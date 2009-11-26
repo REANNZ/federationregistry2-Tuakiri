@@ -1,0 +1,63 @@
+@import _uielements.sass
+
+#hd
+
+  #banner
+    +clear 
+    h1
+      +left
+      color = #333
+      line-height = 80px
+      margin-left = 12px
+      :font
+        :size = 1.9em
+    
+    #userops
+      +right
+      :margin
+        :right = 12px
+      :font
+        :weight = "bold"
+      a
+        +link(#333)
+
+    img
+      +right
+	
+    height = 100px
+    padding = 6px
+    :background
+      :color = #f5f5f5
+
+  li.current
+    +rounded-tl
+    +rounded-tr
+
+#bd
+  +clear
+
+table.cleantable
+  +datatable(0px, 100%)
+
+table.buttons
+  +datatablewithbuttons
+
+div.errors
+  +rounded
+
+  margin = 6px
+  padding = 6px
+
+  border = 2px "solid" #b10902
+
+  :background
+    :color = #c5200a
+  color = #fff
+
+td.errors
+  input
+    border = 2px "solid" #b10902
+
+    :background
+      :color = #c5200a
+    color = #fff
