@@ -51,3 +51,17 @@ table.buttons tbody tr td { padding: 9px; }
 div.errors { -moz-border-radius: 5px; -webkit-border-radius: 5px; margin: 6px; padding: 6px; border: 2px solid #b10902; background-color: #c5200a; color: white; }
 
 td.errors input { border: 2px solid #b10902; background-color: #c5200a; color: white; }
+
+.categorysummary { margin-left: auto; margin-right: auto; overflow: hidden; display: inline-block; width: 975px; margin-top: 64px; margin-bottom: 64px; }
+.categorysummary { display: block; }
+.categorysummary .category { float: left; width: 301px; padding: 12px; }
+.categorysummary .category .numeric { float: left; font-size: 2em; }
+.categorysummary .category .numeric .total { color: #a2a2a2; }
+.categorysummary .category .graphic { float: right; }
+
+.categorydetail { clear: left; margin-left: auto; margin-right: auto; width: 975px; }
+.categorydetail .category { margin-bottom: 36px; }
+.categorydetail .category .numeric { float: left; font-size: 1.4em; }
+.categorydetail .category .numeric .total { color: #a2a2a2; }
+.categorydetail .category table { clear: left; }
+.categorydetail .category table td { width: 300px; }

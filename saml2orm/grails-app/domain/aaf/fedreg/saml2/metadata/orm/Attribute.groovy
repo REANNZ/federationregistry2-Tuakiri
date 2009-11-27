@@ -31,8 +31,17 @@ class Attribute  {
 	}
 
 	static constraints = {
-		name(nullable: false, blank: false)
+		name(nullable: false, blank: false, unique: true)
 		nameFormat(nullable: true)
 		friendlyName(nullable: false, blank: false)
+	}
+	
+	public boolean equals(Object obj) {
+		if ( !(obj instanceof Attribute) ) return false;
+		
+		Attribute attr = (Attribute) obj
+		if((attr.id == id) && (attr.name == name)) return true;
+		
+		return false;
 	}
 }

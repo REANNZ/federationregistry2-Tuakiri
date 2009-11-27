@@ -26,10 +26,10 @@ class AttributeComplianceController {
 		categories.each {
 			def total = Attribute.countByCategory(it)
 			def supported = idp.attributes.findAll{a ->	a.category == it }
-			def currentStatus = new CategorySupportStatus(total:total, supported:supported.size(), name:it.name)
+			def currentStatus = new CategorySupportStatus(totalCount:total, supportedCount:supported.size(), available:Attribute.findAllByCategory(it), supported:supported, name:it.name)
 			categorySupport.add(currentStatus)
 		}
-        [categorySupport: categorySupport]
+        [idp:idp, categorySupport: categorySupport]
 	}
 	
 }
