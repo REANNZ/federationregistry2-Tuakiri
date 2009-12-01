@@ -6,6 +6,9 @@ class CategorySupportStatus {
 	int supportedCount
 	
 	String name
+	
 	def supported
 	def available
+	
+	def idp
 }

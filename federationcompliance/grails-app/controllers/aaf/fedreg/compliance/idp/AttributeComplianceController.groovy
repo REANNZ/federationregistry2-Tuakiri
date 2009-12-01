@@ -7,12 +7,24 @@ import aaf.fedreg.compliance.CategorySupportStatus
 
 class AttributeComplianceController {
 	
-	def list = {
-		params.max = Math.min(params.max ? params.max.toInteger() : 10, 100)
-        [idpInstanceList: IdentityProvider.list(params), idpInstanceTotal: IdentityProvider.count()]
+	def summary = {
+		def idpInstanceList = IdentityProvider.list()
+		
+		def categorySupportSummaries = []
+		idpInstanceList.each { idp ->			
+			def categories = AttributeCategory.listOrderByName()
+			categories.each {
+				def total = Attribute.countByCategory(it)
+				def supported = idp.attributes.findAll{a ->	a.category == it }
+				def summary = new CategorySupportStatus(totalCount:total, supportedCount:supported.size(), name:it.name, idp: idp)
+				categorySupportSummaries.add(summary)
+			}
+		}
+		
+		[idpInstanceList:idpInstanceList, categorySupportSummaries:categorySupportSummaries]
 	}
 	
-	def show = {
+	def identityprovider = {
 		def idp = IdentityProvider.get(params.id)
         if (!idp) {
 			flash.type="error"
@@ -30,6 +42,13 @@ class AttributeComplianceController {
 			categorySupport.add(currentStatus)
 		}
         [idp:idp, categorySupport: categorySupport]
+	}
+	
+	def attribute = {
+		def attribute = Attribute.get(params.id)
+		def idpInstanceList = IdentityProvider.list()
+		def supportingIdpInstanceList = idpInstanceList.findAll{idp -> attribute in idp.attributes}
+		[idpInstanceList:idpInstanceList, supportingIdpInstanceList: supportingIdpInstanceList, attribute: attribute]
 	}
 	
 }

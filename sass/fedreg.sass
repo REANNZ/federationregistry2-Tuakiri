@@ -2,11 +2,24 @@
 
 #hd
 
-  #banner
-    +clear 
+  .aafmenu
+    +clearleft
+
+    ul
+      +horizmenu("none", #e7a65b, #55626d, #fff, #fff )
+      li
+        +rounded-bl
+        +rounded-br
+        margin = 3px
+        :margin
+          :top = 0px
+
+  #banner    
+    +clearfix
+
     h1
       +left
-      color = #333
+      color = #f2f2f2
       line-height = 80px
       margin-left = 12px
       :font
@@ -19,22 +32,71 @@
       :font
         :weight = "bold"
       a
-        +link(#333)
+        +link(#f2f2f2)
+      color = #f2f2f2
 
     img
       +right
+      margin = 12px
 	
-    height = 100px
+    height = 124px
     padding = 6px
     :background
-      :color = #f5f5f5
+      :color = #55626D
 
-  li.current
-    +rounded-tl
-    +rounded-tr
+
+    ul
+      :background
+        :color = #3e3e3e
+
+    li.current
+      :background
+        :color = 3e3e3e
 
 #bd
   +clear
+  :margin
+    :top = 12px
+
+  .container
+    min-width = 980px
+
+  .localnavigation
+    +left
+    +clearfix
+    +rounded
+    +cleanlist
+
+    width = 160px
+    margin = 6px
+    padding = 6px
+
+    :background
+      :color = #f5f5f5
+    border = 1px "solid" #d5d5d5
+
+    h3
+      :font
+        :size = 1.0em
+        :weight = bold
+      color = #a6a6a6
+
+    a
+      :font
+        :size = 1.0em
+        :weight = bold
+      +link(#666)
+
+    ul
+      :margin
+        :left = 6px
+        :bottom = 6px
+
+  .content
+    +left
+    +automargin
+    min-width = 770px
+    margin-left = 18px
 
 table.cleantable
   +datatable(0px, 100%)
@@ -62,19 +124,29 @@ td.errors
       :color = #c5200a
     color = #fff
 
-.categorysummary
-  +automargin
-  +clearfix
+.attributecompliancesummary
+  table
+    th
+      color = #a2a2a2
+    td
+      &.organizationname
+        :font
+          :size = 1.4em
+      .numeric
+        text-align = "left"
+        :font
+          :size = 1.4em
+        .total
+          color = #a2a2a2
 
-  width = 975px
+.categorysummary
   :margin
-    :top = 64px
+    :top = 32px
     :bottom = 64px
 
   .category
     +left
-    width = 301px
-    padding = 12px
+    margin = 6px
 
     .numeric
       +left
@@ -84,13 +156,10 @@ td.errors
         color = #a2a2a2
     
     .graphic
-      +right
+      
 
 .categorydetail
   +clearleft
-  +automargin
-
-  width = 975px
 
   .category
     :margin
@@ -105,5 +174,44 @@ td.errors
 
     table
       +clearleft
-      td
-        width = 300px
+      th
+        color = #a2a2a2
+
+.attributesummary
+  +left
+  :margin
+    :bottom = 64px
+
+  .attribute
+    +automargin
+    width = 250px
+    margin = 6px
+
+    .numeric
+      +left
+      :font
+        :size = 2.0em
+      .total
+        color = #a2a2a2
+
+    .graphic
+      +right
+
+.attributedetail
+  +clearleft
+
+  .attribute
+    :margin
+      :bottom = 36px
+
+    .numeric
+      +left
+      :font
+        :size = 1.4em
+      .total
+        color = #a2a2a2
+
+    table
+      +clearleft
+      th
+        color = #a2a2a2
