@@ -1,25 +1,12 @@
 
-<div>
-  <ul id="topnavigation_" class="horizmenu mlhorizmenu">
-
+<div class="aafmenu">
+  <ul id="topnavigation_">
+	<li class="${['attributeCompliance'].contains(controllerName) ? 'current' : ''}">
+      	<a href="/federationregistry/attributeCompliance/summary" class="icon icon_award_star_gold_2"><g:message code="navigation.compliance.label" /></a>
+	</li>
     <n:isAdministrator>
       <li class="${['admins', 'user', 'role', 'group'].contains(controllerName) ? 'current' : ''}">
-      	<a href="#" class="icon icon_cog"><g:message code="navigation.accesscontrol.label" /></a>
-	      <ul class="submenu">
-				<li>
-			  		<g:link controller="user" action="list" class="icon icon_user"><g:message code="navigation.accesscontrol.user.label" /></g:link>
-				</li>
-				<li>
-					<g:link controller="role" action="list" class="icon icon_cog"><g:message code="navigation.accesscontrol.roles.label" /></g:link>
-				</li>
-				<li>
-					<g:link controller="group" action="list" class="icon icon_group"><g:message code="navigation.accesscontrol.groups.label" /></g:link>
-				</li>
-				<li>
-	          		<g:link controller="admins" action="index" class="icon icon_user_suit"><g:message code="navigation.accesscontrol.administrators.label" /></g:link>
-				</li>
-	        </li>
-	      </ul>
+      	<g:link controller="admins" class="icon icon_cog"><g:message code="navigation.accesscontrol.label" /></g:link>
       </li>
     </n:isAdministrator>
   </ul>

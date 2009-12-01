@@ -28,8 +28,9 @@ public class SecurityFilters extends intient.nimble.security.NimbleFilterBase {
         // Content requiring users to be authenticated
         secure(controller: "*") {
             before = {
-                accessControl ()
+                accessControl (auth: false)
             }
+			
         }
 
     }

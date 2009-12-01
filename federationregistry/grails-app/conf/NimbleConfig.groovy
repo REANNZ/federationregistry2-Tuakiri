@@ -16,6 +16,12 @@
  */
 
 nimble {
+	
+	layout {
+        application = 'aaf'
+        administration = 'aaf'
+    }
+
     organization {
         name = ""
         displayname = ""

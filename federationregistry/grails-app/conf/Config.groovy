@@ -10,6 +10,8 @@ aaf {
 	}
 }
 
+security.shiro.authc.required = false
+
 // set per-environment serverURL stem for creating absolute links
 environments {
     production {
