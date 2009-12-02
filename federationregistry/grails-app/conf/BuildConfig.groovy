@@ -1,7 +1,7 @@
 
 // Local Plugins
 basePath=new File("../")
-grails.plugin.location.saml2orm="${basePath.absolutePath}/saml2orm"
+grails.plugin.location.saml2orm="${basePath.canonicalPath}/saml2orm"
 grails.plugin.location.federationcore="${basePath.absolutePath}/federationcore"
 grails.plugin.location.federationcompliance="${basePath.absolutePath}/federationcompliance"
 
