@@ -10,5 +10,5 @@
 </div>
 
 <n:isLoggedIn>
-<g:render template='/templates/nimble/navigation/topnavigation'/>
+  <g:render template='/templates/nimble/navigation/topnavigation'/>
 </n:isLoggedIn>
