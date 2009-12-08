@@ -22,7 +22,7 @@
 						<img src="http://chart.apis.google.com/chart?
 						chs=225x50
 						&chco=2dac3f,ea2f31
-						&chd=t:${currentStatus.supportedCount.encodeAsHTML()},${currentStatus.totalCount.encodeAsHTML() - currentStatus.supportedCount.encodeAsHTML()}
+						&chd=t:${currentStatus.supportedCount.encodeAsHTML()},${(currentStatus.totalCount -currentStatus.supportedCount).encodeAsHTML()}
 						&chds=0,${currentStatus.totalCount.encodeAsHTML()},0,${currentStatus.totalCount.encodeAsHTML()}
 						&cht=p3
 						&chl=<g:message code="compliance.attributes.supported"/>|<g:message code="compliance.attributes.notsupported"/>"
@@ -37,7 +37,7 @@
 			<g:each in="${categorySupport}" status="i" var="currentStatus">
 				<div class="category">
 					<div class="numeric">
-						<strong>${currentStatus.name.encodeAsHTML()} - ${currentStatus.supportedCount.encodeAsHTML()}<span class="total"> / ${currentStatus.totalCount.encodeAsHTML()}</span></strong>
+						<strong>${currentStatus.name.encodeAsHTML()} - ${currentStatus.supportedCount}<span class="total"> / ${currentStatus.totalCount.encodeAsHTML()}</span></strong>
 					</div>
 				
 					<table class="cleantable buttons">

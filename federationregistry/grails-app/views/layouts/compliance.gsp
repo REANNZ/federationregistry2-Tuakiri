@@ -27,7 +27,7 @@
 
   <div id="doc">
     <div id="hd">
-		<g:render template="/templates/aafheader" />
+		<g:render template='/templates/aafheader' />
     </div>
     <div id="bd">
 		<div class="container">
