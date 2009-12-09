@@ -16,11 +16,11 @@
       <njs:flashgrowl/>
     </script>
 
-	<nh:famfamfam/>
 	<link rel="stylesheet" href="${resource(file: '/css/icons.css')}"/>
 	<link rel="stylesheet" href="${resource(file: '/css/fedreg.css')}"/>
 	
-  <g:layoutHead />
+    <g:layoutHead />
+    <nh:famfamfam/>
 </head>
 
 <body>
