@@ -55,20 +55,21 @@
 
 #bd
   +clear
-  :margin
-    :top = 12px
+  margin = 0px
 
   .container
-    min-width = 980px
+    margin = 0px
+    padding = 0px
+    width = 100%
 
   .localnavigation
     +left
     +clearfix
-    +rounded
+    +rounded-br
     +cleanlist
 
-    width = 160px
-    margin = 6px
+    width = 180px
+    margin = 0px
     padding = 6px
 
     :background
@@ -78,7 +79,7 @@
     h3
       :font
         :size = 1.0em
-        :weight = bold
+        :weight = "bold"
       color = #a6a6a6
 
     a
@@ -94,9 +95,10 @@
 
   .content
     +left
-    +automargin
     min-width = 770px
-    margin-left = 18px
+    :margin
+      :top = 12px
+      :left = 18px
 
 table.cleantable
   +datatable(0px, 100%)
