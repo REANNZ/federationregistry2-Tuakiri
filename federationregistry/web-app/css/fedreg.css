@@ -20,15 +20,15 @@
 
 #bd { clear: all; margin: 0px; }
 #bd .container { margin: 0px; padding: 0px; width: 100%; }
-#bd .localnavigation { float: left; overflow: hidden; display: inline-block; -moz-border-radius-bottomright: 5px; -webkit-border-bottom-right-radius: 5px; width: 180px; margin: 0px; padding: 6px; background-color: #f5f5f5; border: 1px solid #d5d5d5; }
+#bd .localnavigation { float: left; overflow: hidden; display: inline-block; -moz-border-radius-bottomright: 5px; -webkit-border-bottom-right-radius: 5px; width: 180px; margin: 0px; padding: 6px; background-color: #f5f5f5; border: 1px solid #d5d5d5; border-top: none; }
 #bd .localnavigation { display: block; }
 #bd .localnavigation ul { list-style-type: none; }
 #bd .localnavigation ul li { list-style-type: none; }
 #bd .localnavigation h3 { font-size: 1em; font-weight: bold; color: #a6a6a6; }
 #bd .localnavigation a { font-size: 1em; font-weight: bold; color: #666666; cursor: pointer; text-decoration: none; }
 #bd .localnavigation a:hover { text-decoration: underline; }
-#bd .localnavigation ul { margin-left: 6px; margin-bottom: 6px; }
-#bd .content { float: left; min-width: 770px; margin-top: 12px; margin-left: 18px; }
+#bd .localnavigation ul { margin-left: 6px; margin-bottom: 3px; }
+#bd .content { float: left; width: 770px; margin-top: 6px; margin-left: 12px; }
 
 table.cleantable { margin: 0px; width: 100%; }
 table.cleantable h3 { margin: 0px; padding: 0px; margin-bottom: 3px; }

@@ -18,7 +18,6 @@
     <link rel="stylesheet" href="${resource(dir: nimblePath, file: '/css/fedreg.css')}"/>
 
     <g:layoutHead/>
-    <nh:famfamfam/>
 </head>
 
 <body>
@@ -41,7 +40,7 @@
   </div>
 
 <n:sessionterminated/>
-
+<n:confirm/>
 
 </body>
 
