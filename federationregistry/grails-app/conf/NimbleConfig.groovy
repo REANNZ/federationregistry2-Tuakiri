@@ -18,8 +18,9 @@
 nimble {
 	
 	layout {
-        application = 'aaf'
+        application = 'main'
         administration = 'aaf'
+		login = 'login'
     }
 
     organization {

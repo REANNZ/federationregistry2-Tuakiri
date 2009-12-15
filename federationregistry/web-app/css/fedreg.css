@@ -29,6 +29,7 @@
 #bd .localnavigation a:hover { text-decoration: underline; }
 #bd .localnavigation ul { margin-left: 6px; margin-bottom: 3px; }
 #bd .content { float: left; width: 770px; margin-top: 6px; margin-left: 12px; }
+#bd .logincontent { margin-left: auto; margin-right: auto; padding: 18px; }
 
 table.cleantable { margin: 0px; width: 100%; }
 table.cleantable h3 { margin: 0px; padding: 0px; margin-bottom: 3px; }

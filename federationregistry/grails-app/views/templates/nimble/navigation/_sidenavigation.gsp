@@ -93,7 +93,7 @@
 						    </li>
 							<li>
 								<n:confirmaction action="document.deletegroup.submit();" title="${message(code: 'delete.confirm.title')}" msg="${message(code: 'group.delete.confirm.msg')}" accept="${message(code: 'default.button.accept.label')}" cancel="${message(code: 'default.button.cancel.label')}" class=""><g:message code="group.delete.label" /></n:confirmaction>
-							</li>
+							</li>			
 						</ul>
 					</li>
 				</ul>
