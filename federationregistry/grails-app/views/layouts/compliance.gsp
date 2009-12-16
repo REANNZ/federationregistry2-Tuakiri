@@ -19,8 +19,11 @@
 	<link rel="stylesheet" href="${resource(file: '/css/icons.css')}"/>
 	<link rel="stylesheet" href="${resource(file: '/css/fedreg.css')}"/>
 	
+	
+	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/jquery.jqplot.min.js')}"></script>
+	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/plugins/jqplot.pieRenderer.min.js')}"></script>
+	<link rel="stylesheet" href="${resource(dir:'css',file:'jquery.jqplot.min.css')}" />
     <g:layoutHead />
-    <nh:famfamfam/>
 </head>
 
 <body>

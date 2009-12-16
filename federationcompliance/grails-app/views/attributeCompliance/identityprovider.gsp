@@ -1,10 +1,10 @@
 
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="compliance" />
         <g:set var="entityName" value="${message(code: 'identityProviderAttributeCompliance.label')}" />
         <title><g:message code="default.list.label" args="[entityName]" /></title>
+		
     </head>
     <body>
 	
@@ -17,18 +17,19 @@
 				<div class="numeric">
 					<strong>${currentStatus.supportedCount.encodeAsHTML()}<span class="total"> / ${currentStatus.totalCount.encodeAsHTML()}</span></strong>
 				</div>
-				<div class="graphic">	
-					
-						<img src="http://chart.apis.google.com/chart?
-						chs=225x50
-						&chco=2dac3f,ea2f31
-						&chd=t:${currentStatus.supportedCount.encodeAsHTML()},${(currentStatus.totalCount -currentStatus.supportedCount).encodeAsHTML()}
-						&chds=0,${currentStatus.totalCount.encodeAsHTML()},0,${currentStatus.totalCount.encodeAsHTML()}
-						&cht=p3
-						&chl=<g:message code="compliance.attributes.supported"/>|<g:message code="compliance.attributes.notsupported"/>"
-						alt="${currentStatus.name} chart" />
+				
+				<div id="graphic${i}" style="width: 200px; height: 200px;">
 					
 				</div>
+				<script type="text/javascript">
+
+					line${i} = [['supported',${currentStatus.supportedCount}], ['unsupported',${(currentStatus.totalCount - currentStatus.supportedCount)}] ];
+					plot${i} = $.jqplot('graphic${i}', [line${i}], {
+					    title: '',
+					    seriesDefaults:{renderer:$.jqplot.PieRenderer, rendererOptions:{sliceMargin:0, diameter: 100}}
+					});
+				</script>
+				
 			</div>
 		</g:each>
 		</div>
