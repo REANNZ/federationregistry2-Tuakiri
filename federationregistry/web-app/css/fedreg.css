@@ -63,7 +63,7 @@ td.errors input { border: 2px solid #b10902; background-color: #c5200a; color: w
 .categorydetail .category table { clear: left; }
 .categorydetail .category table th { color: #a2a2a2; }
 
-.attributesummary { float: left; margin-bottom: 64px; }
+.attributesummary { float: left; margin-bottom: 0px; }
 .attributesummary .attribute { margin-left: auto; margin-right: auto; width: 250px; margin: 6px; }
 .attributesummary .attribute .numeric { float: left; font-size: 2em; }
 .attributesummary .attribute .numeric .total { color: #a2a2a2; }

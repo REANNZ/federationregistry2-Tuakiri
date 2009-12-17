@@ -15,15 +15,16 @@
 				<div class="numeric">
 					<strong>${supportingIdpInstanceList.size().encodeAsHTML()}<span class="total"> / ${idpInstanceList.size().encodeAsHTML()}</span></strong>
 				</div>
-				<div class="graphic">	
-						<img src="http://chart.apis.google.com/chart?
-						chs=225x50
-						&chco=2dac3f,ea2f31
-						&chd=t:${supportingIdpInstanceList.size().encodeAsHTML()},${(idpInstanceList.size() - supportingIdpInstanceList.size()).encodeAsHTML()}
-						&cht=p3
-						&chl=<g:message code="compliance.attributes.supported"/>|<g:message code="compliance.attributes.notsupported"/>"
-						alt="${attribute?.friendlyName.encodeAsHTML()} support chart" />
-				</div>
+				<div id="graphic${i}" style="width: 200px; height: 200px;"></div>
+				<script type="text/javascript">
+					line${i} = [['supported',${supportingIdpInstanceList.size()}], ['unsupported',${(idpInstanceList.size() - supportingIdpInstanceList.size())}] ];
+					plot${i} = $.jqplot('graphic${i}', [line${i}], {
+					    title: '',
+					    seriesColors: [ "#30A800", "#D44226" ],
+						grid: { background: 'transparent', borderColor: 'transparent', shadow: false },
+					    seriesDefaults:{renderer:$.jqplot.PieRenderer, rendererOptions:{sliceMargin:3, diameter: 100}}
+					});
+				</script>
 			</div>
 		</div>
 		<div class="attributedetail">
