@@ -12,13 +12,13 @@
 		
 		<div class="categorysummary">
 		<g:each in="${categorySupport}" status="i" var="currentStatus">
-			<div class="category">
+			<div class="category" >
 				<h3>${currentStatus.name}</h3>
 				<div class="numeric">
 					<strong>${currentStatus.supportedCount.encodeAsHTML()}<span class="total"> / ${currentStatus.totalCount.encodeAsHTML()}</span></strong>
 				</div>
 				
-				<div id="graphic${i}" style="width: 200px; height: 150px;"></div>
+				<div id="graphic${i}" style="margin-left: 18px; width: 200px; height: 150px;"></div>
 				<script type="text/javascript">
 					line${i} = [['supported',${currentStatus.supportedCount}], ['unsupported',${(currentStatus.totalCount - currentStatus.supportedCount)}] ];
 					plot${i} = $.jqplot('graphic${i}', [line${i}], {
