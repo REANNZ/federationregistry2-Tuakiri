@@ -3,17 +3,17 @@
     <head>
         <meta name="layout" content="compliance" />
         <g:set var="entityName" value="${message(code: 'identityProviderAttributeCompliance.label')}" />
-        <title><g:message code="default.list.label" args="[entityName]" /></title>
+        <title><g:message code="fedreg.view.compliance.identityprovider.title"/></title>
 		
     </head>
     <body>
 	
-		<h2><g:message code="compliance.attributes.identityprovider.label" args="${[idp?.organization?.displayName]}" /></h2>
+		<h2><g:message code="fedreg.view.compliance.identityprovider.heading" args="${[idp?.organization?.displayName]}" /></h2>
 		
 		<div class="categorysummary">
 		<g:each in="${categorySupport}" status="i" var="currentStatus">
 			<div class="category" >
-				<h3>${currentStatus.name}</h3>
+				<h3><g:message code="fedreg.label.${currentStatus.name.toLowerCase()}"/></h3>
 				<div class="numeric">
 					<strong>${currentStatus.supportedCount.encodeAsHTML()}<span class="total"> / ${currentStatus.totalCount.encodeAsHTML()}</span></strong>
 				</div>
@@ -43,8 +43,8 @@
 	                    <thead>
 	                        <tr>
                         
-	                            <th><g:message code="attribute.label" /></th>
-								<th/>
+	                            <th><g:message code="fedreg.label.attribute" /></th>
+								<th><g:message code="fedreg.label.status" /></th>
 								<th/>
 							                        
 	                        </tr>
@@ -57,14 +57,14 @@
                         
 	                            <td>
 									<g:if test="${currentStatus.supported.contains(attr)}">
-										<span class="icon icon_tick"><g:message code="compliance.attributes.supported"/></span>
+										<span class="icon icon_tick"><g:message code="fedreg.label.supported"/></span>
 									</g:if>
 									<g:else>
-										<span class="icon icon_cross"><g:message code="compliance.attributes.notsupported"/></span>
+										<span class="icon icon_cross"><g:message code="fedreg.label.notsupported"/></span>
 									</g:else>
 								</td>
 								
-								<td><g:link action="attribute" id="${attr.id}" class="button icon icon_view icon_view_attributeSupport"><g:message code="attributeSupport.view.label" /></g:link></td>
+								<td><g:link action="attribute" id="${attr.id}" class="button icon icon_view icon_view_attributeSupport"><g:message code="fedreg.link.view" /></g:link></td>
 	                        </tr>
 	                    </g:each>
 	                    </tbody>

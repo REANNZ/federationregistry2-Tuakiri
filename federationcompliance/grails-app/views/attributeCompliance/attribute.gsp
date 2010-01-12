@@ -3,15 +3,15 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="compliance" />
         <g:set var="entityName" value="${message(code: 'identityProviderAttributeCompliance.label')}" />
-        <title><g:message code="default.list.label" args="[entityName]" /></title>
+        <title><g:message code="fedreg.view.compliance.attribute.title"/></title>
     </head>
     <body>
 	
-		<h2><g:message code="compliance.attributes.crossfederation.label" args="${[attribute?.friendlyName]}" /></h2>
+		<h2><g:message code="fedreg.view.compliance.attribute.heading" args="${[attribute?.friendlyName]}" /></h2>
 
 		<div class="attributesummary">
 			<div class="attribute">
-				<h3><g:message code="compliance.attributes.crossfederation.graph.label"/></h3>
+				<h3><g:message code="fedreg.view.compliance.attribute.graph.heading" /></h3>
 				<div class="numeric">
 					<strong>${supportingIdpInstanceList.size().encodeAsHTML()}<span class="total"> / ${idpInstanceList.size().encodeAsHTML()}</span></strong>
 				</div>
@@ -34,8 +34,8 @@
 	                    <thead>
 	                        <tr>
 
-	                            <th><g:message code="organization.name.label" /></th>
-								<th/>
+	                            <th><g:message code="fedreg.label.organization" /></th>
+								<t<th><g:message code="fedreg.label.status" /></th>
 								<th/>
 
 	                        </tr>
@@ -48,14 +48,14 @@
 
 	                            <td>
 									<g:if test="${supportingIdpInstanceList.contains(idp)}">
-										<span class="icon icon_tick"><g:message code="compliance.attributes.supported"/></span>
+										<span class="icon icon_tick"><g:message code="fedreg.label.supported"/></span>
 									</g:if>
 									<g:else>
-										<span class="icon icon_cross"><g:message code="compliance.attributes.notsupported"/></span>
+										<span class="icon icon_cross"><g:message code="fedreg.label.notsupported"/></span>
 									</g:else>
 								</td>
 
-								<td><g:link action="identityprovider" id="${idp.id}" class="button icon icon_view icon_view_attributeCompliance"><g:message code="attributeCompliance.view.label" /></g:link></td>
+								<td><g:link action="identityprovider" id="${idp.id}" class="button icon icon_view icon_view_attributeCompliance"><g:message code="fedreg.link.view" /></g:link></td>
 	                        </tr>
 	                    </g:each>
 	                    </tbody>

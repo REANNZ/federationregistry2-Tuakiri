@@ -24,7 +24,7 @@
 
   <div id="doc">
     <div id="hd">
-		<g:render template='/templates/aafheader' />
+		<g:render template='/templates/aafheader'  model="['navigation':true]"/>
     </div>
     <div id="bd">
       	<div class="container">
@@ -35,7 +35,6 @@
 		</div>
     </div>
     <div id="ft">
-	
     </div>
   </div>
 

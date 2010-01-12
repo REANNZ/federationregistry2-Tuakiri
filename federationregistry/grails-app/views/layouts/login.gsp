@@ -8,12 +8,8 @@
 
     <nh:nimblecore/>
     <nh:nimbleui/>
-    <nh:admin/>
   
     <nh:growl/>
-    <script type="text/javascript">
-      <njs:flashgrowl/>
-    </script>
 
     <link rel="stylesheet" href="${resource(dir: nimblePath, file: '/css/fedreg.css')}"/>
 
@@ -24,7 +20,7 @@
 
   <div id="doc">
     <div id="hd">
-		<g:render template='/templates/aafheader' />
+		<g:render template='/templates/aafheader' model="['navigation':false]"/>
     </div>
     <div id="bd">
       	<div class="container">

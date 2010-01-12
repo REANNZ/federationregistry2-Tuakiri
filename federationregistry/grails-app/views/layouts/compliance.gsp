@@ -30,14 +30,14 @@
 
   <div id="doc">
     <div id="hd">
-		<g:render template='/templates/aafheader' />
+		<g:render template='/templates/aafheader' model="['navigation':true]"/>
     </div>
     <div id="bd">
 		<div class="container">
 	    	<div class="localnavigation">
-			  <h3>Compliance Navigation</h3>
+			  <h3><g:message code="fedreg.layout.compliance.navigation.title" /></h3>
 			    <ul>
-				  <li><g:link controller="attributeCompliance" action="summary">Attribute Summary</g:link>
+				  <li><g:link controller="attributeCompliance" action="summary"><g:message code="fedreg.link.attributesummary" /></g:link>
 				  </li>
 				</ul>
 			</div>

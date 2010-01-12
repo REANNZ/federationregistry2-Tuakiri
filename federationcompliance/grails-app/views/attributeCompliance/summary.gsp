@@ -5,21 +5,20 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="compliance" />
         <g:set var="entityName" value="${message(code: 'identityProviderAttributeCompliance.label')}" />
-        <title><g:message code="default.list.label" args="[entityName]" /></title>
+        <title><g:message code="fedreg.view.compliance.summary.title"/></title>
     </head>
     <body>
 	
-			<h2><g:message code="compliance.attributes.summary.label"/></h2>
+			<h2><g:message code="fedreg.view.compliance.summary.heading"/></h2>
 			
 				<div class="attributecompliancesummary">
 					
                 	<table class="cleantable buttons">
 	                    <thead>
-	                        <tr>
-                        
-	                            <th><g:message code="organization.displayName.label" /></th>
+	                        <tr>                        
+	                            <th><g:message code="fedreg.label.organization" /></th>
 								<g:each in="${AttributeCategory.listOrderByName()}">
-									<th>${it.name.encodeAsHTML()}</th>
+									<th><g:message code="fedreg.label.${it.name.toLowerCase()}" /></th>
 								</g:each>
 								<th/>                        
 	                        </tr>
@@ -35,7 +34,7 @@
 										</div>
 									</td>	                        
 			                    </g:findAll>
-								<td><g:link action="identityprovider" id="${idp.id}" class="button icon icon_view icon_view_attributeCompliance"><g:message code="attributeCompliance.view.label" /></g:link></td>
+								<td><g:link action="identityprovider" id="${idp.id}" class="button icon icon_view icon_view_attributeCompliance"><g:message code="fedreg.link.view" /></g:link></td>
 							</tr>
 						</g:each>
 	                    </tbody>
