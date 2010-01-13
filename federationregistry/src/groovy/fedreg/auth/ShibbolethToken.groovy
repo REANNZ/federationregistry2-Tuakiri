@@ -10,13 +10,13 @@ import org.apache.shiro.authc.AuthenticationToken
  */
 public class ShibbolethToken implements AuthenticationToken {
 
-  	def principal, attr;
+  	def principal, givenName, surname, email
 
 	public Object getPrincipal() {
 	    return this.principal
-	  }
+	}
 	
   	public Object getCredentials() {
 	    return null
-	  }
+	}
 }

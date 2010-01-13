@@ -28,21 +28,21 @@ class ShibbolethService {
      */
     public void nimbleInit() {
         if (grailsApplication.config.fedreg.shibboleth.federationprovider.enabled) {
-            shibbolethFederationProvider = FederationProvider.findByUid(OpenIDService.federationProviderUid)
+            shibbolethFederationProvider = FederationProvider.findByUid(ShibbolethService.federationProviderUid)
             if (!shibbolethFederationProvider) {
 
                 shibbolethFederationProvider = new FederationProvider()
                 shibbolethFederationProvider.uid = ShibbolethService.federationProviderUid
-                shibbolethFederationProvider.autoProvision = grailsApplication.config.nimble.shibboleth.federationprovider.autoprovision
+                shibbolethFederationProvider.autoProvision = grailsApplication.config.fedreg.shibboleth.federationprovider.autoprovision
 
                 def details = new Details()
-                details.name = grailsApplication.config.nimble.shibboleth.name
-                details.displayName = grailsApplication.config.nimble.shibboleth.displayname
-                details.description = grailsApplication.config.nimble.shibboleth.description
+                details.name = grailsApplication.config.fedreg.shibboleth.name
+                details.displayName = grailsApplication.config.fedreg.shibboleth.displayname
+                details.description = grailsApplication.config.fedreg.shibboleth.description
 
                 def url = new Url()
-                url.location = grailsApplication.config.nimble.shibboleth.url
-                url.altText = grailsApplication.config.nimble.shibboleth.alttext
+                url.location = grailsApplication.config.fedreg.shibboleth.url
+                url.altText = grailsApplication.config.fedreg.shibboleth.alttext
                 def savedUrl = url.save()
                 if(url.hasErrors()) {
                     url.errors.each {

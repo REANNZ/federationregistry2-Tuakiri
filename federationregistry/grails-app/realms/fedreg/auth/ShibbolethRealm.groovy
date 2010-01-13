@@ -1,4 +1,4 @@
-package fedreg.realm
+package fedreg.auth
 
 import org.apache.shiro.authc.UnknownAccountException
 import org.apache.shiro.authc.DisabledAccountException
@@ -8,18 +8,20 @@ import org.apache.shiro.authc.IncorrectCredentialsException
 import intient.nimble.InstanceGenerator
 import intient.nimble.core.*
 
+import fedreg.service.ShibbolethService
+
 /**
  * Integrates with Shiro to establish a session for users accessing the system based
  * on authentication with a Shibboleth IDP in the federation (relies on Apache Shibboleth SP to initiate session and handle SAML internals).
  *
  * @author Bradley Beddoes
  */
-public class ShibbolethRealm {
-	
+class ShibbolethRealm {
 	static authTokenClass = fedreg.auth.ShibbolethToken
 	
 	def userService
 	def adminsService
+	def grailsApplication
 	
 	def authenticate(authToken) {
         if (!grailsApplication.config.fedreg.shibboleth.federationprovider.enabled) {
@@ -27,29 +29,28 @@ public class ShibbolethRealm {
             throw new UnknownAccountException("Authentication attempt for Shibboleth provider, denying attempt as Shibboleth disabled")
         }
 
-		def username = authToken.attr.getHeader(grailsApplication.config.fedreg.shibboleth.headers.uniqueIdentifier)
-		def user = UserBase.findByUsername(username)
+		def user = UserBase.findByUsername(authToken.principal)
         if (!user) {
-            log.info("No account representing user $username exists")
+            log.info("No account representing user ${authToken.principal} exists")
 			def shibbolethFederationProvider = FederationProvider.findByUid(ShibbolethService.federationProviderUid)
-			
-			if (shibbolethFederationProvider && shibbolethFederationProvider.autoProvision) {
-                log.debug("Shibboleth auto provision is enabled, creating user account for $username")
+			if (shibbolethFederationProvider && shibbolethFederationProvider.autoProvision) {	
+                log.debug("Shibboleth auto provision is enabled, creating user account for ${authToken.principal}")
 
 				UserBase newUser = InstanceGenerator.user()
-	            newUser.username = username
+	            newUser.username = authToken.principal
 	            newUser.enabled = true
 	            newUser.external = true
 	            newUser.federated = true
 			
 				newUser.profile = InstanceGenerator.profile()
                 newUser.profile.owner = newUser
-                newUser.profile.fullName = "${authToken.attr.get(grailsApplication.config.fedreg.shibboleth.headers.givenName)} ${authToken.attr.get(grailsApplication.config.fedreg.shibboleth.headers.surname)}"
-				newUser.profile.email = authToken.attr.get(grailsApplication.config.fedreg.shibboleth.headers.mail)
+                newUser.profile.fullName = "${authToken.givenName} ${authToken.surname}"
+				newUser.profile.email = authToken.email
 				
+				//TODO FEDERATION PROVIDER	
 				user = userService.createUser(newUser)
                 if (user.hasErrors()) {
-                    log.error("Error creating user account from Shibboleth credentials for $username")
+                    log.error("Error creating user account from Shibboleth credentials for ${authToken.principal}")
                     user.errors.each {
                         log.error(it)
                     }
@@ -58,9 +59,10 @@ public class ShibbolethRealm {
                 log.info("Created new user [$user.id]$user.username from Shibboleth attribute statement")
 
 				// To assist with bootstrap provide the first account with admin privilledges
-				if(UserBase.count() == 0) {
-					adminsService.add(admin)
-					log.info("Issued account $username with admin privs as this was the first account entering the system")
+				// 1 because we created and saved above
+				if(UserBase.count() == 1) {
+					adminsService.add(user)
+					log.info("Issued account $user.username with admin privs as this was the first account entering the system")
 				}
 			}
 			else
@@ -68,8 +70,8 @@ public class ShibbolethRealm {
 		}else {
 			// Update name and email to what IDP has supplied - this could be extended to role membership etc in the future
 			boolean change = false
-			def fullName = "${authToken.attr.get(grailsApplication.config.fedreg.shibboleth.headers.givenName)} ${authToken.attr.get(grailsApplication.config.fedreg.shibboleth.headers.surname)}"
-			def email = authToken.attr.get(grailsApplication.config.fedreg.shibboleth.headers.mail)	
+			def fullName = "${authToken.givenName} ${authToken.surname}"
+			def email = authToken.email	
 			if(user.profile.fullName != fullName) {
 				change = true
 				user.profile.fullName = fullName
@@ -80,7 +82,7 @@ public class ShibbolethRealm {
 			}
 			if(change) {
 				userService.updateUser(user)
-				log.info("Updated account $username with new IDP supplied values for fullname $fullName and email $email")
+				log.info("Updated account ${authToken.principal} with new IDP supplied values for fullname $fullName and email $email")
 			}
 		}
 		
@@ -89,7 +91,7 @@ public class ShibbolethRealm {
             throw new DisabledAccountException("The account [$user.id]$user.username accessed via Shibboleth is disabled")
         }
 		log.info("Successfully logged in user [$user.id]$user.username using Shibboleth")
-        def account = new SimpleAccount(user.id, username, "redreg.realm.ShibbolethRealm")
+        def account = new SimpleAccount(user.id, authToken.principal, "redreg.realm.ShibbolethRealm")
         return account
     }
 

@@ -10,6 +10,29 @@ aaf {
 	}
 }
 
+fedreg {
+	shibboleth {
+		name = "Australian Access Federation"
+        displayname = "Australian Access Federation"
+        description = "The Australian Access Federation provides the means of allowing a participating institution and/or a service provider to trust the information it receives from another participating institution."
+        url = "http://www.aaf.edu.au"
+        alttext = "Australian Access Federation"
+
+        federationprovider {
+			spactive = false
+            enabled = true
+            autoprovision = true
+        }
+
+		headers {
+			uniqueIdentifier = "persistent-id"
+			givenName= "giveName"
+			surname= "sn"
+			email= "mail"
+		}
+    }
+}
+
 security.shiro.authc.required = false
 
 // set per-environment serverURL stem for creating absolute links
@@ -42,10 +65,13 @@ log4j = {
           	'org.codehaus.groovy.grails.web.mapping.filter',
           	'org.codehaus.groovy.grails.web.mapping',
           	'org.codehaus.groovy.grails.commons',
-          	'org.codehaus.groovy.grails.plugins'
+       		'org.codehaus.groovy.grails.plugins'
 
     debug 	'intient.nimble',
-			'aaf.fedreg'
+			'fedreg',
+			'org.apache.shiro'
+			
+	info	'org.springframework'
 }
 
 grails.mime.file.extensions = true

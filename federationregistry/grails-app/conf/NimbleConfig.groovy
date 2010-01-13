@@ -39,7 +39,7 @@ nimble {
 
     localusers {
         authentication {
-            enabled = false
+            enabled = true
         }
         registration {
             enabled = false
