@@ -18,10 +18,6 @@ class ShibbolethService {
     
     def shibbolethFederationProvider
 
-    ShibbolethService() {
-
-    }
-
     /**
      * Integrates with extended Nimble bootstrap process, sets up Shibboleth Environment
      * once all domain objects etc have dynamic methods available to them.

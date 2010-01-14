@@ -1,5 +1,8 @@
 package fedreg.controllers
 
+import grails.util.GrailsUtil
+import org.codehaus.groovy.grails.commons.GrailsApplication
+
 import org.apache.shiro.SecurityUtils
 import org.apache.shiro.authc.AuthenticationException
 import org.apache.shiro.authc.UsernamePasswordToken
@@ -49,8 +52,7 @@ class AuthController {
 	
 	def shibauth = {
 		def attr = [:]
-		if (grailsApplication.config.fedreg.shibboleth.federationprovider.spactive) {
-			
+		if (grailsApplication.config.fedreg.shibboleth.federationprovider.spactive) {		
 			def targetUri = session.getAttribute(AuthController.TARGET) ?: "/"
             session.removeAttribute(AuthController.TARGET)
             redirect(uri: targetUri)
@@ -62,7 +64,7 @@ class AuthController {
 	}
 	
 	def devauth = {
-		if (grailsApplication.config.fedreg.shibboleth.federationprovider.spactive) {
+		if (!(GrailsUtil.environment == GrailsApplication.ENV_DEVELOPMENT) || grailsApplication.config.fedreg.shibboleth.federationprovider.spactive) {
 			response.sendError(403)
 			return
 		}
