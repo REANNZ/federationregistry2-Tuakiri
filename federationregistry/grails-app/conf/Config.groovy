@@ -67,7 +67,7 @@ log4j = {
           	'org.codehaus.groovy.grails.commons',
        		'org.codehaus.groovy.grails.plugins'
 
-    debug 	'intient.nimble',
+    debug 	'grails.plugin.nimble',
 			'fedreg',
 			'org.apache.shiro'
 			

@@ -8,10 +8,10 @@
 #hd .aafmenu ul li.current { background-color: #55626d; background-position: bottom left; background-repeat: repeat-x; }
 #hd .aafmenu ul li.current a { color: white; }
 #hd .aafmenu ul li { -moz-border-radius-bottomleft: 5px; -webkit-border-bottom-left-radius: 5px; -moz-border-radius-bottomright: 5px; -webkit-border-bottom-right-radius: 5px; margin: 3px; margin-top: 0px; }
-#hd #banner { overflow: hidden; display: inline-block; height: 124px; padding: 6px; background-color: #55626d; }
+#hd #banner { overflow: hidden; display: inline-block; height: 124px; padding: 0px; background-color: #55626d; }
 #hd #banner { display: block; }
 #hd #banner h1 { float: left; color: #f2f2f2; line-height: 80px; margin-left: 12px; font-size: 1.9em; }
-#hd #banner #userops { float: right; margin-right: 12px; font-weight: bold; color: #f2f2f2; }
+#hd #banner #userops { float: right; -moz-border-radius-bottomleft: 5px; -webkit-border-bottom-left-radius: 5px; -moz-border-radius-bottomright: 5px; -webkit-border-bottom-right-radius: 5px; padding: 9px; margin-right: 12px; font-weight: bold; font-size: 1.1em; background-color: #3c454d; color: #f2f2f2; }
 #hd #banner #userops a { color: #f2f2f2; cursor: pointer; text-decoration: none; }
 #hd #banner #userops a:hover { text-decoration: underline; }
 #hd #banner img { float: right; margin: 12px; }

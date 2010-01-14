@@ -24,6 +24,9 @@ class AuthController {
 	}
 	
 	def login = {
+		if(params.targetUri)
+        	session.setAttribute(AuthController.TARGET, params.targetUri)
+
 		if (grailsApplication.config.fedreg.shibboleth.federationprovider.spactive) {
 			redirect (action:shibauth)
 			return
@@ -31,8 +34,14 @@ class AuthController {
 	}
 	
 	def logout = {
-		
-	}
+        signout()
+    }
+
+    def signout = {
+        log.info("Signing out user")
+        SecurityUtils.subject?.logout()
+        redirect(uri: '/')
+    }
 	
 	def unauthorized = {
 		
@@ -42,6 +51,9 @@ class AuthController {
 		def attr = [:]
 		if (grailsApplication.config.fedreg.shibboleth.federationprovider.spactive) {
 			
+			def targetUri = session.getAttribute(AuthController.TARGET) ?: "/"
+            session.removeAttribute(AuthController.TARGET)
+            redirect(uri: targetUri)
 		}
 		else {
 			log.error("Attempt to do shibboleth authentication when Apache SP is not marked active in local configuration")
@@ -62,8 +74,6 @@ class AuthController {
 
         def targetUri = session.getAttribute(AuthController.TARGET) ?: "/"
         session.removeAttribute(AuthController.TARGET)
-
-        log.info("Authenticated user, $params.username. Directing to content $targetUri")
         redirect(uri: targetUri)
 	}
 

@@ -5,8 +5,8 @@ import org.apache.shiro.authc.DisabledAccountException
 import org.apache.shiro.authc.SimpleAccount
 import org.apache.shiro.authc.IncorrectCredentialsException
 
-import intient.nimble.InstanceGenerator
-import intient.nimble.core.*
+import grails.plugin.nimble.InstanceGenerator
+import grails.plugin.nimble.core.*
 
 import fedreg.service.ShibbolethService
 
@@ -29,6 +29,11 @@ class ShibbolethRealm {
             throw new UnknownAccountException("Authentication attempt for Shibboleth provider, denying attempt as Shibboleth disabled")
         }
 
+		if (!authToken.principal) {
+            log.error("Authentication attempt for Shibboleth provider, denying attempt as no persistent identifier (ShibbolethToken.principal) was provided")
+            throw new UnknownAccountException("Authentication attempt for Shibboleth provider, denying attempt as no persistent identifier (ShibbolethToken.principal) was provided")
+        }
+
 		def user = UserBase.findByUsername(authToken.principal)
         if (!user) {
             log.info("No account representing user ${authToken.principal} exists")
@@ -41,13 +46,13 @@ class ShibbolethRealm {
 	            newUser.enabled = true
 	            newUser.external = true
 	            newUser.federated = true
+				newUser.federationProvider = shibbolethFederationProvider
 			
 				newUser.profile = InstanceGenerator.profile()
                 newUser.profile.owner = newUser
                 newUser.profile.fullName = "${authToken.givenName} ${authToken.surname}"
 				newUser.profile.email = authToken.email
-				
-				//TODO FEDERATION PROVIDER	
+					
 				user = userService.createUser(newUser)
                 if (user.hasErrors()) {
                     log.error("Error creating user account from Shibboleth credentials for ${authToken.principal}")
@@ -59,10 +64,10 @@ class ShibbolethRealm {
                 log.info("Created new user [$user.id]$user.username from Shibboleth attribute statement")
 
 				// To assist with bootstrap provide the first account with admin privilledges
-				// 1 because we created and saved above
+				// ==1 because we created and saved above
 				if(UserBase.count() == 1) {
 					adminsService.add(user)
-					log.info("Issued account $user.username with admin privs as this was the first account entering the system")
+					log.info("Issued account $user.username with admin right as this was the first account entering the system")
 				}
 			}
 			else
