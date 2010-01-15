@@ -6,6 +6,9 @@ import aaf.fedreg.core.IdentityProvider
 import aaf.fedreg.compliance.CategorySupportStatus
 
 class AttributeComplianceController {
+	def index = {
+		redirect action:summary
+	}
 	
 	def summary = {
 		def idpInstanceList = IdentityProvider.list()

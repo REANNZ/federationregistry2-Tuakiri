@@ -1,4 +1,6 @@
 
+appName=federationregistry
+
 aaf {
 	fedreg {
 		oldrr {
@@ -22,10 +24,11 @@ fedreg {
 			spactive = false
             enabled = true
             autoprovision = true
+			ssoendpoint = "/Shibboleth.sso/Login"
         }
 
 		headers {
-			uniqueIdentifier = "persistent-id"
+			uniqueID = "persistent-id"
 			givenName= "giveName"
 			surname= "sn"
 			email= "mail"

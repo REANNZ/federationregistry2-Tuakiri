@@ -25,12 +25,21 @@ public class SecurityFilters extends grails.plugin.nimble.security.NimbleFilterB
 
     def filters = {
 
-        // Content requiring users to be authenticated
-        secure(controller: "*") {
+        // Federation registry content requiring users to be authenticated
+        secure(controller: "attributeCompliance") {
             before = {
                 accessControl (auth: false)
             }
 			
+        }
+
+		// Administrative components
+		administration(controller: "(admins|user|group|role)") {
+            before = {
+                accessControl {
+                    role(AdminsService.ADMIN_ROLE)
+                }
+            }
         }
 
     }

@@ -30,8 +30,14 @@ class AuthController {
 		if(params.targetUri)
         	session.setAttribute(AuthController.TARGET, params.targetUri)
 
+		// Integrates with Shibboleth NativeSPSessionCreationParameters as per https://spaces.internet2.edu/display/SHIB2/NativeSPSessionCreationParameters
+		// This allows us to mix and match publicly available and private content within Federation Registry by making use of Nimble provided
+		// security filters in conf/SecurityFilters.groovy
 		if (grailsApplication.config.fedreg.shibboleth.federationprovider.spactive) {
-			redirect (action:shibauth)
+			def localAction = createLink(action:'shibauth', absolute: true)
+			def url = "${grailsApplication.config.fedreg.shibboleth.federationprovider.ssoendpoint}?target=${localAction}"
+			
+			redirect (url: url)
 			return
 		}
 	}
@@ -40,7 +46,15 @@ class AuthController {
         signout()
     }
 
-    def signout = {
+	def echo = {
+	    def attr = [:]
+		request.headerNames.each {
+			attr.put(it, request.getHeader(it))
+		}
+		return [attr: attr]
+	}
+
+    def signout = { 
         log.info("Signing out user")
         SecurityUtils.subject?.logout()
         redirect(uri: '/')
@@ -52,15 +66,51 @@ class AuthController {
 	
 	def shibauth = {
 		def attr = [:]
-		if (grailsApplication.config.fedreg.shibboleth.federationprovider.spactive) {		
-			def targetUri = session.getAttribute(AuthController.TARGET) ?: "/"
-            session.removeAttribute(AuthController.TARGET)
-            redirect(uri: targetUri)
+		if (grailsApplication.config.fedreg.shibboleth.federationprovider.spactive) {	
+			// Right now this a very basic integration. In the future we could pull out all kinds of extra shibboleth headers here
+			// and do things like auto group population based on homeOrganization and group/roles based on other attributes. This would
+			// be a trivial addition to the current realm impl but isn't currently spec'd out.
+			
+			def uniqueID = request.getHeader(grailsApplication.config.fedreg.shibboleth.headers.uniqueID)
+			def givenName = request.getHeader(grailsApplication.config.fedreg.shibboleth.headers.givenName)
+			def surname = request.getHeader(grailsApplication.config.fedreg.shibboleth.headers.surname)
+			def email = request.getHeader(grailsApplication.config.fedreg.shibboleth.headers.email)
+			
+			try {
+				def authToken = new ShibbolethToken(principal:uniqueID, givenName:givenName, surname:surname, email:email)
+				log.info("Attempting to establish session for user based on Shibboleth authentication with the following details: $uniqueID, $givenName, $surname, $email")
+				
+				SecurityUtils.subject.login(authToken)
+		        this.userService.createLoginRecord(request)
+		
+				def targetUri = session.getAttribute(AuthController.TARGET) ?: "/"
+	            session.removeAttribute(AuthController.TARGET)
+	            redirect(uri: targetUri)
+				return
+			}
+	        catch (IncorrectCredentialsException e) {
+	            log.info "Shibboleth credentials failure for user '${uniqueID}'."
+	            log.debug(e)
+	        }
+	        catch (DisabledAccountException e) {
+	            log.warn "Attempt to login via shibboleth to disabled account for user '${uniqueID}'."
+	            log.debug(e)
+	        }
+	        catch (AuthenticationException e) {
+	            log.info "General authentication failure for user '${uniqueID}'."
+	            log.debug(e)
+	        }
+	
+			redirect(action: shiberror)
 		}
 		else {
 			log.error("Attempt to do shibboleth authentication when Apache SP is not marked active in local configuration")
 			response.sendError(500)
 		}	
+	}
+	
+	def shiberror = {
+		
 	}
 	
 	def devauth = {
