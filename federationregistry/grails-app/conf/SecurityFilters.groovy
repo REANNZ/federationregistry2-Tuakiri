@@ -15,6 +15,7 @@
  *  limitations under the License.
  */
 import grails.plugin.nimble.core.AdminsService
+import grails.plugin.nimble.core.UserService
 
 /**
  * Filter that works with Nimble security model to protect controllers, actions, views for Federation Registry
@@ -28,7 +29,9 @@ public class SecurityFilters extends grails.plugin.nimble.security.NimbleFilterB
         // Federation registry content requiring users to be authenticated
         secure(controller: "attributeCompliance") {
             before = {
-                accessControl (auth: false)
+                accessControl (auth: false) {
+					role(UserService.USER_ROLE)
+				}
             }
 			
         }
