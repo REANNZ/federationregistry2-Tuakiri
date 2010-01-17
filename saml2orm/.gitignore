@@ -12,6 +12,9 @@ docs.tar.gz
 *.iml
 *.iws
 *.war
+web-app/css
+web-app/js
+web-app/images
 web-app/plugins/*
 target/
 test/reports/*
