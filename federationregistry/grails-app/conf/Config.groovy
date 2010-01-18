@@ -1,18 +1,16 @@
 
+// Application configuration, possibly should be externalized using Grails external config abilities when looking to deploy more widely
+
 appName=federationregistry
 
-aaf {
-	fedreg {
-		oldrr {
-			connection = "jdbc:mysql://localhost:3306/resourceregistry"
-			user = "rr"
-			password = "password"
-			driver = "com.mysql.jdbc.Driver"
-		}
-	}
-}
-
 fedreg {
+	oldrr {
+		connection = "jdbc:mysql://localhost:3306/resourceregistry"
+		user = "rr"
+		password = "password"
+		driver = "com.mysql.jdbc.Driver"
+	}
+	
 	shibboleth {
 		name = "Australian Access Federation"
         displayname = "Australian Access Federation"

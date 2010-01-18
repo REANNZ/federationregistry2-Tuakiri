@@ -10,6 +10,9 @@ docs.tar.gz
 *.iws
 *.war
 web-app/plugins/*
+web-app/css/*
+web-app/js/*
+web-app/images/*
 target/
 test/reports/*
 unzipped/*
