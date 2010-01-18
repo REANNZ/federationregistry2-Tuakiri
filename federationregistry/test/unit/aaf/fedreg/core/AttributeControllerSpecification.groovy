@@ -1,14 +1,14 @@
-package aaf.fedreg.core
+package fedreg.core
 
 import grails.test.*
 import grails.plugin.spock.*
 
-import aaf.fedreg.domain.*
+import fedreg.domain.*
 
 class AttributeControllerSpecification extends ControllerSpecification {
 	
 	// FIXME: Multiple requirements in this specification are failing due to http://jira.codehaus.org/browse/GRAILS-5348
-	// Exception is - No signature of method: aaf.fedreg.AttributeController.message()
+	// Exception is - No signature of method: fedreg.AttributeController.message()
 	
 	def "index redirect to list"() {
 		setup:

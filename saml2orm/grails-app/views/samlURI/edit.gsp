@@ -1,5 +1,5 @@
 
-<%@ page import="aaf.fedreg.saml2.metadata.orm.SamlURI" %>
+<%@ page import="fedreg.saml2.metadata.orm.SamlURI" %>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -39,7 +39,7 @@
                                   <label for="type"><g:message code="samlURI.type.label"/></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: samlURIInstance, field: 'type', 'errors')}">
-                                    <g:select name="type" from="${aaf.fedreg.saml2.metadata.orm.SamlURIType?.values()}" value="${samlURIInstance?.type}"  />
+                                    <g:select name="type" from="${fedreg.saml2.metadata.orm.SamlURIType?.values()}" value="${samlURIInstance?.type}"  />
                                 </td>
                             </tr>
                         

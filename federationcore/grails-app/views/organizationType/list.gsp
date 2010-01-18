@@ -1,5 +1,5 @@
 
-<%@ page import="aaf.fedreg.core.OrganizationType" %>
+<%@ page import="fedreg.core.OrganizationType" %>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />

@@ -1,9 +1,9 @@
 package fedreg.compliance.idp
 
-import aaf.fedreg.core.Attribute
-import aaf.fedreg.core.AttributeCategory
-import aaf.fedreg.core.IdentityProvider
-import aaf.fedreg.compliance.CategorySupportStatus
+import fedreg.core.Attribute
+import fedreg.core.AttributeCategory
+import fedreg.core.IdentityProvider
+import fedreg.compliance.CategorySupportStatus
 
 class AttributeComplianceController {
 	def index = {

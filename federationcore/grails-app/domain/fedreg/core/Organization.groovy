@@ -1,6 +1,6 @@
 package fedreg.core
 
-class Organization  extends aaf.fedreg.saml2.metadata.orm.Organization {
+class Organization  extends fedreg.saml2.metadata.orm.Organization {
 	
 	OrganizationType primary
 	

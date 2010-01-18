@@ -1,6 +1,6 @@
 package fedreg.core
 
-class Attribute extends aaf.fedreg.saml2.metadata.orm.Attribute {
+class Attribute extends fedreg.saml2.metadata.orm.Attribute {
 
 	String oid
 	String headerName

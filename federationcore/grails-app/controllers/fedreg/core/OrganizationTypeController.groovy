@@ -1,4 +1,4 @@
-package fedreg.core.controller
+package fedreg.core
 
 class OrganizationTypeController {
 

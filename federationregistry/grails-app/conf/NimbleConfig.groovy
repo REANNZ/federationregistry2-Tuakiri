@@ -88,8 +88,8 @@ nimble {
     }
 
     implementation {
-    	user = "aaf.fedreg.User"
-    	profile = "aaf.fedreg.Profile"
+    	user = "fedreg.host.User"
+    	profile = "fedreg.host.Profile"
     }
 }
 

@@ -3,17 +3,17 @@ package fedreg.host
 import org.springframework.beans.factory.InitializingBean
 import groovy.sql.Sql
 
-import aaf.fedreg.core.Attribute
-import aaf.fedreg.core.AttributeScope
-import aaf.fedreg.core.AttributeCategory
-import aaf.fedreg.core.IdentityProvider
-import aaf.fedreg.core.Organization
-import aaf.fedreg.core.OrganizationType
+import fedreg.core.Attribute
+import fedreg.core.AttributeScope
+import fedreg.core.AttributeCategory
+import fedreg.core.IdentityProvider
+import fedreg.core.Organization
+import fedreg.core.OrganizationType
 
 
-import aaf.fedreg.saml2.metadata.orm.SamlURI
-import aaf.fedreg.saml2.metadata.orm.UrlURI
-import aaf.fedreg.saml2.metadata.orm.SingleSignOnService
+import fedreg.saml2.metadata.orm.SamlURI
+import fedreg.saml2.metadata.orm.UrlURI
+import fedreg.saml2.metadata.orm.SingleSignOnService
 
 
 class DataImporterService implements InitializingBean {

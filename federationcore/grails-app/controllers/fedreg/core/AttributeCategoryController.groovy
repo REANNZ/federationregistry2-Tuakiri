@@ -1,4 +1,4 @@
-package aaf.fedreg
+package fedreg.core
 
 class AttributeCategoryController {
 

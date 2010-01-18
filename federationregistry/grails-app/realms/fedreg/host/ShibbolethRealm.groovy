@@ -8,7 +8,7 @@ import org.apache.shiro.authc.IncorrectCredentialsException
 import grails.plugin.nimble.InstanceGenerator
 import grails.plugin.nimble.core.*
 
-import fedreg.service.ShibbolethService
+import fedreg.host.ShibbolethService
 
 /**
  * Integrates with Shiro to establish a session for users accessing the system based
@@ -99,5 +99,9 @@ class ShibbolethRealm {
         def account = new SimpleAccount(user.id, authToken.principal, "redreg.realm.ShibbolethRealm")
         return account
     }
+
+	public String toString() {
+		"Realm: fedreg.host.ShibbolethRealm"
+	}
 
 }

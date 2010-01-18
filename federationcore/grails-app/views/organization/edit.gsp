@@ -1,5 +1,5 @@
 
-<%@ page import="aaf.fedreg.core.Organization" %>
+<%@ page import="fedreg.core.Organization" %>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -75,7 +75,7 @@
                                   <label for="types"><g:message code="organization.types.label"/></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: organizationInstance, field: 'types', 'errors')}">
-                                    <g:select name="types" from="${aaf.fedreg.core.OrganizationType.list()}" multiple="yes" optionKey="id" size="5" value="${organizationInstance?.types}" />
+                                    <g:select name="types" from="${fedreg.core.OrganizationType.list()}" multiple="yes" optionKey="id" size="5" value="${organizationInstance?.types}" />
                                 </td>
                             </tr>
                         
@@ -84,7 +84,7 @@
                                   <label for="primary"><g:message code="organization.primary.label"/></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: organizationInstance, field: 'primary', 'errors')}">
-                                    <g:select name="primary.id" from="${aaf.fedreg.core.OrganizationType.list()}" optionKey="id" value="${organizationInstance?.primary?.id}"  />
+                                    <g:select name="primary.id" from="${fedreg.core.OrganizationType.list()}" optionKey="id" value="${organizationInstance?.primary?.id}"  />
                                 </td>
                             </tr>
                         

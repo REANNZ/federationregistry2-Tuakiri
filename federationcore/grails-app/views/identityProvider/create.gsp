@@ -1,5 +1,5 @@
 
-<%@ page import="aaf.fedreg.core.IdentityProvider" %>
+<%@ page import="fedreg.core.IdentityProvider" %>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -28,7 +28,7 @@
                                     <label for="organization"><g:message code="identityProvider.organization.label" default="Organization" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: identityProviderInstance, field: 'organization', 'errors')}">
-                                    <g:select name="organization.id" from="${aaf.fedreg.saml2.metadata.orm.Organization.list()}" optionKey="id" value="${identityProviderInstance?.organization?.id}" noSelection="['null': '']" />
+                                    <g:select name="organization.id" from="${fedreg.saml2.metadata.orm.Organization.list()}" optionKey="id" value="${identityProviderInstance?.organization?.id}" noSelection="['null': '']" />
                                 </td>
                             </tr>
                         
@@ -46,7 +46,7 @@
                                     <label for="errorURL"><g:message code="identityProvider.errorURL.label" default="Error URL" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: identityProviderInstance, field: 'errorURL', 'errors')}">
-                                    <g:select name="errorURL.id" from="${aaf.fedreg.saml2.metadata.orm.UrlURI.list()}" optionKey="id" value="${identityProviderInstance?.errorURL?.id}" noSelection="['null': '']" />
+                                    <g:select name="errorURL.id" from="${fedreg.saml2.metadata.orm.UrlURI.list()}" optionKey="id" value="${identityProviderInstance?.errorURL?.id}" noSelection="['null': '']" />
                                 </td>
                             </tr>
                         

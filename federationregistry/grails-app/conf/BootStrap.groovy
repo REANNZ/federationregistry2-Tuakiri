@@ -2,11 +2,11 @@
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import grails.util.GrailsUtil
 
-import aaf.fedreg.core.AttributeScope
-import aaf.fedreg.core.AttributeCategory
+import fedreg.core.AttributeScope
+import fedreg.core.AttributeCategory
 
-import aaf.fedreg.saml2.metadata.orm.SamlURI
-import aaf.fedreg.saml2.metadata.orm.SamlURIType
+import fedreg.saml2.metadata.orm.SamlURI
+import fedreg.saml2.metadata.orm.SamlURIType
 
 class BootStrap {
 	

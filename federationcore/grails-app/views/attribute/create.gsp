@@ -1,5 +1,5 @@
 
-<%@ page import="aaf.fedreg.core.Attribute" %>
+<%@ page import="fedreg.core.Attribute" %>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -37,7 +37,7 @@
                                     <label for="nameFormat"><g:message code="attribute.nameFormat.label" default="Name Format" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: attributeInstance, field: 'nameFormat', 'errors')}">
-                                    <g:select name="nameFormat.id" from="${aaf.fedreg.saml2.metadata.orm.SamlURI.list()}" optionKey="id" value="${attributeInstance?.nameFormat?.id}" noSelection="['null': '']" />
+                                    <g:select name="nameFormat.id" from="${fedreg.saml2.metadata.orm.SamlURI.list()}" optionKey="id" value="${attributeInstance?.nameFormat?.id}" noSelection="['null': '']" />
                                 </td>
                             </tr>
                         
@@ -91,7 +91,7 @@
                                     <label for="scope"><g:message code="attribute.scope.label" default="Scope" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: attributeInstance, field: 'scope', 'errors')}">
-                                    <g:select name="scope.id" from="${aaf.fedreg.core.AttributeScope.list()}" optionKey="id" value="${attributeInstance?.scope?.id}"  />
+                                    <g:select name="scope.id" from="${fedreg.core.AttributeScope.list()}" optionKey="id" value="${attributeInstance?.scope?.id}"  />
                                 </td>
                             </tr>
                         
@@ -100,7 +100,7 @@
                                     <label for="category"><g:message code="attribute.category.label" default="Category" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: attributeInstance, field: 'category', 'errors')}">
-                                    <g:select name="category.id" from="${aaf.fedreg.core.AttributeCategory.list()}" optionKey="id" value="${attributeInstance?.category?.id}"  />
+                                    <g:select name="category.id" from="${fedreg.core.AttributeCategory.list()}" optionKey="id" value="${attributeInstance?.category?.id}"  />
                                 </td>
                             </tr>
                         

@@ -1,4 +1,4 @@
-package aaf.fedreg.core
+package fedreg.core
 
 import grails.test.*
 import grails.plugin.spock.*

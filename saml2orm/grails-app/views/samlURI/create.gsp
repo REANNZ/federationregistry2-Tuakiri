@@ -37,7 +37,7 @@
                                     <label for="type"><g:message code="samlURI.type.label" default="Type" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: samlURIInstance, field: 'type', 'errors')}">
-                                    <g:select name="type" from="${aaf.fedreg.saml2.metadata.orm.SamlURIType?.values()}" value="${samlURIInstance?.type}"  />
+                                    <g:select name="type" from="${fedreg.saml2.metadata.orm.SamlURIType?.values()}" value="${samlURIInstance?.type}"  />
                                 </td>
                             </tr>
                         

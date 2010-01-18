@@ -1,5 +1,5 @@
 
-<%@ page import="aaf.fedreg.saml2.metadata.orm.SamlURI" %>
+<%@ page import="fedreg.saml2.metadata.orm.SamlURI" %>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />

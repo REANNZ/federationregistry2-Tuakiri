@@ -1,6 +1,6 @@
 package fedreg.host
 
-import fedreg.core.domain.OrganizationType
+import fedreg.core.OrganizationType
 
 class Profile extends grails.plugin.nimble.core.ProfileBase {
 
@@ -8,7 +8,7 @@ class Profile extends grails.plugin.nimble.core.ProfileBase {
 	OrganizationType organization
 	
 	static constraints = {
-		organization(nullable:false)
+		organization(nullable:true)
 	}
 
 }

@@ -1,5 +1,5 @@
 
-<%@ page import="aaf.fedreg.saml2.metadata.orm.SingleSignOnService" %>
+<%@ page import="fedreg.saml2.metadata.orm.SingleSignOnService" %>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -30,7 +30,7 @@
                                   <label for="binding"><g:message code="singleSignOnService.binding.label"/></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: singleSignOnServiceInstance, field: 'binding', 'errors')}">
-                                    <g:select name="binding.id" from="${aaf.fedreg.saml2.metadata.orm.SamlURI.list()}" optionKey="id" value="${singleSignOnServiceInstance?.binding?.id}"  />
+                                    <g:select name="binding.id" from="${fedreg.saml2.metadata.orm.SamlURI.list()}" optionKey="id" value="${singleSignOnServiceInstance?.binding?.id}"  />
                                 </td>
                             </tr>
                         
@@ -39,7 +39,7 @@
                                   <label for="location"><g:message code="singleSignOnService.location.label"/></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: singleSignOnServiceInstance, field: 'location', 'errors')}">
-                                    <g:select name="location.id" from="${aaf.fedreg.saml2.metadata.orm.UrlURI.list()}" optionKey="id" value="${singleSignOnServiceInstance?.location?.id}"  />
+                                    <g:select name="location.id" from="${fedreg.saml2.metadata.orm.UrlURI.list()}" optionKey="id" value="${singleSignOnServiceInstance?.location?.id}"  />
                                 </td>
                             </tr>
                         
@@ -48,7 +48,7 @@
                                   <label for="responseLocation"><g:message code="singleSignOnService.responseLocation.label"/></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: singleSignOnServiceInstance, field: 'responseLocation', 'errors')}">
-                                    <g:select name="responseLocation.id" from="${aaf.fedreg.saml2.metadata.orm.UrlURI.list()}" optionKey="id" value="${singleSignOnServiceInstance?.responseLocation?.id}" noSelection="['null': '']" />
+                                    <g:select name="responseLocation.id" from="${fedreg.saml2.metadata.orm.UrlURI.list()}" optionKey="id" value="${singleSignOnServiceInstance?.responseLocation?.id}" noSelection="['null': '']" />
                                 </td>
                             </tr>
                         
@@ -57,7 +57,7 @@
                                   <label for="owner"><g:message code="singleSignOnService.owner.label"/></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: singleSignOnServiceInstance, field: 'owner', 'errors')}">
-                                    <g:select name="owner.id" from="${aaf.fedreg.saml2.metadata.orm.IDPSSODescriptor.list()}" optionKey="id" value="${singleSignOnServiceInstance?.owner?.id}"  />
+                                    <g:select name="owner.id" from="${fedreg.saml2.metadata.orm.IDPSSODescriptor.list()}" optionKey="id" value="${singleSignOnServiceInstance?.owner?.id}"  />
                                 </td>
                             </tr>
                         
