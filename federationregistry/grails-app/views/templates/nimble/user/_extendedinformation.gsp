@@ -1,4 +1,4 @@
-<h3><g:message code="nimble.view.user.show.profile.heading" /></h3>
+<h3><g:message code="nimble.view.user.show.extendedinformation.heading" /></h3>
 
 <table class="datatable">
  	<tbody>
