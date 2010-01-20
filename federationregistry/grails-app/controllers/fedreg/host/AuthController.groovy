@@ -78,7 +78,7 @@ class AuthController {
 			
 			try {
 				def authToken = new ShibbolethToken(principal:uniqueID, givenName:givenName, surname:surname, email:email, entityID:entityID)
-				log.info("Attempting to establish session for user based on Shibboleth authentication with the following details: $uniqueID, $givenName, $surname, $email")
+				log.info("Attempting to establish session for user based on Shibboleth authentication with the following details: $uniqueID, $givenName, $surname, $email, $entityID")
 				
 				SecurityUtils.subject.login(authToken)
 		        this.userService.createLoginRecord(request)

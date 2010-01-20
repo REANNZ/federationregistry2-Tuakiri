@@ -10,5 +10,11 @@
 	    	<th><g:message code="nimble.label.email" /></th>
 			<td>${user.profile?.email?.encodeAsHTML()}</td>
 		</tr>
+		<tr>
+	    	<th><g:message code="fedreg.label.organization" /></th>
+			<td>
+				<g:link controller="organization" action="show" id="${user.entityDescriptor?.organization?.id}">${user.entityDescriptor?.organization?.displayName.encodeAsHTML()}</g:link>
+			</td>
+		</tr>
 	</tbody>
 </table>

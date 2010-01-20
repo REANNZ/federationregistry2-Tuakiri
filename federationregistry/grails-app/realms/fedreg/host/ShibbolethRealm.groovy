@@ -46,9 +46,13 @@ class ShibbolethRealm {
             log.info("No account representing user ${authToken.principal} exists")
 			def shibbolethFederationProvider = FederationProvider.findByUid(ShibbolethService.federationProviderUid)
 			if (shibbolethFederationProvider && shibbolethFederationProvider.autoProvision) {	
-                log.debug("Shibboleth auto provision is enabled, creating user account for ${authToken.principal}")
+                log.info("Shibboleth auto provision is enabled, creating user account for ${authToken.principal} belonging to Entity ${authToken.entityID}")
 
-				def entityDescriptor = EntityDescriptor.findByEntityID(authToken.entityID)
+				def entityDescriptor = EntityDescriptor.findWhere(entityID:authToken.entityID)
+				if(!entityDescriptor) {
+					log.error("Authentication attempt for Shibboleth provider, denying attempt as no Entity matching (ShibbolethToken.entityID) is available. Has bootstrap occured?")
+		            throw new UnknownAccountException("Authentication attempt for Shibboleth provider, denying attempt as no Entity matching (ShibbolethToken.entityID) is available. Has bootstrap occured?")
+				}
 
 				UserBase newUser = InstanceGenerator.user()
 	            newUser.username = authToken.principal
@@ -56,7 +60,7 @@ class ShibbolethRealm {
 	            newUser.external = true
 	            newUser.federated = true
 				newUser.federationProvider = shibbolethFederationProvider
-				newUser.entityID = entityDescriptor
+				newUser.entityDescriptor = entityDescriptor
 			
 				newUser.profile = InstanceGenerator.profile()
                 newUser.profile.owner = newUser

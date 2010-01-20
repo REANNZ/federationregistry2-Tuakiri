@@ -19,7 +19,7 @@
 							<g:hiddenField name="givenName" value="Mega" />
 							<g:hiddenField name="surname" value="Tron" />
 							<g:hiddenField name="email" value="megatron@decepticons.com" />
-							<g:hiddenField name="entityID" value="https://idp.qut.edu.au/idp/shibboleth" />
+							<g:hiddenField name="entityID" value="https://auth-test-idp.qut.edu.au/idp/shibboleth" />
 							<g:submitButton name="Login" />
 						</g:form>
 					</td>
@@ -33,7 +33,7 @@
 							<g:hiddenField name="givenName" value="Optimus" />
 							<g:hiddenField name="surname" value="Prime" />
 							<g:hiddenField name="email" value="optimus@autobots.com" />
-							<g:hiddenField name="entityID" value="https://idp.qut.edu.au/idp/shibboleth" />
+							<g:hiddenField name="entityID" value="https://auth-test-idp.qut.edu.au/idp/shibboleth" />
 							<g:submitButton name="Login" />
 						</g:form>
 					</td>
