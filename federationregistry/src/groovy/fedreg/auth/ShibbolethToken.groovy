@@ -1,6 +1,5 @@
 package fedreg.auth
 
-import org.openid4java.discovery.Identifier
 import org.apache.shiro.authc.AuthenticationToken
 
 /**
@@ -10,7 +9,7 @@ import org.apache.shiro.authc.AuthenticationToken
  */
 public class ShibbolethToken implements AuthenticationToken {
 
-  	def principal, givenName, surname, email
+  	def principal, givenName, surname, email, entityID
 
 	public Object getPrincipal() {
 	    return this.principal

@@ -10,6 +10,8 @@ import grails.plugin.nimble.core.*
 
 import fedreg.host.ShibbolethService
 
+import fedreg.saml2.metadata.orm.EntityDescriptor
+
 /**
  * Integrates with Shiro to establish a session for users accessing the system based
  * on authentication with a Shibboleth IDP in the federation (relies on Apache Shibboleth SP to initiate session and handle SAML internals).
@@ -34,6 +36,11 @@ class ShibbolethRealm {
             throw new UnknownAccountException("Authentication attempt for Shibboleth provider, denying attempt as no persistent identifier (ShibbolethToken.principal) was provided")
         }
 
+		if (!authToken.entityID) {
+            log.error("Authentication attempt for Shibboleth provider, denying attempt as no entityID (ShibbolethToken.entityID) was provided")
+            throw new UnknownAccountException("Authentication attempt for Shibboleth provider, denying attempt as no entityID (ShibbolethToken.entityID) was provided")
+        }
+
 		def user = UserBase.findByUsername(authToken.principal)
         if (!user) {
             log.info("No account representing user ${authToken.principal} exists")
@@ -41,12 +48,15 @@ class ShibbolethRealm {
 			if (shibbolethFederationProvider && shibbolethFederationProvider.autoProvision) {	
                 log.debug("Shibboleth auto provision is enabled, creating user account for ${authToken.principal}")
 
+				def entityDescriptor = EntityDescriptor.findByEntityID(authToken.entityID)
+
 				UserBase newUser = InstanceGenerator.user()
 	            newUser.username = authToken.principal
 	            newUser.enabled = true
 	            newUser.external = true
 	            newUser.federated = true
 				newUser.federationProvider = shibbolethFederationProvider
+				newUser.entityID = entityDescriptor
 			
 				newUser.profile = InstanceGenerator.profile()
                 newUser.profile.owner = newUser

@@ -26,6 +26,8 @@ class RoleDescriptor  {
   UrlURI errorURL
   String extensions
 
+  static belongsTo = [entityDescriptor:EntityDescriptor]
+
   static hasMany = [
           contactPersons: ContactPerson,
           protocolSupportEnumerations: SamlURI,

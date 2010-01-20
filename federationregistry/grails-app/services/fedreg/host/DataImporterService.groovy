@@ -14,7 +14,7 @@ import fedreg.core.OrganizationType
 import fedreg.saml2.metadata.orm.SamlURI
 import fedreg.saml2.metadata.orm.UrlURI
 import fedreg.saml2.metadata.orm.SingleSignOnService
-
+import fedreg.saml2.metadata.orm.EntityDescriptor
 
 class DataImporterService implements InitializingBean {
 
@@ -86,6 +86,8 @@ class DataImporterService implements InitializingBean {
 		{			
 			
 			def org = Organization.findByName(it.homeOrgName)
+			def entityDescriptor = new EntityDescriptor(entityID:it.entityID, organization:org)
+			entityDescriptor.save()
 			def idp = new IdentityProvider(organization: org)
 			
 			sql.eachRow("select * from serviceLocations where objectID=${it.homeOrgID} and serviceType='SingleSignOnService'",

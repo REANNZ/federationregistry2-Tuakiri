@@ -26,6 +26,7 @@ fedreg {
         }
 
 		headers {
+			entityID = "Shib-Identity-Provider"
 			uniqueID = "persistent-id"
 			givenName= "giveName"
 			surname= "sn"

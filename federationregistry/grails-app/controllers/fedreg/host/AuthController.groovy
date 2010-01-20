@@ -74,9 +74,10 @@ class AuthController {
 			def givenName = request.getHeader(grailsApplication.config.fedreg.shibboleth.headers.givenName)
 			def surname = request.getHeader(grailsApplication.config.fedreg.shibboleth.headers.surname)
 			def email = request.getHeader(grailsApplication.config.fedreg.shibboleth.headers.email)
+			def entityID = request.getHeader(grailsApplication.config.fedreg.shibboleth.headers.entityID)
 			
 			try {
-				def authToken = new ShibbolethToken(principal:uniqueID, givenName:givenName, surname:surname, email:email)
+				def authToken = new ShibbolethToken(principal:uniqueID, givenName:givenName, surname:surname, email:email, entityID:entityID)
 				log.info("Attempting to establish session for user based on Shibboleth authentication with the following details: $uniqueID, $givenName, $surname, $email")
 				
 				SecurityUtils.subject.login(authToken)
@@ -118,7 +119,7 @@ class AuthController {
 			return
 		}
 		
-		def authToken = new ShibbolethToken(principal:params.uniqueID, givenName:params.givenName, surname:params.surname, email:params.email)
+		def authToken = new ShibbolethToken(principal:params.uniqueID, givenName:params.givenName, surname:params.surname, email:params.email, entityID:params.entityID)
 		SecurityUtils.subject.login(authToken)
         this.userService.createLoginRecord(request)
         def targetUri = session.getAttribute(AuthController.TARGET) ?: "/"
