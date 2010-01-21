@@ -18,13 +18,13 @@
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import grails.util.GrailsUtil
 
-import grails.plugin.nimble.InstanceGenerator
+import grails.plugins.nimble.InstanceGenerator
 
-import grails.plugin.nimble.core.LevelPermission
-import grails.plugin.nimble.core.Role
-import grails.plugin.nimble.core.Group
-import grails.plugin.nimble.core.AdminsService
-import grails.plugin.nimble.core.UserService
+import grails.plugins.nimble.core.LevelPermission
+import grails.plugins.nimble.core.Role
+import grails.plugins.nimble.core.Group
+import grails.plugins.nimble.core.AdminsService
+import grails.plugins.nimble.core.UserService
 
 /*
  * Allows applications using Nimble to undertake process at BootStrap that are related to Nimbe provided objects

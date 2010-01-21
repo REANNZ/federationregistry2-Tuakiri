@@ -17,23 +17,22 @@
 
 package fedreg.saml2.metadata.orm
 
-/**
- * @author Bradley Beddoes
- */
-class ContactPerson  {
+class ContactDetails {
+	
+	  Organization company
+	  String givenName
+	  String surname
 
-	ContactDetails details
-	ContactType type
-	String extensions
+	  static hasMany = [
+	        emailAddresses: MailURI,
+	        telephoneNumbers: TelNumURI,
+			contactPersons: ContactPerson
+	  ]
 
-  	static belongsTo = [descriptor:RoleDescriptor, entity:EntityDescriptor]
-
-	static constraints = {
-		descriptor(nullable:true)
-        entity(nullable:true)
-	}
-}
-
-enum ContactType {
-	technical, support, administrative, billing, other
+	  static constraints = {
+	    company(nullable: true)
+	    givenName(blank: false)
+	    surname(blank: false)
+	  }
+	
 }

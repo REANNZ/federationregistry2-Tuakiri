@@ -6,7 +6,7 @@ package fedreg.host
  * @author Bradley Beddoes
  */
 
-import grails.plugin.nimble.core.*
+import grails.plugins.nimble.core.*
 
 class ShibbolethService {
     boolean transactional = true

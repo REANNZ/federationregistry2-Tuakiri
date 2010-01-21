@@ -1,9 +1,9 @@
 package fedreg.host
 
-import fedreg.saml2.metadata.orm.EntityDescriptor
+import fedreg.core.Entity
 
-class User extends grails.plugin.nimble.core.UserBase {
+class User extends grails.plugins.nimble.core.UserBase {
 
 	// Extend UserBase with your custom values here
-	EntityDescriptor entityDescriptor
+	Entity entity
 }

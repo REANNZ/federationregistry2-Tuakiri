@@ -6,9 +6,12 @@ import groovy.sql.Sql
 import fedreg.core.Attribute
 import fedreg.core.AttributeScope
 import fedreg.core.AttributeCategory
+import fedreg.core.Entity
 import fedreg.core.IdentityProvider
+
 import fedreg.core.Organization
 import fedreg.core.OrganizationType
+import fedreg.core.Contact
 
 
 import fedreg.saml2.metadata.orm.SamlURI
@@ -79,16 +82,32 @@ class DataImporterService implements InitializingBean {
 		})
     }
 
+	def importContacts() {
+		
+	}
+
+	def importEntities() {
+		sql.eachRow("select * from homeOrgs",
+		{
+			def org = Organization.findByName(it.homeOrgName)
+			def entity = new Entity(entityID:it.entityID, organization:org, blah:'blah')
+			entity.save()
+			if(entity.hasErrors()) {
+				entity.errors.each {log.error it}
+			}
+		})
+	}
+
 	// TODO: Extend to support full range of IDP components, very minimal currently much more to pull in
 	def importIdentityProviders() {
 		
 		sql.eachRow("select * from homeOrgs",
 		{			
-			
-			def org = Organization.findByName(it.homeOrgName)
-			def entityDescriptor = new EntityDescriptor(entityID:it.entityID, organization:org)
-			entityDescriptor.save()
-			def idp = new IdentityProvider(organization: org)
+			def entity = Entity.findWhere(entityID:it.entityID)
+			log.error "ENTITY ${entity.entityID}"
+			def idp = new IdentityProvider()
+			idp.entityDescriptor = entity
+			idp.organization = entity.organization
 			
 			sql.eachRow("select * from serviceLocations where objectID=${it.homeOrgID} and serviceType='SingleSignOnService'",
 			{
@@ -107,9 +126,12 @@ class DataImporterService implements InitializingBean {
 					idp.addToAttributes(attr)
 			})
 
-			idp.save()
-		})
-		
-		
+			//idp.save()
+			//if(idp.hasErrors()) {
+			//	idp.errors.each {log.error it}
+			//}
+			entity.addToIdpDescriptors(idp)
+			entity.save()
+		})	
 	}
 }

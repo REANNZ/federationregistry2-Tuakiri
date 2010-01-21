@@ -5,12 +5,10 @@ import org.apache.shiro.authc.DisabledAccountException
 import org.apache.shiro.authc.SimpleAccount
 import org.apache.shiro.authc.IncorrectCredentialsException
 
-import grails.plugin.nimble.InstanceGenerator
-import grails.plugin.nimble.core.*
+import grails.plugins.nimble.InstanceGenerator
+import grails.plugins.nimble.core.*
 
-import fedreg.host.ShibbolethService
-
-import fedreg.saml2.metadata.orm.EntityDescriptor
+import fedreg.core.Entity
 
 /**
  * Integrates with Shiro to establish a session for users accessing the system based
@@ -48,8 +46,8 @@ class ShibbolethRealm {
 			if (shibbolethFederationProvider && shibbolethFederationProvider.autoProvision) {	
                 log.info("Shibboleth auto provision is enabled, creating user account for ${authToken.principal} belonging to Entity ${authToken.entityID}")
 
-				def entityDescriptor = EntityDescriptor.findWhere(entityID:authToken.entityID)
-				if(!entityDescriptor) {
+				def entity = Entity.findWhere(entityID:authToken.entityID)
+				if(!entity) {
 					log.error("Authentication attempt for Shibboleth provider, denying attempt as no Entity matching (ShibbolethToken.entityID) is available. Has bootstrap occured?")
 		            throw new UnknownAccountException("Authentication attempt for Shibboleth provider, denying attempt as no Entity matching (ShibbolethToken.entityID) is available. Has bootstrap occured?")
 				}
@@ -60,7 +58,7 @@ class ShibbolethRealm {
 	            newUser.external = true
 	            newUser.federated = true
 				newUser.federationProvider = shibbolethFederationProvider
-				newUser.entityDescriptor = entityDescriptor
+				newUser.entity = entity
 			
 				newUser.profile = InstanceGenerator.profile()
                 newUser.profile.owner = newUser

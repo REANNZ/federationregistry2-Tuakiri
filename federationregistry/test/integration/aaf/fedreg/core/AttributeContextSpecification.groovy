@@ -1,7 +1,7 @@
 package fedreg.core
 
 import grails.test.*
-import grails.plugin.spock.*
+import grails.plugins.spock.*
 
 class AttributeCategorySpecification extends UnitSpecification {
 	

@@ -45,4 +45,8 @@ class EntityDescriptor {
     extensions(nullable: true)
   }
 
+	static mapping = {
+    	tablePerHierarchy false
+  	}
+
 }
