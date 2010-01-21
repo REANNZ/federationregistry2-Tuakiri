@@ -21,6 +21,12 @@ class AuthController {
 	
 	def grailsApplication
 	def userService
+	def dataImporterService
+	
+	def di = {
+		dataImporterService.importEntities()
+		sendError(500)
+	}
 	
 	def index = {
 		redirect (action:login)

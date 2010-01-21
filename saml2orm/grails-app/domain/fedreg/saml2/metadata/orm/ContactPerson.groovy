@@ -22,7 +22,7 @@ package fedreg.saml2.metadata.orm
  */
 class ContactPerson  {
 
-	ContactDetails details
+	Contact contact
 	ContactType type
 	String extensions
 
@@ -31,6 +31,7 @@ class ContactPerson  {
 	static constraints = {
 		descriptor(nullable:true)
         entity(nullable:true)
+		extensions(nullable:true)
 	}
 }
 

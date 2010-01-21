@@ -45,9 +45,11 @@ class BootStrap {
 			
 			
 			dataImporterService.importOrganizations()
+			dataImporterService.importContacts()
 			dataImporterService.importAttributes()
 			dataImporterService.importEntities()
 			dataImporterService.importIdentityProviders()
+			
 		}
 
      }

@@ -22,7 +22,7 @@ package fedreg.saml2.metadata.orm
  */
 class AnyUri extends Uri  {
 
-  static belongsTo = [Endpoint, ContactPerson, RoleDescriptor]
+  static belongsTo = [Endpoint, Contact, RoleDescriptor]
 
   static mapping = {
     tablePerHierarchy false

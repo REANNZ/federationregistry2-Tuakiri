@@ -32,7 +32,7 @@ class EntityDescriptor {
           attributeAuthorityDescriptors: AttributeAuthorityDescriptor,
           pdpDescriptors: PDPDescriptor,
           additionalMetadataLocations: AdditionalMetadataLocation,
-          contactPersons: ContactPerson
+          contacts: ContactPerson
   ]
 
   static constraints = {
@@ -41,7 +41,7 @@ class EntityDescriptor {
     attributeAuthorityDescriptors(nullable: true)
     pdpDescriptors(nullable: true)
     organization(nullable: true)
-    contactPersons(nullable: true)
+    contacts(nullable: true)
     extensions(nullable: true)
   }
 
