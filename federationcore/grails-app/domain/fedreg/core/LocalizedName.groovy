@@ -16,17 +16,15 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+
 package fedreg.core
 
-class AttributeCategory {
-	
-	String name
+/**
+ * @author Bradley Beddoes
+ */
+class LocalizedName {
 
-    static constraints = {
-		name (blank:false)
-    }
+  String lang
+  String name
 
-	public String toString() {
-		return name
-	}
 }

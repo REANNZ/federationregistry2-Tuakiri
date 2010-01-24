@@ -18,15 +18,13 @@
  */
 package fedreg.core
 
-class AttributeCategory {
-	
-	String name
+/**
+ * @author Bradley Beddoes
+ */
+class TelNumURI extends AnyUri  {
 
-    static constraints = {
-		name (blank:false)
-    }
+  static constraints = {
+    uri(nullable: false, blank: false)
+  }
 
-	public String toString() {
-		return name
-	}
 }

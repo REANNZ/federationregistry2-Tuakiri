@@ -16,17 +16,16 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+
 package fedreg.core
 
-class AttributeCategory {
-	
-	String name
+/**
+ * @author Bradley Beddoes
+ */
+class MailURI extends AnyUri  {
 
-    static constraints = {
-		name (blank:false)
-    }
+  static constraints = {
+    uri(nullable: false, blank: false, email: true)
+  }
 
-	public String toString() {
-		return name
-	}
 }

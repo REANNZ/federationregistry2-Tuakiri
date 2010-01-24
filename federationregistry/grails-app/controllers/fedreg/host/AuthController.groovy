@@ -46,6 +46,11 @@ class AuthController {
 			redirect (url: url)
 			return
 		}
+		
+		if (GrailsUtil.environment != GrailsApplication.ENV_DEVELOPMENT) {
+			response.sendError(403)
+			return
+		}
 	}
 	
 	def logout = {

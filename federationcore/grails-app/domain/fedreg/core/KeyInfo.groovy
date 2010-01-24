@@ -16,17 +16,22 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+
 package fedreg.core
 
-class AttributeCategory {
-	
-	String name
+/**
+ * @author Bradley Beddoes
+ */
+class KeyInfo  {
 
-    static constraints = {
-		name (blank:false)
-    }
+  String keyName
+  Date expiryDate
+  String certificate
 
-	public String toString() {
-		return name
-	}
+  static belongsTo = [owner: KeyDescriptor]
+
+  static constraints = {
+    keyName(nullable: true, blank: true)
+    expiryDate(nullable: true)
+  }
 }

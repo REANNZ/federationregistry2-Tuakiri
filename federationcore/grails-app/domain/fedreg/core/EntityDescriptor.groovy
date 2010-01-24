@@ -16,17 +16,39 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+
 package fedreg.core
 
-class AttributeCategory {
-	
-	String name
+/**
+ * @author Bradley Beddoes
+ */
+class EntityDescriptor {
 
-    static constraints = {
-		name (blank:false)
-    }
+  String entityID
+  Organization organization
+  String extensions
 
-	public String toString() {
-		return name
-	}
+  static hasMany = [
+          idpDescriptors: IDPSSODescriptor,
+          spDescriptors: SPSSODescriptor,
+          attributeAuthorityDescriptors: AttributeAuthorityDescriptor,
+          pdpDescriptors: PDPDescriptor,
+          additionalMetadataLocations: AdditionalMetadataLocation,
+          contacts: ContactPerson
+  ]
+
+  static constraints = {
+    idpDescriptors(nullable: true)
+    spDescriptors(nullable: true)
+    attributeAuthorityDescriptors(nullable: true)
+    pdpDescriptors(nullable: true)
+    organization(nullable: true)
+    contacts(nullable: true)
+    extensions(nullable: true)
+  }
+
+	static mapping = {
+    	tablePerHierarchy false
+  	}
+
 }

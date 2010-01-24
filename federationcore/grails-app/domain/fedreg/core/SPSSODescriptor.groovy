@@ -16,17 +16,25 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+
 package fedreg.core
 
-class AttributeCategory {
-	
-	String name
+/**
+ * @author Bradley Beddoes
+ */
+class SPSSODescriptor extends SSODescriptor {
 
-    static constraints = {
-		name (blank:false)
-    }
+  boolean authnRequestsSigned
+  boolean wantAssertionsSigned
 
-	public String toString() {
-		return name
-	}
+  static belongsTo = [entityDescriptor:EntityDescriptor]
+
+  static hasMany = [
+          assertionConsumerServices: IndexedEndpoint,
+          attributeConsumingServices: AttributeConsumingService
+  ]
+
+  static constraints = {
+    attributeConsumingServices(nullable: true)
+  }
 }

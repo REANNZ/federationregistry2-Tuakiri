@@ -16,17 +16,32 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+
 package fedreg.core
 
-class AttributeCategory {
-	
-	String name
+/**
+ * @author Bradley Beddoes
+ */
+class IDPSSODescriptor extends SSODescriptor  {
 
-    static constraints = {
-		name (blank:false)
-    }
+  boolean wantAuthnRequestsSigned
 
-	public String toString() {
-		return name
-	}
+  static belongsTo = [entityDescriptor:EntityDescriptor]
+
+  static hasMany = [
+          singleSignOnServices: SingleSignOnService,
+          nameIDMappingServices: NameIDMappingService,
+          assertionIDRequestServices: AssertionIDRequestService,
+          attributeProfiles: SamlURI,
+          attributes: Attribute
+  ]
+
+  static constraints = {
+    singleSignOnServices(minSize: 1)
+    nameIDMappingServices(nullable: true)
+    assertionIDRequestServices(nullable: true)
+    attributeProfiles(nullable: true)
+    attributes(nullable: true)
+  }
+
 }

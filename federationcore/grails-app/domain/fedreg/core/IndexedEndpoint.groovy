@@ -16,17 +16,18 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+
 package fedreg.core
 
-class AttributeCategory {
-	
-	String name
+/**
+ * @author Bradley Beddoes
+ */
+class IndexedEndpoint extends Endpoint  {
 
-    static constraints = {
-		name (blank:false)
-    }
+  boolean isDefault
 
-	public String toString() {
-		return name
-	}
+  static mapping = {
+    tablePerHierarchy false
+  }
+
 }

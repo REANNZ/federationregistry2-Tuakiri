@@ -10,17 +10,17 @@ class IdentityProviderController {
 
     def list = {
         params.max = Math.min(params.max ? params.max.toInteger() : 10, 100)
-        [identityProviderInstanceList: IdentityProvider.list(params), identityProviderInstanceTotal: IdentityProvider.count()]
+        [identityProviderInstanceList: IDPSSODescriptor.list(params), identityProviderInstanceTotal: IDPSSODescriptor.count()]
     }
 
     def create = {
-        def identityProviderInstance = new IdentityProvider()
+        def identityProviderInstance = new IDPSSODescriptor()
         identityProviderInstance.properties = params
         return [identityProviderInstance: identityProviderInstance]
     }
 
     def save = {
-        def identityProviderInstance = new IdentityProvider(params)
+        def identityProviderInstance = new IDPSSODescriptor(params)
         if (identityProviderInstance.save(flush: true)) {
 			flash.type="success"
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'identityProvider.label'), identityProviderInstance.toString()])}"
@@ -32,7 +32,7 @@ class IdentityProviderController {
     }
 
     def show = {
-        def identityProviderInstance = IdentityProvider.get(params.id)
+        def identityProviderInstance = IDPSSODescriptor.get(params.id)
         if (!identityProviderInstance) {
 			flash.type="error"
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'identityProvider.label'), params.id])}"
@@ -44,7 +44,7 @@ class IdentityProviderController {
     }
 
     def edit = {
-        def identityProviderInstance = IdentityProvider.get(params.id)
+        def identityProviderInstance = IDPSSODescriptor.get(params.id)
         if (!identityProviderInstance) {
 			flash.type = "error"
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'identityProvider.label'), params.id])}"
@@ -56,7 +56,7 @@ class IdentityProviderController {
     }
 
     def update = {
-        def identityProviderInstance = IdentityProvider.get(params.id)
+        def identityProviderInstance = IDPSSODescriptor.get(params.id)
         if (identityProviderInstance) {
             if (params.version) {
                 def version = params.version.toLong()
@@ -85,7 +85,7 @@ class IdentityProviderController {
     }
 
     def delete = {
-        def identityProviderInstance = IdentityProvider.get(params.id)
+        def identityProviderInstance = IDPSSODescriptor.get(params.id)
         if (identityProviderInstance) {
             try {
                 identityProviderInstance.delete(flush: true)

@@ -16,17 +16,22 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+
 package fedreg.core
 
-class AttributeCategory {
-	
-	String name
+/**
+ * @author Bradley Beddoes
+ */
+class PDPDescriptor {
 
-    static constraints = {
-		name (blank:false)
-    }
+  static hasMany = [
+          authzServices: Endpoint,
+          assertionIDRequestServices: Endpoint,
+          nameIDFormats: String
+  ]
 
-	public String toString() {
-		return name
-	}
+  static constraints = {
+    assertionIDRequestServices(nullable: true)
+    nameIDFormats(nullable: true)
+  }
 }

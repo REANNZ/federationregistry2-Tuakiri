@@ -8,6 +8,9 @@
       <li class="${['admins', 'user', 'role', 'group'].contains(controllerName) ? 'current' : ''}">
       	<g:link controller="user" class="icon icon_cog"><g:message code="fedreg.navigation.accesscontrol" /></g:link>
       </li>
+	  <li class="">
+      	<g:link controller="monitoring" class="icon icon_time"><g:message code="fedreg.navigation.monitoring" /></g:link>
+      </li>
     </n:isAdministrator>
   </ul>
   

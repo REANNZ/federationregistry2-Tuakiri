@@ -16,17 +16,27 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+
 package fedreg.core
 
-class AttributeCategory {
-	
-	String name
+/**
+ * @author Bradley Beddoes
+ */
+class ContactPerson  {
 
-    static constraints = {
-		name (blank:false)
-    }
+	Contact contact
+	ContactType type
+	String extensions
 
-	public String toString() {
-		return name
+  	static belongsTo = [descriptor:RoleDescriptor, entity:EntityDescriptor]
+
+	static constraints = {
+		descriptor(nullable:true)
+        entity(nullable:true)
+		extensions(nullable:true)
 	}
+}
+
+enum ContactType {
+	technical, support, administrative, billing, other
 }

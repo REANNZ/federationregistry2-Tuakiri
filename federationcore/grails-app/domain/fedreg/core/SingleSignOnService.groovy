@@ -16,17 +16,18 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+
 package fedreg.core
 
-class AttributeCategory {
-	
-	String name
+/**
+ * @author Bradley Beddoes
+ */
+class SingleSignOnService extends Endpoint {
 
-    static constraints = {
-		name (blank:false)
-    }
+  static belongsTo = [owner: IDPSSODescriptor]
 
-	public String toString() {
-		return name
-	}
+  public String toString() {
+	return "${binding.type} - ${location.uri}"
+  }
+
 }

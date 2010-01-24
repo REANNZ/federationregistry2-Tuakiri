@@ -55,7 +55,7 @@
                         
 	                            <td>${attr.friendlyName.encodeAsHTML()}</td>
                         
-	                            <td>
+	                            <td> 
 									<g:if test="${currentStatus.supported.contains(attr)}">
 										<span class="icon icon_tick"><g:message code="fedreg.label.supported"/></span>
 									</g:if>

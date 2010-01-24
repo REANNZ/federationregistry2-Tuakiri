@@ -16,17 +16,30 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+
 package fedreg.core
 
-class AttributeCategory {
-	
-	String name
+/**
+ * @author Bradley Beddoes
+ */
+class SSODescriptor extends RoleDescriptor  {
 
-    static constraints = {
-		name (blank:false)
-    }
+  static hasMany = [
+          nameIDFormats: SamlURI,
+          artifactResolutionServices: ArtifactResolutionService,
+          singleLogoutServices: SingleLogoutService,
+          manageNameIDServices: ManageNameIDService
+  ]
 
-	public String toString() {
-		return name
-	}
+  static mapping = {
+  	tablePerHierarchy false
+  }
+
+  static constraints = {
+    nameIDFormats(nullable: true)
+    artifactResolutionServices(nullable: true)
+    singleLogoutServices(nullable: true)
+    manageNameIDServices(nullable: true)
+  }
+
 }

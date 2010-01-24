@@ -1,5 +1,4 @@
 
-<%@ page import="fedreg.core.IdentityProvider" %>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -30,7 +29,7 @@
                                   <label for="organization"><g:message code="identityProvider.organization.label"/></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: identityProviderInstance, field: 'organization', 'errors')}">
-                                    <g:select name="organization.id" from="${fedreg.saml2.metadata.orm.Organization.list()}" optionKey="id" value="${identityProviderInstance?.organization?.id}" noSelection="['null': '']" />
+                                    <g:select name="organization.id" from="${fedreg.core.Organization.list()}" optionKey="id" value="${identityProviderInstance?.organization?.id}" noSelection="['null': '']" />
                                 </td>
                             </tr>
                         
@@ -48,7 +47,7 @@
                                   <label for="errorURL"><g:message code="identityProvider.errorURL.label"/></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: identityProviderInstance, field: 'errorURL', 'errors')}">
-                                    <g:select name="errorURL.id" from="${fedreg.saml2.metadata.orm.UrlURI.list()}" optionKey="id" value="${identityProviderInstance?.errorURL?.id}" noSelection="['null': '']" />
+                                    <g:select name="errorURL.id" from="${fedreg.core.UrlURI.list()}" optionKey="id" value="${identityProviderInstance?.errorURL?.id}" noSelection="['null': '']" />
                                 </td>
                             </tr>
                         
@@ -57,7 +56,7 @@
                                   <label for="protocolSupportEnumerations"><g:message code="identityProvider.protocolSupportEnumerations.label"/></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: identityProviderInstance, field: 'protocolSupportEnumerations', 'errors')}">
-                                    <g:select name="protocolSupportEnumerations" from="${fedreg.saml2.metadata.orm.SamlURI.list()}" multiple="yes" optionKey="id" size="5" value="${identityProviderInstance?.protocolSupportEnumerations}" />
+                                    <g:select name="protocolSupportEnumerations" from="${fedreg.core.SamlURI.list()}" multiple="yes" optionKey="id" size="5" value="${identityProviderInstance?.protocolSupportEnumerations}" />
                                 </td>
                             </tr>
                         
@@ -98,7 +97,7 @@
                                   <label for="nameIDFormats"><g:message code="identityProvider.nameIDFormats.label"/></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: identityProviderInstance, field: 'nameIDFormats', 'errors')}">
-                                    <g:select name="nameIDFormats" from="${fedreg.saml2.metadata.orm.SamlURI.list()}" multiple="yes" optionKey="id" size="5" value="${identityProviderInstance?.nameIDFormats}" />
+                                    <g:select name="nameIDFormats" from="${fedreg.core.SamlURI.list()}" multiple="yes" optionKey="id" size="5" value="${identityProviderInstance?.nameIDFormats}" />
                                 </td>
                             </tr>
                         
@@ -203,7 +202,7 @@
                                   <label for="attributeProfiles"><g:message code="identityProvider.attributeProfiles.label"/></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: identityProviderInstance, field: 'attributeProfiles', 'errors')}">
-                                    <g:select name="attributeProfiles" from="${fedreg.saml2.metadata.orm.SamlURI.list()}" multiple="yes" optionKey="id" size="5" value="${identityProviderInstance?.attributeProfiles}" />
+                                    <g:select name="attributeProfiles" from="${fedreg.core.SamlURI.list()}" multiple="yes" optionKey="id" size="5" value="${identityProviderInstance?.attributeProfiles}" />
                                 </td>
                             </tr>
                         
@@ -212,7 +211,7 @@
                                   <label for="attributes"><g:message code="identityProvider.attributes.label"/></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: identityProviderInstance, field: 'attributes', 'errors')}">
-                                    <g:select name="attributes" from="${fedreg.saml2.metadata.orm.Attribute.list()}" multiple="yes" optionKey="id" size="5" value="${identityProviderInstance?.attributes}" />
+                                    <g:select name="attributes" from="${fedreg.core.Attribute.list()}" multiple="yes" optionKey="id" size="5" value="${identityProviderInstance?.attributes}" />
                                 </td>
                             </tr>
                         

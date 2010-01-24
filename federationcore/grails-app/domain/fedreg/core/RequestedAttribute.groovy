@@ -16,17 +16,15 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+
 package fedreg.core
 
-class AttributeCategory {
-	
-	String name
+/**
+ * @author Bradley Beddoes
+ */
+class RequestedAttribute  {
 
-    static constraints = {
-		name (blank:false)
-    }
+  boolean isRequired
+  Attribute attribute
 
-	public String toString() {
-		return name
-	}
 }

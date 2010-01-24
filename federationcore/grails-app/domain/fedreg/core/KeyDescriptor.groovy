@@ -16,17 +16,27 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+
 package fedreg.core
 
-class AttributeCategory {
-	
-	String name
+/**
+ * @author Bradley Beddoes
+ */
+class KeyDescriptor  {
 
-    static constraints = {
-		name (blank:false)
-    }
 
-	public String toString() {
-		return name
-	}
+  KeyInfo keyInfo
+  EncryptionMethod encryptionMethod
+  KeyTypes keyType
+
+  static belongsTo = [owner: RoleDescriptor]
+
+  static constraints = {
+    encryptionMethod(nullable: true)
+  }
+
+}
+
+enum KeyTypes {
+  encryption, signing
 }

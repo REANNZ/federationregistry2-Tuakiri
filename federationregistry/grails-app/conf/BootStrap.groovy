@@ -4,17 +4,14 @@ import grails.util.GrailsUtil
 
 import fedreg.core.AttributeScope
 import fedreg.core.AttributeCategory
-
-import fedreg.saml2.metadata.orm.SamlURI
-import fedreg.saml2.metadata.orm.SamlURIType
+import fedreg.core.SamlURI
+import fedreg.core.SamlURIType
 
 class BootStrap {
 	
 	def dataImporterService
 
      def init = { servletContext ->
-	
-		if (GrailsUtil.environment == GrailsApplication.ENV_DEVELOPMENT) {
 			def fedScope = new AttributeScope(name:'Federation')
 			fedScope.save()
 	
@@ -49,9 +46,6 @@ class BootStrap {
 			dataImporterService.importAttributes()
 			dataImporterService.importEntities()
 			dataImporterService.importIdentityProviders()
-			
-		}
-
      }
 
      def destroy = {

@@ -6,21 +6,20 @@ import groovy.sql.Sql
 import fedreg.core.Attribute
 import fedreg.core.AttributeScope
 import fedreg.core.AttributeCategory
-import fedreg.core.Entity
-import fedreg.core.IdentityProvider
+
+import fedreg.core.EntityDescriptor
+import fedreg.core.IDPSSODescriptor
 
 import fedreg.core.Organization
 import fedreg.core.OrganizationType
 import fedreg.core.Contact
+import fedreg.core.ContactPerson
+import fedreg.core.ContactType
 
-
-import fedreg.saml2.metadata.orm.SamlURI
-import fedreg.saml2.metadata.orm.UrlURI
-import fedreg.saml2.metadata.orm.MailURI
-import fedreg.saml2.metadata.orm.SingleSignOnService
-import fedreg.saml2.metadata.orm.EntityDescriptor
-import fedreg.saml2.metadata.orm.ContactPerson
-import fedreg.saml2.metadata.orm.ContactType
+import fedreg.core.SamlURI
+import fedreg.core.UrlURI
+import fedreg.core.MailURI
+import fedreg.core.SingleSignOnService
 
 class DataImporterService implements InitializingBean {
 
@@ -121,7 +120,7 @@ class DataImporterService implements InitializingBean {
 		sql.eachRow("select * from homeOrgs",
 		{
 			def org = Organization.findByName(it.homeOrgName)
-			def entity = new Entity(entityID:it.entityID, organization:org, blah:'blah')
+			def entity = new EntityDescriptor(entityID:it.entityID, organization:org, blah:'blah')
 			entity.save()
 			if(entity.hasErrors()) {
 				entity.errors.each {log.error it}
@@ -129,7 +128,7 @@ class DataImporterService implements InitializingBean {
 		})
 		
 		// Create ContactPerson instances and link entities to contacts
-		Entity.list().each { ent ->
+		EntityDescriptor.list().each { ent ->
 			sql.eachRow("select email, contactType from contacts INNER JOIN homeOrgs ON contacts.objectID=homeOrgs.homeOrgID WHERE homeOrgs.entityID=${ent.entityID}",
 			{
 				def email = it.email
@@ -164,8 +163,8 @@ class DataImporterService implements InitializingBean {
 		
 		sql.eachRow("select * from homeOrgs",
 		{			
-			def entity = Entity.findWhere(entityID:it.entityID)
-			def idp = new IdentityProvider(entityDescriptor:entity, organization:entity.organization)
+			def entity = EntityDescriptor.findWhere(entityID:it.entityID)
+			def idp = new IDPSSODescriptor(entityDescriptor:entity, organization:entity.organization)
 			
 			sql.eachRow("select * from serviceLocations where objectID=${it.homeOrgID} and serviceType='SingleSignOnService'",
 			{

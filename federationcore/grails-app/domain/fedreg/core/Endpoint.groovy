@@ -18,15 +18,27 @@
  */
 package fedreg.core
 
-class AttributeCategory {
-	
-	String name
+/**
+ * @author Bradley Beddoes
+ */
+class Endpoint  {
 
-    static constraints = {
-		name (blank:false)
-    }
+  SamlURI binding
+  UrlURI location
+  UrlURI responseLocation
 
-	public String toString() {
-		return name
-	}
+  static mapping = {
+    tablePerHierarchy false
+  }
+
+  static constraints = {
+    binding(nullable: false)
+    location(nullable: false)
+    responseLocation(nullable: true)
+  }
+
+  public String toString() {
+	return location.uri
+  }
+
 }

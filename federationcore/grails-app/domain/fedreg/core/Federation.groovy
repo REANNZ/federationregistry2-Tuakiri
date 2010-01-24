@@ -16,17 +16,24 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+
 package fedreg.core
 
-class AttributeCategory {
-	
-	String name
+/**
+ * @author Bradley Beddoes
+ */
+class Federation {
 
-    static constraints = {
-		name (blank:false)
-    }
+  EntitiesDescriptor entitiesDescriptor
+  String name
+  String description
 
-	public String toString() {
-		return name
-	}
+  static hasMany = [
+          members: Member
+  ]
+
+  static constraints = {
+    members(nullable: true)
+  }
+
 }

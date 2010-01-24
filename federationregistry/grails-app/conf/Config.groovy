@@ -19,10 +19,10 @@ fedreg {
         alttext = "Australian Access Federation"
 
         federationprovider {
-			spactive = false
+			spactive = true
             enabled = true
             autoprovision = true
-			ssoendpoint = "/Shibboleth.sso/Login"
+			ssoendpoint = "/Shibboleth.sso/DS"
         }
 
 		headers {
@@ -40,7 +40,7 @@ security.shiro.authc.required = false
 // set per-environment serverURL stem for creating absolute links
 environments {
     production {
-        grails.serverURL = "http://www.changeme.com"
+        grails.serverURL = "https://manager.test.aaf.edu.au/${appName}"
 		testDataConfig {
         	enabled = false
       	}

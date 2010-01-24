@@ -16,17 +16,29 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+
 package fedreg.core
 
-class AttributeCategory {
-	
-	String name
+/**
+ * @author Bradley Beddoes
+ */
+class AttributeConsumingService {
 
-    static constraints = {
-		name (blank:false)
-    }
+	boolean isDefault
+	int index
 
-	public String toString() {
-		return name
+	static hasMany = [
+    	serviceNames: LocalizedName,
+	    serviceDescriptions: LocalizedName,
+	    requestedAttributes: RequestedAttribute
+	]
+
+	static constraints = {
+		serviceDescriptions(nullable: true)
 	}
+	
+	static mapping = {
+		index column: "mdindex"		
+	}
+
 }

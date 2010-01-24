@@ -16,17 +16,23 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+
 package fedreg.core
 
-class AttributeCategory {
-	
-	String name
+/**
+ * @author Bradley Beddoes
+ */
+class Uri  {
 
-    static constraints = {
-		name (blank:false)
-    }
+  String uri
+  String description
 
-	public String toString() {
-		return name
-	}
+  static mapping = {
+    tablePerHierarchy false
+  }
+
+  static constraints = {
+    description(nullable: true, blank: true)
+  }
+
 }

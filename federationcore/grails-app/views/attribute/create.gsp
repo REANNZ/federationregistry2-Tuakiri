@@ -37,7 +37,7 @@
                                     <label for="nameFormat"><g:message code="attribute.nameFormat.label" default="Name Format" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: attributeInstance, field: 'nameFormat', 'errors')}">
-                                    <g:select name="nameFormat.id" from="${fedreg.saml2.metadata.orm.SamlURI.list()}" optionKey="id" value="${attributeInstance?.nameFormat?.id}" noSelection="['null': '']" />
+                                    <g:select name="nameFormat.id" from="${fedreg.core.SamlURI.list()}" optionKey="id" value="${attributeInstance?.nameFormat?.id}" noSelection="['null': '']" />
                                 </td>
                             </tr>
                         

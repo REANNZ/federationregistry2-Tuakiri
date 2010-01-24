@@ -16,17 +16,36 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+
 package fedreg.core
 
-class AttributeCategory {
-	
-	String name
+/**
+ * @author Bradley Beddoes
+ */
+class RoleDescriptor  {
 
-    static constraints = {
-		name (blank:false)
-    }
+  Organization organization
+  UrlURI errorURL
+  String extensions
 
-	public String toString() {
-		return name
-	}
+  static hasMany = [
+          contactPersons: ContactPerson,
+          protocolSupportEnumerations: SamlURI,
+          keyDescriptors: KeyDescriptor
+  ]
+
+  static mapping = {
+    tablePerHierarchy false
+  }
+
+  static constraints = {
+    organization(nullable: true)
+    extensions(nullable: true)
+    errorURL(nullable:true)
+    protocolSupportEnumerations(nullable: true)
+
+    contactPersons(nullable: true)
+    keyDescriptors(nullable: true)
+  }
+
 }

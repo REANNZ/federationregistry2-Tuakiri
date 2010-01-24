@@ -13,7 +13,7 @@
 		</tr>
 		<tr>
 			<th><g:message code="fedreg.label.providingentity" /></th>
-			<td>${user?.entity?.blah.encodeAsHTML()}</td>
+			<td>${user?.entityDescriptor?.entityID.encodeAsHTML()}</td>
 		</tr>
   </tbody>
 </table>
