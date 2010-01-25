@@ -47,11 +47,11 @@ fedreg {
 	}
 	
 	shibboleth {
-		name = "Our Federation"
-        displayname = "Our Federation"
-        description = "Our federation description"
+		name = "fedreg.template.federation.shibboleth.name"
+	    displayname = "fedreg.template.federation.shibboleth.displayname"
+	    description = "fedreg.template.federation.shibboleth.description"
+	    alttext = "fedreg.template.federation.shibboleth.alttext"
         url = "http://www.federation.org"
-        alttext = "Our Federation Logo Alt Text"
 
         federationprovider {
 			spactive = false

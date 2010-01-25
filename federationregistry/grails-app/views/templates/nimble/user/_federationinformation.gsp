@@ -4,12 +4,12 @@
 		<tr>
 			<th><g:message code="nimble.label.provider" /></th>
 			<td valign="top">
-			<a href="${user.federationProvider.details?.url?.location}" alt="${user.federationProvider.details?.url?.altText}">${user?.federationProvider?.details?.displayName.encodeAsHTML()}</a>
+			<a href="${user.federationProvider.details?.url?.location}" alt="${user.federationProvider.details?.url?.altText}"><g:message code="${user?.federationProvider?.details?.displayName}"/></a>
 		</td>
 		</tr>
 		<tr>
 			<th><g:message code="nimble.label.description" /></th>
-			<td>${user?.federationProvider?.details?.description.encodeAsHTML()}</td>
+			<td><g:message code="${user?.federationProvider?.details?.description}"/></td>
 		</tr>
 		<tr>
 			<th><g:message code="fedreg.label.providingentity" /></th>

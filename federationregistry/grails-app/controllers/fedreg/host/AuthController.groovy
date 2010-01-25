@@ -23,7 +23,7 @@ class AuthController {
 	def userService
 	def dataImporterService
 	
-	static Map allowedMethods = [shibauth: 'POST', devauth: 'POST']
+	static Map allowedMethods = [ devauth: 'POST' ]
 	
 	def index = {
 		redirect (action:login)
