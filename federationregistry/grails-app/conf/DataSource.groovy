@@ -1,3 +1,4 @@
+
 hibernate {
     cache.use_second_level_cache=true
     cache.use_query_cache=true
@@ -13,12 +14,12 @@ environments {
 	}
 	test {
 		dataSource {
-			dbCreate = "update"
+			dbCreate = "create-drop"
 		}
 	}
 	production {
 		dataSource {
-			dbCreate = "update"
+			dbCreate = "create-drop"
 		}
 	}
 }
