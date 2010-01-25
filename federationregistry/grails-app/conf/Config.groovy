@@ -1,81 +1,15 @@
 
-// Application configuration, possibly should be externalized using Grails external config abilities when looking to deploy more widely
-
-appName=federationregistry
-
-fedreg {
-	oldrr {
-		connection = "jdbc:mysql://localhost:3306/resourceregistry"
-		user = "rr"
-		password = "password"
-		driver = "com.mysql.jdbc.Driver"
-	}
-	
-	shibboleth {
-		name = "Australian Access Federation"
-        displayname = "Australian Access Federation"
-        description = "The Australian Access Federation provides the means of allowing a participating institution and/or a service provider to trust the information it receives from another participating institution."
-        url = "http://www.aaf.edu.au"
-        alttext = "Australian Access Federation"
-
-        federationprovider {
-			spactive = true
-            enabled = true
-            autoprovision = true
-			ssoendpoint = "/Shibboleth.sso/DS"
-        }
-
-		headers {
-			entityID = "Shib-Identity-Provider"
-			uniqueID = "persistent-id"
-			givenName= "giveName"
-			surname= "sn"
-			email= "mail"
-		}
-    }
+// Import externalized configuration for the Federation Registry application
+def fedregConf = System.getenv("FEDREG_CONFIG")
+if(fedregConf) {
+	println( "Including configuration file: ${fedregConf}" )
+	grails.config.locations = ["file:${fedregConf}"]
+} else {
+	println "No external configuration file defined for environment variable FEDREG_CONFIG, terminating startup"
+	throw new RuntimeException("No external configuration file defined for environment variable FEDREG_CONFIG, terminating startup")
 }
 
-security.shiro.authc.required = false
-
-// set per-environment serverURL stem for creating absolute links
-environments {
-    production {
-        grails.serverURL = "https://manager.test.aaf.edu.au/${appName}"
-		testDataConfig {
-        	enabled = false
-      	}
-    }
-    test {
-        grails.serverURL = "http://localhost:8080/${appName}"
-		testDataConfig {
-        	enabled = true
-      	}
-    }
-    development {
-        grails.serverURL = "http://localhost:8080/${appName}"
-		testDataConfig {
-        	enabled = false
-      	}
-    }
-}
-
-// log4j configuration
-log4j = {
-    error 	'org.codehaus.groovy.grails.web.servlet',
-          	'org.codehaus.groovy.grails.web.pages',
-          	'org.codehaus.groovy.grails.web.sitemesh',
-          	'org.codehaus.groovy.grails.web.mapping.filter',
-          	'org.codehaus.groovy.grails.web.mapping',
-          	'org.codehaus.groovy.grails.commons',
-       		'org.codehaus.groovy.grails.plugins'
-
-    debug 	'grails.plugins.nimble',
-			'fedreg',
-			'org.apache.shiro'
-			
-	info	'org.springframework'
-}
-
+// Standard Grails configuration
 grails.mime.file.extensions = true
 grails.mime.use.accept.header = false
 grails.mime.types = [html: ['text/html', 'application/xhtml+xml'],
@@ -95,12 +29,24 @@ grails.mime.types = [html: ['text/html', 'application/xhtml+xml'],
 grails.views.default.codec = "none"
 grails.views.gsp.encoding = "UTF-8"
 grails.converters.encoding = "UTF-8"
-
 grails.enable.native2ascii = true
-
-
-// enable GSP preprocessing: replace head -> g:captureHead, title -> g:captureTitle, meta -> g:captureMeta, body -> g:captureBody
 grails.views.gsp.sitemesh.preprocess = true
+
+// Environmental configuration
+environments {
+    test {
+        grails.serverURL = "http://localhost:8080/${appName}"
+		testDataConfig {
+        	enabled = true
+      	}
+    }
+    development {
+        grails.serverURL = "http://localhost:8080/${appName}"
+		testDataConfig {
+        	enabled = false
+      	}
+    }
+}
 
 
 

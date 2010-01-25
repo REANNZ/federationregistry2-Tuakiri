@@ -23,10 +23,7 @@ class AuthController {
 	def userService
 	def dataImporterService
 	
-	def di = {
-		dataImporterService.importEntities()
-		sendError(500)
-	}
+	static Map allowedMethods = [shibauth: 'POST', devauth: 'POST']
 	
 	def index = {
 		redirect (action:login)

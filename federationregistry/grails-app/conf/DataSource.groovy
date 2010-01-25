@@ -1,12 +1,3 @@
-dataSource {
-	pooled = true
-	driverClassName = "com.mysql.jdbc.Driver"
-	username = "fr"
-	password =  "password"
-	dialect= org.hibernate.dialect.MySQLInnoDBDialect
-	
-	url = "jdbc:mysql://localhost/federationregistry"
-}
 hibernate {
     cache.use_second_level_cache=true
     cache.use_query_cache=true
