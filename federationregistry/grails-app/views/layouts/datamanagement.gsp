@@ -35,7 +35,7 @@
     <div id="bd">
 		<div class="container">
 	    	<div class="localnavigation">
-			  <h3><g:message code="fedreg.layout.data.navigation.title" /></h3>
+			  <h3><g:message code="fedreg.layout.datamanagement.navigation.title" /></h3>
 			    <ul>
 				  <li><g:link controller="dataManagement" action="refreshdata"><g:message code="fedreg.link.refreshdata" /></g:link>
 				  </li>

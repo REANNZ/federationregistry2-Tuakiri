@@ -3,11 +3,13 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<meta name="layout" content="datamanagement" />
-		<title><g:message code="fedreg.view.host.data.title"/></title>
+		<title><g:message code="fedreg.view.host.datamanagement.title"/></title>
 	</head>
 	<body>
 			
-			<h2><g:message code="fedreg.view.host.data.descriptive"/></h2>
+			<h2><g:message code="fedreg.view.host.datamanagement.heading"/></h2>
+			
+			<g:message code="fedreg.view.host.datamanagement.descriptive"/>
 			
 			<table class="cleantable buttons">
                 <thead>
