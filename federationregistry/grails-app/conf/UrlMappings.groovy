@@ -14,7 +14,16 @@ class UrlMappings {
 		controller = "attributeCompliance"
 	}
 	
-      "/"(view:"/index")
+	"/bootstrap" {
+			controller = "dataManagement"
+			action = "bootstrap"
+	}
+	
+	"/datamanagement/$action?/$id?"{
+		controller = "dataManagement"
+	}
+	
+    "/"(view:"/index")
 	  "500"(view:'/error')
 	}
 }

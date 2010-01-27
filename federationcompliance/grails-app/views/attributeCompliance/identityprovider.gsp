@@ -17,15 +17,14 @@
 				<div class="numeric">
 					<strong>${currentStatus.supportedCount.encodeAsHTML()}<span class="total"> / ${currentStatus.totalCount.encodeAsHTML()}</span></strong>
 				</div>
-				
-				<div id="graphic${i}" style="margin-left: 18px; width: 200px; height: 150px;"></div>
+				<div id="graphic${i}" style="width: 150px; height: 125px;"></div>
 				<script type="text/javascript">
 					line${i} = [['supported',${currentStatus.supportedCount}], ['unsupported',${(currentStatus.totalCount - currentStatus.supportedCount)}] ];
 					plot${i} = $.jqplot('graphic${i}', [line${i}], {
 					    title: '',
 					    seriesColors: [ "#30A800", "#D44226" ],
-						grid: { background: 'transparent', borderColor: 'transparent', shadow: false },
-					    seriesDefaults:{renderer:$.jqplot.PieRenderer, rendererOptions:{sliceMargin:3, diameter: 100}}
+						grid: { background: '#fff', borderColor: '#fff', shadow: false },
+					    seriesDefaults:{renderer:$.jqplot.PieRenderer, rendererOptions:{sliceMargin:0, diameter: 80}}
 					});
 				</script>	
 			</div>

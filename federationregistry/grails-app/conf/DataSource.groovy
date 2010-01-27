@@ -14,12 +14,12 @@ environments {
 	}
 	test {
 		dataSource {
-			dbCreate = "create-drop"
+			dbCreate = "update"
 		}
 	}
 	production {
 		dataSource {
-			dbCreate = "create-drop"
+			dbCreate = "update"
 		}
 	}
 }

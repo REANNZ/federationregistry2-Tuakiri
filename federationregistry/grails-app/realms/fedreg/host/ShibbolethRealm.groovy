@@ -38,6 +38,12 @@ class ShibbolethRealm {
 			log.error("Authentication attempt for Shibboleth provider, denying attempt as no entityID (ShibbolethToken.entityID) was provided")
 			throw new UnknownAccountException("Authentication attempt for Shibboleth provider, denying attempt as no entityID (ShibbolethToken.entityID) was provided")
 		}
+		
+		def entityDescriptor = EntityDescriptor.findWhere(entityID:authToken.entityID)
+		if(!entityDescriptor) {
+			log.error("Authentication attempt for Shibboleth provider, denying attempt as no Entity matching (ShibbolethToken.entityID) is available. Has bootstrap occured?")
+			throw new UnknownAccountException("Authentication attempt for Shibboleth provider, denying attempt as no Entity matching (ShibbolethToken.entityID) is available. Has bootstrap occured?")
+		}
 
 		def user = UserBase.findByUsername(authToken.principal)
 		if (!user) {
@@ -45,12 +51,6 @@ class ShibbolethRealm {
 			def shibbolethFederationProvider = FederationProvider.findByUid(ShibbolethService.federationProviderUid)
 			if (shibbolethFederationProvider && shibbolethFederationProvider.autoProvision) {	
 				log.info("Shibboleth auto provision is enabled, creating user account for ${authToken.principal} belonging to Entity ${authToken.entityID}")
-
-				def entityDescriptor = EntityDescriptor.findWhere(entityID:authToken.entityID)
-				if(!entityDescriptor) {
-					log.error("Authentication attempt for Shibboleth provider, denying attempt as no Entity matching (ShibbolethToken.entityID) is available. Has bootstrap occured?")
-					throw new UnknownAccountException("Authentication attempt for Shibboleth provider, denying attempt as no Entity matching (ShibbolethToken.entityID) is available. Has bootstrap occured?")
-				}
 
 				UserBase newUser = InstanceGenerator.user()
 				newUser.username = authToken.principal
@@ -88,14 +88,18 @@ class ShibbolethRealm {
 			// Update name and email to what IDP has supplied - this could be extended to role membership etc in the future
 			boolean change = false
 			def fullName = "${authToken.givenName} ${authToken.surname}"
-			def email = authToken.email 
+			def email = (authToken.email == "") ? null : authToken.email 
 			if(user.profile.fullName != fullName) {
 				change = true
 				user.profile.fullName = fullName
 			}	
 			if(user.profile.email != email) {
 				change = true
-				user.profile.email != email
+				user.profile.email = email
+			}
+			if(user.entityDescriptor != entityDescriptor) {
+				change = true
+				user.entityDescriptor = entityDescriptor
 			}
 			if(change) {
 				userService.updateUser(user)

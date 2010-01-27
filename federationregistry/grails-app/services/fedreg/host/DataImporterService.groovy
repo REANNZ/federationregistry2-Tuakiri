@@ -37,6 +37,17 @@ class DataImporterService implements InitializingBean {
         sql = Sql.newInstance(oldrr.connection, oldrr.user, oldrr.password, oldrr.driver)	
     }
 
+	def dumpData() {
+		log.debug("Executing dump data process")
+		User.list().each { it.entityDescriptor = null; it.save(); }
+		IDPSSODescriptor.list().each {it.delete();}
+		EntityDescriptor.list().each {it.delete();}
+		Contact.list().each {it.delete();}
+		Attribute.list().each {it.delete();}
+		Organization.list().each {it.delete();}
+		OrganizationType.list().each {it.delete();}
+	}
+
 	def importOrganizations() {
 		sql.eachRow("select * from homeOrgTypes",
 		{
