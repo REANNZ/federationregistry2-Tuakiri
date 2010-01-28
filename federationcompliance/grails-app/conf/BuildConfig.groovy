@@ -1,6 +1,5 @@
 
 // Local Plugins
-grails.plugin.location.saml2orm="../saml2orm"
 grails.plugin.location.federationcore="../federationcore"
 
 grails.project.class.dir = "target/classes"
