@@ -1,6 +1,5 @@
 
 // Local Plugins
-grails.plugin.location.saml2orm="../saml2orm"
 
 grails.project.class.dir = "target/classes"
 grails.project.test.class.dir = "target/test-classes"
