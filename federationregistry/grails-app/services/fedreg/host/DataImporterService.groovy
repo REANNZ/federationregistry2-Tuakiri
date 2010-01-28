@@ -45,8 +45,11 @@ class DataImporterService implements InitializingBean {
 		importEntities()
 		importIdentityProviders()
 		
-		def dataLoadRecord = new DataLoadRecord(invoker:authenticatedUser?:null, remoteAddr: request.getRemoteAddr(), remoteHost: request.getRemoteHost(), userAgent:request.getHeader("User-Agent"))
-		dataLoadRecord.save()
+		if(request)
+		{
+			def dataLoadRecord = new DataLoadRecord(invoker:authenticatedUser?:null, remoteAddr: request.getRemoteAddr(), remoteHost: request.getRemoteHost(), userAgent:request.getHeader("User-Agent"))
+			dataLoadRecord.save()
+		}
 	}
 	
 	def initialPopulate() {
