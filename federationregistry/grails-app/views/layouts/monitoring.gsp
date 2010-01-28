@@ -33,21 +33,7 @@
 		<g:render template='/templates/aafheader' model="['navigation':true]"/>
     </div>
     <div id="bd">
-		<div class="container">
-	    	<div class="localnavigation">
-			  <h3><g:message code="fedreg.layout.datamanagement.navigation.title" /></h3>
-			    <ul>
-				  <li>
-					<n:confirmaction action="document.refreshdata.submit();" title="${message(code: 'fedreg.view.host.datamanagement.confirm.title')}" msg="${message(code: 'fedreg.view.host.datamanagement.confirm.descriptive')}" accept="${message(code: 'nimble.link.accept')}" cancel="${message(code: 'nimble.link.cancel')}" class=""><g:message code="fedreg.link.refreshdata" /></n:confirmaction>
-				  </li>
-				</ul>
-			</div>
-			<div class="content">
 	      		<g:layoutBody/>
-			  	<g:form action="refreshdata" name="refreshdata">
-				</g:form>
-			</div>
-		</div>
     </div>
     <div id="ft">
 	
@@ -55,7 +41,7 @@
   </div>
 
 <n:sessionterminated/>
-<n:confirm/>
+
 
 </body>
 

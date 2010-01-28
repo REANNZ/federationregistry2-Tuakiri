@@ -36,7 +36,16 @@ public class SecurityFilters extends grails.plugins.nimble.security.NimbleFilter
         }
 
 		// Data reload functionality
-		administration(controller: "dataManagement", action:"(index|refreshdata)") {
+		datamgt(controller: "dataManagement", action:"(index|refreshdata)") {
+            before = {
+                accessControl {
+                    role(AdminsService.ADMIN_ROLE)
+                }
+            }
+        }
+
+		// Monitoring functionality
+		monitoring(controller: "monitor") {
             before = {
                 accessControl {
                     role(AdminsService.ADMIN_ROLE)

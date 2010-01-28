@@ -17,6 +17,7 @@ import fedreg.core.ContactPerson
 import fedreg.core.ContactType
 
 import fedreg.core.SamlURI
+import fedreg.core.SamlURIType
 import fedreg.core.UrlURI
 import fedreg.core.MailURI
 import fedreg.core.SingleSignOnService
@@ -36,6 +37,46 @@ class DataImporterService implements InitializingBean {
 		def oldrr = grailsApplication.config.fedreg.oldrr		
         sql = Sql.newInstance(oldrr.connection, oldrr.user, oldrr.password, oldrr.driver)	
     }
+
+	def populate(def request) {
+		importOrganizations()
+		importContacts()
+		importAttributes()
+		importEntities()
+		importIdentityProviders()
+		
+		def dataLoadRecord = new DataLoadRecord(invoker:authenticatedUser?:null, remoteAddr: request.getRemoteAddr(), remoteHost: request.getRemoteHost(), userAgent:request.getHeader("User-Agent"))
+		dataLoadRecord.save()
+	}
+	
+	def initialPopulate() {
+		def fedScope = new AttributeScope(name:'Federation')
+		fedScope.save()
+
+		def localScope = new AttributeScope(name:'Local')
+		localScope.save()
+
+		def mandatoryCategory = new AttributeCategory(name:'Mandatory')
+		mandatoryCategory.save()
+
+		def recommendedCategory = new AttributeCategory(name:'Recommended')
+		recommendedCategory.save()
+
+		def optionalCategory = new AttributeCategory(name:'Optional')
+		optionalCategory.save()
+		
+		def httpRedirect = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect')
+		httpRedirect.save()
+		
+		def httpPost = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST')
+		httpPost.save()
+		
+		def httpPostSimple = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST-SimpleSign')
+		httpPostSimple.save()
+		
+		def shibAuthn = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:mace:shibboleth:1.0:profiles:AuthnRequest')
+		shibAuthn.save()
+	}
 
 	def dumpData() {
 		log.debug("Executing dump data process")
