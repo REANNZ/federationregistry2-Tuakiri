@@ -3,24 +3,7 @@ package fedreg.host
 import org.springframework.beans.factory.InitializingBean
 import groovy.sql.Sql
 
-import fedreg.core.Attribute
-import fedreg.core.AttributeScope
-import fedreg.core.AttributeCategory
-
-import fedreg.core.EntityDescriptor
-import fedreg.core.IDPSSODescriptor
-
-import fedreg.core.Organization
-import fedreg.core.OrganizationType
-import fedreg.core.Contact
-import fedreg.core.ContactPerson
-import fedreg.core.ContactType
-
-import fedreg.core.SamlURI
-import fedreg.core.SamlURIType
-import fedreg.core.UrlURI
-import fedreg.core.MailURI
-import fedreg.core.SingleSignOnService
+import fedreg.core.*
 
 class DataImporterService implements InitializingBean {
 
@@ -43,7 +26,8 @@ class DataImporterService implements InitializingBean {
 		importContacts()
 		importAttributes()
 		importEntities()
-		importIdentityProviders()
+		importIDPSSODescriptors()
+		importAttributeAuthorityDescriptors()
 		
 		if(request)
 		{
@@ -74,11 +58,20 @@ class DataImporterService implements InitializingBean {
 		def httpPost = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST')
 		httpPost.save()
 		
+		def httpArtifact = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact')
+		httpPost.save()
+		
 		def httpPostSimple = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST-SimpleSign')
 		httpPostSimple.save()
 		
 		def shibAuthn = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:mace:shibboleth:1.0:profiles:AuthnRequest')
 		shibAuthn.save()
+		
+		def soap = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:SOAP')
+		soap.save()
+		
+		def soap1 = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:1.0:bindings:SOAP-binding')
+		soap1.save()
 	}
 
 	def dumpData() {
@@ -172,49 +165,68 @@ class DataImporterService implements InitializingBean {
 	}
 
 	def importEntities() {
+		log.debug "Importing entities from upstream resource registry"
 		sql.eachRow("select * from homeOrgs",
 		{
 			def org = Organization.findByName(it.homeOrgName)
-			def entity = new EntityDescriptor(entityID:it.entityID, organization:org, blah:'blah')
-			entity.save()
+			def entity = new EntityDescriptor(entityID:it.entityID, organization:org, active:it.approved).save()
 			if(entity.hasErrors()) {
 				entity.errors.each {log.error it}
 			}
+			log.debug "Imported entity ${entity.entityID}"
+			
+			// Create ContactPerson instances and link entities to contacts
+			sql.eachRow("select email, contactType from contacts INNER JOIN homeOrgs ON contacts.objectID=homeOrgs.homeOrgID WHERE homeOrgs.entityID=${entity.entityID}",
+			{
+				linkContact(it, entity)
+			})
+			entity.save()
 		})
 		
-		// Create ContactPerson instances and link entities to contacts
-		EntityDescriptor.list().each { ent ->
-			sql.eachRow("select email, contactType from contacts INNER JOIN homeOrgs ON contacts.objectID=homeOrgs.homeOrgID WHERE homeOrgs.entityID=${ent.entityID}",
+		sql.eachRow("select * from resources",
+		{
+			def org = Organization.findByName(it.homeOrg)
+			def entity = new EntityDescriptor(entityID:it.providerID, organization:org, active:it.visible).save()
+			if(entity.hasErrors()) {
+				entity.errors.each {log.error it}
+			}
+			log.debug "Imported entity ${entity.entityID}"
+			
+			// Create ContactPerson instances and link entities to contacts
+			sql.eachRow("select email, contactType from contacts INNER JOIN resources ON contacts.objectID=resources.resourceID WHERE resources.providerID=${entity.entityID}",
 			{
-				def email = it.email
-				def c = Contact.createCriteria()
-				def contact = c.get {
+				linkContact(it, entity)
+			})
+			entity.save()
+		})
+	}
+	
+	def linkContact(def row, def ent) {
+		def email = row.email
+		def c = Contact.createCriteria()
+		def contact = c.get {
+			and {
+				emailAddresses {
 					and {
-						emailAddresses {
-							and {
-								eq("uri", email)
-							}
-						}
+						eq("uri", email)
 					}
 				}
-				def type
-				switch(it.contactType) {
-					case 'technical': type = ContactType.technical; break;
-					case 'support': type = ContactType.support; break;
-					case 'administrative': type = ContactType.administrative; break;
-					case 'billing': type = ContactType.billing; break;
-					default: type = ContactType.other; break;
-				}
-				def contactPerson = new ContactPerson(contact:contact, entity:ent, type:type)
-				ent.addToContacts(contactPerson)
-			})
-			
-			ent.save()
+			}
 		}
+		def type
+		switch(row.contactType) {
+			case 'technical': type = ContactType.technical; break;
+			case 'support': type = ContactType.support; break;
+			case 'administrative': type = ContactType.administrative; break;
+			case 'billing': type = ContactType.billing; break;
+			default: type = ContactType.other; break;
+		}
+		def contactPerson = new ContactPerson(contact:contact, entity:ent, type:type)
+		ent.addToContacts(contactPerson)
+		log.debug "Linked contact ${contactPerson.contact.givenName} ${contactPerson.contact.surname} to entity ${ent.entityID}"
 	}
 
-	// TODO: Extend to support full range of IDP components, very minimal currently much more to pull in
-	def importIdentityProviders() {
+	def importIDPSSODescriptors() {
 		
 		sql.eachRow("select * from homeOrgs",
 		{			
@@ -229,21 +241,56 @@ class DataImporterService implements InitializingBean {
 					def ssoService = new SingleSignOnService(binding: binding, location: location)
 					idp.addToSingleSignOnServices(ssoService)
 				}
+				else 
+					log.warn ("No SamlURI binding for uri ${it.serviceBinding} exists, not importing, not importing SingleSignOnService")
 			})
-			
+			sql.eachRow("select * from serviceLocations where objectID=${it.homeOrgID} and serviceType='ArtifactResolutionService'",
+			{
+				def binding = SamlURI.findByUri(it.serviceBinding)
+				if(binding) {
+					def location = new UrlURI(uri:it.serviceLocation)
+					def artServ = new ArtifactResolutionService(binding: binding, location: location, isDefault: it.defaultLocation)
+					idp.addToArtifactResolutionServices(artServ)
+				}
+				else
+					log.warn ("No SamlURI binding for uri ${it.serviceBinding} exists, not importing ArtifactResolutionService")
+			})
 			sql.eachRow("select attributeOID from attributes INNER JOIN homeOrgAttributes ON attributes.attributeID=homeOrgAttributes.attributeID where homeOrgAttributes.homeOrgID=${it.homeOrgID};",
 			{
 				def attr = Attribute.findByOid(it.attributeOID)
 				if(attr)
 					idp.addToAttributes(attr)
 			})
-
-			//idp.save()
-			//if(idp.hasErrors()) {
-			//	idp.errors.each {log.error it}
-			//}
 			entity.addToIdpDescriptors(idp)
 			entity.save()
 		})	
+	}
+	
+	def importAttributeAuthorityDescriptors() {
+		sql.eachRow("select * from homeOrgs",
+		{			
+			def entity = EntityDescriptor.findWhere(entityID:it.entityID)
+			def aa = new AttributeAuthorityDescriptor(entityDescriptor:entity, organization:entity.organization).save()
+			
+			sql.eachRow("select * from serviceLocations where objectID=${it.homeOrgID} and serviceType='AttributeService'",
+			{
+				def binding = SamlURI.findByUri(it.serviceBinding)
+				if(binding) {
+					def location = new UrlURI(uri:it.serviceLocation)
+					def attrService = new AttributeService(binding: binding, location: location)
+					aa.addToAttributeServices(attrService)
+				}
+				else 
+					log.warn ("No SamlURI binding for uri ${it.serviceBinding} exists, not importing, not importing AttributeService")
+			})
+			sql.eachRow("select attributeOID from attributes INNER JOIN homeOrgAttributes ON attributes.attributeID=homeOrgAttributes.attributeID where homeOrgAttributes.homeOrgID=${it.homeOrgID};",
+			{
+				def attr = Attribute.findByOid(it.attributeOID)
+				if(attr)
+					aa.addToAttributes(attr)
+			})
+			entity.addToAttributeAuthorityDescriptors(aa)
+			entity.save()
+		})
 	}
 }

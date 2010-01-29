@@ -28,6 +28,8 @@ class EntityDescriptor {
   Organization organization
   String extensions
 
+	boolean active
+
   static hasMany = [
           idpDescriptors: IDPSSODescriptor,
           spDescriptors: SPSSODescriptor,

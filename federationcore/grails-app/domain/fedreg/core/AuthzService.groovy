@@ -22,16 +22,8 @@ package fedreg.core
 /**
  * @author Bradley Beddoes
  */
-class PDPDescriptor {
+class AuthzService extends Endpoint  {
 
-  static hasMany = [
-          authzServices: Endpoint,
-          assertionIDRequestServices: AssertionIDRequestService,
-          nameIDFormats: String
-  ]
+	static belongsTo = [ owner:PDPDescriptor ]
 
-  static constraints = {
-    assertionIDRequestServices(nullable: true)
-    nameIDFormats(nullable: true)
-  }
 }

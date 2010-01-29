@@ -25,8 +25,8 @@ package fedreg.core
 class AttributeAuthorityDescriptor extends RoleDescriptor {
 
   static hasMany = [
-          attributeServices: Endpoint,
-          assertionIDRequestServices: Endpoint,
+          attributeServices: AttributeService,
+          assertionIDRequestServices: AssertionIDRequestService,
           nameIDFormats: String,
           attributeProfiles: String,
           attributes: Attribute
