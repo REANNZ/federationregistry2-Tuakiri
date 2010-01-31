@@ -10,6 +10,11 @@ if(fedregConf) {
 }
 
 // Standard Grails configuration
+
+grails.gorm.default.mapping = {
+
+}
+
 grails.mime.file.extensions = true
 grails.mime.use.accept.header = false
 grails.mime.types = [html: ['text/html', 'application/xhtml+xml'],

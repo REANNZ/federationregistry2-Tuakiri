@@ -77,6 +77,7 @@ class DataImporterService implements InitializingBean {
 	def dumpData() {
 		log.debug("Executing dump data process")
 		User.list().each { it.entityDescriptor = null; it.save(); }
+		AttributeAuthorityDescriptor.list().each {it.delete();}
 		IDPSSODescriptor.list().each {it.delete();}
 		EntityDescriptor.list().each {it.delete();}
 		Contact.list().each {it.delete();}
@@ -293,4 +294,9 @@ class DataImporterService implements InitializingBean {
 			entity.save()
 		})
 	}
+
+	def importSPSSODescriptors() {
+		
+	}
+
 }
