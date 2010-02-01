@@ -22,25 +22,8 @@ package fedreg.core
 /**
  * @author Bradley Beddoes
  */
-class AttributeConsumingService {
+class AssertionConsumerService extends IndexedEndpoint  {
 
-	boolean isDefault
-	int index
-
-	static hasMany = [
-    	serviceNames: LocalizedName,
-	    serviceDescriptions: LocalizedName,
-	    requestedAttributes: RequestedAttribute
-	]
-
-	static constraints = {
-		serviceDescriptions(nullable: true)
-	}
-	
-	static belongsTo = [owner: SPSSODescriptor]
-	
-	static mapping = {
-		index column: "mdindex"		// Avoid DB collisions with reserved word index
-	}
+  static belongsTo = [owner: SPSSODescriptor]
 
 }

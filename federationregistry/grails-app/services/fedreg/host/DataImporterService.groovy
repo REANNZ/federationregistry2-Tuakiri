@@ -28,6 +28,7 @@ class DataImporterService implements InitializingBean {
 		importEntities()
 		importIDPSSODescriptors()
 		importAttributeAuthorityDescriptors()
+		importSPSSODescriptors()
 		
 		if(request)
 		{
@@ -37,53 +38,49 @@ class DataImporterService implements InitializingBean {
 	}
 	
 	def initialPopulate() {
-		def fedScope = new AttributeScope(name:'Federation')
-		fedScope.save()
-
-		def localScope = new AttributeScope(name:'Local')
-		localScope.save()
-
-		def mandatoryCategory = new AttributeCategory(name:'Mandatory')
-		mandatoryCategory.save()
-
-		def recommendedCategory = new AttributeCategory(name:'Recommended')
-		recommendedCategory.save()
-
-		def optionalCategory = new AttributeCategory(name:'Optional')
-		optionalCategory.save()
 		
-		def httpRedirect = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect')
-		httpRedirect.save()
+		// Attribute Scopes (Non standard)	
+		def fedScope = new AttributeScope(name:'Federation').save()
+		def localScope = new AttributeScope(name:'Local').save()
+		def mandatoryCategory = new AttributeCategory(name:'Mandatory').save()
+		def recommendedCategory = new AttributeCategory(name:'Recommended').save()
+		def optionalCategory = new AttributeCategory(name:'Optional').save()
 		
-		def httpPost = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST')
-		httpPost.save()
+		// Bindings
+		def httpRedirect = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect').save()
+		def httpPost = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST').save()
+		def httpArtifact = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact').save()
+		def httpPostSimple = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST-SimpleSign').save()
+		def paos = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:PAOS').save()
+		def soap = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:SOAP').save()
+		def shibAuthn = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:mace:shibboleth:1.0:profiles:AuthnRequest').save()
+		def httpPost1 = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:1.0:profiles:browser-post').save()
+		def httpArtifact1 = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:1.0:profiles:artifact-01').save()
+		def soap1 = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:1.0:bindings:SOAP-binding').save()
 		
-		def httpArtifact = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact')
-		httpPost.save()
-		
-		def httpPostSimple = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST-SimpleSign')
-		httpPostSimple.save()
-		
-		def shibAuthn = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:mace:shibboleth:1.0:profiles:AuthnRequest')
-		shibAuthn.save()
-		
-		def soap = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:SOAP')
-		soap.save()
-		
-		def soap1 = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:1.0:bindings:SOAP-binding')
-		soap1.save()
+		// NameIDFormats
+		def unspec = new SamlURI(type:SamlURIType.NameIdentifierFormat, uri:'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified').save()
+		def email = new SamlURI(type:SamlURIType.NameIdentifierFormat, uri:'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress').save()
+		def x509 = new SamlURI(type:SamlURIType.NameIdentifierFormat, uri:'urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName').save()
+		def windows = new SamlURI(type:SamlURIType.NameIdentifierFormat, uri:'urn:oasis:names:tc:SAML:1.1:nameid-format:WindowsDomainQualifiedName').save()
+		def kerberos = new SamlURI(type:SamlURIType.NameIdentifierFormat, uri:'urn:oasis:names:tc:SAML:2.0:nameid-format:kerberos').save()
+		def entity = new SamlURI(type:SamlURIType.NameIdentifierFormat, uri:'urn:oasis:names:tc:SAML:2.0:nameid-format:entity').save()
+		def pers = new SamlURI(type:SamlURIType.NameIdentifierFormat, uri:'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent').save()
+		def trans = new SamlURI(type:SamlURIType.NameIdentifierFormat, uri:'urn:oasis:names:tc:SAML:2.0:nameid-format:transient').save()
+		def shibNameID = new SamlURI(type:SamlURIType.NameIdentifierFormat, uri:'urn:mace:shibboleth:1.0:nameIdentifier').save()
 	}
 
 	def dumpData() {
 		log.debug("Executing dump data process")
 		User.list().each { it.entityDescriptor = null; it.save(); }
-		AttributeAuthorityDescriptor.list().each {it.delete();}
-		IDPSSODescriptor.list().each {it.delete();}
-		EntityDescriptor.list().each {it.delete();}
-		Contact.list().each {it.delete();}
-		Attribute.list().each {it.delete();}
-		Organization.list().each {it.delete();}
-		OrganizationType.list().each {it.delete();}
+		SPSSODescriptor.list().each { it.delete(); }
+		AttributeAuthorityDescriptor.list().each { it.delete(); }
+		IDPSSODescriptor.list().each { it.delete(); }
+		EntityDescriptor.list().each { it.delete(); }
+		Contact.list().each { it.delete(); }
+		Attribute.list().each { it.delete(); }
+		Organization.list().each { it.delete(); }
+		OrganizationType.list().each { it.delete(); }
 	}
 
 	def importOrganizations() {
@@ -228,11 +225,14 @@ class DataImporterService implements InitializingBean {
 	}
 
 	def importIDPSSODescriptors() {
+		def shibNameID = SamlURI.findByUri('urn:mace:shibboleth:1.0:nameIdentifier')
+		def trans = SamlURI.findByUri('urn:oasis:names:tc:SAML:2.0:nameid-format:transient')
 		
 		sql.eachRow("select * from homeOrgs",
 		{			
 			def entity = EntityDescriptor.findWhere(entityID:it.entityID)
 			def idp = new IDPSSODescriptor(entityDescriptor:entity, organization:entity.organization)
+			idp.addToNameIDFormats(trans)	// RR hard codes everything to only advertise NameIDForm of transient so we need to do the same, in FR this is modifable and DB driven
 			
 			sql.eachRow("select * from serviceLocations where objectID=${it.homeOrgID} and serviceType='SingleSignOnService'",
 			{
@@ -264,10 +264,14 @@ class DataImporterService implements InitializingBean {
 			})
 			entity.addToIdpDescriptors(idp)
 			entity.save()
+			log.debug "Added new IDPSSODescriptor to Entity ${entity.entityID}"
 		})	
 	}
 	
 	def importAttributeAuthorityDescriptors() {
+		def shibNameID = SamlURI.findByUri('urn:mace:shibboleth:1.0:nameIdentifier')
+		def trans = SamlURI.findByUri('urn:oasis:names:tc:SAML:2.0:nameid-format:transient')
+		
 		sql.eachRow("select * from homeOrgs",
 		{			
 			def entity = EntityDescriptor.findWhere(entityID:it.entityID)
@@ -296,7 +300,94 @@ class DataImporterService implements InitializingBean {
 	}
 
 	def importSPSSODescriptors() {
+		def shibNameID = SamlURI.findByUri('urn:mace:shibboleth:1.0:nameIdentifier')
+		def trans = SamlURI.findByUri('urn:oasis:names:tc:SAML:2.0:nameid-format:transient')
 		
+		sql.eachRow("select * from resources",
+		{
+			// RR hardcodes NameIDFormats so we need to figure out which version of SAML is supported(or even both) and manually add NameIDFormats
+			boolean saml1 = false
+			boolean saml2 = false
+			
+			def entity = EntityDescriptor.findWhere(entityID:it.providerID)
+			def sp = new SPSSODescriptor(entityDescriptor:entity, organization:entity.organization, visible:it.visible)
+
+			sql.eachRow("select * from serviceLocations where objectID=${it.resourceID} and serviceType='SingleLogoutService'",
+			{
+				def binding = SamlURI.findByUri(it.serviceBinding)
+				if(binding) {
+					def location = new UrlURI(uri:it.serviceLocation)
+					def sls = new SingleLogoutService(binding: binding, location: location)
+					sp.addToSingleLogoutServices(sls)
+					
+					if(it.serviceBinding.contains('SAML:2.0'))
+						saml2 = true
+					if(it.serviceBinding.contains('SAML:1.0'))
+						saml1 = true
+				}
+				else 
+					log.warn ("No SamlURI binding for uri ${it.serviceBinding} exists, not importing, not importing SingleLogoutService")
+			})
+			sql.eachRow("select * from serviceLocations where objectID=${it.resourceID} and serviceType='AssertionConsumerService'",
+			{
+				def binding = SamlURI.findByUri(it.serviceBinding)
+				if(binding) {
+					def location = new UrlURI(uri:it.serviceLocation)
+					def acs = new AssertionConsumerService(binding: binding, location: location, isDefault: it.defaultLocation)
+					sp.addToAssertionConsumerServices(acs)
+					
+					if(it.serviceBinding.contains('SAML:2.0'))
+						saml2 = true
+					if(it.serviceBinding.contains('SAML:1.0'))
+						saml1 = true
+				}
+				else 
+					log.warn ("No SamlURI binding for uri ${it.serviceBinding} exists, not importing, not importing AssertionConsumerService")
+			})
+			sql.eachRow("select * from serviceLocations where objectID=${it.resourceID} and serviceType='ManageNameIDService'",
+			{
+				def binding = SamlURI.findByUri(it.serviceBinding)
+				if(binding) {
+					def location = new UrlURI(uri:it.serviceLocation)
+					def mnids = new ManageNameIDService(binding: binding, location: location)
+					sp.addToManageNameIDServices(mnids)
+					
+					if(it.serviceBinding.contains('SAML:2.0'))
+						saml2 = true
+					if(it.serviceBinding.contains('SAML:1.0'))
+						saml1 = true
+				}
+				else 
+					log.warn ("No SamlURI binding for uri ${it.serviceBinding} exists, not importing, not importing ManageNameIDService")
+			})
+			
+			if(saml2)
+				sp.addToNameIDFormats(trans)
+			if(saml1)
+				sp.addToNameIDFormats(shibNameID)
+			
+			// RR has no real concept of multiple AttributeConsumingServices so everything is just index 0 and true for isDefault...
+			// Additionally current metadata just grabs data from objectDescription for serviceName and serviceDescription ... fun.
+			def acs = new AttributeConsumingService(index:0, isDefault:true)
+			sql.eachRow("select * from objectDescriptions where objectID=${it.resourceID} and objectType='resource'",
+			{
+				acs.addToServiceNames(new LocalizedName(name:it.descriptiveName, lang:it.language))
+				acs.addToServiceDescriptions(new LocalizedName(name:it.description, lang:it.language))
+			})
+			
+			sql.eachRow("select attributeUse.attributeUseType, attributes.attributeURN from attributeUse INNER JOIN attributes ON attributes.attributeID=attributeUse.attributeID where attributeUse.resourceID=${it.resourceID}",
+			{
+				def required = it.attributeUseType
+				def attr = Attribute.findByName(it.attributeURN)
+				def reqAttr = new RequestedAttribute(isRequired:required, attribute:attr)
+				acs.addToRequestedAttributes(reqAttr)
+			})
+			sp.addToAttributeConsumingServices(acs)
+			
+			entity.addToSpDescriptors(sp)
+			entity.save()
+			log.debug "Added new SPSSODescriptor to Entity ${entity.entityID}"
+		})
 	}
 
 }

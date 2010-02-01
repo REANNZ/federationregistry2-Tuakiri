@@ -29,7 +29,7 @@ class RoleDescriptor  {
   String extensions
 
   static hasMany = [
-          contactPersons: ContactPerson,
+          contacts: ContactPerson,
           protocolSupportEnumerations: SamlURI,
           keyDescriptors: KeyDescriptor
   ]
@@ -44,7 +44,7 @@ class RoleDescriptor  {
     errorURL(nullable:true)
     protocolSupportEnumerations(nullable: true)
 
-    contactPersons(nullable: true)
+    contacts(nullable: true)
     keyDescriptors(nullable: true)
   }
 

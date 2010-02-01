@@ -23,8 +23,8 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class RequestedAttribute  {
+	boolean isRequired
+	Attribute attribute
 
-  boolean isRequired
-  Attribute attribute
-
+	static belongsTo = [owner: AttributeConsumingService]
 }

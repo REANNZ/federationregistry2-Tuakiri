@@ -30,7 +30,7 @@ class SPSSODescriptor extends SSODescriptor {
   static belongsTo = [entityDescriptor:EntityDescriptor]
 
   static hasMany = [
-          assertionConsumerServices: IndexedEndpoint,
+          assertionConsumerServices: AssertionConsumerService,
           attributeConsumingServices: AttributeConsumingService
   ]
 
