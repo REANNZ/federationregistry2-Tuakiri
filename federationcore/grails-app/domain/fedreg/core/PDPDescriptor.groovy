@@ -22,16 +22,18 @@ package fedreg.core
 /**
  * @author Bradley Beddoes
  */
-class PDPDescriptor {
+class PDPDescriptor extends RoleDescriptor {
+	
+	static belongsTo = [entityDescriptor:EntityDescriptor]
 
-  static hasMany = [
-          authzServices: Endpoint,
-          assertionIDRequestServices: AssertionIDRequestService,
-          nameIDFormats: String
-  ]
+	static hasMany = [
+		authzServices: Endpoint,
+		assertionIDRequestServices: AssertionIDRequestService,
+		nameIDFormats: String
+	]
 
-  static constraints = {
-    assertionIDRequestServices(nullable: true)
-    nameIDFormats(nullable: true)
-  }
+	static constraints = {
+		assertionIDRequestServices(nullable: true)
+		nameIDFormats(nullable: true)
+	}
 }
