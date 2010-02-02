@@ -24,14 +24,14 @@ package fedreg.core
  */
 class KeyInfo  {
 
-  String keyName
-  Date expiryDate
-  String certificate
+	String keyName
+	Date expiryDate
+	Certificate certificate
 
-  static belongsTo = [owner: KeyDescriptor]
+	static belongsTo = [owner: KeyDescriptor]
 
-  static constraints = {
-    keyName(nullable: true, blank: true)
-    expiryDate(nullable: true)
-  }
+	static constraints = {
+		keyName(nullable: true, blank: true)
+		expiryDate(nullable: true)
+	}
 }

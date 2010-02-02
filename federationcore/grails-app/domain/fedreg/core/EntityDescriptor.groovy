@@ -24,8 +24,10 @@ package fedreg.core
  */
 class EntityDescriptor {
 
-	String entityID
+	// Organization is the top teir in our model. All entities must belong to an organization definition
 	Organization organization
+
+	String entityID
 	String extensions
 	boolean active
 
@@ -43,7 +45,6 @@ class EntityDescriptor {
 		spDescriptors(nullable: true)
 		attributeAuthorityDescriptors(nullable: true)
 		pdpDescriptors(nullable: true)
-		organization(nullable: true)
 		contacts(nullable: true)
 		extensions(nullable: true)
   	}

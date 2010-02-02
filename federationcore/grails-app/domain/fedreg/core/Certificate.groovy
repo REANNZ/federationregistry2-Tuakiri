@@ -19,10 +19,10 @@
 
 package fedreg.core
 
-/**
+/*
  * @author Bradley Beddoes
  */
 class Certificate {
-  String cert
-  String fingerprint
+	String cert
+	String fingerprint
 }

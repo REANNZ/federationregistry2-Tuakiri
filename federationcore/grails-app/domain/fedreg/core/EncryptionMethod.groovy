@@ -19,19 +19,19 @@
 
 package fedreg.core
 
-/**
+/*
  * @author Bradley Beddoes
  */
 class EncryptionMethod  {
 
-  String algorithm
-  String keySize
-  String oaeParams
+	String algorithm
+	String keySize
+	String oaeParams
 
-  static belongsTo = [owner: KeyDescriptor]
+	static belongsTo = [owner: KeyDescriptor]
 
-  static constraints = {
-    oaeParams(nullable: true)
-  }
+	static constraints = {
+		oaeParams(nullable: true)
+	}
 
 }

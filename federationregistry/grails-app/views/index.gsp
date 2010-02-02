@@ -13,7 +13,7 @@
 	
 			<h2>Login</h2>
 			
-			<p><g:link controller="attributeCompliance" action="summary">Login to the Federation Registry</g:link></p>
+			<p><g:link controller="idpAttributeCompliance" action="summary">Login to the Federation Registry</g:link></p>
 			
 			<h3>Required Attributes</h3>
 

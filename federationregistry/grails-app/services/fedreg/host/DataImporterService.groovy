@@ -96,6 +96,18 @@ class DataImporterService implements InitializingBean {
 			def org = new Organization(name:it.homeOrgName, displayName:it.homeOrgName, lang:it.mainLanguage, url: new UrlURI(uri:it.errorURL ?:'http://aaf.edu.au/support'), primary: orgType)
 			org.save()
 		})
+		
+		sql.eachRow("select * from resources",
+		{
+			// If organization does not yet exist it must only be providing services in which case we mark as being of Type 'other'
+			def org = Organization.findByName(it.homeOrg)
+			if(!org) {
+				log.debug "Loading organization which is only providing services, ${it.homeOrg}"
+				def orgType = OrganizationType.findByName('others')
+				org = new Organization(name:it.homeOrg, displayName:it.homeOrg, lang:it.mainLanguage, url: new UrlURI(uri:it.errorURL ?:'http://aaf.edu.au/support'), primary: orgType)
+				org.save()
+			}
+		})
 	}
 
     def importAttributes() {

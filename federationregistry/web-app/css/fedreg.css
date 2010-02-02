@@ -25,6 +25,7 @@
 #bd .localnavigation ul { list-style-type: none; }
 #bd .localnavigation ul li { list-style-type: none; }
 #bd .localnavigation h3 { font-size: 1em; font-weight: bold; color: #a6a6a6; }
+#bd .localnavigation h4 { font-size: 0.9em; font-weight: bold; color: #868686; margin-bottom: 1px; }
 #bd .localnavigation a { font-size: 1em; font-weight: bold; color: #666666; cursor: pointer; text-decoration: none; }
 #bd .localnavigation a:hover { text-decoration: underline; }
 #bd .localnavigation ul { margin-left: 6px; margin-bottom: 3px; }

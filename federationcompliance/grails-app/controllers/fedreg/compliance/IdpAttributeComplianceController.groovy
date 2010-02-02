@@ -1,11 +1,12 @@
-package fedreg.compliance.idp
+package fedreg.compliance
 
 import fedreg.core.Attribute
 import fedreg.core.AttributeCategory
 import fedreg.core.IDPSSODescriptor
 import fedreg.compliance.CategorySupportStatus
 
-class AttributeComplianceController {
+class IdpAttributeComplianceController {
+	
 	def index = {
 		redirect action:summary
 	}
@@ -27,7 +28,7 @@ class AttributeComplianceController {
 		[idpInstanceList:idpInstanceList, categorySupportSummaries:categorySupportSummaries]
 	}
 	
-	def identityprovider = {
+	def comprehensive = {
 		def idp = IDPSSODescriptor.get(params.id)
         if (!idp) {
 			flash.type="error"
@@ -47,7 +48,7 @@ class AttributeComplianceController {
         [idp:idp, categorySupport: categorySupport]
 	}
 	
-	def attribute = {
+	def federationwide = {
 		def attribute = Attribute.get(params.id)
 		def idpInstanceList = IDPSSODescriptor.list()
 		def supportingIdpInstanceList = idpInstanceList.findAll{idp -> attribute in idp.attributes}

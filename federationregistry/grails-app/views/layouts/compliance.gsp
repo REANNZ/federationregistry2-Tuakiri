@@ -37,8 +37,22 @@
 	    	<div class="localnavigation">
 			  <h3><g:message code="fedreg.layout.compliance.navigation.title" /></h3>
 			    <ul>
-				  <li><g:link controller="attributeCompliance" action="summary"><g:message code="fedreg.link.attributesummary" /></g:link>
-				  </li>
+					<li>
+						<h4><g:message code="fedreg.navigation.identityproviders" /></h4>
+						<ul>
+							<li>
+								<g:link controller="idpAttributeCompliance" action="summary"><g:message code="fedreg.link.attributesummary" /></g:link>
+						 	</li>
+						</ul>
+					</li>
+					<li>
+						<h4><g:message code="fedreg.navigation.federationwide" /></h4>
+						<ul>
+							<li>
+								<g:link controller="attributeRelease" action="index"><g:message code="fedreg.link.attributerelease" /></g:link>
+						 	</li>
+						</ul>
+				 	</li>
 				</ul>
 			</div>
 			<div class="content">

@@ -19,24 +19,23 @@
 
 package fedreg.core
 
-/**
+/*
  * @author Bradley Beddoes
  */
 class KeyDescriptor  {
 
+	KeyInfo keyInfo
+	EncryptionMethod encryptionMethod
+	KeyTypes keyType
 
-  KeyInfo keyInfo
-  EncryptionMethod encryptionMethod
-  KeyTypes keyType
+	static belongsTo = [owner: RoleDescriptor]
 
-  static belongsTo = [owner: RoleDescriptor]
-
-  static constraints = {
-    encryptionMethod(nullable: true)
-  }
+	static constraints = {
+		encryptionMethod(nullable: true)
+	}
 
 }
 
 enum KeyTypes {
-  encryption, signing
+	encryption, signing
 }

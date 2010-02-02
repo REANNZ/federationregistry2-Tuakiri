@@ -6,12 +6,16 @@ class UrlMappings {
 		  }
 	  }
 	
-	"/attributescope/$action?/$id?"{
+	"/compliance/attributescope/identityprovider/$action?/$id?"{
 		controller = "attributeScope"
 	}
 	
-	"/attributecompliance/$action?/$id?"{
-		controller = "attributeCompliance"
+	"/compliance/identityprovider/attributes/$action?/$id?"{
+		controller = "idpAttributeCompliance"
+	}
+	
+	"/compliance/attributes/release/$action?/$id?"{
+		controller = "attributeRelease"
 	}
 	
 	"/bootstrap" {
