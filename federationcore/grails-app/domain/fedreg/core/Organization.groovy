@@ -27,7 +27,7 @@ class Organization  {
 	String name
 	String displayName
 	String lang
-	String url
+	UrlURI url
 	String extensions
 	
 	OrganizationType primary

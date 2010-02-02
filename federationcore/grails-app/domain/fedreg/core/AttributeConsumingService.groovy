@@ -26,10 +26,11 @@ class AttributeConsumingService {
 
 	boolean isDefault
 	int index
+	String lang
 
 	static hasMany = [
-    	serviceNames: LocalizedName,
-	    serviceDescriptions: LocalizedName,
+    	serviceNames: String,
+	    serviceDescriptions: String,
 	    requestedAttributes: RequestedAttribute
 	]
 

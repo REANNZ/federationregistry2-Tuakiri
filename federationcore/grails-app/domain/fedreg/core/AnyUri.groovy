@@ -24,7 +24,7 @@ package fedreg.core
  */
 class AnyUri extends Uri  {
 
-  static belongsTo = [Endpoint, Contact, RoleDescriptor]
+  static belongsTo = [Organization, Endpoint, Contact, RoleDescriptor]
 
   static mapping = {
     tablePerHierarchy false

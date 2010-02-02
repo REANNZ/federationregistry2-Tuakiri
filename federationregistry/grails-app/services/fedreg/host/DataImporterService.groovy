@@ -93,7 +93,7 @@ class DataImporterService implements InitializingBean {
 		sql.eachRow("select * from homeOrgs",
 		{
 			def orgType = OrganizationType.findByName(it.homeOrgType)
-			def org = new Organization(name:it.homeOrgName, displayName:it.homeOrgName, lang:it.mainLanguage, url:it.errorURL ?:'http://aaf.edu.au/support', primary: orgType)
+			def org = new Organization(name:it.homeOrgName, displayName:it.homeOrgName, lang:it.mainLanguage, url: new UrlURI(uri:it.errorURL ?:'http://aaf.edu.au/support'), primary: orgType)
 			org.save()
 		})
 	}
@@ -371,8 +371,9 @@ class DataImporterService implements InitializingBean {
 			def acs = new AttributeConsumingService(index:0, isDefault:true)
 			sql.eachRow("select * from objectDescriptions where objectID=${it.resourceID} and objectType='resource'",
 			{
-				acs.addToServiceNames(new LocalizedName(name:it.descriptiveName, lang:it.language))
-				acs.addToServiceDescriptions(new LocalizedName(name:it.description, lang:it.language))
+				acs.lang = it.language
+				acs.addToServiceNames(it.descriptiveName)
+				acs.addToServiceDescriptions(it.description)
 			})
 			
 			sql.eachRow("select attributeUse.attributeUseType, attributes.attributeURN from attributeUse INNER JOIN attributes ON attributes.attributeID=attributeUse.attributeID where attributeUse.resourceID=${it.resourceID}",
