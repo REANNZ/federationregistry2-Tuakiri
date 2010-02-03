@@ -23,6 +23,8 @@
 	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/jquery.jqplot.min.js')}"></script>
 	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/plugins/jqplot.pieRenderer.min.js')}"></script>
 	<link rel="stylesheet" href="${resource(dir:'css',file:'jquery.jqplot.min.css')}" />
+	
+	<!-- RAR -->
     <g:layoutHead />
 </head>
 
@@ -38,7 +40,7 @@
 			  <h3><g:message code="fedreg.layout.compliance.navigation.title" /></h3>
 			    <ul>
 					<li>
-						<h4><g:message code="fedreg.navigation.identityproviders" /></h4>
+						<h4><g:message code="fedreg.navigation.identityprovider" /></h4>
 						<ul>
 							<li>
 								<g:link controller="idpAttributeCompliance" action="summary"><g:message code="fedreg.link.attributesummary" /></g:link>

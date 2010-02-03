@@ -390,7 +390,7 @@ class DataImporterService implements InitializingBean {
 			
 			sql.eachRow("select attributeUse.attributeUseType, attributes.attributeURN from attributeUse INNER JOIN attributes ON attributes.attributeID=attributeUse.attributeID where attributeUse.resourceID=${it.resourceID}",
 			{
-				def required = it.attributeUseType
+				def required = it.attributeUseType.equals("required")	// change to boolean for sanity..
 				def attr = Attribute.findByName(it.attributeURN)
 				def reqAttr = new RequestedAttribute(isRequired:required, attribute:attr)
 				acs.addToRequestedAttributes(reqAttr)

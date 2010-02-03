@@ -46,6 +46,7 @@ environments {
       	}
     }
     development {
+		grails.gsp.enable.reload = true
         grails.serverURL = "http://localhost:8080/${appName}"
 		testDataConfig {
         	enabled = false
