@@ -30,6 +30,9 @@ class EntityDescriptor {
 	String entityID
 	String extensions
 	boolean active
+	
+	Date dateCreated
+	Date lastUpdated
 
 	static hasMany = [
 		  idpDescriptors: IDPSSODescriptor,
@@ -47,6 +50,8 @@ class EntityDescriptor {
 		pdpDescriptors(nullable: true)
 		contacts(nullable: true)
 		extensions(nullable: true)
+		dateCreated(nullable:true)
+		lastUpdated(nullable:true)
   	}
 
 	static mapping = {

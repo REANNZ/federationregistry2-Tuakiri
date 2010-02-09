@@ -25,8 +25,13 @@ class OrganizationType {
 	String displayName
 	String description
 	
+	Date dateCreated
+	Date lastUpdated
+	
 	static constraints = {
 		description(nullable:true)
+		dateCreated(nullable:true)
+		lastUpdated(nullable:true)
 	}
 
 }

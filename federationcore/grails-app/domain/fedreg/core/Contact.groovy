@@ -26,6 +26,9 @@ class Contact {
 	  String surname
 	
 	  boolean userLink = false;
+	
+	Date dateCreated
+	Date lastUpdated
 
 	  static hasMany = [
 	        emailAddresses: MailURI,
@@ -33,11 +36,13 @@ class Contact {
 			contactPersons: ContactPerson
 	  ]
 
-	  static constraints = {
+	static constraints = {
 	    company(nullable: true)
 	    givenName(blank: false)
 	    surname(blank: false)
-	  }
+		dateCreated(nullable:true)
+		lastUpdated(nullable:true)
+	}
 	
 	static mapping = {
 		autoImport false

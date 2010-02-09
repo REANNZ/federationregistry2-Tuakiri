@@ -26,11 +26,16 @@ class KeyDescriptor  {
 	KeyInfo keyInfo
 	EncryptionMethod encryptionMethod
 	KeyTypes keyType
+	
+	Date dateCreated
+	Date lastUpdated
 
 	static belongsTo = [owner: RoleDescriptor]
 
 	static constraints = {
 		encryptionMethod(nullable: true)
+		dateCreated(nullable:true)
+		lastUpdated(nullable:true)
 	}
 
 }

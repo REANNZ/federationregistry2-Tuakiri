@@ -26,7 +26,15 @@ class CACertificate {
 	String cert
 	String fingerprint
 	
+	Date dateCreated
+	Date lastUpdated
+	
 	static belongsTo = [owner: CAKeyInfo]
+	
+	static constraints = {
+		dateCreated(nullable:true)
+		lastUpdated(nullable:true)
+	}
 	
 	static mapping = { 
 	    cert(type: 'text') 

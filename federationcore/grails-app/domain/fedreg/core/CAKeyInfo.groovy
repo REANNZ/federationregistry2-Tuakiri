@@ -26,10 +26,15 @@ class CAKeyInfo  {
 	String keyName
 	Date expiryDate
 	Certificate certificate
+	
+	Date dateCreated
+	Date lastUpdated
 
 	static constraints = {
 		keyName(nullable: true, blank: true)
 		expiryDate(nullable: true)
+		dateCreated(nullable:true)
+		lastUpdated(nullable:true)
 	}
 	
 }

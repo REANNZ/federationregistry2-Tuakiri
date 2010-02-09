@@ -27,6 +27,9 @@ class AttributeConsumingService {
 	boolean isDefault
 	int index
 	String lang
+	
+	Date dateCreated
+	Date lastUpdated
 
 	static hasMany = [
     	serviceNames: String,
@@ -36,6 +39,8 @@ class AttributeConsumingService {
 
 	static constraints = {
 		serviceDescriptions(nullable: true)
+		dateCreated(nullable:true)
+		lastUpdated(nullable:true)
 	}
 	
 	static belongsTo = [owner: SPSSODescriptor]

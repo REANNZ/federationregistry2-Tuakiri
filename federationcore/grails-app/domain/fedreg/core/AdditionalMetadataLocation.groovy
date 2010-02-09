@@ -24,7 +24,19 @@ package fedreg.core
  */
 class AdditionalMetadataLocation  {
 
-  String uri
-  String namespace
+	String uri
+	String namespace
+
+	Date dateCreated
+	Date lastUpdated
+	
+	static mapping = {
+		sort "uri"
+	}
+	
+	static constraints = {
+		dateCreated(nullable:true)
+		lastUpdated(nullable:true)
+	}
 
 }

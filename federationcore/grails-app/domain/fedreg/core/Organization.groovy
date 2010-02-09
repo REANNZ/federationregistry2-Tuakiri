@@ -32,6 +32,9 @@ class Organization  {
 	
 	OrganizationType primary
 	
+	Date dateCreated
+	Date lastUpdated
+	
 	static hasMany = [
 		types : OrganizationType
 	]
@@ -47,5 +50,7 @@ class Organization  {
 		url(nullable: false, blank: false, url: true)
 		extensions(nullable: true, blank: true)
 		types(nullable:true)
+		dateCreated(nullable:true)
+		lastUpdated(nullable:true)
 	}
 }

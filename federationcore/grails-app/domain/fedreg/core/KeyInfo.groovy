@@ -27,12 +27,17 @@ class KeyInfo  {
 	String keyName
 	Date expiryDate
 	Certificate certificate
+	
+	Date dateCreated
+	Date lastUpdated
 
 	static belongsTo = [owner: KeyDescriptor]
 
 	static constraints = {
 		keyName(nullable: true, blank: true)
 		expiryDate(nullable: true)
+		dateCreated(nullable:true)
+		lastUpdated(nullable:true)
 	}
 	
 }

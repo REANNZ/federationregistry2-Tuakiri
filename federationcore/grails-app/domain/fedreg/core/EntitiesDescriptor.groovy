@@ -27,6 +27,9 @@ class EntitiesDescriptor {
   String name
   String extensions
 
+	Date dateCreated
+	Date lastUpdated
+
   static hasMany = [
           entityDescriptors: EntityDescriptor,
           entitiesDescriptors: EntitiesDescriptor,
@@ -37,6 +40,8 @@ class EntitiesDescriptor {
     entitiesDescriptors(nullable: true)
     name(nullable: true)
     extensions(nullable: true)
+	dateCreated(nullable:true)
+	lastUpdated(nullable:true)
   }
 
 }

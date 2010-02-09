@@ -27,12 +27,17 @@ class Uri  {
   String uri
   String description
 
+	Date dateCreated
+	Date lastUpdated
+
   static mapping = {
     tablePerHierarchy false
   }
 
-  static constraints = {
-    description(nullable: true, blank: true)
-  }
+	static constraints = {
+    	description(nullable: true, blank: true)
+		dateCreated(nullable:true)
+		lastUpdated(nullable:true)
+	}
 
 }

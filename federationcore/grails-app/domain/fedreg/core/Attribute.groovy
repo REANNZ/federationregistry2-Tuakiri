@@ -35,6 +35,9 @@ class Attribute  {
 	
 	AttributeScope scope
 	AttributeCategory category
+	
+	Date dateCreated
+	Date lastUpdated
 
 	static mapping = {
 		autoImport false
@@ -48,6 +51,8 @@ class Attribute  {
 		headerName (blank:false)
 		alias (blank:false)
 		description (blank:false)
+		dateCreated(nullable:true)
+		lastUpdated(nullable:true)
 	}
 	
 	public String toString() {

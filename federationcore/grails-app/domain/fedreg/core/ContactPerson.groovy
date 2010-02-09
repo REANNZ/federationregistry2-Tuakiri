@@ -27,6 +27,9 @@ class ContactPerson  {
 	Contact contact
 	ContactType type
 	String extensions
+	
+	Date dateCreated
+	Date lastUpdated
 
   	static belongsTo = [descriptor:RoleDescriptor, entity:EntityDescriptor]
 
@@ -34,6 +37,8 @@ class ContactPerson  {
 		descriptor(nullable:true)
         entity(nullable:true)
 		extensions(nullable:true)
+		dateCreated(nullable:true)
+		lastUpdated(nullable:true)
 	}
 }
 

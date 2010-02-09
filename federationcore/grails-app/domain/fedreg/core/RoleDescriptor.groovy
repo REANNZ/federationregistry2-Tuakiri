@@ -28,6 +28,9 @@ class RoleDescriptor  {
   UrlURI errorURL
   String extensions
 
+	Date dateCreated
+	Date lastUpdated
+
   static hasMany = [
           contacts: ContactPerson,
           protocolSupportEnumerations: SamlURI,
@@ -43,9 +46,10 @@ class RoleDescriptor  {
     extensions(nullable: true)
     errorURL(nullable:true)
     protocolSupportEnumerations(nullable: true)
-
     contacts(nullable: true)
     keyDescriptors(nullable: true)
+	dateCreated(nullable:true)
+	lastUpdated(nullable:true)
   }
 
 }

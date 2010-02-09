@@ -21,10 +21,15 @@ package fedreg.core
 class AttributeCategory {
 	
 	String name
+	
+	Date dateCreated
+	Date lastUpdated
 
     static constraints = {
 		name (blank:false)
-    }
+		dateCreated(nullable:true)
+		lastUpdated(nullable:true)
+	}
 
 	public String toString() {
 		return name

@@ -27,11 +27,16 @@ class EncryptionMethod  {
 	String algorithm
 	String keySize
 	String oaeParams
+	
+	Date dateCreated
+	Date lastUpdated
 
 	static belongsTo = [owner: KeyDescriptor]
 
 	static constraints = {
 		oaeParams(nullable: true)
+		dateCreated(nullable:true)
+		lastUpdated(nullable:true)
 	}
 
 }

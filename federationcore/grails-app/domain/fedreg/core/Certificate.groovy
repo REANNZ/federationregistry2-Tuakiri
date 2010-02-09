@@ -26,10 +26,18 @@ class Certificate {
 	String cert
 	String fingerprint
 	
+	Date dateCreated
+	Date lastUpdated
+	
 	static belongsTo = [owner: KeyInfo]
 	
 	static mapping = { 
 		cert(type: 'text') 
+	}
+	
+	static constraints = {
+		dateCreated(nullable:true)
+		lastUpdated(nullable:true)
 	}
 	
 }

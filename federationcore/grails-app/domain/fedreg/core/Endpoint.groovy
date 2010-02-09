@@ -27,6 +27,9 @@ class Endpoint  {
   UrlURI location
   UrlURI responseLocation
 
+	Date dateCreated
+	Date lastUpdated
+
   static mapping = {
     tablePerHierarchy false
   }
@@ -35,6 +38,8 @@ class Endpoint  {
     binding(nullable: false)
     location(nullable: false)
     responseLocation(nullable: true)
+	dateCreated(nullable:true)
+	lastUpdated(nullable:true)
   }
 
   public String toString() {

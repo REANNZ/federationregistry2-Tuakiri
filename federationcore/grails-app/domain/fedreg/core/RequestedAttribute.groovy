@@ -25,6 +25,14 @@ package fedreg.core
 class RequestedAttribute  {
 	boolean isRequired
 	Attribute attribute
+	
+	Date dateCreated
+	Date lastUpdated
+	
+	static constraints = {
+		dateCreated(nullable:true)
+		lastUpdated(nullable:true)
+	}
 
 	static belongsTo = [owner: AttributeConsumingService]
 }

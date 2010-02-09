@@ -22,9 +22,14 @@ package fedreg.core
 class AttributeScope {
 	
 	String name
+	
+	Date dateCreated
+	Date lastUpdated
 
     static constraints = {
 		name (blank:false)
+		dateCreated(nullable:true)
+		lastUpdated(nullable:true)
     }
 
 	public String toString() {
