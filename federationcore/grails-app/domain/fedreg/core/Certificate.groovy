@@ -16,13 +16,20 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
 package fedreg.core
 
 /*
  * @author Bradley Beddoes
  */
 class Certificate {
+	
 	String cert
 	String fingerprint
+	
+	static belongsTo = [owner: KeyInfo]
+	
+	static mapping = { 
+		cert(type: 'text') 
+	}
+	
 }

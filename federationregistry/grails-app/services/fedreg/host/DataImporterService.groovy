@@ -274,6 +274,10 @@ class DataImporterService implements InitializingBean {
 				if(attr)
 					idp.addToAttributes(attr)
 			})
+			
+			// RR doesn't store any flag to indicate that AA publishes encyption type in MD so we won't create an enc key.....
+			importCrypto(it.homeOrgID, idp, false)
+			
 			entity.addToIdpDescriptors(idp)
 			entity.save()
 			log.debug "Added new IDPSSODescriptor to Entity ${entity.entityID}"
@@ -306,8 +310,13 @@ class DataImporterService implements InitializingBean {
 				if(attr)
 					aa.addToAttributes(attr)
 			})
+			
+			// RR doesn't store any flag to indicate that AA publishes encyption type in MD so we won't create an enc key.....
+			importCrypto(it.homeOrgID, aa, false)
+			
 			entity.addToAttributeAuthorityDescriptors(aa)
 			entity.save()
+			log.debug "Added new AttributeAuthorityDescriptor to Entity ${entity.entityID}"
 		})
 	}
 
@@ -397,9 +406,30 @@ class DataImporterService implements InitializingBean {
 			})
 			sp.addToAttributeConsumingServices(acs)
 			
+			// RR doesn't store any flag to indicate that SP publishes encyption type in MD but it does for every SP.....
+			importCrypto(it.resourceID, sp, true)
+			
 			entity.addToSpDescriptors(sp)
 			entity.save()
 			log.debug "Added new SPSSODescriptor to Entity ${entity.entityID}"
+		})
+	}
+	
+	def importCrypto(def id, def descriptor, def enc) {
+		sql.eachRow("select * from certData where objectID=${id}",
+		{
+			def cert = new Certificate(cert:it.certData, fingerprint:it.certFingerprint)
+			def keyInfo = new KeyInfo(certificate:cert)
+			def keyDescriptor = new KeyDescriptor(keyInfo:keyInfo, keyType:KeyTypes.signing, owner:descriptor)
+			
+			descriptor.addToKeyDescriptors(keyDescriptor)
+			
+			if(enc){
+				def certEnc = new Certificate(cert:it.certData, fingerprint:it.certFingerprint)
+				def keyInfoEnc = new KeyInfo(certificate:certEnc)
+				def keyDescriptorEnc = new KeyDescriptor(keyInfo:keyInfoEnc, keyType:KeyTypes.encryption)
+				descriptor.addToKeyDescriptors(keyDescriptorEnc)
+			}
 		})
 	}
 

@@ -16,19 +16,16 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
 package fedreg.core
 
 /**
  * @author Bradley Beddoes
  */
-class KeyInfo  {
+class CAKeyInfo  {
 
 	String keyName
 	Date expiryDate
 	Certificate certificate
-
-	static belongsTo = [owner: KeyDescriptor]
 
 	static constraints = {
 		keyName(nullable: true, blank: true)
