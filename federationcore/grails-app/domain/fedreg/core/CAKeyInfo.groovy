@@ -25,7 +25,7 @@ class CAKeyInfo  {
 
 	String keyName
 	Date expiryDate
-	Certificate certificate
+	CACertificate certificate
 	
 	Date dateCreated
 	Date lastUpdated

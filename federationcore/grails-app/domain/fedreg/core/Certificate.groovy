@@ -23,8 +23,7 @@ package fedreg.core
  */
 class Certificate {
 	
-	String cert
-	String fingerprint
+	String data
 	
 	Date dateCreated
 	Date lastUpdated
@@ -32,7 +31,7 @@ class Certificate {
 	static belongsTo = [owner: KeyInfo]
 	
 	static mapping = { 
-		cert(type: 'text') 
+		data(type: 'text') 
 	}
 	
 	static constraints = {

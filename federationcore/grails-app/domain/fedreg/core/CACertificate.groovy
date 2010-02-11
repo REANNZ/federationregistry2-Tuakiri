@@ -23,8 +23,7 @@ package fedreg.core
  */
 class CACertificate {
 	
-	String cert
-	String fingerprint
+	String data
 	
 	Date dateCreated
 	Date lastUpdated
@@ -37,7 +36,7 @@ class CACertificate {
 	}
 	
 	static mapping = { 
-	    cert(type: 'text') 
+	    data(type: 'text') 
 	}
 	
 }

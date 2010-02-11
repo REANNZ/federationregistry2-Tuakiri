@@ -1,1 +1,2 @@
 V	130208035456Z		E045785BCA2C2A85	unknown	/C=AU/ST=QLD/O=Australian Access Federation/OU=Advanced Technical Development/CN=Federation Registry Testing/emailAddress=support@aaf.edu.au
+V	110210001247Z		E045785BCA2C2A86	unknown	/C=AU/ST=QLD/L=BRISBANE/O=Australian Access Federation/OU=Advanced Technical Development/CN=someidp.test.fedreg.aaf.edu.au/emailAddress=support@aaf.edu.au
