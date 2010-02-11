@@ -11,6 +11,7 @@ class DataImporterService implements InitializingBean {
 
 	def grailsApplication
 	def sql
+	def cryptoService
 
 	// This entire service is a temporary piece of code to assist with a slow orderly migration from a PHP based resource registry to a new generation Grails version
 	// It is anticipated that over time all data being sourced from the RR will be created in this app and this service and all methods will be totally discontinued
@@ -22,6 +23,7 @@ class DataImporterService implements InitializingBean {
     }
 
 	def populate(def request) {
+		importCACertificates()
 		importOrganizations()
 		importContacts()
 		importAttributes()
@@ -81,6 +83,15 @@ class DataImporterService implements InitializingBean {
 		Attribute.list().each { it.delete(); }
 		Organization.list().each { it.delete(); }
 		OrganizationType.list().each { it.delete(); }
+		CACertificate.list().each { it.delete(); }
+	}
+	
+	def importCACertificates() {
+		sql.eachRow("select * from certData where objectType='issuingca'", {
+			def caCert = new CACertificate(data:it.certData)
+			def caKeyInfo = new CAKeyInfo(certificate:caCert)
+			caKeyInfo.save()
+		})
 	}
 
 	def importOrganizations() {
@@ -418,14 +429,14 @@ class DataImporterService implements InitializingBean {
 	def importCrypto(def id, def descriptor, def enc) {
 		sql.eachRow("select * from certData where objectID=${id}",
 		{
-			def cert = new Certificate(cert:it.certData, fingerprint:it.certFingerprint)
+			def cert = new Certificate(data:it.certData)
 			def keyInfo = new KeyInfo(certificate:cert)
 			def keyDescriptor = new KeyDescriptor(keyInfo:keyInfo, keyType:KeyTypes.signing, owner:descriptor)
 			
 			descriptor.addToKeyDescriptors(keyDescriptor)
 			
 			if(enc){
-				def certEnc = new Certificate(cert:it.certData, fingerprint:it.certFingerprint)
+				def certEnc = new Certificate(data:it.certData)
 				def keyInfoEnc = new KeyInfo(certificate:certEnc)
 				def keyDescriptorEnc = new KeyDescriptor(keyInfo:keyInfoEnc, keyType:KeyTypes.encryption)
 				descriptor.addToKeyDescriptors(keyDescriptorEnc)

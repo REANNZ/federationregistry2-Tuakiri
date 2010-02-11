@@ -32,5 +32,11 @@ class CryptoService {
 			return false
 		}
 	}
+	
+	def Date expiryDate(fedreg.core.Certificate certificate) {
+		CertificateFactory cf = CertificateFactory.getInstance("X.509")
+		def c = cf.generateCertificate(new ByteArrayInputStream(certificate.data.bytes))
+		c.getNotAfter()
+	}	
 
 }

@@ -59,5 +59,16 @@ class CryptoServiceSpecification extends IntegrationSpecification {
 		where:
 		cert << [new Certificate(data:new File('./test/integration/data/managertestaaf.pem').text), new Certificate(data:new File('./test/integration/data/newcertminimal.pem').text)]
 	}
+	
+	def 'ensure valid expiry date calculated'() {
+		
+		expect:
+		cryptoService.expiryDate(cert) == date
+		
+		where:
+		cert << [new Certificate(data:new File('./test/integration/data/managertestaaf.pem').text)]
+		date << [new GregorianCalendar(2011, Calendar.DECEMBER, 15, 9, 59, 59).time]
+		
+	}
 
 }
