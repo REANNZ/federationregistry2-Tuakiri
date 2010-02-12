@@ -34,8 +34,8 @@ class DataImporterService implements InitializingBean {
 		
 		if(request)
 		{
-			def dataLoadRecord = new DataLoadRecord(invoker:authenticatedUser?:null, remoteAddr: request.getRemoteAddr(), remoteHost: request.getRemoteHost(), userAgent:request.getHeader("User-Agent"))
-			dataLoadRecord.save()
+			//def dataLoadRecord = new DataLoadRecord(invoker:authenticatedUser?:null, remoteAddr: request.getRemoteAddr(), remoteHost: request.getRemoteHost(), userAgent:request.getHeader("User-Agent"))
+			//dataLoadRecord.save()
 		}
 	}
 	
@@ -83,7 +83,7 @@ class DataImporterService implements InitializingBean {
 		Attribute.list().each { it.delete(); }
 		Organization.list().each { it.delete(); }
 		OrganizationType.list().each { it.delete(); }
-		CACertificate.list().each { it.delete(); }
+		CAKeyInfo.list().each { it.delete(); }
 	}
 	
 	def importCACertificates() {

@@ -1,10 +1,5 @@
 class UrlMappings {
     static mappings = {
-      "/$controller/$action?/$id?"{
-	      constraints {
-			 // apply constraints here
-		  }
-	  }
 	
 	"/compliance/attributescope/identityprovider/$action?/$id?"{
 		controller = "attributeScope"
@@ -16,6 +11,10 @@ class UrlMappings {
 	
 	"/compliance/attributes/release/$action?/$id?"{
 		controller = "attributeRelease"
+	}
+	
+	"/compliance/cautilization/$action?/$id?"{
+		controller = "certifyingAuthorityUsage"
 	}
 	
 	"/bootstrap" {

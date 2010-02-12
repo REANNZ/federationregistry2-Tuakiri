@@ -70,5 +70,16 @@ class CryptoServiceSpecification extends IntegrationSpecification {
 		date << [new GregorianCalendar(2011, Calendar.DECEMBER, 15, 9, 59, 59).time]
 		
 	}
+	
+	def 'ensure valid issuer'() {
+		
+		expect:
+		cryptoService.issuer(cert) == issuer
+		
+		where:
+		cert << [new Certificate(data:new File('./test/integration/data/managertestaaf.pem').text)]
+		issuer = 'CN=AusCERT Server CA,OU=Certificate Services,O=AusCERT,C=AU'
+		
+	}
 
 }
