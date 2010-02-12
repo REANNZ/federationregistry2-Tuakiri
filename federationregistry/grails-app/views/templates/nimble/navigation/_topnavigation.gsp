@@ -2,7 +2,7 @@
 <div class="aafmenu">
 	
 	<ul id="topnavigation_">
-		<li class="${['idpAttributeCompliance', 'attributeRelease'].contains(controllerName) ? 'current' : ''}">
+		<li class="${['idpAttributeCompliance', 'attributeRelease', 'certifyingAuthorityUsage'].contains(controllerName) ? 'current' : ''}">
 			<g:link controller="idpAttributeCompliance" action="summary" class="icon icon_award_star_gold_2"><g:message code="fedreg.navigation.compliance" /></g:link>
 		</li>
 		<n:isAdministrator>

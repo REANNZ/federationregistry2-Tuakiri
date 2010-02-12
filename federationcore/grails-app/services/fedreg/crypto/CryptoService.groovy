@@ -45,4 +45,9 @@ class CryptoService {
 		c.issuerX500Principal.name
 	}
 
+	def String subject(fedreg.core.Certificate certificate) {
+		CertificateFactory cf = CertificateFactory.getInstance("X.509")
+		def c = cf.generateCertificate(new ByteArrayInputStream("${certificate.data}".decodeBase64()))  // Wrap in string here to ensure B64 due to TEXT type weirdness
+		c.subjectX500Principal.name
+	}
 }
