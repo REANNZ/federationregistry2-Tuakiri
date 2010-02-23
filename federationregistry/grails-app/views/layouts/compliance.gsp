@@ -53,6 +53,9 @@
 							<li>
 								<g:link controller="attributeRelease" action="index"><g:message code="fedreg.link.attributerelease" /></g:link>
 						 	</li>
+							<li>
+								<g:link controller="certifyingAuthorityUsage" action="index"><g:message code="fedreg.link.cautilization" /></g:link>
+							</li>
 						</ul>
 				 	</li>
 				</ul>

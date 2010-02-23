@@ -157,9 +157,17 @@ class DataImporterService implements InitializingBean {
 		//Import contacts associated with 'homeOrgs'
 		sql.eachRow("select email, contactName from contacts ORDER BY (email)",
 		{
-			def names = it.contactName.split(" ")
-			def givenName = names[0]
-			def surname = names[1]
+			def givenName, surname
+			
+			if(it.contactName.contains(" ")) {
+				def names = it.contactName.split(" ")
+				givenName = names[0]
+				surname = names[1]
+			}
+			else {
+				givenName = "N/A"
+				surname = it.contactName
+			}
 			def email = it.email
 			
 			def c = Contact.createCriteria()
@@ -244,7 +252,7 @@ class DataImporterService implements InitializingBean {
 		}
 		def contactPerson = new ContactPerson(contact:contact, entity:ent, type:type)
 		ent.addToContacts(contactPerson)
-		log.debug "Linked contact ${contactPerson.contact.givenName} ${contactPerson.contact.surname} to entity ${ent.entityID}"
+		log.debug "Linked contact ${contactPerson?.contact?.givenName} ${contactPerson?.contact?.surname} to entity ${ent.entityID}"
 	}
 
 	def importIDPSSODescriptors() {
@@ -431,7 +439,7 @@ class DataImporterService implements InitializingBean {
 		{
 			def cert = new Certificate(data:it.certData)
 			def keyInfo = new KeyInfo(certificate:cert)
-			def keyDescriptor = new KeyDescriptor(keyInfo:keyInfo, keyType:KeyTypes.signing, owner:descriptor)
+			def keyDescriptor = new KeyDescriptor(keyInfo:keyInfo, keyType:KeyTypes.signing, roleDescriptor:descriptor)
 			
 			descriptor.addToKeyDescriptors(keyDescriptor)
 			

@@ -28,7 +28,7 @@ class Certificate {
 	Date dateCreated
 	Date lastUpdated
 	
-	static belongsTo = [owner: KeyInfo]
+	static belongsTo = [keyInfo: KeyInfo]
 	
 	static mapping = { 
 		data(type: 'text') 

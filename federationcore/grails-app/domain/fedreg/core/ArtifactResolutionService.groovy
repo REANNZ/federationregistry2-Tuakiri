@@ -24,6 +24,6 @@ package fedreg.core
  */
 class ArtifactResolutionService extends IndexedEndpoint  {
 
-  static belongsTo = [owner: SSODescriptor]
+  static belongsTo = [ssoDescriptor: SSODescriptor]
 
 }

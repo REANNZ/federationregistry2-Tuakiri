@@ -50,6 +50,8 @@ td.errors input { border: 2px solid #b10902; background-color: #c5200a; color: w
 #attributereleasecompliance table h3 { color: #525252; font-size: 1.3em; font-weight: bold; }
 #attributereleasecompliance table h4 { margin: 0px; margin-top: 12px; color: #666666; font-size: 1.1em; font-weight: bold; }
 
+#cautilization table table th { width: 100px; }
+
 .attributecompliancesummary table th { color: #a2a2a2; }
 .attributecompliancesummary table td.organizationname { font-size: 1.4em; }
 .attributecompliancesummary table td .numeric { text-align: left; font-size: 1.2em; }

@@ -34,5 +34,5 @@ class RequestedAttribute  {
 		lastUpdated(nullable:true)
 	}
 
-	static belongsTo = [owner: AttributeConsumingService]
+	static belongsTo = [attributeConsumingService: AttributeConsumingService]
 }

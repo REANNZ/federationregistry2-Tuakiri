@@ -24,7 +24,7 @@ package fedreg.core
  */
 class SingleSignOnService extends Endpoint {
 
-  static belongsTo = [owner: IDPSSODescriptor]
+  static belongsTo = [idpSSODescriptor: IDPSSODescriptor]
 
   public String toString() {
 	return "${binding.type} - ${location.uri}"

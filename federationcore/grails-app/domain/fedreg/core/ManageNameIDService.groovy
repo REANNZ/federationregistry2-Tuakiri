@@ -24,6 +24,6 @@ package fedreg.core
  */
 class ManageNameIDService extends Endpoint  {
 
-  static belongsTo = [owner: SSODescriptor]
+  static belongsTo = [ssoDescriptor: SSODescriptor]
 
 }

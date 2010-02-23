@@ -30,7 +30,7 @@ class KeyDescriptor  {
 	Date dateCreated
 	Date lastUpdated
 
-	static belongsTo = [owner: RoleDescriptor]
+	static belongsTo = [roleDescriptor: RoleDescriptor]
 
 	static constraints = {
 		encryptionMethod(nullable: true)

@@ -31,7 +31,7 @@ class EncryptionMethod  {
 	Date dateCreated
 	Date lastUpdated
 
-	static belongsTo = [owner: KeyDescriptor]
+	static belongsTo = [keyDescriptor: KeyDescriptor]
 
 	static constraints = {
 		oaeParams(nullable: true)

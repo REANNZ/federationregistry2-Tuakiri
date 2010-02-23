@@ -28,7 +28,7 @@ class CACertificate {
 	Date dateCreated
 	Date lastUpdated
 	
-	static belongsTo = [owner: CAKeyInfo]
+	static belongsTo = [caKeyInfo: CAKeyInfo]
 	
 	static constraints = {
 		dateCreated(nullable:true)

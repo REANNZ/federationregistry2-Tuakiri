@@ -24,6 +24,6 @@ package fedreg.core
  */
 class SingleLogoutService extends Endpoint  {
 
-  static belongsTo = [owner: SSODescriptor]
+  static belongsTo = [ssoDescriptor: SSODescriptor]
 
 }

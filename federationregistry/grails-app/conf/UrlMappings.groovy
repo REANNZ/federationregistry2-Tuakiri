@@ -26,6 +26,10 @@ class UrlMappings {
 		controller = "dataManagement"
 	}
 	
+	"/monitor/$action?/$id?"{
+		controller = "monitor"
+	}
+	
     "/"(view:"/index")
 	  "500"(view:'/error')
 	}
