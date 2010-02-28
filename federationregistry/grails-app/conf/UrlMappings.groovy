@@ -17,6 +17,10 @@ class UrlMappings {
 		controller = "certifyingAuthorityUsage"
 	}
 	
+	"/federation/identityprovider/$action?/$id?"{
+		controller = "identityProvider"
+	}
+	
 	"/bootstrap" {
 			controller = "dataManagement"
 			action = "bootstrap"

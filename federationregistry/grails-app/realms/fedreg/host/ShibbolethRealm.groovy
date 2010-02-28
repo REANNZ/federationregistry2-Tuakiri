@@ -21,6 +21,7 @@ class ShibbolethRealm {
 	
 	def userService
 	def adminsService
+	def groupService
 	def grailsApplication
 	
 	def authenticate(authToken) {
@@ -81,6 +82,12 @@ class ShibbolethRealm {
 					adminsService.add(user)
 					log.info("Issued account $user.username with admin right as this was the first account entering the system")
 				}
+				
+				def group = Group.findByName(authToken.homeOrganization)
+				if(!group)
+					group = groupService.createGroup(authToken.homeOrganization, "Users belonging to IDP ${authToken.homeOrganization}", false)
+					
+				groupService.addMember(user, group)
 			}
 			else
 				throw new UnknownAccountException("No account representing user $username exists and autoProvision is false")

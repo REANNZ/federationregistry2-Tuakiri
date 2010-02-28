@@ -9,7 +9,7 @@ import org.apache.shiro.authc.AuthenticationToken
  */
 public class ShibbolethToken implements AuthenticationToken {
 
-  	def principal, givenName, surname, email, entityID
+  	def principal, givenName, surname, email, entityID, homeOrganization, homeOrganizationType
 
 	public Object getPrincipal() {
 	    return this.principal
