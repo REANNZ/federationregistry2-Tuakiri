@@ -28,6 +28,8 @@ class OrganizationType {
 	Date dateCreated
 	Date lastUpdated
 	
+	boolean discoveryServiceCategory = false
+	
 	static constraints = {
 		description(nullable:true)
 		dateCreated(nullable:true)
