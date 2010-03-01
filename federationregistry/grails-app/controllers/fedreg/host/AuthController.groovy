@@ -75,9 +75,7 @@ class AuthController {
 	def shibauth = {
 		def attr = [:]
 		if (grailsApplication.config.fedreg.shibboleth.federationprovider.spactive) {	
-			// Right now this a very basic integration. In the future we could pull out all kinds of extra shibboleth headers here
-			// and do things like auto group population based on homeOrganization and group/roles based on other attributes. This would
-			// be a trivial addition to the current realm impl but isn't currently spec'd out.
+
 			def uniqueID = request.getHeader(grailsApplication.config.fedreg.shibboleth.headers.uniqueID)
 			def givenName = request.getHeader(grailsApplication.config.fedreg.shibboleth.headers.givenName)
 			def surname = request.getHeader(grailsApplication.config.fedreg.shibboleth.headers.surname)
@@ -86,9 +84,11 @@ class AuthController {
 			def homeOrganiztion = request.getHeader(grailsApplication.config.fedreg.shibboleth.headers.homeOrganization)
 			def homeOrganizationType = request.getHeader(grailsApplication.config.fedreg.shibboleth.headers.homeOrganizationType)
 			
+			log.debug "Attempting shibboleth based authentication with the following details: $uniqueID, $givenName, $surname, $email, $entityID, $homeOrganization, $homeOrganizationType"
+			
 			try {
 				def authToken = new ShibbolethToken(principal:uniqueID, givenName:givenName, surname:surname, email:email, entityID:entityID, homeOrganiztion:homeOrganiztion, homeOrganiztionType:homeOrganiztionType)
-				log.info("Attempting to establish session for user based on Shibboleth authentication with the following details: $uniqueID, $givenName, $surname, $email, $entityID")
+				log.info "Attempting to establish session for user based on Shibboleth authentication with the following details: $uniqueID, $givenName, $surname, $email, $entityID" 
 				
 				SecurityUtils.subject.login(authToken)
 		        this.userService.createLoginRecord(request)
@@ -129,7 +129,7 @@ class AuthController {
 			return
 		}
 		
-		def authToken = new ShibbolethToken(principal:params.uniqueID, givenName:params.givenName, surname:params.surname, email:params.email, entityID:params.entityID)
+		def authToken = new ShibbolethToken(principal:params.uniqueID, givenName:params.givenName, surname:params.surname, email:params.email, entityID:params.entityID, homeOrganization:params.homeOrganization, homeOrganizationType:params.homeOrganizationType)
 		SecurityUtils.subject.login(authToken)
         this.userService.createLoginRecord(request)
         def targetUri = session.getAttribute(AuthController.TARGET) ?: "/"

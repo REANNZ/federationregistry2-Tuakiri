@@ -22,6 +22,7 @@ class ShibbolethRealm {
 	def userService
 	def adminsService
 	def groupService
+	def roleService
 	def grailsApplication
 	
 	def authenticate(authToken) {
@@ -38,6 +39,16 @@ class ShibbolethRealm {
 		if (!authToken.entityID) {
 			log.error("Authentication attempt for Shibboleth provider, denying attempt as no entityID (ShibbolethToken.entityID) was provided")
 			throw new UnknownAccountException("Authentication attempt for Shibboleth provider, denying attempt as no entityID (ShibbolethToken.entityID) was provided")
+		}
+		
+		if (!authToken.homeOrganization) {
+			log.error("Authentication attempt for Shibboleth provider, denying attempt as no homeOrganization (ShibbolethToken.homeOrganization) was provided")
+			throw new UnknownAccountException("Authentication attempt for Shibboleth provider, denying attempt as no homeOrganization (ShibbolethToken.homeOrganization) was provided")
+		}
+		
+		if (!authToken.homeOrganizationType) {
+			log.error("Authentication attempt for Shibboleth provider, denying attempt as no homeOrganizationType (ShibbolethToken.homeOrganizationType) was provided")
+			throw new UnknownAccountException("Authentication attempt for Shibboleth provider, denying attempt as no homeOrganizationType (ShibbolethToken.homeOrganizationType) was provided")
 		}
 		
 		def entityDescriptor = EntityDescriptor.findWhere(entityID:authToken.entityID)
@@ -88,6 +99,12 @@ class ShibbolethRealm {
 					group = groupService.createGroup(authToken.homeOrganization, "Users belonging to IDP ${authToken.homeOrganization}", false)
 					
 				groupService.addMember(user, group)
+				
+				def role = Role.findByName(authToken.homeOrganization)
+				if(!role)
+					role = roleService.createRole(authToken.homeOrganizationType, "Users belonging to an IDP whose home organization is of type ${authToken.homeOrganizationType}", false)
+					
+				roleService.addMember(user, role)
 			}
 			else
 				throw new UnknownAccountException("No account representing user $username exists and autoProvision is false")

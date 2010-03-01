@@ -20,6 +20,8 @@
 							<g:hiddenField name="surname" value="Tron" />
 							<g:hiddenField name="email" value="megatron@decepticons.com" />
 							<g:hiddenField name="entityID" value="https://auth-idp.qut.edu.au/idp/shibboleth" />
+							<g:hiddenField name="homeOrganization" value="qut.edu.au" />
+							<g:hiddenField name="homeOrganizationType" value="university:australia" />
 							<g:submitButton name="Login" />
 						</g:form>
 					</td>
@@ -34,6 +36,8 @@
 							<g:hiddenField name="surname" value="Prime" />
 							<g:hiddenField name="email" value="optimus@autobots.com" />
 							<g:hiddenField name="entityID" value="https://auth-idp.qut.edu.au/idp/shibboleth" />
+							<g:hiddenField name="homeOrganization" value="qut.edu.au" />
+							<g:hiddenField name="homeOrganizationType" value="university:australia" />
 							<g:submitButton name="Login" />
 						</g:form>
 					</td>
