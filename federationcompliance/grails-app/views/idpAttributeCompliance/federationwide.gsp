@@ -34,7 +34,7 @@
 	                    <thead>
 	                        <tr>
 
-	                            <th><g:message code="fedreg.label.organization" /></th>
+	                            <th><g:message code="fedreg.label.identityprovider" /></th>
 								<t<th><g:message code="fedreg.label.status" /></th>
 								<th/>
 
@@ -44,7 +44,7 @@
 	                    <g:each in="${idpInstanceList}" status="i" var="idp">
 	                        <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 
-	                            <td>${idp?.organization?.name?.encodeAsHTML()}</td>
+	                            <td>${idp?.displayName?.encodeAsHTML()}</td>
 
 	                            <td>
 									<g:if test="${supportingIdpInstanceList.contains(idp)}">

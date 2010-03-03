@@ -63,7 +63,7 @@
 									</g:else>
 								</td>
 								
-								<td><g:link action="federationwide" id="${attr.id}" class="button icon icon_view icon_view_attributeSupport"><g:message code="fedreg.link.view" /></g:link></td>
+								<td><g:link action="federationwide" id="${attr.id}" class="button icon icon_view icon_view_attributeSupport"><g:message code="fedreg.link.availability" /></g:link></td>
 	                        </tr>
 	                    </g:each>
 	                    </tbody>
