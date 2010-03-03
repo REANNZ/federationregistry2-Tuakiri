@@ -46,11 +46,6 @@ class ShibbolethRealm {
 			throw new UnknownAccountException("Authentication attempt for Shibboleth provider, denying attempt as no homeOrganization (ShibbolethToken.homeOrganization) was provided")
 		}
 		
-		if (!authToken.homeOrganizationType) {
-			log.error("Authentication attempt for Shibboleth provider, denying attempt as no homeOrganizationType (ShibbolethToken.homeOrganizationType) was provided")
-			throw new UnknownAccountException("Authentication attempt for Shibboleth provider, denying attempt as no homeOrganizationType (ShibbolethToken.homeOrganizationType) was provided")
-		}
-		
 		def entityDescriptor = EntityDescriptor.findWhere(entityID:authToken.entityID)
 		if(!entityDescriptor) {
 			log.error("Authentication attempt for Shibboleth provider, denying attempt as no Entity matching (ShibbolethToken.entityID) is available. Has bootstrap occured?")
@@ -93,18 +88,6 @@ class ShibbolethRealm {
 					adminsService.add(user)
 					log.info("Issued account $user.username with admin right as this was the first account entering the system")
 				}
-				
-				def group = Group.findByName(authToken.homeOrganization)
-				if(!group)
-					group = groupService.createGroup(authToken.homeOrganization, "Users belonging to IDP ${authToken.homeOrganization}", false)
-					
-				groupService.addMember(user, group)
-				
-				def role = Role.findByName(authToken.homeOrganization)
-				if(!role)
-					role = roleService.createRole(authToken.homeOrganizationType, "Users belonging to an IDP whose home organization is of type ${authToken.homeOrganizationType}", false)
-					
-				roleService.addMember(user, role)
 			}
 			else
 				throw new UnknownAccountException("No account representing user $username exists and autoProvision is false")

@@ -24,32 +24,37 @@ package fedreg.core
  */
 class RoleDescriptor  {
 
-  Organization organization
-  UrlURI errorURL
-  String extensions
+	Organization organization
+	UrlURI errorURL
+	
+	String displayName
+	String description
+	String extensions
 
 	Date dateCreated
 	Date lastUpdated
 
-  static hasMany = [
-          contacts: ContactPerson,
-          protocolSupportEnumerations: SamlURI,
-          keyDescriptors: KeyDescriptor
-  ]
+	static hasMany = [
+		contacts: ContactPerson,
+		protocolSupportEnumerations: SamlURI,
+		keyDescriptors: KeyDescriptor
+	]
 
-  static mapping = {
-    tablePerHierarchy false
-  }
+	static mapping = {
+		tablePerHierarchy false
+	}
 
-  static constraints = {
-    organization(nullable: true)
-    extensions(nullable: true)
-    errorURL(nullable:true)
-    protocolSupportEnumerations(nullable: true)
-    contacts(nullable: true)
-    keyDescriptors(nullable: true)
-	dateCreated(nullable:true)
-	lastUpdated(nullable:true)
-  }
+	static constraints = {
+		organization(nullable: true)
+		extensions(nullable: true)
+		errorURL(nullable:true)
+		protocolSupportEnumerations(nullable: true)
+		contacts(nullable: true)
+		keyDescriptors(nullable: true)
+		dateCreated(nullable:true)
+		lastUpdated(nullable:true)
+		displayName(nullable:true)
+		description(nullable:true)
+	}
 
 }

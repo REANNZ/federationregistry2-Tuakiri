@@ -27,8 +27,11 @@ class Organization  {
 	String name
 	String displayName
 	String lang
-	UrlURI url
 	String extensions
+	
+	boolean active = false
+	
+	UrlURI url
 	
 	OrganizationType primary
 	
@@ -36,7 +39,10 @@ class Organization  {
 	Date lastUpdated
 	
 	static hasMany = [
-		types : OrganizationType
+		types : OrganizationType,
+		suspensions: OrganizationType,	// Won't render in DS/WAYF listing
+		sponsors: Organization,
+		affiliates: Organization
 	]
 
 	static mapping = {

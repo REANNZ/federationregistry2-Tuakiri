@@ -81,13 +81,13 @@ class AuthController {
 			def surname = request.getHeader(grailsApplication.config.fedreg.shibboleth.headers.surname)
 			def email = request.getHeader(grailsApplication.config.fedreg.shibboleth.headers.email)
 			def entityID = request.getHeader(grailsApplication.config.fedreg.shibboleth.headers.entityID)
-			def homeOrganiztion = request.getHeader(grailsApplication.config.fedreg.shibboleth.headers.homeOrganization)
+			def homeOrganization = request.getHeader(grailsApplication.config.fedreg.shibboleth.headers.homeOrganization)
 			def homeOrganizationType = request.getHeader(grailsApplication.config.fedreg.shibboleth.headers.homeOrganizationType)
 			
 			log.debug "Attempting shibboleth based authentication with the following details: $uniqueID, $givenName, $surname, $email, $entityID, $homeOrganization, $homeOrganizationType"
 			
 			try {
-				def authToken = new ShibbolethToken(principal:uniqueID, givenName:givenName, surname:surname, email:email, entityID:entityID, homeOrganiztion:homeOrganiztion, homeOrganiztionType:homeOrganiztionType)
+				def authToken = new ShibbolethToken(principal:uniqueID, givenName:givenName, surname:surname, email:email, entityID:entityID, homeOrganization:homeOrganization, homeOrganizationType:homeOrganizationType)
 				log.info "Attempting to establish session for user based on Shibboleth authentication with the following details: $uniqueID, $givenName, $surname, $email, $entityID" 
 				
 				SecurityUtils.subject.login(authToken)

@@ -34,14 +34,14 @@
 					<tr>
 						<td>
 							<h3><g:message code="fedreg.label.serviceprovider"/></h3>
-							<g:select id="sp" from="${activeSP}" optionKey="id" optionValue="${{it.entityDescriptor.entityID}}"/>
+							<g:select id="sp" from="${activeSP}" optionKey="id" optionValue="${{it.displayName ? it.displayName.encodeAsHTML():it.entityDescriptor.entityID.encodeAsHTML()}}"/>
 						</td>
 						<td>
 							<a href="#" id="analyzecompatibility" class="button icon icon_arrow_join"><g:message code="fedreg.link.compare"/></a>
 						</td>
 						<td>
 							<h3><g:message code="fedreg.label.identityprovider"/></h3>
-							<g:select id="idp" from="${activeIDP}" optionKey="id" optionValue="${{it.entityDescriptor.entityID}}"/>
+							<g:select id="idp" from="${activeIDP}" optionKey="id" optionValue="${{it.displayName ? it.displayName.encodeAsHTML():it.entityDescriptor.entityID.encodeAsHTML()}}"/>
 						</td>
 					</tr>
 				</tbody>

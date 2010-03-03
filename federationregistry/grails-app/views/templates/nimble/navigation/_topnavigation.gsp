@@ -6,9 +6,7 @@
 			<g:link controller="idpAttributeCompliance" action="summary" class="icon icon_award_star_gold_2"><g:message code="fedreg.navigation.compliance" /></g:link>
 		</li>
 		<n:isAdministrator>
-			<li class="${['identityProvider'].contains(controllerName) ? 'current' : ''}">
-				<g:link controller="identityProvider" class="icon icon_database"><g:message code="fedreg.navigation.federation" /></g:link>
-		  	</li>
+
 			<li class="${['admins', 'user', 'role', 'group'].contains(controllerName) ? 'current' : ''}">
 				<g:link controller="user" class="icon icon_cog"><g:message code="fedreg.navigation.accesscontrol" /></g:link>
 			</li>

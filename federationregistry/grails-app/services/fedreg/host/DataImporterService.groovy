@@ -265,6 +265,12 @@ class DataImporterService implements InitializingBean {
 			def idp = new IDPSSODescriptor(entityDescriptor:entity, organization:entity.organization)
 			idp.addToNameIDFormats(trans)	// RR hard codes everything to only advertise NameIDForm of transient so we need to do the same, in FR this is modifable and DB driven
 			
+			sql.eachRow("select * from objectDescriptions where objectID=${it.homeOrgID} and objectType='homeOrg'",
+			{
+				idp.displayName = it.descriptiveName
+				idp.description = it.description
+			})
+			
 			sql.eachRow("select * from serviceLocations where objectID=${it.homeOrgID} and serviceType='SingleSignOnService'",
 			{
 				def binding = SamlURI.findByUri(it.serviceBinding)
@@ -351,6 +357,12 @@ class DataImporterService implements InitializingBean {
 			
 			def entity = EntityDescriptor.findWhere(entityID:it.providerID)
 			def sp = new SPSSODescriptor(entityDescriptor:entity, organization:entity.organization, visible:it.visible)
+			
+			sql.eachRow("select * from objectDescriptions where objectID=${it.resourceID} and objectType='resource'",
+			{
+				sp.displayName = it.descriptiveName
+				sp.description = it.description
+			})
 
 			sql.eachRow("select * from serviceLocations where objectID=${it.resourceID} and serviceType='SingleLogoutService'",
 			{
