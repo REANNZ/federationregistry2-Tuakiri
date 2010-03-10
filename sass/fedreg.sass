@@ -111,9 +111,9 @@
 
   .content
     +left
-    width: 770px
+    width: *
     :margin
-      :top = 6px
+      :top = 0px
       :left = 12px
 
   .logincontent
@@ -145,6 +145,57 @@ td.errors
     :background
       :color = #c5200a
     color = #fff
+
+.breadcrumb
+  +rounded-br
+  +rounded-bl
+
+  :padding
+    :top = 6px
+    :bottom = 6px
+    :left = 18px
+
+  :background
+    :color = #3c454d
+
+  color = #fff
+  a
+    +link(#e2e2e2)
+    :font
+      :weight = "bold"
+    
+
+#organizationentities
+  h3
+    margin = 3px
+    :font
+      :weight = "bold"
+      :size = 1.4em
+    color = #b2b2b2
+
+  .entity
+    padding = 6px
+    margin = 3px
+
+    h4
+      margin = 3px
+      :font
+        :weight = "bold"
+        :size = 1.3em
+      color = #999
+
+    h5
+      margin-bottom: 3px
+      :font
+        :weight = "bold"
+        :size = 1.1em
+      color = #666
+
+    table
+      margin-left = 3px
+      tr
+        td
+          width = 100px
 
 #attributereleasecompliance
   table
@@ -211,6 +262,9 @@ td.errors
       +clearleft
       th
         color = #a2a2a2
+        width = 200px
+      td
+        width = 200px
 
 .attributesummary
   +left

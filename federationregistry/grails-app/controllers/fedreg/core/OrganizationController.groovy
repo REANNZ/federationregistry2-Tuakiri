@@ -9,72 +9,73 @@ class OrganizationController {
     }
 
     def list = {
-        params.max = Math.min(params.max ? params.max.toInteger() : 10, 100)
-        [organizationInstanceList: Organization.list(params), organizationInstanceTotal: Organization.count()]
+        params.max = Math.min(params.max ? params.max.toInteger() : 20, 100)
+        [organizationList: Organization.list(params), organizationTotal: Organization.count()]
     }
 
     def create = {
-        def organizationInstance = new Organization()
-        organizationInstance.properties = params
-        return [organizationInstance: organizationInstance]
+        def organization = new Organization()
+        organization.properties = params
+        return [organization: organization]
     }
 
     def save = {
-        def organizationInstance = new Organization(params)
-        if (organizationInstance.save(flush: true)) {
+        def organization = new Organization(params)
+        if (organization.save(flush: true)) {
 			flash.type="success"
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'organization.label'), organizationInstance.toString()])}"
-            redirect(action: "show", id: organizationInstance.id)
+            flash.message = "${message(code: 'default.created.message', args: [message(code: 'organization.label'), organization.toString()])}"
+            redirect(action: "show", id: organization.id)
         }
         else {
-            render(view: "create", model: [organizationInstance: organizationInstance])
+            render(view: "create", model: [organization: organization])
         }
     }
 
     def show = {
-        def organizationInstance = Organization.get(params.id)
-        if (!organizationInstance) {
+        def organization = Organization.get(params.id)
+        if (!organization) {
 			flash.type="error"
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'organization.label'), params.id])}"
             redirect(action: "list")
         }
         else {
-            [organizationInstance: organizationInstance]
+			def entities = EntityDescriptor.findAllWhere(organization:organization)
+            [organization: organization, entities:entities]
         }
     }
 
     def edit = {
-        def organizationInstance = Organization.get(params.id)
-        if (!organizationInstance) {
+        def organization = Organization.get(params.id)
+        if (!organization) {
 			flash.type = "error"
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'organization.label'), params.id])}"
             redirect(action: "list")
         }
         else {
-            return [organizationInstance: organizationInstance]
+            return [organization: organization]
         }
     }
 
     def update = {
-        def organizationInstance = Organization.get(params.id)
-        if (organizationInstance) {
+        def organization = Organization.get(params.id)
+        if (organization) {
             if (params.version) {
                 def version = params.version.toLong()
-                if (organizationInstance.version > version) {
+                if (organization.version > version) {
                     
-                    organizationInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'organization.label')])
-                    render(view: "edit", model: [organizationInstance: organizationInstance])
+                    organization.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'organization.label')])
+                    render(view: "edit", model: [organization: organization])
                     return
                 }
             }
-            organizationInstance.properties = params
-            if (!organizationInstance.hasErrors() && organizationInstance.save(flush: true)) {
+            organization.properties = params
+            if (!organization.hasErrors() && organization.save(flush: true)) {
 				flash.type = "success"
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'organization.label'), organizationInstance.id])}"
-                redirect(action: "show", id: organizationInstance.id)
+                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'organization.label'), organization.id])}"
+                redirect(action: "show", id: organization.id)
             }
             else {
-                render(view: "edit", model: [organizationInstance: organizationInstance])
+                render(view: "edit", model: [organization: organization])
             }
         }
         else {
@@ -85,10 +86,10 @@ class OrganizationController {
     }
 
     def delete = {
-        def organizationInstance = Organization.get(params.id)
-        if (organizationInstance) {
+        def organization = Organization.get(params.id)
+        if (organization) {
             try {
-                organizationInstance.delete(flush: true)
+                organization.delete(flush: true)
 				flash.type = "success"
                 flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'organization.label'), params.id])}"
                 redirect(action: "list")

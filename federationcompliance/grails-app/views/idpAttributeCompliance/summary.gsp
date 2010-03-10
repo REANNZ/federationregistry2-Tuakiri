@@ -16,7 +16,7 @@
                 	<table class="cleantable buttons">
 	                    <thead>
 	                        <tr>                        
-	                            <th><g:message code="fedreg.label.organization" /></th>
+	                            <th><g:message code="fedreg.label.identityprovider" /></th>
 								<g:each in="${AttributeCategory.listOrderByName()}">
 									<th><g:message code="fedreg.label.${it.name.toLowerCase()}" /></th>
 								</g:each>
@@ -26,7 +26,7 @@
 	                    <tbody>
 						<g:each in="${idpInstanceList}" status="i" var="idp">
 							<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-								<td class="organizationname">${idp?.organization?.name.encodeAsHTML()}</td>
+								<td class="organizationname">${idp?.displayName?.encodeAsHTML()}</td>
 	                    		<g:findAll in="${categorySupportSummaries}" expr="it.idp == idp">
 			                        <td>
 										<div class="numeric">
@@ -34,7 +34,7 @@
 										</div>
 									</td>	                        
 			                    </g:findAll>
-								<td><g:link action="comprehensive" id="${idp.id}" class="button icon icon_view icon_view_attributeCompliance"><g:message code="fedreg.link.view" /></g:link></td>
+								<td><g:link action="comprehensive" id="${idp.id}" class="button icon icon_magnifier"><g:message code="fedreg.link.view" /></g:link></td>
 							</tr>
 						</g:each>
 	                    </tbody>

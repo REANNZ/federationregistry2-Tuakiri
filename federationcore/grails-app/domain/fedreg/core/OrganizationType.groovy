@@ -35,5 +35,9 @@ class OrganizationType {
 		dateCreated(nullable:true)
 		lastUpdated(nullable:true)
 	}
+	
+	public String toString() {
+		return displayName
+	}
 
 }

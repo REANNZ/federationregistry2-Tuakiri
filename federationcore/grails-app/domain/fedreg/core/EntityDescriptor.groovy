@@ -57,5 +57,9 @@ class EntityDescriptor {
 	static mapping = {
 		tablePerHierarchy false
 	}
+	
+	public String toString() {
+		return entityID
+	}
 
 }

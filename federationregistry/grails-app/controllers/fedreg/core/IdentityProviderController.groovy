@@ -39,7 +39,7 @@ class IdentityProviderController {
             redirect(action: "list")
         }
         else {
-            [identityProviderInstance: identityProviderInstance]
+            [identityProvider: identityProviderInstance]
         }
     }
 

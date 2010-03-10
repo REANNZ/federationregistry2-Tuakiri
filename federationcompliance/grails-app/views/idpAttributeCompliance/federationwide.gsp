@@ -55,7 +55,7 @@
 									</g:else>
 								</td>
 
-								<td><g:link action="comprehensive" id="${idp.id}" class="button icon icon_view icon_view_attributeCompliance"><g:message code="fedreg.link.view" /></g:link></td>
+								<td><g:link action="comprehensive" id="${idp.id}" class="button icon icon_magnifier"><g:message code="fedreg.link.idpattravail" /></g:link></td>
 	                        </tr>
 	                    </g:each>
 	                    </tbody>

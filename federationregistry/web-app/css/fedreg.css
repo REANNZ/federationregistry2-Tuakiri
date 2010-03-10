@@ -29,7 +29,7 @@
 #bd .localnavigation a { font-size: 1em; font-weight: bold; color: #666666; cursor: pointer; text-decoration: none; }
 #bd .localnavigation a:hover { text-decoration: underline; }
 #bd .localnavigation ul { margin-left: 6px; margin-bottom: 3px; }
-#bd .content { float: left; width: 770px; margin-top: 6px; margin-left: 12px; }
+#bd .content { float: left; width: *; margin-top: 0px; margin-left: 12px; }
 #bd .logincontent { margin-left: auto; margin-right: auto; padding: 18px; }
 
 table.cleantable { margin: 0px; width: 100%; }
@@ -46,6 +46,17 @@ table.buttons tbody tr td { padding: 9px; }
 div.errors { -moz-border-radius: 5px; -webkit-border-radius: 5px; margin: 6px; padding: 6px; border: 2px solid #b10902; background-color: #c5200a; color: white; }
 
 td.errors input { border: 2px solid #b10902; background-color: #c5200a; color: white; }
+
+.breadcrumb { -moz-border-radius-bottomright: 5px; -webkit-border-bottom-right-radius: 5px; -moz-border-radius-bottomleft: 5px; -webkit-border-bottom-left-radius: 5px; padding-top: 6px; padding-bottom: 6px; padding-left: 18px; background-color: #3c454d; color: white; }
+.breadcrumb a { color: #e2e2e2; cursor: pointer; text-decoration: none; font-weight: bold; }
+.breadcrumb a:hover { text-decoration: underline; }
+
+#organizationentities h3 { margin: 3px; font-weight: bold; font-size: 1.4em; color: #b2b2b2; }
+#organizationentities .entity { padding: 6px; margin: 3px; }
+#organizationentities .entity h4 { margin: 3px; font-weight: bold; font-size: 1.3em; color: #999999; }
+#organizationentities .entity h5 { margin-bottom: 3px; font-weight: bold; font-size: 1.1em; color: #666666; }
+#organizationentities .entity table { margin-left: 3px; }
+#organizationentities .entity table tr td { width: 100px; }
 
 #attributereleasecompliance table h3 { color: #525252; font-size: 1.3em; font-weight: bold; }
 #attributereleasecompliance table h4 { margin: 0px; margin-top: 12px; color: #666666; font-size: 1.1em; font-weight: bold; }
@@ -66,7 +77,8 @@ td.errors input { border: 2px solid #b10902; background-color: #c5200a; color: w
 .categorydetail .category .numeric { font-size: 1.4em; }
 .categorydetail .category .numeric .total { color: #a2a2a2; }
 .categorydetail .category table { clear: left; }
-.categorydetail .category table th { color: #a2a2a2; }
+.categorydetail .category table th { color: #a2a2a2; width: 200px; }
+.categorydetail .category table td { width: 200px; }
 
 .attributesummary { float: left; }
 .attributesummary .attribute { margin: 6px; }

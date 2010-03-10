@@ -24,6 +24,7 @@
 	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/plugins/jqplot.pieRenderer.min.js')}"></script>
 	<link rel="stylesheet" href="${resource(dir:'css',file:'jquery.jqplot.min.css')}" />
 	
+	<!-- RAR -->
     <g:layoutHead />
 </head>
 
@@ -36,27 +37,17 @@
     <div id="bd">
 		<div class="container">
 	    	<div class="localnavigation">
-			  <h3><g:message code="fedreg.layout.compliance.navigation.title" /></h3>
+			  <h3><g:message code="fedreg.layout.members.navigation.title" /></h3>
 			    <ul>
 					<li>
-						<h4><g:message code="fedreg.navigation.identityprovider" /></h4>
-						<ul>
-							<li>
-								<g:link controller="idpAttributeCompliance" action="summary"><g:message code="fedreg.link.attributesummary" /></g:link>
-						 	</li>
-						</ul>
+						<g:link controller="organization" action="list"><g:message code="fedreg.link.organization" /></g:link>
 					</li>
 					<li>
-						<h4><g:message code="fedreg.navigation.federationwide" /></h4>
-						<ul>
-							<li>
-								<g:link controller="attributeRelease" action="index"><g:message code="fedreg.link.attributerelease" /></g:link>
-						 	</li>
-							<li>
-								<g:link controller="certifyingAuthorityUsage" action="index"><g:message code="fedreg.link.cautilization" /></g:link>
-							</li>
-						</ul>
-				 	</li>
+						<g:link controller="entity" action="list"><g:message code="fedreg.link.entitydescriptor" /></g:link>
+					</li>
+					<li>
+						<g:link controller="identityProvider" action="list"><g:message code="fedreg.link.identityprovider" /></g:link>
+					</li>
 				</ul>
 			</div>
 			<div class="content">
