@@ -356,7 +356,8 @@ class DataImporterService implements InitializingBean {
 			boolean saml2 = false
 			
 			def entity = EntityDescriptor.findWhere(entityID:it.providerID)
-			def sp = new SPSSODescriptor(entityDescriptor:entity, organization:entity.organization, visible:it.visible)
+			def sd = new ServiceDescription()
+			def sp = new SPSSODescriptor(entityDescriptor:entity, organization:entity.organization, visible:it.visible, serviceDescription:sd)
 			
 			sql.eachRow("select * from objectDescriptions where objectID=${it.resourceID} and objectType='resource'",
 			{

@@ -22,7 +22,7 @@ package fedreg.core
 /**
  * @author Bradley Beddoes
  */
-class Organization  {
+class Organization  {	// Also called a participant in AAF land
 
 	String name
 	String displayName

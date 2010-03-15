@@ -9,72 +9,72 @@ class IdentityProviderController {
     }
 
     def list = {
-        params.max = Math.min(params.max ? params.max.toInteger() : 10, 100)
-        [identityProviderInstanceList: IDPSSODescriptor.list(params), identityProviderInstanceTotal: IDPSSODescriptor.count()]
+        params.max = Math.min(params.max ? params.max.toInteger() : 20, 100)
+        [identityProviderList: IDPSSODescriptor.list(params), identityProviderTotal: IDPSSODescriptor.count()]
     }
 
     def create = {
-        def identityProviderInstance = new IDPSSODescriptor()
-        identityProviderInstance.properties = params
-        return [identityProviderInstance: identityProviderInstance]
+        def identityProvider = new IDPSSODescriptor()
+        identityProvider.properties = params
+        return [identityProvider: identityProvider]
     }
 
     def save = {
-        def identityProviderInstance = new IDPSSODescriptor(params)
-        if (identityProviderInstance.save(flush: true)) {
+        def identityProvider = new IDPSSODescriptor(params)
+        if (identityProvider.save(flush: true)) {
 			flash.type="success"
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'identityProvider.label'), identityProviderInstance.toString()])}"
-            redirect(action: "show", id: identityProviderInstance.id)
+            flash.message = "${message(code: 'default.created.message', args: [message(code: 'identityProvider.label'), identityProvider.toString()])}"
+            redirect(action: "show", id: identityProvider.id)
         }
         else {
-            render(view: "create", model: [identityProviderInstance: identityProviderInstance])
+            render(view: "create", model: [identityProvider: identityProvider])
         }
     }
 
     def show = {
-        def identityProviderInstance = IDPSSODescriptor.get(params.id)
-        if (!identityProviderInstance) {
+        def identityProvider = IDPSSODescriptor.get(params.id)
+        if (!identityProvider) {
 			flash.type="error"
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'identityProvider.label'), params.id])}"
             redirect(action: "list")
         }
         else {
-            [identityProvider: identityProviderInstance]
+            [identityProvider: identityProvider]
         }
     }
 
     def edit = {
-        def identityProviderInstance = IDPSSODescriptor.get(params.id)
-        if (!identityProviderInstance) {
+        def identityProvider = IDPSSODescriptor.get(params.id)
+        if (!identityProvider) {
 			flash.type = "error"
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'identityProvider.label'), params.id])}"
             redirect(action: "list")
         }
         else {
-            return [identityProviderInstance: identityProviderInstance]
+            return [identityProvider: identityProvider]
         }
     }
 
     def update = {
-        def identityProviderInstance = IDPSSODescriptor.get(params.id)
-        if (identityProviderInstance) {
+        def identityProvider = IDPSSODescriptor.get(params.id)
+        if (identityProvider) {
             if (params.version) {
                 def version = params.version.toLong()
-                if (identityProviderInstance.version > version) {
+                if (identityProvider.version > version) {
                     
-                    identityProviderInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'identityProvider.label')])
-                    render(view: "edit", model: [identityProviderInstance: identityProviderInstance])
+                    identityProvider.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'identityProvider.label')])
+                    render(view: "edit", model: [identityProvider: identityProvider])
                     return
                 }
             }
-            identityProviderInstance.properties = params
-            if (!identityProviderInstance.hasErrors() && identityProviderInstance.save(flush: true)) {
+            identityProvider.properties = params
+            if (!identityProvider.hasErrors() && identityProvider.save(flush: true)) {
 				flash.type = "success"
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'identityProvider.label'), identityProviderInstance.id])}"
-                redirect(action: "show", id: identityProviderInstance.id)
+                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'identityProvider.label'), identityProvider.id])}"
+                redirect(action: "show", id: identityProvider.id)
             }
             else {
-                render(view: "edit", model: [identityProviderInstance: identityProviderInstance])
+                render(view: "edit", model: [identityProvider: identityProvider])
             }
         }
         else {
@@ -85,10 +85,10 @@ class IdentityProviderController {
     }
 
     def delete = {
-        def identityProviderInstance = IDPSSODescriptor.get(params.id)
-        if (identityProviderInstance) {
+        def identityProvider = IDPSSODescriptor.get(params.id)
+        if (identityProvider) {
             try {
-                identityProviderInstance.delete(flush: true)
+                identityProvider.delete(flush: true)
 				flash.type = "success"
                 flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'identityProvider.label'), params.id])}"
                 redirect(action: "list")

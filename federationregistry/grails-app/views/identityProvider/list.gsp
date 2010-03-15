@@ -3,48 +3,37 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="members" />
-        <g:set var="entityName" value="${message(code: 'identityProvider.label')}" />
-        <title><g:message code="default.list.label" args="[entityName]" /></title>
+        <title><g:message code="fedreg.view.members.identityprovider.list.title" /></title>
     </head>
     <body>
 
         <div class="container">
-            <h2><g:message code="default.list.label" args="[entityName]" /></h2>
+            <h2><g:message code="fedreg.view.members.identityprovider.list.heading" /></h2>
             <div class="list">
                 <table class="cleantable buttons">
                     <thead>
                         <tr>
-                        
-                            <th><g:message code="identityProvider.organization.label" /></th>
-                   	    
-                            <g:sortableColumn property="extensions" title="${message(code: 'identityProvider.extensions.label')}" />
-                        
-                            <th><g:message code="identityProvider.errorURL.label" /></th>
-                   	    
-                            <g:sortableColumn property="wantAuthnRequestsSigned" title="${message(code: 'identityProvider.wantAuthnRequestsSigned.label')}" />
-                        
+							<g:sortableColumn property="displayName" title="${message(code: 'fedreg.label.identityprovider')}" />
+                            <g:sortableColumn property="organization" title="${message(code: 'fedreg.label.organization')}" />
+                            <th/>
                         </tr>
                     </thead>
                     <tbody>
-                    <g:each in="${identityProviderInstanceList}" status="i" var="identityProviderInstance">
+                    <g:each in="${identityProviderList}" status="i" var="identityProvider">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                         
-                            <td>${fieldValue(bean: identityProviderInstance, field: "organization")}</td>
+							<td>${fieldValue(bean: identityProvider, field: "displayName")}</td>
+							
+                            <td>${fieldValue(bean: identityProvider, field: "organization")}</td>
                         
-                            <td>${fieldValue(bean: identityProviderInstance, field: "extensions")}</td>
-                        
-                            <td>${fieldValue(bean: identityProviderInstance, field: "errorURL")}</td>
-                        
-                            <td><g:formatBoolean boolean="${identityProviderInstance.wantAuthnRequestsSigned}" /></td>
-                        
-							<td><g:link action="show" id="${identityProviderInstance.id}" class="button icon icon_view icon_view_identityProvider"><g:message code="identityProvider.view.label" /></g:link></td>
+							<td><g:link action="show" id="${identityProvider.id}" class="button icon icon_view icon_view_identityProvider"><g:message code="fedreg.link.view" /></g:link></td>
                         </tr>
                     </g:each>
                     </tbody>
                 </table>
             </div>
             <div class="paginateButtons">
-                <g:paginate total="${identityProviderInstanceTotal}" />
+                <g:paginate total="${identityProviderTotal}" />
             </div>
         </div>
     </body>

@@ -22,23 +22,18 @@ package fedreg.core
 /**
  * @author Bradley Beddoes
  */
-class SPSSODescriptor extends SSODescriptor {
-
- 	boolean authnRequestsSigned
- 	boolean wantAssertionsSigned
-
-	ServiceDescription serviceDescription
-
- 	static belongsTo = [entityDescriptor:EntityDescriptor]
-
-	static hasMany = [
-		assertionConsumerServices: AssertionConsumerService,
-		attributeConsumingServices: AttributeConsumingService,
-		serviceCategories: ServiceCategory
-	]
-
+class ServiceDescription {
+	
+	boolean publish = false
+	
+	Date dateCreated
+	Date lastUpdated
+	
+	static belongsTo = [spSSODescriptor:SPSSODescriptor]
+	
 	static constraints = {
-		attributeConsumingServices(nullable: true)
-		serviceDescription(nullable:false)
- 	}
+		dateCreated(nullable:true)
+		lastUpdated(nullable:true)
+	}
+	
 }
