@@ -15,8 +15,8 @@
                     <thead>
                         <tr>
                         
-                            <g:sortableColumn property="name" title="${message(code: 'fedreg.label.name')}" />
-                        
+                            <g:sortableColumn property="name" title="${message(code: 'fedreg.label.organization')}" />
+                  			<g:sortableColumn property="name" title="${message(code: 'fedreg.label.primarytype')}" />
                             <th />
                         
                         </tr>
@@ -26,7 +26,7 @@
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                         
                             <td>${fieldValue(bean: organization, field: "displayName")}</td>
-                        
+                        	<td>${fieldValue(bean: organization, field: "primary")}</td>
 							<td><g:link action="show" id="${organization.id}" class="button icon icon_server_go"><g:message code="fedreg.link.view" /></g:link></td>
                         </tr>
                     </g:each>

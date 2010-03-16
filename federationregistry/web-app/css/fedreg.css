@@ -51,12 +51,27 @@ td.errors input { border: 2px solid #b10902; background-color: #c5200a; color: w
 .breadcrumb a { color: #e2e2e2; cursor: pointer; text-decoration: none; font-weight: bold; }
 .breadcrumb a:hover { text-decoration: underline; }
 
-#organizationentities h3 { margin: 3px; font-weight: bold; font-size: 1.4em; color: #b2b2b2; }
-#organizationentities .entity { padding: 6px; margin: 3px; }
-#organizationentities .entity h4 { margin: 3px; font-weight: bold; font-size: 1.3em; color: #999999; }
-#organizationentities .entity h5 { margin-bottom: 3px; font-weight: bold; font-size: 1.1em; color: #666666; }
-#organizationentities .entity table { margin-left: 3px; }
-#organizationentities .entity table tr td { width: 100px; }
+.tabcontent { margin: 9px; width: 700px; }
+.tabcontent h3 { margin: 0px; padding: 0px; margin-bottom: 3px; }
+.tabcontent thead tr th { background-color: #fff; }
+.tabcontent thead tr th a { color: #363636; cursor: pointer; text-decoration: none; }
+.tabcontent thead tr th a:hover { text-decoration: underline; }
+.tabcontent tbody tr.odd td { background-color: #fff; }
+.tabcontent tbody tr.even td { background-color: #fbfbfb; }
+.tabcontent tbody tr td.name { font-weight: bold; }
+.tabcontent tbody tr td { padding: 9px; }
+
+#organization #tabs { width: 800px; }
+#organization .tabcontent { margin: 9px; width: 95%; }
+#organization .tabcontent h3 { margin: 0px; padding: 0px; margin-bottom: 3px; }
+#organization .tabcontent thead tr th { background-color: #fff; }
+#organization .tabcontent thead tr th a { color: #363636; cursor: pointer; text-decoration: none; }
+#organization .tabcontent thead tr th a:hover { text-decoration: underline; }
+#organization .tabcontent tbody tr.odd td { background-color: #fff; }
+#organization .tabcontent tbody tr.even td { background-color: #fbfbfb; }
+#organization .tabcontent tbody tr td.name { font-weight: bold; }
+#organization .tabcontent tbody tr td { padding: 9px; }
+#organization .tabcontent table td { width: 200px; }
 
 #attributereleasecompliance table h3 { color: #525252; font-size: 1.3em; font-weight: bold; }
 #attributereleasecompliance table h4 { margin: 0px; margin-top: 12px; color: #666666; font-size: 1.1em; font-weight: bold; }

@@ -172,18 +172,13 @@ class DataImporterService implements InitializingBean {
 			
 			def c = Contact.createCriteria()
 			def results = c.list {
-				and {
-					emailAddresses {
-						and {
-							eq("uri", email)
-						}
-					}
+				email {
+					eq("uri", email)
 				}
 			}
 			// Doesn't already exist (RR data is crapppppy!!) so create.
 			if(results.size() == 0) {
-				def contact = new Contact(userLink:false, givenName:givenName, surname:surname)
-								.addToEmailAddresses(new MailURI(uri:email))
+				def contact = new Contact(userLink:false, givenName:givenName, surname:surname, email:new MailURI(uri:email))
 								
 				contact.save(flush:true)
 				if(contact.hasErrors()) {

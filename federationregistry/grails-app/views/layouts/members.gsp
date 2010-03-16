@@ -40,13 +40,13 @@
 			  <h3><g:message code="fedreg.layout.members.navigation.title" /></h3>
 			    <ul>
 					<li>
-						<g:link controller="organization" action="list"><g:message code="fedreg.link.organization" /></g:link>
+						<g:link controller="organization" action="list"><g:message code="fedreg.link.organizations" /></g:link>
 					</li>
 					<li>
-						<g:link controller="entity" action="list"><g:message code="fedreg.link.entitydescriptor" /></g:link>
+						<g:link controller="entity" action="list"><g:message code="fedreg.link.entitydescriptors" /></g:link>
 					</li>
 					<li>
-						<g:link controller="identityProvider" action="list"><g:message code="fedreg.link.identityprovider" /></g:link>
+						<g:link controller="identityProvider" action="list"><g:message code="fedreg.link.identityproviders" /></g:link>
 					</li>
 				</ul>
 			</div>

@@ -40,7 +40,8 @@ class OrganizationController {
         }
         else {
 			def entities = EntityDescriptor.findAllWhere(organization:organization)
-            [organization: organization, entities:entities]
+			def contacts = Contact.findAllWhere(organization:organization)
+            [organization: organization, entities:entities, contacts:contacts]
         }
     }
 

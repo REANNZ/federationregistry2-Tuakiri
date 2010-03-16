@@ -163,39 +163,21 @@ td.errors
     +link(#e2e2e2)
     :font
       :weight = "bold"
-    
 
-#organizationentities
-  h3
-    margin = 3px
-    :font
-      :weight = "bold"
-      :size = 1.4em
-    color = #b2b2b2
+.tabcontent
+  +datatable(9px, 700px)
+  +datatablewithbuttons
 
-  .entity
-    padding = 6px
-    margin = 3px
+#organization
+  #tabs
+    width = 800px
 
-    h4
-      margin = 3px
-      :font
-        :weight = "bold"
-        :size = 1.3em
-      color = #999
-
-    h5
-      margin-bottom: 3px
-      :font
-        :weight = "bold"
-        :size = 1.1em
-      color = #666
-
+  .tabcontent
+    +datatable(9px, 95%)
+    +datatablewithbuttons
     table
-      margin-left = 3px
-      tr
-        td
-          width = 100px
+      td
+        width = 200px
 
 #attributereleasecompliance
   table

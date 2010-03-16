@@ -4,7 +4,6 @@
 		<li>
 			<g:link controller="user" action="list"><g:message code="nimble.link.users" /></g:link>
 		</li>
-		<!--
 			<g:if test="${controllerName == 'user' && actionName == 'list'}">
 				<ul>
 					<li>
@@ -12,7 +11,6 @@
 					</li>
 				</ul>
 			</g:if>
-		-->
 			<g:if test="${controllerName == 'user' && actionName in ['show', 'edit', 'changepassword', 'changelocalpassword']}">
 			    <ul>
 					<li>
