@@ -60,11 +60,11 @@ class Attribute  {
 	}
 	
 	public boolean equals(Object obj) {
-		if ( !(obj instanceof Attribute) ) return false;
+		if ( !(obj instanceof Attribute) ) return false
 		
 		Attribute attr = (Attribute) obj
-		if((attr.id == id) && (attr.name == name)) return true;
+		if(attr.name.equals(name)) return true
 		
-		return false;
+		return false
 	}
 }

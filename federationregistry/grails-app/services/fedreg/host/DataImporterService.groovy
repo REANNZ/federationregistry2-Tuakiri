@@ -155,7 +155,7 @@ class DataImporterService implements InitializingBean {
 
 	def importContacts() {
 		//Import contacts associated with 'homeOrgs'
-		sql.eachRow("select email, contactName from contacts ORDER BY (email)",
+		sql.eachRow("select email, contactName, homeOrgName from contacts LEFT JOIN homeOrgs ON contacts.objectID=homeOrgs.homeOrgID ORDER BY (email)",
 		{
 			def givenName, surname
 			
@@ -168,21 +168,32 @@ class DataImporterService implements InitializingBean {
 				givenName = "N/A"
 				surname = it.contactName
 			}
-			def email = it.email
-			
-			def c = Contact.createCriteria()
-			def results = c.list {
-				email {
-					eq("uri", email)
-				}
-			}
-			// Doesn't already exist (RR data is crapppppy!!) so create.
-			if(results.size() == 0) {
-				def contact = new Contact(userLink:false, givenName:givenName, surname:surname, email:new MailURI(uri:email))
+
+			// Doesn't already exist (RR data is crapppppy!!) so create
+			if(!MailURI.findByUri(it.email)) {
+				def organization
+				if(it.homeOrgName)
+					organization = Organization.findByName(it.homeOrgName)
+					
+				def contact = new Contact(organization:organization, userLink:false, givenName:givenName, surname:surname, email:new MailURI(uri:it.email))
 								
 				contact.save(flush:true)
 				if(contact.hasErrors()) {
 					contact.errors.each { err -> log.error err}
+				}
+			}
+			else {
+				// Check if this is duplicate entry for this user and if so does this entry link them to an organization?
+				def contact = Contact.findByEmail(MailURI.findByUri(it.email))
+				if(!contact.organization) {
+					if(it.homeOrgName) {
+						def organization = Organization.findByName(it.homeOrgName)
+						contact.organization = organization
+						contact.save()
+						if(contact.hasErrors()) {
+							contact.errors.each { err -> log.error err}
+						}
+					}
 				}
 			}
 		})
@@ -226,18 +237,9 @@ class DataImporterService implements InitializingBean {
 	}
 	
 	def linkContact(def row, def ent) {
-		def email = row.email
-		def c = Contact.createCriteria()
-		def contact = c.get {
-			and {
-				emailAddresses {
-					and {
-						eq("uri", email)
-					}
-				}
-			}
-		}
 		def type
+		def contact = Contact.findByEmail(MailURI.findByUri(row.email))
+		
 		switch(row.contactType) {
 			case 'technical': type = ContactType.technical; break;
 			case 'support': type = ContactType.support; break;

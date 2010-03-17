@@ -8,10 +8,6 @@
 	</head>
 	<body>
 		
-		<div class="breadcrumb">
-			<g:link controller="organization" action="show" id="${identityProvider.entityDescriptor.organization.id}">${identityProvider.entityDescriptor.organization.displayName.encodeAsHTML()}</g:link> > <g:link controller="entity" action="show" id="${identityProvider.entityDescriptor.id}">${identityProvider.entityDescriptor.entityID.encodeAsHTML()}</g:link> > <g:link controller="identityProvider" action="show" id="${identityProvider.id}">${identityProvider.displayName.encodeAsHTML()}</g:link>
-		</div>
-		
 		<h2><g:message code="fedreg.view.members.identityprovider.show.heading" /></h2>
 		
 		<div class="details">

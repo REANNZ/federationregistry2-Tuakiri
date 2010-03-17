@@ -21,7 +21,7 @@ package fedreg.core
 
 class Contact {
 	
-	Organization company
+	Organization organization
 	String givenName
 	String surname
 	MailURI email
@@ -38,7 +38,7 @@ class Contact {
 	]
 
 	static constraints = {
-		company(nullable: true)
+		organization(nullable: true)
 		givenName(blank: false)
 		surname(blank: false)
 		dateCreated(nullable:true)
