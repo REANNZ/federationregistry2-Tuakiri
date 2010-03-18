@@ -44,7 +44,7 @@
 						</tr>
 						<tr>
 							<th><g:message code="fedreg.label.primarytype" /></th>
-							<td><g:link controller="organizationType" action="show" id="${organization?.primary?.id}">${organization?.primary?.encodeAsHTML()}</g:link></td>
+							<td>${organization?.primary?.encodeAsHTML()}</td>
 						</tr>
 						<g:if test="${organization.types}">
 						<tr>
@@ -52,7 +52,7 @@
 							<td valign="top" style="text-align: left;" class="value">
 								<ul>
 								<g:each in="${organization.types}" var="t">
-									<li><g:link controller="organizationType" action="show" id="${t.id}">${t?.encodeAsHTML()}</g:link></li>
+									<li>${t?.encodeAsHTML()}</li>
 								</g:each>
 								</ul>
 							</td>

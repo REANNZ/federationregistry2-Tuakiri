@@ -30,6 +30,8 @@ class RoleDescriptor  {
 	String displayName
 	String description
 	String extensions
+	
+	boolean active
 
 	Date dateCreated
 	Date lastUpdated

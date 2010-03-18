@@ -259,7 +259,7 @@ class DataImporterService implements InitializingBean {
 		sql.eachRow("select * from homeOrgs",
 		{			
 			def entity = EntityDescriptor.findWhere(entityID:it.entityID)
-			def idp = new IDPSSODescriptor(entityDescriptor:entity, organization:entity.organization)
+			def idp = new IDPSSODescriptor(active:true, entityDescriptor:entity, organization:entity.organization)
 			idp.addToNameIDFormats(trans)	// RR hard codes everything to only advertise NameIDForm of transient so we need to do the same, in FR this is modifable and DB driven
 			
 			sql.eachRow("select * from objectDescriptions where objectID=${it.homeOrgID} and objectType='homeOrg'",
@@ -313,7 +313,7 @@ class DataImporterService implements InitializingBean {
 		sql.eachRow("select * from homeOrgs",
 		{			
 			def entity = EntityDescriptor.findWhere(entityID:it.entityID)
-			def aa = new AttributeAuthorityDescriptor(entityDescriptor:entity, organization:entity.organization).save()
+			def aa = new AttributeAuthorityDescriptor(active:true, entityDescriptor:entity, organization:entity.organization).save()
 			
 			sql.eachRow("select * from serviceLocations where objectID=${it.homeOrgID} and serviceType='AttributeService'",
 			{
@@ -354,7 +354,7 @@ class DataImporterService implements InitializingBean {
 			
 			def entity = EntityDescriptor.findWhere(entityID:it.providerID)
 			def sd = new ServiceDescription()
-			def sp = new SPSSODescriptor(entityDescriptor:entity, organization:entity.organization, visible:it.visible, serviceDescription:sd)
+			def sp = new SPSSODescriptor(active:true, entityDescriptor:entity, organization:entity.organization, visible:it.visible, serviceDescription:sd)
 			
 			sql.eachRow("select * from objectDescriptions where objectID=${it.resourceID} and objectType='resource'",
 			{

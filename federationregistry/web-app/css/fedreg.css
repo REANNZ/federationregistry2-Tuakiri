@@ -61,6 +61,7 @@ td.errors input { border: 2px solid #b10902; background-color: #c5200a; color: w
 .tabcontent tbody tr td.name { font-weight: bold; }
 .tabcontent tbody tr td { padding: 9px; }
 
+#organization .details { width: 800px; }
 #organization #tabs { width: 800px; }
 #organization .tabcontent { margin: 9px; width: 95%; }
 #organization .tabcontent h3 { margin: 0px; padding: 0px; margin-bottom: 3px; }
@@ -72,6 +73,12 @@ td.errors input { border: 2px solid #b10902; background-color: #c5200a; color: w
 #organization .tabcontent tbody tr td.name { font-weight: bold; }
 #organization .tabcontent tbody tr td { padding: 9px; }
 #organization .tabcontent table td { width: 200px; }
+
+#entity .details { width: 800px; }
+#entity #tabs { width: 800px; }
+
+#identityprovider .details { width: 1024px; }
+#identityprovider #tabs { width: 1024px; }
 
 #attributereleasecompliance table h3 { color: #525252; font-size: 1.3em; font-weight: bold; }
 #attributereleasecompliance table h4 { margin: 0px; margin-top: 12px; color: #666666; font-size: 1.1em; font-weight: bold; }

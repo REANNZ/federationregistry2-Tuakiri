@@ -21,6 +21,10 @@ class UrlMappings {
 		controller = "organization"
 	}
 	
+	"/membership/entity/$action?/$id?"{
+		controller = "entity"
+	}
+	
 	"/membership/identityprovider/$action?/$id?"{
 		controller = "identityProvider"
 	}
