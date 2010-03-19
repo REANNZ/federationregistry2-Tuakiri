@@ -39,8 +39,7 @@ class DataImporterService implements InitializingBean {
 		}
 	}
 	
-	def initialPopulate() {
-		
+	def initialPopulate() {		
 		// Attribute Scopes (Non standard)	
 		def fedScope = new AttributeScope(name:'Federation').save()
 		def localScope = new AttributeScope(name:'Local').save()
@@ -48,28 +47,31 @@ class DataImporterService implements InitializingBean {
 		def recommendedCategory = new AttributeCategory(name:'Recommended').save()
 		def optionalCategory = new AttributeCategory(name:'Optional').save()
 		
+		// Overall SAML2 protocol support, all SAML 2.0 compliant RoleDescriptors need this.
+		def samlNamespace = new SamlURI(type:SamlURIType.ProtocolSupport, uri:'urn:oasis:names:tc:SAML:2.0:protocol').save()
+		
 		// Bindings
-		def httpRedirect = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect').save()
-		def httpPost = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST').save()
-		def httpArtifact = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact').save()
-		def httpPostSimple = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST-SimpleSign').save()
-		def paos = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:PAOS').save()
-		def soap = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:SOAP').save()
-		def shibAuthn = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:mace:shibboleth:1.0:profiles:AuthnRequest').save()
-		def httpPost1 = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:1.0:profiles:browser-post').save()
-		def httpArtifact1 = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:1.0:profiles:artifact-01').save()
-		def soap1 = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:1.0:bindings:SOAP-binding').save()
+		def httpRedirect = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect', description:'').save()
+		def httpPost = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST', description:'').save()
+		def httpArtifact = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact', description:'').save()
+		def httpPostSimple = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST-SimpleSign', description:'').save()
+		def paos = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:PAOS', description:'').save()
+		def soap = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:SOAP', description:'').save()
+		def shibAuthn = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:mace:shibboleth:1.0:profiles:AuthnRequest', description:'').save()
+		def httpPost1 = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:1.0:profiles:browser-post', description:'').save()
+		def httpArtifact1 = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:1.0:profiles:artifact-01', description:'').save()
+		def soap1 = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:1.0:bindings:SOAP-binding', description:'').save()
 		
 		// NameIDFormats
-		def unspec = new SamlURI(type:SamlURIType.NameIdentifierFormat, uri:'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified').save()
-		def email = new SamlURI(type:SamlURIType.NameIdentifierFormat, uri:'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress').save()
-		def x509 = new SamlURI(type:SamlURIType.NameIdentifierFormat, uri:'urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName').save()
-		def windows = new SamlURI(type:SamlURIType.NameIdentifierFormat, uri:'urn:oasis:names:tc:SAML:1.1:nameid-format:WindowsDomainQualifiedName').save()
-		def kerberos = new SamlURI(type:SamlURIType.NameIdentifierFormat, uri:'urn:oasis:names:tc:SAML:2.0:nameid-format:kerberos').save()
-		def entity = new SamlURI(type:SamlURIType.NameIdentifierFormat, uri:'urn:oasis:names:tc:SAML:2.0:nameid-format:entity').save()
-		def pers = new SamlURI(type:SamlURIType.NameIdentifierFormat, uri:'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent').save()
-		def trans = new SamlURI(type:SamlURIType.NameIdentifierFormat, uri:'urn:oasis:names:tc:SAML:2.0:nameid-format:transient').save()
-		def shibNameID = new SamlURI(type:SamlURIType.NameIdentifierFormat, uri:'urn:mace:shibboleth:1.0:nameIdentifier').save()
+		def unspec = new SamlURI(type:SamlURIType.NameIdentifierFormat, uri:'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified', description:'The interpretation of the content of the element is left to individual implementations.').save()
+		def email = new SamlURI(type:SamlURIType.NameIdentifierFormat, uri:'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress', description:'Indicates that the content of the element is in the form of an email address, specifically addr-spec as defined in IETF RFC 2822').save()
+		def x509 = new SamlURI(type:SamlURIType.NameIdentifierFormat, uri:'urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName', description:'Indicates that the content of the element is in the form specified for the contents of the <ds:X509SubjectName> element in the XML Signature Recommendation [XMLSig].').save()
+		def windows = new SamlURI(type:SamlURIType.NameIdentifierFormat, uri:'urn:oasis:names:tc:SAML:1.1:nameid-format:WindowsDomainQualifiedName', description:'Indicates that the content of the element is a Windows domain qualified name. A Windows domain qualified user name is a string of the form "DomainName\\UserName"').save()
+		def kerberos = new SamlURI(type:SamlURIType.NameIdentifierFormat, uri:'urn:oasis:names:tc:SAML:2.0:nameid-format:kerberos', description:'Indicates that the content of the element is in the form of a Kerberos principal name using the format name[/instance]@REALM').save()
+		def entity = new SamlURI(type:SamlURIType.NameIdentifierFormat, uri:'urn:oasis:names:tc:SAML:2.0:nameid-format:entity', description:'Indicates that the content of the element is the identifier of an entity that provides SAML-based services or is a participant in SAML profiles.').save()
+		def pers = new SamlURI(type:SamlURIType.NameIdentifierFormat, uri:'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', description:'Indicates that the content of the element is a persistent opaque identifier for a principal that is specific to an identity provider and a service provider or affiliation of service providers.').save()
+		def trans = new SamlURI(type:SamlURIType.NameIdentifierFormat, uri:'urn:oasis:names:tc:SAML:2.0:nameid-format:transient', description:'Indicates that the content of the element is an identifier with transient semantics and SHOULD be treated as an opaque and temporary value by the relying party.').save()
+		def shibNameID = new SamlURI(type:SamlURIType.NameIdentifierFormat, uri:'urn:mace:shibboleth:1.0:nameIdentifier', description:'').save()
 	}
 
 	def dumpData() {
@@ -253,6 +255,7 @@ class DataImporterService implements InitializingBean {
 	}
 
 	def importIDPSSODescriptors() {
+		def samlNamespace = SamlURI.findByUri('urn:oasis:names:tc:SAML:2.0:protocol')
 		def shibNameID = SamlURI.findByUri('urn:mace:shibboleth:1.0:nameIdentifier')
 		def trans = SamlURI.findByUri('urn:oasis:names:tc:SAML:2.0:nameid-format:transient')
 		
@@ -261,6 +264,7 @@ class DataImporterService implements InitializingBean {
 			def entity = EntityDescriptor.findWhere(entityID:it.entityID)
 			def idp = new IDPSSODescriptor(active:true, entityDescriptor:entity, organization:entity.organization)
 			idp.addToNameIDFormats(trans)	// RR hard codes everything to only advertise NameIDForm of transient so we need to do the same, in FR this is modifable and DB driven
+			idp.addToProtocolSupportEnumerations(samlNamespace)
 			
 			sql.eachRow("select * from objectDescriptions where objectID=${it.homeOrgID} and objectType='homeOrg'",
 			{
@@ -273,18 +277,19 @@ class DataImporterService implements InitializingBean {
 				def binding = SamlURI.findByUri(it.serviceBinding)
 				if(binding) {
 					def location = new UrlURI(uri:it.serviceLocation)
-					def ssoService = new SingleSignOnService(binding: binding, location: location)
+					def ssoService = new SingleSignOnService(binding: binding, location: location, active:true)
 					idp.addToSingleSignOnServices(ssoService)
 				}
 				else 
 					log.warn ("No SamlURI binding for uri ${it.serviceBinding} exists, not importing, not importing SingleSignOnService")
 			})
+			def index = 0
 			sql.eachRow("select * from serviceLocations where objectID=${it.homeOrgID} and serviceType='ArtifactResolutionService'",
 			{
 				def binding = SamlURI.findByUri(it.serviceBinding)
 				if(binding) {
 					def location = new UrlURI(uri:it.serviceLocation)
-					def artServ = new ArtifactResolutionService(binding: binding, location: location, isDefault: it.defaultLocation)
+					def artServ = new ArtifactResolutionService(binding: binding, location: location, isDefault: it.defaultLocation, active:true, endpointIndex:index++)
 					idp.addToArtifactResolutionServices(artServ)
 				}
 				else
@@ -307,6 +312,7 @@ class DataImporterService implements InitializingBean {
 	}
 	
 	def importAttributeAuthorityDescriptors() {
+		def samlNamespace = SamlURI.findByUri('urn:oasis:names:tc:SAML:2.0:protocol')
 		def shibNameID = SamlURI.findByUri('urn:mace:shibboleth:1.0:nameIdentifier')
 		def trans = SamlURI.findByUri('urn:oasis:names:tc:SAML:2.0:nameid-format:transient')
 		
@@ -314,13 +320,14 @@ class DataImporterService implements InitializingBean {
 		{			
 			def entity = EntityDescriptor.findWhere(entityID:it.entityID)
 			def aa = new AttributeAuthorityDescriptor(active:true, entityDescriptor:entity, organization:entity.organization).save()
+			aa.addToProtocolSupportEnumerations(samlNamespace)
 			
 			sql.eachRow("select * from serviceLocations where objectID=${it.homeOrgID} and serviceType='AttributeService'",
 			{
 				def binding = SamlURI.findByUri(it.serviceBinding)
 				if(binding) {
 					def location = new UrlURI(uri:it.serviceLocation)
-					def attrService = new AttributeService(binding: binding, location: location)
+					def attrService = new AttributeService(binding: binding, location: location, active:true)
 					aa.addToAttributeServices(attrService)
 				}
 				else 
@@ -343,6 +350,7 @@ class DataImporterService implements InitializingBean {
 	}
 
 	def importSPSSODescriptors() {
+		def samlNamespace = SamlURI.findByUri('urn:oasis:names:tc:SAML:2.0:protocol')
 		def shibNameID = SamlURI.findByUri('urn:mace:shibboleth:1.0:nameIdentifier')
 		def trans = SamlURI.findByUri('urn:oasis:names:tc:SAML:2.0:nameid-format:transient')
 		
@@ -355,6 +363,7 @@ class DataImporterService implements InitializingBean {
 			def entity = EntityDescriptor.findWhere(entityID:it.providerID)
 			def sd = new ServiceDescription()
 			def sp = new SPSSODescriptor(active:true, entityDescriptor:entity, organization:entity.organization, visible:it.visible, serviceDescription:sd)
+			sp.addToProtocolSupportEnumerations(samlNamespace)
 			
 			sql.eachRow("select * from objectDescriptions where objectID=${it.resourceID} and objectType='resource'",
 			{
@@ -367,7 +376,7 @@ class DataImporterService implements InitializingBean {
 				def binding = SamlURI.findByUri(it.serviceBinding)
 				if(binding) {
 					def location = new UrlURI(uri:it.serviceLocation)
-					def sls = new SingleLogoutService(binding: binding, location: location)
+					def sls = new SingleLogoutService(binding: binding, location: location, active:true)
 					sp.addToSingleLogoutServices(sls)
 					
 					if(it.serviceBinding.contains('SAML:2.0'))
@@ -378,12 +387,13 @@ class DataImporterService implements InitializingBean {
 				else 
 					log.warn ("No SamlURI binding for uri ${it.serviceBinding} exists, not importing, not importing SingleLogoutService")
 			})
+			def index = 0
 			sql.eachRow("select * from serviceLocations where objectID=${it.resourceID} and serviceType='AssertionConsumerService'",
 			{
 				def binding = SamlURI.findByUri(it.serviceBinding)
 				if(binding) {
 					def location = new UrlURI(uri:it.serviceLocation)
-					def acs = new AssertionConsumerService(binding: binding, location: location, isDefault: it.defaultLocation)
+					def acs = new AssertionConsumerService(binding: binding, location: location, isDefault: it.defaultLocation, active:true, endpointIndex:index++)
 					sp.addToAssertionConsumerServices(acs)
 					
 					if(it.serviceBinding.contains('SAML:2.0'))
@@ -399,7 +409,7 @@ class DataImporterService implements InitializingBean {
 				def binding = SamlURI.findByUri(it.serviceBinding)
 				if(binding) {
 					def location = new UrlURI(uri:it.serviceLocation)
-					def mnids = new ManageNameIDService(binding: binding, location: location)
+					def mnids = new ManageNameIDService(binding: binding, location: location, active:true)
 					sp.addToManageNameIDServices(mnids)
 					
 					if(it.serviceBinding.contains('SAML:2.0'))
@@ -448,6 +458,10 @@ class DataImporterService implements InitializingBean {
 		sql.eachRow("select * from certData where objectID=${id}",
 		{
 			def cert = new Certificate(data:it.certData)
+			cert.expiryDate = cryptoService.expiryDate(cert)
+			cert.issuer = cryptoService.issuer(cert)
+			cert.subject = cryptoService.subject(cert)
+			
 			def keyInfo = new KeyInfo(certificate:cert)
 			def keyDescriptor = new KeyDescriptor(keyInfo:keyInfo, keyType:KeyTypes.signing, roleDescriptor:descriptor)
 			

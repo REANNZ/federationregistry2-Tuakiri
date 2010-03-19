@@ -25,7 +25,6 @@ package fedreg.core
 class KeyInfo  {
 
 	String keyName
-	Date expiryDate
 	Certificate certificate
 	
 	Date dateCreated
@@ -35,7 +34,6 @@ class KeyInfo  {
 
 	static constraints = {
 		keyName(nullable: true, blank: true)
-		expiryDate(nullable: true)
 		dateCreated(nullable:true)
 		lastUpdated(nullable:true)
 	}

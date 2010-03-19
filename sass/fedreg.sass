@@ -75,7 +75,7 @@
     +rounded-br
     +cleanlist
 
-    width = 180px
+    width = 150px
     margin = 0px
     padding = 6px
 
@@ -191,10 +191,49 @@ td.errors
 
 #identityprovider
   .details
-    width = 1024px
+    width = 800px
 
   #tabs
-    width = 1024px
+    width = 800px
+
+  #crypto
+    h4
+      :margin
+        :top = 6px
+        :bottom = 3px
+        :left = 0px
+
+      color = #a2a2a2
+      :font
+        :weight = "bold"
+
+  .endpoints
+    h3
+      :margin
+        :top = 18px
+        :bottom = 3px
+        :left = 0px
+
+      color = #55626d
+      :font
+        :weight = "bold"
+      size = 1.2em
+
+    h4
+      :margin
+        :top = 6px
+        :bottom = 3px
+        :left = 0px
+
+      color = #a2a2a2
+
+    table
+      :margin
+        :left = 6px
+      tr
+        td
+          width = 250px
+          padding = 3px
 
 #attributereleasecompliance
   table
@@ -298,3 +337,52 @@ td.errors
       +clearleft
       th
         color = #a2a2a2
+
+
+.critical
+  +rounded
+  border = 1px "solid" #BB0000
+  :background
+    :color = #CF0101
+
+  color = #fff
+  :font
+    :weight = "bold"
+
+  p
+    margin = 0px
+    padding = 3px
+    :padding
+      :left = 24px
+
+.warning
+  +rounded
+  border = 1px "solid" #E5AF2F
+  :background
+    :color = #feba5e
+
+  color = #fff
+  :font
+    :weight = "bold"
+
+  p
+    margin = 0px
+    padding = 3px
+    :padding
+      :left = 24px
+
+.information
+  +rounded
+  border = 1px "solid" #3D6CAE
+  :background
+    :color = #5180C2
+
+  color = #fff
+  :font
+    :weight = "bold"
+
+  p
+    margin = 0px
+    padding = 3px
+    :padding
+      :left = 24px

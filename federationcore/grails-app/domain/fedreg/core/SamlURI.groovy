@@ -27,5 +27,5 @@ class SamlURI extends Uri  {
 }
 
 public enum SamlURIType {
-  AttributeNameFormat, AttributeProfile, NameIdentifierFormat, ProtocolBinding
+  AttributeNameFormat, AttributeProfile, NameIdentifierFormat, ProtocolBinding, ProtocolSupport
 }

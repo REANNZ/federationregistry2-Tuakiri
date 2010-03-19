@@ -25,6 +25,7 @@ package fedreg.core
 class IndexedEndpoint extends Endpoint  {
 
   boolean isDefault
+  int endpointIndex
 
   static mapping = {
     tablePerHierarchy false
