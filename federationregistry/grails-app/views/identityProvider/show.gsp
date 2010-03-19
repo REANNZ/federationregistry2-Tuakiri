@@ -9,6 +9,7 @@
 		<script type="text/javascript">
 			$(function() {
 				$("#tabs").tabs();
+				$("#tabs2").tabs();
 			});
 		</script>
 	</head>
@@ -198,8 +199,18 @@
 					</table>
 				</div>
 				<div id="tab-endpoints" class="tabcontent">
-					<div class="endpoints">
-						<h3><g:message code="fedreg.label.ssoservices" /></h3>
+					
+					<div id="tabs2">
+						<ul>
+							<li><a href="#tab-sso" class="icon icon_cog"><g:message code="fedreg.label.ssoservices" /></a></li>
+							<li><a href="#tab-ars" class="icon icon_cog"><g:message code="fedreg.label.artifactresolutionservices" /></a></li>
+							<li><a href="#tab-slo" class="icon icon_cog"><g:message code="fedreg.label.sloservices" /></a></li>
+						</ul>
+						
+					<div id="tab-sso" class="endpoints">
+						<g:if test="${!identityProvider.singleSignOnServices}">
+							<div class="information"><p class=" icon icon_information"><g:message code="fedreg.label.ssoservicenotdefined" /></p></div>
+						</g:if>
 						<table id="ssoservices">
 							<tbody>
 							<g:each in="${identityProvider.singleSignOnServices}" status="i" var="sso">
@@ -231,8 +242,10 @@
 							</tbody>
 						</table>
 					</div>
-					<div class="endpoints">
-						<h3><g:message code="fedreg.label.artifactresolutionservices" /></h3>
+					<div id="tab-ars" class="endpoints">
+						<g:if test="${!identityProvider.artifactResolutionServices}">
+							<div class="information"><p class=" icon icon_information"><g:message code="fedreg.label.artifactresolutionservicenotdefined" /></p></div>
+						</g:if>
 						<table id="artresservices">
 							<tbody>
 							<g:each in="${identityProvider.artifactResolutionServices}" status="i" var="art">
@@ -275,8 +288,10 @@
 							</tbody>
 						</table>
 					</div>
-					<div  class="endpoints">
-						<h3><g:message code="fedreg.label.sloservices" /></h3>
+					<div id="tab-slo" class="endpoints">
+						<g:if test="${!identityProvider.singleLogoutServices}">
+							<div class="information"><p class=" icon icon_information"><g:message code="fedreg.label.sloservicenotdefined" /></p></div>
+						</g:if>
 						<table id="sloservices">
 							<tbody>
 							<g:each in="${identityProvider.singleLogoutServices}" status="i" var="slo">

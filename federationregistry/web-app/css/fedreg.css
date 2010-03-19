@@ -80,8 +80,7 @@ td.errors input { border: 2px solid #b10902; background-color: #c5200a; color: w
 #identityprovider .details { width: 800px; }
 #identityprovider #tabs { width: 800px; }
 #identityprovider #crypto h4 { margin-top: 6px; margin-bottom: 3px; margin-left: 0px; color: #a2a2a2; font-weight: bold; }
-#identityprovider .endpoints h3 { margin-top: 18px; margin-bottom: 3px; margin-left: 0px; color: #55626d; font-weight: bold; size: 1.2em; }
-#identityprovider .endpoints h4 { margin-top: 6px; margin-bottom: 3px; margin-left: 0px; color: #a2a2a2; }
+#identityprovider .endpoints h4 { margin-top: 18px; margin-bottom: 3px; margin-left: 0px; color: #a2a2a2; }
 #identityprovider .endpoints table { margin-left: 6px; }
 #identityprovider .endpoints table tr td { width: 250px; padding: 3px; }
 
@@ -126,5 +125,5 @@ td.errors input { border: 2px solid #b10902; background-color: #c5200a; color: w
 .warning { -moz-border-radius: 5px; -webkit-border-radius: 5px; border: 1px solid #e5af2f; background-color: #feba5e; color: white; font-weight: bold; }
 .warning p { margin: 0px; padding: 3px; padding-left: 24px; }
 
-.information { -moz-border-radius: 5px; -webkit-border-radius: 5px; border: 1px solid #3d6cae; background-color: #5180c2; color: white; font-weight: bold; }
+.information { -moz-border-radius: 5px; -webkit-border-radius: 5px; border: 1px solid #3d6cae; background-color: #5180c2; color: white; }
 .information p { margin: 0px; padding: 3px; padding-left: 24px; }
