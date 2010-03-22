@@ -190,13 +190,32 @@ td.errors
     width = 800px
 
 #identityprovider
+  
+
   .details
     width = 800px
+    :font
+      :size = 1.1em
+    a
+      +link(#55626d)
+      :font
+        :weight = "bold"
 
   #tabs
     width = 800px
 
   #crypto
+    h4
+      :margin
+        :top = 6px
+        :bottom = 3px
+        :left = 0px
+
+      color = #a2a2a2
+      :font
+        :weight = "bold"
+
+  #contacts
     h4
       :margin
         :top = 6px
@@ -362,14 +381,17 @@ td.errors
 
 .information
   +rounded
-  border = 1px "solid" #3D6CAE
+  border = 1px "solid" #035883
   :background
-    :color = #5180C2
+    :color = #d9e8fa
 
-  color = #fff
+  color = #035883
 
   p
     margin = 0px
     padding = 3px
     :padding
       :left = 24px
+
+.popup
+  text-align = "center"

@@ -18,7 +18,7 @@
 		<h2><g:message code="fedreg.view.members.identityprovider.show.heading" args="[identityProvider.displayName]"/></h2>
 		<div id="identityprovider">
 			<div class="details">
-				<table class="datatable">
+				<table class="datatable buttons">
 					<tbody>		
 						<tr>
 							<th><g:message code="fedreg.label.displayname"/></th>
@@ -38,11 +38,11 @@
 						</tr>
 						<tr>
 							<th><g:message code="fedreg.label.organization"/></th>
-							<td><g:link controller="organization" action="show" id="${identityProvider.organization.id}">${fieldValue(bean: identityProvider, field: "organization")}</g:link></td>
+							<td><g:link controller="organization" action="show" id="${identityProvider.organization.id}" class="icon icon_arrow_branch">${fieldValue(bean: identityProvider, field: "organization")}</g:link></td>
 						</tr>
 						<tr>
 							<th><g:message code="fedreg.label.entitydescriptor"/></th>
-							<td><g:link controller="entity" action="show" id="${identityProvider.entityDescriptor.id}">${fieldValue(bean: identityProvider, field: "entityDescriptor")}</g:link></td>
+							<td><g:link controller="entity" action="show" id="${identityProvider.entityDescriptor.id}" class="icon icon_arrow_branch">${fieldValue(bean: identityProvider, field: "entityDescriptor")}</g:link></td>
 						</tr>
 						<tr>
 							<th><g:message code="fedreg.label.protocolsupport"/></th>
@@ -93,37 +93,57 @@
 				</ul>
 				
 				<div id="tab-contacts" class="tabcontent">
-					<table>
-						<thead>
-							<tr>
-								<th><g:message code="fedreg.label.name" /></th>
-								<th><g:message code="fedreg.label.email" /></th>
-								<th><g:message code="fedreg.label.type" /></th>
-								<th/>
-							</tr>
-						</thead>
-						<tbody>
-						<g:each in="${identityProvider.contacts}" var="contactPerson" status="i">
-							<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-								<td>${contactPerson.contact.givenName?.encodeAsHTML()} ${contactPerson.contact.surname?.encodeAsHTML()}</td>
-								<td>${contactPerson.contact.email?.uri.encodeAsHTML()}
-								</td>
-								<td>${contactPerson.type.encodeAsHTML()}</td>
-								<td/>
-							</tr>
-						</g:each>
-						<g:each in="${identityProvider.entityDescriptor.contacts}" var="contactPerson" status="i">
-							<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-								<td>${contactPerson.contact.givenName?.encodeAsHTML()} ${contactPerson.contact.surname?.encodeAsHTML()}</td>
-								<td>${contactPerson.contact.email?.uri.encodeAsHTML()}
-								</td>
-								<td>${contactPerson.type.encodeAsHTML()}</td>
-								<td/>
-							</tr>
-						</g:each>
-						
-						</tbody>
-					</table>
+					<div id="contacts">
+						<table class="cleantable">
+							<thead>
+								<tr>
+									<th><g:message code="fedreg.label.name" /></th>
+									<th><g:message code="fedreg.label.email" /></th>
+									<th><g:message code="fedreg.label.type" /></th>
+									<th/>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td colspan="4">
+										<h4>Local Contacts</h4>
+									</td>
+								</tr>
+								<g:each in="${identityProvider.contacts}" var="contactPerson" status="i">
+								<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
+									<td>${contactPerson.contact.givenName?.encodeAsHTML()} ${contactPerson.contact.surname?.encodeAsHTML()}</td>
+									<td>${contactPerson.contact.email?.uri.encodeAsHTML()}
+									</td>
+									<td>${contactPerson.type.encodeAsHTML()}</td>
+									<td><g:link controller="identityProvider" action="unlinkContact" id="${contactPerson.id}" class="button icon icon_delete"><g:message code="fedreg.label.remove"/></g:link></td>
+								</tr>
+								</g:each>
+								<tr>
+									<td colspan="4">
+										<g:render template="/templates/contactmanager" />
+									</td>
+								</tr>
+								
+								<g:if test="${identityProvider.entityDescriptor.contacts}">
+								<tr>
+									<td colspan="4">
+										<h4>Contacts associated with parent Entity Descriptor</h4>
+									</td>
+								</tr>
+								<g:each in="${identityProvider.entityDescriptor.contacts}" var="contactPerson" status="i">
+								<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
+									<td>${contactPerson.contact.givenName?.encodeAsHTML()} ${contactPerson.contact.surname?.encodeAsHTML()}</td>
+									<td>${contactPerson.contact.email?.uri.encodeAsHTML()}
+									</td>
+									<td>${contactPerson.type.encodeAsHTML()}</td>
+									<td/>
+								</tr>
+								</g:each>
+								</g:if>
+								
+							</tbody>
+						</table>
+					</div>
 				</div>
 				<div id="tab-crypto" class="tabcontent">
 					<table id="crypto">
