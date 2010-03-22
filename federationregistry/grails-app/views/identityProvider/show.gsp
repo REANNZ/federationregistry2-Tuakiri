@@ -207,117 +207,118 @@
 							<li><a href="#tab-slo" class="icon icon_cog"><g:message code="fedreg.label.sloservices" /></a></li>
 						</ul>
 						
-					<div id="tab-sso" class="endpoints">
-						<g:if test="${!identityProvider.singleSignOnServices}">
-							<div class="information"><p class=" icon icon_information"><g:message code="fedreg.label.ssoservicenotdefined" /></p></div>
-						</g:if>
-						<table id="ssoservices">
-							<tbody>
-							<g:each in="${identityProvider.singleSignOnServices}" status="i" var="sso">
-								<tr><td colspan="2"><h4><g:message code="fedreg.label.ssoservice" /> ${i+1}</h4></td></tr>
-								<tr>
-									<th><g:message code="fedreg.label.binding" /></th>
-									<td>${sso.binding.uri.encodeAsHTML()}</td>
-								</tr>
-								<tr>
-									<th><g:message code="fedreg.label.location" /></th>
-									<td>${sso.location.uri.encodeAsHTML()}</td>
-								</tr>
-								<tr>
-									<th><g:message code="fedreg.label.responselocation" /></th>
-									<td>${(sso.responseLocation?.uri ?:sso.location.uri).encodeAsHTML()}</td>
-								</tr>
-								<tr>
-									<th><g:message code="fedreg.label.status" /></th>
-									<td>
-									<g:if test="${sso.active}">
-										<div class="icon icon_tick"><g:message code="fedreg.label.active" /></div>
-									</g:if>
-									<g:else>
-										<div class="icon icon_cross"><g:message code="fedreg.label.inactive" /></div>
-									</g:else>
-									<td>
-								</tr>
-							</g:each>
-							</tbody>
-						</table>
-					</div>
-					<div id="tab-ars" class="endpoints">
-						<g:if test="${!identityProvider.artifactResolutionServices}">
-							<div class="information"><p class=" icon icon_information"><g:message code="fedreg.label.artifactresolutionservicenotdefined" /></p></div>
-						</g:if>
-						<table id="artresservices">
-							<tbody>
-							<g:each in="${identityProvider.artifactResolutionServices}" status="i" var="art">
-								<tr><td colspan="2"><h4><g:message code="fedreg.label.artifactresolutionservice" /> ${i+1}</h4></td></tr>
-								<tr>
-									<th><g:message code="fedreg.label.binding" /></th>
-									<td>${art.binding.uri.encodeAsHTML()}</td>
-								</tr>
-								<tr>
-									<th><g:message code="fedreg.label.index" /></th>
-									<td>${art.endpointIndex.encodeAsHTML()}</td>
-								</tr>
-								<tr>
-									<th><g:message code="fedreg.label.location" /></th>
-									<td>${art.location.uri.encodeAsHTML()}</td>
-								</tr>
-								<tr>
-									<th><g:message code="fedreg.label.defaultendpoint" /></th>
-									<td>
-									<g:if test="${art.isDefault}">
-										<div class="icon icon_tick"><g:message code="fedreg.label.yes" /></div>
-									</g:if>
-									<g:else>
-										<div class="icon icon_cross"><g:message code="fedreg.label.no" /></div>
-									</g:else>	
-									</td>
-								</tr>
-								<tr>
-									<th><g:message code="fedreg.label.status" /></th>
-									<td>
-									<g:if test="${art.active}">
-										<div class="icon icon_tick"><g:message code="fedreg.label.active" /></div>
-									</g:if>
-									<g:else>
-										<div class="icon icon_cross"><g:message code="fedreg.label.inactive" /></div>
-									</g:else>
-									<td>
-								</tr>
-							</g:each>
-							</tbody>
-						</table>
-					</div>
-					<div id="tab-slo" class="endpoints">
-						<g:if test="${!identityProvider.singleLogoutServices}">
-							<div class="information"><p class=" icon icon_information"><g:message code="fedreg.label.sloservicenotdefined" /></p></div>
-						</g:if>
-						<table id="sloservices">
-							<tbody>
-							<g:each in="${identityProvider.singleLogoutServices}" status="i" var="slo">
-								<tr><td colspan="2"><h4><g:message code="fedreg.label.sloservice" /> ${i+1}</h4></td></tr>
-								<tr>
-									<th><g:message code="fedreg.label.binding" /></th>
-									<td>${slo.binding.uri.encodeAsHTML()}</td>
-								</tr>
-								<tr>
-									<th><g:message code="fedreg.label.location" /></th>
-									<td>${slo.location.uri.encodeAsHTML()}</td>
-								</tr>
-								<tr>
-									<th><g:message code="fedreg.label.status" /></th>
-									<td>
-									<g:if test="${slo.active}">
-										<div class="icon icon_tick"><g:message code="fedreg.label.active" /></div>
-									</g:if>
-									<g:else>
-										<div class="icon icon_cross"><g:message code="fedreg.label.inactive" /></div>
-									</g:else>
-									<td>
-								</tr>
-							</g:each>
-							</tbody>
-						</table>
+						<div id="tab-sso" class="endpoints">
+							<g:if test="${!identityProvider.singleSignOnServices}">
+								<div class="information"><p class=" icon icon_information"><g:message code="fedreg.label.ssoservicenotdefined" /></p></div>
+							</g:if>
+							<table id="ssoservices">
+								<tbody>
+								<g:each in="${identityProvider.singleSignOnServices}" status="i" var="sso">
+									<tr><td colspan="2"><h4><g:message code="fedreg.label.ssoservice" /> ${i+1}</h4></td></tr>
+									<tr>
+										<th><g:message code="fedreg.label.binding" /></th>
+										<td>${sso.binding.uri.encodeAsHTML()}</td>
+									</tr>
+									<tr>
+										<th><g:message code="fedreg.label.location" /></th>
+										<td>${sso.location.uri.encodeAsHTML()}</td>
+									</tr>
+									<tr>
+										<th><g:message code="fedreg.label.responselocation" /></th>
+										<td>${(sso.responseLocation?.uri ?:sso.location.uri).encodeAsHTML()}</td>
+									</tr>
+									<tr>
+										<th><g:message code="fedreg.label.status" /></th>
+										<td>
+										<g:if test="${sso.active}">
+											<div class="icon icon_tick"><g:message code="fedreg.label.active" /></div>
+										</g:if>
+										<g:else>
+											<div class="icon icon_cross"><g:message code="fedreg.label.inactive" /></div>
+										</g:else>
+										<td>
+									</tr>
+								</g:each>
+								</tbody>
+							</table>
+						</div>
+						<div id="tab-ars" class="endpoints">
+							<g:if test="${!identityProvider.artifactResolutionServices}">
+								<div class="information"><p class=" icon icon_information"><g:message code="fedreg.label.artifactresolutionservicenotdefined" /></p></div>
+							</g:if>
+							<table id="artresservices">
+								<tbody>
+								<g:each in="${identityProvider.artifactResolutionServices}" status="i" var="art">
+									<tr><td colspan="2"><h4><g:message code="fedreg.label.artifactresolutionservice" /> ${i+1}</h4></td></tr>
+									<tr>
+										<th><g:message code="fedreg.label.binding" /></th>
+										<td>${art.binding.uri.encodeAsHTML()}</td>
+									</tr>
+									<tr>
+										<th><g:message code="fedreg.label.index" /></th>
+										<td>${art.endpointIndex.encodeAsHTML()}</td>
+									</tr>
+									<tr>
+										<th><g:message code="fedreg.label.location" /></th>
+										<td>${art.location.uri.encodeAsHTML()}</td>
+									</tr>
+									<tr>
+										<th><g:message code="fedreg.label.defaultendpoint" /></th>
+										<td>
+										<g:if test="${art.isDefault}">
+											<div class="icon icon_tick"><g:message code="fedreg.label.yes" /></div>
+										</g:if>
+										<g:else>
+											<div class="icon icon_cross"><g:message code="fedreg.label.no" /></div>
+										</g:else>	
+										</td>
+									</tr>
+									<tr>
+										<th><g:message code="fedreg.label.status" /></th>
+										<td>
+										<g:if test="${art.active}">
+											<div class="icon icon_tick"><g:message code="fedreg.label.active" /></div>
+										</g:if>
+										<g:else>
+											<div class="icon icon_cross"><g:message code="fedreg.label.inactive" /></div>
+										</g:else>
+										<td>
+									</tr>
+								</g:each>
+								</tbody>
+							</table>
+						</div>
+						<div id="tab-slo" class="endpoints">
+							<g:if test="${!identityProvider.singleLogoutServices}">
+								<div class="information"><p class=" icon icon_information"><g:message code="fedreg.label.sloservicenotdefined" /></p></div>
+							</g:if>
+							<table id="sloservices">
+								<tbody>
+								<g:each in="${identityProvider.singleLogoutServices}" status="i" var="slo">
+									<tr><td colspan="2"><h4><g:message code="fedreg.label.sloservice" /> ${i+1}</h4></td></tr>
+									<tr>
+										<th><g:message code="fedreg.label.binding" /></th>
+										<td>${slo.binding.uri.encodeAsHTML()}</td>
+									</tr>
+									<tr>
+										<th><g:message code="fedreg.label.location" /></th>
+										<td>${slo.location.uri.encodeAsHTML()}</td>
+									</tr>
+									<tr>
+										<th><g:message code="fedreg.label.status" /></th>
+										<td>
+										<g:if test="${slo.active}">
+											<div class="icon icon_tick"><g:message code="fedreg.label.active" /></div>
+										</g:if>
+										<g:else>
+											<div class="icon icon_cross"><g:message code="fedreg.label.inactive" /></div>
+										</g:else>
+										<td>
+									</tr>
+								</g:each>
+								</tbody>
+							</table>
+						</div>
 					</div>
 				</div>
 				<div id="tab-attributes" class="tabcontent">
