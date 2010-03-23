@@ -43,6 +43,6 @@ class IdentityProviderController {
 				}
 			}
 		}
-		[contacts:contacts]
+		[contacts:contacts, contactTypes:ContactType.list()]
 	}
 }

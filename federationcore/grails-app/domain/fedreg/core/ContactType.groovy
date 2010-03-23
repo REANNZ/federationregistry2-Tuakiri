@@ -22,22 +22,22 @@ package fedreg.core
 /**
  * @author Bradley Beddoes
  */
-class ContactPerson  {
+class ContactType  {
 
-	Contact contact
-	ContactType type
-	String extensions
+	String name
+	String displayName
+	String description
 	
 	Date dateCreated
 	Date lastUpdated
-
-  	static belongsTo = [descriptor:RoleDescriptor, entity:EntityDescriptor]
-
+	
 	static constraints = {
-		descriptor(nullable:true)
-        entity(nullable:true)
-		extensions(nullable:true)
+		name(nullable:false, displayName: false)
+		displayName(nullable:false, displayName: false)
+		description(nullable:false, displayName: false)
 		dateCreated(nullable:true)
 		lastUpdated(nullable:true)
 	}
+	
+
 }

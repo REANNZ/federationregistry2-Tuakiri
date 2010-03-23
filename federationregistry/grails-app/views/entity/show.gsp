@@ -36,14 +36,6 @@
 						<tr>
 							<th><g:message code="fedreg.label.organization"/></th>
 							<td>${fieldValue(bean: entity, field: "organization.displayName")}</td>
-						</tr>
-						<tr>
-							<th><g:message code="fedreg.label.created"/></th>
-							<td>${fieldValue(bean: entity, field: "dateCreated")}</td>
-						</tr>
-						<tr>
-							<th><g:message code="fedreg.label.lastupdated"/></th>
-							<td>${fieldValue(bean: entity, field: "lastUpdated")}</td>
 						</tr>			
 					</tbody>
 				</table>

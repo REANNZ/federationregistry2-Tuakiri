@@ -45,7 +45,6 @@
 	<a id="addcontactlink" href="#" class="button icon icon_add"><g:message code="fedreg.label.addcontact"/></a>
 </div>
 <div id="searchcontact">
-	
 		<h4>fedreg.templates.contactmanager.searchforcontacts.heading</h4>
 		<table class="datatable buttons">
 			<thead>
@@ -67,7 +66,7 @@
 		            </td>
 				</tr>
 			</tbody>
-		</table>
+		</table>		
 		<div id="spinnercontacts">
 			<img src="${resource(dir:'images', file:'spinner.gif')}" width="20" height="20">
 		</div>

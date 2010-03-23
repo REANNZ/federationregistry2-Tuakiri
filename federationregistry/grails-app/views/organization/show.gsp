@@ -27,14 +27,6 @@
 							<td>${fieldValue(bean: organization, field: "displayName")}</td>
 						</tr>
 						<tr>
-							<th><g:message code="fedreg.label.created"/></th>
-							<td>${fieldValue(bean: organization, field: "dateCreated")}</td>
-						</tr>
-						<tr>
-							<th><g:message code="fedreg.label.lastupdated"/></th>
-							<td>${fieldValue(bean: organization, field: "lastUpdated")}</td>
-						</tr>
-						<tr>
 							<th><g:message code="fedreg.label.lang" /></th>
 							<td>${fieldValue(bean: organization, field: "lang")}</td>
 						</tr>
@@ -63,7 +55,7 @@
 			
 				<div id="tabs">
 					<ul>
-						<li><a href="#tab-contacts" class="icon icon_user_comment"><g:message code="fedreg.label.contacts" /></a></li>
+						<li><a href="#tab-members" class="icon icon_user_comment"><g:message code="fedreg.label.members" /></a></li>
 						<li><a href="#tab-entities" class="icon icon_cog"><g:message code="fedreg.label.entities" /></a></li>
 						<li><a href="#tab-idp" class="icon icon_cog"><g:message code="fedreg.label.identityproviders" /></a></li>
 						<li><a href="#tab-aa" class="icon icon_cog"><g:message code="fedreg.label.attributeauthorities" /></a></li>
@@ -73,7 +65,7 @@
 						</g:if>
 					</ul>
 					
-					<div id="tab-contacts" class="tabcontent">
+					<div id="tab-members" class="tabcontent">
 						<table>
 							<thead>
 								<tr>

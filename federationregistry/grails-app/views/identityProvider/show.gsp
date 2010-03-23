@@ -29,14 +29,6 @@
 							<td>${fieldValue(bean: identityProvider, field: "description")}</td>
 						</tr>
 						<tr>
-							<th><g:message code="fedreg.label.created"/></th>
-							<td>${fieldValue(bean: identityProvider, field: "dateCreated")}</td>
-						</tr>
-						<tr>
-							<th><g:message code="fedreg.label.lastupdated"/></th>
-							<td>${fieldValue(bean: identityProvider, field: "lastUpdated")}</td>
-						</tr>
-						<tr>
 							<th><g:message code="fedreg.label.organization"/></th>
 							<td><g:link controller="organization" action="show" id="${identityProvider.organization.id}" class="icon icon_arrow_branch">${fieldValue(bean: identityProvider, field: "organization")}</g:link></td>
 						</tr>
@@ -209,10 +201,6 @@
 										<div class="icon icon_cross"><g:message code="fedreg.label.no" /></div>
 									</g:else>
 								</td>
-							</tr>
-							<tr>
-								<th><g:message code="fedreg.label.certificatedata" /></th>
-								<td>${(kd.keyInfo.certificate.data).encodeAsHTML()}</td>
 							</tr>
 						</g:each>
 						</tbody>

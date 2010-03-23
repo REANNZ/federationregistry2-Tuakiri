@@ -72,6 +72,15 @@ class DataImporterService implements InitializingBean {
 		def pers = new SamlURI(type:SamlURIType.NameIdentifierFormat, uri:'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', description:'Indicates that the content of the element is a persistent opaque identifier for a principal that is specific to an identity provider and a service provider or affiliation of service providers.').save()
 		def trans = new SamlURI(type:SamlURIType.NameIdentifierFormat, uri:'urn:oasis:names:tc:SAML:2.0:nameid-format:transient', description:'Indicates that the content of the element is an identifier with transient semantics and SHOULD be treated as an opaque and temporary value by the relying party.').save()
 		def shibNameID = new SamlURI(type:SamlURIType.NameIdentifierFormat, uri:'urn:mace:shibboleth:1.0:nameIdentifier', description:'').save()
+		
+		// Contact Types
+		def tech = new ContactType(name:'technical', displayName:'Technical', description: 'Technical contacts').save()
+		def mark = new ContactType(name:'marketing', displayName:'Marketing', description: 'Marketting contacts').save()
+		def bill = new ContactType(name:'billing', displayName:'Billing', description: 'Billing contacts').save()
+		def supp = new ContactType(name:'support', displayName:'Support', description: 'Support contacts').save()
+		def admin = new ContactType(name:'administrative', displayName:'Administrative', description: 'Administrative contacts').save()
+		def other = new ContactType(name:'other', displayName:'Other', description: 'Other contacts').save()
+		
 	}
 
 	def dumpData() {
@@ -242,13 +251,9 @@ class DataImporterService implements InitializingBean {
 		def type
 		def contact = Contact.findByEmail(MailURI.findByUri(row.email))
 		
-		switch(row.contactType) {
-			case 'technical': type = ContactType.technical; break;
-			case 'support': type = ContactType.support; break;
-			case 'administrative': type = ContactType.administrative; break;
-			case 'billing': type = ContactType.billing; break;
-			default: type = ContactType.other; break;
-		}
+		type = ContactType.findByName(row.contactType)
+		if(!type)
+			type = ContactType.findByName('other')
 		def contactPerson = new ContactPerson(contact:contact, entity:ent, type:type)
 		ent.addToContacts(contactPerson)
 		log.debug "Linked contact ${contactPerson?.contact?.givenName} ${contactPerson?.contact?.surname} to entity ${ent.entityID}"

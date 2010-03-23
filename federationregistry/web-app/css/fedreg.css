@@ -77,7 +77,7 @@ td.errors input { border: 2px solid #b10902; background-color: #c5200a; color: w
 #entity .details { width: 800px; }
 #entity #tabs { width: 800px; }
 
-#identityprovider .details { width: 800px; font-size: 1.1em; }
+#identityprovider .details { width: 800px; font-size: 1em; }
 #identityprovider .details a { color: #55626d; cursor: pointer; text-decoration: none; font-weight: bold; }
 #identityprovider .details a:hover { text-decoration: underline; }
 #identityprovider #tabs { width: 800px; }
@@ -131,4 +131,8 @@ td.errors input { border: 2px solid #b10902; background-color: #c5200a; color: w
 .information { -moz-border-radius: 5px; -webkit-border-radius: 5px; border: 1px solid #035883; background-color: #d9e8fa; color: #035883; }
 .information p { margin: 0px; padding: 3px; padding-left: 24px; }
 
-.popup { text-align: center; }
+.popup { text-align: center; padding: 6px; }
+
+.ui-dialog { border: 0px; padding: 0px; }
+.ui-dialog .ui-widget-header { margin: 0px; border: 0px; color: white; background: #51626e; }
+.ui-dialog .ui-dialog-title { color: white; font-size: 1.1em; }
