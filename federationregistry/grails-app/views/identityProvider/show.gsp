@@ -127,7 +127,7 @@
 									<td>${contactPerson.contact.givenName?.encodeAsHTML()} ${contactPerson.contact.surname?.encodeAsHTML()}</td>
 									<td>${contactPerson.contact.email?.uri.encodeAsHTML()}
 									</td>
-									<td>${contactPerson.type.encodeAsHTML()}</td>
+									<td>${contactPerson.type?.displayName.encodeAsHTML()}</td>
 									<td/>
 								</tr>
 								</g:each>

@@ -312,7 +312,11 @@ class DataImporterService implements InitializingBean {
 			
 			entity.addToIdpDescriptors(idp)
 			entity.save()
-			log.debug "Added new IDPSSODescriptor to Entity ${entity.entityID}"
+			if(entity.hasErrors()) {
+				entity.errors.each {log.error it}
+			}
+			else
+				log.debug "Added new IDPSSODescriptor to Entity ${entity.entityID}"
 		})	
 	}
 	
@@ -350,7 +354,11 @@ class DataImporterService implements InitializingBean {
 			
 			entity.addToAttributeAuthorityDescriptors(aa)
 			entity.save()
-			log.debug "Added new AttributeAuthorityDescriptor to Entity ${entity.entityID}"
+			if(entity.hasErrors()) {
+				entity.errors.each {log.error it}
+			}
+			else
+				log.debug "Added new AttributeAuthorityDescriptor to Entity ${entity.entityID}"
 		})
 	}
 
@@ -455,7 +463,11 @@ class DataImporterService implements InitializingBean {
 			
 			entity.addToSpDescriptors(sp)
 			entity.save()
-			log.debug "Added new SPSSODescriptor to Entity ${entity.entityID}"
+			if(entity.hasErrors()) {
+				entity.errors.each {log.error it}
+			}
+			else
+				log.debug "Added new SPSSODescriptor to Entity ${entity.entityID}"
 		})
 	}
 	
@@ -474,8 +486,12 @@ class DataImporterService implements InitializingBean {
 			
 			if(enc){
 				def certEnc = new Certificate(data:it.certData)
+				certEnc.expiryDate = cryptoService.expiryDate(certEnc)
+				certEnc.issuer = cryptoService.issuer(certEnc)
+				certEnc.subject = cryptoService.subject(certEnc)
+				
 				def keyInfoEnc = new KeyInfo(certificate:certEnc)
-				def keyDescriptorEnc = new KeyDescriptor(keyInfo:keyInfoEnc, keyType:KeyTypes.encryption)
+				def keyDescriptorEnc = new KeyDescriptor(keyInfo:keyInfoEnc, keyType:KeyTypes.encryption, roleDescriptor:descriptor)
 				descriptor.addToKeyDescriptors(keyDescriptorEnc)
 			}
 		})
