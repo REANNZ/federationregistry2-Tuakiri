@@ -29,6 +29,10 @@ class UrlMappings {
 		controller = "identityProvider"
 	}
 	
+	"/membership/contacts/$action?/$id?"{
+		controller = "contacts"
+	}
+	
 	"/bootstrap" {
 			controller = "dataManagement"
 			action = "bootstrap"
@@ -41,6 +45,7 @@ class UrlMappings {
 	"/monitor/$action?/$id?"{
 		controller = "monitor"
 	}
+	
 	
     "/"(view:"/index")
 	  "500"(view:'/error')

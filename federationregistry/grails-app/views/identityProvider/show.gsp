@@ -7,13 +7,26 @@
 		<title><g:message code="fedreg.view.members.identityprovider.show.title" /></title>
 		
 		<script type="text/javascript">
+			var linkContactEndpoint = "${createLink(controller:'contacts', action:'linkDescriptorContact')}";
+			
 			$(function() {
 				$("#tabs").tabs();
 				$("#tabs2").tabs();
+				
+				$("#working").hide();
+				
+				$("#working").bind("ajaxSend", function(){
+					$(this).css({left: $("body").scrollLeft() + 10, top: $("body").scrollTop() + 10})
+					$(this).show('blind')
+				 }).bind("ajaxComplete", function(){
+				   $(this).hide('blind');
+				 });
 			});
 		</script>
 	</head>
 	<body>
+		
+		<div id="working"><img src="${resource(dir:'images', file:'spinner.gif')}" width="20" height="20"><br/><g:message code="fedreg.label.working"/></div>
 		
 		<h2><g:message code="fedreg.view.members.identityprovider.show.heading" args="[identityProvider.displayName]"/></h2>
 		<div id="identityprovider">
@@ -106,13 +119,13 @@
 									<td>${contactPerson.contact.givenName?.encodeAsHTML()} ${contactPerson.contact.surname?.encodeAsHTML()}</td>
 									<td>${contactPerson.contact.email?.uri.encodeAsHTML()}
 									</td>
-									<td>${contactPerson.type.encodeAsHTML()}</td>
+									<td>${contactPerson.type.displayName.encodeAsHTML()}</td>
 									<td><g:link controller="identityProvider" action="unlinkContact" id="${contactPerson.id}" class="button icon icon_delete"><g:message code="fedreg.label.remove"/></g:link></td>
 								</tr>
 								</g:each>
 								<tr>
 									<td colspan="4">
-										<g:render template="/templates/contactmanager" />
+										<g:render template="/templates/contactmanager" model="[roleDescriptor:identityProvider]"/>
 									</td>
 								</tr>
 								

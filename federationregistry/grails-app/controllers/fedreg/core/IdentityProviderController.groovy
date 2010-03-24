@@ -26,7 +26,15 @@ class IdentityProviderController {
 	}
 	
 	def searchContacts = {
+		sleep(1000);
 		def contacts, email
+		if(!params.id) {
+			log.warn "RoleDescriptor ID was not supplied"
+			render message(code: 'fedreg.roledescriptor.noid')
+			response.status = 500
+			return
+		}
+			
 		if(!params.givenName && !params.surname && !params.email)
 			contacts = Contact.list()
 		else {
@@ -43,6 +51,6 @@ class IdentityProviderController {
 				}
 			}
 		}
-		[contacts:contacts, contactTypes:ContactType.list()]
+		[roleDescriptor:RoleDescriptor.get(params.id), contacts:contacts, contactTypes:ContactType.list()]
 	}
 }

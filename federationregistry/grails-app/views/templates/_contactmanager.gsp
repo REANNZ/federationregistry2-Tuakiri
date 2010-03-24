@@ -6,35 +6,34 @@
 		
 		$("#addcontactlink").click(function() {
 			$("#addcontact").hide();
-			$("#searchcontact").show();
+			$("#searchcontact").show('slide');
+			$("#email").focus();
 		});
 		
 		$("#closesearchcontactlink").click(function() {
-			$("#searchcontact").hide();
+			$("#searchcontact").hide('slide')
 			$("#availablecontacts").hide();
-			$("#addcontact").show();
+			$("#addcontact").show('slide');
+			
 		});
 	});
 	
 	var idpContactSearchEndpoint = "${createLink(controller:'identityProvider', action:'searchContacts')}";
 	var idpContactLinkEndpoint = "${createLink(controller:'identityProvider', action:'linkContact')}";
 	
-	function searchContacts() {
-		$("#availablecontacts").hide();
-		$("#spinnercontacts").show();
-		var dataString = "givenName=" + $('#givenName').val() + '&surname=' + $('#surname').val() + '&email=' + $('#email').val()
+	function searchContacts(id) {
+		$("#availablecontacts").hide('slide');
+		var dataString = "id=" + id + "&givenName=" + $('#givenName').val() + '&surname=' + $('#surname').val() + '&email=' + $('#email').val()
 		$.ajax({
 			type: "POST",
 			url: idpContactSearchEndpoint,
 			data: dataString,
 			success: function(res) {
-				$("#spinnercontacts").hide();
 				$("#availablecontacts").empty();
 				$("#availablecontacts").append(res);
-				$("#availablecontacts").show();
+				$("#availablecontacts").show('slide');
 		    },
 		    error: function (xhr, ajaxOptions, thrownError) {
-				$("#spinnercontacts").hide();
 				growl('error', xhr.responseText);
 		    }
 		});
@@ -61,15 +60,12 @@
 					<td><input type="text" id="surname" name="surname" class="enhancedinput"/></td>
 					<td><input type="text" id="email" name="email" class="enhancedinput"/></td>
 					<td>
-						<a href="#" onClick="searchContacts();" class="button icon icon_magnifier"><g:message code="fedreg.link.search" /></a>
+						<a href="#" onClick="searchContacts(${roleDescriptor.id});" class="button icon icon_magnifier"><g:message code="fedreg.link.search" /></a>
 		                <a href="#" id="closesearchcontactlink" class="button icon icon_cross"><g:message code="fedreg.link.close" /></a>
 		            </td>
 				</tr>
 			</tbody>
 		</table>		
-		<div id="spinnercontacts">
-			<img src="${resource(dir:'images', file:'spinner.gif')}" width="20" height="20">
-		</div>
 
 	<div id="availablecontacts">
 	</div>
