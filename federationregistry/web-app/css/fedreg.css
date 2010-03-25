@@ -139,3 +139,6 @@ td.errors input { border: 2px solid #b10902; background-color: #c5200a; color: w
 .ui-dialog { border: 0px; padding: 0px; }
 .ui-dialog .ui-widget-header { margin: 0px; border: 0px; color: white; background: #51626e; }
 .ui-dialog .ui-dialog-title { color: white; font-size: 1.1em; }
+
+.searcharea { padding: 6px; margin-top: 12px; }
+.searcharea h4 { margin-top: 6px; margin-bottom: 3px; margin-left: 0px; color: #a2a2a2; font-weight: bold; }

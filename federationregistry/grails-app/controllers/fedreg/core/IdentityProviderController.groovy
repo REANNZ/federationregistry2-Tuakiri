@@ -21,36 +21,7 @@ class IdentityProviderController {
 			redirect(action: "list")
 		}
 		else {
-			[identityProvider: identityProvider]
+			[identityProvider: identityProvider, contactTypes:ContactType.list()]
 		}
-	}
-	
-	def searchContacts = {
-		sleep(1000);
-		def contacts, email
-		if(!params.id) {
-			log.warn "RoleDescriptor ID was not supplied"
-			render message(code: 'fedreg.roledescriptor.noid')
-			response.status = 500
-			return
-		}
-			
-		if(!params.givenName && !params.surname && !params.email)
-			contacts = Contact.list()
-		else {
-			def emails
-			if(params.email)
-				emails = MailURI.findAllByUriLike("%${params.email}%")
-			def c = Contact.createCriteria()
-			contacts = c.list {
-				or {
-					ilike("givenName", params.givenName)
-					ilike("surname", params.surname)
-					if(emails)
-						'in'("email", emails)
-				}
-			}
-		}
-		[roleDescriptor:RoleDescriptor.get(params.id), contacts:contacts, contactTypes:ContactType.list()]
 	}
 }

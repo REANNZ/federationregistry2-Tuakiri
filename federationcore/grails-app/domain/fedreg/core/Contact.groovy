@@ -47,6 +47,7 @@ class Contact {
 	
 	static mapping = {
 		autoImport false
+		sort "surname"
 	}
 	
 }

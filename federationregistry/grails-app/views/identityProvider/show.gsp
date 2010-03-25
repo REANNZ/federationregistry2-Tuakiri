@@ -7,7 +7,11 @@
 		<title><g:message code="fedreg.view.members.identityprovider.show.title" /></title>
 		
 		<script type="text/javascript">
-			var linkContactEndpoint = "${createLink(controller:'contacts', action:'linkDescriptorContact')}";
+			var activeContact
+			var linkContactEndpoint = "${createLink(controller:'contacts', action:'linkDescriptorContact', id:identityProvider.id )}";
+			var unlinkContactEndpoint = "${createLink(controller:'contacts', action:'unlinkDescriptorContact' )}";
+			var listContactsEndpoint = "${createLink(controller:'contacts', action:'listDescriptorContacts', id:identityProvider.id ) }";
+			var contactSearchEndpoint = "${createLink(controller:'contacts', action:'searchContacts')}";
 			
 			$(function() {
 				$("#tabs").tabs();
@@ -15,11 +19,15 @@
 				
 				$("#working").hide();
 				
-				$("#working").bind("ajaxSend", function(){
-					$(this).css({left: $("body").scrollLeft() + 10, top: $("body").scrollTop() + 10})
-					$(this).show('blind')
+				$("#working").bind("fedreg.working", function(){
+					if( $(this).is(':hidden') ) {
+						$(this).css({left: $("body").scrollLeft() + 10, top: $("body").scrollTop() + 10})
+						$(this).show('blind')
+					}
 				 }).bind("ajaxComplete", function(){
-				   $(this).hide('blind');
+					if( $(this).is(':visible') ) {
+						$(this).hide('blind');
+					}
 				 });
 			});
 		</script>
@@ -99,56 +107,9 @@
 				
 				<div id="tab-contacts" class="tabcontent">
 					<div id="contacts">
-						<table class="cleantable">
-							<thead>
-								<tr>
-									<th><g:message code="fedreg.label.name" /></th>
-									<th><g:message code="fedreg.label.email" /></th>
-									<th><g:message code="fedreg.label.type" /></th>
-									<th/>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td colspan="4">
-										<h4>Local Contacts</h4>
-									</td>
-								</tr>
-								<g:each in="${identityProvider.contacts}" var="contactPerson" status="i">
-								<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-									<td>${contactPerson.contact.givenName?.encodeAsHTML()} ${contactPerson.contact.surname?.encodeAsHTML()}</td>
-									<td>${contactPerson.contact.email?.uri.encodeAsHTML()}
-									</td>
-									<td>${contactPerson.type.displayName.encodeAsHTML()}</td>
-									<td><g:link controller="identityProvider" action="unlinkContact" id="${contactPerson.id}" class="button icon icon_delete"><g:message code="fedreg.label.remove"/></g:link></td>
-								</tr>
-								</g:each>
-								<tr>
-									<td colspan="4">
-										<g:render template="/templates/contactmanager" model="[roleDescriptor:identityProvider]"/>
-									</td>
-								</tr>
-								
-								<g:if test="${identityProvider.entityDescriptor.contacts}">
-								<tr>
-									<td colspan="4">
-										<h4>Contacts associated with parent Entity Descriptor</h4>
-									</td>
-								</tr>
-								<g:each in="${identityProvider.entityDescriptor.contacts}" var="contactPerson" status="i">
-								<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-									<td>${contactPerson.contact.givenName?.encodeAsHTML()} ${contactPerson.contact.surname?.encodeAsHTML()}</td>
-									<td>${contactPerson.contact.email?.uri.encodeAsHTML()}
-									</td>
-									<td>${contactPerson.type?.displayName.encodeAsHTML()}</td>
-									<td/>
-								</tr>
-								</g:each>
-								</g:if>
-								
-							</tbody>
-						</table>
+						<g:render template="/templates/contacts/contactlist" model="[descriptor:identityProvider, allowremove:true]" />
 					</div>
+					<g:render template="/templates/contacts/contactmanagement" model="[descriptor:identityProvider, contactTypes:contactTypes]"/>
 				</div>
 				<div id="tab-crypto" class="tabcontent">
 					<table id="crypto">
@@ -374,8 +335,10 @@
 						</thead>
 						<tbody>
 						<g:each in="${identityProvider.nameIDFormats}" status="i" var="nidf">
-							<td>${nidf.uri.encodeAsHTML()}</td>
-							<td>${nidf.description?.encodeAsHTML()}</td>
+							<tr>
+								<td>${nidf.uri.encodeAsHTML()}</td>
+								<td>${nidf.description?.encodeAsHTML()}</td>
+							</tr>
 						</g:each>
 						</tbody>
 					</table>
