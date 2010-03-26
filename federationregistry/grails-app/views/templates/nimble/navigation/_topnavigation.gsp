@@ -2,7 +2,7 @@
 <div class="aafmenu">
 	
 	<ul id="topnavigation_">
-		<li class="${['organization', 'entity', 'identityProvider'].contains(controllerName) ? 'current' : ''}">
+		<li class="${['organization', 'entity', 'identityProvider', 'contacts'].contains(controllerName) ? 'current' : ''}">
 			<g:link controller="organization" action="list" class="icon icon_chart_organisation"><g:message code="fedreg.navigation.membership" /></g:link>
 		</li>
 		<li class="${['idpAttributeCompliance', 'attributeRelease', 'certifyingAuthorityUsage'].contains(controllerName) ? 'current' : ''}">

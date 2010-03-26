@@ -11,10 +11,10 @@
 		});
 		
 		$("#closesearchcontactlink").click(function() {
-			$("#searchcontact").hide('slide')
+			$("#searchcontact").hide('slide');
 			$("#availablecontacts").hide();
 			$("#addcontact").show('slide');
-			
+			$("#availablecontacts").empty();
 		});
 	});
 	

@@ -8,7 +8,29 @@ class ContactsController {
 		redirect(action: "list", params: params)
 	}
 
-	def list = {}
+	def list = {
+		params.max = Math.min(params.max ? params.max.toInteger() : 20, 100)
+		[contactList: Contact.list(params), contactTotal: Contact.count()]
+	}
+	
+	def show = {
+		if(!params.id) {
+			log.warn "Contact id was not present"
+			render message(code: 'fedreg.controllers.namevalue.missing')
+			redirect action:list
+			return
+		}
+		
+		def contact = Contact.get(params.id)
+		if (!contact) {
+			flash.type="error"
+			flash.message = message(code: 'fedreg.contact.nonexistant', args: [params.id])
+			redirect(action: "list")
+			return
+		}
+
+		[contact: contact]
+	}
 	
 	// AJAX Bound
 	def searchContacts = {
@@ -34,6 +56,13 @@ class ContactsController {
 	}
 	
 	def linkDescriptorContact = {
+		if(!params.id || !params.contactID || !params.contactType) {
+			log.warn "All name/value pairs required for this call were not present"
+			render message(code: 'fedreg.controllers.namevalue.missing')
+			response.sendError(500)
+			return
+		}
+		
 		def descriptor = RoleDescriptor.get(params.id)
 		if(!descriptor) {
 			log.warn "RoleDescriptor identified by id $params.id was not located"
@@ -75,6 +104,13 @@ class ContactsController {
 	}
 	
 	def unlinkDescriptorContact = {
+		if(!params.id) {
+			log.warn "All name/value pairs required for this call were not present"
+			render message(code: 'fedreg.controllers.namevalue.missing')
+			response.sendError(500)
+			return
+		}
+		
 		def contactPerson = ContactPerson.get(params.id)
 		if(!contactPerson) {
 			log.warn "ContactPerson identified by id $params.id was not located"
@@ -88,6 +124,13 @@ class ContactsController {
 	}
 	
 	def listDescriptorContacts = {
+		if(!params.id) {
+			log.warn "All name/value pairs required for this call were not present"
+			render message(code: 'fedreg.controllers.namevalue.missing')
+			response.sendError(500)
+			return
+		}
+		
 		def descriptor = RoleDescriptor.get(params.id)
 		if(!descriptor) {
 			log.warn "RoleDescriptor identified by id $params.id was not located"

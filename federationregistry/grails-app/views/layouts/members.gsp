@@ -13,6 +13,24 @@
     <nh:growl/>
     <script type="text/javascript">
       <njs:flashgrowl/>
+
+		$(function() {
+			$("#tabs").tabs();
+			$("#tabs2").tabs();
+			
+			$("#working").hide();
+			
+			$("#working").bind("fedreg.working", function(){
+				if( $(this).is(':hidden') ) {
+					$(this).css({left: $("body").scrollLeft() + 10, top: $("body").scrollTop() + 10})
+					$(this).show('blind')
+				}
+			 }).bind("ajaxComplete", function(){
+				if( $(this).is(':visible') ) {
+					$(this).hide('blind');
+				}
+			 });
+		});
     </script>
 
 	<link rel="stylesheet" href="${resource(file: '/css/icons.css')}"/>
@@ -22,8 +40,7 @@
 	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/jquery.jqplot.min.js')}"></script>
 	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/plugins/jqplot.pieRenderer.min.js')}"></script>
 	<link rel="stylesheet" href="${resource(dir:'css',file:'jquery.jqplot.min.css')}" />
-	
-	<!-- RAR -->
+
     <g:layoutHead />
 </head>
 
@@ -34,6 +51,7 @@
 		<g:render template='/templates/aafheader' model="['navigation':true]"/>
     </div>
     <div id="bd">
+		<div id="working"><img src="${resource(dir:'images', file:'spinner.gif')}" width="20" height="20"><br/><g:message code="fedreg.label.working"/></div>
 		<div class="container">
 	    	<div class="localnavigation">
 			  <h3><g:message code="fedreg.layout.members.navigation.title" /></h3>
@@ -46,6 +64,20 @@
 					</li>
 					<li>
 						<g:link controller="identityProvider" action="list"><g:message code="fedreg.link.identityproviders" /></g:link>
+					</li>
+					<li>
+						<g:link controller="contacts" action="list"><g:message code="fedreg.link.contacts" /></g:link>
+						<g:if test="${controllerName == 'contacts' && actionName in ['show', 'edit']}">
+						    <ul>
+								<li>
+										<g:link controller="contacts" action="show" id="${contact.id}">${contact.givenName?.encodeAsHTML()} ${contact.surname?.encodeAsHTML()}</g:link>
+										<ul>
+											<li><g:link controller="contacts" action="edit" id="${contact.id}" class="icon icon_user_edit"><g:message code="fedreg.link.edit"/></g:link></li>
+											<li><g:link controller="contacts" action="delete" id="${contact.id}" class="icon icon_user_delete"><g:message code="fedreg.link.delete"/></g:link></li>
+										</ul>
+								</li>
+							</ul>
+						</g:if>
 					</li>
 				</ul>
 			</div>

@@ -16,26 +16,10 @@
 			$(function() {
 				$("#tabs").tabs();
 				$("#tabs2").tabs();
-				
-				$("#working").hide();
-				
-				$("#working").bind("fedreg.working", function(){
-					if( $(this).is(':hidden') ) {
-						$(this).css({left: $("body").scrollLeft() + 10, top: $("body").scrollTop() + 10})
-						$(this).show('blind')
-					}
-				 }).bind("ajaxComplete", function(){
-					if( $(this).is(':visible') ) {
-						$(this).hide('blind');
-					}
-				 });
 			});
 		</script>
 	</head>
 	<body>
-		
-		<div id="working"><img src="${resource(dir:'images', file:'spinner.gif')}" width="20" height="20"><br/><g:message code="fedreg.label.working"/></div>
-		
 		<h2><g:message code="fedreg.view.members.identityprovider.show.heading" args="[identityProvider.displayName]"/></h2>
 		<div id="identityprovider">
 			<div class="details">

@@ -19,9 +19,9 @@ class IdentityProviderController {
 			flash.type="error"
 			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'identityProvider.label'), params.id])}"
 			redirect(action: "list")
+			return
 		}
-		else {
-			[identityProvider: identityProvider, contactTypes:ContactType.list()]
-		}
+
+		[identityProvider: identityProvider, contactTypes:ContactType.list()]
 	}
 }
