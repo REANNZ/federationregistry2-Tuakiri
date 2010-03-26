@@ -32,36 +32,36 @@
 								<th><g:message code="fedreg.label.linkedaccount" /></th>
 								<td>
 									<g:if test="${contact.userLink}">
-										<g:message code="fedreg.label.yes" class="icon icon_tick"/>
+										<span class="icon icon_tick"><g:message code="fedreg.label.yes"/></span>
 									</g:if>
 									<g:else>
-										<g:message code="fedreg.label.no" class="icon icon_cross"/>
+										<span class="icon icon_cross"><g:message code="fedreg.label.no" /></span>
 									</g:else>
 								</td>
 							</tr>
 						</tr>
-						<g:if test="${contact.secondaryEmailAddresses}">
+						<g:if test="${contact.secondaryEmail}">
 						<tr>
 							<th><g:message code="fedreg.label.secondaryemail" /></th>
-							<td>
-							<g:each in="${contact.secondaryEmailAddresses}" status="i" var="email">
-								<a href="mailto:${fieldValue(bean: email, field: "uri")}" class="icon icon_email">${fieldValue(bean: email, field: "uri")}</a><br/>
-							</g:each>
-							</td>
+							<td><a href="mailto:${fieldValue(bean: contact, field: "secondaryEmail.uri")}" class="icon icon_email">${fieldValue(bean: contact, field: "secondaryEmail.uri")}</a></td>
 						</tr>
 						</g:if>
-						<g:if test="${contact.telephoneNumbers}">
 						<tr>
-							<th><g:message code="fedreg.label.phonenumbers" /></th>
-							<td>
-							<g:each in="${contact.telephoneNumbers}" status="i" var="phone">
-								${fieldValue(bean: phone, field: "uri")} ( ${fieldValue(bean: phone, field: "description") })<br/>
-							</g:each>
-							</td>
+							<th><g:message code="fedreg.label.workphone" /></th>
+							<td>${fieldValue(bean: contact, field: "workPhone.uri")}</td>
 						</tr>
 						<tr>
+							<th><g:message code="fedreg.label.mobilephone" /></th>
+							<td>${fieldValue(bean: contact, field: "mobilePhone.uri")}</td>
 						</tr>
-						</g:if>
+						<tr>
+							<th><g:message code="fedreg.label.homephone" /></th>
+							<td>${fieldValue(bean: contact, field: "homePhone.uri")}</td>
+						</tr>
+						<tr>
+							<th><g:message code="fedreg.label.description" /></th>
+							<td>${fieldValue(bean: contact, field: "description")}</td>
+						</tr>
 					</tbody>
 				</table>
 			</div>

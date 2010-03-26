@@ -73,7 +73,6 @@
 										<g:link controller="contacts" action="show" id="${contact.id}">${contact.givenName?.encodeAsHTML()} ${contact.surname?.encodeAsHTML()}</g:link>
 										<ul>
 											<li><g:link controller="contacts" action="edit" id="${contact.id}" class="icon icon_user_edit"><g:message code="fedreg.link.edit"/></g:link></li>
-											<li><g:link controller="contacts" action="delete" id="${contact.id}" class="icon icon_user_delete"><g:message code="fedreg.link.delete"/></g:link></li>
 										</ul>
 								</li>
 							</ul>
