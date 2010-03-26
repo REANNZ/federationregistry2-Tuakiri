@@ -21,10 +21,18 @@ package fedreg.core
 
 class Contact {
 	
-	Organization organization
 	String givenName
 	String surname
+	String description
+	
+	Organization organization
+	
 	MailURI email
+	MailURI secondaryEmail
+	
+	TelNumURI workPhone 
+	TelNumURI homePhone 
+	TelNumURI mobilePhone
 	
 	boolean userLink = false;
 	
@@ -32,15 +40,18 @@ class Contact {
 	Date lastUpdated
 
 	static hasMany = [
-		secondaryEmailAddresses: MailURI,
-		telephoneNumbers: TelNumURI,
 		contactPersons: ContactPerson
 	]
 
 	static constraints = {
+		description(nullable: true, blank:true)
 		organization(nullable: true)
 		givenName(blank: false)
 		surname(blank: false)
+		secondaryEmail(nullable:true)
+		workPhone(nullable:true)
+		homePhone(nullable:true)
+		mobilePhone(nullable:true)
 		dateCreated(nullable:true)
 		lastUpdated(nullable:true)
 	}

@@ -42,6 +42,7 @@
 						</tr>
 						<g:if test="${contact.secondaryEmailAddresses}">
 						<tr>
+							<th><g:message code="fedreg.label.secondaryemail" /></th>
 							<td>
 							<g:each in="${contact.secondaryEmailAddresses}" status="i" var="email">
 								<a href="mailto:${fieldValue(bean: email, field: "uri")}" class="icon icon_email">${fieldValue(bean: email, field: "uri")}</a><br/>
@@ -51,9 +52,10 @@
 						</g:if>
 						<g:if test="${contact.telephoneNumbers}">
 						<tr>
+							<th><g:message code="fedreg.label.phonenumbers" /></th>
 							<td>
 							<g:each in="${contact.telephoneNumbers}" status="i" var="phone">
-								${fieldValue(bean: phone, field: "uri")}<br/>
+								${fieldValue(bean: phone, field: "uri")} ( ${fieldValue(bean: phone, field: "description") })<br/>
 							</g:each>
 							</td>
 						</tr>

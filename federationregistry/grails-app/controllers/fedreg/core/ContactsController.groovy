@@ -15,7 +15,26 @@ class ContactsController {
 	
 	def show = {
 		if(!params.id) {
-			log.warn "Contact id was not present"
+			log.warn "Contact ID was not present"
+			render message(code: 'fedreg.controllers.namevalue.missing')
+			redirect action:list
+			return
+		}
+		
+		def contact = Contact.get(params.id)
+		if (!contact) {
+			flash.type="error"
+			flash.message = message(code: 'fedreg.contact.nonexistant', args: [params.id])
+			redirect(action: "list")
+			return
+		}
+
+		[contact: contact]
+	}
+	
+	def edit = {
+		if(!params.id) {
+			log.warn "Contact ID was not present"
 			render message(code: 'fedreg.controllers.namevalue.missing')
 			redirect action:list
 			return
