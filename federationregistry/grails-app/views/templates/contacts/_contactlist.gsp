@@ -14,8 +14,9 @@
 				<td>${contactPerson.contact.givenName?.encodeAsHTML()} ${contactPerson.contact.surname?.encodeAsHTML()}</td>
 				<td>${contactPerson.contact.email?.uri.encodeAsHTML()}</td>
 				<td>${contactPerson.type.displayName.encodeAsHTML()}</td>
+				<td><g:link controller="contacts" action="show" id="${contactPerson.contact.id}" class="button icon icon_user_go"><g:message code="fedreg.link.view"/></g:link>
 				<g:if test="${allowremove}">
-				<td><a href="#" onClick="unlinkContact(${contactPerson.id});" class="button icon icon_delete"><g:message code="fedreg.link.remove"/></td>
+				<a href="#" onClick="unlinkContact(${contactPerson.id});" class="button icon icon_delete"><g:message code="fedreg.link.remove"/></td>
 				</g:if>
 			</tr>
 			</g:each>

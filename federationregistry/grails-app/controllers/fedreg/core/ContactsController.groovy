@@ -32,6 +32,48 @@ class ContactsController {
 		[contact: contact]
 	}
 	
+	def create = {
+		def contact = new Contact()
+		[contact: contact]
+	}
+	
+	def save = {
+		def contact = new Contact()
+
+		contact.givenName = params.givenname
+		contact.surname = params.surname
+		contact.email = new MailURI(uri:params.email)
+		contact.description = params.description
+		
+		if(params.secondaryEmail)
+			contact.secondaryEmail = new MailURI(uri:params.secondaryEmail)
+		
+		if(params.workPhone)
+			contact.workPhone = new TelNumURI(uri:params.workPhone)
+
+				
+		if(params.mobilePhone)
+			contact.mobilePhone = new TelNumURI(uri:params.mobilePhone)
+				
+		if(params.homePhone)
+			contact.homePhone = new TelNumURI(uri:params.homePhone)
+				
+		contact.save()
+		if(contact.hasErrors()) {
+			contact.errors.each {
+				log.warn it
+			}
+			flash.type = "error"
+		    flash.message = message(code: 'fedreg.contact.create.error')
+			render view: "create", model: [contact: contact]
+			return
+		}
+		
+		flash.type = "success"
+	    flash.message = message(code: 'fedreg.contact.create.success')
+		redirect action: "show", id: contact.id
+	}
+	
 	def edit = {
 		if(!params.id) {
 			log.warn "Contact ID was not present"

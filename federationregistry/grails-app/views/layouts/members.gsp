@@ -67,16 +67,19 @@
 					</li>
 					<li>
 						<g:link controller="contacts" action="list"><g:message code="fedreg.link.contacts" /></g:link>
-						<g:if test="${controllerName == 'contacts' && actionName in ['show', 'edit']}">
+						
 						    <ul>
+								<li><g:link controller="contacts" action="create" class="icon icon_user_add"><g:message code="fedreg.link.create"/></g:link></li>
+								<g:if test="${controllerName == 'contacts' && actionName in ['show', 'edit']}">
 								<li>
-										<g:link controller="contacts" action="show" id="${contact.id}">${contact.givenName?.encodeAsHTML()} ${contact.surname?.encodeAsHTML()}</g:link>
+										<g:link controller="contacts" action="show" id="${contact.id}" class="icon icon_user">${contact.givenName?.encodeAsHTML()} ${contact.surname?.encodeAsHTML()}</g:link>
 										<ul>
 											<li><g:link controller="contacts" action="edit" id="${contact.id}" class="icon icon_user_edit"><g:message code="fedreg.link.edit"/></g:link></li>
 										</ul>
 								</li>
+								</g:if>
 							</ul>
-						</g:if>
+						
 					</li>
 				</ul>
 			</div>
