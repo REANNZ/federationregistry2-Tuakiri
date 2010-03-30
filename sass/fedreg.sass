@@ -1,5 +1,7 @@
 @import _uielements.sass
 
+
+
 #hd
 
   .aafmenu
@@ -199,8 +201,6 @@ td.errors
     width = 800px
 
 #identityprovider
-  
-
   .details
     width = 800px
     :font
@@ -274,86 +274,8 @@ td.errors
       th
         width = 100px
 
-.attributecompliancesummary
-  table
-    th
-      color = #a2a2a2
-    td
-      &.organizationname
-        :font
-          :size = 1.4em
-      .numeric
-        text-align = "left"
-        :font
-          :size = 1.2em
-        .total
-          color = #a2a2a2
 
-.categorysummary
 
-  .category
-    +left
-    margin = 6px
-
-    .numeric
-      :font
-        :size = 1.4em
-      .total
-        color = #a2a2a2
-
-.categorydetail
-  +clearleft
-
-  .category
-    margin = 6px
-
-    .numeric
-      :font
-        :size = 1.4em
-      .total
-        color = #a2a2a2
-
-    table
-      +clearleft
-      th
-        color = #a2a2a2
-        width = 200px
-      td
-        width = 200px
-
-.attributesummary
-  +left
-
-  .attribute
-    margin = 6px
-
-    .numeric
-      :font
-        :size = 1.4em
-      .total
-        color = #a2a2a2
-
-    .graphic
-      +right
-
-.attributedetail
-  +clearleft
-
-  .attribute
-    :margin
-      :bottom = 36px
-
-    .numeric
-      +left
-      :font
-        :size = 1.4em
-      .total
-        color = #a2a2a2
-
-    table
-      +clearleft
-      th
-        color = #a2a2a2
 
 
 .critical
@@ -440,4 +362,50 @@ td.errors
     color = #a2a2a2
     :font
       :weight = "bold"
+
+.enhancedtabledata
+  +datatable(0px, 100%)
+  +datatablewithbuttons
+
+  :font
+    :size = 1.1em
+
+  thead
+    tr
+      th
+        color = #666666
+        a
+          +link(#666666)
+        &.sortable
+          a
+            padding-left: 18px
+
+            :background
+              :repeat = "no-repeat"
+              :position = "left center"
+              :image = url("icons/table_refresh.png")
+
+  td
+    .numeric
+      text-align = "left"
+      .total
+        color = #a2a2a2
+
+.graphcontent
+  .numeric
+    :font
+      :size = 1.2em
+    text-align = "left"
+    .total
+      color = #a2a2a2
+
+.horizontalelem
+  +left
+  margin-right = 18px
+
+.contentblock
+  +clearleft
+  :margin
+    :top = 12px
+    :bottom = 12px
   

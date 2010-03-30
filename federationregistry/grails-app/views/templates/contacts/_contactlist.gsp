@@ -1,4 +1,5 @@
 
+	<g:if test="${descriptor.contacts}">
 	<table class="cleantable">
 		<thead>
 			<tr>
@@ -22,3 +23,7 @@
 			</g:each>
 		</tbody>
 	</table>
+	</g:if>
+	<g:else>
+		<p><g:message code="fedreg.template.contacts.noresults" /></p>
+	</g:else>

@@ -9,8 +9,8 @@
 
 		<div class="container">
 			<h2><g:message code="fedreg.view.members.contacts.list.heading" /></h2>
-			<div class="list">
-				<table class="cleantable buttons">
+			<div>
+				<table class="enhancedtabledata buttons">
 					<thead>
 						<tr>
 							<g:sortableColumn property="givenName" title="${message(code: 'fedreg.label.givenname')}" />
@@ -27,7 +27,7 @@
 							<td>${fieldValue(bean: contact, field: "surname")}</td>
 							<td>${fieldValue(bean: contact, field: "email.uri")}</td>
 							<td>${fieldValue(bean: contact, field: "organization.displayName")}</td>
-							<td><g:link action="show" id="${contact.id}" class="button icon icon_zoom"><g:message code="fedreg.link.view" /></g:link></td>
+							<td><g:link action="show" id="${contact.id}" class="button icon icon_magnifier"><g:message code="fedreg.link.view" /></g:link></td>
 						</tr>
 					</g:each>
 					</tbody>

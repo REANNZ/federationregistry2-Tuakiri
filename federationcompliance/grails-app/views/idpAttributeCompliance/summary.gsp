@@ -11,9 +11,9 @@
 	
 			<h2><g:message code="fedreg.view.compliance.summary.heading"/></h2>
 			
-				<div class="attributecompliancesummary">
+				<div>
 					
-                	<table class="cleantable buttons">
+                	<table class="enhancedtabledata">
 	                    <thead>
 	                        <tr>                        
 	                            <th><g:message code="fedreg.label.identityprovider" /></th>

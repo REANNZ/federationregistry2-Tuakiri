@@ -9,8 +9,8 @@
 
         <div class="container">
             <h2><g:message code="fedreg.view.members.identityprovider.list.heading" /></h2>
-            <div class="list">
-                <table class="cleantable buttons">
+            <div>
+                <table class="enhancedtabledata">
                     <thead>
                         <tr>
 							<g:sortableColumn property="displayName" title="${message(code: 'fedreg.label.identityprovider')}" />

@@ -10,8 +10,8 @@
 
         <div class="container">
             <h2><g:message code="fedreg.view.members.organization.list.heading" /></h2>
-            <div class="list">
-                <table class="cleantable buttons">
+            <div>
+                <table class="enhancedtabledata">
                     <thead>
                         <tr>
                         

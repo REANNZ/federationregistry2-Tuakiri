@@ -10,9 +10,9 @@
 	
 		<h2><g:message code="fedreg.view.compliance.identityprovider.heading" args="${[idp?.organization?.displayName]}" /></h2>
 		
-		<div class="categorysummary">
+		<div class="graphcontent">
 		<g:each in="${categorySupport}" status="i" var="currentStatus">
-			<div class="category" >
+			<div class="horizontalelem" >
 				<h3><g:message code="fedreg.label.${currentStatus.name.toLowerCase()}"/></h3>
 				<div class="numeric">
 					<strong>${currentStatus.supportedCount.encodeAsHTML()}<span class="total"> / ${currentStatus.totalCount.encodeAsHTML()}</span></strong>
@@ -30,15 +30,13 @@
 			</div>
 		</g:each>
 		</div>
-		<div class="categorydetail">
-
 			<g:each in="${categorySupport}" status="i" var="currentStatus">
-				<div class="category">
+				<div class="contentblock">
 					<div class="numeric">
 						<strong>${currentStatus.name.encodeAsHTML()} - ${currentStatus.supportedCount}<span class="total"> / ${currentStatus.totalCount.encodeAsHTML()}</span></strong>
 					</div>
 				
-					<table class="cleantable buttons">
+					<table class="enhancedtabledata">
 	                    <thead>
 	                        <tr>
                         

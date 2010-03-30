@@ -93,36 +93,6 @@ td.errors input { border: 2px solid #b10902; background-color: #c5200a; color: w
 
 #cautilization table table th { width: 100px; }
 
-.attributecompliancesummary table th { color: #a2a2a2; }
-.attributecompliancesummary table td.organizationname { font-size: 1.4em; }
-.attributecompliancesummary table td .numeric { text-align: left; font-size: 1.2em; }
-.attributecompliancesummary table td .numeric .total { color: #a2a2a2; }
-
-.categorysummary .category { float: left; margin: 6px; }
-.categorysummary .category .numeric { font-size: 1.4em; }
-.categorysummary .category .numeric .total { color: #a2a2a2; }
-
-.categorydetail { clear: left; }
-.categorydetail .category { margin: 6px; }
-.categorydetail .category .numeric { font-size: 1.4em; }
-.categorydetail .category .numeric .total { color: #a2a2a2; }
-.categorydetail .category table { clear: left; }
-.categorydetail .category table th { color: #a2a2a2; width: 200px; }
-.categorydetail .category table td { width: 200px; }
-
-.attributesummary { float: left; }
-.attributesummary .attribute { margin: 6px; }
-.attributesummary .attribute .numeric { font-size: 1.4em; }
-.attributesummary .attribute .numeric .total { color: #a2a2a2; }
-.attributesummary .attribute .graphic { float: right; }
-
-.attributedetail { clear: left; }
-.attributedetail .attribute { margin-bottom: 36px; }
-.attributedetail .attribute .numeric { float: left; font-size: 1.4em; }
-.attributedetail .attribute .numeric .total { color: #a2a2a2; }
-.attributedetail .attribute table { clear: left; }
-.attributedetail .attribute table th { color: #a2a2a2; }
-
 .critical { -moz-border-radius: 5px; -webkit-border-radius: 5px; border: 1px solid #bb0000; background-color: #cf0101; color: white; font-weight: bold; }
 .critical p { margin: 0px; padding: 3px; padding-left: 24px; }
 
@@ -142,3 +112,26 @@ td.errors input { border: 2px solid #b10902; background-color: #c5200a; color: w
 
 .searcharea { padding: 6px; margin-top: 12px; }
 .searcharea h4 { margin-top: 6px; margin-bottom: 3px; margin-left: 0px; color: #a2a2a2; font-weight: bold; }
+
+.enhancedtabledata { margin: 0px; width: 100%; font-size: 1.1em; }
+.enhancedtabledata h3 { margin: 0px; padding: 0px; margin-bottom: 3px; }
+.enhancedtabledata thead tr th { background-color: #fff; }
+.enhancedtabledata thead tr th a { color: #363636; cursor: pointer; text-decoration: none; }
+.enhancedtabledata thead tr th a:hover { text-decoration: underline; }
+.enhancedtabledata tbody tr.odd td { background-color: #fff; }
+.enhancedtabledata tbody tr.even td { background-color: #fbfbfb; }
+.enhancedtabledata tbody tr td.name { font-weight: bold; }
+.enhancedtabledata tbody tr td { padding: 9px; }
+.enhancedtabledata thead tr th { color: #666666; }
+.enhancedtabledata thead tr th a { color: #666666; cursor: pointer; text-decoration: none; }
+.enhancedtabledata thead tr th a:hover { text-decoration: underline; }
+.enhancedtabledata thead tr th.sortable a { padding-left: 18px; background-repeat: no-repeat; background-position: left center; background-image: url('icons/table_refresh.png'); }
+.enhancedtabledata td .numeric { text-align: left; }
+.enhancedtabledata td .numeric .total { color: #a2a2a2; }
+
+.graphcontent .numeric { font-size: 1.2em; text-align: left; }
+.graphcontent .numeric .total { color: #a2a2a2; }
+
+.horizontalelem { float: left; margin-right: 18px; }
+
+.contentblock { clear: left; margin-top: 12px; margin-bottom: 12px; }
