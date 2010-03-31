@@ -474,7 +474,10 @@ class DataImporterService implements InitializingBean {
 	def importCrypto(def id, def descriptor, def enc) {
 		sql.eachRow("select * from certData where objectID=${id}",
 		{
-			def cert = new Certificate(data:it.certData)
+			try {
+			def data = "-----BEGIN CERTIFICATE-----\n${it.certData}\n-----END CERTIFICATE-----"
+			log.debug "Importing certificate data\n${data}"
+			def cert = new Certificate(data:data)	
 			cert.expiryDate = cryptoService.expiryDate(cert)
 			cert.issuer = cryptoService.issuer(cert)
 			cert.subject = cryptoService.subject(cert)
@@ -485,7 +488,7 @@ class DataImporterService implements InitializingBean {
 			descriptor.addToKeyDescriptors(keyDescriptor)
 			
 			if(enc){
-				def certEnc = new Certificate(data:it.certData)
+				def certEnc = new Certificate(data:data)
 				certEnc.expiryDate = cryptoService.expiryDate(certEnc)
 				certEnc.issuer = cryptoService.issuer(certEnc)
 				certEnc.subject = cryptoService.subject(certEnc)
@@ -493,6 +496,10 @@ class DataImporterService implements InitializingBean {
 				def keyInfoEnc = new KeyInfo(certificate:certEnc)
 				def keyDescriptorEnc = new KeyDescriptor(keyInfo:keyInfoEnc, keyType:KeyTypes.encryption, roleDescriptor:descriptor)
 				descriptor.addToKeyDescriptors(keyDescriptorEnc)
+			}
+			}
+			catch(Exception e) {
+				log.error "Error importing crypto for descriptor ${descriptor.displayName}"
 			}
 		})
 	}

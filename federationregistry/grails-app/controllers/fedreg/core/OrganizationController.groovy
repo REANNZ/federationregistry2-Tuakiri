@@ -14,6 +14,13 @@ class OrganizationController {
 	}
 
 	def show = {
+		if(!params.id) {
+			log.warn "Organization ID was not present"
+			render message(code: 'fedreg.controllers.namevalue.missing')
+			redirect action:list
+			return
+		}
+		
 		def organization = Organization.get(params.id)
 		if (!organization) {
 			flash.type="error"

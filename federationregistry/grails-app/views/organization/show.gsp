@@ -78,8 +78,7 @@
 							<g:each in="${contacts}" var="contact" status="i">
 								<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 									<td>${contact.givenName?.encodeAsHTML()} ${contact.surname?.encodeAsHTML()}</td>
-									<td>${contact.email?.uri.encodeAsHTML()}
-									</td>
+									<td>${contact.email?.uri.encodeAsHTML()}</td>
 									<td></td>
 								</tr>
 							</g:each>

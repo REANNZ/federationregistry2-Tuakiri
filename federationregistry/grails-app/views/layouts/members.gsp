@@ -72,7 +72,7 @@
 								<g:if test="${controllerName == 'contacts' && actionName in ['list']}">
 									<li><g:link controller="contacts" action="create" class="icon icon_user_add"><g:message code="fedreg.link.create"/></g:link></li>
 								</g:if>
-								<g:if test="${actionName in ['show', 'edit']}">
+								<g:if test="${controllerName == 'contacts' && actionName in ['show', 'edit']}">
 								<li>
 										<g:link controller="contacts" action="show" id="${contact.id}" class="icon icon_user">${contact.givenName?.encodeAsHTML()} ${contact.surname?.encodeAsHTML()}</g:link>
 										<ul>

@@ -13,6 +13,6 @@
 
 <g:if test="${navigation}">
 	<n:isLoggedIn>
-	  <g:render template='/templates/nimble/navigation/topnavigation'/>
+	  <g:render template='/templates/aaftopnavigation'/>
 	</n:isLoggedIn>
 </g:if>

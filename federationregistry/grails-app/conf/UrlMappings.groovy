@@ -33,6 +33,10 @@ class UrlMappings {
 		controller = "contacts"
 	}
 	
+	"/membership/keydescriptors/$action?/$id?"{
+		controller = "keyDescriptor"
+	}
+	
 	"/bootstrap" {
 			controller = "dataManagement"
 			action = "bootstrap"
