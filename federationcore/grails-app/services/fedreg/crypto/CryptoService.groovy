@@ -47,13 +47,13 @@ class CryptoService {
 	
 	def String issuer(fedreg.core.Certificate certificate) {
 		CertificateFactory cf = CertificateFactory.getInstance("X.509")
-		def c = cf.generateCertificate(new ByteArrayInputStream(certificate.data.getBytes("UTF8")))  // Wrap in string here to ensure B64 due to TEXT type weirdness
+		def c = cf.generateCertificate(new ByteArrayInputStream(certificate.data.getBytes("UTF8")))
 		c.issuerX500Principal.name
 	}
 
 	def String subject(fedreg.core.Certificate certificate) {
 		CertificateFactory cf = CertificateFactory.getInstance("X.509")
-		def c = cf.generateCertificate(new ByteArrayInputStream(certificate.data.getBytes("UTF8")))  // Wrap in string here to ensure B64 due to TEXT type weirdness
+		def c = cf.generateCertificate(new ByteArrayInputStream(certificate.data.getBytes("UTF8")))
 		c.subjectX500Principal.name
 	}
 }

@@ -1,6 +1,7 @@
 @import _uielements.sass
 
-
+body
+  font-family = "Gill Sans", "Gill Sans MT", "Segoe UI", "Candara", "Bitstream Vera Sans", "DejaVu Sans", "Bitstream Vera Sans", "Trebuchet MS", "Verdana", "Verdana Ref", "sans-serif"
 
 #hd
 
@@ -8,13 +9,16 @@
     +clearleft
 
     ul
-      +horizmenu("none", #3c454d, #55626d, #fff, #fff )
+      +horizmenu("none", #e6e6e6, #2c3d4b, #666, #fff )
       li
         +rounded-bl
         +rounded-br
         margin = 6px
         :margin
           :top = 0px
+        a
+          :font
+            :weight = "normal"
 
   #banner    
     +clearfix
@@ -38,11 +42,11 @@
         :weight = "bold"
         :size = 1.1em
       :background
-        :color = #3c454d
+        :color = #e6e6e6
 
       a
-        +link(#f2f2f2)
-      color = #f2f2f2
+        +link(#666)
+      color = #666
 
     img
       +right
@@ -51,15 +55,8 @@
     height = 124px
     padding = 0px
     :background
-      :color = #55626D
+      :color = #2c3d4b
 
-    ul
-      :background
-        :color = #3e3e3e
-
-    li.current
-      :background
-        :color = 3e3e3e
 
 #bd
   +clear
@@ -72,7 +69,7 @@
     color = "#f2f2f2"
     text-align = "center"
     :background
-      :color = "#55626D"
+      :color = "#2c3d4b"
     border = 2px "solid" #fff
 
   .container
@@ -83,16 +80,16 @@
   .localnavigation
     +left
     +clearfix
-    +rounded-br
+    +rounded
     +cleanlist
 
     width = 150px
-    margin = 0px
+    margin = 6px
     padding = 6px
 
     :background
-      :color = #f5f5f5
-    border = 1px "solid" #d5d5d5
+      :color = #e6e6e6
+    border = 0px "solid" #d5d5d5
     :border
       :top = "none"
 
@@ -334,6 +331,9 @@ td.errors
 
   form
     margin = 3px
+
+.ui-widget
+  font-family = "Gill Sans", "Gill Sans MT", "Segoe UI", "Candara", "Bitstream Vera Sans", "DejaVu Sans", "Bitstream Vera Sans", "Trebuchet MS", "Verdana", "Verdana Ref", "sans-serif"
 
 .ui-dialog
   border = 0px

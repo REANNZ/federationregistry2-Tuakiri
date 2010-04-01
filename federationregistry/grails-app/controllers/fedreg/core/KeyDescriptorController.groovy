@@ -38,7 +38,12 @@ class KeyDescriptorController {
 		log.debug "About to validate new certificate:\n${params.cert}"
 		
 		def certificate = new Certificate(data: params.cert)
-		render cryptoService.issuer(certificate);
+		def subject = cryptoService.subject(subject);
+		def issuer = cryptoService.issuer(certificate);
+		def expires = cryptoService.expiryDate(certificate);
+		def valid = cryptoService.validateCertificate(certificate);
+		
+		render template:"/templates/certificates/"
 	}
 
 }

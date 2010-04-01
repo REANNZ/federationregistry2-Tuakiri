@@ -19,6 +19,9 @@
 				<g:link controller="monitor" class="icon icon_time"><g:message code="fedreg.navigation.monitoring" /></g:link>
 			</li>
 		</n:isAdministrator>
+		<li class="">
+			<g:link controller="auth" action="logout" class="icon icon_lock_open"><g:message code="fedreg.label.logout" /></g:link>
+		</li>
 	</ul>
   
 </div>
