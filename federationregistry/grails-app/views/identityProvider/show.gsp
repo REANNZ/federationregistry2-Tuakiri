@@ -12,7 +12,9 @@
 			var unlinkContactEndpoint = "${createLink(controller:'contacts', action:'unlinkDescriptorContact' )}";
 			var listContactsEndpoint = "${createLink(controller:'contacts', action:'listDescriptorContacts', id:identityProvider.id ) }";
 			var contactSearchEndpoint = "${createLink(controller:'contacts', action:'searchContacts')}";
-			var newCertificateValidationEndpoint = "${createLink(controller:'keyDescriptor', action:'validateCertificate')}";
+			var certificateListEndpoint = "${createLink(controller:'identityProvider', action:'listCertificates', id:identityProvider.id )}";
+			var certificateDeleteEndpoint = "${createLink(controller:'keyDescriptor', action:'delete')}";
+			var certificateValidationEndpoint = "${createLink(controller:'keyDescriptor', action:'validateCertificate')}";
 			
 			$(function() {
 				$("#tabs").tabs();

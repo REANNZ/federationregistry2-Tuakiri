@@ -35,15 +35,26 @@ class KeyDescriptorController {
 			response.sendError(500)
 			return
 		}
-		log.debug "About to validate new certificate:\n${params.cert}"
 		
+		log.debug "About to validate new certificate:\n${params.cert}"
+		try {
 		def certificate = new Certificate(data: params.cert)
-		def subject = cryptoService.subject(subject);
+		def subject = cryptoService.subject(certificate);
 		def issuer = cryptoService.issuer(certificate);
 		def expires = cryptoService.expiryDate(certificate);
-		def valid = cryptoService.validateCertificate(certificate);
 		
-		render template:"/templates/certificates/"
+		def invalidca = false
+		if(!subject.equals(issuer))		// Not self signed do they use a valid CA?
+			invalidca = cryptoService.validateCertificate(certificate);
+		
+		render (template:"/templates/certificates/certificatevalidation", model:[corrupt: false, subject:subject, issuer:issuer, expires:expires, invalidca:invalidca])
+		}
+		catch(Exception e) {
+			log.warn "Certificate data is invalid"
+			log.debug e
+			render (template:"/templates/certificates/certificatevalidation", model:[corrupt:true])
+			return
+		}
 	}
 
 }

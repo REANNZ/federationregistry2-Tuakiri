@@ -37,10 +37,57 @@
 		var dataString = "cert=" + $("#newcertificatedata").val();
 		$.ajax({
 			type: "POST",
-			url: newCertificateValidationEndpoint,
+			url: certificateValidationEndpoint,
 			data: dataString,
 			success: function(res) {
-				$("#newcertificatedetails").html(res)
+				$("#newcertificatedetails").html(res);
+		    },
+		    error: function (xhr, ajaxOptions, thrownError) {
+				growl('error', xhr.responseText);
+		    }
+		});
+	}
+	
+	function createNewCertificate() {
+		$("#working").trigger("fedreg.working");
+		var dataString = "cert=" + $("#newcertificatedata").val();
+		$.ajax({
+			type: "POST",
+			url: certificateCreationEndpoint,
+			data: dataString,
+			success: function(res) {
+				growl(res);
+				listCertificates();
+		    },
+		    error: function (xhr, ajaxOptions, thrownError) {
+				growl('error', xhr.responseText);
+		    }
+		});
+	}
+	
+	function removeKeyDescriptor(id) {
+		$("#working").trigger("fedreg.working");
+		var dataString = "id=" + id;
+		$.ajax({
+			type: "POST",
+			url: certificateDeleteEndpoint,
+			data: dataString,
+			success: function(res) {
+				growl(res);
+				listCertificates();
+		    },
+		    error: function (xhr, ajaxOptions, thrownError) {
+				growl('error', xhr.responseText);
+		    }
+		});
+	}
+	
+	function listCertificates() {
+		$.ajax({
+			type: "GET",
+			url: certificateListEndpoint,
+			success: function(res) {
+				$("#certificates").html(res)
 		    },
 		    error: function (xhr, ajaxOptions, thrownError) {
 				growl('error', xhr.responseText);
@@ -56,8 +103,10 @@
 	
 	<div id="newcertificate">
 		<h4>Add new certificate</h4>
-		<p>Paste your PEM formatted public key below</p>
-		<g:textArea name="newcertificatedata" rows="50" cols="120"/>
+		<p>
+			Paste your PEM formatted public key below<br/>
+			<g:textArea name="newcertificatedata" rows="50" cols="120"/>
+		</p>
 		<div id="newcertificatedetails">
 		</div>
 	</div>
@@ -67,7 +116,7 @@
 			<p><g:message code="fedreg.template.certificate.confirmaddition"/></p>
 			<div class="buttons">
 				<a href="#" class="modal_close button icon icon_accept" onClick="addCertificate();">Accept</a>
-				<a href="#" onClick="$('#certificateconfirmationdialog').dialog('close');" class="modal_close button icon icon_cancel">Cancel</a>    
+				<a href="#" onClick="$('#certificateconfirmationdialog').dialog('close');" class="modal_close button icon icon_cancel">Cancel</a>   
 			</div>
 		</div>
 	</div>

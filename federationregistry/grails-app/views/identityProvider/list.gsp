@@ -15,7 +15,7 @@
                         <tr>
 							<g:sortableColumn property="displayName" title="${message(code: 'fedreg.label.identityprovider')}" />
                             <g:sortableColumn property="organization" title="${message(code: 'fedreg.label.organization')}" />
-                            <th/>
+                            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
                         </tr>
                     </thead>
                     <tbody>

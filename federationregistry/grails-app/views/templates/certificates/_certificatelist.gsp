@@ -7,14 +7,6 @@
 			<td>${kd.keyType.encodeAsHTML()}</td>
 		</tr>
 		<tr>
-			<th><g:message code="fedreg.label.created" /></th>
-			<td>${kd.dateCreated.encodeAsHTML()}</td>
-		</tr>
-		<tr>
-			<th><g:message code="fedreg.label.lastupdated" /></th>
-			<td>${kd.lastUpdated.encodeAsHTML()}</td>
-		</tr>
-		<tr>
 			<th><g:message code="fedreg.label.name" /></th>
 			<td>${(kd.keyInfo.keyName?:"N/A").encodeAsHTML()}</td>
 		</tr>
@@ -66,7 +58,7 @@
 			<td />
 			<td>
 				<g:if test="${allowremove}">
-				<a href="#" onClick="removeKeyDescriptor(${kd.id});" class="button icon icon_delete"><g:message code="fedreg.link.remove"/></td>
+				<a href="#" onClick="removeKeyDescriptor(${kd.id});" class="button icon icon_delete"><g:message code="fedreg.link.remove"/> <a href="#" onClick="listCertificates();" class="modal_close button icon icon_cancel">Cancel</a> </td>
 				</g:if>
 			</td>
 		</tr>

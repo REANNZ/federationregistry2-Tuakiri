@@ -14,6 +14,14 @@ class IdentityProviderController {
 	}
 
 	def show = {
+		if(!params.id) {
+			log.warn "IDPSSODescriptor ID was not present"
+			flash.type="error"
+			flash.message = message(code: 'fedreg.controllers.namevalue.missing')
+			redirect(action: "list")
+			return
+		}
+		
 		def identityProvider = IDPSSODescriptor.get(params.id)
 		if (!identityProvider) {
 			flash.type="error"
@@ -23,5 +31,26 @@ class IdentityProviderController {
 		}
 
 		[identityProvider: identityProvider, contactTypes:ContactType.list()]
+	}
+	
+	// AJAX Bound
+	def listCertificates = {
+		if(!params.id) {
+			log.warn "IDPSSODescriptor ID was not present"
+			render message(code: 'fedreg.controllers.namevalue.missing')
+			response.sendError(500)
+			return
+		}
+		
+		def identityProvider = IDPSSODescriptor.get(params.id)
+		if (!identityProvider) {
+			log.warn "IDPSSODescriptor ID was not present"
+			flash.type="error"
+			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'identityProvider.label'), params.id])}"
+			redirect(action: "list")
+			return
+		}
+		
+		render (template:"/templates/certificates/certificatelist", model:[descriptor:identityProvider, allowremove:true])
 	}
 }

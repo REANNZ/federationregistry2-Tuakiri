@@ -99,7 +99,8 @@ class DataImporterService implements InitializingBean {
 	
 	def importCACertificates() {
 		sql.eachRow("select * from certData where objectType='issuingca'", {
-			def caCert = new CACertificate(data:it.certData)
+			def data = "-----BEGIN CERTIFICATE-----\n${it.certData}\n-----END CERTIFICATE-----"
+			def caCert = new CACertificate(data:data)
 			def caKeyInfo = new CAKeyInfo(certificate:caCert)
 			caKeyInfo.save()
 		})

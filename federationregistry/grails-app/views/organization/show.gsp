@@ -13,7 +13,7 @@
 		</script>
 	</head>
 	<body>
-			<h2><g:message code="fedreg.view.members.organization.show.heading" args="[organization.displayName]"/></h2>
+		<h2><g:message code="fedreg.view.members.organization.show.heading" args="[organization.displayName]"/></h2>
 		<div id="organization">
 			<div class="details">
 				<table class="datatable">
