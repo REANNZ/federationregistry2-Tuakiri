@@ -24,6 +24,6 @@ package fedreg.core
  */
 class AttributeService extends Endpoint  {
 
-  static belongsTo = [attributeAuthorityDescriptor: AttributeAuthorityDescriptor]
+  static belongsTo = [descriptor: AttributeAuthorityDescriptor]
 
 }

@@ -43,7 +43,7 @@ class AttributeConsumingService {
 		lastUpdated(nullable:true)
 	}
 	
-	static belongsTo = [spSSODescriptor: SPSSODescriptor]
+	static belongsTo = [descriptor: SPSSODescriptor]
 	
 	static mapping = {
 		index column: "mdindex"		// Avoid DB collisions with reserved word index

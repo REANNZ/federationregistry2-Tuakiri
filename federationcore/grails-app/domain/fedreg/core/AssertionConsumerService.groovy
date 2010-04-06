@@ -24,6 +24,6 @@ package fedreg.core
  */
 class AssertionConsumerService extends IndexedEndpoint  {
 
-  static belongsTo = [spSSODescriptor: SPSSODescriptor]
+  static belongsTo = [descriptor: SPSSODescriptor]
 
 }

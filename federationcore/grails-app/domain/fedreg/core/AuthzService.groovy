@@ -24,6 +24,6 @@ package fedreg.core
  */
 class AuthzService extends Endpoint  {
 
-	static belongsTo = [ pdpDescriptor:PDPDescriptor ]
+	static belongsTo = [ descriptor:PDPDescriptor ]
 
 }

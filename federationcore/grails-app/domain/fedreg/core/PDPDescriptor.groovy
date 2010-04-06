@@ -27,7 +27,7 @@ class PDPDescriptor extends RoleDescriptor {
 	static belongsTo = [entityDescriptor:EntityDescriptor]
 
 	static hasMany = [
-		authzServices: Endpoint,
+		authzServices: AuthzService,
 		assertionIDRequestServices: AssertionIDRequestService,
 		nameIDFormats: String
 	]
