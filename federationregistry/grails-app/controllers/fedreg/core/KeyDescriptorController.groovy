@@ -2,7 +2,7 @@ package fedreg.core
 
 class KeyDescriptorController {
 
-	static allowedMethods = [delete: "POST", validateCertificate:"POST"]
+	static allowedMethods = [delete: "POST", validateCertificate:"POST", listCertificates:"GET", createCertificate:"POST"]
 	
 	def cryptoService
 	
