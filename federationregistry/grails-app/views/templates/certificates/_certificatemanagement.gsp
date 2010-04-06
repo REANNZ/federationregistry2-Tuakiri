@@ -9,10 +9,8 @@
 		});
 		
 		$("#closenewcertificatelink").click(function() {
-			$("#searchcontact").hide('slide');
-			$("#availablecontacts").hide();
-			$("#addcontact").show('slide');
-			$("#availablecontacts").empty();
+			$("#newcertificate").hide('slide');
+			$("#addcertificate").show('slide');
 		});
 		
 		$("#newcertificatedata").bind('paste', function() { setTimeout(function() {verifyNewCertificateData();}, 100); });
@@ -50,13 +48,17 @@
 	
 	function createNewCertificate() {
 		$("#working").trigger("fedreg.working");
-		var dataString = "cert=" + $("#newcertificatedata").val();
+		var dataString = "cert=" + $("#newcertificatedata").val() + "&certname=" + $("#newcertificatename").val();
 		$.ajax({
 			type: "POST",
 			url: certificateCreationEndpoint,
 			data: dataString,
 			success: function(res) {
-				growl(res);
+				$("#newcertificatedata").val('');
+				$("#newcertificatedetails").html('');
+				$("#newcertificate").hide('slide');
+				$("#addcertificate").show('slide');
+				growl('success', res);
 				listCertificates();
 		    },
 		    error: function (xhr, ajaxOptions, thrownError) {
@@ -73,7 +75,7 @@
 			url: certificateDeleteEndpoint,
 			data: dataString,
 			success: function(res) {
-				growl(res);
+				growl('success', res);
 				listCertificates();
 		    },
 		    error: function (xhr, ajaxOptions, thrownError) {
@@ -98,14 +100,15 @@
 
 <div id="certificatemanagement">
 	<div id="addcertificate" class="searcharea">
-		<a id="addcertficatelink" href="#" class="button icon icon_add"><g:message code="fedreg.link.addcertficate"/></a>
+		<a id="addcertficatelink" href="#" class="button icon icon_add"><g:message code="fedreg.link.addcertificate"/></a>
 	</div>
 	
 	<div id="newcertificate">
-		<h4>Add new certificate</h4>
+		<h4><g:message code="fedreg.template.certificates.certificatemanagement.addnew.heading"/></h4>
 		<p>
-			Paste your PEM formatted public key below<br/>
-			<g:textArea name="newcertificatedata" rows="50" cols="120"/>
+			<g:message code="fedreg.template.certificates.certificatemanagement.addnew.requestformat" />
+			<br/>
+			<g:textArea name="newcertificatedata" rows="50" cols="120"/><br/>
 		</p>
 		<div id="newcertificatedetails">
 		</div>
@@ -115,8 +118,8 @@
 		<div class="popup">
 			<p><g:message code="fedreg.template.certificate.confirmaddition"/></p>
 			<div class="buttons">
-				<a href="#" class="modal_close button icon icon_accept" onClick="addCertificate();">Accept</a>
-				<a href="#" onClick="$('#certificateconfirmationdialog').dialog('close');" class="modal_close button icon icon_cancel">Cancel</a>   
+				<a href="#" class="modal_close button icon icon_accept" onClick="addCertificate();"><g:message code="fedreg.link.accept"/></a>
+				<a href="#" onClick="$('#certificateconfirmationdialog').dialog('close');" class="modal_close button icon icon_cancel"><g:message code="fedreg.link.cancel"/></a>   
 			</div>
 		</div>
 	</div>

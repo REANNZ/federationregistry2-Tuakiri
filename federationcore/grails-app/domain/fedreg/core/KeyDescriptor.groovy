@@ -37,6 +37,10 @@ class KeyDescriptor  {
 		dateCreated(nullable:true)
 		lastUpdated(nullable:true)
 	}
+	
+	static mapping = {
+		sort "dateCreated"
+	}
 
 }
 

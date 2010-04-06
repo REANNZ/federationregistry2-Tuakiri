@@ -64,7 +64,7 @@ td.errors input { border: 2px solid #b10902; background-color: #c5200a; color: w
 .critical { -moz-border-radius: 5px; -webkit-border-radius: 5px; border: 1px solid #bb0000; background-color: #cf0101; color: white; font-weight: bold; }
 .critical p { margin: 0px; padding: 3px; padding-left: 24px; }
 
-.warning { -moz-border-radius: 5px; -webkit-border-radius: 5px; border: 1px solid #e5af2f; background-color: #feba5e; color: white; font-weight: bold; }
+.warning { -moz-border-radius: 5px; -webkit-border-radius: 5px; border: 1px solid #e7e691; background-color: #fefef0; color: #333333; }
 .warning p { margin: 0px; padding: 3px; padding-left: 24px; }
 
 .information { -moz-border-radius: 5px; -webkit-border-radius: 5px; border: 1px solid #035883; background-color: #d9e8fa; color: #035883; }
@@ -105,3 +105,8 @@ td.errors input { border: 2px solid #b10902; background-color: #c5200a; color: w
 .horizontalelem { float: left; margin-right: 18px; }
 
 .contentblock { clear: left; margin-top: 12px; margin-bottom: 12px; }
+
+.componentlist h3 { margin: 0px; padding: 0px; }
+.componentlist h4 { margin: 0px; padding: 0px; }
+.componentlist table tr td { padding: 0px; padding-bottom: 3px; }
+.componentlist .button { margin: 3px; }

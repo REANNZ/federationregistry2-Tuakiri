@@ -2,10 +2,10 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<meta name="layout" content="members" />
-		<title><g:message code="fedreg.view.members.contacts.edit.title" /></title>
+		<title><g:message code="fedreg.view.members.contacts.create.title" /></title>
 	</head>
 	<body>
-		<h2><g:message code="fedreg.view.members.contacts.edit.heading" args="[contact.givenName, contact.surname]"/></h2>
+		<h2><g:message code="fedreg.view.members.contacts.create.heading" /></h2>
 		
 		<div id="contact">
 			

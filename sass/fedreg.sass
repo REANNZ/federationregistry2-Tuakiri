@@ -8,6 +8,8 @@ body
   .aafmenu
     +clearleft
 
+    border-bottom = 1px "solid" #d6d6d6
+
     ul
       +horizmenu("none", #e6e6e6, #2c3d4b, #666, #fff )
       li
@@ -75,7 +77,7 @@ body
   .container
     margin = 0px
     padding = 0px
-    width = 100%
+    width = 1024px
 
   .localnavigation
     +left
@@ -89,27 +91,26 @@ body
 
     :background
       :color = #e6e6e6
-    border = 0px "solid" #d5d5d5
-    :border
-      :top = "none"
+    border = 1px "solid" #d6d6d6
 
     h3
       :font
-        :size = 1.0em
+        :size = 0.9em
         :weight = "bold"
-      color = #a6a6a6
+      color = #2c3d4b
+      margin-bottom = 6px
 
     h4
       :font
         :size = 0.9em
         :weight = "bold"
-      color = #868686
-      margin-bottom: 1px
+      color = #2c3d4b
+      margin-bottom = 1px
 
     a
       :font
-        :size = 1.0em
-        :weight = "bold"
+        :size = 1.1em
+        :weight = "normal"
       +link(#666)
 
     ul
@@ -119,10 +120,10 @@ body
 
   .content
     +left
-    width: *
+    width = 830px
     :margin
       :top = 0px
-      :left = 12px
+
 
   .logincontent
     +automargin
@@ -154,126 +155,12 @@ td.errors
       :color = #c5200a
     color = #fff
 
-.breadcrumb
-  +rounded-br
-  +rounded-bl
-
-  :padding
-    :top = 6px
-    :bottom = 6px
-    :left = 18px
-
-  :background
-    :color = #3c454d
-
-  color = #fff
-  a
-    +link(#e2e2e2)
-    :font
-      :weight = "bold"
+#tabs
+  width = 820px
 
 .tabcontent
   +datatable(9px, 700px)
   +datatablewithbuttons
-
-#organization
-  .details
-    width = 800px
-
-  #tabs
-    width = 800px
-
-  .tabcontent
-    +datatable(9px, 95%)
-    +datatablewithbuttons
-    table
-      td
-        width = 200px
-
-#entity
-  .details
-    width = 800px
-
-  #tabs
-    width = 800px
-
-#identityprovider
-  .details
-    width = 800px
-    :font
-      :size = 1.0em
-    a
-      +link(#55626d)
-      :font
-        :weight = "bold"
-
-  #tabs
-    width = 800px
-
-  #crypto
-    h4
-      :margin
-        :top = 6px
-        :bottom = 3px
-        :left = 0px
-
-      color = #a2a2a2
-      :font
-        :weight = "bold"
-
-  #contacts
-    h4
-      :margin
-        :top = 6px
-        :bottom = 3px
-        :left = 0px
-
-      color = #a2a2a2
-      :font
-        :weight = "bold"
-
-  .endpoints
-    h4
-      :margin
-        :top = 18px
-        :bottom = 3px
-        :left = 0px
-
-      color = #a2a2a2
-
-    table
-      :margin
-        :left = 6px
-      tr
-        td
-          width = 250px
-          padding = 3px
-
-#attributereleasecompliance
-  table
-    h3
-      color = #525252
-      :font
-        :size = 1.3em
-        :weight = "bold"
-
-    h4
-      +nomargin
-      margin-top = 12px
-      color = #666
-      :font
-        :size = 1.1em
-        :weight = "bold"
-
-#cautilization
-  table
-    table
-      th
-        width = 100px
-
-
-
-
 
 .critical
   +rounded
@@ -293,13 +180,11 @@ td.errors
 
 .warning
   +rounded
-  border = 1px "solid" #E5AF2F
+  border = 1px "solid" #e7e691
   :background
-    :color = #feba5e
+    :color = #fefef0
 
-  color = #fff
-  :font
-    :weight = "bold"
+  color = #333
 
   p
     margin = 0px
@@ -320,7 +205,6 @@ td.errors
     padding = 3px
     :padding
       :left = 24px
-
 
 .popup
   text-align = "center"
@@ -367,6 +251,8 @@ td.errors
   +datatable(0px, 100%)
   +datatablewithbuttons
 
+  width = 830px
+
   :font
     :size = 1.1em
 
@@ -387,7 +273,7 @@ td.errors
 
   td
     .numeric
-      text-align = "left"
+      text-align = "center"
       .total
         color = #a2a2a2
 
@@ -408,4 +294,23 @@ td.errors
   :margin
     :top = 12px
     :bottom = 12px
+
+.componentlist
+  h3
+    margin = 0px
+    padding = 0px
+  
+  h4
+    margin = 0px
+    padding = 0px
+
+  table
+    tr
+      td
+        padding = 0px
+        :padding
+          :bottom = 3px
+
+  .button
+    margin = 3px
   

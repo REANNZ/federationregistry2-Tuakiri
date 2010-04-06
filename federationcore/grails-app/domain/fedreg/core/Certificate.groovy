@@ -38,6 +38,7 @@ class Certificate {
 	
 	static mapping = { 
 		data(type: 'text') 
+		sort "dateCreated"
 	}
 	
 	static constraints = {

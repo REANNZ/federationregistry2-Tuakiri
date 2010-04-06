@@ -38,4 +38,8 @@ class KeyInfo  {
 		lastUpdated(nullable:true)
 	}
 	
+	static mapping = {
+		sort "dateCreated"
+	}
+	
 }

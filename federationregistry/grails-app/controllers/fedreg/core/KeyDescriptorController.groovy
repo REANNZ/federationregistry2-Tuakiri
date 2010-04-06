@@ -28,6 +28,25 @@ class KeyDescriptorController {
 		render message(code: 'fedreg.keydescriptor.delete.success')
 	}
 	
+	def listCertificates = {
+		if(!params.id) {
+			log.warn "Descriptor ID was not present"
+			render message(code: 'fedreg.controllers.namevalue.missing')
+			response.sendError(500)
+			return
+		}
+		
+		def descriptor = RoleDescriptor.get(params.id)
+		if (!descriptor) {
+			log.warn "Descriptor was not found for id ${params.id}"
+			render message(code: 'fedreg.roledescriptor.nonexistant', args: [params.id])
+			response.sendError(500)
+			return
+		}
+		
+		render (template:"/templates/certificates/certificatelist", model:[descriptor:descriptor, allowremove:true])
+	}
+	
 	def validateCertificate = {
 		if(!params.cert) {
 			log.warn "Certificate data was not present"
@@ -42,19 +61,82 @@ class KeyDescriptorController {
 		def subject = cryptoService.subject(certificate);
 		def issuer = cryptoService.issuer(certificate);
 		def expires = cryptoService.expiryDate(certificate);
+			
+		//TODO extend validation checks over time
+		def valid = true
+		def certerrors = []
 		
-		def invalidca = false
-		if(!subject.equals(issuer))		// Not self signed do they use a valid CA?
-			invalidca = cryptoService.validateCertificate(certificate);
+		// Wilcard certificate
+		if(subject.contains('*')) {
+			valid = false
+			certerrors.add("fedreg.template.certificates.validation.wildcard")
+		}
 		
-		render (template:"/templates/certificates/certificatevalidation", model:[corrupt: false, subject:subject, issuer:issuer, expires:expires, invalidca:invalidca])
+		// Valid certifying authority
+		if(!subject.equals(issuer)) {
+			def validca = false
+			validca = cryptoService.validateCertificate(certificate);
+			
+			if(!validca) {
+				valid = false
+				certerrors.add("fedreg.template.certificates.validation.invalidca")
+			}
+		}	
+		
+		render (template:"/templates/certificates/certificatevalidation", model:[corrupt: false, subject:subject, issuer:issuer, expires:expires, valid:valid, certerrors:certerrors])
 		}
 		catch(Exception e) {
 			log.warn "Certificate data is invalid"
-			log.debug e
+			e.printStackTrace()
 			render (template:"/templates/certificates/certificatevalidation", model:[corrupt:true])
 			return
 		}
 	}
 
+
+	def createCertificate = {
+		if(!params.id) {
+			log.warn "KeyDescriptor ID was not present"
+			render message(code: 'fedreg.controllers.namevalue.missing')
+			response.sendError(500)
+			return
+		}
+		
+		if(!params.cert) {
+			log.warn "Certificate data was not present"
+			render message(code: 'fedreg.controllers.namevalue.missing')
+			response.sendError(500)
+			return
+		}
+		
+		def descriptor = RoleDescriptor.get(params.id)
+		if (!descriptor) {
+			log.warn "Descriptor was not found for id ${params.id}"
+			render message(code: 'fedreg.roledescriptor.nonexistant', args: [params.id])
+			response.sendError(500)
+			return
+		}
+		
+		def cert = new Certificate(data:params.cert)	
+		cert.expiryDate = cryptoService.expiryDate(cert)
+		cert.issuer = cryptoService.issuer(cert)
+		cert.subject = cryptoService.subject(cert)
+		
+		def keyInfo = new KeyInfo(certificate:cert, keyName:params.certname)
+		def keyDescriptor = new KeyDescriptor(keyInfo:keyInfo, keyType:KeyTypes.signing, roleDescriptor:descriptor)
+		
+		descriptor.addToKeyDescriptors(keyDescriptor)
+		descriptor.save()
+		
+		if(descriptor.hasErrors()) {
+			descriptor.errors.each {
+				log.wearn it
+			}
+			render message(code: 'fedreg.keydescriptor.create.failed')
+			response.sendError(500)
+			return
+		}
+		
+		render message(code: 'fedreg.keydescriptor.create.success')
+	}
 }
