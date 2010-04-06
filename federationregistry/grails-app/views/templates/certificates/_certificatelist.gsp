@@ -6,14 +6,19 @@
 			<tr>
 				<th><g:message code="fedreg.label.keytype" /></th>
 				<td>${kd.keyType.encodeAsHTML()}</td>
+				<td>
+					<g:if test="${allowremove}">
+					<a href="#" onClick="removeKeyDescriptor(${kd.id});" class="button icon icon_delete"><g:message code="fedreg.link.remove"/>
+					</g:if>
+				</td>
 			</tr>
 			<tr>
 				<th><g:message code="fedreg.label.name" /></th>
-				<td>${(kd.keyInfo.keyName?:"N/A").encodeAsHTML()}</td>
+				<td colspan="2">${(kd.keyInfo.keyName?:"N/A").encodeAsHTML()}</td>
 			</tr>
 			<tr>
 				<th><g:message code="fedreg.label.issuer" /></th>
-				<td>${kd.keyInfo.certificate.issuer.encodeAsHTML()}</td>
+				<td colspan="2">${kd.keyInfo.certificate.issuer.encodeAsHTML()}</td>
 			</tr>
 			<tr>
 				<th><g:message code="fedreg.label.subject" /></th>
@@ -21,7 +26,7 @@
 			</tr>
 			<tr>
 				<th><g:message code="fedreg.label.expirydate" /></th>
-				<td>
+				<td colspan="2">
 					${kd.keyInfo.certificate.expiryDate.encodeAsHTML()}
 					<g:if test="${kd.keyInfo.certificate.criticalAlert()}">
 						<div class="critical">
@@ -46,21 +51,13 @@
 			</tr>
 			<tr>
 				<th><g:message code="fedreg.label.selfsigned" /></th>
-				<td>
+				<td colspan="2">
 					<g:if test="${kd.keyInfo.certificate.subject.equals(kd.keyInfo.certificate.issuer)}">
 						<div class="icon icon_tick"><g:message code="fedreg.label.yes" /></div>
 					</g:if>
 					<g:else>
 						<div class="icon icon_cross"><g:message code="fedreg.label.no" /></div>
 					</g:else>
-				</td>
-			</tr>
-			<tr>
-				<td />
-				<td>
-					<g:if test="${allowremove}">
-					<a href="#" onClick="removeKeyDescriptor(${kd.id});" class="button icon icon_delete"><g:message code="fedreg.link.remove"/>
-					</g:if>
 				</td>
 			</tr>
 		</g:each>
