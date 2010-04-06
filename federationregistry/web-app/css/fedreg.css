@@ -106,7 +106,7 @@ td.errors input { border: 2px solid #b10902; background-color: #c5200a; color: w
 
 .contentblock { clear: left; margin-top: 12px; margin-bottom: 12px; }
 
-.componentlist h3 { margin: 0px; padding: 0px; }
-.componentlist h4 { margin: 0px; padding: 0px; }
+.componentlist h3 { margin: 0px; margin-top: 12px; padding: 0px; }
+.componentlist h4 { margin: 0px; margin-top: 12px; padding: 0px; }
 .componentlist table tr td { padding: 0px; padding-bottom: 3px; }
 .componentlist .button { margin: 3px; }
