@@ -19,6 +19,8 @@
 package fedreg.core
 
 /**
+ * While not marked explicitly due to GORM issues both Endpoint and IndexedEndpoint are considered 'Abstract'
+ *
  * @author Bradley Beddoes
  */
 class Endpoint	{

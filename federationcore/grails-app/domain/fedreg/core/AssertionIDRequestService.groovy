@@ -24,12 +24,6 @@ package fedreg.core
  */
 class AssertionIDRequestService extends Endpoint  {
 
-  static belongsTo = [idpSSODescriptor:IDPSSODescriptor, attributeAuthorityDescriptor:AttributeAuthorityDescriptor, pdpDescriptor:PDPDescriptor]
-
-	static constraints = {
-		idpSSODescriptor(nullable:true)
-		attributeAuthorityDescriptor(nullable:true)
-		pdpDescriptor(nullable:true)
-	}
+	static belongsTo = [descriptor:RoleDescriptor]
 
 }

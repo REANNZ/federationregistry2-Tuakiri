@@ -8,7 +8,7 @@
 				<td>${kd.keyType.encodeAsHTML()}</td>
 				<td>
 					<g:if test="${allowremove}">
-					<a href="#" onClick="removeKeyDescriptor(${kd.id});" class="button icon icon_delete"><g:message code="fedreg.link.remove"/>
+						<n:confirmaction action="removeKeyDescriptor(${kd.id});" title="${message(code: 'fedreg.template.certificates.remove.confirm.title')}" msg="${message(code: 'fedreg.template.certificates.remove.confirm.descriptive')}" accept="${message(code: 'fedreg.link.accept')}" cancel="${message(code: 'fedreg.link.cancel')}" class="button icon icon_delete"><g:message code="fedreg.link.remove" /></n:confirmaction>
 					</g:if>
 				</td>
 			</tr>

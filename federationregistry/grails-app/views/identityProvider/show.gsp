@@ -16,6 +16,8 @@
 			var certificateCreationEndpoint = "${createLink(controller:'keyDescriptor', action:'createCertificate', id:identityProvider.id)}";
 			var certificateDeleteEndpoint = "${createLink(controller:'keyDescriptor', action:'delete')}";
 			var certificateValidationEndpoint = "${createLink(controller:'keyDescriptor', action:'validateCertificate')}";
+			var endpointDeleteEndpoint = "${createLink(controller:'endpoint', action:'delete')}";
+			var endpointListEndpoint = "${createLink(controller:'endpoint', action:'listEndpoints', id:identityProvider.id)}";
 			
 			$(function() {
 				$("#tabs").tabs();
@@ -118,18 +120,19 @@
 						
 						<div id="tab-sso" class="componentlist">
 							<div id="ssoendpoints">
-								<g:render template="/templates/endpoints/endpointlist" model="[endpoints:identityProvider.singleSignOnServices, allowremove:true]" />
+								<g:render template="/templates/endpoints/endpointlist" model="[endpoints:identityProvider.singleSignOnServices, allowremove:true, endpointType:'singleSignOnServices', containerID:'ssoendpoints']" />
 							</div>
+							<g:render template="/templates/endpoints/endpointmanagement" />
 						</div>
 						<div id="tab-ars" class="componentlist">
 							<div id="artifactendpoints">
-								<g:render template="/templates/endpoints/endpointlist" model="[endpoints:identityProvider.artifactResolutionServices, allowremove:true]" />
+								<g:render template="/templates/endpoints/endpointlist" model="[endpoints:identityProvider.artifactResolutionServices, allowremove:true, endpointType:'artifactResolutionServices', containerID:'artifactendpoints']" />
 								<hr/>
 							</div>
 						</div>
 						<div id="tab-slo" class="componentlist">
 							<div id="singlelogoutendpoints">
-								<g:render template="/templates/endpoints/endpointlist" model="[endpoints:identityProvider.singleLogoutServices, allowremove:true]" />
+								<g:render template="/templates/endpoints/endpointlist" model="[endpoints:identityProvider.singleLogoutServices, allowremove:true, endpointType:'singleLogoutServices', containerID:'singlelogoutendpoints']"]" />
 								<hr/>
 							</div>
 						</div>

@@ -96,7 +96,7 @@
   </div>
 
 <n:sessionterminated/>
-
+<n:confirm/>
 
 </body>
 

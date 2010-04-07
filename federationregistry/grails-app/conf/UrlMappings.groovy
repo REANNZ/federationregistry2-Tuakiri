@@ -37,6 +37,10 @@ class UrlMappings {
 		controller = "keyDescriptor"
 	}
 	
+	"/membership/endpoints/$action?/$id?"{
+		controller = "endpoint"
+	}
+	
 	"/bootstrap" {
 			controller = "dataManagement"
 			action = "bootstrap"

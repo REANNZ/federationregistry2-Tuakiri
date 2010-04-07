@@ -11,7 +11,7 @@
 			<td>${ep.binding.uri.encodeAsHTML()}</td>
 			<td>
 			<g:if test="${allowremove}">
-				<a href="#" onClick="removeEndpoint(${ep.id});" class="button icon icon_delete"><g:message code="fedreg.link.remove"/>
+					<n:confirmaction action="removeEndpoint(${ep.id}, '${endpointType}', '${containerID}' );" title="${message(code: 'fedreg.template.endpoints.remove.confirm.title')}" msg="${message(code: 'fedreg.template.endpoints.remove.confirm.descriptive')}" accept="${message(code: 'nimble.link.accept')}" cancel="${message(code: 'nimble.link.cancel')}" class="button icon icon_delete"><g:message code="fedreg.link.remove" /></n:confirmaction>
 			</g:if>
 			</td>
 		</tr>
