@@ -11,7 +11,7 @@ class KeyDescriptorController {
 		if(!params.id) {
 			log.warn "KeyDescriptor ID was not present"
 			render message(code: 'fedreg.controllers.namevalue.missing')
-			response.sendError(500)
+			response.setStatus(500)
 			return
 		}
 		
@@ -19,7 +19,7 @@ class KeyDescriptorController {
 		if(!keyDescriptor) {
 			log.warn "KeyDescriptor identified by id $params.id was not located"
 			render message(code: 'fedreg.keydescriptor.nonexistant', args: [params.id])
-			response.sendError(500)
+			response.setStatus(500)
 			return
 		}
 		
@@ -32,7 +32,7 @@ class KeyDescriptorController {
 		if(!params.id) {
 			log.warn "Descriptor ID was not present"
 			render message(code: 'fedreg.controllers.namevalue.missing')
-			response.sendError(500)
+			response.setStatus(500)
 			return
 		}
 		
@@ -40,7 +40,7 @@ class KeyDescriptorController {
 		if (!descriptor) {
 			log.warn "Descriptor was not found for id ${params.id}"
 			render message(code: 'fedreg.roledescriptor.nonexistant', args: [params.id])
-			response.sendError(500)
+			response.setStatus(500)
 			return
 		}
 		
@@ -98,14 +98,14 @@ class KeyDescriptorController {
 		if(!params.id) {
 			log.warn "KeyDescriptor ID was not present"
 			render message(code: 'fedreg.controllers.namevalue.missing')
-			response.sendError(500)
+			response.setStatus(500)
 			return
 		}
 		
 		if(!params.cert) {
 			log.warn "Certificate data was not present"
 			render message(code: 'fedreg.controllers.namevalue.missing')
-			response.sendError(500)
+			response.setStatus(500)
 			return
 		}
 		
@@ -113,7 +113,7 @@ class KeyDescriptorController {
 		if (!descriptor) {
 			log.warn "Descriptor was not found for id ${params.id}"
 			render message(code: 'fedreg.roledescriptor.nonexistant', args: [params.id])
-			response.sendError(500)
+			response.setStatus(500)
 			return
 		}
 		
@@ -133,7 +133,7 @@ class KeyDescriptorController {
 				log.wearn it
 			}
 			render message(code: 'fedreg.keydescriptor.create.failed')
-			response.sendError(500)
+			response.setStatus(500)
 			return
 		}
 		

@@ -113,7 +113,7 @@
 		<a id="addcontactlink" href="#" class="button icon icon_add"><g:message code="fedreg.label.addcontact"/></a>
 	</div>
 	<div id="searchcontact" class="searcharea">
-		<h4><g:message code="fedreg.templates.contactmanager.searchforcontacts.heading"/></h4>
+		<h3><g:message code="fedreg.templates.contactmanager.searchforcontacts.heading"/></h3>
 		<table class="datatable buttons">
 			<thead>
 				<tr>

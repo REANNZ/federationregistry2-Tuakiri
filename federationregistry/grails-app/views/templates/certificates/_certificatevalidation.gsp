@@ -3,9 +3,6 @@
 	<div class="critical">
 		<p class="icon icon_exclamation"><g:message code="fedreg.template.certificates.validation.corrupt" /></p>
 	</div>
-	<p>
-		<br/><a href="#" onClick="$('#newcertificate').hide('slide'); $('#addcertificate').show('slide');" class="modal_close button icon icon_cancel"><g:message code="fedreg.link.cancel"/></a>
-	</p>
 </g:if>
 <g:else>
 	<table>
@@ -43,5 +40,4 @@
 			<p>
 		</div>
 	</g:else>
-	<a href="#" onClick="$('#newcertificate').hide('slide'); $('#addcertificate').show('slide');" class="modal_close button icon icon_cancel"><g:message code="fedreg.link.cancel"/></a>
 </g:else>

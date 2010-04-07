@@ -104,12 +104,13 @@
 	</div>
 	
 	<div id="newcertificate">
-		<h4><g:message code="fedreg.template.certificates.certificatemanagement.addnew.heading"/></h4>
+		<h3><g:message code="fedreg.template.certificates.certificatemanagement.addnew.heading"/></h3>
 		<p>
-			<g:message code="fedreg.template.certificates.certificatemanagement.addnew.requestformat" />
+			<g:message code="fedreg.template.certificates.certificatemanagement.addnew.requestformat" /> &nbsp;&nbsp;&nbsp; <a href="#" onClick="$('#newcertificate').hide('slide'); $('#addcertificate').show('slide');" class="modal_close button icon icon_cancel"><g:message code="fedreg.link.cancel"/></a>
 			<br/>
-			<g:textArea name="newcertificatedata" rows="50" cols="120"/><br/>
+			<g:textArea name="newcertificatedata" rows="50" cols="120"/>
 		</p>
+		
 		<div id="newcertificatedetails">
 		</div>
 	</div>

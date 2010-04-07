@@ -2,7 +2,7 @@
 <g:if test="${endpoints}">
 <table>
 	<tbody>
-	<g:each in="${endpoints}" status="i" var="ep">
+	<g:each in="${endpoints.sort{it.dateCreated}}" status="i" var="ep">
 		<tr>
 			<td colspan="3"><h4><g:message code="fedreg.label.endpoint"/> ${i+1}</h4></td>
 		</tr>
@@ -16,23 +16,26 @@
 			</td>
 		</tr>
 		<tr>
-			<th><g:message code="fedreg.label.location" /></th>
-			<td colspan="2">${ep.location.uri.encodeAsHTML()}</td>
-		</tr>
-		<tr>
-			<th><g:message code="fedreg.label.responselocation" /></th>
-			<td colspan="2">${(ep.responseLocation?.uri ?:ep.location.uri).encodeAsHTML()}</td>
-		</tr>
-		<tr>
 			<th><g:message code="fedreg.label.status" /></th>
-			<td colspan="2">
+			<td>
 			<g:if test="${ep.active}">
 				<div class="icon icon_tick"><g:message code="fedreg.label.active" /></div>
 			</g:if>
 			<g:else>
 				<div class="icon icon_cross"><g:message code="fedreg.label.inactive" /></div>
 			</g:else>
+			</td>
 			<td>
+				<n:confirmaction action="toggleEndpointState(${ep.id}, '${endpointType}', '${containerID}' );" title="${message(code: 'fedreg.template.endpoints.toggle.confirm.title')}" msg="${message(code: 'fedreg.template.endpoints.toggle.confirm.descriptive')}" accept="${message(code: 'nimble.link.accept')}" cancel="${message(code: 'nimble.link.cancel')}" class="button icon icon_arrow_refresh"><g:message code="fedreg.link.togglestate" /></n:confirmaction>
+			</td>
+		</tr>
+		<tr>
+			<th><g:message code="fedreg.label.location" /></th>
+			<td colspan="2">${ep.location.uri.encodeAsHTML()}</td>
+		</tr>
+		<tr>
+			<th><g:message code="fedreg.label.responselocation" /></th>
+			<td colspan="2">${(ep.responseLocation?.uri ?:ep.location.uri).encodeAsHTML()}</td>
 		</tr>
 	</g:each>
 	</tbody>
