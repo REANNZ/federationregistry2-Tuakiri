@@ -19,7 +19,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                    <g:each in="${identityProviderList}" status="i" var="identityProvider">
+                    <g:each in="${identityProviderList.sort{it.displayName}}" status="i" var="identityProvider">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                         
 							<td>${fieldValue(bean: identityProvider, field: "displayName")}</td>

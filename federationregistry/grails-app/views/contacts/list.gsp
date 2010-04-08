@@ -20,7 +20,7 @@
 						</tr>
 					</thead>
 					<tbody>
-					<g:each in="${contactList}" status="i" var="contact">
+					<g:each in="${contactList.sort{it.surname}}" status="i" var="contact">
 						<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 							<td>${fieldValue(bean: contact, field: "givenName")}</td>
 							<td>${fieldValue(bean: contact, field: "surname")}</td>

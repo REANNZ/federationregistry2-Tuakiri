@@ -20,7 +20,7 @@
 						</tr>
 					</thead>
 					<tbody>
-					<g:each in="${organizationList}" status="i" var="organization">
+					<g:each in="${organizationList.sort{it.name}}" status="i" var="organization">
 						<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 							<td>${fieldValue(bean: organization, field: "displayName")}</td>
 							<td>${fieldValue(bean: organization, field: "primary")}</td>
