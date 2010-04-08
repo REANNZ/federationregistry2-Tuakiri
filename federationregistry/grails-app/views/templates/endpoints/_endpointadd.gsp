@@ -2,7 +2,6 @@
 <%@page import="fedreg.core.SamlURIType" %>
 
 <script type="text/javascript">
-
 	$(function() {
 		$("#new${endpointType}").hide();
 	
@@ -23,7 +22,6 @@
 			$("#add${endpointType}").show('slide');
 		});
 	});
-	
 </script>
 
 <div id="add${endpointType}" class="searcharea">

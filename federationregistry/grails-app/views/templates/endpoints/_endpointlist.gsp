@@ -2,7 +2,7 @@
 <g:if test="${endpoints}">
 <table>
 	<tbody>
-	<g:each in="${endpoints.sort{it.dateCreated}}" status="i" var="ep">
+	<g:each in="${endpoints.sort{it.dateCreated} }" status="i" var="ep">
 		<tr>
 			<td colspan="3"><h4><g:message code="fedreg.label.endpoint"/> ${i+1}</h4></td>
 		</tr>

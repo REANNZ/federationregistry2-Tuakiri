@@ -102,17 +102,16 @@
 						<g:render template="/templates/contacts/contactlist" model="[descriptor:identityProvider, allowremove:true]" />
 					</div>
 					<hr>
-					<g:render template="/templates/contacts/contactmanagement" model="[descriptor:identityProvider, contactTypes:contactTypes]"/>
+					<g:render template="/templates/contacts/contactadd" model="[descriptor:identityProvider, contactTypes:contactTypes]"/>
 				</div>
 				<div id="tab-crypto" class="tabcontent">
 					<div id="certificates">
 						<g:render template="/templates/certificates/certificatelist" model="[descriptor:identityProvider, allowremove:true]" />
 					</div>
 					<hr>
-					<g:render template="/templates/certificates/certificatemanagement" model="[descriptor:identityProvider]"/>
+					<g:render template="/templates/certificates/certificateadd" model="[descriptor:identityProvider]"/>
 				</div>
 				<div id="tab-endpoints" class="tabcontent">
-					<g:render template="/templates/endpoints/endpointmanagement" />
 					<div id="tabs2">
 						<ul>
 							<li><a href="#tab-sso" class="icon icon_cog"><g:message code="fedreg.label.ssoservices" /></a></li>

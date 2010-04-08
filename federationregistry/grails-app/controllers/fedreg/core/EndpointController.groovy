@@ -136,13 +136,14 @@ class EndpointController {
 			def location = new UrlURI(uri:params.location)
 			def service = grailsApplication.classLoader.loadClass(allowedEndpoints.get(endpoint)).newInstance(binding: binding, location: location, active:true)
 			descriptor."addTo${capitalize(endpoint)}"(service)
-			
+			descriptor.save(flush:true)
 			if(descriptor.hasErrors()) {
 				descriptor.errors.each {
 					log.warn it
 				}
 			}
 			else {
+				descriptor.refresh()
 				log.debug "Created endpoint for descriptor ID ${params.id} of type ${endpoint} at location ${params.location}"
 				render (template:"/templates/endpoints/endpointlist", model:[endpoints:descriptor."${endpoint}", allowremove:true, endpointType:endpoint, containerID:params.containerID])
 			}
