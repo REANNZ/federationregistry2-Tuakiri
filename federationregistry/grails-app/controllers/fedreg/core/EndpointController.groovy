@@ -17,7 +17,7 @@ class EndpointController {
 		if(!params.id) {
 			log.warn "Endpoint ID was not present"
 			render message(code: 'fedreg.controllers.namevalue.missing')
-			response.sendError(500)
+			response.setStatus(500)
 			return
 		}
 		

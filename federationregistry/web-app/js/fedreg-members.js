@@ -241,3 +241,36 @@ function toggleEndpointState(id, endpointType, containerID) {
 	    }
 	});
 }
+
+// NAME ID Formats
+function removeNameIDFormat(formatID, containerID) {
+	$("#working").trigger("fedreg.working");
+	var dataString = "formatID=" + formatID;
+	$.ajax({
+		type: "POST",
+		url: nameIDFormatDeleteEndpoint,
+		data: dataString,
+		success: function(res) {
+			growl('success', res);
+			listNameIDFormats(containerID);
+	    },
+	    error: function (xhr, ajaxOptions, thrownError) {
+			growl('error', xhr.responseText);
+	    }
+	});
+}
+
+function listNameIDFormats(containerID) {
+	var dataString = "containerID=" + containerID
+	$.ajax({
+		type: "GET",
+		url: nameIDFormatListEndpoint,
+		data: dataString,
+		success: function(res) {
+			$("#"+containerID).html(res)
+	    },
+	    error: function (xhr, ajaxOptions, thrownError) {
+			growl('error', xhr.responseText);
+	    }
+	});
+}

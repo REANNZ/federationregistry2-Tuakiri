@@ -41,6 +41,10 @@ class UrlMappings {
 		controller = "endpoint"
 	}
 	
+	"/membership/nameidformats/$action?/$id?"{
+		controller = "nameIDFormat"
+	}
+	
 	"/bootstrap" {
 			controller = "dataManagement"
 			action = "bootstrap"

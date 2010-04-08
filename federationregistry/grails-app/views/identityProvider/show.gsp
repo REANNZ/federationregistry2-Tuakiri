@@ -20,6 +20,8 @@
 			var endpointListEndpoint = "${createLink(controller:'endpoint', action:'listEndpoints', id:identityProvider.id)}";
 			var endpointCreationEndpoint = "${createLink(controller:'endpoint', action:'createEndpoint', id:identityProvider.id)}";
 			var endpointToggleStateEndpoint = "${createLink(controller:'endpoint', action:'toggleState')}";
+			var nameIDFormatDeleteEndpoint = "${createLink(controller:'nameIDFormat', action:'delete', id:identityProvider.id )}";
+			var nameIDFormatListEndpoint = "${createLink(controller:'nameIDFormat', action:'listNameIDFormats', id:identityProvider.id )}";
 			
 			$(function() {
 				$("#tabs").tabs();
@@ -165,23 +167,10 @@
 					</div>
 				</div>
 				<div id="tab-nameidformats" class="tabcontent">
-					<table class="cleantable">
-						<thead>
-							<tr>
-								<th><g:message code="fedreg.label.supportedformat" /></th>
-								<th><g:message code="fedreg.label.description" /></th>
-								<th/>
-							</tr>
-						</thead>
-						<tbody>
-						<g:each in="${identityProvider.nameIDFormats}" status="i" var="nidf">
-							<tr>
-								<td>${nidf.uri.encodeAsHTML()}</td>
-								<td>${nidf.description?.encodeAsHTML()}</td>
-							</tr>
-						</g:each>
-						</tbody>
-					</table>
+					<div id="nameidformats">
+						<g:render template="/templates/nameidformats/list" model="[nameIDFormats:identityProvider.nameIDFormats, containerID:'nameidformats']" />
+					</div>
+					<g:render template="/templates/nameidformats/nameidformatadd" model="[containerID:'nameidformats']"/>
 				</div>
 				<div id="tab-ext" class="tabcontent">
 					${identityProvider.extensions?.encodeAsHTML()}
