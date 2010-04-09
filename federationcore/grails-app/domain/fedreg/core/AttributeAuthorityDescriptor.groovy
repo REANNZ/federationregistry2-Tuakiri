@@ -24,6 +24,8 @@ package fedreg.core
  */
 class AttributeAuthorityDescriptor extends RoleDescriptor {
 	
+	IDPSSODescriptor collaborator    // This links the AA with an IDP that collaborates with it to provide authentication assertion services
+	
 	static belongsTo = [entityDescriptor:EntityDescriptor]
 
 	static hasMany = [
@@ -35,6 +37,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor {
 	]
 
 	static constraints = {
+		collaborator(nullable:true)
 		assertionIDRequestServices(nullable: true)
 		nameIDFormats(nullable: true)
 		attributeProfiles(nullable: true)
