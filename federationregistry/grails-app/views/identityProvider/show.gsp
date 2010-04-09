@@ -22,6 +22,7 @@
 			var endpointToggleStateEndpoint = "${createLink(controller:'endpoint', action:'toggleState')}";
 			var nameIDFormatDeleteEndpoint = "${createLink(controller:'nameIDFormat', action:'delete', id:identityProvider.id )}";
 			var nameIDFormatListEndpoint = "${createLink(controller:'nameIDFormat', action:'listNameIDFormats', id:identityProvider.id )}";
+			var nameIDFormatAddEndpoint = "${createLink(controller:'nameIDFormat', action:'addNameIDFormat', id:identityProvider.id )}";
 			
 			$(function() {
 				$("#tabs").tabs();
@@ -170,7 +171,8 @@
 					<div id="nameidformats">
 						<g:render template="/templates/nameidformats/list" model="[nameIDFormats:identityProvider.nameIDFormats, containerID:'nameidformats']" />
 					</div>
-					<g:render template="/templates/nameidformats/nameidformatadd" model="[containerID:'nameidformats']"/>
+					<hr>
+					<g:render template="/templates/nameidformats/add" model="[containerID:'nameidformats']"/>
 				</div>
 				<div id="tab-ext" class="tabcontent">
 					${identityProvider.extensions?.encodeAsHTML()}

@@ -21,3 +21,8 @@
 	</tbody>
 </table>
 </g:if>
+<g:else>
+	<div>
+		<p class="icon icon_information"><g:message code="fedreg.template.nameidformats.noresults"/></p>
+	</div>
+</g:else>

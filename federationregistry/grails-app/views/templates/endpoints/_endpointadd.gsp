@@ -9,13 +9,6 @@
 			$("#add${endpointType}").hide();
 			$("#new${endpointType}").show('slide');
 		});
-	
-		$("#closesearchcontactlink").click(function() {
-			$("#searchcontact").hide('slide');
-			$("#availablecontacts").hide();
-			$("#addcontact").show('slide');
-			$("#availablecontacts").empty();
-		});
 		
 		$("#cancel${endpointType}link").click(function() {
 			$("#new${endpointType}").hide();
@@ -29,7 +22,7 @@
 </div>
 	
 <div id="new${endpointType}"  class="searcharea">
-	<h3>Add new endpoint</h3>
+	<h3><g:message code="fedreg.template.endpoints.add.heading"/></h3>
 	<form id="new${endpointType}data">
 	<table>
 		<tbody>

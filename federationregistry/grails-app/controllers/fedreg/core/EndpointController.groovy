@@ -92,13 +92,6 @@ class EndpointController {
 			return
 		}
 		
-		if(!params.containerID) {
-			log.warn "Container ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
-			response.setStatus(500)
-			return
-		}
-		
 		if(!params.binding) {
 			log.warn "Binding ID was not present"
 			render message(code: 'fedreg.controllers.namevalue.missing')
@@ -141,11 +134,15 @@ class EndpointController {
 				descriptor.errors.each {
 					log.warn it
 				}
+				render message(code: 'fedreg.endpoint.create.failed')
+				response.setStatus(500)
+				return
 			}
 			else {
 				descriptor.refresh()
 				log.debug "Created endpoint for descriptor ID ${params.id} of type ${endpoint} at location ${params.location}"
-				render (template:"/templates/endpoints/endpointlist", model:[endpoints:descriptor."${endpoint}", allowremove:true, endpointType:endpoint, containerID:params.containerID])
+				render message(code: 'fedreg.endpoint.create.success')
+				return
 			}
 		}
 		else {

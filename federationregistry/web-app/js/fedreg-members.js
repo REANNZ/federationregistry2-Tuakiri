@@ -208,12 +208,13 @@ function listEndpoints(endpointType, containerID) {
 
 function createEndpoint(endpointType, containerID) {
 	$("#working").trigger("fedreg.working");
-	var dataString = "endpointType=" + endpointType + "&containerID=" + containerID + "&" + $("#new" + endpointType + "data").serialize();
+	var dataString = "endpointType=" + endpointType + "&" + $("#new" + endpointType + "data").serialize();
 	$.ajax({
 		type: "POST",
 		url: endpointCreationEndpoint,
 		data: dataString,
 		success: function(res) {
+			growl('success', res);
 			$(':input', "#new" + endpointType + "data")
 			 	.not(':button, :submit, :reset, :hidden, select[name=binding]')
 			 	.val('')
@@ -268,6 +269,23 @@ function listNameIDFormats(containerID) {
 		data: dataString,
 		success: function(res) {
 			$("#"+containerID).html(res)
+	    },
+	    error: function (xhr, ajaxOptions, thrownError) {
+			growl('error', xhr.responseText);
+	    }
+	});
+}
+
+function addNameIDFormat(containerID) {
+	$("#working").trigger("fedreg.working");
+	var dataString = $("#newnameidformatdata").serialize();
+	$.ajax({
+		type: "POST",
+		url: nameIDFormatAddEndpoint,
+		data: dataString,
+		success: function(res) {
+			growl('success', res);
+			listNameIDFormats(containerID);
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
 			growl('error', xhr.responseText);
