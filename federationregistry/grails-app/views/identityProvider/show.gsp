@@ -97,7 +97,6 @@
 					<li><a href="#tab-endpoints" class="icon icon_cog"><g:message code="fedreg.label.endpoints" /></a></li>
 					<li><a href="#tab-attributes" class="icon icon_cog"><g:message code="fedreg.label.supportedattributes" /></a></li>
 					<li><a href="#tab-nameidformats" class="icon icon_cog"><g:message code="fedreg.label.supportednameidformats" /></a></li>
-					<li><a href="#tab-ext" class="icon icon_cog"><g:message code="fedreg.label.extensions" /></a></li>
 				</ul>
 				
 				<div id="tab-contacts" class="tabcontent">
@@ -173,9 +172,6 @@
 					</div>
 					<hr>
 					<g:render template="/templates/nameidformats/add" model="[containerID:'nameidformats']"/>
-				</div>
-				<div id="tab-ext" class="tabcontent">
-					${identityProvider.extensions?.encodeAsHTML()}
 				</div>
 			</div>
 			
