@@ -7,15 +7,6 @@
 			<td colspan="3"><h4><g:message code="fedreg.label.endpoint"/> ${i+1}</h4></td>
 		</tr>
 		<tr>
-			<th><g:message code="fedreg.label.binding" /></th>
-			<td>${ep.binding.uri.encodeAsHTML()}</td>
-			<td>
-			<g:if test="${allowremove}">
-					<n:confirmaction action="fedreg.endpoint_delete(${ep.id}, '${endpointType}', '${containerID}' );" title="${message(code: 'fedreg.template.endpoints.remove.confirm.title')}" msg="${message(code: 'fedreg.template.endpoints.remove.confirm.descriptive')}" accept="${message(code: 'nimble.link.accept')}" cancel="${message(code: 'nimble.link.cancel')}" class="button icon icon_delete"><g:message code="fedreg.link.delete" /></n:confirmaction>
-			</g:if>
-			</td>
-		</tr>
-		<tr>
 			<th><g:message code="fedreg.label.status" /></th>
 			<td>
 			<g:if test="${ep.active}">
@@ -31,11 +22,22 @@
 		</tr>
 		<tr>
 			<th><g:message code="fedreg.label.location" /></th>
-			<td colspan="2">${ep.location.uri.encodeAsHTML()}</td>
+			<td>${ep.location.uri.encodeAsHTML()}</td>
+			<td>
+				<g:if test="${allowremove}">
+						<n:confirmaction action="fedreg.endpoint_delete(${ep.id}, '${endpointType}', '${containerID}' );" title="${message(code: 'fedreg.template.endpoints.remove.confirm.title')}" msg="${message(code: 'fedreg.template.endpoints.remove.confirm.descriptive')}" accept="${message(code: 'nimble.link.accept')}" cancel="${message(code: 'nimble.link.cancel')}" class="button icon icon_bin"><g:message code="fedreg.link.delete" /></n:confirmaction>
+				</g:if>
+			</td>
 		</tr>
+		<g:if test="${resloc}">
 		<tr>
 			<th><g:message code="fedreg.label.responselocation" /></th>
 			<td colspan="2">${(ep.responseLocation?.uri ?:ep.location.uri).encodeAsHTML()}</td>
+		</tr>
+		</g:if>
+		<tr>
+			<th><g:message code="fedreg.label.binding" /></th>
+			<td colspan="2">${ep.binding.uri.encodeAsHTML()}</td>
 		</tr>
 	</g:each>
 	</tbody>

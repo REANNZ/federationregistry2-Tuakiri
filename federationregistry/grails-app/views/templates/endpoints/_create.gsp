@@ -38,12 +38,14 @@
 					<input name="location" type="text" class="easyinput" size="60"/>
 				</td>
 			</tr>
+			<g:if test="${resloc}">
 			<tr>
 				<th><g:message code="fedreg.label.responselocation"/><th>
 				<td>
 					<input name="responselocation" type="text" class="easyinput" size="60"/>
 				</td>
 			</tr>
+			</g:if>
 			<tr>
 				<th><g:message code="fedreg.label.active"/><th>
 				<td>
