@@ -6,10 +6,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
     <title><g:message code="fedreg.title" /> | <g:layoutTitle /></title>
     
-	<nh:jquery/>
-    <nh:basecss/>
+	<nh:nimblecore/>
     <nh:nimbleui/>
-    <nh:admin/>
   
     <nh:growl/>
     <script type="text/javascript">
@@ -71,7 +69,6 @@
   </div>
 
 <n:sessionterminated/>
-<n:confirm/>
 
 </body>
 

@@ -8,7 +8,6 @@
     
 	<nh:nimblecore/>
     <nh:nimbleui/>
-    <nh:admin/>
   
     <nh:growl/>
     <script type="text/javascript">
@@ -102,7 +101,6 @@
   </div>
 
 <n:sessionterminated/>
-<n:confirm/>
 
 </body>
 

@@ -37,6 +37,7 @@ class IDPSSODescriptor extends SSODescriptor  {
 	]
 
  	static constraints = {
+		collaborator(nullable: true)
 		singleSignOnServices(minSize: 1)
 		nameIDMappingServices(nullable: true)
 		assertionIDRequestServices(nullable: true)

@@ -13,7 +13,7 @@
 		<tr>
 	    	<th><g:message code="fedreg.label.organization" /></th>
 			<td>
-				<g:link controller="organization" action="show" id="${user?.entityDescriptor?.organization?.id}">${user?.entityDescriptor?.organization?.displayName.encodeAsHTML()}</g:link>
+				<g:link controller="organization" action="show" id="${user?.entityDescriptor?.organization?.id}">${user?.entityDescriptor?.organization?.displayName?.encodeAsHTML()}</g:link>
 			</td>
 		</tr>
 	</tbody>

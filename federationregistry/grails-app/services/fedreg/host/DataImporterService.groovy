@@ -34,8 +34,8 @@ class DataImporterService implements InitializingBean {
 		
 		if(request)
 		{
-			//def dataLoadRecord = new DataLoadRecord(invoker:authenticatedUser?:null, remoteAddr: request.getRemoteAddr(), remoteHost: request.getRemoteHost(), userAgent:request.getHeader("User-Agent"))
-			//dataLoadRecord.save()
+			def dataLoadRecord = new DataLoadRecord(invoker:authenticatedUser?:null, remoteAddr: request.getRemoteAddr(), remoteHost: request.getRemoteHost(), userAgent:request.getHeader("User-Agent"))
+			dataLoadRecord.save()
 		}
 	}
 	

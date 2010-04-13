@@ -25,7 +25,7 @@ function verifyNewCertificateData() {
 			$("#newcertificatedetails").html(res);
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
-			growl('error', xhr.responseText);
+			nimble.growl('error', xhr.responseText);
 	    }
 	});
 }
@@ -42,11 +42,11 @@ function createNewCertificate() {
 			$("#newcertificatedetails").html('');
 			$("#newcertificate").hide('slide');
 			$("#addcertificate").show('slide');
-			growl('success', res);
+			nimble.growl('success', res);
 			listCertificates();
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
-			growl('error', xhr.responseText);
+			nimble.growl('error', xhr.responseText);
 	    }
 	});
 }
@@ -59,11 +59,11 @@ function removeKeyDescriptor(id) {
 		url: certificateDeleteEndpoint,
 		data: dataString,
 		success: function(res) {
-			growl('success', res);
+			nimble.growl('success', res);
 			listCertificates();
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
-			growl('error', xhr.responseText);
+			nimble.growl('error', xhr.responseText);
 	    }
 	});
 }
@@ -76,7 +76,7 @@ function listCertificates() {
 			$("#certificates").html(res)
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
-			growl('error', xhr.responseText);
+			nimble.growl('error', xhr.responseText);
 	    }
 	});
 }
@@ -110,7 +110,7 @@ function searchContacts(id) {
 			$("#availablecontacts").show('slide');
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
-			growl('error', xhr.responseText);
+			nimble.growl('error', xhr.responseText);
 	    }
 	});
 }
@@ -128,15 +128,15 @@ function linkContact(contactType) {
 	var dataString = "contactID=" + activeContact + "&contactType=" + $('#contactselectedtype').val()
 	$.ajax({
 		type: "POST",
-		url: linkContactEndpoint,
+		url: contactCreateEndpoint,
 		data: dataString,
 		success: function(res) {
 			reloadContacts();
 			$("#contactconfirmationdialog").dialog('close');
-			growl('success', res);
+			nimble.growl('success', res);
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
-			growl('error', xhr.responseText);
+			nimble.growl('error', xhr.responseText);
 	    }
 	});
 }
@@ -146,14 +146,14 @@ function unlinkContact(contactID) {
 	var dataString = "id=" + contactID;
 	$.ajax({
 		type: "POST",
-		url: unlinkContactEndpoint,
+		url: contactDeleteEndpoint,
 		data: dataString,
 		success: function(res) {
 			reloadContacts();
-			growl('success', res);
+			nimble.growl('success', res);
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
-			growl('error', xhr.responseText);
+			nimble.growl('error', xhr.responseText);
 	    }
 	});
 }
@@ -161,12 +161,12 @@ function unlinkContact(contactID) {
 function reloadContacts() {
 	$.ajax({
 		type: "GET",
-		url: listContactsEndpoint,
+		url: contactListEndpoint,
 		success: function(res) {
 			$("#contacts").html(res);
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
-			growl('error', xhr.responseText);
+			nimble.growl('error', xhr.responseText);
 	    }
 	});
 }
@@ -182,11 +182,11 @@ function removeEndpoint(id, endpointType, containerID) {
 		url: endpointDeleteEndpoint,
 		data: dataString,
 		success: function(res) {
-			growl('success', res);
+			nimble.growl('success', res);
 			listEndpoints(endpointType, containerID);
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
-			growl('error', xhr.responseText);
+			nimble.growl('error', xhr.responseText);
 	    }
 	});
 }
@@ -201,7 +201,7 @@ function listEndpoints(endpointType, containerID) {
 			$("#"+containerID).html(res)
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
-			growl('error', xhr.responseText);
+			nimble.growl('error', xhr.responseText);
 	    }
 	});
 }
@@ -214,14 +214,14 @@ function createEndpoint(endpointType, containerID) {
 		url: endpointCreationEndpoint,
 		data: dataString,
 		success: function(res) {
-			growl('success', res);
+			nimble.growl('success', res);
 			$(':input', "#new" + endpointType + "data")
 			 	.not(':button, :submit, :reset, :hidden, select[name=binding]')
 			 	.val('')
 			listEndpoints(endpointType, containerID);
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
-			growl('error', xhr.responseText);
+			nimble.growl('error', xhr.responseText);
 	    }
 	});
 }
@@ -234,11 +234,11 @@ function toggleEndpointState(id, endpointType, containerID) {
 		url: endpointToggleStateEndpoint,
 		data: dataString,
 		success: function(res) {
-			growl('success', res);
+			nimble.growl('success', res);
 			listEndpoints(endpointType, containerID);
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
-			growl('error', xhr.responseText);
+			nimble.growl('error', xhr.responseText);
 	    }
 	});
 }
@@ -252,11 +252,11 @@ function removeNameIDFormat(formatID, containerID) {
 		url: nameIDFormatDeleteEndpoint,
 		data: dataString,
 		success: function(res) {
-			growl('success', res);
+			nimble.growl('success', res);
 			listNameIDFormats(containerID);
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
-			growl('error', xhr.responseText);
+			nimble.growl('error', xhr.responseText);
 	    }
 	});
 }
@@ -271,7 +271,7 @@ function listNameIDFormats(containerID) {
 			$("#"+containerID).html(res)
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
-			growl('error', xhr.responseText);
+			nimble.growl('error', xhr.responseText);
 	    }
 	});
 }
@@ -284,11 +284,61 @@ function addNameIDFormat(containerID) {
 		url: nameIDFormatAddEndpoint,
 		data: dataString,
 		success: function(res) {
-			growl('success', res);
+			nimble.growl('success', res);
 			listNameIDFormats(containerID);
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
-			growl('error', xhr.responseText);
+			nimble.growl('error', xhr.responseText);
+	    }
+	});
+}
+
+// Attributes
+function removeAttribute(attributeID, containerID) {
+	$("#working").trigger("fedreg.working");
+	var dataString = "attributeID=" + attributeID;
+	$.ajax({
+		type: "POST",
+		url: attributeDeleteEndpoint,
+		data: dataString,
+		success: function(res) {
+			nimble.growl('success', res);
+			listAttributes(containerID);
+	    },
+	    error: function (xhr, ajaxOptions, thrownError) {
+			nimble.growl('error', xhr.responseText);
+	    }
+	});
+}
+
+function listAttributes(containerID) {
+	var dataString = "containerID=" + containerID
+	$.ajax({
+		type: "GET",
+		url: attributeListEndpoint,
+		data: dataString,
+		success: function(res) {
+			$("#"+containerID).html(res)
+	    },
+	    error: function (xhr, ajaxOptions, thrownError) {
+			nimble.growl('error', xhr.responseText);
+	    }
+	});
+}
+
+function addAttribute(containerID) {
+	$("#working").trigger("fedreg.working");
+	var dataString = $("#newnameidformatdata").serialize();
+	$.ajax({
+		type: "POST",
+		url: attributeAddEndpoint,
+		data: dataString,
+		success: function(res) {
+			nimble.growl('success', res);
+			listAttributes(containerID);
+	    },
+	    error: function (xhr, ajaxOptions, thrownError) {
+			nimble.growl('error', xhr.responseText);
 	    }
 	});
 }

@@ -8,21 +8,24 @@
 		
 		<script type="text/javascript">
 			var activeContact
-			var linkContactEndpoint = "${createLink(controller:'contacts', action:'linkDescriptorContact', id:identityProvider.id )}";
-			var unlinkContactEndpoint = "${createLink(controller:'contacts', action:'unlinkDescriptorContact' )}";
-			var listContactsEndpoint = "${createLink(controller:'contacts', action:'listDescriptorContacts', id:identityProvider.id ) }";
-			var contactSearchEndpoint = "${createLink(controller:'contacts', action:'searchContacts')}";
-			var certificateListEndpoint = "${createLink(controller:'keyDescriptor', action:'listCertificates', id:identityProvider.id )}";
-			var certificateCreationEndpoint = "${createLink(controller:'keyDescriptor', action:'createCertificate', id:identityProvider.id)}";
-			var certificateDeleteEndpoint = "${createLink(controller:'keyDescriptor', action:'delete')}";
-			var certificateValidationEndpoint = "${createLink(controller:'keyDescriptor', action:'validateCertificate')}";
-			var endpointDeleteEndpoint = "${createLink(controller:'endpoint', action:'delete')}";
-			var endpointListEndpoint = "${createLink(controller:'endpoint', action:'listEndpoints', id:identityProvider.id)}";
-			var endpointCreationEndpoint = "${createLink(controller:'endpoint', action:'createEndpoint', id:identityProvider.id)}";
-			var endpointToggleStateEndpoint = "${createLink(controller:'endpoint', action:'toggleState')}";
-			var nameIDFormatDeleteEndpoint = "${createLink(controller:'nameIDFormat', action:'delete', id:identityProvider.id )}";
-			var nameIDFormatListEndpoint = "${createLink(controller:'nameIDFormat', action:'listNameIDFormats', id:identityProvider.id )}";
-			var nameIDFormatAddEndpoint = "${createLink(controller:'nameIDFormat', action:'addNameIDFormat', id:identityProvider.id )}";
+			var contactCreateEndpoint = "${createLink(controller:'descriptorContact', action:'create', id:identityProvider.id )}";
+			var contactDeleteEndpoint = "${createLink(controller:'descriptorContact', action:'delete' )}";
+			var contactListEndpoint = "${createLink(controller:'descriptorContact', action:'list', id:identityProvider.id ) }";
+			var contactSearchEndpoint = "${createLink(controller:'descriptorContact', action:'search')}";
+			
+			var certificateListEndpoint = "${createLink(controller:'descriptorKeyDescriptor', action:'list', id:identityProvider.id )}";
+			var certificateCreationEndpoint = "${createLink(controller:'descriptorKeyDescriptor', action:'create', id:identityProvider.id)}";
+			var certificateDeleteEndpoint = "${createLink(controller:'descriptorKeyDescriptor', action:'delete')}";
+			var certificateValidationEndpoint = "${createLink(controller:'descriptorKeyDescriptor', action:'validateCertificate')}";
+			
+			var endpointDeleteEndpoint = "${createLink(controller:'descriptorEndpoint', action:'delete')}";
+			var endpointListEndpoint = "${createLink(controller:'descriptorEndpoint', action:'list', id:identityProvider.id)}";
+			var endpointCreationEndpoint = "${createLink(controller:'descriptorEndpoint', action:'create', id:identityProvider.id)}";
+			var endpointToggleStateEndpoint = "${createLink(controller:'descriptorEndpoint', action:'toggle')}";
+			
+			var nameIDFormatDeleteEndpoint = "${createLink(controller:'descriptorNameIDFormat', action:'delete', id:identityProvider.id )}";
+			var nameIDFormatListEndpoint = "${createLink(controller:'descriptorNameIDFormat', action:'list', id:identityProvider.id )}";
+			var nameIDFormatAddEndpoint = "${createLink(controller:'descriptorNameIDFormat', action:'add', id:identityProvider.id )}";
 			
 			$(function() {
 				$("#tabs").tabs();
@@ -146,24 +149,8 @@
 					</div>
 				</div>
 				<div id="tab-attributes" class="tabcontent">
-					<div class="categorydetail">
-						<table class="cleantable">
-							<thead>
-								<tr>
-									<th><g:message code="fedreg.label.attribute" /></th>
-									<th><g:message code="fedreg.label.description" /></th>
-									<th/>
-								</tr>
-							</thead>
-							<tbody>
-							<g:each in="${identityProvider.attributes}" status="i" var="attr">
-								<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-									<td>${attr.friendlyName.encodeAsHTML()}</td>
-									<td> ${attr.description.encodeAsHTML()}</td>
-								</tr>
-							</g:each>
-							</tbody>
-						</table>	
+					<div id="attributes">
+						<g:render template="/templates/attributes/list" model="[attrs:identityProvider.attributes, containerID:'attributes']" />
 					</div>
 				</div>
 				<div id="tab-nameidformats" class="tabcontent">

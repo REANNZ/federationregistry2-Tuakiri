@@ -33,16 +33,20 @@ class UrlMappings {
 		controller = "contacts"
 	}
 	
-	"/membership/keydescriptors/$action?/$id?"{
-		controller = "keyDescriptor"
+	"/membership/backend/contact/$action?/$id?"{
+		controller = "descriptorContact"
 	}
 	
-	"/membership/endpoints/$action?/$id?"{
-		controller = "endpoint"
+	"/membership/backend/keydescriptor/$action?/$id?"{
+		controller = "descriptorKeyDescriptor"
 	}
 	
-	"/membership/nameidformats/$action?/$id?"{
-		controller = "nameIDFormat"
+	"/membership/backend/endpoint/$action?/$id?"{
+		controller = "descriptorEndpoint"
+	}
+	
+	"/membership/backend/nameidformat/$action?/$id?"{
+		controller = "descriptorNameIDFormat"
 	}
 	
 	"/bootstrap" {
