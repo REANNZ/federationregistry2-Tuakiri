@@ -14,7 +14,7 @@
 			<td>${nidf.uri.encodeAsHTML()}</td>
 			<td>${nidf.description?.encodeAsHTML()}</td>
 			<td>
-				<n:confirmaction action="removeNameIDFormat(${nidf.id}, '${containerID}' );" title="${message(code: 'fedreg.template.nameidformats.remove.confirm.title')}" msg="${message(code: 'fedreg.template.nameidformats.remove.confirm.descriptive', args:[nidf.uri.encodeAsHTML()])}" accept="${message(code: 'nimble.link.accept')}" cancel="${message(code: 'nimble.link.cancel')}" class="button icon icon_delete"><g:message code="fedreg.link.remove"/></n:confirmaction>
+				<n:confirmaction action="fedreg.nameIDFormat_remove(${nidf.id}, '${containerID}' );" title="${message(code: 'fedreg.template.nameidformats.remove.confirm.title')}" msg="${message(code: 'fedreg.template.nameidformats.remove.confirm.descriptive', args:[nidf.uri.encodeAsHTML()])}" accept="${message(code: 'nimble.link.accept')}" cancel="${message(code: 'nimble.link.cancel')}" class="button icon icon_delete"><g:message code="fedreg.link.remove"/></n:confirmaction>
 			</td>
 		</tr>
 	</g:each>

@@ -26,7 +26,7 @@
 			</tr>
 		</tbody>
 	</table>
-	<a href="#" onClick="createNewCertificate();" class="button icon icon_add"><g:message code="fedreg.link.add"/></a>
+	<a href="#" onClick="fedreg.keyDescriptor_create();" class="button icon icon_add"><g:message code="fedreg.link.add"/></a>
 	</g:if>
 	<g:else>
 			</tbody>

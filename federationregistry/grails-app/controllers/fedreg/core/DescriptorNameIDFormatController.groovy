@@ -2,10 +2,9 @@ package fedreg.core
 
 class DescriptorNameIDFormatController {
 
-	static allowedMethods = [delete: "POST"]
-							
-	// AJAX Bound
-	def delete = {
+	static allowedMethods = [remove: "POST"]
+	
+	def remove = {
 		if(!params.id) {
 			log.warn "Descriptor ID was not present"
 			render message(code: 'fedreg.controllers.namevalue.missing')

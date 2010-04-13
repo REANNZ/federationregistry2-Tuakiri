@@ -52,7 +52,7 @@
 			</tr>
 		</tbody>
 	</table>
-	<a href="#" onclick="createEndpoint('${endpointType}', '${containerID}');" id="create${endpointType}link" class="button icon icon_add"><g:message code="fedreg.link.add"/></a>&nbsp;
-	<a href="#" id="cancel${endpointType}link" class="button icon icon_cancel"><g:message code="fedreg.link.cancel"/></a>
+	<a href="#" onclick="fedreg.endpoint_create('${endpointType}', '${containerID}');" id="create${endpointType}link" class="button icon icon_add"><g:message code="fedreg.link.add"/></a>&nbsp;
+	<a href="#" id="cancel${endpointType}link" class="button icon icon_cancel"><g:message code="fedreg.link.close"/></a>
 	</form>
 </div>

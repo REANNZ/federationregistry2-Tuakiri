@@ -11,7 +11,7 @@
 			<td>${ep.binding.uri.encodeAsHTML()}</td>
 			<td>
 			<g:if test="${allowremove}">
-					<n:confirmaction action="removeEndpoint(${ep.id}, '${endpointType}', '${containerID}' );" title="${message(code: 'fedreg.template.endpoints.remove.confirm.title')}" msg="${message(code: 'fedreg.template.endpoints.remove.confirm.descriptive')}" accept="${message(code: 'nimble.link.accept')}" cancel="${message(code: 'nimble.link.cancel')}" class="button icon icon_delete"><g:message code="fedreg.link.remove" /></n:confirmaction>
+					<n:confirmaction action="fedreg.endpoint_delete(${ep.id}, '${endpointType}', '${containerID}' );" title="${message(code: 'fedreg.template.endpoints.remove.confirm.title')}" msg="${message(code: 'fedreg.template.endpoints.remove.confirm.descriptive')}" accept="${message(code: 'nimble.link.accept')}" cancel="${message(code: 'nimble.link.cancel')}" class="button icon icon_delete"><g:message code="fedreg.link.delete" /></n:confirmaction>
 			</g:if>
 			</td>
 		</tr>
@@ -26,7 +26,7 @@
 			</g:else>
 			</td>
 			<td>
-				<n:confirmaction action="toggleEndpointState(${ep.id}, '${endpointType}', '${containerID}' );" title="${message(code: 'fedreg.template.endpoints.toggle.confirm.title')}" msg="${message(code: 'fedreg.template.endpoints.toggle.confirm.descriptive')}" accept="${message(code: 'nimble.link.accept')}" cancel="${message(code: 'nimble.link.cancel')}" class="button icon icon_arrow_refresh"><g:message code="fedreg.link.togglestate" /></n:confirmaction>
+				<n:confirmaction action="fedreg.endpoint_toggle(${ep.id}, '${endpointType}', '${containerID}' );" title="${message(code: 'fedreg.template.endpoints.toggle.confirm.title')}" msg="${message(code: 'fedreg.template.endpoints.toggle.confirm.descriptive')}" accept="${message(code: 'nimble.link.accept')}" cancel="${message(code: 'nimble.link.cancel')}" class="button icon icon_arrow_refresh"><g:message code="fedreg.link.togglestate" /></n:confirmaction>
 			</td>
 		</tr>
 		<tr>

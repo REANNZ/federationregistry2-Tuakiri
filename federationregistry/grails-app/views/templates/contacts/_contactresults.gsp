@@ -18,7 +18,7 @@
 					<td>${contact.email?.uri?.encodeAsHTML()}</td>
 					<td>${contact.organization?.displayName?.encodeAsHTML()}</td>
 					<td>
-						<a href="#" onClick="confirmAndChooseContactType('${contact.id}', '${contact.givenName} ${contact.surname}', '${contact.email?.uri}');" class="button icon icon_add"><g:message code="fedreg.link.add" /></a>
+						<a href="#" onClick="fedreg.contact_confirm('${contact.id}', '${contact.givenName} ${contact.surname}', '${contact.email?.uri}');" class="button icon icon_add"><g:message code="fedreg.link.add" /></a>
 					</td>
 				</tr>
 			</g:each>

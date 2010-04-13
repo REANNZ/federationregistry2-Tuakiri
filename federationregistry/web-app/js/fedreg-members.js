@@ -1,20 +1,9 @@
 
-// CERTIFICATES
-function certificateDialogInit() {
-	$("#certificateconfirmationdialog").dialog({
-		bgiframe: true,
-		resizable: false,
-		modal: true,
-		autoOpen: false,
-		width: 400,
-		overlay: {
-			backgroundColor: '#000',
-			opacity: 0.5
-		}
-	});
-}
+window.fedreg = window.fedreg || {};
+var fedreg = window.fedreg;
 
-function verifyNewCertificateData() {
+// Key Descriptor
+fedreg.keyDescriptor_verify = function() {
 	$("#working").trigger("fedreg.working");
 	var dataString = "cert=" + $("#newcertificatedata").val();
 	$.ajax({
@@ -28,9 +17,9 @@ function verifyNewCertificateData() {
 			nimble.growl('error', xhr.responseText);
 	    }
 	});
-}
+};
 
-function createNewCertificate() {
+fedreg.keyDescriptor_create = function() {
 	$("#working").trigger("fedreg.working");
 	var dataString = "cert=" + $("#newcertificatedata").val() + "&certname=" + $("#newcertificatename").val();
 	$.ajax({
@@ -43,32 +32,15 @@ function createNewCertificate() {
 			$("#newcertificate").hide('slide');
 			$("#addcertificate").show('slide');
 			nimble.growl('success', res);
-			listCertificates();
+			fedreg.keyDescriptor_list()
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
 			nimble.growl('error', xhr.responseText);
 	    }
 	});
-}
+};
 
-function removeKeyDescriptor(id) {
-	$("#working").trigger("fedreg.working");
-	var dataString = "id=" + id;
-	$.ajax({
-		type: "POST",
-		url: certificateDeleteEndpoint,
-		data: dataString,
-		success: function(res) {
-			nimble.growl('success', res);
-			listCertificates();
-	    },
-	    error: function (xhr, ajaxOptions, thrownError) {
-			nimble.growl('error', xhr.responseText);
-	    }
-	});
-}
-
-function listCertificates() {
+fedreg.keyDescriptor_list = function() {
 	$.ajax({
 		type: "GET",
 		url: certificateListEndpoint,
@@ -79,10 +51,28 @@ function listCertificates() {
 			nimble.growl('error', xhr.responseText);
 	    }
 	});
-}
+};
 
-// CONTACTS
-function contactDialogInit() {
+fedreg.keyDescriptor_delete = function(id) {
+	$("#working").trigger("fedreg.working");
+	var dataString = "id=" + id;
+	$.ajax({
+		type: "POST",
+		url: certificateDeleteEndpoint,
+		data: dataString,
+		success: function(res) {
+			nimble.growl('success', res);
+			fedreg.keyDescriptor_list()
+	    },
+	    error: function (xhr, ajaxOptions, thrownError) {
+			nimble.growl('error', xhr.responseText);
+	    }
+	});
+};
+
+
+// Contacts
+fedreg.contact_dialogInit = function() {
 	$("#contactconfirmationdialog").dialog({
 		bgiframe: true,
 		resizable: false,
@@ -94,9 +84,9 @@ function contactDialogInit() {
 			opacity: 0.5
 		}
 	});
-}
+};
 
-function searchContacts(id) {
+fedreg.contact_search = function(id) {
 	$("#working").trigger("fedreg.working");
 	$("#availablecontacts").hide('slide').html('');
 	var dataString = "givenName=" + $('#givenName').val() + '&surname=' + $('#surname').val() + '&email=' + $('#email').val()
@@ -113,17 +103,17 @@ function searchContacts(id) {
 			nimble.growl('error', xhr.responseText);
 	    }
 	});
-}
+};
 
-function confirmAndChooseContactType(contactID, name, email) {
+fedreg.contact_confirm = function(contactID, name, email) {
 	activeContact = contactID;
 	$("#contactnameconfirmation").html(name);
 	$("#contactemailconfirmation").html(email)
 	$("#contactconfirmationdialog").dialog( "option", "hide", "drop" );
 	$("#contactconfirmationdialog").dialog('open');
-}
+};
 
-function linkContact(contactType) {
+fedreg.contact_create = function(contactType) {
 	$("#working").trigger("fedreg.working");
 	var dataString = "contactID=" + activeContact + "&contactType=" + $('#contactselectedtype').val()
 	$.ajax({
@@ -131,7 +121,7 @@ function linkContact(contactType) {
 		url: contactCreateEndpoint,
 		data: dataString,
 		success: function(res) {
-			reloadContacts();
+			fedreg.contact_list();
 			$("#contactconfirmationdialog").dialog('close');
 			nimble.growl('success', res);
 	    },
@@ -139,9 +129,9 @@ function linkContact(contactType) {
 			nimble.growl('error', xhr.responseText);
 	    }
 	});
-}
+};
 
-function unlinkContact(contactID) {
+fedreg.contact_delete = function(contactID) {
 	$("#working").trigger("fedreg.working");
 	var dataString = "id=" + contactID;
 	$.ajax({
@@ -149,16 +139,16 @@ function unlinkContact(contactID) {
 		url: contactDeleteEndpoint,
 		data: dataString,
 		success: function(res) {
-			reloadContacts();
+			fedreg.contact_list();
 			nimble.growl('success', res);
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
 			nimble.growl('error', xhr.responseText);
 	    }
 	});
-}
+};
 
-function reloadContacts() {
+fedreg.contact_list = function() {
 	$.ajax({
 		type: "GET",
 		url: contactListEndpoint,
@@ -169,12 +159,11 @@ function reloadContacts() {
 			nimble.growl('error', xhr.responseText);
 	    }
 	});
-}
+};
 
 
-// ENDPOINTS
-
-function removeEndpoint(id, endpointType, containerID) {
+// Endpoint
+fedreg.endpoint_delete = function(id, endpointType, containerID) {
 	$("#working").trigger("fedreg.working");
 	var dataString = "id=" + id;
 	$.ajax({
@@ -183,15 +172,15 @@ function removeEndpoint(id, endpointType, containerID) {
 		data: dataString,
 		success: function(res) {
 			nimble.growl('success', res);
-			listEndpoints(endpointType, containerID);
+			fedreg.endpoint_list(endpointType, containerID);
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
 			nimble.growl('error', xhr.responseText);
 	    }
 	});
-}
+};
 
-function listEndpoints(endpointType, containerID) {
+fedreg.endpoint_list = function(endpointType, containerID) {
 	var dataString = "endpointType=" + endpointType + "&containerID=" + containerID;
 	$.ajax({
 		type: "GET",
@@ -204,9 +193,9 @@ function listEndpoints(endpointType, containerID) {
 			nimble.growl('error', xhr.responseText);
 	    }
 	});
-}
+};
 
-function createEndpoint(endpointType, containerID) {
+fedreg.endpoint_create = function(endpointType, containerID) {
 	$("#working").trigger("fedreg.working");
 	var dataString = "endpointType=" + endpointType + "&" + $("#new" + endpointType + "data").serialize();
 	$.ajax({
@@ -218,15 +207,15 @@ function createEndpoint(endpointType, containerID) {
 			$(':input', "#new" + endpointType + "data")
 			 	.not(':button, :submit, :reset, :hidden, select[name=binding]')
 			 	.val('')
-			listEndpoints(endpointType, containerID);
+			fedreg.endpoint_list(endpointType, containerID);
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
 			nimble.growl('error', xhr.responseText);
 	    }
 	});
-}
+};
 
-function toggleEndpointState(id, endpointType, containerID) {
+fedreg.endpoint_toggle = function(id, endpointType, containerID) {
 	$("#working").trigger("fedreg.working");
 	var dataString = "id=" + id;
 	$.ajax({
@@ -235,33 +224,33 @@ function toggleEndpointState(id, endpointType, containerID) {
 		data: dataString,
 		success: function(res) {
 			nimble.growl('success', res);
-			listEndpoints(endpointType, containerID);
+			fedreg.endpoint_list(endpointType, containerID);
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
 			nimble.growl('error', xhr.responseText);
 	    }
 	});
-}
+};
 
-// NAME ID Formats
-function removeNameIDFormat(formatID, containerID) {
+// Name ID Formats
+fedreg.nameIDFormat_remove = function(formatID, containerID) {
 	$("#working").trigger("fedreg.working");
 	var dataString = "formatID=" + formatID;
 	$.ajax({
 		type: "POST",
-		url: nameIDFormatDeleteEndpoint,
+		url: nameIDFormatRemoveEndpoint,
 		data: dataString,
 		success: function(res) {
 			nimble.growl('success', res);
-			listNameIDFormats(containerID);
+			fedreg.nameIDFormat_list(containerID);
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
 			nimble.growl('error', xhr.responseText);
 	    }
 	});
-}
+};
 
-function listNameIDFormats(containerID) {
+fedreg.nameIDFormat_list = function(containerID) {
 	var dataString = "containerID=" + containerID
 	$.ajax({
 		type: "GET",
@@ -274,9 +263,9 @@ function listNameIDFormats(containerID) {
 			nimble.growl('error', xhr.responseText);
 	    }
 	});
-}
+};
 
-function addNameIDFormat(containerID) {
+fedreg.nameIDFormat_add = function(containerID) {
 	$("#working").trigger("fedreg.working");
 	var dataString = $("#newnameidformatdata").serialize();
 	$.ajax({
@@ -285,33 +274,33 @@ function addNameIDFormat(containerID) {
 		data: dataString,
 		success: function(res) {
 			nimble.growl('success', res);
-			listNameIDFormats(containerID);
+			fedreg.nameIDFormat_list(containerID);
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
 			nimble.growl('error', xhr.responseText);
 	    }
 	});
-}
+};
 
 // Attributes
-function removeAttribute(attributeID, containerID) {
+fedreg.attribute_remove = function(attributeID, containerID) {
 	$("#working").trigger("fedreg.working");
 	var dataString = "attributeID=" + attributeID;
 	$.ajax({
 		type: "POST",
-		url: attributeDeleteEndpoint,
+		url: attributeRemoveEndpoint,
 		data: dataString,
 		success: function(res) {
 			nimble.growl('success', res);
-			listAttributes(containerID);
+			fedreg.attribute_list(containerID);
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
 			nimble.growl('error', xhr.responseText);
 	    }
 	});
-}
+};
 
-function listAttributes(containerID) {
+fedreg.attribute_list = function(containerID) {
 	var dataString = "containerID=" + containerID
 	$.ajax({
 		type: "GET",
@@ -324,9 +313,9 @@ function listAttributes(containerID) {
 			nimble.growl('error', xhr.responseText);
 	    }
 	});
-}
+};
 
-function addAttribute(containerID) {
+fedreg.attribute_add = function(containerID) {
 	$("#working").trigger("fedreg.working");
 	var dataString = $("#newnameidformatdata").serialize();
 	$.ajax({
@@ -335,10 +324,10 @@ function addAttribute(containerID) {
 		data: dataString,
 		success: function(res) {
 			nimble.growl('success', res);
-			listAttributes(containerID);
+			fedreg.attribute_list(containerID);
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
 			nimble.growl('error', xhr.responseText);
 	    }
 	});
-}
+};

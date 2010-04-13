@@ -35,7 +35,7 @@
 			</tr>
 		</tbody>
 	</table>
-	<a href="#" onclick="addNameIDFormat('${containerID}');" id="createnameidformatlink" class="button icon icon_add"><g:message code="fedreg.link.add"/></a>&nbsp;
-	<a href="#" id="cancelnameidformatlink" class="button icon icon_cancel"><g:message code="fedreg.link.cancel"/></a>
+	<a href="#" onclick="fedreg.nameIDFormat_add('${containerID}');" id="createnameidformatlink" class="button icon icon_add"><g:message code="fedreg.link.add"/></a>&nbsp;
+	<a href="#" id="cancelnameidformatlink" class="button icon icon_cancel"><g:message code="fedreg.link.close"/></a>
 	</form>
 </div>
