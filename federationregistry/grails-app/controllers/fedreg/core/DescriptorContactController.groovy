@@ -23,7 +23,7 @@ class DescriptorContactController {
 				}
 			}
 		}
-		render(template:"/templates/contacts/contactresults", model:[contacts:contacts])
+		render(template:"/templates/contacts/results", model:[contacts:contacts])
 	}
 	
 	def create = {
@@ -110,6 +110,6 @@ class DescriptorContactController {
 			return
 		}
 		
-		render(template:"/templates/contacts/contactlist", model:[descriptor:descriptor, allowremove:params.allowremove?:true])
+		render(template:"/templates/contacts/list", model:[descriptor:descriptor, allowremove:params.allowremove?:true])
 	}
 }

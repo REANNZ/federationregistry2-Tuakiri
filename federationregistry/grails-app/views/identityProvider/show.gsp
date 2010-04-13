@@ -104,17 +104,17 @@
 				
 				<div id="tab-contacts" class="tabcontent">
 					<div id="contacts">
-						<g:render template="/templates/contacts/contactlist" model="[descriptor:identityProvider, allowremove:true]" />
+						<g:render template="/templates/contacts/list" model="[descriptor:identityProvider, allowremove:true]" />
 					</div>
 					<hr>
-					<g:render template="/templates/contacts/contactadd" model="[descriptor:identityProvider, contactTypes:contactTypes]"/>
+					<g:render template="/templates/contacts/create" model="[descriptor:identityProvider, contactTypes:contactTypes]"/>
 				</div>
 				<div id="tab-crypto" class="tabcontent">
 					<div id="certificates">
-						<g:render template="/templates/certificates/certificatelist" model="[descriptor:identityProvider, allowremove:true]" />
+						<g:render template="/templates/certificates/list" model="[descriptor:identityProvider, allowremove:true]" />
 					</div>
 					<hr>
-					<g:render template="/templates/certificates/certificateadd" model="[descriptor:identityProvider]"/>
+					<g:render template="/templates/certificates/create" model="[descriptor:identityProvider]"/>
 				</div>
 				<div id="tab-endpoints" class="tabcontent">
 					<div id="tabs2">
@@ -126,25 +126,25 @@
 						
 						<div id="tab-sso" class="componentlist">
 							<div id="ssoendpoints">
-								<g:render template="/templates/endpoints/endpointlist" model="[endpoints:identityProvider.singleSignOnServices, allowremove:true, endpointType:'singleSignOnServices', containerID:'ssoendpoints']" />
+								<g:render template="/templates/endpoints/list" model="[endpoints:identityProvider.singleSignOnServices, allowremove:true, endpointType:'singleSignOnServices', containerID:'ssoendpoints']" />
 							</div>
 							<hr>
-							<g:render template="/templates/endpoints/endpointadd" model="[endpointType:'singleSignOnServices', containerID:'ssoendpoints']" />
+							<g:render template="/templates/endpoints/create" model="[endpointType:'singleSignOnServices', containerID:'ssoendpoints']" />
 							
 						</div>
 						<div id="tab-ars" class="componentlist">
 							<div id="artifactendpoints">
-								<g:render template="/templates/endpoints/endpointlist" model="[endpoints:identityProvider.artifactResolutionServices, allowremove:true, endpointType:'artifactResolutionServices', containerID:'artifactendpoints']" />
+								<g:render template="/templates/endpoints/list" model="[endpoints:identityProvider.artifactResolutionServices, allowremove:true, endpointType:'artifactResolutionServices', containerID:'artifactendpoints']" />
 							</div>
 							<hr>
-							<g:render template="/templates/endpoints/endpointadd" model="[endpointType:'artifactResolutionServices', containerID:'artifactendpoints']" />
+							<g:render template="/templates/endpoints/create" model="[endpointType:'artifactResolutionServices', containerID:'artifactendpoints']" />
 						</div>
 						<div id="tab-slo" class="componentlist">
 							<div id="singlelogoutendpoints">
-								<g:render template="/templates/endpoints/endpointlist" model="[endpoints:identityProvider.singleLogoutServices, allowremove:true, endpointType:'singleLogoutServices', containerID:'singlelogoutendpoints']" />
+								<g:render template="/templates/endpoints/list" model="[endpoints:identityProvider.singleLogoutServices, allowremove:true, endpointType:'singleLogoutServices', containerID:'singlelogoutendpoints']" />
 							</div>
 							<hr>
-							<g:render template="/templates/endpoints/endpointadd" model="[endpointType:'singleLogoutServices', containerID:'singlelogoutendpoints']" />
+							<g:render template="/templates/endpoints/create" model="[endpointType:'singleLogoutServices', containerID:'singlelogoutendpoints']" />
 						</div>
 					</div>
 				</div>

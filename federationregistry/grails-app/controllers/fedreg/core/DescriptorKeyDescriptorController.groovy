@@ -6,7 +6,6 @@ class DescriptorKeyDescriptorController {
 	
 	def cryptoService
 	
-	// AJAX Bound
 	def delete = {
 		if(!params.id) {
 			log.warn "KeyDescriptor ID was not present"
@@ -44,7 +43,7 @@ class DescriptorKeyDescriptorController {
 			return
 		}
 		
-		render (template:"/templates/certificates/certificatelist", model:[descriptor:descriptor, allowremove:true])
+		render (template:"/templates/certificates/list", model:[descriptor:descriptor, allowremove:true])
 	}
 	
 	def validateCertificate = {
@@ -83,12 +82,12 @@ class DescriptorKeyDescriptorController {
 			}
 		}	
 		
-		render (template:"/templates/certificates/certificatevalidation", model:[corrupt: false, subject:subject, issuer:issuer, expires:expires, valid:valid, certerrors:certerrors])
+		render (template:"/templates/certificates/validation", model:[corrupt: false, subject:subject, issuer:issuer, expires:expires, valid:valid, certerrors:certerrors])
 		}
 		catch(Exception e) {
 			log.warn "Certificate data is invalid"
 			e.printStackTrace()
-			render (template:"/templates/certificates/certificatevalidation", model:[corrupt:true])
+			render (template:"/templates/certificates/validation", model:[corrupt:true])
 			return
 		}
 	}

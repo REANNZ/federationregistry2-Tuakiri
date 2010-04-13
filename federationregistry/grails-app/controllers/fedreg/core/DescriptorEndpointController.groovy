@@ -5,14 +5,12 @@ import static org.apache.commons.lang.StringUtils.*
 class DescriptorEndpointController {
 
 	static allowedMethods = [delete: "POST", listEndpoints:"GET"]
-	
-	def cryptoService
-	
 	// Maps allowed endpoints to internal class representation
 	def allowedEndpoints = [singleSignOnServices:"fedreg.core.SingleSignOnService", artifactResolutionServices:"fedreg.core.ArtifactResolutionService", 
 							singleLogoutServices:"fedreg.core.SingleLogoutService"]
-							
-	// AJAX Bound
+
+	def cryptoService
+
 	def delete = {
 		if(!params.id) {
 			log.warn "Endpoint ID was not present"
@@ -67,7 +65,7 @@ class DescriptorEndpointController {
 		def endpoint = params.endpointType
 		if(allowedEndpoints.containsKey(endpoint) && descriptor.hasProperty(endpoint)) {
 			log.debug "Listing endpoints for descriptor ID ${params.id} of type ${endpoint}"
-			render (template:"/templates/endpoints/endpointlist", model:[endpoints:descriptor."${endpoint}", allowremove:true, endpointType:endpoint, containerID:params.containerID])
+			render (template:"/templates/endpoints/list", model:[endpoints:descriptor."${endpoint}", allowremove:true, endpointType:endpoint, containerID:params.containerID])
 		}
 		else {
 			log.warn "Endpoint ${endpoint} is invalid for Descriptor with id ${params.id}"
