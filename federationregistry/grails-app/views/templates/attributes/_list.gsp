@@ -9,13 +9,13 @@
 		</tr>
 	</thead>
 	<tbody>
-	<g:each in="${attrs}" status="i" var="attr">
+	<g:each in="${attrs.sort{it.friendlyName}}" status="i" var="attr">
 		<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 			<td>${attr.friendlyName.encodeAsHTML()}</td>
 			<td>${attr.oid.encodeAsHTML()}</td>
 			<td> ${attr.description.encodeAsHTML()}</td>
 			<td>
-				<n:confirmaction action="removeAttribute(${attr.id}, '${containerID}' );" title="${message(code: 'fedreg.template.attributes.remove.confirm.title')}" msg="${message(code: 'fedreg.template.attributes.remove.confirm.descriptive', args:[attr.friendlyName.encodeAsHTML()])}" accept="${message(code: 'nimble.link.accept')}" cancel="${message(code: 'nimble.link.cancel')}" class="button icon icon_delete"><g:message code="fedreg.link.remove"/></n:confirmaction>
+				<n:confirmaction action="fedreg.attribute_remove(${attr.id}, '${containerID}' );" title="${message(code: 'fedreg.template.attributes.remove.confirm.title')}" msg="${message(code: 'fedreg.template.attributes.remove.confirm.descriptive', args:[attr.friendlyName.encodeAsHTML()])}" accept="${message(code: 'nimble.link.accept')}" cancel="${message(code: 'nimble.link.cancel')}" class="button icon icon_delete"><g:message code="fedreg.link.remove"/></n:confirmaction>
 			</td>
 		</tr>
 	</g:each>

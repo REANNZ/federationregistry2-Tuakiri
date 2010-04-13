@@ -317,7 +317,7 @@ fedreg.attribute_list = function(containerID) {
 
 fedreg.attribute_add = function(containerID) {
 	$("#working").trigger("fedreg.working");
-	var dataString = $("#newnameidformatdata").serialize();
+	var dataString = $("#newattributedata").serialize();
 	$.ajax({
 		type: "POST",
 		url: attributeAddEndpoint,

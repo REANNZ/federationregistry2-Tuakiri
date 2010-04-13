@@ -23,7 +23,7 @@ class DescriptorContactController {
 				}
 			}
 		}
-		render(template:"/templates/contacts/results", model:[contacts:contacts])
+		render(template:"/templates/contacts/results", model:[contacts:contacts]) 
 	}
 	
 	def create = {

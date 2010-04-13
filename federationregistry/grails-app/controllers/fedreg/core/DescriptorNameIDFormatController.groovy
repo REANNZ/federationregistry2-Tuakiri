@@ -35,6 +35,13 @@ class DescriptorNameIDFormatController {
 			return
 		}
 		
+		if(!descriptor.nameIDFormats.contains(nameIDFormat)) {
+			log.warn "NameIDFormat identified by id $params.formatID was already supported by descriptor ${params.id}"
+			response.setStatus(500)
+			render message(code: 'fedreg.nameidformat.remove.notsupported', args:[nameIDFormat.uri])
+			return
+		}
+		
 		log.info "Removing nameIDFormat (${params.formatID})${nameIDFormat.uri} from descriptor ${params.id}"
 		descriptor.removeFromNameIDFormats(nameIDFormat)
 		descriptor.save()
@@ -43,11 +50,11 @@ class DescriptorNameIDFormatController {
 			descriptor.errors.each {
 				log.debug it
 			}
-			render message(code: 'fedreg.nameidformat.delete.failed')
+			render message(code: 'fedreg.nameidformat.remove.failed', args:[nameIDFormat.uri])
 			response.setStatus(500)
 			return
 		}else {
-			render message(code: 'fedreg.nameidformat.delete.success')
+			render message(code: 'fedreg.nameidformat.remove.success', args:[nameIDFormat.uri])
 		}
 	}
 	
@@ -111,7 +118,7 @@ class DescriptorNameIDFormatController {
 		if(descriptor.nameIDFormats.contains(nameIDFormat)) {
 			log.warn "NameIDFormat identified by id $params.formatID was already supported by descriptor ${params.id}"
 			response.setStatus(500)
-			render message(code: 'fedreg.nameidformat.add.alreadysupported')
+			render message(code: 'fedreg.nameidformat.add.alreadysupported', args:[nameIDFormat.uri])
 			return
 		}
 		
@@ -122,11 +129,11 @@ class DescriptorNameIDFormatController {
 			descriptor.errors.each {
 				log.debug it
 			}
-			render message(code: 'fedreg.nameidformat.add.failed')
+			render message(code: 'fedreg.nameidformat.add.failed', args:[nameIDFormat.uri])
 			response.setStatus(500)
 			return
 		}else {
-			render message(code: 'fedreg.nameidformat.add.success')
+			render message(code: 'fedreg.nameidformat.add.success', args:[nameIDFormat.uri])
 		}
 	}
 

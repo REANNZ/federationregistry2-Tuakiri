@@ -24,7 +24,6 @@
 <div id="newnameidformat"  class="searcharea">
 	<h3><g:message code="fedreg.template.nameidformats.add.heading"/></h3>
 	<form id="newnameidformatdata">
-	<g:hiddenField name="containerID" value="myValue" />
 	<table>
 		<tbody>
 			<tr>

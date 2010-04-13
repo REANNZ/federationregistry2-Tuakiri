@@ -27,6 +27,10 @@
 			var nameIDFormatListEndpoint = "${createLink(controller:'descriptorNameIDFormat', action:'list', id:identityProvider.id )}";
 			var nameIDFormatAddEndpoint = "${createLink(controller:'descriptorNameIDFormat', action:'add', id:identityProvider.id )}";
 			
+			var attributeRemoveEndpoint = "${createLink(controller:'descriptorAttribute', action:'remove', id:identityProvider.id )}";
+			var attributeListEndpoint = "${createLink(controller:'descriptorAttribute', action:'list', id:identityProvider.id )}";
+			var attributeAddEndpoint = "${createLink(controller:'descriptorAttribute', action:'add', id:identityProvider.id )}";
+			
 			$(function() {
 				$("#tabs").tabs();
 				$("#tabs2").tabs();
@@ -103,6 +107,7 @@
 				</ul>
 				
 				<div id="tab-contacts" class="tabcontent">
+					<h3><g:message code="fedreg.label.contacts" /></h3>
 					<div id="contacts">
 						<g:render template="/templates/contacts/list" model="[descriptor:identityProvider, allowremove:true]" />
 					</div>
@@ -110,6 +115,7 @@
 					<g:render template="/templates/contacts/create" model="[descriptor:identityProvider, contactTypes:contactTypes]"/>
 				</div>
 				<div id="tab-crypto" class="tabcontent">
+					<h3><g:message code="fedreg.label.publishedcertificates" /></h3>
 					<div id="certificates">
 						<g:render template="/templates/certificates/list" model="[descriptor:identityProvider, allowremove:true]" />
 					</div>
@@ -117,6 +123,7 @@
 					<g:render template="/templates/certificates/create" model="[descriptor:identityProvider]"/>
 				</div>
 				<div id="tab-endpoints" class="tabcontent">
+					<h3><g:message code="fedreg.label.supportedendpoints" /></h3>
 					<div id="tabs2">
 						<ul>
 							<li><a href="#tab-sso" class="icon icon_cog"><g:message code="fedreg.label.ssoservices" /></a></li>
@@ -149,11 +156,15 @@
 					</div>
 				</div>
 				<div id="tab-attributes" class="tabcontent">
+					<h3><g:message code="fedreg.label.supportedattributes" /></h3>
 					<div id="attributes">
 						<g:render template="/templates/attributes/list" model="[attrs:identityProvider.attributes, containerID:'attributes']" />
 					</div>
+					<hr>
+					<g:render template="/templates/attributes/add" model="[type:'idp', containerID:'attributes']"/>
 				</div>
 				<div id="tab-nameidformats" class="tabcontent">
+					<h3><g:message code="fedreg.label.supportednameidformats" /></h3>
 					<div id="nameidformats">
 						<g:render template="/templates/nameidformats/list" model="[nameIDFormats:identityProvider.nameIDFormats, containerID:'nameidformats']" />
 					</div>

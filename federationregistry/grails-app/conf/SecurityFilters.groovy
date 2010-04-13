@@ -27,7 +27,7 @@ public class SecurityFilters extends grails.plugins.nimble.security.NimbleFilter
     def filters = {
 
         // Federation registry content requiring users to be authenticated
-        secure(controller: "(idpAttributeCompliance|attributeRelease|certifyingAuthorityUsage|organization|identityProvider|contacts|descriptorContacts|desccriptorKeyDescriptor|descriptorEndpoint|descriptorNameIDFormat)") {
+        secure(controller: "(idpAttributeCompliance|attributeRelease|certifyingAuthorityUsage|organization|identityProvider|contacts|descriptorContacts|desccriptorKeyDescriptor|descriptorEndpoint|descriptorNameIDFormat|descriptorAttribute)") {
             before = {
                 accessControl (auth: false) {
 					role(UserService.USER_ROLE)

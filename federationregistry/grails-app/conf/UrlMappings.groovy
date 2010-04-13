@@ -49,6 +49,10 @@ class UrlMappings {
 		controller = "descriptorNameIDFormat"
 	}
 	
+	"/membership/backend/attribute/$action?/$id?"{
+		controller = "descriptorAttribute"
+	} 
+	
 	"/bootstrap" {
 			controller = "dataManagement"
 			action = "bootstrap"
