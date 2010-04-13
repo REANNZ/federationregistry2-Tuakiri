@@ -100,10 +100,10 @@
 			<div id="tabs">
 				<ul>
 					<li><a href="#tab-contacts" class="icon icon_user_comment"><g:message code="fedreg.label.contacts" /></a></li>
-					<li><a href="#tab-crypto" class="icon icon_cog"><g:message code="fedreg.label.crypto" /></a></li>
-					<li><a href="#tab-endpoints" class="icon icon_cog"><g:message code="fedreg.label.endpoints" /></a></li>
-					<li><a href="#tab-attributes" class="icon icon_cog"><g:message code="fedreg.label.supportedattributes" /></a></li>
-					<li><a href="#tab-nameidformats" class="icon icon_cog"><g:message code="fedreg.label.supportednameidformats" /></a></li>
+					<li><a href="#tab-crypto" class="icon icon_lock"><g:message code="fedreg.label.crypto" /></a></li>
+					<li><a href="#tab-endpoints" class="icon icon_link"><g:message code="fedreg.label.endpoints" /></a></li>
+					<li><a href="#tab-attributes" class="icon icon_vcard"><g:message code="fedreg.label.supportedattributes" /></a></li>
+					<li><a href="#tab-nameidformats" class="icon icon_database_key"><g:message code="fedreg.label.supportednameidformats" /></a></li>
 				</ul>
 				
 				<div id="tab-contacts" class="tabcontent">
