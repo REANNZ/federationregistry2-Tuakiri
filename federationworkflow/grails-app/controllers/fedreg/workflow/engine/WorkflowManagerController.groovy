@@ -14,7 +14,7 @@ import java.text.SimpleDateFormat
 import org.hibernate.FetchMode as FM
 
 
-class ProcessManagerController {
+class WorkflowManagerController {
 
 	def processManagerService
 	def messageService

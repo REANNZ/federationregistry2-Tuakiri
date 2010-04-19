@@ -54,14 +54,14 @@ class UrlMappings {
 	} 
 	
 	"/workflow/$action?/$id?"{
-		controller = "processManager"
+		controller = "workflowManager"
 	}
 	
-	"/workflow/instances/$id?" (controller: 'processManager', action: 'processInstances')
-    "/workflow/instances/search/$id?" (controller: 'processManager', action: 'dateSearch')
-    "/workflow/processes/$id?" (controller: 'processManager', action: 'processDefinitions')
-    "/workflow/processes/create/$id?" (controller: 'processManager', action: 'newProcess')
-    "/workflow/processes/definition/$id?" (controller: 'processManager', action: 'processDefinition')
+	"/workflow/instances/$id?" (controller: 'workflowManager', action: 'processInstances')
+    "/workflow/instances/search/$id?" (controller: 'workflowManager', action: 'dateSearch')
+    "/workflow/processes/$id?" (controller: 'workflowManager', action: 'processDefinitions')
+    "/workflow/processes/create/$id?" (controller: 'workflowManager', action: 'newProcess')
+    "/workflow/processes/definition/$id?" (controller: 'workflowManager', action: 'processDefinition')
 	
 	"/bootstrap" {
 			controller = "dataManagement"

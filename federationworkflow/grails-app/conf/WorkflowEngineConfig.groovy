@@ -1,6 +1,6 @@
 workflowEngine {
     layout {
-        application = 'main'
-        administration = 'main'
+        application = 'workflow'
+        administration = 'workflow'
     }
 }
