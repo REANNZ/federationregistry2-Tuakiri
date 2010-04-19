@@ -1,0 +1,30 @@
+<plugin name='workflow-engine' version='0.1' grailsVersion='1.1 &gt; *'>
+  <author>James Rasmussen</author>
+  <authorEmail>j.rasmussen@qut.edu.au</authorEmail>
+  <resources>
+    <resource>BootStrap</resource>
+    <resource>BuildConfig</resource>
+    <resource>DataSource</resource>
+    <resource>WorkflowEngineBootStrap</resource>
+    <resource>WorkflowEngineConfig</resource>
+    <resource>WorkflowEngineSecurityFilters</resource>
+    <resource>WorkflowEngineUrlMappings</resource>
+    <resource>spring.resources</resource>
+    <resource>fedreg.workflow.engine.ProcessManagerController</resource>
+    <resource>fedreg.workflow.engine.ActionResultDefinition</resource>
+    <resource>fedreg.workflow.engine.ProcessDefinition</resource>
+    <resource>fedreg.workflow.engine.ProcessInstance</resource>
+    <resource>fedreg.workflow.engine.ProcessMessage</resource>
+    <resource>fedreg.workflow.engine.TaskDefinition</resource>
+    <resource>fedreg.workflow.engine.TaskInstance</resource>
+    <resource>fedreg.workflow.engine.ProcessManagerService</resource>
+    <resource>fedreg.workflow.engine.CalendarTagLib</resource>
+    <resource>fedreg.workflow.engine.WorkflowEngineTagLib</resource>
+  </resources>
+  <dependencies>
+    <resolvers>
+      <resolver type='grailsPlugins' name='grailsPlugins' />
+    </resolvers>
+  </dependencies>
+  <behavior />
+</plugin>
