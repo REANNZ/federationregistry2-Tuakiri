@@ -53,6 +53,16 @@ class UrlMappings {
 		controller = "descriptorAttribute"
 	} 
 	
+	"/workflow/$action?/$id?"{
+		controller = "processManager"
+	}
+	
+	"/workflow/instances/$id?" (controller: 'processManager', action: 'processInstances')
+    "/workflow/instances/search/$id?" (controller: 'processManager', action: 'dateSearch')
+    "/workflow/processes/$id?" (controller: 'processManager', action: 'processDefinitions')
+    "/workflow/processes/create/$id?" (controller: 'processManager', action: 'newProcess')
+    "/workflow/processes/definition/$id?" (controller: 'processManager', action: 'processDefinition')
+	
 	"/bootstrap" {
 			controller = "dataManagement"
 			action = "bootstrap"
