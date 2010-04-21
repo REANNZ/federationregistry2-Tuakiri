@@ -22,8 +22,8 @@ class ProcessServiceSpec extends IntegrationSpec {
 		
 		then:
 		def process = Process.findByName('Minimal Process')
-		process.tasks.get(0).launch.get('approved').contains('task2')
-		process.tasks.get(1).terminate.get('error').contains('task3')
+		process.tasks.get(0).launch.get('submitted').contains('task2')
+		process.tasks.get(0).launch.get('submitted').contains('task3')
 		process.creator == user
 	}
 }

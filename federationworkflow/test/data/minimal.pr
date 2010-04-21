@@ -6,27 +6,26 @@ process('Minimal Process') {
 	task ('task1') {
 		execute(controller: 'TestController', action: 'approve')
 		on('submitted') {
-			launch ('task4')
-			terminate ('task3')
+			launch (['task2', 'task3'])
 		}
     }
 
 	task ('task2') {
 		execute(service: 'messaging', method: 'send')
-		on('submitted') {
+		on('complete') {
 			launch ('task4')
 		}
-		on('error') {
+		on('smtpfail') {
 			terminate ('task3')
 		}
     }
 
 	task ('task3') {
 		execute(service: 'im', method: 'send')
-		on('submitted') {
+		on('delivered') {
 			launch ('task4')
 		}
-		on('error') {
+		on('brokenpipe') {
 			terminate ('task2')
 		}
     }

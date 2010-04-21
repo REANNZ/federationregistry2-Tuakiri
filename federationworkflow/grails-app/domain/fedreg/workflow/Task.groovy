@@ -15,7 +15,7 @@ class Task {
 
    	static hasMany = [	instances: TaskInstance, 
 						actioners: UserBase, 
-						dependencies: Task
+						dependencies: String
 	]
 	
     static belongsTo = [ process: Process ]

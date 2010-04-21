@@ -29,7 +29,7 @@ class TaskDelegate {
 	}
 
 	void dependencies(String name) {
-		dependencies([name])
+		task.addToDependencies(name)
 	}
 
 	def on(String outcome, Closure closure) {
