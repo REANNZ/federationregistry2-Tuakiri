@@ -13,7 +13,7 @@
 				<div class="numeric">
 					<strong>${supportingIdpInstanceList.size().encodeAsHTML()}<span class="total"> / ${idpInstanceList.size().encodeAsHTML()}</span></strong>
 				</div>
-				<div id="graphic${i}" style="width: 150px; height: 125px;"></div>
+				<div id="graphic${i}" ></div>
 				<script type="text/javascript">
 					line${i} = [['supported',${supportingIdpInstanceList.size()}], ['unsupported',${(idpInstanceList.size() - supportingIdpInstanceList.size())}] ];
 					plot${i} = $.jqplot('graphic${i}', [line${i}], {

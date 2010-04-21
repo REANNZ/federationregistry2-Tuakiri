@@ -1,0 +1,39 @@
+
+process('Minimal Process') {
+
+	description("This is a minimal process definition")
+	
+	task ('task1') {
+		execute(controller: 'TestController', action: 'approve')
+		on('submitted') {
+			launch ('task4')
+			terminate ('task3')
+		}
+    }
+
+	task ('task2') {
+		execute(service: 'messaging', method: 'send')
+		on('submitted') {
+			launch ('task4')
+		}
+		on('error') {
+			terminate ('task3')
+		}
+    }
+
+	task ('task3') {
+		execute(service: 'im', method: 'send')
+		on('submitted') {
+			launch ('task4')
+		}
+		on('error') {
+			terminate ('task2')
+		}
+    }
+
+	task('task4') {
+		dependencies(['task2', 'task3'])
+		finish()
+	}
+	
+}

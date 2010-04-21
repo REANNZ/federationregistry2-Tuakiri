@@ -40,7 +40,7 @@
 					                            <%  if (p.isEnum()) { %>
 					                            <td valign="top" class="value">\${${propertyName}?.${p.name}?.encodeAsHTML()}</td>
 					                            <%  } else if (p.oneToMany || p.manyToMany) { %>
-					                            <td valign="top" style="text-align: left;" class="value">
+					                            <td valign="top"  class="value">
 					                                <ul>
 					                                <g:each in="\${${propertyName}.${p.name}}" var="${p.name[0]}">
 					                                    <li><g:link controller="${p.referencedDomainClass?.propertyName}" action="show" id="\${${p.name[0]}.id}">\${${p.name[0]}?.encodeAsHTML()}</g:link></li>

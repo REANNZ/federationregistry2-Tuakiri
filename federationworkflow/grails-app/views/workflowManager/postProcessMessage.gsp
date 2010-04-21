@@ -45,6 +45,6 @@
     </g:each>
 
     <b>Post Message:</b><br>
-    <g:textArea name="message" style="width:400px; height: 200px;"/><br>
+    <g:textArea name="message" /><br>
     <g:submitButton name="Comment" value="Comment" onclick="postMessage();"/>
 </div>

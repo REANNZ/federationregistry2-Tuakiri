@@ -41,7 +41,7 @@
 						<g:if test="${organization.types}">
 						<tr>
 							<th><g:message code="fedreg.label.secondarytypes" /></th>
-							<td valign="top" style="text-align: left;" class="value">
+							<td valign="top"  class="value">
 								<ul>
 								<g:each in="${organization.types}" var="t">
 									<li>${t?.encodeAsHTML()}</li>

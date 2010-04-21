@@ -17,7 +17,7 @@
 				<div class="numeric">
 					<strong>${currentStatus.supportedCount.encodeAsHTML()}<span class="total"> / ${currentStatus.totalCount.encodeAsHTML()}</span></strong>
 				</div>
-				<div id="graphic${i}" style="width: 150px; height: 125px;"></div>
+				<div id="graphic${i}" ></div>
 				<script type="text/javascript">
 					line${i} = [['supported',${currentStatus.supportedCount}], ['unsupported',${(currentStatus.totalCount - currentStatus.supportedCount)}] ];
 					plot${i} = $.jqplot('graphic${i}', [line${i}], {
