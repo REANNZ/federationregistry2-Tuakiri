@@ -16,10 +16,6 @@ class TaskDelegate {
 		action(map, true)
 	}
 
-	void actioner(String name) {
-		this.actioners([name])
-	}
-
 	void actioners(List roles) {
 		task.actioners = roles
 	}
@@ -39,6 +35,13 @@ class TaskDelegate {
 
 	void finish() {
 		task.finishOnThisTask = true
+	}
+	
+	def approver(Map map, Closure closure) {
+		task.automated = false
+		
+		closure.delegate = new ApprovalDelegate(task, map)
+		closure()
 	}
 
 }

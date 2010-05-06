@@ -4,29 +4,46 @@ process('Minimal Process') {
 	description("This is a minimal process definition")
 	
 	task ('task1') {
-		execute(controller: 'TestController', action: 'approve')
+		approver(role: '{TEST_VAR}', user:'test@testdomain.com') {
+			reject(name: 'rejection1', description:'rejection overview') {
+				start (['task5'])
+			}
+		}
+		execute(controller: 'TestController', action: 'someaction')
 		on('submitted') {
-			launch (['task2', 'task3'])
+			start (['task2', 'task3'])
 		}
     }
 
 	task ('task2') {
+		approver(roles: ['{TEST_VAR2}', '{TEST_VAR3}', 'TEST_ROLE']) {
+			reject(name: 'rejection2', description:'rejection overview') {
+				terminate ('task3')
+				start (['task5'])
+			}
+			reject(name: 'rejection3', description:'rejection overview') {
+				terminate ('task3')
+				start (['task6'])
+			}
+		}
 		execute(service: 'messaging', method: 'send')
 		on('complete') {
-			launch ('task4')
+			start ('task4')
 		}
 		on('smtpfail') {
 			terminate ('task3')
+			start (['task5'])
 		}
     }
 
 	task ('task3') {
 		execute(service: 'im', method: 'send')
 		on('delivered') {
-			launch ('task4')
+			start ('task4')
 		}
 		on('brokenpipe') {
 			terminate ('task2')
+			start (['task5'])
 		}
     }
 
@@ -34,5 +51,14 @@ process('Minimal Process') {
 		dependencies(['task2', 'task3'])
 		finish()
 	}
+	
+	task('task5') {
+		finish()
+	}
+	
+	task ('task6') {
+		execute(service: 'im', method: 'send')
+		finish()
+    }
 	
 }

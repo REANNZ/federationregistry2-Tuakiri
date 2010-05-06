@@ -1,13 +1,20 @@
 package fedreg.workflow
 
-import fedreg.workflow.ProcessInstance
+import grails.plugins.nimble.core.UserBase
 
 class ProcessMessage {
 
-    Date date
-    String postedBy
+	UserBase creator
     String message
+	Date dateCreated
+	
+	TaskInstance references
     
-    static belongsTo = [parentProcess: ProcessInstance]
+    static belongsTo = [processInstance: ProcessInstance]
+
+	static constraints = {
+		references(nullable:true)
+		dateCreated(nullable:true)
+	}
     
 }

@@ -13,8 +13,12 @@ class ProcessDelegate {
 
 		closure.delegate = new TaskDelegate(task)
 		closure()
+		
+		// TODO VALIDATE TASK
+		// 1. Dependencies exist
+		// 2. Hardcoded approver users/roles/groups exist
 
-		this.process.addToTasks(task)
+		process.addToTasks(task)
 	}
 
     void description(String description) {

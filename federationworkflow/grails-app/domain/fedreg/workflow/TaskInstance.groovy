@@ -6,20 +6,20 @@ import grails.plugins.nimble.core.UserBase
 
 class TaskInstance {
 
-	String name
-	TaskStatus status
-	int recordId
-	String assignedTo
+	TaskStatus status = TaskStatus.PENDING
+	UserBase approver
 
-	UserBase actionedBy
-	String result
-	String message
-
-	Date dateCompleted
+	Date dateCreated
 	Date lastUpdated
 
 	static belongsTo = [processInstance: ProcessInstance, task: Task]
-	
+	static constraints = {
+		approver(nullable:true)
+		result(nullable:true)
+		message(nullable:true)
+		dateCreated(nullable:true)
+		lastUpdated(nullable:true)
+	}
 	
 //	static hasMany = [calledBy: TaskInstance]
 /*

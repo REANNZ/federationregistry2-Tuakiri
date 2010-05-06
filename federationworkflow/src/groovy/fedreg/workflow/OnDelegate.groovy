@@ -10,12 +10,12 @@ class OnDelegate {
 		this.outcome = outcome
 	}
 
-    void launch(List tasks) {
-		this.task.launch.put(this.outcome, tasks)
+    void start(List tasks) {
+		this.task.start.put(this.outcome, tasks)
 	}
 	
-	void launch(String task) {
-		this.task.launch.put(this.outcome, [task])
+	void start(String task) {
+		this.task.start.put(this.outcome, [task])
 	}
 	
 	void terminate(List tasks) {
