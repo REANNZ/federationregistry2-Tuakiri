@@ -10,8 +10,7 @@ class Task {
 	boolean automated = true
 	
 	Map execute = [:]
-   	Map start = [:]
-	Map terminate = [:]
+   	Map outcomes = [:]
 	Map rejections = [:]
 	
 	List approverRoles = []
@@ -22,6 +21,7 @@ class Task {
 
    	static hasMany = [	instances: TaskInstance, 
 						rejections: TaskRejection,
+						outcomes: TaskOutcome,
 						dependencies: String,
 						approverRoles: String,
 						approverGroups: String,

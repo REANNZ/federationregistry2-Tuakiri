@@ -31,8 +31,8 @@ class ProcessServiceSpec extends IntegrationSpec {
 		then:
 		def process = Process.findByName('Minimal Process')
 		
-		process.tasks.get(0).start.get('submitted').contains('task2')
-		process.tasks.get(0).start.get('submitted').contains('task3')
+		process.tasks.get(0).outcomes.get('testoutcome1').start.contains('task2')
+		process.tasks.get(0).outcomes.get('testoutcome1').start.contains('task3')
 		process.tasks.get(0).automated == false
 		process.tasks.get(0).approverRoles.size() == 1
 		process.tasks.get(0).approverRoles.contains('{TEST_VAR}')

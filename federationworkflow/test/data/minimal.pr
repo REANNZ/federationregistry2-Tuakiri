@@ -1,7 +1,7 @@
 
 process('Minimal Process') {
 
-	description("This is a minimal process definition")
+	description "This is a minimal process definition"
 	
 	task ('task1') {
 		approver(role: '{TEST_VAR}', user:'test@testdomain.com') {
@@ -10,7 +10,7 @@ process('Minimal Process') {
 			}
 		}
 		execute(controller: 'TestController', action: 'someaction')
-		on('submitted') {
+		outcome(name: 'testoutcome1', description:'testoutcome1 description') {
 			start (['task2', 'task3'])
 		}
     }
@@ -27,10 +27,10 @@ process('Minimal Process') {
 			}
 		}
 		execute(service: 'messaging', method: 'send')
-		on('complete') {
+		outcome(name: 'testoutcome2', description:'testoutcome2 description') {
 			start ('task4')
 		}
-		on('smtpfail') {
+		outcome(name: 'testoutcome3', description:'testoutcome3 description') {
 			terminate ('task3')
 			start (['task5'])
 		}
@@ -38,12 +38,12 @@ process('Minimal Process') {
 
 	task ('task3') {
 		execute(service: 'im', method: 'send')
-		on('delivered') {
-			start ('task4')
-		}
-		on('brokenpipe') {
+		outcome(name: 'testoutcome4', description:'testoutcome4 description') {
 			terminate ('task2')
 			start (['task5'])
+		}
+		outcome(name: 'testoutcome5', description:'testoutcome5 description') {
+			start ('task4')
 		}
     }
 

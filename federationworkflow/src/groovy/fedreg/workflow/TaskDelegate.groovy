@@ -28,9 +28,12 @@ class TaskDelegate {
 		task.addToDependencies(name)
 	}
 
-	def on(String outcome, Closure closure) {
-		closure.delegate = new OnDelegate(task, outcome)
+	def outcome(Map map, Closure closure) {		
+		def taskOutcome = new TaskOutcome(name: map.name, description: map.description, task:task)
+		closure.delegate = new OutcomeDelegate(taskOutcome)
 		closure()
+		
+		task.outcomes.put(map.name, taskOutcome)
 	}
 
 	void finish() {
