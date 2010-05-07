@@ -26,7 +26,7 @@ class TaskServiceSpec extends IntegrationSpec {
 		setup:
 		minimalDefinition = new File('test/data/minimal.pr').getText()
 		processService.create(minimalDefinition)
-		def processInstance = processService.initiate('Minimal Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
+		def processInstance = processService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
 		
 		when:		
 		processService.run(processInstance)

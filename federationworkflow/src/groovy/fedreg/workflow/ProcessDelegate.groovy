@@ -8,8 +8,8 @@ class ProcessDelegate {
 		this.process = process
 	}
 
-    void task(String name, Closure closure) {
-    	def task = new Task(name: name)
+    void task(Map m, Closure closure) {
+    	def task = new Task(name: m.name, description:m.description)
 
 		closure.delegate = new TaskDelegate(task)
 		closure()
@@ -20,8 +20,4 @@ class ProcessDelegate {
 
 		process.addToTasks(task)
 	}
-
-    void description(String description) {
-    	process.description = description
-    }
 }

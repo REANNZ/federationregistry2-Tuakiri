@@ -29,17 +29,16 @@ class ProcessServiceSpec extends IntegrationSpec {
 		processService.create(minimalDefinition)
 		
 		then:
-		def process = Process.findByName('Minimal Process')
+		def process = Process.findByName('Minimal Test Process')
 		
 		process.tasks.get(0).outcomes.get('testoutcome1').start.contains('task2')
-		process.tasks.get(0).outcomes.get('testoutcome1').start.contains('task3')
 		process.tasks.get(0).automated == false
 		process.tasks.get(0).approverRoles.size() == 1
 		process.tasks.get(0).approverRoles.contains('{TEST_VAR}')
 		process.tasks.get(0).rejections.get('rejection1') != null
 		process.tasks.get(0).rejections.get('rejection1').start.size() == 1
 		process.tasks.get(0).rejections.get('rejection1').terminate.size() == 0
-		process.tasks.get(0).rejections.get('rejection1').start.contains('task5')
+		process.tasks.get(0).rejections.get('rejection1').start.contains('task6')
 		
 		process.tasks.get(1).automated == false
 		process.tasks.get(1).approverRoles.size() == 3
@@ -47,11 +46,11 @@ class ProcessServiceSpec extends IntegrationSpec {
 		process.tasks.get(1).approverRoles.contains('{TEST_VAR3}')
 		process.tasks.get(1).approverRoles.contains('TEST_ROLE')
 		
-		process.tasks.get(2).automated == true
-		process.tasks.get(2).approverRoles.size() == 0
-		
 		process.tasks.get(3).automated == true
 		process.tasks.get(3).approverRoles.size() == 0
+		
+		process.tasks.get(4).automated == true
+		process.tasks.get(4).approverRoles.size() == 0
 		
 		process.creator == processService.authenticatedUser
 	}
@@ -60,7 +59,7 @@ class ProcessServiceSpec extends IntegrationSpec {
 		setup:
 		minimalDefinition = new File('test/data/minimal.pr').getText()
 		processService.create(minimalDefinition)
-		def process = Process.findByName('Minimal Process')
+		def process = Process.findByName('Minimal Test Process')
 		
 		when:		
 		processService.initiate(process.name, "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
@@ -79,7 +78,7 @@ class ProcessServiceSpec extends IntegrationSpec {
 		setup:
 		minimalDefinition = new File('test/data/minimal.pr').getText()
 		processService.create(minimalDefinition)
-		def processInstance = processService.initiate('Minimal Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
+		def processInstance = processService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
 		
 		when:		
 		processService.run(processInstance)
