@@ -8,6 +8,8 @@ class Process {
 	String description
 	String definition
 	
+	boolean active
+	
 	int version
 	int processVersion
 	

@@ -4,27 +4,28 @@ import fedreg.workflow.ProcessStatus
 import fedreg.workflow.ProcessPriority
 import fedreg.workflow.ProcessMessage
 
+import grails.plugins.nimble.core.UserBase
+
 class ProcessInstance {
 
-	String name
+	String description
 	ProcessStatus status
-	String initiatedBy
     ProcessPriority priority
-	Date dateInitiated
 
-	Date dateCompleted
+	Date dateCreated
 	Date lastUpdated
+	UserBase initiatedBy
+	
 	boolean completionAcknowlegded = false
+	
+	List taskInstances
+	Map params
 
-	static hasMany = [tasks: TaskInstance, messages: ProcessMessage]
+	static hasMany = [taskInstances: TaskInstance, messages: ProcessMessage]
     static belongsTo = [process: Process]
 
 	static constraints = {
-		dateCompleted(nullable: true)
+		dateCreated(nullable: true)
+		lastUpdated(nullable: true)
 	}
-	
-	static mapping = {
-	    tasks fetch: "join"
-	}
-	
 }

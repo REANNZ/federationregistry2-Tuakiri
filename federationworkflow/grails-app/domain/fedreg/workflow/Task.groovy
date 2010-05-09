@@ -1,30 +1,38 @@
 package fedreg.workflow
 
 import grails.plugins.nimble.core.UserBase
+import grails.plugins.nimble.core.Role
+import grails.plugins.nimble.core.Group
 
 class Task {
 
     String name
-	boolean automated = false
+	String description
+	boolean automated = true
 	
 	Map execute = [:]
-   	Map launch = [:]
-	Map terminate = [:]
+   	Map outcomes = [:]
+	Map rejections = [:]
+	
+	List approverRoles = []
+	List approverGroups = []
+	List approvers = []
    	
    	boolean finishOnThisTask = false
 
    	static hasMany = [	instances: TaskInstance, 
-						actioners: UserBase, 
-						dependencies: String
+						rejections: TaskRejection,
+						outcomes: TaskOutcome,
+						dependencies: String,
+						approverRoles: String,
+						approverGroups: String,
+						approvers: String
 	]
 	
     static belongsTo = [ process: Process ]
 	
 	static constraints = {
-		
-		instances(nullable:true)
-		actioners(nullable:true)
-		dependencies(nullable:true)
+
 	}
 
 

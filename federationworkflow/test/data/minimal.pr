@@ -1,37 +1,68 @@
 
-process('Minimal Process') {
-
-	description("This is a minimal process definition")
+process(name:'Minimal Test Process', description: 'Minimal test process description') {
 	
-	task ('task1') {
-		execute(controller: 'TestController', action: 'approve')
-		on('submitted') {
-			launch (['task2', 'task3'])
+	task(name: 'task1', description: 'Description of task1') {
+		approver(role: '{TEST_VAR}', user:'test@testdomain.com') {
+			reject(name: 'rejection1', description:'rejection overview') {
+				start ('task6')
+			}
+		}
+		execute(controller: 'TestController', action: 'testaction')
+		outcome(name: 'testoutcome1', description:'testoutcome1 description') {
+			start ('task2')
 		}
     }
 
-	task ('task2') {
-		execute(service: 'messaging', method: 'send')
-		on('complete') {
-			launch ('task4')
+	task(name: 'task2', description: 'Description of task2') {
+		approver(roles: ['{TEST_VAR2}', '{TEST_VAR3}', 'TEST_ROLE']) {
+			reject(name: 'rejection2', description:'rejection overview') {
+				start (['task6'])
+			}
+			reject(name: 'rejection3', description:'rejection overview') {
+				start (['task1'])
+			}
 		}
-		on('smtpfail') {
+		execute(service: 'testservice', method: 'testmethod')
+		outcome(name: 'testoutcome2', description:'testoutcome2 description') {
+			start (['task3', 'task4'])
+		}
+		outcome(name: 'testoutcome3', description:'testoutcome3 description') {
+			start ('task6')
+		}
+    }
+
+	task(name: 'task3', description: 'Description of task3') {
+		approver(roles: ['{TEST_VAR4}', '{TEST_VAR5}']) {
+			reject(name: 'rejection3', description:'rejection overview') {
+				start ('task6')
+				terminate ('task4')
+			}
+		}
+		outcome(name: 'testoutcome3', description:'testoutcome3 description') {
+			start ('task5')
+		}
+    }
+
+	task(name: 'task4', description: 'Description of task4') {
+		execute(service: 'testservice2', method: 'testmethod2')
+		outcome(name: 'testoutcome4', description:'testoutcome4 description') {
+			start ('task6')
 			terminate ('task3')
 		}
-    }
-
-	task ('task3') {
-		execute(service: 'im', method: 'send')
-		on('delivered') {
-			launch ('task4')
-		}
-		on('brokenpipe') {
-			terminate ('task2')
+		outcome(name: 'testoutcome5', description:'testoutcome5 description') {
+			start ('task5')
 		}
     }
 
-	task('task4') {
-		dependencies(['task2', 'task3'])
+	task(name: 'task5', description: 'Description of task5') {
+		dependencies(['task3', 'task4'])
+		execute(service: 'testservice3', method: 'testmethod3')
+		outcome(name: 'testoutcome5', description:'testoutcome5 description') {
+			start ('task6')
+		}
+	}
+	
+	task(name: 'task6', description: 'Description of task6') {
 		finish()
 	}
 	
