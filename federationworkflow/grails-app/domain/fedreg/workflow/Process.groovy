@@ -37,31 +37,4 @@ class Process {
 		creator(nullable: false)
 		lastEditor(nullable: true)
 	}
-	/*
-		tasks(validator: { val, obj ->
-           if (!val.find { it.finishOnThisTask == true }) {
-		        obj.errors.rejectValue('tasks', 'finish', [obj.name] as Object[], "The process must have one or more finishing tasks")
-   				return false
-   		   }
-		   
-		   return true
-		    
-		}, nullable: false)
-	}
-	
-	
-	
-
-  	def getStartTask() {
-		return tasks.find { it.name == firstTask}
-	}
-
-	def getTask(String name) {
-		return tasks.find { it.name == name }
-	}
-
-    String toString() {
-		return "id="+id+",name="+name+",version="+version+",processVersion="+processVersion+",uploadedBy="+uploadedBy+",tasks="+tasks
-	}
-	*/
 }
