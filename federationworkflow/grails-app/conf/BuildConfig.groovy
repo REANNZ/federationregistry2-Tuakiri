@@ -29,3 +29,17 @@ grails.project.dependency.resolution = {
     }
 
 }
+
+//cobertura exclusions
+coverage {
+	exclusions = [
+	              '**/grails/plugin/spock/**',
+	              '**/grails/plugins/nimble/**',
+	              '**/org/apache/**',
+	              '**/org/grails/**',
+	              '**/junit/framework/**',
+	              '**/*Config*',
+	              '**/*Shiro*',
+	              '**/*Nimble*'
+				  ]
+}

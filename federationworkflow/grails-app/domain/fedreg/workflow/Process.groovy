@@ -36,5 +36,21 @@ class Process {
 		definition(nullable: false)
 		creator(nullable: false)
 		lastEditor(nullable: true)
+		
+		tasks(validator: {val, obj ->
+			def result = true
+			val.each {
+				it.dependencies.each { dep ->
+					def task = val.find { t -> t.name.equals(dep)}
+					if(!task) {
+						result = false
+					}
+				}
+			}
+			if(val.size() < 1) {
+				result false
+			}
+			result
+		})
 	}
 }

@@ -9,5 +9,9 @@ class TaskOutcome {
 	List terminate = []
 	
     static belongsTo = [ task: Task ]
+
+	static constraints = {
+		start(minSize: 1)
+	}
 	
 }
