@@ -36,74 +36,31 @@ class Task {
 	static constraints = {
 		description(nullable:false, blank:false)
 		execute( validator: { val, obj ->
-			obj.with {
-				if(ensureMinimalDirectives()) {
-					if(execute == null || execute.keySet().size() == 0) {
-						log.debug('Overall directives satisified, no execute directives to validate')
-						return true
-					}
-					else {
-						if(execute.containsKey('service')) {
-							log.debug('Execute directive located containing a service definition, validating method is defined')
-							return execute.keySet().size() == 2 && execute.containsKey('method')
-						}
-						else {
-							if(execute.containsKey('controller')) {
-								log.debug('Execute directive located containing a controller definition, validating action (and optional ID) is defined')
-								if(execute.keySet().size() == 2) 
-									return execute.containsKey('action')
-								else 
-									return execute.keySet().size() == 3 && execute.containsKey('action') && execute.containsKey('id')
-							}
-							else {
-								log.error('Execute directive located that does not specify service or controller')
-								return false	// specifies neither service or controller
-							}
-						}
-					}
-				}
-				else
-					return false
-			}
+			obj.validateExecution()
 		})
 		approvers( validator: { val, obj ->
-			obj.ensureMinimalDirectives()
+			!obj.ensureMinimalDirectives() ? ['task.validation.directives.approvers.invalid', name] : true
 		})
 		approverGroups( validator: { val, obj ->
-			obj.ensureMinimalDirectives()
+			!obj.ensureMinimalDirectives() ? ['task.validation.directives.approvers.invalid', name] : true
 		})
 		approverRoles( validator: { val, obj ->
-			obj.ensureMinimalDirectives()
+			!obj.ensureMinimalDirectives() ? ['task.validation.directives.approvers.invalid', name] : true
 		})
 		outcomes( validator: {val, obj ->
-			obj.with {
-				if(!finishOnThisTask) {
-					if(needsApproval() && !executes())
-						outcomes.size() == 1
-					else
-						outcomes.size() > 0
-				}
-				else
-					outcomes == null || outcomes.size() == 0
-			}
+			obj.validateOutcomes()
 		})
 		rejections( validator: {val, obj ->
-			obj.with {
-				if(needsApproval()) {
-					rejections.size() > 0
-				}
-				else
-					true
-			}
+			obj.validateRejections()
 		})
 	}
 	
 	def ensureMinimalDirectives = {
 		if (!finishOnThisTask) {
-			!((approvers.size() == 0) && (approverGroups.size() == 0) && (approverRoles.size() == 0) && (execute.size() == 0))
+			if( (approvers.size() == 0) && (approverGroups.size() == 0) && (approverRoles.size() == 0) && (execute.size() == 0) )
+				return false
 		}
-		else
-			true
+		true
 	}
 	
 	def needsApproval = {
@@ -112,5 +69,73 @@ class Task {
 	
 	def executes = {
 		execute.size() > 0
+	}
+	
+	def validateRejections = {
+		if(needsApproval()) {
+			if(rejections.size() == 0)
+				return ['task.validation.approval.rejections.invalid.count', name]
+		}
+		true
+	}
+	
+	def validateOutcomes = {
+		if(!finishOnThisTask) {
+			if(needsApproval() && !executes()) {
+				if(outcomes.size() != 1)
+					return ['task.validation.outcomes.approvalonly.invalid.count', name]
+			}
+			else {
+				if(outcomes.size() == 0) {
+					return ['task.validation.outcomes.invalid.count', name]
+				}
+			}
+		}
+		else
+			if( outcomes?.size() != 0)
+				return ['task.validation.outcomes.finishtask.invalid.count', name]
+		
+		// Outcomes meet spec
+		return true
+	}
+	
+	def validateExecution = {
+		if(ensureMinimalDirectives()) {
+			if(execute == null || execute.keySet().size() == 0) {
+				log.debug('Overall directives satisified, no execute directives to validate')
+				return true
+			}
+			else {
+				if(execute.containsKey('service')) {
+					log.debug('Execute directive located containing a service definition, validating method is defined')
+					if(execute.keySet().size() != 2 || !(execute.containsKey('method'))) {
+						return ['task.validation.execute.service.invalid.definition', name]
+					}
+				}
+				else {
+					if(execute.containsKey('controller')) {
+						log.debug('Execute directive located containing a controller definition, validating action (and optional ID) is defined')
+						if(execute.keySet().size() == 2) {
+							if(!execute.containsKey('action')) {
+								return ['task.validation.execute.controller.invalid.definition', name]
+							}
+						}
+						else {
+							if(!(execute.keySet().size() == 3 && execute.containsKey('action') && execute.containsKey('id')) )
+								return ['task.validation.execute.controller.invalid.definition', name]
+						}
+					}
+					else {
+						log.error('Execute directive located that does not specify service or controller')
+						return ['task.validation.execute.invalid.definition', name]
+					}
+				}
+			}
+		}
+		else
+			return ['task.validation.invalid.directive.set', name]
+			
+		// Task meets spec
+		true
 	}
 }

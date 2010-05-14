@@ -38,64 +38,70 @@ class Process {
 		lastEditor(nullable: true)
 		
 		tasks(validator: {val, obj ->
-			def finish = false
-			
-			// Ensure all processes have at least 1 task
-			if(!val || val.size() == 0) {
-				return false
-			}
-			
-			for(v in val) {
-				// Ensure all dependencies reference valid tasks
-				for(dep in v.dependencies) {
-					def task = val.find { t -> t.name.equals(dep) }
-					if(!task) {
-						return false
-					}
-				}
-				
-				// Ensure all rejections start+terminate reference valid tasks
-				for(rej in v.rejections.values()) {
-					for (s in rej.start) {
-						def task = val.find { t -> t.name.equals(s) }
-						if(!task) {
-							return false
-						}
-					}
-					for (s in rej.terminate) {
-						def task = val.find { t -> t.name.equals(s) }
-						if(!task) {
-							return false
-						}
-					}
-				}
-				
-				// Ensure all outcome start+terminate reference valid tasks
-				for(out in v.outcomes.values()) {
-					for (s in out.start) {
-						def task = val.find { t -> t.name.equals(s) }
-						if(!task) {
-							return false
-						}
-					}
-					for (s in out.terminate) {
-						def task = val.find { t -> t.name.equals(s) }
-						if(!task) {
-							return false
-						}
-					}
-				}
-				
-				if(!finish) {
-					finish = v.finishOnThisTask
-				}
-			}
-			
-			// Ensure all processes have at least 1 finish task
-			if(!finish)
-				return false
-			
-			true
+			obj.validateTasks()
 		})
+	}
+	
+	def validateTasks = {
+		boolean f = false
+		
+		// Ensure all processes have at least 1 task
+		if(tasks == null || tasks.size() == 0) {
+			return ['process.validation.tasks.minimum', name]
+		}
+		
+		for(v in tasks) {
+			// Ensure all dependencies reference valid tasks
+			for(dep in v.dependencies) {
+				def task = tasks.find { t -> t.name.equals(dep) }
+				if(!task) {
+					return ['process.validation.tasks.dependencies.invalid.reference', name, dep]
+				}
+			}
+			
+			// Ensure all outcome start+terminate reference valid tasks
+			for(out in v.outcomes.values()) {
+				for (s in out.start) {
+					def task = tasks.find { t -> t.name.equals(s) }
+					if(!task) {
+						return ['process.validation.tasks.outcomes.invalid.start.reference', name, s]
+					}
+				}
+				for (s in out.terminate) {
+					def task = tasks.find { t -> t.name.equals(s) }
+					if(!task) {
+						return ['process.validation.tasks.outcomes.invalid.terminate.reference', name, s]
+					}
+				}
+			}
+			
+			// Ensure all rejections start+terminate reference valid tasks
+			for(rej in v.rejections.values()) {
+				for (s in rej.start) {
+					def task = tasks.find { t -> t.name.equals(s) }
+					if(!task) {
+						return ['process.validation.tasks.rejections.invalid.start.reference', name, s]
+					}
+				}
+				for (s in rej.terminate) {
+					def task = tasks.find { t -> t.name.equals(s) }
+					if(!task) {
+						return ['process.validation.tasks.rejections.invalid.terminate.reference', name, s]
+					}
+				}
+			}
+			
+			if(!f)
+				f = v.finishOnThisTask
+				
+			println v.finishOnThisTask
+			
+		}
+		
+		// Ensure all processes have at least 1 finish task
+		if(!f)
+			return ['process.validation.no.finish.task', name]
+		
+		true
 	}
 }
