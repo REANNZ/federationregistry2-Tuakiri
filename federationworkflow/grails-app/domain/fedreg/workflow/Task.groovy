@@ -27,7 +27,8 @@ class Task {
 						dependencies: String,
 						approverRoles: String,
 						approverGroups: String,
-						approvers: String
+						approvers: String,
+						execute: String
 	]
 	
     static belongsTo = [ process: Process ]

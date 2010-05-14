@@ -8,7 +8,8 @@ class TaskSpec extends IntegrationSpec {
 		setup: 
 		def process = new Process(name:'test process', description:'test process')
 		def task = new Task(name:'test', description:'test description', finishOnThisTask:false, process:process)
-		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome', task:task)
+		def task2 = new Task(name:'test2', description:'test2 description', finishOnThisTask:true, process:process)
+		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome', task:task).addToStart('test2').addToStart('test2')
 		task.outcomes.put('testOutcomeVal', taskOutcome)
 		
 		when:
@@ -27,14 +28,16 @@ class TaskSpec extends IntegrationSpec {
 		def process = new Process(name:'test process', description:'test process')
 		def task = new Task(name:'test', description:'test description', finishOnThisTask:false, process:process)
 		task.addToApprovers('userID')
-		task.rejections.put('testReject', new TaskRejection(name:'test rejection', description:'test rejection description'))
-		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome', task:task)
+		task.rejections.put('testReject', new TaskRejection(name:'test rejection', description:'test rejection description').addToStart('test'))
+		def task2 = new Task(name:'test2', description:'test2 description', finishOnThisTask:true, process:process)
+		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome', task:task).addToStart('test2')
 		task.outcomes.put("testOutcomeVal", taskOutcome)
 		
 		when:
 		def result = task.validate()
 		
 		then:
+		println task.errors
 		result == true
 		task.errors.getFieldErrors('execute').size() == 0
 		task.errors.getFieldErrors('approvers').size() == 0
@@ -47,8 +50,9 @@ class TaskSpec extends IntegrationSpec {
 		def process = new Process(name:'test process', description:'test process')
 		def task = new Task(name:'test', description:'test description', finishOnThisTask:false, process:process)
 		task.addToApproverGroups('userID')
-		task.rejections.put('testReject', new TaskRejection(name:'test rejection', description:'test rejection description'))
-		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome', task:task)
+		task.rejections.put('testReject', new TaskRejection(name:'test rejection', description:'test rejection description').addToStart('test'))
+		def task2 = new Task(name:'test2', description:'test2 description', finishOnThisTask:true, process:process)
+		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome', task:task).addToStart('test2')
 		task.outcomes.put('testOutcomeVal', taskOutcome)
 		
 		when:
@@ -67,8 +71,9 @@ class TaskSpec extends IntegrationSpec {
 		def process = new Process(name:'test process', description:'test process')
 		def task = new Task(name:'test', description:'test description', finishOnThisTask:false, process:process)
 		task.addToApproverRoles('userID')
-		task.rejections.put('testReject', new TaskRejection(name:'test rejection', description:'test rejection description'))
-		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome', task:task)
+		task.rejections.put('testReject', new TaskRejection(name:'test rejection', description:'test rejection description').addToStart('test'))
+		def task2 = new Task(name:'test2', description:'test2 description', finishOnThisTask:true, process:process)
+		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome', task:task).addToStart('test2')
 		task.outcomes.put('testOutcomeVal', taskOutcome)
 		
 		when:
@@ -87,7 +92,8 @@ class TaskSpec extends IntegrationSpec {
 		def process = new Process(name:'test process', description:'test process')
 		def task = new Task(name:'test', description:'test description', finishOnThisTask:false, process:process)
 		task.addToApprovers('userID')
-		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome', task:task)
+		def task2 = new Task(name:'test2', description:'test2 description', finishOnThisTask:true, process:process)
+		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome', task:task).addToStart('test2')
 		task.outcomes.put("testOutcomeVal", taskOutcome)
 		
 		when:
@@ -103,7 +109,8 @@ class TaskSpec extends IntegrationSpec {
 		def process = new Process(name:'test process', description:'test process')
 		def task = new Task(name:'test', description:'test description', finishOnThisTask:false, process:process)
 		task.addToApproverGroups('userID')
-		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome', task:task)
+		def task2 = new Task(name:'test2', description:'test2 description', finishOnThisTask:true, process:process)
+		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome', task:task).addToStart('test2')
 		task.outcomes.put("testOutcomeVal", taskOutcome)
 		
 		when:
@@ -119,7 +126,8 @@ class TaskSpec extends IntegrationSpec {
 		def process = new Process(name:'test process', description:'test process')
 		def task = new Task(name:'test', description:'test description', finishOnThisTask:false, process:process)
 		task.addToApproverRoles('userID')
-		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome', task:task)
+		def task2 = new Task(name:'test2', description:'test2 description', finishOnThisTask:true, process:process)
+		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome', task:task).addToStart('test2')
 		task.outcomes.put("testOutcomeVal", taskOutcome)
 		
 		when:
@@ -135,7 +143,7 @@ class TaskSpec extends IntegrationSpec {
 		def process = new Process(name:'test process', description:'test process')
 		def task = new Task(name:'test', description:'test description', finishOnThisTask:false, process:process)
 		task.addToApprovers('userID')
-		task.rejections.put('testReject', new TaskRejection(name:'test rejection', description:'test rejection description'))
+		task.rejections.put('testReject', new TaskRejection(name:'test rejection', description:'test rejection description').addToStart('test'))
 		
 		when:
 		def result = task.validate()
@@ -150,7 +158,7 @@ class TaskSpec extends IntegrationSpec {
 		def process = new Process(name:'test process', description:'test process')
 		def task = new Task(name:'test', description:'test description', finishOnThisTask:false, process:process)
 		task.addToApproverGroups('userID')
-		task.rejections.put('testReject', new TaskRejection(name:'test rejection', description:'test rejection description'))
+		task.rejections.put('testReject', new TaskRejection(name:'test rejection', description:'test rejection description').addToStart('test'))
 		
 		when:
 		def result = task.validate()
@@ -165,7 +173,7 @@ class TaskSpec extends IntegrationSpec {
 		def process = new Process(name:'test process', description:'test process')
 		def task = new Task(name:'test', description:'test description', finishOnThisTask:false, process:process)
 		task.addToApproverRoles('userID')
-		task.rejections.put('testReject', new TaskRejection(name:'test rejection', description:'test rejection description'))
+		task.rejections.put('testReject', new TaskRejection(name:'test rejection', description:'test rejection description').addToStart('test'))
 		
 		when:
 		def result = task.validate()
@@ -181,7 +189,8 @@ class TaskSpec extends IntegrationSpec {
 		def task = new Task(name:'test', description:'test description', finishOnThisTask:false, process:process)
 		task.execute.put('service', "testService")
 		task.execute.put('method', "testMethod")
-		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome', task:task)
+		def task2 = new Task(name:'test2', description:'test2 description', finishOnThisTask:true, process:process)
+		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome', task:task).addToStart('test2')
 		task.outcomes.put('testOutcomeVal', taskOutcome)
 		
 		when:
@@ -200,7 +209,8 @@ class TaskSpec extends IntegrationSpec {
 		def process = new Process(name:'test process', description:'test process')
 		def task = new Task(name:'test', description:'test description', finishOnThisTask:false, process:process)
 		task.execute.put('taglib', 'testTaglib')
-		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome', task:task)
+		def task2 = new Task(name:'test2', description:'test2 description', finishOnThisTask:true, process:process)
+		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome', task:task).addToStart('test2')
 		task.outcomes.put('testOutcomeVal', taskOutcome)
 		
 		when:
@@ -217,7 +227,8 @@ class TaskSpec extends IntegrationSpec {
 		def task = new Task(name:'test', description:'test description', finishOnThisTask:false, process:process)
 		task.execute.put('service', 'testService')
 		task.execute.put('method', 'testMethod')
-		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome', task:task)
+		def task2 = new Task(name:'test2', description:'test2 description', finishOnThisTask:true, process:process)
+		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome', task:task).addToStart('test2')
 		task.outcomes.put('testOutcomeVal', taskOutcome)
 		
 		when:
@@ -233,7 +244,8 @@ class TaskSpec extends IntegrationSpec {
 		def process = new Process(name:'test process', description:'test process')
 		def task = new Task(name:'test', description:'test description', finishOnThisTask:false, process:process)
 		task.execute.put('serivce', 'testService')
-		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome', task:task)
+		def task2 = new Task(name:'test2', description:'test2 description', finishOnThisTask:true, process:process)
+		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome', task:task).addToStart('test2')
 		task.outcomes.put('testOutcomeVal', taskOutcome)
 		
 		when:
@@ -251,7 +263,8 @@ class TaskSpec extends IntegrationSpec {
 		task.execute.put('service', 'testService')
 		task.execute.put('method', 'testMethod')
 		task.execute.put('someTest', 'testVal')
-		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome', task:task)
+		def task2 = new Task(name:'test2', description:'test2 description', finishOnThisTask:true, process:process)
+		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome', task:task).addToStart('test2')
 		task.outcomes.put('testOutcomeVal', taskOutcome)
 		
 		when:
@@ -268,7 +281,8 @@ class TaskSpec extends IntegrationSpec {
 		def task = new Task(name:'test', description:'test description', finishOnThisTask:false, process:process)
 		task.execute.put('controller', 'testService')
 		task.execute.put('action', 'testMethod')
-		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome', task:task)
+		def task2 = new Task(name:'test2', description:'test2 description', finishOnThisTask:true, process:process)
+		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome', task:task).addToStart('test2')
 		task.outcomes.put('testOutcomeVal', taskOutcome)
 		
 		when:
@@ -286,7 +300,8 @@ class TaskSpec extends IntegrationSpec {
 		task.execute.put('controller', 'testService')
 		task.execute.put('action', 'testMethod')
 		task.execute.put('id', '1')
-		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome', task:task)
+		def task2 = new Task(name:'test2', description:'test2 description', finishOnThisTask:true, process:process)
+		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome', task:task).addToStart('test2')
 		task.outcomes.put('testOutcomeVal', taskOutcome)
 		
 		when:
@@ -302,7 +317,8 @@ class TaskSpec extends IntegrationSpec {
 		def process = new Process(name:'test process', description:'test process')
 		def task = new Task(name:'test', description:'test description', finishOnThisTask:false, process:process)
 		task.execute.put('controller', 'testService')
-		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome', task:task)
+		def task2 = new Task(name:'test2', description:'test2 description', finishOnThisTask:true, process:process)
+		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome', task:task).addToStart('test2')
 		task.outcomes.put('testOutcomeVal', taskOutcome)
 		
 		when:
@@ -320,7 +336,8 @@ class TaskSpec extends IntegrationSpec {
 		task.execute.put('controller', 'testService')
 		task.execute.put('action', 'testMethod')
 		task.execute.put('blah', 'testMethod')
-		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome', task:task)
+		def task2 = new Task(name:'test2', description:'test2 description', finishOnThisTask:true, process:process)
+		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome', task:task).addToStart('test2')
 		task.outcomes.put('testOutcomeVal', taskOutcome)
 		
 		when:

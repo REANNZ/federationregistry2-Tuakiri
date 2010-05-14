@@ -10,8 +10,13 @@ class TaskRejection {
 	
     static belongsTo = [ task: Task ]
 
+	static hasMany = [	start: String,
+						terminate: String ]
+
 	static constraints = {
-		start(minSize: 1)
+		start(validator: {val ->
+			val.size() > 0
+		})
 	}
 	
 }
