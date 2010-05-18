@@ -8,6 +8,7 @@ import grails.plugins.nimble.core.Group
 class TaskService {
 	
 	def final paramKey = /\{(.+?)\}/
+	def executionActor
 	
 	def initiate (ProcessInstance processInstance) {
 		initiate(processInstance, processInstance.process.tasks.get(0))
@@ -30,19 +31,6 @@ class TaskService {
 		}
 		
 		execute(taskInstance)
-	}
-	
-	def execute(TaskInstance taskInstance) {
-		if(taskInstance.task.needsApproval && taskInstance.status != TaskStatus.APPROVALGRANTED) {
-			if(taskInstance.status == TaskStatus.INITIATING) {
-				requestApproval(taskInstance)
-			}
-			if(taskInstance.status == TaskStatus.APPROVALREJECTED) {
-			}
-			if(taskInstance.status == TaskStatus.APPROVALFAILURE) {
-			}
-		}
-
 	}
 	
 	def approve(TaskInstance taskInstance) {

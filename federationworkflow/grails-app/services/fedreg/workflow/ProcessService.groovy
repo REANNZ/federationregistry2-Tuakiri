@@ -3,6 +3,7 @@ package fedreg.workflow
 class ProcessService {
 	
 	def taskService
+	def executionActor``
 	
 	def create(def definition) {
 		Binding binding = new Binding()
