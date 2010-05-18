@@ -8,7 +8,6 @@ class Task {
 
     String name
 	String description
-	boolean automated = true
 	
 	Map execute = [:]
    	Map outcomes = [:]

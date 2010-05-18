@@ -32,7 +32,7 @@ class ProcessServiceSpec extends IntegrationSpec {
 		def process = Process.findByName('Minimal Test Process')
 		
 		process.tasks.get(0).outcomes.get('testoutcome1').start.contains('task2')
-		process.tasks.get(0).automated == false
+		process.tasks.get(0).needsApproval() == true
 		process.tasks.get(0).approverRoles.size() == 1
 		process.tasks.get(0).approverRoles.contains('{TEST_VAR}')
 		process.tasks.get(0).rejections.get('rejection1') != null
@@ -40,16 +40,16 @@ class ProcessServiceSpec extends IntegrationSpec {
 		process.tasks.get(0).rejections.get('rejection1').terminate.size() == 0
 		process.tasks.get(0).rejections.get('rejection1').start.contains('task6')
 		
-		process.tasks.get(1).automated == false
+		process.tasks.get(1).needsApproval() == true
 		process.tasks.get(1).approverRoles.size() == 3
 		process.tasks.get(1).approverRoles.contains('{TEST_VAR2}')
 		process.tasks.get(1).approverRoles.contains('{TEST_VAR3}')
 		process.tasks.get(1).approverRoles.contains('TEST_ROLE')
 		
-		process.tasks.get(3).automated == true
+		process.tasks.get(3).needsApproval() == false
 		process.tasks.get(3).approverRoles.size() == 0
 		
-		process.tasks.get(4).automated == true
+		process.tasks.get(4).needsApproval() == false
 		process.tasks.get(4).approverRoles.size() == 0
 		
 		process.creator == processService.authenticatedUser

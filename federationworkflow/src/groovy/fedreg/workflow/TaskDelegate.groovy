@@ -41,8 +41,6 @@ class TaskDelegate {
 	}
 	
 	def approver(Map map, Closure closure) {
-		task.automated = false
-		
 		closure.delegate = new ApprovalDelegate(task, map)
 		closure()
 	}
