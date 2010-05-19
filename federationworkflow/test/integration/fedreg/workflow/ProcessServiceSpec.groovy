@@ -37,7 +37,6 @@ class ProcessServiceSpec extends IntegrationSpec {
 		process.tasks.get(0).approverRoles.contains('{TEST_VAR}')
 		process.tasks.get(0).rejections.get('rejection1') != null
 		process.tasks.get(0).rejections.get('rejection1').start.size() == 1
-		process.tasks.get(0).rejections.get('rejection1').terminate.size() == 0
 		process.tasks.get(0).rejections.get('rejection1').start.contains('task6')
 		
 		process.tasks.get(1).needsApproval() == true

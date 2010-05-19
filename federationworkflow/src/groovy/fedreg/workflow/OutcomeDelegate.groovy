@@ -15,12 +15,5 @@ class OutcomeDelegate {
 	void start(String task) {
 		this.taskOutcome.start.add(task)
 	}
-	
-	void terminate(List tasks) {
-		this.taskOutcome.terminate.addAll(tasks)
-	}
-	
-	void terminate(String task) {
-		this.taskOutcome.terminate.add(task)
-	}
+
 }

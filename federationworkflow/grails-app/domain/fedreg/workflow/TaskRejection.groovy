@@ -6,12 +6,10 @@ class TaskRejection {
 	String description
 	
 	List start = []
-	List terminate = []
 	
     static belongsTo = [ task: Task ]
 
-	static hasMany = [	start: String,
-						terminate: String ]
+	static hasMany = [	start: String ]
 
 	static constraints = {
 		start(validator: {val ->
