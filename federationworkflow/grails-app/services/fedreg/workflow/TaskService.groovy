@@ -47,7 +47,7 @@ class TaskService {
 			taskInstance.errors.each { log.error it }
 			// TODO: Terminate process??
 		}
-		executionActor << [taskInstance, TaskStatus.APPROVALGRANTED]
+		execute(taskInstance)
 	}
 	
 	def reject(TaskInstance taskInstance, String identifier, String reason) {
@@ -62,8 +62,16 @@ class TaskService {
 		// Notify process creator
 	}
 	
-	def execute(TaskInstance taskInstance) {
-		
+	def processVal(def scriptedVal, def params) {
+		// Check if the scripted value matches {.+} if so attempt to replace
+		// with the value provided when the process was initialized
+		def val = scriptedVal
+		if(scriptedVal =~ paramKey) {
+	        def key = scriptedVal =~ paramKey
+	        if(params.containsKey(key[0][1]))
+	            val = params.get(key[0][1])
+	    }
+		return val
 	}
 	
 	def requestApproval(def id) {
@@ -143,18 +151,6 @@ class TaskService {
 				// TODO: Terminate process??
 			}
 		}
-	}
-	
-	def processVal(def scriptedVal, def params) {
-		// Check if the scripted value matches {.+} if so attempt to replace
-		// with the value provided when the process was initialized
-		def val = scriptedVal
-		if(scriptedVal =~ paramKey) {
-	        def key = scriptedVal =~ paramKey
-	        if(params.containsKey(key[0][1]))
-	            val = params.get(key[0][1])
-	    }
-		return val
 	}
 
 }

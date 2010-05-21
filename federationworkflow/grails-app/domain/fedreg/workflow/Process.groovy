@@ -67,6 +67,12 @@ class Process {
 						return ['process.validation.tasks.outcomes.invalid.start.reference', name, s]
 					}
 				}
+				for (s in out.terminate) {
+					def task = tasks.find { t -> t.name.equals(s) }
+					if(!task) {
+						return ['process.validation.tasks.outcomes.invalid.terminate.reference', name, s]
+					}
+				}
 			}
 			
 			// Ensure all rejections start+terminate reference valid tasks
@@ -75,6 +81,12 @@ class Process {
 					def task = tasks.find { t -> t.name.equals(s) }
 					if(!task) {
 						return ['process.validation.tasks.rejections.invalid.start.reference', name, s]
+					}
+				}
+				for (s in rej.terminate) {
+					def task = tasks.find { t -> t.name.equals(s) }
+					if(!task) {
+						return ['process.validation.tasks.rejections.invalid.terminate.reference', name, s]
 					}
 				}
 			}

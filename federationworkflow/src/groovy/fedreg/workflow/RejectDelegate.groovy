@@ -16,4 +16,12 @@ class RejectDelegate {
 		this.rejection.start.addAll([task])
 	}
 	
+	void terminate(List tasks) {
+		this.rejection.terminate.addAll(tasks)
+	}
+	
+	void terminate(String task) {
+		this.rejection.terminate.addAll([task])
+	}
+	
 }

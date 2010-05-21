@@ -1,14 +1,10 @@
 package fedreg.workflow
 
-import static groovyx.gpars.GParsPool.withPool
-import static groovyx.gpars.GParsPool.executeAsync
 import groovyx.gpars.actor.*
 
 class ExecutionActor extends DynamicDispatchActor {
 	
-	def processService
-	def taskService
-	def workflowMessager
+	def processService, taskService, workflowMessager
 	
 	void onMessage(List message) {
         def taskInstanceID = message.get(0)

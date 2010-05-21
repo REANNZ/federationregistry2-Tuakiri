@@ -136,6 +136,73 @@ class ProcessSpec extends IntegrationSpec {
 		process.errors.getFieldError('tasks').code == 'process.validation.tasks.rejections.invalid.start.reference'
 	}
 	
+	def "Ensure process with rejections that depend on terminating existing tasks are valid"() {
+		setup: 
+		def process = new Process(name:'test process', description:'test process', definition:'empty definition', processVersion:1, creator: new UserBase(username:'testusername'))
+		
+		def taskRejection = new TaskRejection(name:'test rejection', description:'test rejection description').addToStart('test3')
+		taskRejection.addToTerminate('test2')
+		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome').addToStart('test2')
+		def task = new Task(name:'test', description:'test description', finishOnThisTask:false)
+		
+		task.addToApprovers('userID')
+		task.rejections.put('testReject', taskRejection)
+		task.outcomes.put("testOutcomeVal", taskOutcome)
+		process.addToTasks(task)
+		
+		def taskRejection2 = new TaskRejection(name:'test rejection2', description:'test rejection2 description').addToStart('test')
+		def taskOutcome2 = new TaskOutcome(name:'testOutcomeVal2', description:'testing outcome2').addToStart('test3')
+		def task2 = new Task(name:'test2', description:'test description2', finishOnThisTask:false)
+		
+		task2.addToApprovers('userID')
+		task2.rejections.put('testReject2', taskRejection2)
+		task2.outcomes.put("testOutcomeVal2", taskOutcome2)
+		process.addToTasks(task2)
+		
+		def task3 = new Task(name:'test3', description:'test description3', finishOnThisTask:true)
+		process.addToTasks(task3)
+		
+		when:
+		def result = process.validate()
+		
+		then:
+		result
+	}
+	
+	def "Ensure process with rejections that depend on terminating non existant tasks are invalid"() {
+		setup: 
+		def process = new Process(name:'test process', description:'test process', definition:'empty definition', processVersion:1, creator: new UserBase(username:'testusername'))
+		
+		def taskRejection = new TaskRejection(name:'test rejection', description:'test rejection description').addToStart('test3')
+		taskRejection.addToTerminate('noSuchTask')
+		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome').addToStart('test2')
+		def task = new Task(name:'test', description:'test description', finishOnThisTask:false)
+		
+		task.addToApprovers('userID')
+		task.rejections.put('testReject', taskRejection)
+		task.outcomes.put("testOutcomeVal", taskOutcome)
+		process.addToTasks(task)
+		
+		def taskRejection2 = new TaskRejection(name:'test rejection2', description:'test rejection2 description').addToStart('test')
+		def taskOutcome2 = new TaskOutcome(name:'testOutcomeVal2', description:'testing outcome2').addToStart('test3')
+		def task2 = new Task(name:'test2', description:'test description2', finishOnThisTask:false)
+		
+		task2.addToApprovers('userID')
+		task2.rejections.put('testReject2', taskRejection2)
+		task2.outcomes.put("testOutcomeVal2", taskOutcome2)
+		process.addToTasks(task2)
+		
+		def task3 = new Task(name:'test3', description:'test description3', finishOnThisTask:true)
+		process.addToTasks(task3)
+		
+		when:
+		def result = process.validate()
+		
+		then:
+		!result
+		process.errors.getFieldError('tasks').code == 'process.validation.tasks.rejections.invalid.terminate.reference'
+	}
+	
 	def "Ensure process with outcomes that depend on starting existing tasks are valid"() {
 		setup: 
 		def process = new Process(name:'test process', description:'test process', definition:'empty definition', processVersion:1, creator: new UserBase(username:'testusername'))
@@ -191,6 +258,65 @@ class ProcessSpec extends IntegrationSpec {
 		then:
 		!result
 		process.errors.getFieldError('tasks').code == 'process.validation.tasks.outcomes.invalid.start.reference'
+	}
+	
+	def "Ensure process with outcomes that depend on terminating existing tasks are valid"() {
+		setup: 
+		def process = new Process(name:'test process', description:'test process', definition:'empty definition', processVersion:1, creator: new UserBase(username:'testusername'))
+		
+		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome').addToStart('test2')
+		taskOutcome.addToTerminate('test')
+		def task = new Task(name:'test', description:'test description', finishOnThisTask:false)
+		task.execute.put('service', 'testService')
+		task.execute.put('method', 'testServiceMethod')
+		task.outcomes.put("testOutcomeVal", taskOutcome)
+		process.addToTasks(task)
+		
+		def taskOutcome2 = new TaskOutcome(name:'testOutcomeVal2', description:'testing outcome2').addToStart('test3')
+		def task2 = new Task(name:'test2', description:'test description2', finishOnThisTask:false)
+		task2.execute.put('service', 'testService2')
+		task2.execute.put('method', 'testServiceMethod2')
+		task2.outcomes.put("testOutcomeVal2", taskOutcome2)
+		process.addToTasks(task2)
+		
+		def task3 = new Task(name:'test3', description:'test description3', finishOnThisTask:true)
+		process.addToTasks(task3)
+		
+		when:
+		def result = process.validate()
+		
+		then:
+		result
+	}
+	
+	def "Ensure process with outcomes that depend on termininating non-existing tasks are invalid"() {
+		setup: 
+		def process = new Process(name:'test process', description:'test process', definition:'empty definition', processVersion:1, creator: new UserBase(username:'testusername'))
+		
+		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome').addToStart('test2')
+		taskOutcome.addToTerminate('noSuchTask')
+		def task = new Task(name:'test', description:'test description', finishOnThisTask:false)
+		task.execute.put('service', 'testService')
+		task.execute.put('method', 'testServiceMethod')
+		task.outcomes.put("testOutcomeVal", taskOutcome)
+		process.addToTasks(task)
+		
+		def taskOutcome2 = new TaskOutcome(name:'testOutcomeVal2', description:'testing outcome2').addToStart('test3')
+		def task2 = new Task(name:'test2', description:'test description2', finishOnThisTask:false)
+		task2.execute.put('service', 'testService2')
+		task2.execute.put('method', 'testServiceMethod2')
+		task2.outcomes.put('testOutcomeVal2', taskOutcome2)
+		process.addToTasks(task2)
+		
+		def task3 = new Task(name:'test3', description:'test description3', finishOnThisTask:true)
+		process.addToTasks(task3)
+		
+		when:
+		def result = process.validate()
+		
+		then:
+		!result
+		process.errors.getFieldError('tasks').code == 'process.validation.tasks.outcomes.invalid.terminate.reference'
 	}
 	
 }

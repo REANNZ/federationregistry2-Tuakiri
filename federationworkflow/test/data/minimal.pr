@@ -35,6 +35,7 @@ process(name:'Minimal Test Process', description: 'Minimal test process descript
 		approver(roles: ['{TEST_VAR4}', '{TEST_VAR5}']) {
 			reject(name: 'rejection3', description:'rejection overview') {
 				start ('task6')
+				terminate ('task4')
 			}
 		}
 		outcome(name: 'testoutcome3', description:'testoutcome3 description') {
@@ -46,6 +47,7 @@ process(name:'Minimal Test Process', description: 'Minimal test process descript
 		execute(service: 'testservice2', method: 'testmethod2')
 		outcome(name: 'testoutcome4', description:'testoutcome4 description') {
 			start ('task6')
+			terminate ('task3')
 		}
 		outcome(name: 'testoutcome5', description:'testoutcome5 description') {
 			start ('task5')
