@@ -26,10 +26,22 @@ class TaskService {
 		}
 		
 		if(!task.save()) {
-			log.error "Unable to update Task with new instance data"
+			log.error "Unable to update Task with new instance for processInstance ${processInstance.description} and task ${task.name}"
 			task.errors.each { log.error it }
 		}
 		
+		if(!taskInstance.save(flush:true)) {
+			log.error "Unable to create taskInstance to represent processInstance ${processInstance.description} and task ${task.name}"
+			task.errors.each { log.error it }
+		}
+		
+		println 'B'
+		println taskInstance.id
+		println taskInstance.task.id
+		println taskInstance.task.approvers
+		println taskInstance.task.approverRoles
+		
+		taskInstance.refresh()
 		if(task.needsApproval())
 			executionActor << [taskInstance.id, ExecutionAction.APPROVALREQUIRED]
 		else
@@ -62,22 +74,21 @@ class TaskService {
 		// Notify process creator
 	}
 	
-	def processVal(def scriptedVal, def params) {
-		// Check if the scripted value matches {.+} if so attempt to replace
-		// with the value provided when the process was initialized
-		def val = scriptedVal
-		if(scriptedVal =~ paramKey) {
-	        def key = scriptedVal =~ paramKey
-	        if(params.containsKey(key[0][1]))
-	            val = params.get(key[0][1])
-	    }
-		return val
+	def execute (def id) {
+		
 	}
 	
 	def requestApproval(def id) {
+		println 'X'
+		
 		// This is a task defined with an approver directive which means we need to request permission from USERS || GROUPS || ROLES to proceed
 		def taskInstance = TaskInstance.lock(id)
 	
+		println taskInstance.id
+		println taskInstance.task.id
+		println taskInstance.task.approvers
+		println taskInstance.task.approverRoles
+		
 		def locatedApprover = false
 		def identifier, user, role, group
 		for(approver in taskInstance.task.approvers) {
@@ -129,6 +140,8 @@ class TaskService {
 				log.error "Attempting to identify group by identifier '${identifier}' for process '${taskInstance.processInstance.description}' to request approval for task '${taskInstance.task.name}' failed. Workflow is erronous and should be checked."
 			}
 		}
+		
+		println 'ZZ'
 	
 		if(!locatedApprover) {
 			// The task requires approval but all avenues to locate an authoritative source have failed. The process is now effectively dead
@@ -145,12 +158,26 @@ class TaskService {
 			// Messages have been queued to all concerned requesting approval so we're now in a wait state
 			log.debug "Located valid approver(s) for process '${taskInstance.processInstance.description}' and task '${taskInstance.task.name}', task will continue once approved"
 			taskInstance.status = TaskStatus.APPROVALREQUIRED
+			println 'Z'
 			if(!taskInstance.save()) {
 				log.error "While attempting to update taskInstance ${taskInstance.id} with REQUIRESAPPROVAL status a failure occured"
 				taskInstance.errors.each { log.error it }
 				// TODO: Terminate process??
 			}
+			println 'ZX'
 		}
+	}
+	
+	def processVal(def scriptedVal, def params) {
+		// Check if the scripted value matches {.+} if so attempt to replace
+		// with the value provided when the process was initialized
+		def val = scriptedVal
+		if(scriptedVal =~ paramKey) {
+	        def key = scriptedVal =~ paramKey
+	        if(params.containsKey(key[0][1]))
+	            val = params.get(key[0][1])
+	    }
+		return val
 	}
 
 }

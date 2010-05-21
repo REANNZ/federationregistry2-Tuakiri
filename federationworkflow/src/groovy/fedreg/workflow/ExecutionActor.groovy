@@ -20,6 +20,7 @@ class ExecutionActor extends DynamicDispatchActor {
 				taskService.reject(taskInstanceID, rejection, reasoning)
 				break
 			case ExecutionAction.EXECUTE:
+				println 'executing'
 				taskService.execute(taskInstanceID)
 				break
 			case ExecutionAction.FINALIZE:

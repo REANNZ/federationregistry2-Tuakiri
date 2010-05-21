@@ -93,9 +93,6 @@ class Process {
 			
 			if(!f)
 				f = v.finishOnThisTask
-				
-			println v.finishOnThisTask
-			
 		}
 		
 		// Ensure all processes have at least 1 finish task

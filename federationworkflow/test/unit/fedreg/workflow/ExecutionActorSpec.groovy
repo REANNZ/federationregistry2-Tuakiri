@@ -1,7 +1,5 @@
 package fedreg.workflow
 
-import grails.test.*
-import groovy.mock.interceptor.*
 import grails.plugin.spock.*
 
 class ExecutionActorSpec extends UnitSpec {
@@ -11,21 +9,18 @@ class ExecutionActorSpec extends UnitSpec {
 		mockDomain(Task)
 		mockDomain(TaskInstance)
 		
-		def t = new Task(approvers:'user1')
-		def ti = new TaskInstance(task: t)
+		int id = 1
 		
-		def psMock = new MockFor(ProcessService)
-		def ps = psMock.proxyInstance()
+		def ps = Mock(ProcessService)		
+		def ts = Mock(TaskService)
 		
-		def tsMock = new MockFor(TaskService )
-		tsMock.demand.requestApproval() { i -> i.status = TaskStatus.APPROVALREQUIRED; i.save() }
-		def ts = tsMock.proxyInstance()
+		def ea = new ExecutionActor(processService:ps, taskService:ts)
 	
 		when:
-		ea.onMessage([ti, ExecutionAction.APPROVALREQUIRED])
+		ea.onMessage([id, ExecutionAction.APPROVALREQUIRED])
 		
 		then:
-		1 * ts.requestApproval(ti)
+		1 * ts.requestApproval(id)
 	}
 	
 	def "Validate execution actor correctly calls task service execute for task that is being initialized and doesn't need approval"() {
@@ -33,19 +28,18 @@ class ExecutionActorSpec extends UnitSpec {
 		mockDomain(Task)
 		mockDomain(TaskInstance)
 		
-		def t = new Task()
-		def ti = new TaskInstance(task: t)
+		int id = 1
 		
-		def ps = Mock(ProcessService)		
+		def ps = Mock(ProcessService)
 		def ts = Mock(TaskService)
 		
 		def ea = new ExecutionActor(processService:ps, taskService:ts)
 		
 		when:
-		ea.onMessage([ti, ExecutionAction.EXECUTE])
+		ea.onMessage([id, ExecutionAction.EXECUTE])
 		
 		then:
-		ti.status == TaskStatus.APPROVALREQUIRED
+		1 * ts.execute(id)
 	}
 	
 }

@@ -73,7 +73,7 @@ class ProcessServiceSpec extends IntegrationSpec {
 		processInstance.params.get('TEST_VAR3').equals('VALUE_3')
 		processInstance.params.get('NOSUCH_VAR') == null
 	}
-	
+	/*
 	def "Run minimal process"() {
 		setup:
 		minimalDefinition = new File('test/data/minimal.pr').getText()
@@ -87,4 +87,5 @@ class ProcessServiceSpec extends IntegrationSpec {
 		processInstance.taskInstances.size() == 1
 		def ti = processInstance.taskInstances.get(0).status == TaskStatus.APPROVALREQUIRED
 	}
+	*/
 }

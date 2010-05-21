@@ -31,7 +31,7 @@ class ApprovalDelegate {
 		}
 		
 		if(approvers.get('user')) {
-			task.approvers.add(approvers.get('user'))
+			task.addToApprovers(approvers.get('user'))
 		}
 	}
 	
