@@ -69,9 +69,7 @@ class ProcessService {
 	}
 	
 	def run(ProcessInstance processInstance) {
-		
 		taskService.initiate(processInstance)
-		
 	}
 	
 }

@@ -84,6 +84,6 @@ class ProcessServiceSpec extends IntegrationSpec {
 		
 		then:
 		processInstance.taskInstances.size() == 1
-		processInstance.taskInstances.get(0).status == TaskStatus.APPROVALREQUIRED
+		def ti = processInstance.taskInstances.get(0).status == TaskStatus.APPROVALREQUIRED
 	}
 }

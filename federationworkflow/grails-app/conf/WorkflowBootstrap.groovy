@@ -7,7 +7,7 @@ class WorkflowBootStrap {
   def taskService
 
   def init = {servletContext ->
-	def executionActor = new ExecutionActor(processService:processService, taskService:taskService)
+	def executionActor = new ExecutionActor(processService:processService, taskService:taskService).start()
 	processService.executionActor = executionActor
 	taskService.executionActor = executionActor
   }

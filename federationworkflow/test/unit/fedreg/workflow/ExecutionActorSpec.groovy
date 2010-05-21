@@ -18,7 +18,7 @@ class ExecutionActorSpec extends UnitSpec {
 		def ea = new ExecutionActor(processService:ps, taskService:ts)
 		
 		when:
-		ea.onMessage([ti, TaskStatus.INITIATING])
+		ea.onMessage([ti, ExecutionAction.APPROVALREQUIRED])
 		
 		then:
 		1 * ts.requestApproval(ti)
@@ -38,7 +38,7 @@ class ExecutionActorSpec extends UnitSpec {
 		def ea = new ExecutionActor(processService:ps, taskService:ts)
 		
 		when:
-		ea.onMessage([ti, TaskStatus.INITIATING])
+		ea.onMessage([ti, ExecutionAction.EXECUTE])
 		
 		then:
 		1 * ts.execute(ti)

@@ -11,36 +11,35 @@ class ExecutionActor extends DynamicDispatchActor {
 	def workflowMessager
 	
 	void onMessage(List message) {
-        def taskInstance = message.get(0)
-		def status = message.get(1)
+        def taskInstanceID = message.get(0)
+		def action = message.get(1)
 		
-		switch(status) {
-			case TaskStatus.INITIATING:
-				if(taskInstance.task.needsApproval()) {
-					taskService.requestApproval(taskInstance)
-				}
-				else {
-					if(taskInstance.task.executes())
-						taskService.execute(taskInstance)
-				}	
+		switch(action) {
+			case ExecutionAction.APPROVALREQUIRED:
+				taskService.requestApproval(taskInstanceID)
 				break
-			case TaskStatus.APPROVALREQUIRED:
+			case ExecutionAction.APPROVALREJECT:
+				def rejection = message.get(2)
+				def reasoning = message.get(3)
+				taskService.reject(taskInstanceID, rejection, reasoning)
 				break
-			case TaskStatus.APPROVALFAILURE:
+			case ExecutionAction.EXECUTE:
+				taskService.execute(taskInstanceID)
 				break
-			case TaskStatus.APPROVALGRANTED:
-				if(taskInstance.task.executes())
-					taskService.execute(taskInstance)
+			case ExecutionAction.FINALIZE:
+				taskService.finalize(taskInstanceID, outcome, reasoning)
 				break
-			case TaskStatus.APPROVALREJECTED:
-				break
-			case TaskStatus.INPROGRESS:
-				break
-			case TaskStatus.SUCCESSFUL:
-				break
-			case TaskStatus.TERMINATED:
-				break
+			default:
+				throw new RuntimeException("ExecutionActor default.. WTF.. TODO")
 		}
     }
 	
+}
+
+public enum ExecutionAction {
+	APPROVALREQUIRED,
+	APPROVALREQUESTED,
+	APPROVALREJECT,
+	EXECUTE,
+	FINALIZE
 }

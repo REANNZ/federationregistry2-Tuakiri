@@ -30,7 +30,13 @@ class TaskService {
 			task.errors.each { log.error it }
 		}
 		
-		execute(taskInstance)
+		if(task.needsApproval())
+			executionActor << [taskInstance.id, ExecutionAction.APPROVALREQUIRED]
+		else
+			if(task.executes())
+				executionActor << [taskInstance.id, ExecutionAction.EXECUTE]
+			else
+				executionActor << [taskInstance.id, ExecutionAction.FINALIZE]
 	}
 	
 	def approve(TaskInstance taskInstance) {
@@ -60,10 +66,9 @@ class TaskService {
 		
 	}
 	
-	def requestApproval(TaskInstance taskInstance) {
+	def requestApproval(def id) {
 		// This is a task defined with an approver directive which means we need to request permission from USERS || GROUPS || ROLES to proceed
-		def subject = "Action required for workflow ${taskInstance.task.process.name}"
-		def message = "The workflow ${taskInstance.task.process.name} (${taskInstance.processInstance.description}) is waiting to execute a task."
+		def taskInstance = TaskInstance.lock(id)
 	
 		def locatedApprover = false
 		def identifier, user, role, group
