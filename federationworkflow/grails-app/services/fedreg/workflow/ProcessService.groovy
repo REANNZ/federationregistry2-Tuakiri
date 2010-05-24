@@ -69,7 +69,20 @@ class ProcessService {
 	}
 	
 	def run(ProcessInstance processInstance) {
-		taskService.initiate(processInstance)
+		println 'herep'
+		
+			def task = Task.get(1)
+			println task
+			println task.execute
+			/*
+		executionActor = new ExecutionActor(processService:this, taskService:taskService)
+		executionActor.start()
+		
+		executionActor << [ExecutionAction.INITIATE, processInstance.id, processInstance.process.tasks.get(0).id]
+		executionActor.join()
+		println 'herepd'
+		*/
+		taskService.initiate(processInstance.id, processInstance.process.tasks.get(0).id)
 	}
 	
 }

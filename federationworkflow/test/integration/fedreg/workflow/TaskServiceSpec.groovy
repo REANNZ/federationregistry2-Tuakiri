@@ -12,7 +12,6 @@ class TaskServiceSpec extends IntegrationSpec {
 	static transactional = true
 	
 	def processService
-	def taskService
 	def minimalDefinition
 	
 	def setupSpec() {
@@ -29,7 +28,14 @@ class TaskServiceSpec extends IntegrationSpec {
 		def processInstance = processService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
 		
 		when:		
+		def task = Task.lock(1)
+		println task.execute
+		println task.name
+		println task.description
+		println task.approvers
+		
 		processService.run(processInstance)
+		processService.executionActor.join()
 		
 		then:
 		processInstance.taskInstances.size() == 1

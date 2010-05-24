@@ -1,5 +1,7 @@
 package fedreg.workflow
 
+import org.springframework.transaction.annotation.*
+
 import grails.plugins.nimble.core.UserBase
 import grails.plugins.nimble.core.ProfileBase
 import grails.plugins.nimble.core.Role
@@ -10,45 +12,54 @@ class TaskService {
 	def final paramKey = /\{(.+?)\}/
 	def executionActor
 	
-	def initiate (ProcessInstance processInstance) {
-		initiate(processInstance, processInstance.process.tasks.get(0))
-	}
+	org.hibernate.SessionFactory sessionFactory
 	
-	def initiate (ProcessInstance processInstance, Task task) {
-		def taskInstance = new TaskInstance(status:TaskStatus.INITIATING)
+	def initiate (def processInstanceID, def taskID) {
+			
+			println 'here2'
+
+			def processInstance = ProcessInstance.lock(processInstanceID)
+			def task = Task.get(taskID)
+			def taskInstance = new TaskInstance(status:TaskStatus.INITIATING)
 		
-		task.addToInstances(taskInstance)
-		processInstance.addToTaskInstances(taskInstance)
+			println processInstance
+			println task
+			println task.execute
+			println task.name
+			println task.description
+			println task.approvers
 		
-		if(!processInstance.save()) {
-			log.error "Unable to update processInstance ${processInstance.description} with new taskInstance"
-			task.errors.each { log.error it }
-		}
+			task.addToInstances(taskInstance)
+			processInstance.addToTaskInstances(taskInstance)
 		
-		if(!task.save()) {
-			log.error "Unable to update Task with new instance for processInstance ${processInstance.description} and task ${task.name}"
-			task.errors.each { log.error it }
-		}
+			if(!processInstance.save()) {
+				log.error "Unable to update processInstance ${processInstance.description} with new taskInstance"
+				task.errors.each { log.error it }
+				return
+			}
 		
-		if(!taskInstance.save(flush:true)) {
-			log.error "Unable to create taskInstance to represent processInstance ${processInstance.description} and task ${task.name}"
-			task.errors.each { log.error it }
-		}
+			if(!task.save()) {
+				log.error "Unable to update Task with new instance for processInstance ${processInstance.description} and task ${task.name}"
+				task.errors.each { log.error it }
+				return
+			}
 		
-		println 'B'
-		println taskInstance.id
-		println taskInstance.task.id
-		println taskInstance.task.approvers
-		println taskInstance.task.approverRoles
+			if(!taskInstance.save(flush:true)) {
+				log.error "Unable to create taskInstance to represent processInstance ${processInstance.description} and task ${task.name}"
+				task.errors.each { log.error it }
+				return
+			}
 		
-		taskInstance.refresh()
-		if(task.needsApproval())
-			executionActor << [taskInstance.id, ExecutionAction.APPROVALREQUIRED]
-		else
-			if(task.executes())
-				executionActor << [taskInstance.id, ExecutionAction.EXECUTE]
+			taskInstance.refresh()
+			if(task.needsApproval())
+				executionActor << [ExecutionAction.APPROVALREQUIRED, taskInstance.id]
 			else
-				executionActor << [taskInstance.id, ExecutionAction.FINALIZE]
+				if(task.executes())
+					executionActor << [ExecutionAction.EXECUTE, taskInstance.id]
+				else
+					executionActor << [ExecutionAction.FINALIZE, taskInstance.id]
+				
+			println 'done'
 	}
 	
 	def approve(TaskInstance taskInstance) {
@@ -79,8 +90,6 @@ class TaskService {
 	}
 	
 	def requestApproval(def id) {
-		println 'X'
-		
 		// This is a task defined with an approver directive which means we need to request permission from USERS || GROUPS || ROLES to proceed
 		def taskInstance = TaskInstance.lock(id)
 	
@@ -114,7 +123,6 @@ class TaskService {
 					}
 				}
 			}
-		
 			// We've found a valid user in the system
 			locatedApprover = true
 		}
@@ -140,8 +148,6 @@ class TaskService {
 				log.error "Attempting to identify group by identifier '${identifier}' for process '${taskInstance.processInstance.description}' to request approval for task '${taskInstance.task.name}' failed. Workflow is erronous and should be checked."
 			}
 		}
-		
-		println 'ZZ'
 	
 		if(!locatedApprover) {
 			// The task requires approval but all avenues to locate an authoritative source have failed. The process is now effectively dead
@@ -151,7 +157,6 @@ class TaskService {
 				log.error "While attempting to update taskInstance ${taskInstance.id} with APPROVALFAILURE status a failure occured"
 				taskInstance.errors.each { log.error it }
 			}
-		
 			//TODO Terminate process
 		}
 		else {
@@ -164,7 +169,6 @@ class TaskService {
 				taskInstance.errors.each { log.error it }
 				// TODO: Terminate process??
 			}
-			println 'ZX'
 		}
 	}
 	

@@ -36,10 +36,12 @@ class ApprovalDelegate {
 	}
 	
 	def reject(Map map, Closure closure) {
-		def taskRejection = new TaskRejection(name: map.name, description: map.description, task:task)
+		def name = map.name
+		def description = map.description
+		def taskRejection = new TaskRejection(name: name, description: description, task:task)
 		closure.delegate = new RejectDelegate(taskRejection)
 		closure()
 		
-		task.rejections.put(map.name, taskRejection)
+		task.rejections.put(name, taskRejection)
 	}
 }

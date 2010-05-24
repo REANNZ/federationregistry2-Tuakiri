@@ -1,4 +1,5 @@
 
+grails.spring.bean.packages = ['fedreg.workflow']
 
 // Environmental configuration
 environments {
