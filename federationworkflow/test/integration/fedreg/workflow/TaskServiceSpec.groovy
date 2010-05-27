@@ -12,6 +12,7 @@ class TaskServiceSpec extends IntegrationSpec {
 	static transactional = true
 	
 	def processService
+	def taskService
 	def minimalDefinition
 	
 	def setupSpec() {
@@ -27,19 +28,27 @@ class TaskServiceSpec extends IntegrationSpec {
 		processService.create(minimalDefinition)
 		def processInstance = processService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
 		
-		when:		
-		def task = Task.lock(1)
-		println task.execute
-		println task.name
-		println task.description
-		println task.approvers
-		
+		when:				
 		processService.run(processInstance)
-		processService.executionActor.join()
 		
 		then:
 		processInstance.taskInstances.size() == 1
 		processInstance.taskInstances.get(0).status == TaskStatus.APPROVALREQUIRED
+	}
+	
+	def "blah blah"() {
+		setup:
+		minimalDefinition = new File('test/data/minimal.pr').getText()
+		processService.create(minimalDefinition)
+		def processInstance = processService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
+		
+		when:				
+		taskService.test()
+		sleep(2000)
+		
+		then:
+		println 'here'
+		1
 	}
 	
 }

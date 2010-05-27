@@ -1,6 +1,4 @@
 
-import fedreg.workflow.ExecutionActor
-
 class WorkflowBootStrap {
 	
   def processService
@@ -15,6 +13,6 @@ class WorkflowBootStrap {
   }
 
   private internalBootStap(def servletContext) {
-    nimbleService.init()
+
   }
 }

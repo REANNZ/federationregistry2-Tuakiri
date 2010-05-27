@@ -10,24 +10,11 @@ import grails.plugins.nimble.core.Group
 class TaskService {
 	
 	def final paramKey = /\{(.+?)\}/
-	def executionActor
-	
-	org.hibernate.SessionFactory sessionFactory
 	
 	def initiate (def processInstanceID, def taskID) {
-			
-			println 'here2'
-
 			def processInstance = ProcessInstance.lock(processInstanceID)
 			def task = Task.get(taskID)
 			def taskInstance = new TaskInstance(status:TaskStatus.INITIATING)
-		
-			println processInstance
-			println task
-			println task.execute
-			println task.name
-			println task.description
-			println task.approvers
 		
 			task.addToInstances(taskInstance)
 			processInstance.addToTaskInstances(taskInstance)
@@ -52,14 +39,12 @@ class TaskService {
 		
 			taskInstance.refresh()
 			if(task.needsApproval())
-				executionActor << [ExecutionAction.APPROVALREQUIRED, taskInstance.id]
+				requestApproval(taskInstance.id)
 			else
 				if(task.executes())
-					executionActor << [ExecutionAction.EXECUTE, taskInstance.id]
+					execute(taskInstance.id)
 				else
-					executionActor << [ExecutionAction.FINALIZE, taskInstance.id]
-				
-			println 'done'
+					finalize(taskInstance.id)
 	}
 	
 	def approve(TaskInstance taskInstance) {
@@ -89,14 +74,13 @@ class TaskService {
 		
 	}
 	
+	def finalize (def id) {
+		
+	}
+	
 	def requestApproval(def id) {
 		// This is a task defined with an approver directive which means we need to request permission from USERS || GROUPS || ROLES to proceed
 		def taskInstance = TaskInstance.lock(id)
-	
-		println taskInstance.id
-		println taskInstance.task.id
-		println taskInstance.task.approvers
-		println taskInstance.task.approverRoles
 		
 		def locatedApprover = false
 		def identifier, user, role, group
