@@ -8,57 +8,64 @@ import grails.plugins.nimble.core.Role
 import grails.plugins.nimble.core.Group
 
 class TaskService {
+	static transactional = false
 	
 	def final paramKey = /\{(.+?)\}/
 	
+	def sessionFactory
+	
 	def initiate (def processInstanceID, def taskID) {
-			def processInstance = ProcessInstance.lock(processInstanceID)
-			def task = Task.get(taskID)
-			def taskInstance = new TaskInstance(status:TaskStatus.INITIATING)
-		
-			task.addToInstances(taskInstance)
-			processInstance.addToTaskInstances(taskInstance)
-		
-			if(!processInstance.save()) {
-				log.error "Unable to update processInstance ${processInstance.description} with new taskInstance"
-				task.errors.each { log.error it }
-				return
-			}
-		
-			if(!task.save()) {
-				log.error "Unable to update Task with new instance for processInstance ${processInstance.description} and task ${task.name}"
-				task.errors.each { log.error it }
-				return
-			}
-		
-			if(!taskInstance.save(flush:true)) {
-				log.error "Unable to create taskInstance to represent processInstance ${processInstance.description} and task ${task.name}"
-				task.errors.each { log.error it }
-				return
-			}
-		
-			taskInstance.refresh()
-			if(task.needsApproval())
-				requestApproval(taskInstance.id)
+		def processInstance = ProcessInstance.lock(processInstanceID)
+		def task = Task.lock(taskID)
+		def taskInstance = new TaskInstance(status:TaskStatus.INITIATING)
+	
+		task.addToInstances(taskInstance)
+		processInstance.addToTaskInstances(taskInstance)
+	
+		if(!processInstance.save()) {
+			log.error "Unable to update processInstance ${processInstance.description} with new taskInstance"
+			task.errors.each { log.error it }
+			return
+		}
+	
+		if(!task.save()) {
+			log.error "Unable to update Task with new instance for processInstance ${processInstance.description} and task ${task.name}"
+			task.errors.each { log.error it }
+			return
+		}
+	
+		if(!taskInstance.save(flush:true)) {
+			log.error "Unable to create taskInstance to represent processInstance ${processInstance.description} and task ${task.name}"
+			task.errors.each { log.error it }
+			return
+		}
+	
+		taskInstance.lock()
+		if(task.needsApproval())
+			ApprovalJob.triggerNow([taskInstanceID:taskInstance.id])
+		else
+			if(task.executes())
+				ExecuteJob.triggerNow(taskInstanceID:taskInstance.id)
 			else
-				if(task.executes())
-					execute(taskInstance.id)
-				else
-					finalize(taskInstance.id)
+				finalize(taskInstance.id)
 	}
 	
-	def approve(TaskInstance taskInstance) {
+	def approve(def taskInstanceID) {
+		def taskInstance = TaskInstance.lock(taskInstanceID)
 		taskInstance.status = TaskStatus.APPROVALGRANTED
 		taskInstance.approver = authenticatedUser
-		if(!taskInstance.save()) {
+		if(!taskInstance.save(flush:true)) {
 			log.error "While attempting to update taskInstance ${taskInstance.id} with APPROVALGRANTED status a failure occured"
 			taskInstance.errors.each { log.error it }
 			// TODO: Terminate process??
 		}
-		execute(taskInstance)
+		if(task.executes())
+			ExecuteJob.triggerNow(taskInstanceID:taskInstance.id)
+		else
+			finalize(taskInstance.id)
 	}
 	
-	def reject(TaskInstance taskInstance, String identifier, String reason) {
+	def reject(def taskInstanceID, String identifier, String reason) {
 		taskInstance.status = TaskStatus.APPROVALREJECTED
 		taskInstance.approver = authenticatedUser
 		if(!taskInstance.save()) {
@@ -70,18 +77,19 @@ class TaskService {
 		// Notify process creator
 	}
 	
-	def execute (def id) {
+	def execute(def taskInstanceID) {
 		
 	}
 	
-	def finalize (def id) {
+	def finalize (def taskInstanceID) {
 		
 	}
 	
-	def requestApproval(def id) {
+	def requestApproval(def taskInstanceID) {
 		// This is a task defined with an approver directive which means we need to request permission from USERS || GROUPS || ROLES to proceed
-		def taskInstance = TaskInstance.lock(id)
-		
+		def taskInstance = TaskInstance.lock(taskInstanceID)
+		taskInstance.status = TaskStatus.APPROVALREQUIRED
+
 		def locatedApprover = false
 		def identifier, user, role, group
 		for(approver in taskInstance.task.approvers) {
@@ -137,7 +145,7 @@ class TaskService {
 			// The task requires approval but all avenues to locate an authoritative source have failed. The process is now effectively dead
 			log.error "Unable to locate a valid approver for process '${taskInstance.processInstance.description}' and task '${taskInstance.task.name}', process is invalid and will be terminated"
 			taskInstance.status = TaskStatus.APPROVALFAILURE
-			if(!taskInstance.save()) {
+			if(!taskInstance.save(flush:true)) {
 				log.error "While attempting to update taskInstance ${taskInstance.id} with APPROVALFAILURE status a failure occured"
 				taskInstance.errors.each { log.error it }
 			}
@@ -147,13 +155,13 @@ class TaskService {
 			// Messages have been queued to all concerned requesting approval so we're now in a wait state
 			log.debug "Located valid approver(s) for process '${taskInstance.processInstance.description}' and task '${taskInstance.task.name}', task will continue once approved"
 			taskInstance.status = TaskStatus.APPROVALREQUIRED
-			println 'Z'
-			if(!taskInstance.save()) {
+			if(!taskInstance.save(flush:true)) {
 				log.error "While attempting to update taskInstance ${taskInstance.id} with REQUIRESAPPROVAL status a failure occured"
 				taskInstance.errors.each { log.error it }
 				// TODO: Terminate process??
 			}
 		}
+		sessionFactory.getCurrentSession().clear();
 	}
 	
 	def processVal(def scriptedVal, def params) {

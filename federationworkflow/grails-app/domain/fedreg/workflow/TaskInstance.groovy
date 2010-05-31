@@ -18,4 +18,8 @@ class TaskInstance {
 		dateCreated(nullable:true)
 		lastUpdated(nullable:true)
 	}
+	
+	static mapping = {
+	      cache usage:'read-write', include:'non-lazy'
+	  }
 }
