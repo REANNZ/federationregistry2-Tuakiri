@@ -50,6 +50,11 @@ class TaskService {
 				finalize(taskInstance.id)
 	}
 	
+	def terminate(def taskInstanceID) {
+		def taskInstance = TaskInstance.lock(taskInstanceID)
+		taskInstance.status = TaskStatus.TERMINATED
+	}
+	
 	def approve(def taskInstanceID) {
 		def taskInstance = TaskInstance.lock(taskInstanceID)
 		taskInstance.status = TaskStatus.APPROVALGRANTED
@@ -59,16 +64,19 @@ class TaskService {
 			taskInstance.errors.each { log.error it }
 			// TODO: Terminate process??
 		}
-		if(task.executes())
+		if(taskInstance.task.executes()) {
+			log.debug "Triggering execute for taskInstance ${taskInstance.id} bound to task ${taskInstance.task.name}"
 			ExecuteJob.triggerNow(taskInstanceID:taskInstance.id)
+		}
 		else
 			finalize(taskInstance.id)
 	}
 	
 	def reject(def taskInstanceID, String identifier, String reason) {
+		def taskInstance = TaskInstance.lock(taskInstanceID)
 		taskInstance.status = TaskStatus.APPROVALREJECTED
 		taskInstance.approver = authenticatedUser
-		if(!taskInstance.save()) {
+		if(!taskInstance.save(flush:true)) {
 			log.error "While attempting to update taskInstance ${taskInstance.id} with APPROVALREJECTED status a failure occured"
 			taskInstance.errors.each { log.error it }
 			// TODO: Terminate process??
@@ -78,7 +86,48 @@ class TaskService {
 	}
 	
 	def execute(def taskInstanceID) {
+		def taskInstance = TaskInstance.lock(taskInstanceID)
+		taskInstance.status = TaskStatus.INPROGRESS
 		
+		// TODO find and execute service
+		
+		if(!taskInstance.save(flush:true)) {
+			log.error "While attempting to update taskInstance ${taskInstance.id} with INPROGRESS status a failure occured"
+			taskInstance.errors.each { log.error it }
+			// TODO: Terminate process??
+		}
+	}
+	
+	def complete(def taskInstanceID, def outcomeName) {
+		println 'c1'
+		def taskInstance = TaskInstance.lock(taskInstanceID)
+		if(taskInstance.status != TaskStatus.INPROGRESS) {
+			// TODO
+			println 'c2'
+		}
+		def outcome = taskInstance.task.outcomes.get(outcomeName)
+		if(!outcome) {
+			// TODO: Terminate process??
+			println 'c3'
+		}
+		
+		outcome.terminate.each {
+			println 'c4'
+			TerminateJob.triggerNow([processInstanceID: taskInstance.processInstance.id, taskName:it])
+		}
+		outcome.start.each {
+			println 'c5'
+			StartJob.triggerNow([processInstanceID: taskInstance.processInstance.id, taskName:it])
+		}
+		println 'c6'
+		taskInstance.status = TaskStatus.SUCCESSFUL
+		if(!taskInstance.save(flush:true)) {
+			println 'c7'
+			log.error "While attempting to update taskInstance ${taskInstance.id} with SUCCESSFUL status a failure occured"
+			taskInstance.errors.each { log.error it }
+			// TODO: Terminate process??
+		}
+		println 'c8'
 	}
 	
 	def finalize (def taskInstanceID) {
@@ -161,7 +210,6 @@ class TaskService {
 				// TODO: Terminate process??
 			}
 		}
-		sessionFactory.getCurrentSession().clear();
 	}
 	
 	def processVal(def scriptedVal, def params) {

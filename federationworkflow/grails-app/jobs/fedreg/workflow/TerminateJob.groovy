@@ -7,7 +7,7 @@ class TerminateJob {
 	def sessionRequired = true
 
     def execute(context) {
-        def taskInstanceID = context.mergedJobDataMap.get('taskInstanceID')
-		taskService.approved(taskInstanceID)
+        def processID = context.mergedJobDataMap.get('processID')
+		
     }
 }
