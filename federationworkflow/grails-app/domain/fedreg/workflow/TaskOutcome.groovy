@@ -19,4 +19,7 @@ class TaskOutcome {
 		})
 	}
 	
+	public String toString() {
+		"taskoutcome:[id:$id, name:$name, starts:$start, terminates:$terminate]"
+	}
 }

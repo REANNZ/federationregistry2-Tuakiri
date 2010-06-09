@@ -21,5 +21,9 @@ class TaskInstance {
 	
 	static mapping = {
 	      cache usage:'read-write', include:'non-lazy'
-	  }
+	}
+	
+	public String toString() {
+		"taskinstance:[id:$id] of $task"
+	}
 }

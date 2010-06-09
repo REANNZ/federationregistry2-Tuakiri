@@ -19,4 +19,7 @@ class TaskRejection {
 		})
 	}
 	
+	public String toString() {
+		"taskrejection:[id:$id, name:$name, starts:$start, terminates:$terminate]"
+	}	
 }

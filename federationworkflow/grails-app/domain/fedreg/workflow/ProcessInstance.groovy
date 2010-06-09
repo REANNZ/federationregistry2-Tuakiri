@@ -28,4 +28,8 @@ class ProcessInstance {
 		dateCreated(nullable: true)
 		lastUpdated(nullable: true)
 	}
+	
+	public String toString() {
+		"processinstance:[id:$id] of $process"
+	}
 }

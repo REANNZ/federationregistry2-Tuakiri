@@ -7,6 +7,9 @@ class StartJob {
 	def sessionRequired = true
 
     def execute(context) {
-        def taskInstanceID = context.mergedJobDataMap.get('taskInstanceID')
+        def processInstanceID = context.mergedJobDataMap.get('processInstanceID')
+		def taskID = context.mergedJobDataMap.get('taskID')
+		
+		taskService.initiate(processInstanceID, taskID)
     }
 }

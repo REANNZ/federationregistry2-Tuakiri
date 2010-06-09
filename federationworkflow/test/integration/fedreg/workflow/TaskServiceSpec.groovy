@@ -103,6 +103,52 @@ class TaskServiceSpec extends IntegrationSpec {
 		taskService.metaClass = TaskService.metaClass
 	}
 	
+	def "Validate task6 in minimal process executes when process is run and task1 rejected"() {
+		setup:
+		SpecHelpers.registerMetaClass(TaskService, savedMetaClasses)
+		taskService.metaClass = TaskService.metaClass
+		
+		minimalDefinition = new File('test/data/minimal.pr').getText()
+		processService.create(minimalDefinition)
+		def processInstance = processService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
+		
+		BlockingVariables block = new BlockingVariables(4, TimeUnit.SECONDS)
+		
+		def requestApproval = TaskService.metaClass.getMetaMethod("requestApproval", [Object])
+		TaskService.metaClass.requestApproval = { def taskInstanceID ->
+			requestApproval.invoke(delegate, taskInstanceID)
+			block.approvalRequested = true
+		}
+		
+		def terminateAndStartTasks = TaskService.metaClass.getMetaMethod("terminateAndStartTasks", [Object, Object] as Class[])
+		TaskService.metaClass.terminateAndStartTasks = { def taskInstance, def reaction ->
+			block.terminateAndStartTasks = true
+			block.terminates = reaction.terminate.size()
+			block.starts = reaction.start.size()
+			block.startTask6 = reaction.start.contains('task6')
+		}
+		
+		when:				
+		processService.run(processInstance)
+		if(block.approvalRequested) {
+			sessionFactory.getCurrentSession().clear();
+			taskService.reject(TaskInstance.list().get(0).id, 'rejection1', 'supplied test reason')
+		}
+		
+		then:
+		block.terminateAndStartTasks == true
+		block.terminates == 0
+		block.starts == 1
+		block.startTask6 == true
+		
+		sessionFactory.getCurrentSession().clear();
+		TaskInstance.list().get(0).status == TaskStatus.APPROVALREJECTED
+		
+		cleanup:
+		SpecHelpers.resetMetaClasses(savedMetaClasses)
+		taskService.metaClass = TaskService.metaClass
+	}
+
 	def "Validate first task in minimal process completes when process is run, the task is approved and execution is successful"() {
 		setup:
 		SpecHelpers.registerMetaClass(TaskService, savedMetaClasses)
@@ -128,9 +174,8 @@ class TaskServiceSpec extends IntegrationSpec {
 		
 		def complete = TaskService.metaClass.getMetaMethod("complete", [Object, Object] as Class[])
 		TaskService.metaClass.complete = { def taskInstanceID, def outcomeName ->
-			println complete
-			complete.invoke(delegate, taskInstanceID, outcomeName)
 			block.complete = true
+			block.outcome = outcomeName
 		}
 		
 		when:				
@@ -147,8 +192,141 @@ class TaskServiceSpec extends IntegrationSpec {
 		
 		then:
 		block.complete == true
+		block.outcome == 'testoutcome1'
+		
+		cleanup:
+		SpecHelpers.resetMetaClasses(savedMetaClasses)
+		taskService.metaClass = TaskService.metaClass
+	}
+
+	def "Validate second task in minimal process is started after full completion of first"() {
+		setup:
+		SpecHelpers.registerMetaClass(TaskService, savedMetaClasses)
+		taskService.metaClass = TaskService.metaClass
+		
+		minimalDefinition = new File('test/data/minimal.pr').getText()
+		processService.create(minimalDefinition)
+		def processInstance = processService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
+		
+		BlockingVariables block = new BlockingVariables(4, TimeUnit.SECONDS)
+		
+		boolean taskApproved = false
+		
+		def requestApproval = TaskService.metaClass.getMetaMethod("requestApproval", [Object])
+		TaskService.metaClass.requestApproval = { def taskInstance ->
+			requestApproval.invoke(delegate, taskInstance)
+			
+			if(!taskApproved) {
+				block.approvalRequested = true
+				taskApproved = true
+			}
+			else
+				block.approvalRequestedTask2 = true
+		}
+		
+		def execute = TaskService.metaClass.getMetaMethod("execute", [Object])
+		TaskService.metaClass.execute = { def taskInstanceID ->
+			execute.invoke(delegate, taskInstanceID)
+			block.executed = true
+		}
+		
+		def complete = TaskService.metaClass.getMetaMethod("complete", [Object, Object] as Class[])
+		TaskService.metaClass.complete = { def taskInstanceID, def outcomeName ->
+			complete.invoke(delegate, taskInstanceID, outcomeName)
+			block.complete = true
+		}
+		
+		when:				
+		processService.run(processInstance)
+		if(block.approvalRequested) {
+			sessionFactory.getCurrentSession().clear()
+			taskService.approve(TaskInstance.list().get(0).id)
+		}
+		
+		if(block.executed) {
+			sessionFactory.getCurrentSession().clear();
+			taskService.complete(TaskInstance.list().get(0).id, 'testoutcome1')
+		}
+		
+		then:
+		block.complete == true
+		block.approvalRequestedTask2 == true
 		sessionFactory.getCurrentSession().clear();
 		TaskInstance.list().get(0).status == TaskStatus.SUCCESSFUL
+		TaskInstance.list().get(1).status == TaskStatus.APPROVALREQUIRED
+		
+		cleanup:
+		SpecHelpers.resetMetaClasses(savedMetaClasses)
+		taskService.metaClass = TaskService.metaClass
+	}
+	
+	def "Validate third and forth task in minimal process are started (forth executed no approver needed) after full completion of first 2"() {
+		setup:
+		SpecHelpers.registerMetaClass(TaskService, savedMetaClasses)
+		taskService.metaClass = TaskService.metaClass
+		
+		minimalDefinition = new File('test/data/minimal.pr').getText()
+		processService.create(minimalDefinition)
+		def processInstance = processService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
+		
+		BlockingVariables block = new BlockingVariables(4, TimeUnit.SECONDS)
+		
+		int approvalCount = 0
+		def requestApproval = TaskService.metaClass.getMetaMethod("requestApproval", [Object])
+		TaskService.metaClass.requestApproval = { def taskInstance ->
+			requestApproval.invoke(delegate, taskInstance)
+			
+			block."approval$approvalCount" = true
+			approvalCount++
+		}
+		
+		int execCount = 0
+		def execute = TaskService.metaClass.getMetaMethod("execute", [Object])
+		TaskService.metaClass.execute = { def taskInstanceID ->
+			execute.invoke(delegate, taskInstanceID)
+			block."executed$execCount" = true
+			execCount++
+		}
+		
+/*		def complete = TaskService.metaClass.getMetaMethod("complete", [Object, Object] as Class[])
+		TaskService.metaClass.complete = { def taskInstanceID, def outcomeName ->
+			complete.invoke(delegate, taskInstanceID, outcomeName)
+			block.complete = true
+		}
+*/		
+		when:				
+		processService.run(processInstance)
+		if(block.approval0) {
+			sessionFactory.getCurrentSession().clear()
+			taskService.approve(TaskInstance.list().get(0).id)
+		}
+		
+		if(block.executed0) {
+			sessionFactory.getCurrentSession().clear();
+			taskService.complete(TaskInstance.list().get(0).id, 'testoutcome1')
+		}
+		
+		if(block.approval1) {
+			sessionFactory.getCurrentSession().clear()
+			taskService.approve(TaskInstance.list().get(1).id)
+		}
+		
+		if(block.executed1) {
+			sessionFactory.getCurrentSession().clear();
+			taskService.complete(TaskInstance.list().get(1).id, 'testoutcome2')
+		}
+		
+		then:
+		block.approval1 == true
+		block.approval2 == true
+		block.approval3 == true
+		approvalCount == 3
+		execCount = 2
+		sessionFactory.getCurrentSession().clear();
+		TaskInstance.list().get(0).status == TaskStatus.SUCCESSFUL				// Task 1
+		TaskInstance.list().get(1).status == TaskStatus.SUCCESSFUL				// Task 2
+		TaskInstance.list().get(2).status == TaskStatus.APPROVALREQUIRED		// Task 3
+		TaskInstance.list().get(3).status == TaskStatus.INPROGRESS				// Task 4
 		
 		cleanup:
 		SpecHelpers.resetMetaClasses(savedMetaClasses)

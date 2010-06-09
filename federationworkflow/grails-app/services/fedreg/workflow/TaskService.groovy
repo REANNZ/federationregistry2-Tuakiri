@@ -18,36 +18,40 @@ class TaskService {
 		def processInstance = ProcessInstance.lock(processInstanceID)
 		def task = Task.lock(taskID)
 		def taskInstance = new TaskInstance(status:TaskStatus.INITIATING)
+		
+		log.info "Initiating taskInstance to represent $task within $processInstance"
 	
 		task.addToInstances(taskInstance)
 		processInstance.addToTaskInstances(taskInstance)
 	
 		if(!processInstance.save()) {
-			log.error "Unable to update processInstance ${processInstance.description} with new taskInstance"
+			log.error "Unable to update $processInstance with new taskInstance"
 			task.errors.each { log.error it }
-			return
+			return // TODO
 		}
 	
 		if(!task.save()) {
-			log.error "Unable to update Task with new instance for processInstance ${processInstance.description} and task ${task.name}"
+			log.error "Unable to update Task with new instance for $processInstance and $task"
 			task.errors.each { log.error it }
-			return
+			return // TODO
 		}
 	
 		if(!taskInstance.save(flush:true)) {
-			log.error "Unable to create taskInstance to represent processInstance ${processInstance.description} and task ${task.name}"
+			log.error "Unable to create taskInstance for $processInstance and $task"
 			task.errors.each { log.error it }
-			return
+			return	// TODO
 		}
 	
-		taskInstance.lock()
-		if(task.needsApproval())
+		taskInstance.lock()	 
+		if(task.needsApproval()) {
+			log.debug "Requesting approval for $taskInstance within $processInstance"
 			ApprovalJob.triggerNow([taskInstanceID:taskInstance.id])
+		}
 		else
 			if(task.executes())
 				ExecuteJob.triggerNow(taskInstanceID:taskInstance.id)
 			else
-				finalize(taskInstance.id)
+				finalize(taskInstance.id)	// minimal overhead not worth the extra thread
 	}
 	
 	def terminate(def taskInstanceID) {
@@ -57,6 +61,12 @@ class TaskService {
 	
 	def approve(def taskInstanceID) {
 		def taskInstance = TaskInstance.lock(taskInstanceID)
+		if(!taskInstance) {
+			// TODO
+			println 'wtf'
+		}
+		log.info "Approving execution of $taskInstance in ${taskInstance.processInstance}"
+		
 		taskInstance.status = TaskStatus.APPROVALGRANTED
 		taskInstance.approver = authenticatedUser
 		if(!taskInstance.save(flush:true)) {
@@ -72,62 +82,63 @@ class TaskService {
 			finalize(taskInstance.id)
 	}
 	
-	def reject(def taskInstanceID, String identifier, String reason) {
+	def reject(def taskInstanceID, def rejectionName, def rejectionComment) {
 		def taskInstance = TaskInstance.lock(taskInstanceID)
+		if(!taskInstance) {
+			// TODO
+		}
+		log.info "Rejecting execution of $taskInstance in ${taskInstance.processInstance} due to $rejectionName with additional comment $rejectionComment"
+		// TODO notify workflow messager
+		
 		taskInstance.status = TaskStatus.APPROVALREJECTED
 		taskInstance.approver = authenticatedUser
 		if(!taskInstance.save(flush:true)) {
-			log.error "While attempting to update taskInstance ${taskInstance.id} with APPROVALREJECTED status a failure occured"
+			log.error "While attempting to update $taskInstance with APPROVALREJECTED status a failure occured"
 			taskInstance.errors.each { log.error it }
 			// TODO: Terminate process??
 		}
 		
-		// Notify process creator
+		def rejection = taskInstance.task.rejections.get(rejectionName)
+		if(!rejection) {
+			// TODO: Terminate process??
+		}
+		terminateAndStartTasks(taskInstance, rejection)
 	}
 	
 	def execute(def taskInstanceID) {
 		def taskInstance = TaskInstance.lock(taskInstanceID)
 		taskInstance.status = TaskStatus.INPROGRESS
 		
+		log.debug "Executing $taskInstance for ${taskInstance.processInstance}"
 		// TODO find and execute service
 		
 		if(!taskInstance.save(flush:true)) {
-			log.error "While attempting to update taskInstance ${taskInstance.id} with INPROGRESS status a failure occured"
+			log.error "While attempting to update $taskInstance with INPROGRESS status a failure occured"
 			taskInstance.errors.each { log.error it }
 			// TODO: Terminate process??
 		}
 	}
 	
 	def complete(def taskInstanceID, def outcomeName) {
-		println 'c1'
 		def taskInstance = TaskInstance.lock(taskInstanceID)
 		if(taskInstance.status != TaskStatus.INPROGRESS) {
 			// TODO
-			println 'c2'
 		}
+		
 		def outcome = taskInstance.task.outcomes.get(outcomeName)
 		if(!outcome) {
 			// TODO: Terminate process??
-			println 'c3'
 		}
+		terminateAndStartTasks(taskInstance, outcome)
 		
-		outcome.terminate.each {
-			println 'c4'
-			TerminateJob.triggerNow([processInstanceID: taskInstance.processInstance.id, taskName:it])
-		}
-		outcome.start.each {
-			println 'c5'
-			StartJob.triggerNow([processInstanceID: taskInstance.processInstance.id, taskName:it])
-		}
-		println 'c6'
 		taskInstance.status = TaskStatus.SUCCESSFUL
 		if(!taskInstance.save(flush:true)) {
-			println 'c7'
 			log.error "While attempting to update taskInstance ${taskInstance.id} with SUCCESSFUL status a failure occured"
 			taskInstance.errors.each { log.error it }
 			// TODO: Terminate process??
 		}
-		println 'c8'
+		
+		log.info "Completed $taskInstance for ${taskInstance.processInstance}"
 	}
 	
 	def finalize (def taskInstanceID) {
@@ -209,6 +220,26 @@ class TaskService {
 				taskInstance.errors.each { log.error it }
 				// TODO: Terminate process??
 			}
+		}
+	}
+	
+	def terminateAndStartTasks(def taskInstance, def reaction) {
+		log.info "Processing $reaction terminate and start for $taskInstance"
+		reaction.terminate.each {
+			def task = taskInstance.processInstance.process.tasks.find { t -> t.name.equals(taskName) }
+			if(!task) {
+				log.error "Unable to locate terminate task with name $taskName defined in ${taskInstance.processInstance.process}"
+			}
+			log.debug "Firing start for $task in ${taskInstance.processInstance}"
+			TerminateJob.triggerNow([processInstanceID: taskInstance.processInstance.id, taskID:task.id])
+		}
+		reaction.start.each { taskName ->
+			def task = taskInstance.processInstance.process.tasks.find { t -> t.name.equals(taskName) }
+			if(!task) {
+				log.error "Unable to locate start task with name $taskName defined in ${taskInstance.processInstance.process}"
+			}
+			log.debug "Firing start for $task in ${taskInstance.processInstance}"
+			StartJob.triggerNow([processInstanceID: taskInstance.processInstance.id, taskID:task.id])
 		}
 	}
 	

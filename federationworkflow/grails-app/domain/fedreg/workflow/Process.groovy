@@ -26,7 +26,6 @@ class Process {
 	static mapping = {
 		definition type: "text"
 	}
-
 	
 	static constraints = {
 		name(nullable: false)
@@ -40,6 +39,10 @@ class Process {
 		tasks(validator: {val, obj ->
 			obj.validateTasks()
 		})
+	}
+	
+	public String toString() {
+		"process:[id:$id, name:$name, version:$version]"
 	}
 	
 	def validateTasks = {

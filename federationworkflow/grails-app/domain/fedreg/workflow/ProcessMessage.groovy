@@ -16,5 +16,9 @@ class ProcessMessage {
 		references(nullable:true)
 		dateCreated(nullable:true)
 	}
+	
+	public String toString() {
+		"processmessage:[id:$id, creator:$creator, message:$message]"
+	}
     
 }

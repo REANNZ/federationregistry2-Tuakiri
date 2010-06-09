@@ -54,6 +54,10 @@ class Task {
 		})
 	}
 	
+	public String toString() {
+		"task:[id:$id, name:$name]"
+	}
+	
 	def ensureMinimalDirectives = {
 		if (!finishOnThisTask) {
 			if( (approvers.size() == 0) && (approverGroups.size() == 0) && (approverRoles.size() == 0) && (execute.size() == 0) )

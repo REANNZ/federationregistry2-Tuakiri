@@ -14,7 +14,7 @@ process(name:'Minimal Test Process', description: 'Minimal test process descript
     }
 
 	task(name: 'task2', description: 'Description of task2') {
-		approver(roles: ['{TEST_VAR2}', '{TEST_VAR3}', 'TEST_ROLE']) {
+		approver(roles: ['{TEST_VAR2}', '{TEST_VAR3}', 'TEST_ROLE'], user:'test@testdomain.com') {
 			reject(name: 'rejection2', description:'rejection overview') {
 				start (['task6'])
 			}
