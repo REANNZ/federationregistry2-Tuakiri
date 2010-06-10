@@ -198,7 +198,7 @@ class TaskServiceSpec extends IntegrationSpec {
 		SpecHelpers.resetMetaClasses(savedMetaClasses)
 		taskService.metaClass = TaskService.metaClass
 	}
-
+	
 	def "Validate second task in minimal process is started after full completion of first"() {
 		setup:
 		SpecHelpers.registerMetaClass(TaskService, savedMetaClasses)
@@ -210,47 +210,48 @@ class TaskServiceSpec extends IntegrationSpec {
 		
 		BlockingVariables block = new BlockingVariables(4, TimeUnit.SECONDS)
 		
-		boolean taskApproved = false
-		
+		int approvalCount = 0
 		def requestApproval = TaskService.metaClass.getMetaMethod("requestApproval", [Object])
 		TaskService.metaClass.requestApproval = { def taskInstance ->
-			requestApproval.invoke(delegate, taskInstance)
-			
-			if(!taskApproved) {
-				block.approvalRequested = true
-				taskApproved = true
-			}
-			else
-				block.approvalRequestedTask2 = true
+			requestApproval.invoke(delegate, taskInstance)	
+			block."approval$approvalCount" = true
+			approvalCount++
 		}
 		
+		int executeCount = 0
 		def execute = TaskService.metaClass.getMetaMethod("execute", [Object])
 		TaskService.metaClass.execute = { def taskInstanceID ->
 			execute.invoke(delegate, taskInstanceID)
-			block.executed = true
+			block."execute$executeCount" = true
+			executeCount++
 		}
 		
+		int completeCount = 0
 		def complete = TaskService.metaClass.getMetaMethod("complete", [Object, Object] as Class[])
 		TaskService.metaClass.complete = { def taskInstanceID, def outcomeName ->
 			complete.invoke(delegate, taskInstanceID, outcomeName)
-			block.complete = true
+			block."complete$completeCount" = true
+			completeCount++
 		}
 		
 		when:				
 		processService.run(processInstance)
-		if(block.approvalRequested) {
+		if(block.approval0) {
 			sessionFactory.getCurrentSession().clear()
 			taskService.approve(TaskInstance.list().get(0).id)
 		}
 		
-		if(block.executed) {
+		if(block.execute0) {
 			sessionFactory.getCurrentSession().clear();
 			taskService.complete(TaskInstance.list().get(0).id, 'testoutcome1')
 		}
 		
 		then:
-		block.complete == true
-		block.approvalRequestedTask2 == true
+		block.approval1 == true
+		approvalCount == 2
+		executeCount == 1
+		block.complete0 == true
+		completeCount == 1
 		sessionFactory.getCurrentSession().clear();
 		TaskInstance.list().get(0).status == TaskStatus.SUCCESSFUL
 		TaskInstance.list().get(1).status == TaskStatus.APPROVALREQUIRED
@@ -260,7 +261,7 @@ class TaskServiceSpec extends IntegrationSpec {
 		taskService.metaClass = TaskService.metaClass
 	}
 	
-	def "Validate third and forth task in minimal process are started (forth executed no approver needed) after full completion of first 2"() {
+	def "Validate third and forth task in minimal process are started (forth executed no approver needed) after full completion of first 2"() {			
 		setup:
 		SpecHelpers.registerMetaClass(TaskService, savedMetaClasses)
 		taskService.metaClass = TaskService.metaClass
@@ -275,53 +276,53 @@ class TaskServiceSpec extends IntegrationSpec {
 		def requestApproval = TaskService.metaClass.getMetaMethod("requestApproval", [Object])
 		TaskService.metaClass.requestApproval = { def taskInstance ->
 			requestApproval.invoke(delegate, taskInstance)
-			
 			block."approval$approvalCount" = true
 			approvalCount++
 		}
 		
-		int execCount = 0
+		int executeCount = 0
 		def execute = TaskService.metaClass.getMetaMethod("execute", [Object])
 		TaskService.metaClass.execute = { def taskInstanceID ->
 			execute.invoke(delegate, taskInstanceID)
-			block."executed$execCount" = true
-			execCount++
+			block."execute$executeCount" = true
+			executeCount++
 		}
 		
-/*		def complete = TaskService.metaClass.getMetaMethod("complete", [Object, Object] as Class[])
+		int completeCount = 0
+		def complete = TaskService.metaClass.getMetaMethod("complete", [Object, Object] as Class[])
 		TaskService.metaClass.complete = { def taskInstanceID, def outcomeName ->
 			complete.invoke(delegate, taskInstanceID, outcomeName)
-			block.complete = true
+			block."complete$completeCount" = true
+			completeCount++
 		}
-*/		
-		when:				
+			
+		when:		
 		processService.run(processInstance)
 		if(block.approval0) {
 			sessionFactory.getCurrentSession().clear()
 			taskService.approve(TaskInstance.list().get(0).id)
 		}
 		
-		if(block.executed0) {
+		if(block.execute0) {
 			sessionFactory.getCurrentSession().clear();
 			taskService.complete(TaskInstance.list().get(0).id, 'testoutcome1')
 		}
 		
-		if(block.approval1) {
+		if(block.complete0 && block.approval1) {
 			sessionFactory.getCurrentSession().clear()
 			taskService.approve(TaskInstance.list().get(1).id)
 		}
 		
-		if(block.executed1) {
+		if(block.execute1) {
 			sessionFactory.getCurrentSession().clear();
 			taskService.complete(TaskInstance.list().get(1).id, 'testoutcome2')
 		}
 		
 		then:
-		block.approval1 == true
 		block.approval2 == true
-		block.approval3 == true
 		approvalCount == 3
-		execCount = 2
+		block.execute2 == true
+		executeCount = 3
 		sessionFactory.getCurrentSession().clear();
 		TaskInstance.list().get(0).status == TaskStatus.SUCCESSFUL				// Task 1
 		TaskInstance.list().get(1).status == TaskStatus.SUCCESSFUL				// Task 2

@@ -8,15 +8,17 @@ import grails.plugins.nimble.core.Role
 import grails.plugins.nimble.core.Group
 
 class TaskService {
-	static transactional = false
+	static transactional = true
 	
 	def final paramKey = /\{(.+?)\}/
 	
 	def sessionFactory
+	def grailsApplication
 	
 	def initiate (def processInstanceID, def taskID) {
 		def processInstance = ProcessInstance.lock(processInstanceID)
 		def task = Task.lock(taskID)
+		
 		def taskInstance = new TaskInstance(status:TaskStatus.INITIATING)
 		
 		log.info "Initiating taskInstance to represent $task within $processInstance"
@@ -24,13 +26,13 @@ class TaskService {
 		task.addToInstances(taskInstance)
 		processInstance.addToTaskInstances(taskInstance)
 	
-		if(!processInstance.save()) {
+		if(!processInstance.save(flush:true)) {
 			log.error "Unable to update $processInstance with new taskInstance"
 			task.errors.each { log.error it }
 			return // TODO
 		}
 	
-		if(!task.save()) {
+		if(!task.save(flush:true)) {
 			log.error "Unable to update Task with new instance for $processInstance and $task"
 			task.errors.each { log.error it }
 			return // TODO
@@ -45,11 +47,11 @@ class TaskService {
 		taskInstance.lock()	 
 		if(task.needsApproval()) {
 			log.debug "Requesting approval for $taskInstance within $processInstance"
-			ApprovalJob.triggerNow([taskInstanceID:taskInstance.id])
+			requestApproval(taskInstance.id)
 		}
 		else
 			if(task.executes())
-				ExecuteJob.triggerNow(taskInstanceID:taskInstance.id)
+				execute(taskInstance.id)
 			else
 				finalize(taskInstance.id)	// minimal overhead not worth the extra thread
 	}
@@ -65,6 +67,7 @@ class TaskService {
 			// TODO
 			println 'wtf'
 		}
+		println taskInstance
 		log.info "Approving execution of $taskInstance in ${taskInstance.processInstance}"
 		
 		taskInstance.status = TaskStatus.APPROVALGRANTED
@@ -76,7 +79,7 @@ class TaskService {
 		}
 		if(taskInstance.task.executes()) {
 			log.debug "Triggering execute for taskInstance ${taskInstance.id} bound to task ${taskInstance.task.name}"
-			ExecuteJob.triggerNow(taskInstanceID:taskInstance.id)
+			execute(taskInstance.id)
 		}
 		else
 			finalize(taskInstance.id)
@@ -110,7 +113,7 @@ class TaskService {
 		taskInstance.status = TaskStatus.INPROGRESS
 		
 		log.debug "Executing $taskInstance for ${taskInstance.processInstance}"
-		// TODO find and execute service
+		//grailsApplication.mainContext.getBean('helloService').hi();
 		
 		if(!taskInstance.save(flush:true)) {
 			log.error "While attempting to update $taskInstance with INPROGRESS status a failure occured"
@@ -231,7 +234,7 @@ class TaskService {
 				log.error "Unable to locate terminate task with name $taskName defined in ${taskInstance.processInstance.process}"
 			}
 			log.debug "Firing start for $task in ${taskInstance.processInstance}"
-			TerminateJob.triggerNow([processInstanceID: taskInstance.processInstance.id, taskID:task.id])
+			terminate(taskInstance.processInstance.id, task.id)
 		}
 		reaction.start.each { taskName ->
 			def task = taskInstance.processInstance.process.tasks.find { t -> t.name.equals(taskName) }
@@ -239,7 +242,7 @@ class TaskService {
 				log.error "Unable to locate start task with name $taskName defined in ${taskInstance.processInstance.process}"
 			}
 			log.debug "Firing start for $task in ${taskInstance.processInstance}"
-			StartJob.triggerNow([processInstanceID: taskInstance.processInstance.id, taskID:task.id])
+			initiate(taskInstance.processInstance.id, task.id)
 		}
 	}
 	
