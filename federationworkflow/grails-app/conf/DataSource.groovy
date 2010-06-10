@@ -26,7 +26,7 @@ environments {
 			password = ""
 			
 			dbCreate = "create" // one of 'create', 'create-drop','update'
-			url = "jdbc:hsqldb:mem:devDB"
+			url = "jdbc:hsqldb:mem:testDB"
 		}
 	}
 	production {
