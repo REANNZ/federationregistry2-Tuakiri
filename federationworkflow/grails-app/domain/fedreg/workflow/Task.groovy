@@ -116,16 +116,12 @@ class Task {
 					}
 				}
 				else {
-					if(execute.containsKey('controller')) {
-						log.debug('Execute directive located containing a controller definition, validating action (and optional ID) is defined')
-						if(execute.keySet().size() == 2) {
-							if(!execute.containsKey('action')) {
-								return ['task.validation.execute.controller.invalid.definition', name]
-							}
-						}
-						else {
-							if(!(execute.keySet().size() == 3 && execute.containsKey('action') && execute.containsKey('id')) )
-								return ['task.validation.execute.controller.invalid.definition', name]
+					if(execute.containsKey('script')) {
+						log.debug("Execute directive located referencing a script, validating script is defined named: ${execute.script}")
+						
+						def ws = WorkflowScript.findByName(execute.script)
+						if(!ws) {
+							return ['task.validation.execute.script.invalid.definition', execute.script]
 						}
 					}
 					else {

@@ -186,7 +186,7 @@ class TaskSpec extends IntegrationSpec {
 		result
 	}
 	
-	def "Ensure executable task defining neither service nor controller is invalid"() {
+	def "Ensure executable task defining neither service nor script is invalid"() {
 		setup: 
 		def process = new Process(name:'test process', description:'test process')
 		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome').addToStart('test2')
@@ -253,13 +253,13 @@ class TaskSpec extends IntegrationSpec {
 		task.errors.getFieldError('execute').code == 'task.validation.execute.service.invalid.definition'
 	}
 	
-	def "Ensure executable task defining controller and action is valid"() {
+	def "Ensure executable task defining script is valid"() {
 		setup: 
+		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'').save()
 		def process = new Process(name:'test process', description:'test process')
 		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome').addToStart('test2')
 		def task = new Task(name:'test', description:'test description', finishOnThisTask:false, process:process)
-		task.execute.put('controller', 'testService')
-		task.execute.put('action', 'testMethod')
+		task.execute.put('script', 'TestScript')
 		task.outcomes.put('testOutcomeVal', taskOutcome)
 		
 		when:
@@ -269,29 +269,11 @@ class TaskSpec extends IntegrationSpec {
 		result
 	}
 	
-	def "Ensure executable task defining controller, action and id is valid"() {
+	def "Ensure executable task defining non existant script is invalid"() {
 		setup: 
 		def process = new Process(name:'test process', description:'test process')
 		def task = new Task(name:'test', description:'test description', finishOnThisTask:false, process:process)
-		task.execute.put('controller', 'testService')
-		task.execute.put('action', 'testMethod')
-		task.execute.put('id', '1')
-		def task2 = new Task(name:'test2', description:'test2 description', finishOnThisTask:true, process:process)
-		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome').addToStart('test2')
-		task.outcomes.put('testOutcomeVal', taskOutcome)
-		
-		when:
-		def result = task.validate()
-		
-		then:
-		result
-	}
-	
-	def "Ensure executable task defining controller but no action is invalid"() {
-		setup: 
-		def process = new Process(name:'test process', description:'test process')
-		def task = new Task(name:'test', description:'test description', finishOnThisTask:false, process:process)
-		task.execute.put('controller', 'testService')
+		task.execute.put('script', 'TestScript')
 		def task2 = new Task(name:'test2', description:'test2 description', finishOnThisTask:true, process:process)
 		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome').addToStart('test2')
 		task.outcomes.put('testOutcomeVal', taskOutcome)
@@ -301,25 +283,7 @@ class TaskSpec extends IntegrationSpec {
 		
 		then:
 		!result
-		task.errors.getFieldError('execute').code == 'task.validation.execute.controller.invalid.definition'
-	}
-	
-	def "Ensure executable task defining controller and action with a third non id param is invalid"() {
-		setup: 
-		def process = new Process(name:'test process', description:'test process')
-		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome').addToStart('test2')
-		def task = new Task(name:'test', description:'test description', finishOnThisTask:false, process:process)
-		task.execute.put('controller', 'testService')
-		task.execute.put('action', 'testMethod')
-		task.execute.put('blah', 'testMethod')
-		task.outcomes.put('testOutcomeVal', taskOutcome)
-		
-		when:
-		def result = task.validate()
-		
-		then:
-		!result
-		task.errors.getFieldError('execute').code == 'task.validation.execute.controller.invalid.definition'
+		task.errors.getFieldError('execute').code == 'task.validation.execute.script.invalid.definition'
 	}
 	
 	def "Ensure executable task defining service and method but no outcomes is invalid"() {

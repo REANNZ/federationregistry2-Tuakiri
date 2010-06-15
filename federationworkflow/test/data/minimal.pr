@@ -7,7 +7,7 @@ process(name:'Minimal Test Process', description: 'Minimal test process descript
 				start ('task6')
 			}
 		}
-		execute(controller: 'TestController', action: 'testaction')
+		execute(script: 'TestScript')
 		outcome(name: 'testoutcome1', description:'testoutcome1 description') {
 			start ('task2')
 		}

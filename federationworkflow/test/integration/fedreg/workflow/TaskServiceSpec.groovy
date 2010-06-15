@@ -36,6 +36,7 @@ class TaskServiceSpec extends IntegrationSpec {
 		SpecHelpers.registerMetaClass(TaskService, savedMetaClasses)
 		taskService.metaClass = TaskService.metaClass	// Register existing metaClass and utilize new instance with injected service
 		
+		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'').save()
 		minimalDefinition = new File('test/data/minimal.pr').getText()
 		processService.create(minimalDefinition)
 		def processInstance = processService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
@@ -68,6 +69,7 @@ class TaskServiceSpec extends IntegrationSpec {
 		SpecHelpers.registerMetaClass(TaskService, savedMetaClasses)
 		taskService.metaClass = TaskService.metaClass
 		
+		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'').save()
 		minimalDefinition = new File('test/data/minimal.pr').getText()
 		processService.create(minimalDefinition)
 		def processInstance = processService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
@@ -108,6 +110,7 @@ class TaskServiceSpec extends IntegrationSpec {
 		SpecHelpers.registerMetaClass(TaskService, savedMetaClasses)
 		taskService.metaClass = TaskService.metaClass
 		
+		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'').save()
 		minimalDefinition = new File('test/data/minimal.pr').getText()
 		processService.create(minimalDefinition)
 		def processInstance = processService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
@@ -154,6 +157,7 @@ class TaskServiceSpec extends IntegrationSpec {
 		SpecHelpers.registerMetaClass(TaskService, savedMetaClasses)
 		taskService.metaClass = TaskService.metaClass
 		
+		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'').save()
 		minimalDefinition = new File('test/data/minimal.pr').getText()
 		processService.create(minimalDefinition)
 		def processInstance = processService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
@@ -204,6 +208,7 @@ class TaskServiceSpec extends IntegrationSpec {
 		SpecHelpers.registerMetaClass(TaskService, savedMetaClasses)
 		taskService.metaClass = TaskService.metaClass
 		
+		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'').save()
 		minimalDefinition = new File('test/data/minimal.pr').getText()
 		processService.create(minimalDefinition)
 		def processInstance = processService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
@@ -266,6 +271,7 @@ class TaskServiceSpec extends IntegrationSpec {
 		SpecHelpers.registerMetaClass(TaskService, savedMetaClasses)
 		taskService.metaClass = TaskService.metaClass
 		
+		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'').save()
 		minimalDefinition = new File('test/data/minimal.pr').getText()
 		processService.create(minimalDefinition)
 		def processInstance = processService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])

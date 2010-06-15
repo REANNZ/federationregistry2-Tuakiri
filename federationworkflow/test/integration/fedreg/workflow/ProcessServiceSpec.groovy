@@ -23,6 +23,7 @@ class ProcessServiceSpec extends IntegrationSpec {
 
 	def "Create minimal process"() {
 		setup:
+		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'').save()
 		minimalDefinition = new File('test/data/minimal.pr').getText()
 		
 		when:
@@ -57,6 +58,7 @@ class ProcessServiceSpec extends IntegrationSpec {
 	
 	def "Initiate minimal process"() {
 		setup:
+		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'').save()
 		minimalDefinition = new File('test/data/minimal.pr').getText()
 		processService.create(minimalDefinition)
 		def process = Process.findByName('Minimal Test Process')
@@ -73,19 +75,4 @@ class ProcessServiceSpec extends IntegrationSpec {
 		processInstance.params.get('TEST_VAR3').equals('VALUE_3')
 		processInstance.params.get('NOSUCH_VAR') == null
 	}
-	/*
-	def "Run minimal process"() {
-		setup:
-		minimalDefinition = new File('test/data/minimal.pr').getText()
-		processService.create(minimalDefinition)
-		def processInstance = processService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
-		
-		when:		
-		processService.run(processInstance)
-		
-		then:
-		processInstance.taskInstances.size() == 1
-		def ti = processInstance.taskInstances.get(0).status == TaskStatus.APPROVALREQUIRED
-	}
-	*/
 }
