@@ -5,12 +5,12 @@ import spock.util.concurrent.*
 
 class ExecuteJobSpec extends UnitSpec {
 
-    void "testSomething"() {
+    void "test service execution occurs correctly"() {
 		setup:
 		def outcome
 		
 		def env = [somekey:'someval']
-		def context = [ mergedJobDataMap: [bean:'testBean', method:'testMethod', env: env] ] 
+		def context = [ mergedJobDataMap: [service:'testBean', method:'testMethod', env: env] ] 
 		
 		def testBean = new Expando()
 		testBean.testMethod = {e -> assert e == env; outcome = 'testMethod called'}
@@ -25,6 +25,25 @@ class ExecuteJobSpec extends UnitSpec {
 		
 		then:
 		outcome == 'testMethod called'
+    }
+
+    void "test script execution occurs correctly and supplied environment can be read and added to"() {
+		setup:
+		def outcome
+		
+		def env = [somekey: 'someval']
+		def context = [ mergedJobDataMap: [script:'TestScript', env: env] ] 
+		
+		mockDomain(WorkflowScript)
+		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:"env.outcome = \"testMethod called ${env.somekey}\"").save()
+		
+		def grailsApplication = []
+		
+		when:
+		new ExecuteJob(grailsApplication: grailsApplication).execute( context )
+		
+		then:
+		env.outcome == 'testMethod called someval'
 		
     }
 }

@@ -66,6 +66,10 @@ class Task {
 		true
 	}
 	
+	def hasDependencies = {
+		(dependencies?.size() > 0)
+	}
+	
 	def needsApproval = {
 		(approvers.size() > 0) || (approverGroups.size() > 0) || (approverRoles.size() > 0)
 	}

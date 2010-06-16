@@ -22,7 +22,7 @@ process(name:'Minimal Test Process', description: 'Minimal test process descript
 				start (['task1'])
 			}
 		}
-		execute(service: 'testservice', method: 'testmethod')
+		execute(service: 'testService', method: 'testmethod')
 		outcome(name: 'testoutcome2', description:'testoutcome2 description') {
 			start (['task3', 'task4'])
 		}
@@ -44,7 +44,7 @@ process(name:'Minimal Test Process', description: 'Minimal test process descript
     }
 
 	task(name: 'task4', description: 'Description of task4') {
-		execute(service: 'testservice2', method: 'testmethod2')
+		execute(service: 'testService', method: 'testmethod2')
 		outcome(name: 'testoutcome4', description:'testoutcome4 description') {
 			start ('task6')
 			terminate ('task3')
@@ -56,8 +56,8 @@ process(name:'Minimal Test Process', description: 'Minimal test process descript
 
 	task(name: 'task5', description: 'Description of task5') {
 		dependencies(['task3', 'task4'])
-		execute(service: 'testservice3', method: 'testmethod3')
-		outcome(name: 'testoutcome5', description:'testoutcome5 description') {
+		execute(service: 'testService', method: 'testmethod3')
+		outcome(name: 'testoutcome6', description:'testoutcome6 description') {
 			start ('task6')
 		}
 	}

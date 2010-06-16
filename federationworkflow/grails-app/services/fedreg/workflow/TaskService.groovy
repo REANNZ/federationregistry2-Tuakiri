@@ -18,33 +18,77 @@ class TaskService {
 	def initiate (def processInstanceID, def taskID) {
 		def processInstance = ProcessInstance.lock(processInstanceID)
 		def task = Task.lock(taskID)
+		def taskInstance
 		
-		def taskInstance = new TaskInstance(status:TaskStatus.INITIATING)
+		// This will generally only be the case where a task is a join point in 
+		// our flow and must wait for multiple dependenices to complete
+		processInstance.taskInstances.each { ti ->
+			log.debug "WTF ${ti.task} ${ti.status}"
+			if(ti.task.id == task.id && ti.status == TaskStatus.DEPENDENCYWAIT ) {
+				log.info "Located existing $ti to represent $task within $processInstance"
+				taskInstance = ti
+			}
+		}
 		
-		log.info "Initiating taskInstance to represent $task within $processInstance"
+		if(!taskInstance) {
+			log.info "Initiating taskInstance to represent $task within $processInstance"
+			taskInstance = new TaskInstance(status:TaskStatus.INITIATING)
+			task.addToInstances(taskInstance)
+			processInstance.addToTaskInstances(taskInstance)
 	
-		task.addToInstances(taskInstance)
-		processInstance.addToTaskInstances(taskInstance)
+			if(!processInstance.save(flush:true)) {
+				log.error "Unable to update $processInstance with new taskInstance"
+				task.errors.each { log.error it }
+				return // TODO
+			}
 	
-		if(!processInstance.save(flush:true)) {
-			log.error "Unable to update $processInstance with new taskInstance"
-			task.errors.each { log.error it }
-			return // TODO
+			if(!task.save(flush:true)) {
+				log.error "Unable to update Task with new instance for $processInstance and $task"
+				task.errors.each { log.error it }
+				return // TODO
+			}
+	
+			if(!taskInstance.save(flush:true)) {
+				log.error "Unable to create taskInstance for $processInstance and $task"
+				task.errors.each { log.error it }
+				return	// TODO
+			}
 		}
 	
-		if(!task.save(flush:true)) {
-			log.error "Unable to update Task with new instance for $processInstance and $task"
-			task.errors.each { log.error it }
-			return // TODO
+		taskInstance.lock()
+		if(task.hasDependencies()) {
+			log.info "Task $task has dependencies ${task.dependencies} validating each is complete"
+			def allMet = true
+			task.dependencies.each { dep ->
+				def pass = false
+				// We need to iterate taskInstances and figure out if this task is successful
+				processInstance.taskInstances.findAll{ ti -> ti.task.name == dep}.each { ti ->
+					log.debug "Located taskInstance $ti representing dependency $dep in process $processInstance"
+					if(ti.status == TaskStatus.SUCCESSFUL) {
+						pass = true
+						log.info "Found SUCCESSFUL status $ti"
+					}
+				}
+				if(!pass)
+					log.info "Did not locate taskInstance in SUCCESSFUL state for ${Task.findByName(dep)}"
+					
+				allMet = (allMet && pass)
+			}
+			if(!allMet) {
+				log.info "Task $task has dependencies ${task.dependencies} which are not all complete, sleeping until all are ready"
+				taskInstance.status = TaskStatus.DEPENDENCYWAIT
+
+				if(!taskInstance.save(flush:true)) {
+					log.error "While attempting to update taskInstance ${taskInstance.id} with DEPENDENCYWAIT status a failure occured"
+					taskInstance.errors.each { log.error it }
+					// TODO: Terminate process??
+				}
+				return
+			}
+			
+			log.info "Task $task dependencies ${task.dependencies} are all complete, proceeding"
 		}
-	
-		if(!taskInstance.save(flush:true)) {
-			log.error "Unable to create taskInstance for $processInstance and $task"
-			task.errors.each { log.error it }
-			return	// TODO
-		}
-	
-		taskInstance.lock()	 
+		
 		if(task.needsApproval()) {
 			log.debug "Requesting approval for $taskInstance within $processInstance"
 			requestApproval(taskInstance.id)
@@ -59,6 +103,12 @@ class TaskService {
 	def terminate(def taskInstanceID) {
 		def taskInstance = TaskInstance.lock(taskInstanceID)
 		taskInstance.status = TaskStatus.TERMINATED
+		
+		if(!taskInstance.save(flush:true)) {
+			log.error "While attempting to update taskInstance ${taskInstance.id} with TERMINATED status a failure occured"
+			taskInstance.errors.each { log.error it }
+			// TODO: Terminate process??
+		}
 	}
 	
 	def approve(def taskInstanceID) {
@@ -67,7 +117,6 @@ class TaskService {
 			// TODO
 			println 'wtf'
 		}
-		println taskInstance
 		log.info "Approving execution of $taskInstance in ${taskInstance.processInstance}"
 		
 		taskInstance.status = TaskStatus.APPROVALGRANTED
@@ -111,15 +160,17 @@ class TaskService {
 	def execute(def taskInstanceID) {
 		def taskInstance = TaskInstance.lock(taskInstanceID)
 		taskInstance.status = TaskStatus.INPROGRESS
-		
-		log.debug "Executing $taskInstance for ${taskInstance.processInstance}"
-		//grailsApplication.mainContext.getBean('helloService').hi();
-		
 		if(!taskInstance.save(flush:true)) {
 			log.error "While attempting to update $taskInstance with INPROGRESS status a failure occured"
 			taskInstance.errors.each { log.error it }
 			// TODO: Terminate process??
 		}
+		
+		log.debug "Executing $taskInstance for ${taskInstance.processInstance}"
+		def env = [:]
+		env.putAll(taskInstance.processInstance.params)
+		env.put('taskInstanceID', taskInstanceID)
+		ExecuteJob.triggerNow([service:taskInstance.task.execute.get('service'), method:taskInstance.task.execute.get('method'), script:taskInstance.task.execute.get('script'), env: env])
 	}
 	
 	def complete(def taskInstanceID, def outcomeName) {
@@ -131,8 +182,8 @@ class TaskService {
 		def outcome = taskInstance.task.outcomes.get(outcomeName)
 		if(!outcome) {
 			// TODO: Terminate process??
+			log.error "No such outcome $outcomeName for $taskInstance"
 		}
-		terminateAndStartTasks(taskInstance, outcome)
 		
 		taskInstance.status = TaskStatus.SUCCESSFUL
 		if(!taskInstance.save(flush:true)) {
@@ -141,11 +192,18 @@ class TaskService {
 			// TODO: Terminate process??
 		}
 		
-		log.info "Completed $taskInstance for ${taskInstance.processInstance}"
+		terminateAndStartTasks(taskInstance, outcome)
+		log.info "Completed $taskInstance for ${taskInstance.processInstance} with outcome $outcomeName"
 	}
 	
 	def finalize (def taskInstanceID) {
-		
+		def taskInstance = TaskInstance.lock(taskInstanceID)
+		taskInstance.status = TaskStatus.FINALIZED
+		if(!taskInstance.save(flush:true)) {
+			log.error "While attempting to update $taskInstance with FINALIZED status a failure occured"
+			taskInstance.errors.each { log.error it }
+			// TODO: Terminate process??
+		}
 	}
 	
 	def requestApproval(def taskInstanceID) {
@@ -228,7 +286,7 @@ class TaskService {
 	
 	def terminateAndStartTasks(def taskInstance, def reaction) {
 		log.info "Processing $reaction terminate and start for $taskInstance"
-		reaction.terminate.each {
+		reaction.terminate?.each {
 			def task = taskInstance.processInstance.process.tasks.find { t -> t.name.equals(taskName) }
 			if(!task) {
 				log.error "Unable to locate terminate task with name $taskName defined in ${taskInstance.processInstance.process}"
@@ -236,7 +294,7 @@ class TaskService {
 			log.debug "Firing start for $task in ${taskInstance.processInstance}"
 			terminate(taskInstance.processInstance.id, task.id)
 		}
-		reaction.start.each { taskName ->
+		reaction.start?.each { taskName ->
 			def task = taskInstance.processInstance.process.tasks.find { t -> t.name.equals(taskName) }
 			if(!task) {
 				log.error "Unable to locate start task with name $taskName defined in ${taskInstance.processInstance.process}"

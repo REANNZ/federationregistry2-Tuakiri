@@ -255,7 +255,7 @@ class TaskSpec extends IntegrationSpec {
 	
 	def "Ensure executable task defining script is valid"() {
 		setup: 
-		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'').save()
+		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true').save()
 		def process = new Process(name:'test process', description:'test process')
 		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome').addToStart('test2')
 		def task = new Task(name:'test', description:'test description', finishOnThisTask:false, process:process)

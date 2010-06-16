@@ -23,7 +23,7 @@ class ProcessServiceSpec extends IntegrationSpec {
 
 	def "Create minimal process"() {
 		setup:
-		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'').save()
+		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true').save()
 		minimalDefinition = new File('test/data/minimal.pr').getText()
 		
 		when:
@@ -58,7 +58,7 @@ class ProcessServiceSpec extends IntegrationSpec {
 	
 	def "Initiate minimal process"() {
 		setup:
-		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'').save()
+		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true').save()
 		minimalDefinition = new File('test/data/minimal.pr').getText()
 		processService.create(minimalDefinition)
 		def process = Process.findByName('Minimal Test Process')
