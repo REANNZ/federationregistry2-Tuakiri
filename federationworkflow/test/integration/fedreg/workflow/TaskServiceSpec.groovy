@@ -486,12 +486,6 @@ class TaskServiceSpec extends IntegrationSpec {
 			sessionFactory.getCurrentSession().clear();
 			taskService.approve(TaskInstance.list().get(2).id)
 		}
-		
-		if(block.approval2) {
-			sessionFactory.getCurrentSession().clear()
-			taskService.complete(TaskInstance.list().get(2).id, 'testoutcome3')
-		}
-		
 		if(block.execute2) {
 			sessionFactory.getCurrentSession().clear();
 			taskService.complete(TaskInstance.list().get(3).id, 'testoutcome5')
@@ -580,12 +574,6 @@ class TaskServiceSpec extends IntegrationSpec {
 			sessionFactory.getCurrentSession().clear();
 			taskService.approve(TaskInstance.list().get(2).id)
 		}
-		
-		if(block.approval2) {
-			sessionFactory.getCurrentSession().clear()
-			taskService.complete(TaskInstance.list().get(2).id, 'testoutcome3')
-		}
-		
 		if(block.execute2) {
 			sessionFactory.getCurrentSession().clear();
 			taskService.complete(TaskInstance.list().get(3).id, 'testoutcome5')
