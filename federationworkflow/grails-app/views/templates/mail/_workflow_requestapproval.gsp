@@ -7,7 +7,7 @@
 </head>
 
 <body>
-	
+	THIS SI THE BODY~
 	<p>
 		<g:message code="workflow.requestapproval.descriptive" />
 	</p>

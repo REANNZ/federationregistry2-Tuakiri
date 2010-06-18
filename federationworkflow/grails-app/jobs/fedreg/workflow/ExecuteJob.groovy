@@ -1,14 +1,12 @@
 package fedreg.workflow
 
+/* Used Quartz jobs here so we can take advantange of serialization and possibly even clustering in the future */
 class ExecuteJob {
     static triggers = {}
 	def sessionRequired = true
 	def grailsApplication
 
-    def execute(def context) {
-		println this.metaClass
-		println this.metaClass.execute
-		
+    def execute(def context) {		
         def serviceID = context.mergedJobDataMap.get('service')
 		def method = context.mergedJobDataMap.get('method')
 		def scriptID = context.mergedJobDataMap.get('script')

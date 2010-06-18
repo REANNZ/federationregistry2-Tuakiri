@@ -261,24 +261,30 @@ class TaskService {
 		
 		taskInstance.status = TaskStatus.APPROVALREQUIRED
 
-		def locatedApprover = false
 		def identifier, user, role, group
+		def userList = []
 		for(approver in taskInstance.task.approvers) {
 			identifier = processVal(approver, taskInstance.processInstance.params)
 			if(identifier.isLong())
 				user = UserBase.get(identifier)
 			if(user) {
 				log.debug "Identified user (${user.id}) ${user.username} by a match of the identifier '${identifier}' to their ID attribute"
+				if (!userList.contains(user))
+					userList.add(user)
 			}
 			else {
 				user = UserBase.findByUsername(identifier)
 				if(user) {
 					log.debug "Identified user (${user.id}) ${user.username} by a match of the identifier '${identifier}' to their username attribute"
+					if (!userList.contains(user))
+						userList.add(user)
 				}
 				else {
 					user = ProfileBase.findByEmail(identifier)?.owner
 					if(user){
 						log.debug "Identified user (${user.id}) ${user.username} by a match of the identifier '${identifier}' to their email attribute"
+						if (!userList.contains(user))
+							userList.add(user)
 					}
 					else {
 						log.error "Attempting to identify user by identifier '${identifier}' for process '${taskInstance.processInstance.description}' to request approval for task '${taskInstance.task.name}' failed. Workflow is erronous and should be checked."
@@ -286,23 +292,16 @@ class TaskService {
 					}
 				}
 			}
-			if(user) {
-				locatedApprover = true
-				Object[] args = [taskInstance.task.name]
-				sendMail {
-		            to user.profile.email		
-					from grailsApplication.config.workflow.messaging.mail.from
-		            subject messageSource.getMessage('workflow.requestapproval.mail.subject', args, 'workflow.requestapproval.mail.subject', new Locale("EN"))	// TODO: Draw language from user object when supported by Nimble
-		            body(view: '/templates/mail/_workflow_requestapproval', model: [taskInstance: taskInstance])
-		        }
-			}
 		}
 		taskInstance.task.approverRoles.each {
 			identifier = processVal(it, taskInstance.processInstance.params)
 			role = Role.findByName(identifier)
 			if(role) {
-				// TODO: Loop through all membership of the role and send notification messages
-				locatedApprover = true
+				log.debug "Identified ${role} as a name match of the identifier '${identifier}', adding users to approval notification"
+				role.users.each { u -> 
+					if (!userList.contains(u))
+						userList.add(u)
+				}
 			}
 			else {
 				log.error "Attempting to identify role by identifier '${identifier}' for process '${taskInstance.processInstance.description}' to request approval for task '${taskInstance.task.name}' failed. Workflow is erronous and should be checked."
@@ -312,15 +311,18 @@ class TaskService {
 			identifier = processVal(it, taskInstance.processInstance.params)
 			group = Group.findByName(identifier)
 			if(group) {
-				// TODO: Loop through all membership of the group and send notification messages
-				locatedApprover = true
+				log.debug "Identified ${group} as a name match of the identifier '${identifier}', adding users to approval notification"
+				group.users.each { u -> 
+					if (!userList.contains(u))
+						userList.add(u)
+				}
 			}
 			else {
 				log.error "Attempting to identify group by identifier '${identifier}' for process '${taskInstance.processInstance.description}' to request approval for task '${taskInstance.task.name}' failed. Workflow is erronous and should be checked."
 			}
 		}
 	
-		if(!locatedApprover) {
+		if(userList.size() == 0) {
 			// The task requires approval but all avenues to locate an authoritative source have failed. The process is now effectively dead
 			log.error "Unable to locate a valid approver for process '${taskInstance.processInstance.description}' and task '${taskInstance.task.name}', process is invalid and will be terminated"
 			taskInstance.status = TaskStatus.APPROVALFAILURE
@@ -330,6 +332,9 @@ class TaskService {
 			}
 		}
 		else {
+			userList.each { u ->
+				messageApprovalRequest(u, taskInstance)
+			}
 			// Messages have been queued to all concerned requesting approval so we're now in a wait state
 			log.debug "Located valid approver(s) for process '${taskInstance.processInstance.description}' and task '${taskInstance.task.name}', task will continue once approved"
 			taskInstance.status = TaskStatus.APPROVALREQUIRED
@@ -338,6 +343,18 @@ class TaskService {
 				taskInstance.errors.each { log.error it }
 			}
 		}
+	}
+	
+	def messageApprovalRequest(def user, def taskInstance) {
+		log.debug "Sending approval request to $user for $taskInstance"
+		
+		Object[] args = [taskInstance.task.name]
+		sendMail {
+            to user.profile.email		
+			from grailsApplication.config.workflow.messaging.mail.from
+            subject messageSource.getMessage('workflow.requestapproval.mail.subject', args, 'workflow.requestapproval.mail.subject', new Locale("EN"))	// TODO: Draw language from user object when supported by Nimble
+            body(view: '/templates/mail/_workflow_requestapproval', model: [taskInstance: taskInstance])
+        }
 	}
 	
 	def terminateAndStartTasks(def taskInstance, def reaction) {

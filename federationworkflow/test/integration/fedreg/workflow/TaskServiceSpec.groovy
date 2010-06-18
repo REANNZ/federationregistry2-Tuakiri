@@ -10,6 +10,10 @@ import org.apache.shiro.SecurityUtils
 
 import grails.plugins.nimble.core.UserBase
 import grails.plugins.nimble.core.ProfileBase
+import grails.plugins.nimble.core.Role
+import grails.plugins.nimble.core.Group
+
+import com.icegreen.greenmail.util.*
 
 import org.codehaus.groovy.runtime.InvokerHelper
 
@@ -33,8 +37,10 @@ class TaskServiceSpec extends IntegrationSpec {
 	
 	def setup() {
 		savedMetaClasses = [:]
-		println grailsApplication.config.nimble.messaging.mail.port
-		println grailsApplication.config.nimble.messaging.mail.host
+	}
+	
+	def cleanup() {
+		greenMail.deleteAllMessages()
 	}
 	
 	def "Validate first task in minimal process requires approval when process is run"() {
@@ -63,7 +69,102 @@ class TaskServiceSpec extends IntegrationSpec {
 		result.get() == true
 		sessionFactory.getCurrentSession().clear();
 		processInstance.taskInstances.size() == 1
-		TaskInstance.findById(1).status == TaskStatus.APPROVALREQUIRED
+		TaskInstance.list().get(0).status == TaskStatus.APPROVALREQUIRED
+		greenMail.getReceivedMessages().length == 1
+		def message = greenMail.getReceivedMessages()[0]
+		message.subject == 'workflow.requestapproval.mail.subject'
+		
+		cleanup:
+		SpecHelpers.resetMetaClasses(savedMetaClasses)
+		taskService.metaClass = TaskService.metaClass	// Restore to default metaClass and restore service
+	}
+	
+	def "Validate first task in minimal process requires approval when process is run and approval is provided to users in role1, also validates correct variable substition to workflow script"() {
+		setup:
+		SpecHelpers.registerMetaClass(TaskService, savedMetaClasses)
+		taskService.metaClass = TaskService.metaClass	// Register existing metaClass and utilize new instance with injected service
+		
+		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true').save()
+		minimalDefinition = new File('test/data/minimal.pr').getText()
+		processService.create(minimalDefinition)
+		def processInstance = processService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'role1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
+		
+		// Utilize new (31/5/10) Spock 0.4 support for spec'ing multi-threaded code (very cool use of CountDownLatch)
+		def result = new BlockingVariable<Boolean>(2, TimeUnit.SECONDS)
+		
+		def originalMethod = TaskService.metaClass.getMetaMethod("requestApproval", [Object])
+		TaskService.metaClass.requestApproval = { def taskInstanceID ->
+			originalMethod.invoke(delegate, taskInstanceID)
+			result.set(true)
+		}
+		
+		def role = new Role(name: 'role1')
+		def profile2 = new ProfileBase(email:'test2@testdomain.com')
+		def user2 = new UserBase(username:'testuser2', profile: profile2).save()
+		role.addToUsers(user2)
+		role.save()
+		
+		when:				
+		processService.run(processInstance)
+		
+		then:
+		result.get() == true
+		sessionFactory.getCurrentSession().clear();
+		processInstance.taskInstances.size() == 1
+		TaskInstance.list().get(0).status == TaskStatus.APPROVALREQUIRED
+		greenMail.getReceivedMessages().length == 2
+		def message = greenMail.getReceivedMessages()[0]
+		'workflow.requestapproval.mail.subject' == message.subject
+		'test@testdomain.com' == GreenMailUtil.getAddressList(message.getRecipients(javax.mail.Message.RecipientType.TO))
+		def message2 = greenMail.getReceivedMessages()[1]
+		'workflow.requestapproval.mail.subject' == message2.subject
+		'test2@testdomain.com' == GreenMailUtil.getAddressList(message2.getRecipients(javax.mail.Message.RecipientType.TO))
+		
+		cleanup:
+		SpecHelpers.resetMetaClasses(savedMetaClasses)
+		taskService.metaClass = TaskService.metaClass	// Restore to default metaClass and restore service
+	}
+	
+	def "Validate first task in minimal process requires approval when process is run and approval is provided to users in group1, also validates correct variable substition to workflow script"() {
+		setup:
+		SpecHelpers.registerMetaClass(TaskService, savedMetaClasses)
+		taskService.metaClass = TaskService.metaClass	// Register existing metaClass and utilize new instance with injected service
+		
+		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true').save()
+		minimalDefinition = new File('test/data/minimal.pr').getText()
+		processService.create(minimalDefinition)
+		def processInstance = processService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'TEST_VAR1', 'TEST_VAR2':'group1', 'TEST_VAR3':'VALUE_3'])
+		
+		// Utilize new (31/5/10) Spock 0.4 support for spec'ing multi-threaded code (very cool use of CountDownLatch)
+		def result = new BlockingVariable<Boolean>(2, TimeUnit.SECONDS)
+		
+		def originalMethod = TaskService.metaClass.getMetaMethod("requestApproval", [Object])
+		TaskService.metaClass.requestApproval = { def taskInstanceID ->
+			originalMethod.invoke(delegate, taskInstanceID)
+			result.set(true)
+		}
+		
+		def group = new Group(name: 'group1')
+		def profile2 = new ProfileBase(email:'test2@testdomain.com')
+		def user2 = new UserBase(username:'testuser2', profile: profile2).save()
+		group.addToUsers(user2)
+		group.save()
+		
+		when:				
+		processService.run(processInstance)
+		
+		then:
+		result.get() == true
+		sessionFactory.getCurrentSession().clear();
+		processInstance.taskInstances.size() == 1
+		TaskInstance.list().get(0).status == TaskStatus.APPROVALREQUIRED
+		greenMail.getReceivedMessages().length == 2
+		def message = greenMail.getReceivedMessages()[0]
+		'workflow.requestapproval.mail.subject' == message.subject
+		'test@testdomain.com' == GreenMailUtil.getAddressList(message.getRecipients(javax.mail.Message.RecipientType.TO))
+		def message2 = greenMail.getReceivedMessages()[1]
+		'workflow.requestapproval.mail.subject' == message2.subject
+		'test2@testdomain.com' == GreenMailUtil.getAddressList(message2.getRecipients(javax.mail.Message.RecipientType.TO))
 		
 		cleanup:
 		SpecHelpers.resetMetaClasses(savedMetaClasses)
