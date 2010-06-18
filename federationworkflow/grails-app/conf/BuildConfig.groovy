@@ -40,6 +40,7 @@ coverage {
 	              '**/junit/framework/**',
 	              '**/*Config*',
 	              '**/*Shiro*',
-	              '**/*Nimble*'
+	              '**/*Nimble*',
+				  '**/greenmail/**'
 				  ]
 }

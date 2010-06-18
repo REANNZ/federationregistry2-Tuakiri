@@ -22,6 +22,7 @@ class TaskServiceSpec extends IntegrationSpec {
 	def sessionFactory
 	def savedMetaClasses
 	def grailsApplication
+	def greenMail
 	
 	def setupSpec() {
 		def profile = new ProfileBase(email:'test@testdomain.com')
@@ -32,6 +33,8 @@ class TaskServiceSpec extends IntegrationSpec {
 	
 	def setup() {
 		savedMetaClasses = [:]
+		println grailsApplication.config.nimble.messaging.mail.port
+		println grailsApplication.config.nimble.messaging.mail.host
 	}
 	
 	def "Validate first task in minimal process requires approval when process is run"() {

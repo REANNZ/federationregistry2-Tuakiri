@@ -1,5 +1,7 @@
 package fedreg.workflow
 
+import java.util.Locale
+
 import org.springframework.transaction.annotation.*
 
 import grails.plugins.nimble.core.UserBase
@@ -22,6 +24,7 @@ class TaskService {
 	
 	def sessionFactory
 	def grailsApplication
+	def messageSource
 	
 	def initiate (def processInstanceID, def taskID) {
 		def processInstance = ProcessInstance.lock(processInstanceID)
@@ -283,7 +286,16 @@ class TaskService {
 					}
 				}
 			}
-			locatedApprover = true
+			if(user) {
+				locatedApprover = true
+				Object[] args = [taskInstance.task.name]
+				sendMail {
+		            to user.profile.email		
+					from grailsApplication.config.workflow.messaging.mail.from
+		            subject messageSource.getMessage('workflow.requestapproval.mail.subject', args, 'workflow.requestapproval.mail.subject', new Locale("EN"))	// TODO: Draw language from user object when supported by Nimble
+		            body(view: '/templates/mail/_workflow_requestapproval', model: [taskInstance: taskInstance])
+		        }
+			}
 		}
 		taskInstance.task.approverRoles.each {
 			identifier = processVal(it, taskInstance.processInstance.params)
