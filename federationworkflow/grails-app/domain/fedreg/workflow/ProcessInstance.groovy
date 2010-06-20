@@ -1,9 +1,5 @@
 package fedreg.workflow
 
-import fedreg.workflow.ProcessStatus
-import fedreg.workflow.ProcessPriority
-import fedreg.workflow.ProcessMessage
-
 import grails.plugins.nimble.core.UserBase
 
 class ProcessInstance {
@@ -21,7 +17,7 @@ class ProcessInstance {
 	List taskInstances
 	Map params
 
-	static hasMany = [taskInstances: TaskInstance, messages: ProcessMessage]
+	static hasMany = [taskInstances: TaskInstance, messages: WorkflowMessage]
     static belongsTo = [process: Process]
 
 	static constraints = {
