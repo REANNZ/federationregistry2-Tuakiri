@@ -48,7 +48,11 @@
 			  <h3><g:message code="fedreg.layout.workflow.navigation.title" /></h3>
 			    <ul>
 				  <li>
-					N/A
+					<h4><g:message code="fedreg.layout.workflow.navigation.management.title" /></h4>
+					<ul>
+						<li><g:link controller="workflowManager" action="list"><g:message code="fedreg.link.workflowprocesslist" /></g:link></li>
+						<li><g:link controller="workflowManager" action="create"><g:message code="fedreg.link.workflowprocesscreate" /></g:link></li>
+					</ul>
 				  </li>
 				</ul>
 			</div>
