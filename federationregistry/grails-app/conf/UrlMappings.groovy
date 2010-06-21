@@ -57,11 +57,13 @@ class UrlMappings {
 		controller = "workflowManager"
 	}
 	
-	"/workflow/instances/$id?" (controller: 'workflowManager', action: 'processInstances')
-    "/workflow/instances/search/$id?" (controller: 'workflowManager', action: 'dateSearch')
-    "/workflow/processes/$id?" (controller: 'workflowManager', action: 'processDefinitions')
-    "/workflow/processes/create/$id?" (controller: 'workflowManager', action: 'newProcess')
-    "/workflow/processes/definition/$id?" (controller: 'workflowManager', action: 'processDefinition')
+	"/workflow/management/$action?/$id?" {
+			controller = "workflowManager"
+	}
+	
+	"/workflow/$action?/$id?" {
+			controller = "workflowInstance"
+	}
 	
 	"/bootstrap" {
 			controller = "dataManagement"
@@ -76,6 +78,13 @@ class UrlMappings {
 		controller = "monitor"
 	}
 	
+	"/code/$action?/$id?"{
+		controller = "code"
+	}
+	
+	"/console/$action?/$id?"{
+		controller = "console"
+	}
 	
     "/"(view:"/index")
 	  "500"(view:'/error')

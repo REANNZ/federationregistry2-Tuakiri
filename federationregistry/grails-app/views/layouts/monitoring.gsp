@@ -31,7 +31,7 @@
 		<g:render template='/templates/aafheader' model="['navigation':true]"/>
     </div>
     <div id="bd">
-	      		<g:layoutBody/>
+			<g:layoutBody/>
     </div>
     <div id="ft">
 	

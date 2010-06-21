@@ -45,7 +45,7 @@ public class SecurityFilters extends grails.plugins.nimble.security.NimbleFilter
         }
 
 		// Workflow
-		workflow(controller: "workflowManager") {
+		workflow(controller: "workflow*") {
             before = {
                 accessControl {
                     role(UserService.USER_ROLE)
@@ -80,6 +80,14 @@ public class SecurityFilters extends grails.plugins.nimble.security.NimbleFilter
             }
         }
 
+		// Groovy Console
+		console(controller: "(code|console)") {
+            before = {
+                accessControl {
+                    role(AdminsService.ADMIN_ROLE)
+                }
+            }
+        }
     }
 
 }

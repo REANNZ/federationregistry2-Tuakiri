@@ -1,6 +1,6 @@
 package fedreg.host
 
-class MonitorController {
+class CodeController {
 	
 	def index = {
 		

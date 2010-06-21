@@ -64,6 +64,8 @@ td.errors input { border: 2px solid #b10902; background-color: #c5200a; color: w
 .critical { -moz-border-radius: 5px; -webkit-border-radius: 5px; border: 1px solid #bb0000; background-color: #cf0101; color: white; font-weight: bold; }
 .critical p { margin: 0px; padding: 3px; padding-left: 24px; }
 
+#codeconsole #header { display: none; }
+
 .warning { -moz-border-radius: 5px; -webkit-border-radius: 5px; border: 1px solid #e7e691; background-color: #fefef0; color: #333333; }
 .warning p { margin: 0px; padding: 3px; padding-left: 24px; }
 
