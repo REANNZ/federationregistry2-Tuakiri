@@ -78,7 +78,7 @@ class UrlMappings {
 		controller = "monitor"
 	}
 	
-	"/code/$action?/$id?"{
+	"/codeconsole/$action?/$id?"{
 		controller = "code"
 	}
 	
