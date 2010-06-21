@@ -7,7 +7,7 @@
         <g:javascript library="application" />
     </head>
     <body>
-        <div id="spinner" class="spinner" style="display:none;">
+        <div id="spinner" class="spinner" >
             <img src="${resource(dir:'images',file:'spinner.gif')}" alt="Spinner" />
         </div>
         <div id="grailsLogo" class="logo"><a href="http://grails.org"><img src="${resource(dir:'images',file:'grails_logo.png')}" alt="Grails" border="0" /></a></div>

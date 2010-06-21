@@ -6,7 +6,7 @@
 
 <body>
 
-<table style="width: 1000px; border: 0;">
+<table >
 <tr>
 <td>
 <h1>Process Definitions</h1><br>
@@ -14,11 +14,11 @@
 <p>&nbsp;</p>
 <table>
 <tr>
-    <g:sortableColumn property="process" title="Process" style="width: 230px;" params="${params}"/>
+    <g:sortableColumn property="process" title="Process"  params="${params}"/>
     <g:sortableColumn property="process" title="Description" params="${params}"/>
-    <g:sortableColumn property="version" title="Version" style="width: 30px; text-align:center" params="${params}"/>
-    <th style="width: 90px; text-align:center; color: #333; font-size: 10px; text-decoration: none;">Current Instance</th>
-    <g:sortableColumn property="lastUpdated" title="Last Updated" style="width: 150px; text-align:center" params="${params}"/>
+    <g:sortableColumn property="version" title="Version"  params="${params}"/>
+    <th >Current Instance</th>
+    <g:sortableColumn property="lastUpdated" title="Last Updated"  params="${params}"/>
     
 </tr>
 
@@ -42,9 +42,9 @@
     <g:else>
     <td>Nil.</td>
     </g:else>
-    <td style="text-align: center;">${process.processVersion}</td>
-    <td style="text-align: center;">${process.instances.size()}</td>
-    <td style="text-align: center;"><g:formatDate format="EEE dd/MMM/yyyy, h:mm:ssa" date="${process.lastUpdated}"/></td>
+    <td >${process.processVersion}</td>
+    <td >${process.instances.size()}</td>
+    <td ><g:formatDate format="EEE dd/MMM/yyyy, h:mm:ssa" date="${process.lastUpdated}"/></td>
 
 </tr>
 </g:each>

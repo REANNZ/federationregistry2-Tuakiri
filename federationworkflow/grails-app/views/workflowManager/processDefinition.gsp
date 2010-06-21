@@ -7,9 +7,9 @@
 <body>
 
 <h1>${processDefinition.name}</h1>
-<table style="width: 550px;">
+<table >
     <tr>
-        <th style="width: 120px;">Description:</th>
+        <th >Description:</th>
         <td colspan="3">
             <g:if test="${processDefinition.description}">
                 ${processDefinition.description}
@@ -20,9 +20,9 @@
         </td>
     </tr>
     <tr>
-        <th style="width: 120px;">Process Version:</th>
-        <td style="width: 50px">${processDefinition.processVersion}</td>
-        <th style="width: 120px;">Uploaded by:</th>
+        <th >Process Version:</th>
+        <td >${processDefinition.processVersion}</td>
+        <th >Uploaded by:</th>
         <td><g:if test="${processDefinition.uploadedBy}">
                 <workflow:userfullname username="${processDefinition.uploadedBy}"/>
             </g:if>
@@ -32,7 +32,7 @@
         </td>
     </tr>
     <tr>
-        <th style="width: 120px;">Date Uploaded:</th>
+        <th >Date Uploaded:</th>
         <td colspan="3"><g:formatDate format=" EEE dd/MMM/yyyy, h:mm:ssa" date="${processDefinition.dateCreated}"/></td>
     </tr>
 </table>

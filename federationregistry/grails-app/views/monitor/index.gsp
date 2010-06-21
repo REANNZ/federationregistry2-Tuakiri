@@ -6,7 +6,7 @@
 	</head>
 	<body>
 		
-		<iframe src ="/federationregistry/monitoring" width="100%" height="1000px" style="padding: 12px;">
+		<iframe src ="/federationregistry/monitoring" width="100%" height="1000px" >
 		  <p>Your browser does not support iframes.</p>
 		</iframe>
 	

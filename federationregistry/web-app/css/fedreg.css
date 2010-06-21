@@ -22,7 +22,7 @@ body { font-family: Gill Sans, Gill Sans MT, Segoe UI, Candara, Bitstream Vera S
 #bd { clear: all; margin: 0px; }
 #bd #working { -moz-border-radius: 5px; -webkit-border-radius: 5px; padding: 6px; position: absolute; color: #f2f2f2; text-align: center; background-color: #2c3d4b; border: 2px solid white; }
 #bd .container { margin: 0px; padding: 0px; width: 1024px; }
-#bd .localnavigation { float: left; overflow: hidden; display: inline-block; -moz-border-radius: 5px; -webkit-border-radius: 5px; width: 150px; margin: 6px; padding: 6px; background-color: #e6e6e6; border: 1px solid #d6d6d6; }
+#bd .localnavigation { float: left; overflow: hidden; display: inline-block; -moz-border-radius: 5px; -webkit-border-radius: 5px; width: 150px; margin-left: 0px; margin-right: 12px; padding: 6px; background-color: #e6e6e6; border: 1px solid #d6d6d6; }
 #bd .localnavigation { display: block; }
 #bd .localnavigation ul { list-style-type: none; }
 #bd .localnavigation ul li { list-style-type: none; }
