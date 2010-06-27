@@ -75,4 +75,16 @@ class ProcessServiceSpec extends IntegrationSpec {
 		processInstance.params.get('TEST_VAR3').equals('VALUE_3')
 		processInstance.params.get('NOSUCH_VAR') == null
 	}
+	
+	def "Initiate erronous process"() {
+		setup:
+		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true').save()
+		minimalDefinition = new File('test/data/minimal-broken.pr').getText()
+		
+		when:		
+		def process = processService.create(minimalDefinition)
+		
+		then:
+		process.hasErrors()
+	}
 }

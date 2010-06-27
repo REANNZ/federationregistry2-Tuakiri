@@ -48,10 +48,18 @@
 			  <h3><g:message code="fedreg.layout.workflow.navigation.title" /></h3>
 			    <ul>
 				  <li>
-					<h4><g:message code="fedreg.layout.workflow.navigation.management.title" /></h4>
+					<h4><g:message code="fedreg.layout.workflow.navigation.process.title" /></h4>
 					<ul>
-						<li><g:link controller="workflowManager" action="list"><g:message code="fedreg.link.workflowprocesslist" /></g:link></li>
-						<li><g:link controller="workflowManager" action="create"><g:message code="fedreg.link.workflowprocesscreate" /></g:link></li>
+						<li><g:link controller="workflowProcess" action="list"><g:message code="fedreg.link.list" /></g:link></li>
+						<li><g:link controller="workflowProcess" action="create"><g:message code="fedreg.link.create" /></g:link></li>
+						<g:if test="${controllerName == 'workflowProcess' && actionName in ['show', 'edit']}">
+						<li>
+								<g:link controller="workflowProcess" action="show" id="${process.id}">${process.name?.encodeAsHTML()}</g:link>
+								<ul>
+									<li><g:link controller="workflowProcess" action="edit" id="${process.id}"><g:message code="fedreg.link.edit"/></g:link></li>
+								</ul>
+						</li>
+						</g:if>
 					</ul>
 				  </li>
 				</ul>
