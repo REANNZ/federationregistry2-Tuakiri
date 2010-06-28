@@ -14,6 +14,8 @@ class TaskRejection {
 						terminate: String ]
 
 	static constraints = {
+		name(nullable:false, blank:false)
+		description(nullable:false, blank:false)
 		start(validator: {val ->
 			val.size() > 0
 		})

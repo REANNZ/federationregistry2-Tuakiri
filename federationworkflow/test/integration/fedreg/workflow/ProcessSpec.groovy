@@ -4,6 +4,7 @@ import grails.plugin.spock.*
 import grails.plugins.nimble.core.UserBase
 
 class ProcessSpec extends IntegrationSpec {
+	static transactional = true
 	
 	def "Ensure process with no tasks is invalid"() {
 		setup: 

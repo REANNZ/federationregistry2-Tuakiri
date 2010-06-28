@@ -20,11 +20,12 @@ class WorkflowScript {
 	}
 	
 	static constraints = {
-		name(nullable: false, unique: true)
-		description(nullable: false)
+		name(nullable: false, blank:false, unique: true)
+		description(nullable: false, blank:false)
 		definition(nullable: false, blank: false, validator: { val, obj ->
 			obj.validateScript()
 		})
+		
 		creator(nullable: false)
 		lastEditor(nullable: true)
 	}

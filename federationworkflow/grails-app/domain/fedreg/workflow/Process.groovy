@@ -28,9 +28,12 @@ class Process {
 	}
 	
 	static constraints = {
-		name(nullable: false)
-		description(nullable: false)
+		name(nullable: false, blank:false)
+		description(nullable: false, blank:false)
 		processVersion(min: 1)
+		
+		dateCreated(nullable:true)
+		lastUpdated(nullable:true)
 
 		definition(nullable: false)
 		creator(nullable: false)

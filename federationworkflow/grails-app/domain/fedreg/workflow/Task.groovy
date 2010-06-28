@@ -38,6 +38,7 @@ class Task {
 	static constraints = {
 		name(nullable:false, blank:false)
 		description(nullable:false, blank:false)
+		
 		execute( validator: { val, obj ->
 			obj.validateExecution()
 		})

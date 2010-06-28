@@ -11,7 +11,7 @@ class WorkflowMessage {
     static belongsTo = [processInstance: ProcessInstance, taskInstance: TaskInstance]
 
 	static constraints = {
-		dateCreated(nullable:true)
+		message(nullable:false, blank:false)
 		creator(nullable:true)
 		
 		processInstance(validator: {val, obj ->

@@ -3,6 +3,9 @@ package fedreg.workflow
 import grails.plugin.spock.*
 import spock.util.concurrent.*
 
+import grails.plugins.nimble.core.UserBase
+import grails.plugins.nimble.core.ProfileBase
+
 class ExecuteJobSpec extends UnitSpec {
 
     void "test service execution occurs correctly"() {
@@ -34,8 +37,10 @@ class ExecuteJobSpec extends UnitSpec {
 		def env = [somekey: 'someval']
 		def context = [ mergedJobDataMap: [script:'TestScript', env: env] ] 
 		
+		def user = [save: true] as UserBase
+		
 		mockDomain(WorkflowScript)
-		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:"env.outcome = \"testMethod called ${env.somekey}\"").save()
+		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:"env.outcome = \"testMethod called ${env.somekey}\"", creator: user).save()
 		
 		def grailsApplication = []
 		
