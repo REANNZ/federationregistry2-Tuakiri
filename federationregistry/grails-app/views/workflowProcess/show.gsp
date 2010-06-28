@@ -8,14 +8,10 @@
 	
 	<body>
 		
-		<h2><g:message code="fedreg.view.workflow.process.show.heading" /></h2>
+		<h2><g:message code="fedreg.view.workflow.process.show.heading" args="[process.name]"/></h2>
 		<div class="details">
 			<table class="datatable buttons">
 				<tbody>		
-					<tr>
-						<th><g:message code="fedreg.label.name" /></th>
-						<td>${fieldValue(bean: process, field: "name")}</td>
-					</tr>
 					<tr>
 						<th><g:message code="fedreg.label.description" /></th>
 						<td>${fieldValue(bean: process, field: "description")}</td>
@@ -31,10 +27,6 @@
 					<tr>
 						<th><g:message code="fedreg.label.created" /></th>
 						<td>${fieldValue(bean: process, field: "dateCreated")}</td>
-					</tr>
-					<tr>
-						<th><g:message code="fedreg.label.lastupdated" /></th>
-						<td>${fieldValue(bean: process, field: "lastUpdated")}</td>
 					</tr>
 					<tr>
 						<th><g:message code="fedreg.label.creator" /></th>

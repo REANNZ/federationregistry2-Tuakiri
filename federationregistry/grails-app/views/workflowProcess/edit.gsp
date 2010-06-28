@@ -8,7 +8,7 @@
 		<script src="${request.contextPath}/js/codemirror/js/codemirror.js" type="text/javascript" charset="utf-8"></script>
 	</head>
 	<body>
-		<h2><g:message code="fedreg.view.workflow.process.edit.heading" /></h2>
+		<h2><g:message code="fedreg.view.workflow.process.edit.heading" args="[process.name]"/></h2>
 		
 		<g:if test="${process.hasErrors()}">
 			<div class="error">
