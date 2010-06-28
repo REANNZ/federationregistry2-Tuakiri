@@ -11,7 +11,7 @@ class WorkflowProcessController {
 	}
 	
 	def create = {
-		def process = new Process();
+		def process = new Process()
 		[process: process]
 	}
 	
@@ -105,7 +105,7 @@ class WorkflowProcessController {
 		}
 		catch(Exception e) {
 			flash.type = "error"
-		    flash.message = message(code: 'fedreg.workflow.process.create.totalfailure')
+		    flash.message = message(code: 'fedreg.workflow.process.update.totalfailure')
 			render view: "create", model: [process: process]
 			return
 		}
@@ -119,7 +119,7 @@ class WorkflowProcessController {
 		
 		if(updatedProcess.hasErrors()) {
 			flash.type = "error"
-		    flash.message = message(code: 'fedreg.workflow.process.create.error')
+		    flash.message = message(code: 'fedreg.workflow.process.update.error')
 			render view: "edit", model: [process: updatedProcess]
 			return
 		}

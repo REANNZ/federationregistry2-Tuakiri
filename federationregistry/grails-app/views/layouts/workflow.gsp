@@ -47,6 +47,7 @@
 	    	<div class="localnavigation">
 			  <h3><g:message code="fedreg.layout.workflow.navigation.title" /></h3>
 			    <ul>
+					
 					<g:if test="${controllerName == 'workflowProcess' && actionName in ['show', 'edit']}">
 					<li>
 						<g:link controller="workflowProcess" action="show" id="${process.id}"><h4>${process.name?.encodeAsHTML()}</h4></g:link>
@@ -56,13 +57,33 @@
 						<hr>
 					</li>
 					</g:if>
-				  <li>
-					<h4><g:message code="fedreg.layout.workflow.navigation.process.title" /></h4>
-					<ul>
-						<li><g:link controller="workflowProcess" action="list"><g:message code="fedreg.link.list" /></g:link></li>
-						<li><g:link controller="workflowProcess" action="create"><g:message code="fedreg.link.create" /></g:link></li>
-					</ul>
-				  </li>
+					<g:if test="${controllerName == 'workflowScript' && actionName in ['show', 'edit']}">
+					<li>
+						<g:link controller="workflowScript" action="show" id="${script.id}"><h4>${script.name?.encodeAsHTML()}</h4></g:link>
+						<ul>
+							<li><g:link controller="workflowScript" action="edit" id="${script.id}"><g:message code="fedreg.link.edit"/></g:link></li>
+						</ul>
+						<hr>
+					</li>
+					</g:if>
+					
+					<!-- Processes -->
+				  	<li>
+						<h4><g:message code="fedreg.layout.workflow.navigation.process.title" /></h4>
+						<ul>
+							<li><g:link controller="workflowProcess" action="list"><g:message code="fedreg.link.list" /></g:link></li>
+							<li><g:link controller="workflowProcess" action="create"><g:message code="fedreg.link.create" /></g:link></li>
+						</ul>
+					</li>
+					
+					<!-- Scripts -->
+				  	<li>
+						<h4><g:message code="fedreg.layout.workflow.navigation.script.title" /></h4>
+						<ul>
+							<li><g:link controller="workflowScript" action="list"><g:message code="fedreg.link.list" /></g:link></li>
+							<li><g:link controller="workflowScript" action="create"><g:message code="fedreg.link.create" /></g:link></li>
+						</ul>
+					</li>
 				</ul>
 			</div>
 			<div class="content">

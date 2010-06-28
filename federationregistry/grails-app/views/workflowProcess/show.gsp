@@ -38,7 +38,7 @@
 					</tr>
 				</tbody>
 			</table>
-			<pre>${fieldValue(bean: process, field: "definition")}</pre>
+			<pre style="padding: 24px; border: 1px solid #d2d2d2;">${fieldValue(bean: process, field: "definition")}</pre>
 		</div>
 		
 	</body>

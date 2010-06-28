@@ -23,7 +23,7 @@
 		<g:form action="update" id="${process.id}">
 			<g:textArea name="code" value="${process.definition.encodeAsHTML()}" rows="5" cols="40"/>
 			<br>
-			<button type="submit" class="button icon icon_add"/><g:message code="fedreg.link.update" /></button>
+			<button type="submit" class="button icon icon_accept"/><g:message code="fedreg.link.update" /></button>
 		</g:form>
 		
 		<script type="text/javascript">

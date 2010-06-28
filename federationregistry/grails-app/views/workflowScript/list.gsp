@@ -1,0 +1,31 @@
+
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="layout" content="workflow" />
+		<title><g:message code="fedreg.view.workflow.script.list.title" /></title>
+	</head>
+	<body>
+		<h2><g:message code="fedreg.view.workflow.script.list.heading" /></h2>
+		
+		<table class="enhancedtabledata">
+			<thead>
+				<tr>
+					<g:sortableColumn property="name" title="${message(code: 'fedreg.label.name')}" />
+					<g:sortableColumn property="description" title="${message(code: 'fedreg.label.description')}" />
+					<th/>
+					<th/>
+				</tr>
+			</thead>
+			<tbody>
+			<g:each in="${scriptList}" var="p" status="i">
+				<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
+					<td>${fieldValue(bean: p, field: "name")}</td>
+					<td>${fieldValue(bean: p, field: "description")}</td>
+					<td><g:link action="show" id="${p.id}" class="button icon icon_magnifier"><g:message code="fedreg.link.view" /></g:link></td>
+				</tr>
+			</g:each>
+			</tbody>
+		</table>
+	</body>
+</html>

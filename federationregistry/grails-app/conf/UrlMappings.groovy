@@ -61,6 +61,10 @@ class UrlMappings {
 			controller = "workflowProcess"
 	}
 	
+	"/workflow/scripting/$action?/$id?" {
+			controller = "workflowScript"
+	}
+	
 	"/workflow/$action?/$id?" {
 			controller = "workflowInstance"
 	}
