@@ -45,12 +45,12 @@ class ProcessService {
 	
 	def interpret(Map m, String definition, Closure closure) {
 		def processes = Process.findAllByName(m.name)
-		int version = 1
+		int processVersion = 1
 		if (processes) {
-			version = processes.size() + 1
+			processVersion = processes.size() + 1
 		}
 		
-		def process = new Process(name: m.name, description: m.description, processVersion: version, creator: authenticatedUser, definition: definition, active:true)
+		def process = new Process(name: m.name, description: m.description, processVersion: processVersion, creator: authenticatedUser, definition: definition, active:true)
 		closure.delegate = new ProcessDelegate(process)
 		closure()
 		

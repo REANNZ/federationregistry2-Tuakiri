@@ -87,4 +87,68 @@ class ProcessServiceSpec extends IntegrationSpec {
 		then:
 		process.hasErrors()
 	}
+	
+	def "Update minimal process"() {
+		setup:
+		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true').save()
+		minimalDefinition = new File('test/data/minimal.pr').getText()
+		def updatedDefinition = new File('test/data/minimal2.pr').getText()
+		processService.create(minimalDefinition)
+		
+		when:		
+		processService.update('Minimal Test Process', updatedDefinition)
+		
+		then:
+		def process = Process.findWhere(name: 'Minimal Test Process', active: true)
+		process.description == 'Minimal test process description mkII'
+		process.processVersion == 2
+		process.tasks.get(0).description == 'Description of task1 mkII'
+		process.tasks.get(0).outcomes.get('testoutcome1 mkII') != null
+		process.tasks.size() == 6
+		Process.countByName('Minimal Test Process') == 2
+	}
+	
+	def "Multiple updates to minimal process"() {
+		setup:
+		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true').save()
+		minimalDefinition = new File('test/data/minimal.pr').getText()
+		def updatedDefinition = new File('test/data/minimal2.pr').getText()
+		def updatedDefinition2 = new File('test/data/minimal3.pr').getText()
+		def updatedDefinition3 = new File('test/data/minimal4.pr').getText()
+		processService.create(minimalDefinition)
+		
+		when:		
+		processService.update('Minimal Test Process', updatedDefinition)
+		processService.update('Minimal Test Process', updatedDefinition2)
+		processService.update('Minimal Test Process', updatedDefinition3)
+		
+		then:
+		def process = Process.findWhere(name: 'Minimal Test Process', active: true)
+		process.description == 'Minimal test process description mkIV'
+		process.processVersion == 4
+		process.tasks.get(0).description == 'Description of task1 mkIV'
+		process.tasks.get(0).outcomes.get('testoutcome1 mkIV') != null
+		process.tasks.size() == 5
+		Process.countByName('Minimal Test Process') == 4
+	}
+	
+	def "Ensure initiate always utilizes newest process definition"() {
+		setup:
+		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true').save()
+		minimalDefinition = new File('test/data/minimal.pr').getText()
+		def updatedDefinition = new File('test/data/minimal2.pr').getText()
+		processService.create(minimalDefinition)
+		
+		when:		
+		def processInstance = processService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
+		processService.update('Minimal Test Process', updatedDefinition)
+		def processInstance2 = processService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
+		
+		then:
+		Process.countByName('Minimal Test Process') == 2
+		processInstance.process != processInstance2.process
+		processInstance.process.description == 'Minimal test process description'
+		processInstance2.process.description == 'Minimal test process description mkII'
+	}
+	
 }

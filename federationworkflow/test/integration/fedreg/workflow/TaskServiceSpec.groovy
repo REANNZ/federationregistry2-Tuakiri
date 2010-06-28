@@ -708,4 +708,103 @@ class TaskServiceSpec extends IntegrationSpec {
 		SpecHelpers.resetMetaClasses(savedMetaClasses)
 		taskService.metaClass = TaskService.metaClass
 	}
+	
+	def "Validate initial process definition is run to completion even when process is updated mid run"() {			
+		setup:
+		SpecHelpers.registerMetaClass(TaskService, savedMetaClasses)
+		taskService.metaClass = TaskService.metaClass
+		
+		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true').save()
+		minimalDefinition = new File('test/data/minimal.pr').getText()
+		def updatedDefinition = new File('test/data/minimal4.pr').getText()
+		processService.create(minimalDefinition)
+		def processInstance = processService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
+		
+		BlockingVariables block = new BlockingVariables(4, TimeUnit.SECONDS)
+		
+		int approvalCount = 0
+		def requestApproval = TaskService.metaClass.getMetaMethod("requestApproval", [Object])
+		TaskService.metaClass.requestApproval = { def taskInstance ->
+			requestApproval.invoke(delegate, taskInstance)
+			block."approval$approvalCount" = true
+			approvalCount++
+		}
+		
+		int executeCount = 0
+		def execute = TaskService.metaClass.getMetaMethod("execute", [Object])
+		TaskService.metaClass.execute = { def taskInstanceID ->
+			execute.invoke(delegate, taskInstanceID)
+			block."execute$executeCount" = true
+			executeCount++
+		}
+		
+		int completeCount = 0
+		def complete = TaskService.metaClass.getMetaMethod("complete", [Object, Object] as Class[])
+		TaskService.metaClass.complete = { def taskInstanceID, def outcomeName ->
+			complete.invoke(delegate, taskInstanceID, outcomeName)
+			block."complete$completeCount" = true
+			completeCount++
+		}
+			
+		when:		
+		processService.run(processInstance)
+		if(block.approval0) {
+			sessionFactory.getCurrentSession().clear()
+			taskService.approve(TaskInstance.list().get(0).id)
+		}
+		
+		if(block.execute0) {
+			sessionFactory.getCurrentSession().clear();
+			taskService.complete(TaskInstance.list().get(0).id, 'testoutcome1')
+		}
+		
+		processService.update('Minimal Test Process', updatedDefinition)
+		
+		if(block.complete0 && block.approval1) {
+			sessionFactory.getCurrentSession().clear()
+			taskService.approve(TaskInstance.list().get(1).id)
+		}
+		
+		if(block.execute1) {
+			sessionFactory.getCurrentSession().clear();
+			taskService.complete(TaskInstance.list().get(1).id, 'testoutcome2')
+		}
+		
+		if(block.complete1) {
+			sessionFactory.getCurrentSession().clear();
+			taskService.approve(TaskInstance.list().get(2).id)
+		}
+		if(block.execute2) {
+			sessionFactory.getCurrentSession().clear();
+			taskService.complete(TaskInstance.list().get(3).id, 'testoutcome5')
+		}
+		
+		if(block.execute3) {
+			sessionFactory.getCurrentSession().clear();
+			taskService.complete(TaskInstance.list().get(4).id, 'testoutcome6')
+		}
+		
+		then:
+		block.approval2 == true
+		approvalCount == 3
+		block.execute2 == true
+		executeCount = 3
+		block.complete4 == true
+		completeCount == 5
+		sessionFactory.getCurrentSession().clear();
+		TaskInstance.list().get(0).status == TaskStatus.SUCCESSFUL			// Task 1
+		TaskInstance.list().get(1).status == TaskStatus.SUCCESSFUL			// Task 2
+		TaskInstance.list().get(2).status == TaskStatus.SUCCESSFUL			// Task 3
+		TaskInstance.list().get(3).status == TaskStatus.SUCCESSFUL			// Task 4
+		TaskInstance.list().get(4).status == TaskStatus.SUCCESSFUL			// Task 5
+		TaskInstance.list().get(5).status == TaskStatus.FINALIZED			// Task 6
+		TaskInstance.list().size() == 6
+		Process.countByName('Minimal Test Process') == 2
+		TaskInstance.list().get(0).task.description == 'Description of task1'
+		processInstance.process != Process.findWhere(name: 'Minimal Test Process', active: true)
+		
+		cleanup:
+		SpecHelpers.resetMetaClasses(savedMetaClasses)
+		taskService.metaClass = TaskService.metaClass
+	}
 }
