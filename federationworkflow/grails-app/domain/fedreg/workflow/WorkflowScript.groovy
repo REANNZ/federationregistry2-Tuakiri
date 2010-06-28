@@ -2,10 +2,18 @@ package fedreg.workflow
 
 import org.codehaus.groovy.control.CompilationFailedException
 
+import grails.plugins.nimble.core.UserBase
+
 class WorkflowScript {
 	String name
 	String description
 	String definition
+	
+	UserBase creator
+	UserBase lastEditor
+	
+	Date dateCreated
+	Date lastUpdated
 	
     static mapping = {
 		definition type: "text"
@@ -17,6 +25,8 @@ class WorkflowScript {
 		definition(nullable: false, blank: false, validator: { val, obj ->
 			obj.validateScript()
 		})
+		creator(nullable: false)
+		lastEditor(nullable: true)
 	}
 	
 	public String toString() {

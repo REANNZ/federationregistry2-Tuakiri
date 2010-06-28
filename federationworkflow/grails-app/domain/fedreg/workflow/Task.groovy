@@ -20,6 +20,9 @@ class Task {
    	
    	boolean finishOnThisTask = false
 
+	Date dateCreated
+	Date lastUpdated
+
    	static hasMany = [	instances: TaskInstance, 
 						rejections: TaskRejection,
 						outcomes: TaskOutcome,
