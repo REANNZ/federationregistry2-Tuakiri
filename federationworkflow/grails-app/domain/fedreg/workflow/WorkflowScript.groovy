@@ -21,7 +21,7 @@ class WorkflowScript {
 	
 	static constraints = {
 		name(nullable: false, blank:false, unique: true)
-		description(nullable: false, blank:false)
+		description(nullable: true, blank:false)
 		definition(nullable: false, blank: false, validator: { val, obj ->
 			obj.validateScript()
 		})

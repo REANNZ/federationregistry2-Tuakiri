@@ -13,7 +13,6 @@ import grails.plugins.nimble.core.ProfileBase
 class SpecHelpers {
 	
 	static void setupShiroEnv(def user) {
-		println user.id
 		def subject = [ getPrincipal: { user.id }, isAuthenticated: { true } ] as Subject
 		ThreadContext.put( ThreadContext.SECURITY_MANAGER_KEY, [ getSubject: { subject } ] as SecurityManager )
 		SecurityUtils.metaClass.static.getSubject = { subject }
