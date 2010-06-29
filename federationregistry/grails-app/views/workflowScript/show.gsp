@@ -34,7 +34,7 @@
 					</tr>
 				</tbody>
 			</table>
-			<pre style="padding: 24px; border: 1px solid #d2d2d2;">${fieldValue(bean: script, field: "definition")}</pre>
+			<pre style="padding: 24px;">${fieldValue(bean: script, field: "definition")}</pre>
 		</div>
 		
 	</body>
