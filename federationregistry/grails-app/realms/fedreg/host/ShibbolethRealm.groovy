@@ -82,9 +82,9 @@ class ShibbolethRealm {
 				}
 				log.info("Created new user [$user.id]$user.username from Shibboleth attribute statement")
 
-				// To assist with bootstrap provide the first account with admin privilledges
-				// ==1 because we created and saved above
-				if(UserBase.count() == 1) {
+				// To assist with bootstrap provide the first real user account with admin privilledges
+				// ==2 because we creat internaladministrator in bootstrap and saved above
+				if(UserBase.count() == 2) {
 					adminsService.add(user)
 					log.info("Issued account $user.username with admin right as this was the first account entering the system")
 				}

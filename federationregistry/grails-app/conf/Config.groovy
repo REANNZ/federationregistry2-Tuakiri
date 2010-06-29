@@ -1,12 +1,12 @@
 
 // Import externalized configuration for the Federation Registry application
-def fedregConf = System.getenv("FEDREG_CONFIG")
-if(fedregConf) {
-	println( "Including configuration file: ${fedregConf}" )
-	grails.config.locations = ["file:${fedregConf}"]
+def externalConf = System.getenv("FEDREG_CONFIG")
+if(externalConf) {
+	println( "Including configuration file: ${externalConf}" )
+	grails.config.locations = ["file:${externalConf}/FedRegConfig.groovy"]
 } else {
-	println "No external configuration file defined for environment variable FEDREG_CONFIG, terminating startup"
-	throw new RuntimeException("No external configuration file defined for environment variable FEDREG_CONFIG, terminating startup")
+	println "No external configuration location specified as environment variable FEDREG_CONFIG, terminating startup"
+	throw new RuntimeException("No external configuration location specified as environment variable FEDREG_CONFIG, terminating startup")
 }
 
 // Standard Grails configuration
@@ -14,6 +14,8 @@ if(fedregConf) {
 grails.gorm.default.mapping = {
 
 }
+
+grails.converters.xml.pretty.print = true
 
 grails.mime.file.extensions = true
 grails.mime.use.accept.header = false

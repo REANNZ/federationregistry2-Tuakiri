@@ -14,9 +14,10 @@ class DataLoadRecord {
 	Date lastUpdated
 
 	static constraints = {
-		invoker(nullable:true)
-		dateCreated(nullable: true) // must be true to enable grails
-		lastUpdated(nullable: true) // auto-inject to be useful which occurs post validation
+		invoker(nullable:false)
+		
+		dateCreated(nullable: true)
+		lastUpdated(nullable: true)
 	}
 	
 }
