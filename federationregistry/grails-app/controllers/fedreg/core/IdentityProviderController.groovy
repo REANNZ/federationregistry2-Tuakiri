@@ -34,24 +34,4 @@ class IdentityProviderController {
 
 		[identityProvider: identityProvider, contactTypes:ContactType.list()]
 	}
-	
-	def xml = {
-		if(!params.id) {
-			log.warn "IDPSSODescriptor ID was not present"
-			flash.type="error"
-			flash.message = message(code: 'fedreg.controllers.namevalue.missing')
-			redirect(action: "list")
-			return
-		}
-		
-		def identityProvider = IDPSSODescriptor.get(params.id)
-		if (!identityProvider) {
-			flash.type="error"
-			flash.message = message(code: 'fedreg.idpssoroledescriptor.nonexistant')
-			redirect(action: "list")
-			return
-		}
-		
-		render identityProvider as XML
-	}
 }
