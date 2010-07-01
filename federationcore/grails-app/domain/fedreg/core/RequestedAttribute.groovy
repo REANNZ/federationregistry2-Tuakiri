@@ -23,6 +23,7 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class RequestedAttribute  {
+	boolean approved = false
 	boolean isRequired
 	Attribute attribute
 	
