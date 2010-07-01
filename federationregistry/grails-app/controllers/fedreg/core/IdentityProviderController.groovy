@@ -34,4 +34,13 @@ class IdentityProviderController {
 
 		[identityProvider: identityProvider, contactTypes:ContactType.list()]
 	}
+	
+	def create = {
+		def identityProvider = new IDPSSODescriptor()
+		[identityProvider: identityProvider]
+	}
+	
+	def save = {
+		
+	}
 }

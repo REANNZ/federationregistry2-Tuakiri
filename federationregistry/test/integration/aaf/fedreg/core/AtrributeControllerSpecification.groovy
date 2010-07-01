@@ -1,13 +1,12 @@
 package fedreg.core
 
-import grails.test.*
-import grails.plugins.spock.*
+import grails.plugin.spock.*
 
 class AttributeControllerSpecification extends IntegrationSpecification {
 	
 	def "save valid attribute"() {
 		setup:
-		def controller = new AttributeController()
+		def controller = new DescriptorAttributeController()
 		def scope = AttributeScope.build().save()
 		def category = AttributeCategory.build().save()
 		
@@ -39,7 +38,7 @@ class AttributeControllerSpecification extends IntegrationSpecification {
 	
 	def "update valid attribute"() {
 		setup:
-		def controller = new AttributeController()
+		def controller = new DescriptorAttributeController()
 		def attr1 = Attribute.build().save()
 
 		controller.params.id = attr1.id
