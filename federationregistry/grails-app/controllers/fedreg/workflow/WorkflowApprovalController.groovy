@@ -1,6 +1,6 @@
 package fedreg.workflow
 
-class WorkflowApproval {
+class WorkflowApprovalController {
 	
 	def taskService
 	def defaultAction = "list"
