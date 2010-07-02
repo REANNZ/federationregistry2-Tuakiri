@@ -47,7 +47,7 @@ class RoleDescriptor  {
 	}
 
 	static constraints = {
-		organization(nullable: true)
+		organization(nullable: false)
 		extensions(nullable: true)
 		errorURL(nullable:true)
 		protocolSupportEnumerations(nullable: true)
