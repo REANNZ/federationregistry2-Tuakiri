@@ -42,7 +42,8 @@ class Organization  {	// Also called a participant in AAF land
 		types : OrganizationType,
 		suspensions: OrganizationType,	// Won't render in DS/WAYF listing
 		sponsors: Organization,
-		affiliates: Organization
+		affiliates: Organization,
+		entityDescriptors: EntityDescriptor
 	]
 
 	static mapping = {
@@ -58,6 +59,7 @@ class Organization  {	// Also called a participant in AAF land
 		types(nullable:true)
 		dateCreated(nullable:true)
 		lastUpdated(nullable:true)
+		entityDescriptors(nullable:true)
 	}
 	
 	public String toString() {
