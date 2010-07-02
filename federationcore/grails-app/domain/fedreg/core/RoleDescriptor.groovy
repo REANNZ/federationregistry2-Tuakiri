@@ -55,8 +55,8 @@ class RoleDescriptor  {
 		keyDescriptors(nullable: true)
 		dateCreated(nullable:true)
 		lastUpdated(nullable:true)
-		displayName(nullable:true)
-		description(nullable:true)
+		displayName(nullable:false)
+		description(nullable:false)
 	}
 
 }
