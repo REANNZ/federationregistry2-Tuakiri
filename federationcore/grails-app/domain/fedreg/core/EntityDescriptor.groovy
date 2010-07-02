@@ -29,6 +29,7 @@ class EntityDescriptor {
 
 	String entityID
 	String extensions
+	
 	boolean active
 	boolean approved
 	

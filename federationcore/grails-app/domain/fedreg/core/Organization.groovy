@@ -29,7 +29,8 @@ class Organization  {	// Also called a participant in AAF land
 	String lang
 	String extensions
 	
-	boolean active = false
+	boolean active
+	boolean approved
 	
 	UrlURI url
 	

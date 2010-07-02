@@ -25,6 +25,8 @@ package fedreg.core
  */
 class Endpoint	{
 	boolean active
+	boolean approved
+	
 	SamlURI binding
 	UrlURI location
 	UrlURI responseLocation

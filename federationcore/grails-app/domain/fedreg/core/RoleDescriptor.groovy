@@ -32,6 +32,7 @@ class RoleDescriptor  {
 	String extensions
 	
 	boolean active
+	boolean approved
 
 	Date dateCreated
 	Date lastUpdated
