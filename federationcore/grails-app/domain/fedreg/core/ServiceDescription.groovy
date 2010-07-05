@@ -24,6 +24,8 @@ package fedreg.core
  */
 class ServiceDescription {
 	
+	//TODO: Flesh out more to produce publicly facing content for service catalogue
+	
 	boolean publish = false
 	
 	Date dateCreated
@@ -35,5 +37,7 @@ class ServiceDescription {
 		dateCreated(nullable:true)
 		lastUpdated(nullable:true)
 	}
+	
+	public String toString() {	"servicedescription:[id:$id]" }
 	
 }

@@ -41,4 +41,6 @@ class SPSSODescriptor extends SSODescriptor {
 		attributeConsumingServices(nullable: true)
 		serviceDescription(nullable:false)
  	}
+
+	public String toString() {	"spssodescriptor:[id:$id, displayName: $displayName]" }
 }

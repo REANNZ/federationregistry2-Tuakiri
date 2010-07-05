@@ -37,4 +37,5 @@ class CAKeyInfo  {
 		lastUpdated(nullable:true)
 	}
 	
+	public String toString() {	"cakeyinfo:[id:$id, keyname: $keyName]" }
 }

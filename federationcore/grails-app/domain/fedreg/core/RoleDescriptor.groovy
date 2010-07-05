@@ -59,5 +59,7 @@ class RoleDescriptor  {
 		displayName(nullable:false)
 		description(nullable:false)
 	}
+	
+	public String toString() {	"roledescriptor:[id:$id, displayName: $displayName]" }
 
 }

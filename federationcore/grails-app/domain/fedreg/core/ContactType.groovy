@@ -39,5 +39,5 @@ class ContactType  {
 		lastUpdated(nullable:true)
 	}
 	
-
+	public String toString() {	"contactType:[id:$id, name: $name]" }
 }

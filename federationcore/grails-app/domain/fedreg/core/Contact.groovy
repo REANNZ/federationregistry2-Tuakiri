@@ -61,4 +61,5 @@ class Contact {
 		sort "surname"
 	}
 	
+	public String toString() {	"contact:[id:$id, givenName: $givenName, surname: $surname, email: $email]" }
 }

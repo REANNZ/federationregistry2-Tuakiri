@@ -41,6 +41,8 @@ class KeyDescriptor  {
 	static mapping = {
 		sort "dateCreated"
 	}
+	
+	public String toString() {	"keydescriptor:[id:$id]" }
 
 }
 

@@ -24,7 +24,7 @@ package fedreg.core
  */
 class AdditionalMetadataLocation  {
 
-	String uri
+	UrlURI uri
 	String namespace
 
 	Date dateCreated
@@ -38,5 +38,7 @@ class AdditionalMetadataLocation  {
 		dateCreated(nullable:true)
 		lastUpdated(nullable:true)
 	}
+	
+	public String toString() {	"additionalmetadatalocation:[id:$id, uri: $uri]" }
 
 }

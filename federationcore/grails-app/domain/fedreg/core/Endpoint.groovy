@@ -46,8 +46,5 @@ class Endpoint	{
 		lastUpdated(nullable:true)
 	}
 
-	public String toString() {
-		return location.uri
-	}
-
+	public String toString() {	"endpoint:[id:$id, location: $location]" }
 }

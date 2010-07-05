@@ -38,5 +38,7 @@ class Uri  {
 		dateCreated(nullable:true)
 		lastUpdated(nullable:true)
 	}
+	
+	public String toString() {	"uri:[id:$id, uri: $uri]" }
 
 }

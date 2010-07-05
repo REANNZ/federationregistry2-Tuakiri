@@ -24,6 +24,8 @@ package fedreg.core
  */
 class ArtifactResolutionService extends IndexedEndpoint  {
 
-  static belongsTo = [descriptor: SSODescriptor]
+	static belongsTo = [descriptor: SSODescriptor]
+
+	public String toString() {	"artifactresolutionservice:[id:$id, location: $location]" }
 
 }

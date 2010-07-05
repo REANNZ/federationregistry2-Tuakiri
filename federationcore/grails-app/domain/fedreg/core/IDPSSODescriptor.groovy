@@ -44,5 +44,6 @@ class IDPSSODescriptor extends SSODescriptor  {
 		attributeProfiles(nullable: true)
 		attributes(nullable: true)
 	}
-
+	
+	public String toString() {	"idpssodescriptor:[id:$id, displayName: $displayName]" }
 }

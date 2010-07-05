@@ -39,4 +39,5 @@ class EncryptionMethod  {
 		lastUpdated(nullable:true)
 	}
 
+	public String toString() {	"encryptionmethod:[id:$id, algorithm: $algorithm]" }
 }

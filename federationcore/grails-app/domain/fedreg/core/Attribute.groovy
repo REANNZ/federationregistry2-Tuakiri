@@ -55,9 +55,7 @@ class Attribute  {
 		lastUpdated(nullable:true)
 	}
 	
-	public String toString() {
-		return friendlyName
-	}
+	public String toString() {	"attribute:[id:$id, name: $name]" }
 	
 	public boolean equals(Object obj) {
 		if ( !(obj instanceof Attribute) ) return false

@@ -32,7 +32,5 @@ class AttributeScope {
 		lastUpdated(nullable:true)
     }
 
-	public String toString() {
-		return name
-	}
+	public String toString() {	"attributescope:[id:$id, name: $name]" }
 }

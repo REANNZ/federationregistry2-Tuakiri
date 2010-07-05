@@ -51,6 +51,8 @@ class Certificate {
 		lastUpdated(nullable:true)
 	}
 	
+	public String toString() {	"certificate:[id:$id, subject: $subject, issuer:$issuer, expires: $expiryDate]" }
+	
 	boolean infoAlert() {
 		use ( TimeCategory ) {
 			def today = new Date()

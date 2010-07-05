@@ -36,8 +36,6 @@ class OrganizationType {
 		lastUpdated(nullable:true)
 	}
 	
-	public String toString() {
-		return displayName
-	}
+	public String toString() {	"organizationtype:[id:$id, name:$name, displayName: $displayName]" }
 
 }

@@ -23,8 +23,9 @@ package fedreg.core
  */
 class TelNumURI extends AnyUri  {
 
-  static constraints = {
-    uri(nullable: false, blank: false)
-  }
+	static constraints = {
+		uri(nullable: false, blank: false)
+	}
 
+	public String toString() {	"telnumuri:[id:$id, uri: $uri]" }
 }

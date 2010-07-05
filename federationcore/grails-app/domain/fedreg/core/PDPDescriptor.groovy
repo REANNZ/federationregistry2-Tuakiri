@@ -36,4 +36,6 @@ class PDPDescriptor extends RoleDescriptor {
 		assertionIDRequestServices(nullable: true)
 		nameIDFormats(nullable: true)
 	}
+	
+	public String toString() {	"pdpdescriptor:[id:$id, displayName: $displayName]" }
 }

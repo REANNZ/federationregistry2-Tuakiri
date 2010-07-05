@@ -63,7 +63,5 @@ class Organization  {	// Also called a participant in AAF land
 		entityDescriptors(nullable:true)
 	}
 	
-	public String toString() {
-		return displayName
-	}
+	public String toString() {	"organization:[id:$id, name: $name, displayName: $displayName]" }
 }

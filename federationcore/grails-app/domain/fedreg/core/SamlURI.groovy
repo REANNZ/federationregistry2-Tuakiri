@@ -23,9 +23,11 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class SamlURI extends Uri  {
-  SamlURIType type
+	SamlURIType type
+	
+	public String toString() {	"samluri:[id:$id, uri: $uri]" }
 }
 
 public enum SamlURIType {
-  AttributeNameFormat, AttributeProfile, NameIdentifierFormat, ProtocolBinding, ProtocolSupport
+	AttributeNameFormat, AttributeProfile, NameIdentifierFormat, ProtocolBinding, ProtocolSupport
 }

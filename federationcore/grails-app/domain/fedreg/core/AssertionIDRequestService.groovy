@@ -25,5 +25,7 @@ package fedreg.core
 class AssertionIDRequestService extends Endpoint  {
 
 	static belongsTo = [descriptor:RoleDescriptor]
+	
+	public String toString() {	"assertionidrequestservice:[id:$id, location: $location]" }
 
 }

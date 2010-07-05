@@ -48,5 +48,7 @@ class AttributeConsumingService {
 	static mapping = {
 		index column: "mdindex"		// Avoid DB collisions with reserved word index
 	}
+	
+	public String toString() {	"attributeconsumingservice:[id:$id, name: $serviceNames]" }
 
 }

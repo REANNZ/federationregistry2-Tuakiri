@@ -39,4 +39,5 @@ class CACertificate {
 	    data(type: 'text') 
 	}
 	
+	public String toString() {	"cacertificate:[id:$id]" }
 }

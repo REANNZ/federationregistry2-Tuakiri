@@ -36,4 +36,6 @@ class RequestedAttribute  {
 	}
 
 	static belongsTo = [attributeConsumingService: AttributeConsumingService]
+	
+	public String toString() {	"requestedattribute:[id:$id, isRequired: $isRequired]" }
 }

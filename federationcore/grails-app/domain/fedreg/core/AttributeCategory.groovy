@@ -31,7 +31,5 @@ class AttributeCategory {
 		lastUpdated(nullable:true)
 	}
 
-	public String toString() {
-		return name
-	}
+	public String toString() {	"attributecategory:[id:$id, name: $name]" }
 }

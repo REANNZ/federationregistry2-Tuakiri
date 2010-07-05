@@ -30,4 +30,6 @@ class ServiceCategory {
 		name(nullable: false)
 		description(nullable: false)
  	}
+
+	public String toString() {	"servicevategory:[id:$id, name: $name]" }
 }

@@ -24,6 +24,6 @@ package fedreg.core
  */
 class NameIDMappingService extends Endpoint  {
 
-  static belongsTo = [descriptor: IDPSSODescriptor]
-
+	static belongsTo = [descriptor: IDPSSODescriptor]
+	public String toString() {	"nameidmappingservice:[id:$id, location: $location]" }
 }

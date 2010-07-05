@@ -60,8 +60,6 @@ class EntityDescriptor {
 		tablePerHierarchy false
 	}
 	
-	public String toString() {
-		return entityID
-	}
+	public String toString() {	"entitydescriptor:[id:$id, entityID: $entityID]" }
 
 }

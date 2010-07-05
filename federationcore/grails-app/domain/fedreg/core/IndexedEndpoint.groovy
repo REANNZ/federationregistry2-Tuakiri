@@ -26,11 +26,12 @@ package fedreg.core
  */
 class IndexedEndpoint extends Endpoint  {
 
-  boolean isDefault
-  int endpointIndex
+	boolean isDefault
+  	int endpointIndex
 
-  static mapping = {
-    tablePerHierarchy false
-  }
+  	static mapping = {
+		tablePerHierarchy false
+  	}
 
+	public String toString() { "indexedendpoint:[id:$id, location: $location]" }
 }

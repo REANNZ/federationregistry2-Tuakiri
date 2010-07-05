@@ -24,6 +24,8 @@ package fedreg.core
  */
 class SingleLogoutService extends Endpoint  {
 
-  static belongsTo = [descriptor: SSODescriptor]
+	static belongsTo = [descriptor: SSODescriptor]
+	
+	public String toString() {	"singlelogoutservice:[id:$id, location: $location]" }
 
 }

@@ -44,4 +44,5 @@ class AttributeAuthorityDescriptor extends RoleDescriptor {
 		attributes(nullable: true)
 	}
 
+	public String toString() {	"attributeauthoritydescriptor:[id:$id]" }
 }

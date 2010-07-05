@@ -42,4 +42,6 @@ class KeyInfo  {
 		sort "dateCreated"
 	}
 	
+	public String toString() {	"keyinfo:[id:$id, keyName: $keyName]" }
+	
 }
