@@ -50,25 +50,33 @@ class IdentityProviderController {
 		sso.active = params.active
 		sso.location = location
 		sso.binding = binding
-		
-		def organization = Organization.get(params.organization)
+		identityProvider.addToSingleSignOnServices(sso)
+		sso.validate()
+			
+		def organization = Organization.get(params.organization?.id)
 		if(!organization) {
 			flash.type="error"
 			flash.message="fedreg.core.idpssodescriptor.save.no.organization"
 			render view: 'create', model:[identityProvider:identityProvider]
 			return
 		}
+		identityProvider.organization = organization
 		
-		def entityDescriptor = EntityDescriptor.get(params.idp.entitydescriptor)
+		def entityDescriptor = EntityDescriptor.get(params.entity?.id)
 		if(!entityDescriptor) {
-			entityDescriptor = new EntityDescriptor(active: params.active, entityID: params.entity.identifier)
-			organization.addToEntityDescriptors(entityDescriptor)
+			entityDescriptor = new EntityDescriptor(active: params.active, entityID: params.entity?.identifier)
+		}
+		entityDescriptor.addToIdpDescriptors(identityProvider)
+		organization.addToEntityDescriptors(entityDescriptor)
+		if(!entityDescriptor.validate()) {
+			entityDescriptor.errors.each { log.error it }
+			identityProvider.validate()	// Validate IdP as well at this point to get local errors object populated incase IdP triggered validation fault
+			flash.type="error"
+			flash.message="fedreg.core.idpssodescriptor.save.no.entitydescriptor"
+			render view: 'create', model:[organization:organization, entityDescriptor: entityDescriptor, identityProvider:identityProvider]
+			return
 		}
 		
-		identityProvider.active = false
-		identityProvider.addToSingleSignOnServices(sso)
-		identityProvider.organization = organization
-		entityDescriptor.addToIdpDescriptors(identityProvider)
 		
 		if(!identityProvider.save()) {			
 			identityProvider.errors.each {log.debug it}

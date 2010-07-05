@@ -24,7 +24,7 @@ package fedreg.core
 class IDPSSODescriptor extends SSODescriptor  {
 
 	boolean wantAuthnRequestsSigned
-	AttributeAuthorityDescriptor collaborator	// This links the IDP with an AA that collaborates with it to provide attribute services
+	AttributeAuthorityDescriptor collaborator
 
 	static belongsTo = [entityDescriptor:EntityDescriptor]
 

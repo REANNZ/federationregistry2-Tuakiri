@@ -93,11 +93,11 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		model.identityProvider instanceof IDPSSODescriptor
 	}
 	
-	def "Save succeeds when valid IDPSSODescriptor and base SingleSignOn endpoint data presented"() {
+	def "Save succeeds when valid IDPSSODescriptor and base SingleSignOn endpoint data presented (without existing EntityDescriptor)"() {
 		setup:
 		def org = Organization.build().save()
 		def binding = SamlURI.build(type: SamlURIType.ProtocolBinding).save()
-		controller.params.organization = org.id
+		controller.params.organization = [id: org.id]
 		controller.params.active = true
 		controller.params.entity = [identifier:"http://idp.test.com"]
 		controller.params.idp = [displayName:"test name", description:"test desc"]
@@ -111,10 +111,13 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		SamlURI.count() == 1
 		EntityDescriptor.count() == 1
 		IDPSSODescriptor.count() == 1
-		controller.response.redirectedUrl == "/identityProvider/show/${IDPSSODescriptor.list().get(0).id}"
 		def ed = EntityDescriptor.list().get(0)
 		ed.entityID == "http://idp.test.com"
 		def idp = IDPSSODescriptor.list().get(0)
+		idp.organization == org
+		idp.entityDescriptor == ed
+		idp.entityDescriptor.organization == org
+		controller.response.redirectedUrl == "/identityProvider/show/${idp.id}"
 		idp.displayName = "test name"
 		idp.description = "test desc"
 		idp.singleSignOnServices.size() == 1
@@ -122,11 +125,42 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		idp.singleSignOnServices.asList().get(0).binding == binding
 	}
 	
-	def "Save fails when missing idp displayName"() {
+	def "Save succeeds when valid IDPSSODescriptor and base SingleSignOn endpoint data presented (with existing EntityDescriptor)"() {
 		setup:
 		def org = Organization.build().save()
 		def binding = SamlURI.build(type: SamlURIType.ProtocolBinding).save()
-		controller.params.organization = org.id
+		def ed = EntityDescriptor.build(organization: org).save()
+		controller.params.organization = [id: org.id]
+		controller.params.active = true
+		controller.params.entity = [id:ed.id]
+		controller.params.idp = [displayName:"test name", description:"test desc"]
+		controller.params.sso = [active:true, binding:binding.id, uri:"http://idp.test.com/SSO/endpoint"]
+		
+		when:
+		def model = controller.save()
+		
+		then:
+		Organization.count() == 1
+		SamlURI.count() == 1
+		EntityDescriptor.count() == 1
+		IDPSSODescriptor.count() == 1
+		def idp = IDPSSODescriptor.list().get(0)
+		idp.organization == org
+		idp.entityDescriptor == ed
+		idp.entityDescriptor.organization == org
+		controller.response.redirectedUrl == "/identityProvider/show/${idp.id}"
+		idp.displayName = "test name"
+		idp.description = "test desc"
+		idp.singleSignOnServices.size() == 1
+		idp.singleSignOnServices.asList().get(0).location.uri == "http://idp.test.com/SSO/endpoint"
+		idp.singleSignOnServices.asList().get(0).binding == binding
+	}
+	
+	def "Save fails when IdP constraints not met"() {
+		setup:
+		def org = Organization.build().save()
+		def binding = SamlURI.build(type: SamlURIType.ProtocolBinding).save()
+		controller.params.organization = [id: org.id]
 		controller.params.active = true
 		controller.params.entity = [identifier:"http://idp.test.com"]
 		controller.params.idp = [description:"test desc"]
@@ -140,10 +174,88 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		SamlURI.count() == 1
 		EntityDescriptor.count() == 0
 		IDPSSODescriptor.count() == 0
+		controller.modelAndView.model.identityProvider.errors.getErrorCount() == 1
+		controller.modelAndView.model.identityProvider.errors.getFieldError('displayName').code == 'nullable'
 		controller.flash.type="error"
 		controller.flash.message="fedreg.core.idpssoroledescriptor.save.failed"
 		controller.modelAndView.model.identityProvider.displayName == null
 		controller.modelAndView.model.identityProvider.description == "test desc"
+		controller.modelAndView.model.identityProvider.singleSignOnServices.size() == 1
+		controller.modelAndView.model.organization != null
+		controller.modelAndView.model.entityDescriptor != null
 	}
 	
+	def "Save fails when SSO endpoint constraints not met"() {
+		setup:
+		def org = Organization.build().save()
+		controller.params.organization = [id: org.id]
+		controller.params.active = true
+		controller.params.entity = [identifier:"http://idp.test.com"]
+		controller.params.idp = [displayName: "test", description:"test desc"]
+		controller.params.sso = [active:true, uri:"http://idp.test.com/SSO/endpoint"]
+		
+		when:
+		def model = controller.save()
+		
+		then:
+		Organization.count() == 1
+		EntityDescriptor.count() == 0
+		IDPSSODescriptor.count() == 0
+		controller.modelAndView.model.identityProvider.singleSignOnServices.size() == 1
+		controller.modelAndView.model.identityProvider.singleSignOnServices.toList().get(0).errors.getErrorCount() == 1
+		controller.modelAndView.model.identityProvider.singleSignOnServices.toList().get(0).errors.getFieldError('binding').code == 'nullable'
+		controller.flash.type="error"
+		controller.flash.message="fedreg.core.idpssoroledescriptor.save.failed"
+		controller.modelAndView.model.identityProvider.displayName == "test"
+		controller.modelAndView.model.identityProvider.description == "test desc"
+	}
+	
+	def "Save fails when Organization not supplied"() {
+		setup:
+		def binding = SamlURI.build(type: SamlURIType.ProtocolBinding).save()
+		controller.params.active = true
+		controller.params.entity = [identifier:"http://idp.test.com"]
+		controller.params.idp = [displayName: "test", description:"test desc"]
+		controller.params.sso = [active:true, binding:binding.id, uri:"http://idp.test.com/SSO/endpoint"]
+		
+		when:
+		def model = controller.save()
+		
+		then:
+		Organization.count() == 0
+		SamlURI.count() == 1
+		EntityDescriptor.count() == 0
+		IDPSSODescriptor.count() == 0
+		controller.modelAndView.model.identityProvider.errors.getErrorCount() == 0
+		controller.flash.type="error"
+		controller.flash.message="fedreg.core.idpssodescriptor.save.no.organization"
+		controller.modelAndView.model.identityProvider.displayName == "test"
+		controller.modelAndView.model.identityProvider.description == "test desc"
+		controller.modelAndView.model.identityProvider.singleSignOnServices.size() == 1
+	}
+	
+	def "Save fails when Entity not supplied"() {
+		setup:
+		def org = Organization.build().save()
+		def binding = SamlURI.build(type: SamlURIType.ProtocolBinding).save()
+		controller.params.organization = [id: org.id]
+		controller.params.active = true
+		controller.params.idp = [displayName: "test", description:"test desc"]
+		controller.params.sso = [active:true, binding:binding.id, uri:"http://idp.test.com/SSO/endpoint"]
+		
+		when:
+		def model = controller.save()
+		
+		then:
+		Organization.count() == 1
+		SamlURI.count() == 1
+		EntityDescriptor.count() == 0
+		IDPSSODescriptor.count() == 0
+		controller.modelAndView.model.identityProvider.errors.getErrorCount() == 0
+		controller.flash.type="error"
+		controller.flash.message="fedreg.core.idpssodescriptor.save.no.entitydescriptor"
+		controller.modelAndView.model.identityProvider.displayName == "test"
+		controller.modelAndView.model.identityProvider.description == "test desc"
+		controller.modelAndView.model.identityProvider.singleSignOnServices.size() == 1
+	}
 }
