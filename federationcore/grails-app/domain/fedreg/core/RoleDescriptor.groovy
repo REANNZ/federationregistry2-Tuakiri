@@ -23,7 +23,8 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class RoleDescriptor  {
-
+	def cryptoService
+	
 	Organization organization
 	UrlURI errorURL
 	
@@ -53,7 +54,9 @@ class RoleDescriptor  {
 		errorURL(nullable:true)
 		protocolSupportEnumerations(nullable: true)
 		contacts(nullable: true)
-		keyDescriptors(nullable: true)
+		keyDescriptors(nullable: true, validator: { val, obj ->
+			obj.validateKeyDescriptors()
+		})
 		dateCreated(nullable:true)
 		lastUpdated(nullable:true)
 		displayName(nullable:false)
@@ -61,5 +64,18 @@ class RoleDescriptor  {
 	}
 	
 	public String toString() {	"roledescriptor:[id:$id, displayName: $displayName]" }
+	
+	def validateKeyDescriptors = {
+		if(!keyDescriptors || keyDescriptors.size() == 0)
+			return true
+		
+		keyDescriptors.each { kd ->
+			if(!cryptoService.validateCertificate(kd.keyInfo.certificate)) {
+				return ['fedreg.core.roledescriptor.validation.crypto', kd.keyInfo.keyName]
+			}
+		}
+		
+		return true
+	}
 
 }

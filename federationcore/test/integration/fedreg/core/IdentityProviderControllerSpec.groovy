@@ -7,9 +7,10 @@ import fedreg.core.*
 class IdentityProviderControllerSpec extends IntegrationSpec {
 	
 	def controller
+	def cryptoService
 	
 	def setup () {
-		controller = new IdentityProviderController()
+		controller = new IdentityProviderController(cryptoService: cryptoService)
 	}
 	
 	def "Validate list"() {
@@ -93,6 +94,53 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		model.identityProvider instanceof IDPSSODescriptor
 	}
 	
+	def "Save succeeds when valid initial IDPSSODescriptor and AttributeAuthorityDescriptor data are provided (without existing EntityDescriptor)"() {
+		setup:
+		def soap = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:SOAP', description:'').save()
+		def httpRedirect = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect', description:'').save()
+		def httpPost = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST', description:'').save()
+		def httpArtifact = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact', description:'').save()
+		
+		def ca = new File('./test/integration/data/demoCA/cacertminimal.pem').text
+		def caCert = new CACertificate(data:ca)
+		def caKeyInfo = new CAKeyInfo(certificate:caCert)
+		caKeyInfo.save()
+		
+		def organization = Organization.build().save()
+		def attr1 = Attribute.build().save()
+		def attr2 = Attribute.build().save()
+		
+		def pk = new File('./test/integration/data/newcertminimal.pem').text
+
+		controller.params.organization = [id: organization.id]
+		controller.params.active = true
+		controller.params.entity = [identifier:"http://idp.test.com"]
+		controller.params.idp = [displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk]]
+		controller.params.aa = [create: true, attributeservice:[uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
+		
+		when:
+		def model = controller.save()
+		
+		then:
+		Organization.count() == 1
+		SamlURI.count() == 4
+		EntityDescriptor.count() == 1
+		IDPSSODescriptor.count() == 1
+		AttributeAuthorityDescriptor.count() == 1
+		def ed = EntityDescriptor.list().get(0)
+		ed.entityID == "http://idp.test.com"
+		def idp = IDPSSODescriptor.list().get(0)
+		idp.organization == organization
+		idp.entityDescriptor == ed
+		idp.entityDescriptor.organization == organization
+		
+		controller.response.redirectedUrl == "/identityProvider/show/${idp.id}"
+		idp.displayName = "test name"
+		idp.description = "test desc"
+		idp.keyDescriptors.size() == 2
+	}
+	
+	/*
 	def "Save succeeds when valid IDPSSODescriptor and base SingleSignOn endpoint data presented (without existing EntityDescriptor)"() {
 		setup:
 		def org = Organization.build().save()
@@ -102,6 +150,7 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		controller.params.entity = [identifier:"http://idp.test.com"]
 		controller.params.idp = [displayName:"test name", description:"test desc"]
 		controller.params.sso = [active:true, binding:binding.id, uri:"http://idp.test.com/SSO/endpoint"]
+		controller.params.aa = [uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery", attributes:[1, 2]]
 		
 		when:
 		def model = controller.save()
@@ -111,6 +160,7 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		SamlURI.count() == 1
 		EntityDescriptor.count() == 1
 		IDPSSODescriptor.count() == 1
+		AttributeAuthorityDescriptor.count() == 1
 		def ed = EntityDescriptor.list().get(0)
 		ed.entityID == "http://idp.test.com"
 		def idp = IDPSSODescriptor.list().get(0)
@@ -258,4 +308,5 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		controller.modelAndView.model.identityProvider.description == "test desc"
 		controller.modelAndView.model.identityProvider.singleSignOnServices.size() == 1
 	}
+	*/
 }
