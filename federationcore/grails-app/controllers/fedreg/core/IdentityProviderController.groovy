@@ -51,24 +51,36 @@ class IdentityProviderController {
 		identityProvider.active = params.active
 		
 		// Initial endpoints
-		// def httpPost = new SingleSignOnService()
+		def postBinding = SamlURI.findByUri(SamlConstants.httpPost)
+		def postLocation = new UrlURI(uri: params.idp?.post?.uri)
+		def httpPost = new SingleSignOnService(binding: postBinding, location:postLocation)
+		identityProvider.addToSingleSignOnServices(httpPost)
+		httpPost.validate()
 		
-		//def httpRedirect = new SingleSignOnService()
+		def redirectBinding = SamlURI.findByUri(SamlConstants.httpRedirect)
+		def redirectLocation = new UrlURI(uri: params.idp?.redirect?.uri)
+		def httpRedirect = new SingleSignOnService(binding: redirectBinding, location:redirectLocation)
+		identityProvider.addToSingleSignOnServices(httpRedirect)
+		httpRedirect.validate()
 		
-		//def artifactResolution = new SingleSignOnService()
+		def artifactBinding = SamlURI.findByUri(SamlConstants.soap)
+		def artifactLocation = new UrlURI(uri: params.idp?.artifact?.uri)
+		def soapArtifact = new ArtifactResolutionService(binding: artifactBinding, location:artifactLocation)
+		identityProvider.addToArtifactResolutionServices(soapArtifact)
+		soapArtifact.validate()
 		
 		// Cryptography
 		// Signing
-		if(params.idp.crypto.sig) {
-			def cert = cryptoService.createCertificate(params.idp.crypto.sigdata)
+		if(params.idp?.crypto?.sig) {
+			def cert = cryptoService.createCertificate(params.idp?.crypto?.sigdata)
 			def keyInfo = new KeyInfo(certificate: cert)
 			def keyDescriptor = new KeyDescriptor(keyInfo:keyInfo, keyType:KeyTypes.signing, roleDescriptor:identityProvider)
 			identityProvider.addToKeyDescriptors(keyDescriptor)
 		}
 		
 		// Encryption
-		if(params.idp.crypto.enc) {
-			def certEnc = cryptoService.createCertificate(params.idp.crypto.encdata ?: params.idp.crypto.sigdata)
+		if(params.idp?.crypto?.enc) {
+			def certEnc = cryptoService.createCertificate(params.idp?.crypto?.encdata)
 			def keyInfoEnc = new KeyInfo(certificate:certEnc)
 			def keyDescriptorEnc = new KeyDescriptor(keyInfo:keyInfoEnc, keyType:KeyTypes.encryption, roleDescriptor:identityProvider)
 			identityProvider.addToKeyDescriptors(keyDescriptorEnc)
@@ -81,7 +93,7 @@ class IdentityProviderController {
 			identityProvider.collaborator = attributeAuthority
 			
 			def attributeServiceBinding = SamlURI.findByUri('urn:oasis:names:tc:SAML:2.0:bindings:SOAP')
-			def attributeServiceLocation = new UrlURI(uri: params.aa.attributeservice.uri)
+			def attributeServiceLocation = new UrlURI(uri: params.aa?.attributeservice?.uri)
 		
 			def attributeService = new AttributeService(binding: attributeServiceBinding, location:attributeServiceLocation)
 			attributeAuthority.addToAttributeServices(attributeService)
@@ -89,6 +101,23 @@ class IdentityProviderController {
 				def attr = Attribute.get(attrID)
 				if(attr)
 					attributeAuthority.addToAttributes(attr)
+			}
+			
+			// Cryptography
+			// Signing
+			if(params.aa?.crypto?.sig) {
+				def cert = cryptoService.createCertificate(params.aa?.crypto?.sigdata)
+				def keyInfo = new KeyInfo(certificate: cert)
+				def keyDescriptor = new KeyDescriptor(keyInfo:keyInfo, keyType:KeyTypes.signing, roleDescriptor:attributeAuthority)
+				attributeAuthority.addToKeyDescriptors(keyDescriptor)
+			}
+
+			// Encryption
+			if(params.aa?.crypto?.enc) {
+				def certEnc = cryptoService.createCertificate(params.aa?.crypto?.encdata)
+				def keyInfoEnc = new KeyInfo(certificate:certEnc)
+				def keyDescriptorEnc = new KeyDescriptor(keyInfo:keyInfoEnc, keyType:KeyTypes.encryption, roleDescriptor:attributeAuthority)
+				attributeAuthority.addToKeyDescriptors(keyDescriptorEnc)
 			}
 		}
 		
@@ -113,20 +142,19 @@ class IdentityProviderController {
 		organization.addToEntityDescriptors(entityDescriptor)
 		identityProvider.organization = organization
 		
-		if(params.aa.create)
+		if(params.aa?.create)
 			attributeAuthority.organization = organization
-		
 		
 		// Submission validation		
 		if(!identityProvider.validate()) {			
 			identityProvider.errors.each {log.debug it}
 			flash.type="error"
 			flash.message="fedreg.core.idpssodescriptor.save.validation.error.identityprovider"
-			render view: 'create', model:[organization:organization, entityDescriptor: entityDescriptor, identityProvider:identityProvider, attributeAuthority: attributeAuthority]
+			render view: 'create', model:[organization:organization, entityDescriptor: entityDescriptor, identityProvider:identityProvider, attributeAuthority: attributeAuthority, httpPost: httpPost, httpRedirect: httpRedirect, soapArtifact: soapArtifact]
 			return
 		}
 		
-		if(params.aa.create)
+		if(params.aa?.create)
 			if(!attributeAuthority.validate()) {			
 				attributeAuthority.errors.each {log.debug it}
 				flash.type="error"

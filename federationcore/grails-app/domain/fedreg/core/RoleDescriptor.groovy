@@ -71,7 +71,7 @@ class RoleDescriptor  {
 		
 		keyDescriptors.each { kd ->
 			if(!cryptoService.validateCertificate(kd.keyInfo.certificate)) {
-				return ['fedreg.core.roledescriptor.validation.crypto', kd.keyInfo.keyName]
+				return ['fedreg.core.roledescriptor.validation.crypto.invalid', kd.keyInfo.keyName]
 			}
 		}
 		
