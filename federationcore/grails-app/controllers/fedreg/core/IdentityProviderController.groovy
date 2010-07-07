@@ -1,6 +1,6 @@
 package fedreg.core
 
-import grails.converters.XML
+import fedreg.workflow.ProcessPriority
 
 class IdentityProviderController {
 
@@ -9,6 +9,7 @@ class IdentityProviderController {
 	def defaultAction = "list"
 	
 	def cryptoService
+	def processService
 
 	def list = {
 		[identityProviderList: IDPSSODescriptor.list(params), identityProviderTotal: IDPSSODescriptor.count()]
@@ -177,7 +178,10 @@ class IdentityProviderController {
 			render view: 'create', model:[organization:organization, entityDescriptor: entityDescriptor, identityProvider:identityProvider, attributeAuthority: attributeAuthority, httpPost: httpPost, httpRedirect: httpRedirect, soapArtifact: soapArtifact]
 			return
 		}
-
+		
+		def workflowParams = [ creator:authenticatedUser.id, identityProvider:identityProvider?.id, attributeAuthority:attributeAuthority?.id, organization:organization.name ]
+		processService.initiate( "idpssodescriptor_create", "Approval for creation of IDPSSODescriptor ${identityProvider.displayName}", ProcessPriority.MEDIUM, workflowParams)
+		
 		redirect(action: "show", id: identityProvider.id)
 	}
 }

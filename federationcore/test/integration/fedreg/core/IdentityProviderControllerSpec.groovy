@@ -3,14 +3,19 @@ package fedreg.core
 import grails.plugin.spock.*
 
 import fedreg.core.*
+import fedreg.workflow.*
+import grails.plugins.nimble.core.*
 
 class IdentityProviderControllerSpec extends IntegrationSpec {
 	
 	def controller
 	def cryptoService
+	def processService
 	
 	def setup () {
-		controller = new IdentityProviderController(cryptoService: cryptoService)
+		controller = new IdentityProviderController(cryptoService: cryptoService, processService: processService)
+		def user = UserBase.build()
+		SpecHelpers.setupShiroEnv(user)
 	}
 	
 	def setupBindings() {
@@ -182,6 +187,8 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		aa.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
 		aa.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
 		aa.attributeServices.toList().get(0).location.uri == "http://idp.test.com/SAML2/SOAP/AttributeQuery"
+		
+		Process.count() == 1
 		
 		controller.response.redirectedUrl == "/identityProvider/show/${idp.id}"
 	}
