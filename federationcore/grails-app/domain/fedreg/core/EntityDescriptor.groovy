@@ -46,6 +46,7 @@ class EntityDescriptor {
 	]
 
 	static constraints = {
+		entityID(nullable:false, blank:false, unique:true)
 		idpDescriptors(nullable: true)
 		spDescriptors(nullable: true)
 		attributeAuthorityDescriptors(nullable: true)

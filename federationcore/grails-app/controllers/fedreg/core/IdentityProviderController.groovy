@@ -46,9 +46,7 @@ class IdentityProviderController {
 			for views to render */
 		
 		// IDP
-		def identityProvider = new IDPSSODescriptor()
-		bindData(identityProvider, params.idp, [include:['displayName', 'description']])
-		identityProvider.active = params.active
+		def identityProvider = new IDPSSODescriptor(active:params.active, displayName: params.idp.displayName, description: params.idp.description)
 		
 		// Initial endpoints
 		def postBinding = SamlURI.findByUri(SamlConstants.httpPost)
@@ -88,8 +86,8 @@ class IdentityProviderController {
 		
 		// Attribute Authority
 		def attributeAuthority
-		if(params.aa.create) {
-			attributeAuthority = new AttributeAuthorityDescriptor(displayName: identityProvider.displayName, description: identityProvider.description, collaborator: identityProvider)
+		if(params.aa?.create) {
+			attributeAuthority = new AttributeAuthorityDescriptor(active:params.active, displayName: params.aa.displayName, description: params.aa.description, collaborator: identityProvider)
 			identityProvider.collaborator = attributeAuthority
 			
 			def attributeServiceBinding = SamlURI.findByUri('urn:oasis:names:tc:SAML:2.0:bindings:SOAP')
@@ -128,15 +126,15 @@ class IdentityProviderController {
 		}
 		entityDescriptor.addToIdpDescriptors(identityProvider)
 		
-		if(params.aa.create)
+		if(params.aa?.create)
 			entityDescriptor.addToAttributeAuthorityDescriptors(attributeAuthority)
 		
 		// Organization
 		def organization = Organization.get(params.organization?.id)
 		if(!organization) {
 			flash.type="error"
-			flash.message="fedreg.core.idpssodescriptor.save.no.organization"
-			render view: 'create', model:[identityProvider:identityProvider]
+			flash.message="fedreg.core.idpssodescriptor.save.validation.error.organization"
+			render view: 'create', model:[entityDescriptor: entityDescriptor, identityProvider:identityProvider, attributeAuthority: attributeAuthority, httpPost: httpPost, httpRedirect: httpRedirect, soapArtifact: soapArtifact]
 			return
 		}
 		organization.addToEntityDescriptors(entityDescriptor)
@@ -144,8 +142,17 @@ class IdentityProviderController {
 		
 		if(params.aa?.create)
 			attributeAuthority.organization = organization
-		
-		// Submission validation		
+			
+		// Submission validation
+		if(!entityDescriptor.validate()) {
+			entityDescriptor.errors.each { log.error it }
+			identityProvider.validate()
+			flash.type="error"
+			flash.message="fedreg.core.idpssodescriptor.save.validation.error.entitydescriptor"
+			render view: 'create', model:[organization:organization, entityDescriptor: entityDescriptor, identityProvider:identityProvider, attributeAuthority: attributeAuthority, httpPost: httpPost, httpRedirect: httpRedirect, soapArtifact: soapArtifact]
+			return
+		}
+				
 		if(!identityProvider.validate()) {			
 			identityProvider.errors.each {log.debug it}
 			flash.type="error"
@@ -159,27 +166,18 @@ class IdentityProviderController {
 				attributeAuthority.errors.each {log.debug it}
 				flash.type="error"
 				flash.message="fedreg.core.idpssodescriptor.save.validation.error.attributeauthority"
-				render view: 'create', model:[organization:organization, entityDescriptor: entityDescriptor, identityProvider:identityProvider, attributeAuthority: attributeAuthority]
+				render view: 'create', model:[organization:organization, entityDescriptor: entityDescriptor, identityProvider:identityProvider, attributeAuthority: attributeAuthority, httpPost: httpPost, httpRedirect: httpRedirect, soapArtifact: soapArtifact]
 				return
 			}
-			
-		if(!entityDescriptor.validate()) {
-			entityDescriptor.errors.each { log.error it }
-			identityProvider.validate()
-			flash.type="error"
-			flash.message="fedreg.core.idpssodescriptor.save.validation.error.entitydescriptor"
-			render view: 'create', model:[organization:organization, entityDescriptor: entityDescriptor, identityProvider:identityProvider, attributeAuthority: attributeAuthority]
-			return
-		}
-		
+
 		if(!identityProvider.save()) {			
 			identityProvider.errors.each {log.debug it}
 			flash.type="error"
 			flash.message="fedreg.core.idpssodescriptor.save.failed"
-			render view: 'create', model:[organization:organization, entityDescriptor: entityDescriptor, identityProvider:identityProvider, attributeAuthority: attributeAuthority]
+			render view: 'create', model:[organization:organization, entityDescriptor: entityDescriptor, identityProvider:identityProvider, attributeAuthority: attributeAuthority, httpPost: httpPost, httpRedirect: httpRedirect, soapArtifact: soapArtifact]
 			return
 		}
 
-		redirect(action: "show", id:identityProvider.id)
+		redirect(action: "show", id: identityProvider.id)
 	}
 }

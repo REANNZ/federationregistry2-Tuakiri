@@ -13,13 +13,32 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		controller = new IdentityProviderController(cryptoService: cryptoService)
 	}
 	
+	def setupBindings() {
+		def soap = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:SOAP', description:'').save()
+		def httpRedirect = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect', description:'').save()
+		def httpPost = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST', description:'').save()
+		def httpArtifact = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact', description:'').save()
+	}
+	
+	def setupCrypto() {
+		def ca = new File('./test/integration/data/demoCA/cacertminimal.pem').text
+		def caCert = new CACertificate(data:ca)
+		def caKeyInfo = new CAKeyInfo(certificate:caCert)
+		caKeyInfo.save()
+	}
+	
+	def String loadPK() {
+		new File('./test/integration/data/newcertminimal.pem').text
+	}
+	
 	def "Validate list"() {
 		setup:
 		setupCrypto()
 		def pk = loadPK()
 		
-		(1..25).each {
-			def idp = IDPSSODescriptor.build()
+		(1..25).each { i ->
+			def ed = EntityDescriptor.build(entityID:"http://idp.test.com/$i")
+			def idp = IDPSSODescriptor.build(entityDescriptor: ed)
 			idp.save()
 		}
 		
@@ -32,8 +51,9 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 	
 	def "Validate list with max set"() {
 		setup:
-		(1..25).each {
-			def idp = IDPSSODescriptor.build()
+		(1..25).each { i ->
+			def ed = EntityDescriptor.build(entityID:"http://idp.test.com/$i")
+			def idp = IDPSSODescriptor.build(entityDescriptor: ed)
 			idp.save()
 		}
 		controller.params.max = 10
@@ -49,8 +69,9 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 	
 	def "Validate list with max and offset set"() {
 		setup:
-		(1..25).each {
-			def idp = IDPSSODescriptor.build()
+		(1..25).each { i->
+			def ed = EntityDescriptor.build(entityID:"http://idp.test.com/$i")
+			def idp = IDPSSODescriptor.build(entityDescriptor: ed)
 			idp.save()
 		}
 		controller.params.max = 10
@@ -112,7 +133,7 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		controller.params.entity = [identifier:"http://idp.test.com"]
 		controller.params.idp = [displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], post:[uri:"http://idp.test.com/SAML2/POST/SSO"], 
 								redirect:[uri:"http://idp.test.com/SAML2/Redirect/SSO"], artifact:[uri:"http://idp.test.com/SAML2/SOAP/ArtifactResolution"]]
-		controller.params.aa = [create: true, crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], attributeservice:[uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
+		controller.params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], attributeservice:[uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
 		
 		when:
 		def model = controller.save()
@@ -123,17 +144,21 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		EntityDescriptor.count() == 1
 		IDPSSODescriptor.count() == 1
 		AttributeAuthorityDescriptor.count() == 1
-		def ed = EntityDescriptor.list().get(0)
-		ed.entityID == "http://idp.test.com"
+		
+		def entityDescriptor = EntityDescriptor.list().get(0)
+		entityDescriptor.entityID == "http://idp.test.com"
+		
 		def idp = IDPSSODescriptor.list().get(0)
 		idp.organization == organization
-		idp.entityDescriptor == ed
+		idp.entityDescriptor == entityDescriptor
 		idp.entityDescriptor.organization == organization
 		
-		controller.response.redirectedUrl == "/identityProvider/show/${idp.id}"
 		idp.displayName == "test name"
 		idp.description == "test desc"
 		idp.keyDescriptors.size() == 2
+		idp.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
+		idp.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
+		
 		idp.singleSignOnServices.size() == 2
 		def sso1 = idp.singleSignOnServices.toList().get(0)
 		def sso2 = idp.singleSignOnServices.toList().get(1)
@@ -145,9 +170,20 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 			sso1.location.uri == "http://idp.test.com/SAML2/Redirect/SSO"
 			sso2.location.uri == "http://idp.test.com/SAML2/POST/SSO"
 		}
-		
+				
 		idp.artifactResolutionServices.size() == 1
 		idp.artifactResolutionServices.toList().get(0).location.uri == "http://idp.test.com/SAML2/SOAP/ArtifactResolution"
+		
+		def aa = AttributeAuthorityDescriptor.list().get(0)
+		aa.organization == organization
+		aa.entityDescriptor == entityDescriptor
+		aa.collaborator == idp
+		aa.keyDescriptors.size() == 2
+		aa.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
+		aa.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
+		aa.attributeServices.toList().get(0).location.uri == "http://idp.test.com/SAML2/SOAP/AttributeQuery"
+		
+		controller.response.redirectedUrl == "/identityProvider/show/${idp.id}"
 	}
 	
 	def "Save succeeds when valid initial IDPSSODescriptor and AttributeAuthorityDescriptor data are provided (with existing EntityDescriptor)"() {
@@ -166,7 +202,7 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		controller.params.entity = [id: entityDescriptor.id]
 		controller.params.idp = [displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], post:[uri:"http://idp.test.com/SAML2/POST/SSO"], 
 								redirect:[uri:"http://idp.test.com/SAML2/Redirect/SSO"], artifact:[uri:"http://idp.test.com/SAML2/SOAP/ArtifactResolution"]]
-		controller.params.aa = [create: true, crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], attributeservice:[uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
+		controller.params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], attributeservice:[uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
 		
 		when:
 		def model = controller.save()
@@ -183,10 +219,14 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		idp.entityDescriptor == entityDescriptor
 		idp.entityDescriptor.organization == organization
 		
-		controller.response.redirectedUrl == "/identityProvider/show/${idp.id}"
 		idp.displayName == "test name"
 		idp.description == "test desc"
+		idp.active 
+		!idp.approved
 		idp.keyDescriptors.size() == 2
+		idp.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
+		idp.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
+		
 		idp.singleSignOnServices.size() == 2
 		def sso1 = idp.singleSignOnServices.toList().get(0)
 		def sso2 = idp.singleSignOnServices.toList().get(1)
@@ -201,6 +241,19 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 				
 		idp.artifactResolutionServices.size() == 1
 		idp.artifactResolutionServices.toList().get(0).location.uri == "http://idp.test.com/SAML2/SOAP/ArtifactResolution"
+		
+		def aa = AttributeAuthorityDescriptor.list().get(0)
+		aa.organization == organization
+		aa.entityDescriptor == entityDescriptor
+		aa.collaborator == idp
+		aa.active 
+		!aa.approved
+		aa.keyDescriptors.size() == 2
+		aa.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
+		aa.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
+		aa.attributeServices.toList().get(0).location.uri == "http://idp.test.com/SAML2/SOAP/AttributeQuery"
+		
+		controller.response.redirectedUrl == "/identityProvider/show/${idp.id}"
 	}
 	
 	def "Save fails when IDPSSODescriptor fails constraints even though a valid AttributeAuthorityDescriptor is provided"() {
@@ -219,7 +272,7 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		controller.params.entity = [id: entityDescriptor.id]
 		controller.params.idp = [description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], post:[uri:"http://idp.test.com/SAML2/POST/SSO"], 
 								redirect:[uri:"http://idp.test.com/SAML2/Redirect/SSO"], artifact:[uri:"http://idp.test.com/SAML2/SOAP/ArtifactResolution"]]
-		controller.params.aa = [create: true, crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], attributeservice:[uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
+		controller.params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], attributeservice:[uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
 		
 		when:
 		def model = controller.save()
@@ -239,6 +292,8 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		idp.displayName == null
 		idp.description == "test desc"
 		idp.keyDescriptors.size() == 2
+		idp.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
+		idp.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
 		
 		idp.singleSignOnServices.size() == 2
 		def httpPost = controller.modelAndView.model.httpPost
@@ -253,6 +308,15 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		def soapArtifact = controller.modelAndView.model.soapArtifact
 		idp.artifactResolutionServices.contains(soapArtifact)
 		soapArtifact.location.uri == "http://idp.test.com/SAML2/SOAP/ArtifactResolution"
+		
+		def aa = controller.modelAndView.model.attributeAuthority
+		aa.organization == organization
+		aa.entityDescriptor == entityDescriptor
+		aa.collaborator == idp
+		aa.keyDescriptors.size() == 2
+		aa.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
+		aa.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
+		aa.attributeServices.toList().get(0).location.uri == "http://idp.test.com/SAML2/SOAP/AttributeQuery"
 		
 		controller.modelAndView.model.identityProvider.errors.getFieldError('displayName').code == 'nullable'
 		controller.flash.type = "error"
@@ -275,7 +339,7 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		controller.params.entity = [id: entityDescriptor.id]
 		controller.params.idp = [displayName: "test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], post:[uri:"/SAML2/POST/SSO"], 
 								redirect:[uri:"http://idp.test.com/SAML2/Redirect/SSO"], artifact:[uri:"http://idp.test.com/SAML2/SOAP/ArtifactResolution"]]
-		controller.params.aa = [create: true, crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], attributeservice:[uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
+		controller.params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], attributeservice:[uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
 		
 		when:
 		def model = controller.save()
@@ -295,6 +359,8 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		idp.displayName == "test name"
 		idp.description == "test desc"
 		idp.keyDescriptors.size() == 2
+		idp.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
+		idp.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
 		
 		idp.singleSignOnServices.size() == 2
 		def httpPost = controller.modelAndView.model.httpPost
@@ -311,6 +377,15 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		def soapArtifact = controller.modelAndView.model.soapArtifact
 		idp.artifactResolutionServices.contains(soapArtifact)
 		soapArtifact.location.uri == "http://idp.test.com/SAML2/SOAP/ArtifactResolution"
+		
+		def aa = controller.modelAndView.model.attributeAuthority
+		aa.organization == organization
+		aa.entityDescriptor == entityDescriptor
+		aa.collaborator == idp
+		aa.keyDescriptors.size() == 2
+		aa.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
+		aa.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
+		aa.attributeServices.toList().get(0).location.uri == "http://idp.test.com/SAML2/SOAP/AttributeQuery"
 		
 		controller.flash.type = "error"
 		controller.flash.message = "fedreg.core.idpssodescriptor.save.validation.error.identityprovider"
@@ -332,7 +407,7 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		controller.params.entity = [id: entityDescriptor.id]
 		controller.params.idp = [displayName: "test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], 
 								redirect:[uri:"http://idp.test.com/SAML2/Redirect/SSO"], artifact:[uri:"http://idp.test.com/SAML2/SOAP/ArtifactResolution"]]
-		controller.params.aa = [create: true, crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], attributeservice:[uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
+		controller.params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], attributeservice:[uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
 		
 		when:
 		def model = controller.save()
@@ -352,6 +427,8 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		idp.displayName == "test name"
 		idp.description == "test desc"
 		idp.keyDescriptors.size() == 2
+		idp.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
+		idp.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
 		
 		idp.singleSignOnServices.size() == 2
 		def httpPost = controller.modelAndView.model.httpPost
@@ -370,6 +447,15 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		def soapArtifact = controller.modelAndView.model.soapArtifact
 		idp.artifactResolutionServices.contains(soapArtifact)
 		soapArtifact.location.uri == "http://idp.test.com/SAML2/SOAP/ArtifactResolution"
+		
+		def aa = controller.modelAndView.model.attributeAuthority
+		aa.organization == organization
+		aa.entityDescriptor == entityDescriptor
+		aa.collaborator == idp
+		aa.keyDescriptors.size() == 2
+		aa.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
+		aa.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
+		aa.attributeServices.toList().get(0).location.uri == "http://idp.test.com/SAML2/SOAP/AttributeQuery"
 		
 		controller.flash.type = "error"
 		controller.flash.message = "fedreg.core.idpssodescriptor.save.validation.error.identityprovider"
@@ -391,7 +477,7 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		controller.params.entity = [id: entityDescriptor.id]
 		controller.params.idp = [displayName: "test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], post:[uri:"http://idp.test.com/SAML2/POST/SSO"], 
 								redirect:[uri:"asdfasdasdf"], artifact:[uri:"http://idp.test.com/SAML2/SOAP/ArtifactResolution"]]
-		controller.params.aa = [create: true, crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], attributeservice:[uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
+		controller.params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], attributeservice:[uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
 		
 		when:
 		def model = controller.save()
@@ -411,6 +497,8 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		idp.displayName == "test name"
 		idp.description == "test desc"
 		idp.keyDescriptors.size() == 2
+		idp.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
+		idp.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
 		
 		idp.singleSignOnServices.size() == 2
 		def httpPost = controller.modelAndView.model.httpPost
@@ -427,6 +515,15 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		def soapArtifact = controller.modelAndView.model.soapArtifact
 		idp.artifactResolutionServices.contains(soapArtifact)
 		soapArtifact.location.uri == "http://idp.test.com/SAML2/SOAP/ArtifactResolution"
+		
+		def aa = controller.modelAndView.model.attributeAuthority
+		aa.organization == organization
+		aa.entityDescriptor == entityDescriptor
+		aa.collaborator == idp
+		aa.keyDescriptors.size() == 2
+		aa.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
+		aa.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
+		aa.attributeServices.toList().get(0).location.uri == "http://idp.test.com/SAML2/SOAP/AttributeQuery"
 		
 		controller.flash.type = "error"
 		controller.flash.message = "fedreg.core.idpssodescriptor.save.validation.error.identityprovider"
@@ -448,7 +545,7 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		controller.params.entity = [id: entityDescriptor.id]
 		controller.params.idp = [displayName: "test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], post:[uri:"http://idp.test.com/SAML2/POST/SSO"],
 								artifact:[uri:"http://idp.test.com/SAML2/SOAP/ArtifactResolution"]]
-		controller.params.aa = [create: true, crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], attributeservice:[uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
+		controller.params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], attributeservice:[uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
 		
 		when:
 		def model = controller.save()
@@ -468,6 +565,8 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		idp.displayName == "test name"
 		idp.description == "test desc"
 		idp.keyDescriptors.size() == 2
+		idp.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
+		idp.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
 		
 		idp.singleSignOnServices.size() == 2
 		def httpPost = controller.modelAndView.model.httpPost
@@ -486,6 +585,15 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		def soapArtifact = controller.modelAndView.model.soapArtifact
 		idp.artifactResolutionServices.contains(soapArtifact)
 		soapArtifact.location.uri == "http://idp.test.com/SAML2/SOAP/ArtifactResolution"
+		
+		def aa = controller.modelAndView.model.attributeAuthority
+		aa.organization == organization
+		aa.entityDescriptor == entityDescriptor
+		aa.collaborator == idp
+		aa.keyDescriptors.size() == 2
+		aa.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
+		aa.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
+		aa.attributeServices.toList().get(0).location.uri == "http://idp.test.com/SAML2/SOAP/AttributeQuery"
 		
 		controller.flash.type = "error"
 		controller.flash.message = "fedreg.core.idpssodescriptor.save.validation.error.identityprovider"
@@ -507,7 +615,7 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		controller.params.entity = [id: entityDescriptor.id]
 		controller.params.idp = [displayName: "test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], post:[uri:"http://idp.test.com/SAML2/POST/SSO"], 
 								redirect:[uri:"http://idp.test.com/SAML2/Redirect/SSO"], artifact:[uri:"/SAML2/SOAP/ArtifactResolution"]]
-		controller.params.aa = [create: true, crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], attributeservice:[uri:"SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
+		controller.params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], attributeservice:[uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
 		
 		when:
 		def model = controller.save()
@@ -527,6 +635,8 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		idp.displayName == "test name"
 		idp.description == "test desc"
 		idp.keyDescriptors.size() == 2
+		idp.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
+		idp.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
 		
 		idp.singleSignOnServices.size() == 2
 		def httpPost = controller.modelAndView.model.httpPost
@@ -543,6 +653,15 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		soapArtifact.location.uri == "/SAML2/SOAP/ArtifactResolution"
 		soapArtifact.errors.getErrorCount() == 1
 		soapArtifact.errors.getFieldError('location.uri').code == 'url.invalid'
+		
+		def aa = controller.modelAndView.model.attributeAuthority
+		aa.organization == organization
+		aa.entityDescriptor == entityDescriptor
+		aa.collaborator == idp
+		aa.keyDescriptors.size() == 2
+		aa.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
+		aa.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
+		aa.attributeServices.toList().get(0).location.uri == "http://idp.test.com/SAML2/SOAP/AttributeQuery"
 		
 		controller.flash.type = "error"
 		controller.flash.message = "fedreg.core.idpssodescriptor.save.validation.error.identityprovider"
@@ -564,7 +683,7 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		controller.params.entity = [id: entityDescriptor.id]
 		controller.params.idp = [displayName: "test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], post:[uri:"http://idp.test.com/SAML2/POST/SSO"],
 								redirect:[uri:"http://idp.test.com/SAML2/Redirect/SSO"]]
-		controller.params.aa = [create: true, crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], attributeservice:[uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
+		controller.params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], attributeservice:[uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
 		
 		when:
 		def model = controller.save()
@@ -584,6 +703,8 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		idp.displayName == "test name"
 		idp.description == "test desc"
 		idp.keyDescriptors.size() == 2
+		idp.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
+		idp.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
 		
 		idp.singleSignOnServices.size() == 2
 		def httpPost = controller.modelAndView.model.httpPost
@@ -602,6 +723,15 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		soapArtifact.errors.getFieldError('location.uri').code == 'nullable'
 		idp.errors.getErrorCount() == 1
 		idp.errors.getFieldError('artifactResolutionServices.location.uri').code == 'nullable'
+		
+		def aa = controller.modelAndView.model.attributeAuthority
+		aa.organization == organization
+		aa.entityDescriptor == entityDescriptor
+		aa.collaborator == idp
+		aa.keyDescriptors.size() == 2
+		aa.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
+		aa.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
+		aa.attributeServices.toList().get(0).location.uri == "http://idp.test.com/SAML2/SOAP/AttributeQuery"
 		
 		controller.flash.type = "error"
 		controller.flash.message = "fedreg.core.idpssodescriptor.save.validation.error.identityprovider"
@@ -623,7 +753,7 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		controller.params.entity = [id: entityDescriptor.id]
 		controller.params.idp = [displayName: "test name", description:"test desc",  post:[uri:"http://idp.test.com/SAML2/POST/SSO"],
 								redirect:[uri:"http://idp.test.com/SAML2/Redirect/SSO"], artifact:[uri:"http://idp.test.com/SAML2/SOAP/ArtifactResolution"]]
-		controller.params.aa = [create: true, crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], attributeservice:[uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
+		controller.params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], attributeservice:[uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
 		
 		when:
 		def model = controller.save()
@@ -660,191 +790,380 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		idp.artifactResolutionServices.toList().get(0).location.uri == "http://idp.test.com/SAML2/SOAP/ArtifactResolution"
 	}
 	
-	def setupBindings() {
-		def soap = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:SOAP', description:'').save()
-		def httpRedirect = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect', description:'').save()
-		def httpPost = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST', description:'').save()
-		def httpArtifact = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact', description:'').save()
-	}
-	
-	def setupCrypto() {
-		def ca = new File('./test/integration/data/demoCA/cacertminimal.pem').text
-		def caCert = new CACertificate(data:ca)
-		def caKeyInfo = new CAKeyInfo(certificate:caCert)
-		caKeyInfo.save()
-	}
-	
-	def String loadPK() {
-		new File('./test/integration/data/newcertminimal.pem').text
-	}
-	
-	/*
-	def "Save succeeds when valid IDPSSODescriptor and base SingleSignOn endpoint data presented (without existing EntityDescriptor)"() {
+	def "Save succeeds when AttributeAuthorityDescriptor not required"() {
 		setup:
-		def org = Organization.build().save()
-		def binding = SamlURI.build(type: SamlURIType.ProtocolBinding).save()
-		controller.params.organization = [id: org.id]
+		setupBindings()
+		setupCrypto()
+
+		def organization = Organization.build().save()
+		def entityDescriptor = EntityDescriptor.build(organization:organization).save()
+		def attr1 = Attribute.build().save()
+		def attr2 = Attribute.build().save()
+		def pk = loadPK()
+
+		controller.params.organization = [id: organization.id]
 		controller.params.active = true
-		controller.params.entity = [identifier:"http://idp.test.com"]
-		controller.params.idp = [displayName:"test name", description:"test desc"]
-		controller.params.sso = [active:true, binding:binding.id, uri:"http://idp.test.com/SSO/endpoint"]
-		controller.params.aa = [uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery", attributes:[1, 2]]
+		controller.params.entity = [id: entityDescriptor.id]
+		controller.params.idp = [displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], post:[uri:"http://idp.test.com/SAML2/POST/SSO"], 
+								redirect:[uri:"http://idp.test.com/SAML2/Redirect/SSO"], artifact:[uri:"http://idp.test.com/SAML2/SOAP/ArtifactResolution"]]
+		controller.params.aa = [create: false]
 		
 		when:
 		def model = controller.save()
 		
 		then:
 		Organization.count() == 1
-		SamlURI.count() == 1
+		SamlURI.count() == 4
 		EntityDescriptor.count() == 1
 		IDPSSODescriptor.count() == 1
-		AttributeAuthorityDescriptor.count() == 1
-		def ed = EntityDescriptor.list().get(0)
-		ed.entityID == "http://idp.test.com"
+		AttributeAuthorityDescriptor.count() == 0
+
 		def idp = IDPSSODescriptor.list().get(0)
-		idp.organization == org
-		idp.entityDescriptor == ed
-		idp.entityDescriptor.organization == org
+		idp.organization == organization
+		idp.entityDescriptor == entityDescriptor
+		idp.entityDescriptor.organization == organization
+		
 		controller.response.redirectedUrl == "/identityProvider/show/${idp.id}"
-		idp.displayName = "test name"
-		idp.description = "test desc"
-		idp.singleSignOnServices.size() == 1
-		idp.singleSignOnServices.asList().get(0).location.uri == "http://idp.test.com/SSO/endpoint"
-		idp.singleSignOnServices.asList().get(0).binding == binding
+		idp.displayName == "test name"
+		idp.description == "test desc"
+		idp.keyDescriptors.size() == 2
+		idp.singleSignOnServices.size() == 2
+		def sso1 = idp.singleSignOnServices.toList().get(0)
+		def sso2 = idp.singleSignOnServices.toList().get(1)
+		if(sso1.binding == SamlURI.findByUri(SamlConstants.httpPost)) {
+			sso1.location.uri == "http://idp.test.com/SAML2/POST/SSO"
+			sso2.location.uri == "http://idp.test.com/SAML2/Redirect/SSO"
+		}
+		else {
+			sso1.location.uri == "http://idp.test.com/SAML2/Redirect/SSO"
+			sso2.location.uri == "http://idp.test.com/SAML2/POST/SSO"
+		}
+				
+		idp.artifactResolutionServices.size() == 1
+		idp.artifactResolutionServices.toList().get(0).location.uri == "http://idp.test.com/SAML2/SOAP/ArtifactResolution"
 	}
 	
-	def "Save succeeds when valid IDPSSODescriptor and base SingleSignOn endpoint data presented (with existing EntityDescriptor)"() {
+	def "Save succeeds when AttributeAuthorityDescriptor data not presented"() {
 		setup:
-		def org = Organization.build().save()
-		def binding = SamlURI.build(type: SamlURIType.ProtocolBinding).save()
-		def ed = EntityDescriptor.build(organization: org).save()
-		controller.params.organization = [id: org.id]
+		setupBindings()
+		setupCrypto()
+
+		def organization = Organization.build().save()
+		def entityDescriptor = EntityDescriptor.build(organization:organization).save()
+		def attr1 = Attribute.build().save()
+		def attr2 = Attribute.build().save()
+		def pk = loadPK()
+
+		controller.params.organization = [id: organization.id]
 		controller.params.active = true
-		controller.params.entity = [id:ed.id]
-		controller.params.idp = [displayName:"test name", description:"test desc"]
-		controller.params.sso = [active:true, binding:binding.id, uri:"http://idp.test.com/SSO/endpoint"]
+		controller.params.entity = [id: entityDescriptor.id]
+		controller.params.idp = [displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], post:[uri:"http://idp.test.com/SAML2/POST/SSO"], 
+								redirect:[uri:"http://idp.test.com/SAML2/Redirect/SSO"], artifact:[uri:"http://idp.test.com/SAML2/SOAP/ArtifactResolution"]]
 		
 		when:
 		def model = controller.save()
 		
 		then:
 		Organization.count() == 1
-		SamlURI.count() == 1
+		SamlURI.count() == 4
 		EntityDescriptor.count() == 1
 		IDPSSODescriptor.count() == 1
+		AttributeAuthorityDescriptor.count() == 0
+
 		def idp = IDPSSODescriptor.list().get(0)
-		idp.organization == org
-		idp.entityDescriptor == ed
-		idp.entityDescriptor.organization == org
+		idp.organization == organization
+		idp.entityDescriptor == entityDescriptor
+		idp.entityDescriptor.organization == organization
+		
 		controller.response.redirectedUrl == "/identityProvider/show/${idp.id}"
-		idp.displayName = "test name"
-		idp.description = "test desc"
-		idp.singleSignOnServices.size() == 1
-		idp.singleSignOnServices.asList().get(0).location.uri == "http://idp.test.com/SSO/endpoint"
-		idp.singleSignOnServices.asList().get(0).binding == binding
+		idp.displayName == "test name"
+		idp.description == "test desc"
+		idp.keyDescriptors.size() == 2
+		idp.singleSignOnServices.size() == 2
+		def sso1 = idp.singleSignOnServices.toList().get(0)
+		def sso2 = idp.singleSignOnServices.toList().get(1)
+		if(sso1.binding == SamlURI.findByUri(SamlConstants.httpPost)) {
+			sso1.location.uri == "http://idp.test.com/SAML2/POST/SSO"
+			sso2.location.uri == "http://idp.test.com/SAML2/Redirect/SSO"
+		}
+		else {
+			sso1.location.uri == "http://idp.test.com/SAML2/Redirect/SSO"
+			sso2.location.uri == "http://idp.test.com/SAML2/POST/SSO"
+		}
+				
+		idp.artifactResolutionServices.size() == 1
+		idp.artifactResolutionServices.toList().get(0).location.uri == "http://idp.test.com/SAML2/SOAP/ArtifactResolution"
 	}
 	
-	def "Save fails when IdP constraints not met"() {
+	def "Save fails when AttributeAuthorityDescriptor fails to meet constraints"() {
 		setup:
-		def org = Organization.build().save()
-		def binding = SamlURI.build(type: SamlURIType.ProtocolBinding).save()
-		controller.params.organization = [id: org.id]
+		setupBindings()
+		setupCrypto()
+
+		def organization = Organization.build().save()
+		def entityDescriptor = EntityDescriptor.build(organization:organization).save()
+		def attr1 = Attribute.build().save()
+		def attr2 = Attribute.build().save()
+		def pk = loadPK()
+
+		controller.params.organization = [id: organization.id]
 		controller.params.active = true
-		controller.params.entity = [identifier:"http://idp.test.com"]
-		controller.params.idp = [description:"test desc"]
-		controller.params.sso = [active:true, binding:binding.id, uri:"http://idp.test.com/SSO/endpoint"]
+		controller.params.entity = [id: entityDescriptor.id]
+		controller.params.idp = [displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], post:[uri:"http://idp.test.com/SAML2/POST/SSO"], 
+								redirect:[uri:"http://idp.test.com/SAML2/Redirect/SSO"], artifact:[uri:"http://idp.test.com/SAML2/SOAP/ArtifactResolution"]]
+		controller.params.aa = [create: true, description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], attributeservice:[uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
 		
 		when:
 		def model = controller.save()
 		
 		then:
 		Organization.count() == 1
-		SamlURI.count() == 1
-		EntityDescriptor.count() == 0
+		SamlURI.count() == 4
+		EntityDescriptor.count() == 1
 		IDPSSODescriptor.count() == 0
-		controller.modelAndView.model.identityProvider.errors.getErrorCount() == 1
-		controller.modelAndView.model.identityProvider.errors.getFieldError('displayName').code == 'nullable'
-		controller.flash.type="error"
-		controller.flash.message="fedreg.core.idpssoroledescriptor.save.failed"
-		controller.modelAndView.model.identityProvider.displayName == null
-		controller.modelAndView.model.identityProvider.description == "test desc"
-		controller.modelAndView.model.identityProvider.singleSignOnServices.size() == 1
-		controller.modelAndView.model.organization != null
-		controller.modelAndView.model.entityDescriptor != null
+		AttributeAuthorityDescriptor.count() == 0
+
+		def idp = controller.modelAndView.model.identityProvider
+		idp.organization == organization
+		idp.entityDescriptor == entityDescriptor
+		idp.entityDescriptor.organization == organization
+		
+		idp.displayName == "test name"
+		idp.description == "test desc"
+		idp.keyDescriptors.size() == 2
+		idp.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
+		idp.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
+		
+		idp.singleSignOnServices.size() == 2
+		def httpPost = controller.modelAndView.model.httpPost
+		idp.singleSignOnServices.contains(httpPost)
+		httpPost.location.uri == "http://idp.test.com/SAML2/POST/SSO"
+
+		def httpRedirect = controller.modelAndView.model.httpRedirect
+		idp.singleSignOnServices.contains(httpRedirect)
+		httpRedirect.location.uri == "http://idp.test.com/SAML2/Redirect/SSO"
+		
+		idp.artifactResolutionServices.size() == 1
+		def soapArtifact = controller.modelAndView.model.soapArtifact
+		idp.artifactResolutionServices.contains(soapArtifact)
+		soapArtifact.location.uri == "http://idp.test.com/SAML2/SOAP/ArtifactResolution"
+		
+		def aa = controller.modelAndView.model.attributeAuthority
+		aa.displayName == null
+		
+		controller.flash.type = "error"
+		controller.flash.message = "fedreg.core.idpssodescriptor.save.validation.error.attributeauthority"
 	}
 	
-	def "Save fails when SSO endpoint constraints not met"() {
+	def "Save fails when invalid existing EnityDescriptor provided"() {
 		setup:
-		def org = Organization.build().save()
-		controller.params.organization = [id: org.id]
+		setupBindings()
+		setupCrypto()
+
+		def organization = Organization.build().save()
+		def entityDescriptor = EntityDescriptor.build(organization:organization).save()
+		def attr1 = Attribute.build().save()
+		def attr2 = Attribute.build().save()
+		def pk = loadPK()
+
+		controller.params.organization = [id: organization.id]
 		controller.params.active = true
-		controller.params.entity = [identifier:"http://idp.test.com"]
-		controller.params.idp = [displayName: "test", description:"test desc"]
-		controller.params.sso = [active:true, uri:"http://idp.test.com/SSO/endpoint"]
+		controller.params.entity = [id: entityDescriptor.id + 5]
+		controller.params.idp = [displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], post:[uri:"http://idp.test.com/SAML2/POST/SSO"], 
+								redirect:[uri:"http://idp.test.com/SAML2/Redirect/SSO"], artifact:[uri:"http://idp.test.com/SAML2/SOAP/ArtifactResolution"]]
+		controller.params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], attributeservice:[uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
 		
 		when:
 		def model = controller.save()
 		
 		then:
 		Organization.count() == 1
-		EntityDescriptor.count() == 0
+		SamlURI.count() == 4
+		EntityDescriptor.count() == 1
 		IDPSSODescriptor.count() == 0
-		controller.modelAndView.model.identityProvider.singleSignOnServices.size() == 1
-		controller.modelAndView.model.identityProvider.singleSignOnServices.toList().get(0).errors.getErrorCount() == 1
-		controller.modelAndView.model.identityProvider.singleSignOnServices.toList().get(0).errors.getFieldError('binding').code == 'nullable'
-		controller.flash.type="error"
-		controller.flash.message="fedreg.core.idpssoroledescriptor.save.failed"
-		controller.modelAndView.model.identityProvider.displayName == "test"
-		controller.modelAndView.model.identityProvider.description == "test desc"
+		AttributeAuthorityDescriptor.count() == 0
+
+		IDPSSODescriptor.count() == 0
+		AttributeAuthorityDescriptor.count() == 0
+
+		def idp = controller.modelAndView.model.identityProvider
+		idp.organization == organization
+		idp.entityDescriptor.organization == organization
+		idp.entityDescriptor != entityDescriptor
+		idp.entityDescriptor.entityID == null
+		
+		idp.displayName == "test name"
+		idp.description == "test desc"
+		idp.keyDescriptors.size() == 2
+		idp.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
+		idp.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
+		
+		idp.singleSignOnServices.size() == 2
+		def httpPost = controller.modelAndView.model.httpPost
+		idp.singleSignOnServices.contains(httpPost)
+		httpPost.location.uri == "http://idp.test.com/SAML2/POST/SSO"
+
+		def httpRedirect = controller.modelAndView.model.httpRedirect
+		idp.singleSignOnServices.contains(httpRedirect)
+		httpRedirect.location.uri == "http://idp.test.com/SAML2/Redirect/SSO"
+		
+		idp.artifactResolutionServices.size() == 1
+		def soapArtifact = controller.modelAndView.model.soapArtifact
+		idp.artifactResolutionServices.contains(soapArtifact)
+		soapArtifact.location.uri == "http://idp.test.com/SAML2/SOAP/ArtifactResolution"
+		
+		def aa = controller.modelAndView.model.attributeAuthority
+		aa.organization == organization
+		aa.entityDescriptor != entityDescriptor
+		aa.entityDescriptor.entityID == null
+		aa.collaborator == idp
+		aa.keyDescriptors.size() == 2
+		aa.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
+		aa.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
+		aa.attributeServices.toList().get(0).location.uri == "http://idp.test.com/SAML2/SOAP/AttributeQuery"
+		
+		idp.entityDescriptor.errors.getErrorCount() == 1
+		
+		controller.flash.type = "error"
+		controller.flash.message = "fedreg.core.idpssodescriptor.save.validation.error.entitydescriptor"
 	}
 	
-	def "Save fails when Organization not supplied"() {
+	def "Save fails when EnityDescriptor does not meet constraints"() {
 		setup:
-		def binding = SamlURI.build(type: SamlURIType.ProtocolBinding).save()
+		setupBindings()
+		setupCrypto()
+
+		def organization = Organization.build().save()
+		def attr1 = Attribute.build().save()
+		def attr2 = Attribute.build().save()
+		def pk = loadPK()
+
+		controller.params.organization = [id: organization.id]
 		controller.params.active = true
-		controller.params.entity = [identifier:"http://idp.test.com"]
-		controller.params.idp = [displayName: "test", description:"test desc"]
-		controller.params.sso = [active:true, binding:binding.id, uri:"http://idp.test.com/SSO/endpoint"]
-		
-		when:
-		def model = controller.save()
-		
-		then:
-		Organization.count() == 0
-		SamlURI.count() == 1
-		EntityDescriptor.count() == 0
-		IDPSSODescriptor.count() == 0
-		controller.modelAndView.model.identityProvider.errors.getErrorCount() == 0
-		controller.flash.type="error"
-		controller.flash.message="fedreg.core.idpssodescriptor.save.no.organization"
-		controller.modelAndView.model.identityProvider.displayName == "test"
-		controller.modelAndView.model.identityProvider.description == "test desc"
-		controller.modelAndView.model.identityProvider.singleSignOnServices.size() == 1
-	}
-	
-	def "Save fails when Entity not supplied"() {
-		setup:
-		def org = Organization.build().save()
-		def binding = SamlURI.build(type: SamlURIType.ProtocolBinding).save()
-		controller.params.organization = [id: org.id]
-		controller.params.active = true
-		controller.params.idp = [displayName: "test", description:"test desc"]
-		controller.params.sso = [active:true, binding:binding.id, uri:"http://idp.test.com/SSO/endpoint"]
+		controller.params.entity = [identifier:""]
+		controller.params.idp = [displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], post:[uri:"http://idp.test.com/SAML2/POST/SSO"], 
+								redirect:[uri:"http://idp.test.com/SAML2/Redirect/SSO"], artifact:[uri:"http://idp.test.com/SAML2/SOAP/ArtifactResolution"]]
+		controller.params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], attributeservice:[uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
 		
 		when:
 		def model = controller.save()
 		
 		then:
 		Organization.count() == 1
-		SamlURI.count() == 1
+		SamlURI.count() == 4
 		EntityDescriptor.count() == 0
 		IDPSSODescriptor.count() == 0
-		controller.modelAndView.model.identityProvider.errors.getErrorCount() == 0
-		controller.flash.type="error"
-		controller.flash.message="fedreg.core.idpssodescriptor.save.no.entitydescriptor"
-		controller.modelAndView.model.identityProvider.displayName == "test"
-		controller.modelAndView.model.identityProvider.description == "test desc"
-		controller.modelAndView.model.identityProvider.singleSignOnServices.size() == 1
+		AttributeAuthorityDescriptor.count() == 0
+
+		IDPSSODescriptor.count() == 0
+		AttributeAuthorityDescriptor.count() == 0
+
+		def idp = controller.modelAndView.model.identityProvider
+		idp.organization == organization
+		idp.entityDescriptor.organization == organization
+		idp.entityDescriptor.entityID == ""
+		
+		idp.displayName == "test name"
+		idp.description == "test desc"
+		idp.keyDescriptors.size() == 2
+		idp.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
+		idp.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
+		
+		idp.singleSignOnServices.size() == 2
+		def httpPost = controller.modelAndView.model.httpPost
+		idp.singleSignOnServices.contains(httpPost)
+		httpPost.location.uri == "http://idp.test.com/SAML2/POST/SSO"
+
+		def httpRedirect = controller.modelAndView.model.httpRedirect
+		idp.singleSignOnServices.contains(httpRedirect)
+		httpRedirect.location.uri == "http://idp.test.com/SAML2/Redirect/SSO"
+		
+		idp.artifactResolutionServices.size() == 1
+		def soapArtifact = controller.modelAndView.model.soapArtifact
+		idp.artifactResolutionServices.contains(soapArtifact)
+		soapArtifact.location.uri == "http://idp.test.com/SAML2/SOAP/ArtifactResolution"
+		
+		def aa = controller.modelAndView.model.attributeAuthority
+		aa.organization == organization
+		aa.entityDescriptor.entityID == ""
+		aa.collaborator == idp
+		aa.keyDescriptors.size() == 2
+		aa.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
+		aa.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
+		aa.attributeServices.toList().get(0).location.uri == "http://idp.test.com/SAML2/SOAP/AttributeQuery"
+		
+		idp.entityDescriptor.errors.getErrorCount() == 1
+		idp.entityDescriptor.errors.getFieldError('entityID').code == 'blank'
+		
+		controller.flash.type = "error"
+		controller.flash.message = "fedreg.core.idpssodescriptor.save.validation.error.entitydescriptor"
 	}
-	*/
+	
+	def "Save fails when invalid Organization provided"() {
+		setup:
+		setupBindings()
+		setupCrypto()
+
+		def organization = Organization.build().save()
+		def attr1 = Attribute.build().save()
+		def attr2 = Attribute.build().save()
+		def pk = loadPK()
+
+		controller.params.organization = [id: organization.id + 1]
+		controller.params.active = true
+		controller.params.entity = [identifier: "http://test.example.com"]
+		controller.params.idp = [displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], post:[uri:"http://idp.test.com/SAML2/POST/SSO"], 
+								redirect:[uri:"http://idp.test.com/SAML2/Redirect/SSO"], artifact:[uri:"http://idp.test.com/SAML2/SOAP/ArtifactResolution"]]
+		controller.params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], attributeservice:[uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
+		
+		when:
+		def model = controller.save()
+		
+		then:
+		Organization.count() == 1
+		SamlURI.count() == 4
+		EntityDescriptor.count() == 0
+		IDPSSODescriptor.count() == 0
+		AttributeAuthorityDescriptor.count() == 0
+
+		IDPSSODescriptor.count() == 0
+		AttributeAuthorityDescriptor.count() == 0
+
+		def idp = controller.modelAndView.model.identityProvider
+		idp.organization == null
+		idp.entityDescriptor == controller.modelAndView.model.entityDescriptor
+		
+		idp.displayName == "test name"
+		idp.description == "test desc"
+		idp.keyDescriptors.size() == 2
+		idp.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
+		idp.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
+		
+		idp.singleSignOnServices.size() == 2
+		def httpPost = controller.modelAndView.model.httpPost
+		idp.singleSignOnServices.contains(httpPost)
+		httpPost.location.uri == "http://idp.test.com/SAML2/POST/SSO"
+
+		def httpRedirect = controller.modelAndView.model.httpRedirect
+		idp.singleSignOnServices.contains(httpRedirect)
+		httpRedirect.location.uri == "http://idp.test.com/SAML2/Redirect/SSO"
+		
+		idp.artifactResolutionServices.size() == 1
+		def soapArtifact = controller.modelAndView.model.soapArtifact
+		idp.artifactResolutionServices.contains(soapArtifact)
+		soapArtifact.location.uri == "http://idp.test.com/SAML2/SOAP/ArtifactResolution"
+		
+		def aa = controller.modelAndView.model.attributeAuthority
+		aa.organization == null
+		aa.entityDescriptor == controller.modelAndView.model.entityDescriptor
+		aa.collaborator == idp
+		aa.keyDescriptors.size() == 2
+		aa.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
+		aa.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
+		aa.attributeServices.toList().get(0).location.uri == "http://idp.test.com/SAML2/SOAP/AttributeQuery"
+		
+		controller.flash.type = "error"
+		controller.flash.message = "fedreg.core.idpssodescriptor.save.validation.error.organization"
+	}
+	
 }
