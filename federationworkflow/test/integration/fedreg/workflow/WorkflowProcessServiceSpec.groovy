@@ -8,10 +8,10 @@ import org.apache.shiro.SecurityUtils
 import grails.plugins.nimble.core.UserBase
 import grails.plugins.nimble.core.ProfileBase
 
-class ProcessServiceSpec extends IntegrationSpec {
+class WorkflowProcessServiceSpec extends IntegrationSpec {
 	static transactional = true
 	
-	def processService
+	def workflowProcessService
 	def minimalDefinition
 	def savedMetaClasses
 	
@@ -30,13 +30,13 @@ class ProcessServiceSpec extends IntegrationSpec {
 
 	def "Create minimal process"() {
 		setup:
-		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:processService.authenticatedUser)
+		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:workflowProcessService.authenticatedUser)
 		testScript.save()
 		testScript.errors.each {println it}
 		minimalDefinition = new File('test/data/minimal.pr').getText()
 		
 		when:
-		processService.create(minimalDefinition)
+		workflowProcessService.create(minimalDefinition)
 		
 		then:
 		def process = Process.findByName('Minimal Test Process')
@@ -62,18 +62,18 @@ class ProcessServiceSpec extends IntegrationSpec {
 		process.tasks.get(4).needsApproval() == false
 		process.tasks.get(4).approverRoles.size() == 0
 		
-		process.creator == processService.authenticatedUser
+		process.creator == workflowProcessService.authenticatedUser
 	}
 	
 	def "Initiate minimal process"() {
 		setup:
-		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:processService.authenticatedUser).save()
+		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:workflowProcessService.authenticatedUser).save()
 		minimalDefinition = new File('test/data/minimal.pr').getText()
-		processService.create(minimalDefinition)
+		workflowProcessService.create(minimalDefinition)
 		def process = Process.findByName('Minimal Test Process')
 		
 		when:		
-		processService.initiate(process.name, "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
+		workflowProcessService.initiate(process.name, "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
 		
 		then:
 		def processInstance = ProcessInstance.get(1)
@@ -87,11 +87,11 @@ class ProcessServiceSpec extends IntegrationSpec {
 	
 	def "Initiate erronous process"() {
 		setup:
-		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:processService.authenticatedUser).save()
+		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:workflowProcessService.authenticatedUser).save()
 		minimalDefinition = new File('test/data/minimal-broken.pr').getText()
 		
 		when:		
-		def process = processService.create(minimalDefinition)
+		def process = workflowProcessService.create(minimalDefinition)
 		
 		then:
 		process.hasErrors()
@@ -99,13 +99,13 @@ class ProcessServiceSpec extends IntegrationSpec {
 	
 	def "Update minimal process"() {
 		setup:
-		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:processService.authenticatedUser).save()
+		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:workflowProcessService.authenticatedUser).save()
 		minimalDefinition = new File('test/data/minimal.pr').getText()
 		def updatedDefinition = new File('test/data/minimal2.pr').getText()
-		processService.create(minimalDefinition)
+		workflowProcessService.create(minimalDefinition)
 		
 		when:		
-		processService.update('Minimal Test Process', updatedDefinition)
+		workflowProcessService.update('Minimal Test Process', updatedDefinition)
 		
 		then:
 		def process = Process.findWhere(name: 'Minimal Test Process', active: true)
@@ -119,17 +119,17 @@ class ProcessServiceSpec extends IntegrationSpec {
 	
 	def "Multiple updates to minimal process"() {
 		setup:
-		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:processService.authenticatedUser).save()
+		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:workflowProcessService.authenticatedUser).save()
 		minimalDefinition = new File('test/data/minimal.pr').getText()
 		def updatedDefinition = new File('test/data/minimal2.pr').getText()
 		def updatedDefinition2 = new File('test/data/minimal3.pr').getText()
 		def updatedDefinition3 = new File('test/data/minimal4.pr').getText()
-		processService.create(minimalDefinition)
+		workflowProcessService.create(minimalDefinition)
 		
 		when:		
-		processService.update('Minimal Test Process', updatedDefinition)
-		processService.update('Minimal Test Process', updatedDefinition2)
-		processService.update('Minimal Test Process', updatedDefinition3)
+		workflowProcessService.update('Minimal Test Process', updatedDefinition)
+		workflowProcessService.update('Minimal Test Process', updatedDefinition2)
+		workflowProcessService.update('Minimal Test Process', updatedDefinition3)
 		
 		then:
 		def process = Process.findWhere(name: 'Minimal Test Process', active: true)
@@ -143,15 +143,15 @@ class ProcessServiceSpec extends IntegrationSpec {
 	
 	def "Ensure initiate always utilizes newest process definition"() {
 		setup:
-		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:processService.authenticatedUser).save()
+		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:workflowProcessService.authenticatedUser).save()
 		minimalDefinition = new File('test/data/minimal.pr').getText()
 		def updatedDefinition = new File('test/data/minimal2.pr').getText()
-		processService.create(minimalDefinition)
+		workflowProcessService.create(minimalDefinition)
 		
 		when:		
-		def processInstance = processService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
-		processService.update('Minimal Test Process', updatedDefinition)
-		def processInstance2 = processService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
+		def processInstance = workflowProcessService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
+		workflowProcessService.update('Minimal Test Process', updatedDefinition)
+		def processInstance2 = workflowProcessService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
 		
 		then:
 		Process.countByName('Minimal Test Process') == 2

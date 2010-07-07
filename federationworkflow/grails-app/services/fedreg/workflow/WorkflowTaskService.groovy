@@ -17,7 +17,7 @@ concurrency will be introduced back here over time as framework stability improv
 
 @author Bradley Beddoes
 */
-class TaskService {
+class WorkflowTaskService {
 	static transactional = true
 	
 	def final paramKey = /\{(.+?)\}/

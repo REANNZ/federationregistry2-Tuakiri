@@ -2,9 +2,9 @@ package fedreg.workflow
 
 import org.apache.shiro.SecurityUtils
 
-class ProcessService {
+class WorkflowProcessService {
 	
-	def taskService
+	def workflowTaskService
 	
 	def create(def definition) {
 		Binding binding = new Binding()
@@ -101,7 +101,7 @@ class ProcessService {
 	}
 	
 	def run(ProcessInstance processInstance) {
-		taskService.initiate(processInstance.id, processInstance.process.tasks.get(0).id)
+		workflowTaskService.initiate(processInstance.id, processInstance.process.tasks.get(0).id)
 	}
 	
 }
