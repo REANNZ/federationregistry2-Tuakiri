@@ -68,7 +68,7 @@
 						<g:link controller="entity" action="list"><g:message code="fedreg.link.entitydescriptors" /></g:link>
 					</li>
 					<li>
-						<g:link controller="identityProvider" action="list"><g:message code="fedreg.link.identityproviders" /></g:link>
+						<g:link controller="IDPSSODescriptor" action="list"><g:message code="fedreg.link.identityproviders" /></g:link>
 					</li>
 					<li>
 						<g:link controller="contacts" action="list"><g:message code="fedreg.link.contacts" /></g:link>
