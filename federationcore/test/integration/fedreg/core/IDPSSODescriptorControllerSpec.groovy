@@ -6,7 +6,7 @@ import fedreg.core.*
 import fedreg.workflow.*
 import grails.plugins.nimble.core.*
 
-class IdentityProviderControllerSpec extends IntegrationSpec {
+class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 	
 	def controller
 	def cryptoService
@@ -19,7 +19,7 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		SpecHelpers.registerMetaClass(WorkflowProcessService, savedMetaClasses)
 		workflowProcessService.metaClass = WorkflowProcessService.metaClass
 		
-		controller = new IdentityProviderController(cryptoService: cryptoService, workflowProcessService: workflowProcessService)
+		controller = new IDPSSODescriptorController(cryptoService: cryptoService, workflowProcessService: workflowProcessService)
 		def user = UserBase.build()
 		SpecHelpers.setupShiroEnv(user)
 	}
@@ -109,7 +109,7 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		then:
 		controller.flash.type == "error"
 		controller.flash.message == "fedreg.controllers.namevalue.missing"
-		controller.response.redirectedUrl == "/identityProvider/list"
+		controller.response.redirectedUrl == "/IDPSSODescriptor/list"
 	}
 	
 	def "Show with invalid IDPSSODescriptor ID"() {
@@ -122,7 +122,7 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		then:
 		controller.flash.type == "error"
 		controller.flash.message == "fedreg.core.idpssoroledescriptor.nonexistant"
-		controller.response.redirectedUrl == "/identityProvider/list"
+		controller.response.redirectedUrl == "/IDPSSODescriptor/list"
 	}
 	
 	def "Validate create"() {
@@ -216,7 +216,7 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		wfParams.identityProvider == idp.id
 		wfParams.organization == organization.name
 		
-		controller.response.redirectedUrl == "/identityProvider/show/${idp.id}"
+		controller.response.redirectedUrl == "/IDPSSODescriptor/show/${idp.id}"
 	}
 	
 	def "Save succeeds when valid initial IDPSSODescriptor and AttributeAuthorityDescriptor data are provided (with existing EntityDescriptor)"() {
@@ -303,7 +303,7 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		wfParams.identityProvider == idp.id
 		wfParams.organization == organization.name
 		
-		controller.response.redirectedUrl == "/identityProvider/show/${idp.id}"
+		controller.response.redirectedUrl == "/IDPSSODescriptor/show/${idp.id}"
 	}
 	
 	def "Save fails when IDPSSODescriptor fails constraints even though a valid AttributeAuthorityDescriptor is provided"() {
@@ -857,7 +857,7 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		wfParams.identityProvider == idp.id
 		wfParams.organization == organization.name
 		
-		controller.response.redirectedUrl == "/identityProvider/show/${idp.id}"
+		controller.response.redirectedUrl == "/IDPSSODescriptor/show/${idp.id}"
 	}
 	
 	def "Save succeeds when AttributeAuthorityDescriptor not required"() {
@@ -928,7 +928,7 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		wfParams.identityProvider == idp.id
 		wfParams.organization == organization.name
 		
-		controller.response.redirectedUrl == "/identityProvider/show/${idp.id}"
+		controller.response.redirectedUrl == "/IDPSSODescriptor/show/${idp.id}"
 	}
 	
 	def "Save succeeds when AttributeAuthorityDescriptor data not presented"() {
@@ -998,7 +998,7 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		wfParams.identityProvider == idp.id
 		wfParams.organization == organization.name
 		
-		controller.response.redirectedUrl == "/identityProvider/show/${idp.id}"
+		controller.response.redirectedUrl == "/IDPSSODescriptor/show/${idp.id}"
 	}
 	
 	def "Save fails when AttributeAuthorityDescriptor fails to meet constraints"() {

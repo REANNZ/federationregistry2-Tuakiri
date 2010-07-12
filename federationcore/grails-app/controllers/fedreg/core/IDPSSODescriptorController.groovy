@@ -2,7 +2,7 @@ package fedreg.core
 
 import fedreg.workflow.ProcessPriority
 
-class IdentityProviderController {
+class IDPSSODescriptorController {
 
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -72,6 +72,7 @@ class IdentityProviderController {
 		// Signing
 		if(params.idp?.crypto?.sig) {
 			def cert = cryptoService.createCertificate(params.idp?.crypto?.sigdata)
+			cryptoService.validateCertificate(cert)
 			def keyInfo = new KeyInfo(certificate: cert)
 			def keyDescriptor = new KeyDescriptor(keyInfo:keyInfo, keyType:KeyTypes.signing, roleDescriptor:identityProvider)
 			identityProvider.addToKeyDescriptors(keyDescriptor)
@@ -80,6 +81,7 @@ class IdentityProviderController {
 		// Encryption
 		if(params.idp?.crypto?.enc) {
 			def certEnc = cryptoService.createCertificate(params.idp?.crypto?.encdata)
+			cryptoService.validateCertificate(certEnc)
 			def keyInfoEnc = new KeyInfo(certificate:certEnc)
 			def keyDescriptorEnc = new KeyDescriptor(keyInfo:keyInfoEnc, keyType:KeyTypes.encryption, roleDescriptor:identityProvider)
 			identityProvider.addToKeyDescriptors(keyDescriptorEnc)
@@ -106,6 +108,7 @@ class IdentityProviderController {
 			// Signing
 			if(params.aa?.crypto?.sig) {
 				def cert = cryptoService.createCertificate(params.aa?.crypto?.sigdata)
+				cryptoService.validateCertificate(cert)
 				def keyInfo = new KeyInfo(certificate: cert)
 				def keyDescriptor = new KeyDescriptor(keyInfo:keyInfo, keyType:KeyTypes.signing, roleDescriptor:attributeAuthority)
 				attributeAuthority.addToKeyDescriptors(keyDescriptor)
@@ -114,6 +117,7 @@ class IdentityProviderController {
 			// Encryption
 			if(params.aa?.crypto?.enc) {
 				def certEnc = cryptoService.createCertificate(params.aa?.crypto?.encdata)
+				cryptoService.validateCertificate(certEnc)
 				def keyInfoEnc = new KeyInfo(certificate:certEnc)
 				def keyDescriptorEnc = new KeyDescriptor(keyInfo:keyInfoEnc, keyType:KeyTypes.encryption, roleDescriptor:attributeAuthority)
 				attributeAuthority.addToKeyDescriptors(keyDescriptorEnc)
