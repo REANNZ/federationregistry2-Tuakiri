@@ -37,7 +37,7 @@ class IDPSSODescriptorController {
 	
 	def create = {
 		def identityProvider = new IDPSSODescriptor()
-		[identityProvider: identityProvider]
+		[identityProvider: identityProvider, organizationList: Organization.list()]
 	}
 	
 	def save = {
