@@ -16,11 +16,19 @@ class CryptoService {
 	}
 
 	def boolean validateCertificate(fedreg.core.Certificate certificate) {
+		validateCertificate(certificate, false)
+	}
+	
+	def boolean validateCertificate(fedreg.core.Certificate certificate, boolean requireChain) {	
+		
+		if(!requireChain && certificate.subject.equals(certificate.issuer)) 	// self signed
+			return true
+			
 		CertificateFactory cf = CertificateFactory.getInstance("X.509")
 		CertPathValidator cpv = CertPathValidator.getInstance("PKIX")
-		
+	
 		def trustAnchors = [] as Set
-		
+	
 		try{
 			CACertificate.list().each { cacert ->
 				def c = cf.generateCertificate(new ByteArrayInputStream(cacert.data.getBytes("ASCII")))
@@ -29,9 +37,9 @@ class CryptoService {
 			}
 			PKIXParameters p = new PKIXParameters(trustAnchors)
 			p.setRevocationEnabled(false);
-		
+	
 			def certList = [cf.generateCertificate(new ByteArrayInputStream(certificate.data.getBytes("ASCII")))] as List
-		
+	
 			cpv.validate(cf.generateCertPath(certList), p)
 			return true
 		}
