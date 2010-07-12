@@ -81,7 +81,7 @@ class DescriptorNameIDFormatController {
 			return
 		}
 		
-		render template: "/templates/nameidformats/list", model:[nameIDFormats:descriptor.nameIDFormats, containerID:params.containerID]
+		render template: "/templates/nameidformats/list", contextPath: pluginContextPath, model:[nameIDFormats:descriptor.nameIDFormats, containerID:params.containerID]
 	}
 	
 	def add = {

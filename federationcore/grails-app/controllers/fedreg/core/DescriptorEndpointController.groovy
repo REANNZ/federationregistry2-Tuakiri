@@ -65,7 +65,7 @@ class DescriptorEndpointController {
 		def endpoint = params.endpointType
 		if(allowedEndpoints.containsKey(endpoint) && descriptor.hasProperty(endpoint)) {
 			log.debug "Listing endpoints for descriptor ID ${params.id} of type ${endpoint}"
-			render (template:"/templates/endpoints/list", model:[endpoints:descriptor."${endpoint}", allowremove:true, endpointType:endpoint, containerID:params.containerID])
+			render template:"/templates/endpoints/list", contextPath: pluginContextPath, model:[endpoints:descriptor."${endpoint}", allowremove:true, endpointType:endpoint, containerID:params.containerID]
 		}
 		else {
 			log.warn "Endpoint ${endpoint} is invalid for Descriptor with id ${params.id}"

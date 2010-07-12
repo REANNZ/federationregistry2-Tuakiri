@@ -9,7 +9,7 @@
 		</tr>
 	</thead>
 	<tbody>
-	<g:each in="${nameIDFormats}" status="i" var="nidf">
+	<g:each in="${ nameIDFormats.sort{it.id} }" status="i" var="nidf">
 		<tr>
 			<td>${nidf.uri.encodeAsHTML()}</td>
 			<td>${nidf.description?.encodeAsHTML()}</td>

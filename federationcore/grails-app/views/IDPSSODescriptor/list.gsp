@@ -24,7 +24,7 @@
                         
 							<td>${fieldValue(bean: identityProvider, field: "displayName")}</td>
 							
-                            <td>${fieldValue(bean: identityProvider, field: "organization")}</td>
+                            <td>${fieldValue(bean: identityProvider, field: "organization.name")}</td>
                         
 							<td><g:link action="show" id="${identityProvider.id}" class="button icon icon_view icon_view_identityProvider"><g:message code="fedreg.link.view" /></g:link></td>
                         </tr>

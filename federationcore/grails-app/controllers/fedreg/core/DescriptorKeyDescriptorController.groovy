@@ -43,7 +43,7 @@ class DescriptorKeyDescriptorController {
 			return
 		}
 		
-		render (template:"/templates/certificates/list", model:[descriptor:descriptor, allowremove:true])
+		render template:"/templates/certificates/list", contextPath: pluginContextPath, model:[descriptor:descriptor, allowremove:true]
 	}
 	
 	def validateCertificate = {
@@ -87,7 +87,7 @@ class DescriptorKeyDescriptorController {
 		catch(Exception e) {
 			log.warn "Certificate data is invalid"
 			e.printStackTrace()
-			render (template:"/templates/certificates/validation", model:[corrupt:true])
+			render template:"/templates/certificates/validation", contextPath: pluginContextPath, model:[corrupt:true]
 			return
 		}
 	}

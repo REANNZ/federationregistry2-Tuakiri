@@ -53,11 +53,11 @@
 						</tr>
 						<tr>
 							<th><g:message code="fedreg.label.organization"/></th>
-							<td><g:link controller="organization" action="show" id="${identityProvider.organization.id}" class="icon icon_arrow_branch">${fieldValue(bean: identityProvider, field: "organization")}</g:link></td>
+							<td><g:link controller="organization" action="show" id="${identityProvider.organization.id}">${fieldValue(bean: identityProvider, field: "organization.displayName")}</g:link></td>
 						</tr>
 						<tr>
 							<th><g:message code="fedreg.label.entitydescriptor"/></th>
-							<td><g:link controller="entity" action="show" id="${identityProvider.entityDescriptor.id}" class="icon icon_arrow_branch">${fieldValue(bean: identityProvider, field: "entityDescriptor")}</g:link></td>
+							<td><g:link controller="entity" action="show" id="${identityProvider.entityDescriptor.id}">${fieldValue(bean: identityProvider, field: "entityDescriptor.entityID")}</g:link></td>
 						</tr>
 						<tr>
 							<th><g:message code="fedreg.label.protocolsupport"/></th>
