@@ -216,7 +216,8 @@ class DataImporterService implements InitializingBean {
 		sql.eachRow("select * from homeOrgs",
 		{
 			def org = Organization.findByName(it.homeOrgName)
-			def entity = new EntityDescriptor(entityID:it.entityID, organization:org, active:it.approved).save()
+			def entity = new EntityDescriptor(entityID:it.entityID, organization:org, active:it.approved)
+			entity.save()
 			if(entity.hasErrors()) {
 				entity.errors.each {log.error it}
 			}
@@ -329,8 +330,18 @@ class DataImporterService implements InitializingBean {
 		sql.eachRow("select * from homeOrgs",
 		{			
 			def entity = EntityDescriptor.findWhere(entityID:it.entityID)
-			def aa = new AttributeAuthorityDescriptor(active:true, entityDescriptor:entity, organization:entity.organization).save()
+			def aa = new AttributeAuthorityDescriptor(active:true, entityDescriptor:entity, organization:entity.organization)
+			aa.save()
+			if(aa.hasErrors()) {
+				aa.errors.each {log.error it}
+			}
 			aa.addToProtocolSupportEnumerations(samlNamespace)
+			
+			sql.eachRow("select * from objectDescriptions where objectID=${it.homeOrgID} and objectType='homeOrg'",
+			{
+				aa.displayName = it.descriptiveName
+				aa.description = it.description
+			})
 			
 			sql.eachRow("select * from serviceLocations where objectID=${it.homeOrgID} and serviceType='AttributeService'",
 			{

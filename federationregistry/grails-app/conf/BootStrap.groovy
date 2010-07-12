@@ -18,13 +18,13 @@ class BootStrap {
 	
 	def grailsApplication
 	def dataImporterService
-	def processService
+	def workflowProcessService
 	def sessionFactory
 
      def init = { servletContext ->
 		// Populate default administrative account if required
 		if(User.count() == 0) {
-			def profile = new Profile(email:'internaladministrator@fed.reg')
+			def profile = new Profile(email:'internaladministrator@federation.reg')
 			def user = new User(username:'internaladministrator', enabled: false, external:false, federated: false, profile: profile)
 			user.save(flush: true)
 		}
@@ -57,7 +57,7 @@ class BootStrap {
 		if(Process.count() == 0) {	
 			def processes = new File("${System.getenv('FEDREG_CONFIG')}/workflow/processes")
 			processes.eachFile { process ->
-				processService.create(process.getText())
+				workflowProcessService.create(process.getText())
 			}
 		}
 		
