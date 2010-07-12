@@ -9,11 +9,9 @@ class CryptoService {
 	
 	def fedreg.core.Certificate createCertificate(String data) {
 		def cert = new fedreg.core.Certificate(data: data)	
-		if(validateCertificate(cert)) {
-			cert.expiryDate = expiryDate(cert)
-			cert.issuer = issuer(cert)
-			cert.subject = subject(cert)
-		}
+		cert.expiryDate = expiryDate(cert)
+		cert.issuer = issuer(cert)
+		cert.subject = subject(cert)
 		return cert
 	}
 

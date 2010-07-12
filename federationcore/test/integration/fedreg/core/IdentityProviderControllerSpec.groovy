@@ -10,12 +10,23 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 	
 	def controller
 	def cryptoService
-	def processService
+	def savedMetaClasses
+	def workflowProcessService
 	
 	def setup () {
-		controller = new IdentityProviderController(cryptoService: cryptoService, processService: processService)
+		savedMetaClasses = [:]
+		
+		SpecHelpers.registerMetaClass(WorkflowProcessService, savedMetaClasses)
+		workflowProcessService.metaClass = WorkflowProcessService.metaClass
+		
+		controller = new IdentityProviderController(cryptoService: cryptoService, workflowProcessService: workflowProcessService)
 		def user = UserBase.build()
 		SpecHelpers.setupShiroEnv(user)
+	}
+	
+	def cleanup() {
+		SpecHelpers.resetMetaClasses(savedMetaClasses)
+		workflowProcessService.metaClass = WorkflowProcessService.metaClass
 	}
 	
 	def setupBindings() {
@@ -140,7 +151,15 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 								redirect:[uri:"http://idp.test.com/SAML2/Redirect/SSO"], artifact:[uri:"http://idp.test.com/SAML2/SOAP/ArtifactResolution"]]
 		controller.params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], attributeservice:[uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
 		
+		def wfProcessName, wfDescription, wfPriority, wfParams
+		
 		when:
+		WorkflowProcessService.metaClass.initiate =  { String processName, String instanceDescription, ProcessPriority priority, Map params ->
+			wfProcessName = processName
+			wfDescription = instanceDescription
+			wfPriority = priority
+			wfParams = params
+		}
 		def model = controller.save()
 		
 		then:
@@ -183,12 +202,19 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		aa.organization == organization
 		aa.entityDescriptor == entityDescriptor
 		aa.collaborator == idp
+		idp.collaborator == aa
 		aa.keyDescriptors.size() == 2
 		aa.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
 		aa.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
 		aa.attributeServices.toList().get(0).location.uri == "http://idp.test.com/SAML2/SOAP/AttributeQuery"
 		
-		Process.count() == 1
+		wfProcessName == "idpssodescriptor_create"
+		wfDescription == "Approval for creation of IDPSSODescriptor test name"
+		wfPriority == ProcessPriority.MEDIUM
+		wfParams.size() == 4
+		wfParams.creator == controller.authenticatedUser.id
+		wfParams.identityProvider == idp.id
+		wfParams.organization == organization.name
 		
 		controller.response.redirectedUrl == "/identityProvider/show/${idp.id}"
 	}
@@ -211,7 +237,15 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 								redirect:[uri:"http://idp.test.com/SAML2/Redirect/SSO"], artifact:[uri:"http://idp.test.com/SAML2/SOAP/ArtifactResolution"]]
 		controller.params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], attributeservice:[uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
 		
+		def wfProcessName, wfDescription, wfPriority, wfParams
+		
 		when:
+		WorkflowProcessService.metaClass.initiate =  { String processName, String instanceDescription, ProcessPriority priority, Map params ->
+			wfProcessName = processName
+			wfDescription = instanceDescription
+			wfPriority = priority
+			wfParams = params
+		}
 		def model = controller.save()
 		
 		then:
@@ -253,12 +287,21 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		aa.organization == organization
 		aa.entityDescriptor == entityDescriptor
 		aa.collaborator == idp
+		idp.collaborator == aa
 		aa.active 
 		!aa.approved
 		aa.keyDescriptors.size() == 2
 		aa.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
 		aa.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
 		aa.attributeServices.toList().get(0).location.uri == "http://idp.test.com/SAML2/SOAP/AttributeQuery"
+		
+		wfProcessName == "idpssodescriptor_create"
+		wfDescription == "Approval for creation of IDPSSODescriptor test name"
+		wfPriority == ProcessPriority.MEDIUM
+		wfParams.size() == 4
+		wfParams.creator == controller.authenticatedUser.id
+		wfParams.identityProvider == idp.id
+		wfParams.organization == organization.name
 		
 		controller.response.redirectedUrl == "/identityProvider/show/${idp.id}"
 	}
@@ -762,7 +805,15 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 								redirect:[uri:"http://idp.test.com/SAML2/Redirect/SSO"], artifact:[uri:"http://idp.test.com/SAML2/SOAP/ArtifactResolution"]]
 		controller.params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], attributeservice:[uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
 		
+		def wfProcessName, wfDescription, wfPriority, wfParams
+		
 		when:
+		WorkflowProcessService.metaClass.initiate =  { String processName, String instanceDescription, ProcessPriority priority, Map params ->
+			wfProcessName = processName
+			wfDescription = instanceDescription
+			wfPriority = priority
+			wfParams = params
+		}
 		def model = controller.save()
 		
 		then:
@@ -773,11 +824,13 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		AttributeAuthorityDescriptor.count() == 1
 
 		def idp = IDPSSODescriptor.list().get(0)
+		def aa = AttributeAuthorityDescriptor.list().get(0)
+		
 		idp.organization == organization
 		idp.entityDescriptor == entityDescriptor
 		idp.entityDescriptor.organization == organization
+		idp.collaborator == aa
 		
-		controller.response.redirectedUrl == "/identityProvider/show/${idp.id}"
 		idp.displayName == "test name"
 		idp.description == "test desc"
 		idp.keyDescriptors == null
@@ -795,6 +848,16 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 				
 		idp.artifactResolutionServices.size() == 1
 		idp.artifactResolutionServices.toList().get(0).location.uri == "http://idp.test.com/SAML2/SOAP/ArtifactResolution"
+		
+		wfProcessName == "idpssodescriptor_create"
+		wfDescription == "Approval for creation of IDPSSODescriptor test name"
+		wfPriority == ProcessPriority.MEDIUM
+		wfParams.size() == 4
+		wfParams.creator == controller.authenticatedUser.id
+		wfParams.identityProvider == idp.id
+		wfParams.organization == organization.name
+		
+		controller.response.redirectedUrl == "/identityProvider/show/${idp.id}"
 	}
 	
 	def "Save succeeds when AttributeAuthorityDescriptor not required"() {
@@ -815,7 +878,15 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 								redirect:[uri:"http://idp.test.com/SAML2/Redirect/SSO"], artifact:[uri:"http://idp.test.com/SAML2/SOAP/ArtifactResolution"]]
 		controller.params.aa = [create: false]
 		
+		def wfProcessName, wfDescription, wfPriority, wfParams
+		
 		when:
+		WorkflowProcessService.metaClass.initiate =  { String processName, String instanceDescription, ProcessPriority priority, Map params ->
+			wfProcessName = processName
+			wfDescription = instanceDescription
+			wfPriority = priority
+			wfParams = params
+		}
 		def model = controller.save()
 		
 		then:
@@ -829,8 +900,8 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		idp.organization == organization
 		idp.entityDescriptor == entityDescriptor
 		idp.entityDescriptor.organization == organization
+		idp.collaborator == null
 		
-		controller.response.redirectedUrl == "/identityProvider/show/${idp.id}"
 		idp.displayName == "test name"
 		idp.description == "test desc"
 		idp.keyDescriptors.size() == 2
@@ -848,6 +919,16 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 				
 		idp.artifactResolutionServices.size() == 1
 		idp.artifactResolutionServices.toList().get(0).location.uri == "http://idp.test.com/SAML2/SOAP/ArtifactResolution"
+		
+		wfProcessName == "idpssodescriptor_create"
+		wfDescription == "Approval for creation of IDPSSODescriptor test name"
+		wfPriority == ProcessPriority.MEDIUM
+		wfParams.size() == 4
+		wfParams.creator == controller.authenticatedUser.id
+		wfParams.identityProvider == idp.id
+		wfParams.organization == organization.name
+		
+		controller.response.redirectedUrl == "/identityProvider/show/${idp.id}"
 	}
 	
 	def "Save succeeds when AttributeAuthorityDescriptor data not presented"() {
@@ -867,7 +948,15 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		controller.params.idp = [displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], post:[uri:"http://idp.test.com/SAML2/POST/SSO"], 
 								redirect:[uri:"http://idp.test.com/SAML2/Redirect/SSO"], artifact:[uri:"http://idp.test.com/SAML2/SOAP/ArtifactResolution"]]
 		
+		def wfProcessName, wfDescription, wfPriority, wfParams
+		
 		when:
+		WorkflowProcessService.metaClass.initiate =  { String processName, String instanceDescription, ProcessPriority priority, Map params ->
+			wfProcessName = processName
+			wfDescription = instanceDescription
+			wfPriority = priority
+			wfParams = params
+		}
 		def model = controller.save()
 		
 		then:
@@ -881,8 +970,8 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		idp.organization == organization
 		idp.entityDescriptor == entityDescriptor
 		idp.entityDescriptor.organization == organization
+		idp.collaborator == null
 		
-		controller.response.redirectedUrl == "/identityProvider/show/${idp.id}"
 		idp.displayName == "test name"
 		idp.description == "test desc"
 		idp.keyDescriptors.size() == 2
@@ -900,6 +989,16 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 				
 		idp.artifactResolutionServices.size() == 1
 		idp.artifactResolutionServices.toList().get(0).location.uri == "http://idp.test.com/SAML2/SOAP/ArtifactResolution"
+		
+		wfProcessName == "idpssodescriptor_create"
+		wfDescription == "Approval for creation of IDPSSODescriptor test name"
+		wfPriority == ProcessPriority.MEDIUM
+		wfParams.size() == 4
+		wfParams.creator == controller.authenticatedUser.id
+		wfParams.identityProvider == idp.id
+		wfParams.organization == organization.name
+		
+		controller.response.redirectedUrl == "/identityProvider/show/${idp.id}"
 	}
 	
 	def "Save fails when AttributeAuthorityDescriptor fails to meet constraints"() {

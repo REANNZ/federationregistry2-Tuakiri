@@ -9,7 +9,7 @@ class IdentityProviderController {
 	def defaultAction = "list"
 	
 	def cryptoService
-	def processService
+	def workflowProcessService
 
 	def list = {
 		[identityProviderList: IDPSSODescriptor.list(params), identityProviderTotal: IDPSSODescriptor.count()]
@@ -180,7 +180,7 @@ class IdentityProviderController {
 		}
 		
 		def workflowParams = [ creator:authenticatedUser.id, identityProvider:identityProvider?.id, attributeAuthority:attributeAuthority?.id, organization:organization.name ]
-		processService.initiate( "idpssodescriptor_create", "Approval for creation of IDPSSODescriptor ${identityProvider.displayName}", ProcessPriority.MEDIUM, workflowParams)
+		workflowProcessService.initiate( "idpssodescriptor_create", "Approval for creation of IDPSSODescriptor ${identityProvider.displayName}", ProcessPriority.MEDIUM, workflowParams)
 		
 		redirect(action: "show", id: identityProvider.id)
 	}
