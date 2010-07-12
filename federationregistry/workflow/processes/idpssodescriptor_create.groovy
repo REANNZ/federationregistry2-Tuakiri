@@ -1,8 +1,8 @@
 
-process(name:'idpCreation', description: 'Workflow defining IDP creation approval process') {
+process(name:'idpssodescriptor_create', description: 'Workflow defining IDP creation approval process') {
 	
 	task(name: 'orgApproval', description: 'Request approval from owning organization administrators') {
-		approver(role: '{IDP_ORG}') {
+		approver(role: '{organization}_approvers') {
 			reject(name: 'invalidDefinition', description:'Technical or descriptive content about this IdP is invalid') {
 				start ('finish')
 			}
@@ -15,7 +15,7 @@ process(name:'idpCreation', description: 'Workflow defining IDP creation approva
 		}
     }
 	
-	task(name: 'finish', description: 'Completes the idpCreate workflow') {
+	task(name: 'finish', description: 'Completes the idpssodescriptor_create workflow') {
 		finish()
 	}
 	
