@@ -26,7 +26,7 @@ class UrlMappings {
 	}
 	
 	"/membership/identityprovider/$action?/$id?"{
-		controller = "identityProvider"
+		controller = "IDPSSODescriptor"
 	}
 	
 	"/membership/contacts/$action?/$id?"{
