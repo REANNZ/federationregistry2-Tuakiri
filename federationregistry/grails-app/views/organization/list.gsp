@@ -13,8 +13,8 @@
 					<thead>
 						<tr>
 						
-							<g:sortableColumn property="name" title="${message(code: 'fedreg.label.organization')}" />
-							<g:sortableColumn property="name" title="${message(code: 'fedreg.label.primarytype')}" />
+							<th>${message(code: 'fedreg.label.organization')}</th>
+							<th>${message(code: 'fedreg.label.primarytype')}</th>
 							<th />
 						
 						</tr>
@@ -23,7 +23,7 @@
 					<g:each in="${organizationList.sort{it.name}}" status="i" var="organization">
 						<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 							<td>${fieldValue(bean: organization, field: "displayName")}</td>
-							<td>${fieldValue(bean: organization, field: "primary")}</td>
+							<td>${fieldValue(bean: organization, field: "primary.displayName")}</td>
 							<td><g:link action="show" id="${organization.id}" class="button icon icon_magnifier"><g:message code="fedreg.link.view" /></g:link></td>
 						</tr>
 					</g:each>

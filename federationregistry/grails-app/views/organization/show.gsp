@@ -36,7 +36,7 @@
 						</tr>
 						<tr>
 							<th><g:message code="fedreg.label.primarytype" /></th>
-							<td>${organization?.primary?.encodeAsHTML()}</td>
+							<td>${fieldValue(bean: organization, field: "primary.displayName")}</td>
 						</tr>
 						<g:if test="${organization.types}">
 						<tr>
@@ -44,7 +44,7 @@
 							<td valign="top"  class="value">
 								<ul>
 								<g:each in="${organization.types}" var="t">
-									<li>${t?.encodeAsHTML()}</li>
+									<li>${fieldValue(bean: t, field: "displayName")}</li>
 								</g:each>
 								</ul>
 							</td>
@@ -128,7 +128,7 @@
 										<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 											<td>${idp.displayName.encodeAsHTML()}</td>
 											<td>${ent.entityID.encodeAsHTML()}</td>
-											<td><g:link controller="identityProvider" action="show" id="${idp.id}" class="button icon icon_view"><g:message code="fedreg.link.view" /></g:link></td>
+											<td><g:link controller="IDPSSODescriptor" action="show" id="${idp.id}" class="button icon icon_view"><g:message code="fedreg.link.view" /></g:link></td>
 										</tr>
 									</g:each>
 								</g:if>
@@ -152,7 +152,7 @@
 										<tr>
 											<td>${(aa.displayName?:"N/A").encodeAsHTML()}</td>
 											<td>${ent.entityID.encodeAsHTML()}</td>
-											<td><g:link controller="attributeAuthority" action="show" id="${aa.id}" class="button icon icon_view"><g:message code="fedreg.link.view" /></g:link></td>
+											<td><g:link controller="attributeAuthorityDescriptor" action="show" id="${aa.id}" class="button icon icon_view"><g:message code="fedreg.link.view" /></g:link></td>
 										</tr>
 									</g:each>
 								</g:if>
@@ -176,7 +176,7 @@
 										<tr>
 											<td>${(sp.displayName?:"N/A").encodeAsHTML()}</td>
 											<td>${ent.entityID.encodeAsHTML()}</td>
-											<td><g:link controller="serviceProvider" action="show" id="${sp.id}" class="button icon icon_view"><g:message code="fedreg.link.view" /></g:link></td>
+											<td><g:link controller="SPSSODescriptor" action="show" id="${sp.id}" class="button icon icon_view"><g:message code="fedreg.link.view" /></g:link></td>
 										</tr>
 									</g:each>
 								</g:if>
