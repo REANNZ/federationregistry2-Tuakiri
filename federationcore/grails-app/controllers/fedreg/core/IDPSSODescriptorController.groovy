@@ -48,16 +48,19 @@ class IDPSSODescriptorController {
 		
 		// IDP
 		def identityProvider = new IDPSSODescriptor(active:params.active, displayName: params.idp.displayName, description: params.idp.description)
-		println params.idp.attributes
 		params.idp.attributes.each { attrID -> 
-			def attr = Attribute.get(attrID)
-			if(attr)
-				identityProvider.addToAttributes(attr)
+			if(attrID.value == "on") {
+				def attr = Attribute.get(attrID.key)
+				if(attr)
+					identityProvider.addToAttributes(attr)
+			}
 		}
-		params.idp.nameidformats.each { attrID -> 
-			def nameid = SamlURI.get(attrID)
-			if(nameid)
-				identityProvider.addToNameIDFormats(nameid)
+		params.idp.nameidformats.each { nameFormatID -> 
+			if(nameFormatID.value == "on") {
+				def nameid = SamlURI.get(nameFormatID.key)
+				if(nameid)
+					identityProvider.addToNameIDFormats(nameid)
+			}
 		}
 		
 		// Initial endpoints
@@ -110,9 +113,11 @@ class IDPSSODescriptorController {
 			def attributeService = new AttributeService(binding: attributeServiceBinding, location:attributeServiceLocation)
 			attributeAuthority.addToAttributeServices(attributeService)
 			params.aa.attributes.each { attrID -> 
-				def attr = Attribute.get(attrID)
-				if(attr)
-					attributeAuthority.addToAttributes(attr)
+				if(attrID.value == "on") {
+					def attr = Attribute.get(attrID.key)
+					if(attr)
+						attributeAuthority.addToAttributes(attr)
+				}
 			}
 			
 			// Cryptography

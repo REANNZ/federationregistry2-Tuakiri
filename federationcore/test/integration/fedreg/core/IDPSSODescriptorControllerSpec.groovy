@@ -165,9 +165,9 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		controller.params.organization = [id: organization.id]
 		controller.params.active = true
 		controller.params.entity = [identifier:"http://idp.test.com"]
-		controller.params.idp = [displayName:"test name", description:"test desc", attributes:[attr1.id, attr2.id], nameidformats:[nameID1.id, nameID2.id], crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], post:[uri:"http://idp.test.com/SAML2/POST/SSO"], 
+		controller.params.idp = [displayName:"test name", description:"test desc", attributes:[(attr1.id):'on', (attr2.id):'on'], nameidformats:[(nameID1.id):'on', (nameID2.id):'on'], crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], post:[uri:"http://idp.test.com/SAML2/POST/SSO"], 
 								redirect:[uri:"http://idp.test.com/SAML2/Redirect/SSO"], artifact:[uri:"http://idp.test.com/SAML2/SOAP/ArtifactResolution"]]
-		controller.params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], attributeservice:[uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery"], attributes:[attr1.id, attr2.id]]
+		controller.params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], attributeservice:[uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery"], attributes:[(attr1.id):'on', (attr2.id):'on']]
 		
 		def wfProcessName, wfDescription, wfPriority, wfParams
 		
@@ -260,9 +260,9 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		controller.params.organization = [id: organization.id]
 		controller.params.active = true
 		controller.params.entity = [id: entityDescriptor.id]
-		controller.params.idp = [displayName:"test name", description:"test desc", attributes:[attr1.id, attr2.id], crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], post:[uri:"http://idp.test.com/SAML2/POST/SSO"], 
+		controller.params.idp = [displayName:"test name", description:"test desc", attributes:[(attr1.id):'on', (attr2.id):'on'], crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], post:[uri:"http://idp.test.com/SAML2/POST/SSO"], 
 								redirect:[uri:"http://idp.test.com/SAML2/Redirect/SSO"], artifact:[uri:"http://idp.test.com/SAML2/SOAP/ArtifactResolution"]]
-		controller.params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], attributeservice:[uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery"], attributes:[attr1.id, attr2.id]]
+		controller.params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], attributeservice:[uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery"], attributes:[(attr1.id):'on', (attr2.id):'on']]
 		
 		def wfProcessName, wfDescription, wfPriority, wfParams
 		
