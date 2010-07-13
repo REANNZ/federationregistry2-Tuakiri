@@ -1127,9 +1127,7 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 
 		def idp = controller.modelAndView.model.identityProvider
 		idp.organization == organization
-		idp.entityDescriptor.organization == organization
-		idp.entityDescriptor != entityDescriptor
-		idp.entityDescriptor.entityID == null
+		idp.entityDescriptor == null
 		
 		idp.displayName == "test name"
 		idp.description == "test desc"
@@ -1153,15 +1151,14 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		
 		def aa = controller.modelAndView.model.attributeAuthority
 		aa.organization == organization
-		aa.entityDescriptor != entityDescriptor
-		aa.entityDescriptor.entityID == null
+		aa.entityDescriptor == null
 		aa.collaborator == idp
 		aa.keyDescriptors.size() == 2
 		aa.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
 		aa.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
 		aa.attributeServices.toList().get(0).location.uri == "http://idp.test.com/SAML2/SOAP/AttributeQuery"
 		
-		idp.entityDescriptor.errors.getErrorCount() == 1
+		controller.modelAndView.model.entityDescriptor.errors.getErrorCount() == 1
 		
 		controller.flash.type = "error"
 		controller.flash.message = "fedreg.core.idpssodescriptor.save.validation.error.entitydescriptor"
@@ -1199,8 +1196,7 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 
 		def idp = controller.modelAndView.model.identityProvider
 		idp.organization == organization
-		idp.entityDescriptor.organization == organization
-		idp.entityDescriptor.entityID == ""
+		idp.entityDescriptor == null
 		
 		idp.displayName == "test name"
 		idp.description == "test desc"
@@ -1224,15 +1220,15 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		
 		def aa = controller.modelAndView.model.attributeAuthority
 		aa.organization == organization
-		aa.entityDescriptor.entityID == ""
+		aa.entityDescriptor == null
 		aa.collaborator == idp
 		aa.keyDescriptors.size() == 2
 		aa.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
 		aa.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
 		aa.attributeServices.toList().get(0).location.uri == "http://idp.test.com/SAML2/SOAP/AttributeQuery"
 		
-		idp.entityDescriptor.errors.getErrorCount() == 1
-		idp.entityDescriptor.errors.getFieldError('entityID').code == 'blank'
+		controller.modelAndView.model.entityDescriptor.errors.getErrorCount() == 1
+		controller.modelAndView.model.entityDescriptor.errors.getFieldError('entityID').code == 'blank'
 		
 		controller.flash.type = "error"
 		controller.flash.message = "fedreg.core.idpssodescriptor.save.validation.error.entitydescriptor"
@@ -1270,7 +1266,7 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 
 		def idp = controller.modelAndView.model.identityProvider
 		idp.organization == null
-		idp.entityDescriptor == controller.modelAndView.model.entityDescriptor
+		idp.entityDescriptor == null
 		
 		idp.displayName == "test name"
 		idp.description == "test desc"
@@ -1294,7 +1290,7 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		
 		def aa = controller.modelAndView.model.attributeAuthority
 		aa.organization == null
-		aa.entityDescriptor == controller.modelAndView.model.entityDescriptor
+		aa.entityDescriptor == null
 		aa.collaborator == idp
 		aa.keyDescriptors.size() == 2
 		aa.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk

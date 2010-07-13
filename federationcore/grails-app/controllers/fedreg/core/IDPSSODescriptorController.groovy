@@ -145,10 +145,6 @@ class IDPSSODescriptorController {
 		if(!entityDescriptor) {
 			entityDescriptor = new EntityDescriptor(active: params.active, entityID: params.entity?.identifier)
 		}
-		entityDescriptor.addToIdpDescriptors(identityProvider)
-		
-		if(params.aa?.create)
-			entityDescriptor.addToAttributeAuthorityDescriptors(attributeAuthority)
 		
 		// Organization
 		def organization = Organization.get(params.organization?.id)
@@ -167,13 +163,16 @@ class IDPSSODescriptorController {
 		// Submission validation
 		if(!entityDescriptor.validate()) {
 			entityDescriptor.errors.each { log.error it }
-			identityProvider.validate()
 			flash.type="error"
 			flash.message="fedreg.core.idpssodescriptor.save.validation.error.entitydescriptor"
 			render view: 'create', model:[organization:organization, entityDescriptor: entityDescriptor, identityProvider:identityProvider, attributeAuthority: attributeAuthority, httpPost: httpPost, httpRedirect: httpRedirect, soapArtifact: soapArtifact]
 			return
 		}
-				
+		entityDescriptor.addToIdpDescriptors(identityProvider)
+		
+		if(params.aa?.create)
+			entityDescriptor.addToAttributeAuthorityDescriptors(attributeAuthority)
+					
 		if(!identityProvider.validate()) {			
 			identityProvider.errors.each {log.debug it}
 			flash.type="error"
