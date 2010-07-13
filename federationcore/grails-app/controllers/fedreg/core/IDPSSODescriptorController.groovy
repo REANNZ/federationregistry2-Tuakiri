@@ -37,7 +37,7 @@ class IDPSSODescriptorController {
 	
 	def create = {
 		def identityProvider = new IDPSSODescriptor()
-		[identityProvider: identityProvider, organizationList: Organization.list(), attributeList: Attribute.list()]
+		[identityProvider: identityProvider, organizationList: Organization.list(), attributeList: Attribute.list(), nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding)]
 	}
 	
 	def save = {
@@ -48,6 +48,17 @@ class IDPSSODescriptorController {
 		
 		// IDP
 		def identityProvider = new IDPSSODescriptor(active:params.active, displayName: params.idp.displayName, description: params.idp.description)
+		println params.idp.attributes
+		params.idp.attributes.each { attrID -> 
+			def attr = Attribute.get(attrID)
+			if(attr)
+				identityProvider.addToAttributes(attr)
+		}
+		params.idp.nameidformats.each { attrID -> 
+			def nameid = SamlURI.get(attrID)
+			if(nameid)
+				identityProvider.addToNameIDFormats(nameid)
+		}
 		
 		// Initial endpoints
 		def postBinding = SamlURI.findByUri(SamlConstants.httpPost)
