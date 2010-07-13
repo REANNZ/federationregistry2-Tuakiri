@@ -131,6 +131,10 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 			Organization.build().save()
 		}
 		
+		(1..15).each { i ->
+			Attribute.build(name: "attr$i").save()
+		}
+		
 		when:
 		def model = controller.create()
 
@@ -138,6 +142,7 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		model.identityProvider != null
 		model.identityProvider instanceof IDPSSODescriptor
 		model.organizationList.size() == 15
+		model.attributeList.size() == 15
 	}
 	
 	def "Save succeeds when valid initial IDPSSODescriptor and AttributeAuthorityDescriptor data are provided (without existing EntityDescriptor)"() {
