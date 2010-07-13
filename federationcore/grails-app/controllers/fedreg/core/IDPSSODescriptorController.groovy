@@ -151,7 +151,8 @@ class IDPSSODescriptorController {
 		if(!organization) {
 			flash.type="error"
 			flash.message="fedreg.core.idpssodescriptor.save.validation.error.organization"
-			render view: 'create', model:[entityDescriptor: entityDescriptor, identityProvider:identityProvider, attributeAuthority: attributeAuthority, httpPost: httpPost, httpRedirect: httpRedirect, soapArtifact: soapArtifact]
+			render view: 'create', model:[entityDescriptor: entityDescriptor, identityProvider:identityProvider, attributeAuthority: attributeAuthority, 
+			httpPost: httpPost, httpRedirect: httpRedirect, soapArtifact: soapArtifact, organizationList: Organization.list(), attributeList: Attribute.list(), nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding)]
 			return
 		}
 		organization.addToEntityDescriptors(entityDescriptor)
@@ -165,7 +166,8 @@ class IDPSSODescriptorController {
 			entityDescriptor.errors.each { log.error it }
 			flash.type="error"
 			flash.message="fedreg.core.idpssodescriptor.save.validation.error.entitydescriptor"
-			render view: 'create', model:[organization:organization, entityDescriptor: entityDescriptor, identityProvider:identityProvider, attributeAuthority: attributeAuthority, httpPost: httpPost, httpRedirect: httpRedirect, soapArtifact: soapArtifact]
+			render view: 'create', model:[organization:organization, entityDescriptor: entityDescriptor, identityProvider:identityProvider, attributeAuthority: attributeAuthority, 
+			httpPost: httpPost, httpRedirect: httpRedirect, soapArtifact: soapArtifact, organizationList: Organization.list(), attributeList: Attribute.list(), nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding)]
 			return
 		}
 		entityDescriptor.addToIdpDescriptors(identityProvider)
@@ -177,7 +179,8 @@ class IDPSSODescriptorController {
 			identityProvider.errors.each {log.debug it}
 			flash.type="error"
 			flash.message="fedreg.core.idpssodescriptor.save.validation.error.identityprovider"
-			render view: 'create', model:[organization:organization, entityDescriptor: entityDescriptor, identityProvider:identityProvider, attributeAuthority: attributeAuthority, httpPost: httpPost, httpRedirect: httpRedirect, soapArtifact: soapArtifact]
+			render view: 'create', model:[organization:organization, entityDescriptor: entityDescriptor, identityProvider:identityProvider, attributeAuthority: attributeAuthority, 
+			httpPost: httpPost, httpRedirect: httpRedirect, soapArtifact: soapArtifact, organizationList: Organization.list(), attributeList: Attribute.list(), nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding)]
 			return
 		}
 		
@@ -186,7 +189,8 @@ class IDPSSODescriptorController {
 				attributeAuthority.errors.each {log.debug it}
 				flash.type="error"
 				flash.message="fedreg.core.idpssodescriptor.save.validation.error.attributeauthority"
-				render view: 'create', model:[organization:organization, entityDescriptor: entityDescriptor, identityProvider:identityProvider, attributeAuthority: attributeAuthority, httpPost: httpPost, httpRedirect: httpRedirect, soapArtifact: soapArtifact]
+				render view: 'create', model:[organization:organization, entityDescriptor: entityDescriptor, identityProvider:identityProvider, attributeAuthority: attributeAuthority, 
+				httpPost: httpPost, httpRedirect: httpRedirect, soapArtifact: soapArtifact, organizationList: Organization.list(), attributeList: Attribute.list(), nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding)]
 				return
 			}
 
@@ -194,12 +198,14 @@ class IDPSSODescriptorController {
 			identityProvider.errors.each {log.debug it}
 			flash.type="error"
 			flash.message="fedreg.core.idpssodescriptor.save.failed"
-			render view: 'create', model:[organization:organization, entityDescriptor: entityDescriptor, identityProvider:identityProvider, attributeAuthority: attributeAuthority, httpPost: httpPost, httpRedirect: httpRedirect, soapArtifact: soapArtifact]
+			render view: 'create', model:[organization:organization, entityDescriptor: entityDescriptor, identityProvider:identityProvider, attributeAuthority: attributeAuthority, 
+			httpPost: httpPost, httpRedirect: httpRedirect, soapArtifact: soapArtifact, organizationList: Organization.list(), attributeList: Attribute.list(), nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding)]
 			return
 		}
 		
 		def workflowParams = [ creator:authenticatedUser.id, identityProvider:identityProvider?.id, attributeAuthority:attributeAuthority?.id, organization:organization.name ]
-		workflowProcessService.initiate( "idpssodescriptor_create", "Approval for creation of IDPSSODescriptor ${identityProvider.displayName}", ProcessPriority.MEDIUM, workflowParams)
+		def processInstance = workflowProcessService.initiate( "idpssodescriptor_create", "Approval for creation of IDPSSODescriptor ${identityProvider.displayName}", ProcessPriority.MEDIUM, workflowParams)
+		workflowProcessService.run(processInstance)
 		
 		redirect(action: "show", id: identityProvider.id)
 	}

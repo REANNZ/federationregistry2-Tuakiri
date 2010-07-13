@@ -177,7 +177,9 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 			wfDescription = instanceDescription
 			wfPriority = priority
 			wfParams = params
+			[:]
 		}
+		WorkflowProcessService.metaClass.run = { def processInstance -> }
 		def model = controller.save()
 		
 		then:
@@ -272,7 +274,9 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 			wfDescription = instanceDescription
 			wfPriority = priority
 			wfParams = params
+			[:]
 		}
+		WorkflowProcessService.metaClass.run = { def processInstance -> }
 		def model = controller.save()
 		
 		then:
@@ -846,7 +850,9 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 			wfDescription = instanceDescription
 			wfPriority = priority
 			wfParams = params
+			[:]
 		}
+		WorkflowProcessService.metaClass.run = { def processInstance -> }
 		def model = controller.save()
 		
 		then:
@@ -919,7 +925,9 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 			wfDescription = instanceDescription
 			wfPriority = priority
 			wfParams = params
+			[:]
 		}
+		WorkflowProcessService.metaClass.run = { def processInstance -> }
 		def model = controller.save()
 		
 		then:
@@ -989,7 +997,9 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 			wfDescription = instanceDescription
 			wfPriority = priority
 			wfParams = params
+			[:]
 		}
+		WorkflowProcessService.metaClass.run = { def processInstance -> }
 		def model = controller.save()
 		
 		then:
