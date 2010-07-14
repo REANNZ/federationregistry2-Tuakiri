@@ -46,7 +46,6 @@
 				});
 				
 				$("#newcertificatedata").bind('blur', function() { setTimeout(function() { validateCertificate(); }, 100); });
-				//$("#newcertificatedata").change( function() { setTimeout(function() {fedreg.keyDescriptor_verify();}, 100); });
 			});
 			
 			function attrchange(id) {
