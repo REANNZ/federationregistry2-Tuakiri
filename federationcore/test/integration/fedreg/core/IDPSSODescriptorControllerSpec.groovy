@@ -136,7 +136,7 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		}
 		
 		(1..12).each { i ->
-			SamlURI.build(type:SamlURIType.ProtocolBinding).save()
+			SamlURI.build(type:SamlURIType.NameIdentifierFormat).save()
 		}
 		
 		when:
