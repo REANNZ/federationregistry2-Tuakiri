@@ -59,8 +59,8 @@ class RoleDescriptor  {
 		})
 		dateCreated(nullable:true)
 		lastUpdated(nullable:true)
-		displayName(nullable:false)
-		description(nullable:false)
+		displayName(nullable:false, blank:false)
+		description(nullable:false, blank: false)
 	}
 	
 	public String toString() {	"roledescriptor:[id:$id, displayName: $displayName]" }
