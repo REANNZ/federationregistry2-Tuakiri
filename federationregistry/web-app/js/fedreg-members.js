@@ -6,15 +6,19 @@ var fedreg = window.fedreg;
 fedreg.keyDescriptor_verify = function() {
 	$("#working").trigger("fedreg.working");
 	var dataString = "cert=" + $("#newcertificatedata").val();
+	newCertificateValid = false;
 	$.ajax({
+		async: false,
 		type: "POST",
 		url: certificateValidationEndpoint,
 		data: dataString,
 		success: function(res) {
 			$("#newcertificatedetails").html(res);
+			newCertificateValid = true;
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
-			nimble.growl('error', xhr.responseText);
+			$("#newcertificatedetails").html(xhr.responseText);
+			newCertificateValid = false;
 	    }
 	});
 };
