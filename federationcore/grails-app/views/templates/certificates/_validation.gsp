@@ -1,12 +1,22 @@
 
 <g:if test="${corrupt}">
-	<div class="critical">
-		<p class="icon icon_exclamation"><g:message code="fedreg.template.certificates.validation.corrupt" /></p>
+	<div class="error">
+		<p><g:message code="fedreg.template.certificates.validation.corrupt" /></p>
 	</div>
 </g:if>
 <g:else>
 	<table>
 		<tbody>
+			
+			<tr>
+				<th><g:message code="fedreg.label.status" /></th>
+				<g:if test="${valid}">
+					<td><g:message code="fedreg.label.valid" /> <span class="icon icon_accept">&nbsp;</span></td>
+				</g:if>
+				<g:else>
+					<td><g:message code="fedreg.label.invalid" /> <span class="icon icon_error">&nbsp;</span></td>
+				</g:else>
+			</tr>
 			<tr>
 				<th><g:message code="fedreg.label.subject" /></th>
 				<td>${subject}</td>
@@ -20,19 +30,15 @@
 				<td>${expires}</td>
 			</tr>
 	<g:if test="${valid}">
-			<tr>
-				<th><g:message code="fedreg.label.optionalname"/></th>
-				<td><input type="text" id="newcertificatename" /></td>
-			</tr>
 		</tbody>
 	</table>
-	<a href="#" onClick="fedreg.keyDescriptor_create();" class="button icon icon_add"><g:message code="fedreg.link.add"/></a>
+
 	</g:if>
 	<g:else>
 			</tbody>
 		</table>
-		<div class="warning">
-			<span class="icon icon_error"><strong><g:message code="fedreg.template.certificates.validation.errors"/></strong></span>
+		<div class="error">
+			<span><strong><g:message code="fedreg.template.certificates.validation.errors"/></strong></span>
 			<p>
 			<g:each in="${certerrors}" status="i" var="e">
 				${i+1}). <g:message code="${e}" />

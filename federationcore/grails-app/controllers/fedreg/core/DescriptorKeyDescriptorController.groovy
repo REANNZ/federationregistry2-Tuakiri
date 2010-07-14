@@ -47,10 +47,10 @@ class DescriptorKeyDescriptorController {
 	}
 	
 	def validateCertificate = {
-		if(!params.cert) {
+		if(!params.cert || params.cert.length() == 0) {
 			log.warn "Certificate data was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
-			response.sendError(500)
+			render template:"/templates/certificates/validation", contextPath: pluginContextPath, model:[corrupt:true]
+			response.setStatus(500)
 			return
 		}
 		
@@ -81,13 +81,12 @@ class DescriptorKeyDescriptorController {
 				certerrors.add("fedreg.template.certificates.validation.invalidca")
 			}
 		}	
-		
-		render (template:"/templates/certificates/validation", model:[corrupt: false, subject:subject, issuer:issuer, expires:expires, valid:valid, certerrors:certerrors])
+			render template:"/templates/certificates/validation",  contextPath: pluginContextPath, model:[corrupt: false, subject:subject, issuer:issuer, expires:expires, valid:valid, certerrors:certerrors]
 		}
 		catch(Exception e) {
 			log.warn "Certificate data is invalid"
-			e.printStackTrace()
 			render template:"/templates/certificates/validation", contextPath: pluginContextPath, model:[corrupt:true]
+			response.setStatus(500)
 			return
 		}
 	}
