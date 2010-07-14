@@ -44,8 +44,10 @@
 	
 	<script type="text/javascript" src="${resource(dir: 'js', file: '/fedreg-members.js')}"></script>
 	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/jquery.jqplot.min.js')}"></script>
-	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/plugins/jqplot.pieRenderer.min.js')}"></script>
-
+	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/jqplotplugins/jqplot.pieRenderer.min.js')}"></script>
+	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/jquery.validate.pack.js')}"></script>
+	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/jquery.validate.additional-methods.js')}"></script>
+	
     <g:layoutHead />
 </head>
 
