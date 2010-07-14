@@ -6,40 +6,47 @@
         <title><g:message code="fedreg.view.members.identityprovider.list.title" /></title>
 		
 		<script type="text/javascript">
-			$(function() {
+			var certificateValidationEndpoint = "${createLink(controller:'descriptorKeyDescriptor', action:'validateCertificate')}";
+			var newCertificateValid = false;
+			
+			$(function() {	
+
 				$('form').validate({
-						rules: {
-
-						},
-						messages: {
-
-						},
-						// specifying a submitHandler prevents the default submit, good for the demo
-						submitHandler: function() {
-							alert("submitted!");
-						},
 						success: function(label) {
 							if($(label).next())
 								$(label).next().remove()	// fix annoying bug where success labels are left laying about if duplicate validations
-							label.addClass("icon icon_accept").removeClass("error");
+							label.removeClass("error").addClass("icon icon_accept").html("&nbsp;");
 						},
-					});
-						
-				$('#tgt').click( function () {
-					// We want IDP creation to be simple for users but we're actually creating both
-					// an IDPSSODescriptor and an AttributeDescriptor. Backend expects data for both so we do a little bit of
-					// cunning background copying ;).
-					
-					$('#aa\\.displayName').val($('#idp\\.displayName').val());
-					$('#aa\\.description').val($('#idp\\.description').val());
-					
-					$('#idp\\.crypto\\.encdata').val($('#idp\\.crypto\\.sigdata').val());
-					$('#aa\\.crypto\\.sigdata').val($('#idp\\.crypto\\.sigdata').val());
-					$('#aa\\.crypto\\.encdata').val($('#idp\\.crypto\\.sigdata').val());
-					
-					$('form').submit();
+						keyup: false
 				});
 				
+				// We want IDP creation to be simple for users but we're actually creating both
+				// an IDPSSODescriptor and an AttributeDescriptor. Backend expects data for both so we do a little bit of
+				// cunning background copying ;).
+				$('#idp\\.displayName').change( function() {
+				    $('#aa\\.displayName').val($(this).val());
+				} );
+				$('#idp\\.description').change( function() {
+				    $('#aa\\.description').val($(this).val());
+				} );
+				$('#newcertificatedata').change( function() {
+					$('#idp\\.crypto\\.sigdata').val($(this).val());
+					$('#idp\\.crypto\\.encdata').val($(this).val());
+					$('#aa\\.crypto\\.sigdata').val($(this).val());
+					$('#aa\\.crypto\\.encdata').val($(this).val());
+				} );
+						
+				$('#tgt').click( function () {
+					validateCertificate();
+					if(newCertificateValid) {
+						$('form').submit();
+					}
+					else
+						$('form').validate().form();
+				});
+				
+				$("#newcertificatedata").bind('blur', function() { setTimeout(function() { validateCertificate(); }, 100); });
+				//$("#newcertificatedata").change( function() { setTimeout(function() {fedreg.keyDescriptor_verify();}, 100); });
 			});
 			
 			function attrchange(id) {
@@ -47,6 +54,14 @@
 					$('#aa\\.attributes\\.' + id).val('on')
 				else
 					$('#aa\\.attributes\\.' + id).val('off')
+			}
+			
+			function validateCertificate() {
+				$('#newcertificatedata').removeClass('error');
+				fedreg.keyDescriptor_verify();
+				if(!newCertificateValid) {
+					$('#newcertificatedata').addClass('error');
+				}
 			}
 			
 		</script>
@@ -61,7 +76,7 @@
 			<div id="tgt">CLICK</div>
 			<div id="submitdata">d</div>
 			
-			<g:form action="save" id="tempform">
+			<g:form action="save">
 				<g:hiddenField name="aa.create" value="true"/>
 				
 				<table class="easyinput datatable">
@@ -78,8 +93,8 @@
 							<label for="idp.displayName"><g:message code="fedreg.label.displayname" /></label>
 						</td>
 						<td>
+							<g:hiddenField name="aa.displayName" value=""/>
 							<g:textField name="idp.displayName" class="required" minlength="4"/>
-							<g:hiddenField name="aa.displayName" />
 						</td>
 					</tr>
 					<tr>
@@ -87,8 +102,8 @@
 							<label for="idp.description"><g:message code="fedreg.label.description" /></label>
 						</td>
 						<td>
-							<g:textField name="idp.description" class="required" minlength="4"/>
 							<g:hiddenField name="aa.description" />
+							<g:textField name="idp.description" class="required" minlength="4"/>
 						</td>
 					</tr>
 					<tr>
@@ -136,7 +151,10 @@
 							<label for="idp.crypto.sigdata"><g:message code="fedreg.label.certificate" /></label>
 						</td>
 						<td>
-							<g:textArea name="idp.crypto.sigdata" />
+							<div id="newcertificatedetails">
+							</div>
+							<g:textArea name="newcertificatedata" />
+							<g:hiddenField name="idp.crypto.sigdata" value="${true}" />
 							<g:hiddenField name="idp.crypto.sig" value="${true}" />
 							<g:hiddenField name="idp.crypto.encdata" />
 							<g:hiddenField name="idp.crypto.enc" value="${true}" />
@@ -177,8 +195,30 @@
 							${fieldValue(bean: attr, field: "description")}
 						</td>
 						<td>
-							<g:checkBox name="idp.attributes.${attr.id}" onchange="attrchange(${attr.id})"/>
 							<g:hiddenField name="aa.attributes.${attr.id}" />
+							<g:checkBox name="idp.attributes.${attr.id}" onchange="attrchange(${attr.id})"/>
+						</td>
+					</tr>
+					</g:each>
+				</table>
+				
+				<g:message code="fedreg.label.supportednameidformats" />
+				<table class="enhancedtabledata">
+					<tr>
+						<th><g:message code="fedreg.label.name" /></th>
+						<th><g:message code="fedreg.label.description" /></th>
+						<th><g:message code="fedreg.label.supported" /></th>
+					</tr>
+					<g:each in="${nameIDFormatList.sort{it.uri}}" var="nameidformat" status="i">
+					<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
+						<td>
+							${fieldValue(bean: nameidformat, field: "uri")}
+						</td>
+						<td>
+							${fieldValue(bean: nameidformat, field: "description")}
+						</td>
+						<td>
+							<g:checkBox name="idp.nameidformats.${nameidformat.id}"/>
 						</td>
 					</tr>
 					</g:each>
