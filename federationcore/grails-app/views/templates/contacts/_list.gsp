@@ -1,6 +1,6 @@
 
 	<g:if test="${descriptor.contacts}">
-	<table class="cleantable">
+	<table>
 		<thead>
 			<tr>
 				<th><g:message code="fedreg.label.name" /></th>
@@ -10,14 +10,16 @@
 			</tr>
 		</thead>
 		<tbody>
-			<g:each in="${descriptor.contacts}" var="contactPerson" status="i">
+			<g:each in="${descriptor.contacts.sort{it.contact.surname}}" var="contactPerson" status="i">
 			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 				<td>${contactPerson.contact.givenName?.encodeAsHTML()} ${contactPerson.contact.surname?.encodeAsHTML()}</td>
 				<td>${contactPerson.contact.email?.uri.encodeAsHTML()}</td>
 				<td>${contactPerson.type.displayName.encodeAsHTML()}</td>
-				<td><g:link controller="contacts" action="show" id="${contactPerson.contact.id}" class="button icon icon_user_go"><g:message code="fedreg.link.view"/></g:link>
+				<td>
+					<fr:button href="${createLink(controller:'contacts', action:'show', id: contactPerson.contact.id)}" label="${message(code:'fedreg.link.view')}" icon="arrowthick-1-ne"/>
 				<g:if test="${allowremove}">
-				<a href="#" onClick="fedreg.contact_delete(${contactPerson.id});" class="button icon icon_bin"><g:message code="fedreg.link.delete"/></td>
+					<fr:button href="#" onclick="fedreg.contact_delete(${contactPerson.id});" label="${message(code:'fedreg.link.delete')}" icon="trash"/>
+				</td>
 				</g:if>
 			</tr>
 			</g:each>

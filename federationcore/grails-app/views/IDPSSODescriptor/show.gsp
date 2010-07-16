@@ -38,64 +38,63 @@
 		</script>
 	</head>
 	<body>
+		<section>
+			
 		<h2><g:message code="fedreg.view.members.identityprovider.show.heading" args="[identityProvider.displayName]"/></h2>
-		<div id="identityprovider">
-			<div class="details">
-				<table class="datatable buttons">
-					<tbody>		
-						<tr>
-							<th><g:message code="fedreg.label.displayname"/></th>
-							<td>${fieldValue(bean: identityProvider, field: "displayName")}</td>
-						</tr>
-						<tr>
-							<th><g:message code="fedreg.label.description"/></th>
-							<td>${fieldValue(bean: identityProvider, field: "description")}</td>
-						</tr>
-						<tr>
-							<th><g:message code="fedreg.label.organization"/></th>
-							<td><g:link controller="organization" action="show" id="${identityProvider.organization.id}">${fieldValue(bean: identityProvider, field: "organization.displayName")}</g:link></td>
-						</tr>
-						<tr>
-							<th><g:message code="fedreg.label.entitydescriptor"/></th>
-							<td><g:link controller="entity" action="show" id="${identityProvider.entityDescriptor.id}">${fieldValue(bean: identityProvider, field: "entityDescriptor.entityID")}</g:link></td>
-						</tr>
-						<tr>
-							<th><g:message code="fedreg.label.protocolsupport"/></th>
-							<td>
-								<g:each in="${identityProvider.protocolSupportEnumerations}" status="i" var="pse">
-								${pse.uri} <br/>
-								</g:each>
-							</td>
-						<g:if test="${identityProvider.errorURL}">
-						<tr>
-							<th><g:message code="fedreg.label.errorurl"/></th>
-							<td><a href="${identityProvider.errorURL}">${fieldValue(bean: identityProvider, field: "errorURL")}</a></td>
-						</tr>
+		<table>
+			<tbody>		
+				<tr>
+					<th><g:message code="fedreg.label.displayname"/></th>
+					<td>${fieldValue(bean: identityProvider, field: "displayName")}</td>
+				</tr>
+				<tr>
+					<th><g:message code="fedreg.label.description"/></th>
+					<td>${fieldValue(bean: identityProvider, field: "description")}</td>
+				</tr>
+				<tr>
+					<th><g:message code="fedreg.label.organization"/></th>
+					<td><g:link controller="organization" action="show" id="${identityProvider.organization.id}">${fieldValue(bean: identityProvider, field: "organization.displayName")}</g:link></td>
+				</tr>
+				<tr>
+					<th><g:message code="fedreg.label.entitydescriptor"/></th>
+					<td><g:link controller="entity" action="show" id="${identityProvider.entityDescriptor.id}">${fieldValue(bean: identityProvider, field: "entityDescriptor.entityID")}</g:link></td>
+				</tr>
+				<tr>
+					<th><g:message code="fedreg.label.protocolsupport"/></th>
+					<td>
+						<g:each in="${identityProvider.protocolSupportEnumerations}" status="i" var="pse">
+						${pse.uri} <br/>
+						</g:each>
+					</td>
+				<g:if test="${identityProvider.errorURL}">
+				<tr>
+					<th><g:message code="fedreg.label.errorurl"/></th>
+					<td><a href="${identityProvider.errorURL}">${fieldValue(bean: identityProvider, field: "errorURL")}</a></td>
+				</tr>
+				</g:if>
+				<tr>
+					<th><g:message code="fedreg.label.status"/></th>
+					<td>
+						<g:if test="${identityProvider.active}">
+							<div class="icon icon_tick"><g:message code="fedreg.label.active" /></div>
 						</g:if>
-						<tr>
-							<th><g:message code="fedreg.label.status"/></th>
-							<td>
-								<g:if test="${identityProvider.active}">
-									<div class="icon icon_tick"><g:message code="fedreg.label.active" /></div>
-								</g:if>
-								<g:else>
-									<div class="icon icon_cross"><g:message code="fedreg.label.inactive" /></div>
-								</g:else>
-							</td>
-						<tr>
-							<th><g:message code="fedreg.label.requiresignedauthn"/></th>
-							<td>
-								<g:if test="${identityProvider.wantAuthnRequestsSigned}">
-									<div class="icon icon_tick"><g:message code="fedreg.label.yes" /></div>
-								</g:if>
-								<g:else>
-									<div class="icon icon_cross"><g:message code="fedreg.label.no" /></div>
-								</g:else>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+						<g:else>
+							<div class="icon icon_cross"><g:message code="fedreg.label.inactive" /></div>
+						</g:else>
+					</td>
+				<tr>
+					<th><g:message code="fedreg.label.requiresignedauthn"/></th>
+					<td>
+						<g:if test="${identityProvider.wantAuthnRequestsSigned}">
+							<div class="icon icon_tick"><g:message code="fedreg.label.yes" /></div>
+						</g:if>
+						<g:else>
+							<div class="icon icon_cross"><g:message code="fedreg.label.no" /></div>
+						</g:else>
+					</td>
+				</tr>
+			</tbody>
+		</table>
 			
 			<div id="tabs">
 				<ul>
@@ -173,7 +172,7 @@
 				</div>
 			</div>
 			
-		</div>
-		<br/>
+		</section>
+		
 	</body>
 </html>

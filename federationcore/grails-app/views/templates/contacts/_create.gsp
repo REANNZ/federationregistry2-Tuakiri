@@ -21,7 +21,7 @@
 
 <div>
 	<div id="addcontact" class="searcharea">
-		<a id="addcontactlink" href="#" class="button icon icon_add"><g:message code="fedreg.label.addcontact"/></a>
+		<fr:button id="addcontactlink" href="#" label="${message(code:'fedreg.label.addcontact')}" icon="plus"/>
 	</div>
 	<div id="searchcontact" class="searcharea">
 		<h3><g:message code="fedreg.templates.contactmanager.searchforcontacts.heading"/></h3>
@@ -40,8 +40,8 @@
 					<td><input type="text" id="surname" name="surname" class="enhancedinput"/></td>
 					<td><input type="text" id="email" name="email" class="enhancedinput"/></td>
 					<td>
-						<a href="#" onClick="fedreg.contact_search(${descriptor.id});" class="button icon icon_magnifier"><g:message code="fedreg.link.search" /></a>
-		                <a href="#" id="closesearchcontactlink" class="button icon icon_cross"><g:message code="fedreg.link.close" /></a>
+						<fr:button href="#" onclick="fedreg.contact_search(${descriptor.id});" label="${message(code:'fedreg.link.search')}" icon="search"/>
+						<fr:button id="closesearchcontactlink" href="#" label="${message(code:'fedreg.link.close')}" icon="close"/>
 		            </td>
 				</tr>
 			</tbody>
@@ -57,8 +57,8 @@
 			<p><g:message code="fedreg.template.contacts.selecttype"/></p>
 			<g:select id="contactselectedtype" name="contactType" from="${contactTypes}" optionKey="name" optionValue="displayName"/>
 			<div class="buttons">
-				<a href="#" class="modal_close button icon icon_accept" onClick="fedreg.contact_create();">Accept</a>
-				<a href="#" onClick="$('#contactconfirmationdialog').dialog('close');" class="modal_close button icon icon_cancel">Cancel</a>    
+				<fr:button href="#" onclick="fedreg.contact_create();" label="${message(code:'fedreg.link.accept')}" icon="check" class="modal_close"/>
+				<fr:button href="#" onclick="\$('#contactconfirmationdialog').dialog('close');" label="${message(code:'fedreg.link.cancel')}" icon="cancel" class="modal_close"/>
 			</div>
 		</div>
 	</div>

@@ -69,7 +69,7 @@
 	
     <body>
 		
-        <div class="container">
+        <section>
             <h2><g:message code="fedreg.view.members.identityprovider.create.heading" /></h2>
 
 			<div id="tgt">CLICK</div>
@@ -225,6 +225,6 @@
 
 			</g:form>
 
-        </div>
+        </section>
     </body>
 </html>

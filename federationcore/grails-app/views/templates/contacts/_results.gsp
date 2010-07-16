@@ -17,8 +17,8 @@
 					<td>${contact.surname?.encodeAsHTML()}</td>
 					<td>${contact.email?.uri?.encodeAsHTML()}</td>
 					<td>${contact.organization?.displayName?.encodeAsHTML()}</td>
-					<td>
-						<a href="#" onClick="fedreg.contact_confirm('${contact.id}', '${contact.givenName} ${contact.surname}', '${contact.email?.uri}');" class="button icon icon_add"><g:message code="fedreg.link.add" /></a>
+					<td>						
+						<fr:button href="#" onclick="fedreg.contact_confirm('${contact.id}', '${contact.givenName} ${contact.surname}', '${contact.email?.uri}');" label="${message(code:'fedreg.link.add')}" icon="plus"/>
 					</td>
 				</tr>
 			</g:each>

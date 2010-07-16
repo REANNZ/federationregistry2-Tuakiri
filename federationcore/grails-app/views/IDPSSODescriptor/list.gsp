@@ -7,10 +7,9 @@
     </head>
     <body>
 
-        <div class="container">
+        <section>
             <h2><g:message code="fedreg.view.members.identityprovider.list.heading" /></h2>
-            <div>
-                <table class="enhancedtabledata">
+                <table>
                     <thead>
                         <tr>
 							<g:sortableColumn property="displayName" title="${message(code: 'fedreg.label.identityprovider')}" />
@@ -19,22 +18,25 @@
                         </tr>
                     </thead>
                     <tbody>
-                    <g:each in="${identityProviderList.sort{it.organization.name}}" status="i" var="identityProvider">
+                    <g:each in="${identityProviderList}" status="i" var="identityProvider">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                         
 							<td>${fieldValue(bean: identityProvider, field: "displayName")}</td>
 							
                             <td>${fieldValue(bean: identityProvider, field: "organization.name")}</td>
                         
-							<td><g:link action="show" id="${identityProvider.id}" class="button icon icon_view icon_view_identityProvider"><g:message code="fedreg.link.view" /></g:link></td>
+							<td>
+								<fr:button href="${createLink(controller:'IDPSSODescriptor', action:'show', id: identityProvider.id)}" label="${message(code:'fedreg.link.view')}" icon="arrowthick-1-ne"/>
+							</td>
                         </tr>
                     </g:each>
                     </tbody>
                 </table>
-            </div>
-            <div class="paginateButtons">
+
+            <div class="paginatebuttons">
                 <g:paginate total="${identityProviderTotal}" />
             </div>
-        </div>
+        </section>
+
     </body>
 </html>
