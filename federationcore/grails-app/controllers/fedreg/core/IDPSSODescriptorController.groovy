@@ -12,6 +12,9 @@ class IDPSSODescriptorController {
 	def workflowProcessService
 
 	def list = {
+		if(!params.max)
+			params.max = 10
+		params.sort="organization"
 		[identityProviderList: IDPSSODescriptor.list(params), identityProviderTotal: IDPSSODescriptor.count()]
 	}
 

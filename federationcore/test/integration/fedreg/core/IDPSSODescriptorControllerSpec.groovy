@@ -62,7 +62,7 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		def model = controller.list()
 
 		then:
-		model.identityProviderList.size() == 25
+		model.identityProviderList.size() == 10
 	}
 	
 	def "Validate list with max set"() {
