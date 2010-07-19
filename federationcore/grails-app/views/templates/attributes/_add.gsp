@@ -17,7 +17,7 @@
 </script>
 
 <div id="addattribute" class="searcharea">
-	<a href="#" id="addattributelink" class="button icon icon_add"><g:message code="fedreg.link.addattribute"/></a>
+	<fr:button id="addattributelink" label="${message(code:'fedreg.label.addattribute')}" icon="plus"/>
 </div>
 	
 <div id="newattribute"  class="searcharea">
@@ -36,7 +36,7 @@
 			</tr>
 		</tbody>
 	</table>
-	<a href="#" onclick="fedreg.attribute_add('${containerID}');" id="createattributelink" class="button icon icon_add"><g:message code="fedreg.link.add"/></a>&nbsp;
-	<a href="#" id="cancelattributelink" class="button icon icon_cancel"><g:message code="fedreg.link.close"/></a>
+	<fr:button id="createattributelink" onclick="fedreg.attribute_add('${containerID}');" label="${message(code:'fedreg.link.add')}" icon="plus"/>
+	<fr:button id="cancelattributelink" label="${message(code:'fedreg.label.close')}" icon="cancel"/>
 	</form>
 </div>

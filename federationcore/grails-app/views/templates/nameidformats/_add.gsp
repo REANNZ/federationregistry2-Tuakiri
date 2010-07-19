@@ -18,7 +18,7 @@
 </script>
 
 <div id="addnameidformat" class="searcharea">
-	<a href="#" id="addnameidformatlink" class="button icon icon_add"><g:message code="fedreg.link.addnameidformat"/></a>
+	<fr:button id="addnameidformatlink" label="${message(code:'fedreg.label.addnameidformat')}" icon="plus"/>
 </div>
 	
 <div id="newnameidformat"  class="searcharea">
@@ -34,7 +34,7 @@
 			</tr>
 		</tbody>
 	</table>
-	<a href="#" onclick="fedreg.nameIDFormat_add('${containerID}');" id="createnameidformatlink" class="button icon icon_add"><g:message code="fedreg.link.add"/></a>&nbsp;
-	<a href="#" id="cancelnameidformatlink" class="button icon icon_cancel"><g:message code="fedreg.link.close"/></a>
+	<fr:button onclick="fedreg.nameIDFormat_add('${containerID}');" id="createnameidformatlink" label="${message(code:'fedreg.label.add')}" icon="plus"/>
+	<fr:button id="cancelnameidformatlink" label="${message(code:'fedreg.label.close')}" icon="close"/>
 	</form>
 </div>

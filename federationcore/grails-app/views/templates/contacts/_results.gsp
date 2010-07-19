@@ -27,5 +27,5 @@
 	</g:if>
 	<g:else>
 		<p class="icon icon_information"><g:message code="fedreg.label.noresults"/></p>
-		<p><g:link controller="contacts" action="create" target="_blank" class="button icon icon_add"><g:message code="fedreg.link.newcontact" /></g:link></p>
+		<fr:button href="${createLink(controller:'contacts', action:'create')}" label="${message(code:'fedreg.link.newcontact')}" icon="plus"/>
 	</g:else>

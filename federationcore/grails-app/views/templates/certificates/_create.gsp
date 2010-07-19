@@ -1,6 +1,8 @@
 <script type="text/javascript">
+	var newCertificateValid = false;
 	$(function() {
 		$("#newcertificate").hide();
+		$("#validcertificate").hide();
 		
 		$("#addcertficatelink").click(function() {
 			$("#addcertificate").hide();
@@ -12,24 +14,24 @@
 			$("#addcertificate").show('slide');
 		});
 		
-		$("#newcertificatedata").bind('paste', function() { setTimeout(function() {fedreg.keyDescriptor_verify();}, 100); });
+		$("#newcertificatedata").bind('paste', function() { setTimeout(function() {fedreg.keyDescriptor_verify(); if(newCertificateValid) $("#validcertificate").show('highlight'); else $("#validcertificate").hide(); }, 100); });
 	});
 </script>
 
-<div>
-	<div id="addcertificate" class="searcharea">
-		<a id="addcertficatelink" href="#" class="button icon icon_add"><g:message code="fedreg.link.addcertificate"/></a>
+	<div id="addcertificate">
+		<fr:button id="addcertficatelink" label="${message(code:'fedreg.label.addcertificate')}" icon="plus"/>
 	</div>
 	
 	<div id="newcertificate">
 		<h3><g:message code="fedreg.template.certificates.certificatemanagement.addnew.heading"/></h3>
 		<p>
-			<g:message code="fedreg.template.certificates.certificatemanagement.addnew.requestformat" /> &nbsp;&nbsp;&nbsp; <a href="#" onClick="$('#newcertificate').hide('slide'); $('#addcertificate').show('slide');" class="modal_close button icon icon_cancel"><g:message code="fedreg.link.close"/></a>
-			<br/>
-			<g:textArea name="newcertificatedata" rows="50" cols="120"/>
+			<g:message code="fedreg.template.certificates.certificatemanagement.addnew.requestformat" />
 		</p>
-		
 		<div id="newcertificatedetails">
 		</div>
+		<section id="validcertificate">
+			<fr:button id="addnewcertificatelink" onclick="fedreg.keyDescriptor_create(); \$('#validcertificate').hide();" label="${message(code:'fedreg.label.add')}" icon="plus"/>
+		</section>
+		<g:textArea name="newcertificatedata" rows="25" cols="80"/><br>
+		<fr:button id="closenewcertificatelink" label="${message(code:'fedreg.label.close')}" icon="close"/>
 	</div>
-</div>

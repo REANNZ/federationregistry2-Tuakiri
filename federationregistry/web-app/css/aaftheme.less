@@ -72,6 +72,10 @@
 	text-align: center;
 	.buttons {
 		margin-top: 12px;
+		a {
+			margin-left: 3px;
+			margin-right: 3px;
+		}
 	}
 }
 
@@ -87,6 +91,15 @@
 
 #working {
 	display: none;
+}
+
+#jGrowl {
+	.rounded;
+	background-color: #333;
+	
+	div {
+		background-color: #333;
+	}
 }
 
 body {
@@ -109,12 +122,14 @@ body header {
 
 	   background-color: @headColor;
 	   color: @headFontColor;
-		
-		height: 6.0em;
+					padding-top: 12px;
+		height: 4.0em;
 
 		img {
 			.left;
-			padding: 18px;
+			padding-bottom: 6px;
+			padding-left: 12px;
+			padding-right: 36px;
 		}
 
 		h1 {
@@ -122,8 +137,7 @@ body header {
 			color: #fff;
 			font-size: 1.3em;
 			font-weight: normal;
-			line-height: 3.0em;
-			padding: 18px;
+			line-height: 2.3em;
 	   }
 }
 
@@ -181,6 +195,7 @@ body nav {
 body section {
 	.zero;
 	.automargin;
+	.rounded;
 	
 	width: @maxContentWidth;
 	min-width: @minContentWidth;
@@ -199,6 +214,10 @@ body section section {
 	}
 	a { .zero; color: #0071FB; text-decoration: none; }
 	a:hover { text-decoration: underline; }
+	input {
+		font-size: 1.1em;
+		padding: 6px;
+	}
 	#tabs {
 		margin-top: 24px;
 		font-size: 0.9em;

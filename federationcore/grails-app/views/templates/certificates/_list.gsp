@@ -8,7 +8,7 @@
 				<td>${kd.keyType.encodeAsHTML()}</td>
 				<td>
 					<g:if test="${allowremove}">
-						<n:confirmaction action="fedreg.keyDescriptor_delete(${kd.id});" title="${message(code: 'fedreg.template.certificates.remove.confirm.title')}" msg="${message(code: 'fedreg.template.certificates.remove.confirm.descriptive')}" accept="${message(code: 'fedreg.link.accept')}" cancel="${message(code: 'fedreg.link.cancel')}" class="button icon icon_bin"><g:message code="fedreg.link.delete" /></n:confirmaction>
+						<fr:confirmaction action="fedreg.keyDescriptor_delete(${kd.id});" title="${message(code: 'fedreg.template.certificates.remove.confirm.title')}" msg="${message(code: 'fedreg.template.certificates.remove.confirm.descriptive')}" accept="${message(code: 'fedreg.link.accept')}" cancel="${message(code: 'fedreg.link.cancel')}" label="${message(code: 'fedreg.label.delete')}" icon="trash" />
 					</g:if>
 				</td>
 			</tr>

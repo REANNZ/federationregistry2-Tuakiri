@@ -4,10 +4,12 @@
 <script type="text/javascript">
 	$(function() {
 		$("#new${endpointType}").hide();
+		$("#new${endpointType}data").validate();
 	
 		$("#add${endpointType}link").click(function() {
 			$("#add${endpointType}").hide();
 			$("#new${endpointType}").show('slide');
+			$("#new${endpointType}[name]").focus();
 		});
 		
 		$("#cancel${endpointType}link").click(function() {
@@ -18,10 +20,10 @@
 </script>
 
 <div id="add${endpointType}" class="searcharea">
-	<a href="#" id="add${endpointType}link" class="button icon icon_add"><g:message code="fedreg.link.addendpoint"/></a>
+	<fr:button id="add${endpointType}link" label="${message(code:'fedreg.label.addendpoint')}" icon="plus"/>
 </div>
 	
-<div id="new${endpointType}"  class="searcharea">
+<div id="new${endpointType}" class="searcharea">
 	<h3><g:message code="fedreg.template.endpoints.add.heading"/></h3>
 	<form id="new${endpointType}data">
 	<table>
@@ -35,7 +37,7 @@
 			<tr>
 				<th><g:message code="fedreg.label.location"/><th>
 				<td>
-					<input name="location" type="text" class="easyinput" size="60"/>
+					<input name="location" type="text" class="required url" size="60"/>
 				</td>
 			</tr>
 			<g:if test="${resloc}">
@@ -54,7 +56,7 @@
 			</tr>
 		</tbody>
 	</table>
-	<a href="#" onclick="fedreg.endpoint_create('${endpointType}', '${containerID}');" id="create${endpointType}link" class="button icon icon_add"><g:message code="fedreg.link.add"/></a>&nbsp;
-	<a href="#" id="cancel${endpointType}link" class="button icon icon_cancel"><g:message code="fedreg.link.close"/></a>
+	<fr:button id="create${endpointType}link" onclick="if(\$('#new${endpointType}data').valid()) fedreg.endpoint_create('${endpointType}', '${containerID}');" label="${message(code:'fedreg.label.add')}" icon="plus"/>
+	<fr:button id="cancel${endpointType}link" label="${message(code:'fedreg.label.close')}" icon="close"/>
 	</form>
 </div>

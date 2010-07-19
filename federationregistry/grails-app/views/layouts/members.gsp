@@ -37,27 +37,21 @@
 
 	<link rel="stylesheet" href="${resource(dir:'css',file:'jquery.jqplot.min.css')}" />
 	<link rel="stylesheet" href="${resource(dir:'css',file:'jquery-ui-1.8.2.custom.css')}" />
-	
 	<link rel="stylesheet/less" href="${resource(dir:'css',file:'aaftheme.less')}" />
-	<script src="http://lesscss.googlecode.com/files/less-1.0.21.min.js"></script>
-	
+		
 	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/jquery-1.4.2.min.js')}"></script>
 	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/jquery-ui-1.8.2.custom.min.js')}"></script>
-	
+	<script type="text/javascript" src="${resource(dir: 'js', file: 'less-1.0.32.min.js')}"></script>
 	<script type="text/javascript" src="${resource(dir: 'js', file: '/fedreg-members.js')}"></script>
-	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/jquery.jqplot.min.js')}"></script>
-	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/jqplotplugins/jqplot.pieRenderer.min.js')}"></script>
+	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/jquery.jgrowl.min.js')}"></script>
 	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/jquery.validate.pack.js')}"></script>
 	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/jquery.validate.additional-methods.js')}"></script>
 	
     <g:layoutHead />
 
-	
-	
 </head>
 
 <body>
-
     <header>
 		<g:render template='/templates/aafheader' />
     </header>
