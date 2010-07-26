@@ -20,7 +20,7 @@
 </script>
 
 <div id="add${endpointType}" class="searcharea">
-	<fr:button id="add${endpointType}link" label="${message(code:'fedreg.label.addendpoint')}" icon="plus"/>
+	<n:button id="add${endpointType}link" label="${message(code:'label.addendpoint')}" icon="plus"/>
 </div>
 	
 <div id="new${endpointType}" class="searcharea">
@@ -29,34 +29,34 @@
 	<table>
 		<tbody>
 			<tr>
-				<th><g:message code="fedreg.label.binding"/><th>
+				<th><g:message code="label.binding"/><th>
 				<td>
 					<g:select name="binding" from="${SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding)}" optionKey="id" optionValue="uri"/>
 				</td>
 			</tr>
 			<tr>
-				<th><g:message code="fedreg.label.location"/><th>
+				<th><g:message code="label.location"/><th>
 				<td>
 					<input name="location" type="text" class="required url" size="60"/>
 				</td>
 			</tr>
 			<g:if test="${resloc}">
 			<tr>
-				<th><g:message code="fedreg.label.responselocation"/><th>
+				<th><g:message code="label.responselocation"/><th>
 				<td>
 					<input name="responselocation" type="text" class="easyinput" size="60"/>
 				</td>
 			</tr>
 			</g:if>
 			<tr>
-				<th><g:message code="fedreg.label.active"/><th>
+				<th><g:message code="label.active"/><th>
 				<td>
 					<g:checkBox name="active" value="${true}" />
 				</td>
 			</tr>
 		</tbody>
 	</table>
-	<fr:button id="create${endpointType}link" onclick="if(\$('#new${endpointType}data').valid()) fedreg.endpoint_create('${endpointType}', '${containerID}');" label="${message(code:'fedreg.label.add')}" icon="plus"/>
-	<fr:button id="cancel${endpointType}link" label="${message(code:'fedreg.label.close')}" icon="close"/>
+	<n:button id="create${endpointType}link" onclick="if(\$('#new${endpointType}data').valid()) fedreg.endpoint_create('${endpointType}', '${containerID}');" label="${message(code:'label.add')}" icon="plus"/>
+	<n:button id="cancel${endpointType}link" label="${message(code:'label.close')}" icon="close"/>
 	</form>
 </div>

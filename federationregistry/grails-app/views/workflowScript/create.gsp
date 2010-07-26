@@ -24,20 +24,20 @@
 			<table>
 				<tbody>
 					<tr>
-						<td><label for="name"><g:message code="fedreg.label.name" /></label></td>
+						<td><label for="name"><g:message code="label.name" /></label></td>
 						<td><g:textField name="name" value="${script.name ?: ''}" /></td>
 					</tr>
 					<tr>
-						<td><label for="description"><g:message code="fedreg.label.description" /></label></td>
+						<td><label for="description"><g:message code="label.description" /></label></td>
 						<td><g:textField name="description" value="${script.description ?: ''}" /></td>
 					</tr>
 					<tr>
-						<td><label for="definition"><g:message code="fedreg.label.definition" /></label></td>
+						<td><label for="definition"><g:message code="label.definition" /></label></td>
 						<td><g:textArea name="definition" value="${(script.definition ?: '// Script definition').encodeAsHTML()}" rows="5" cols="40"/></td>
 					</tr>
 				</tbody>
 			</table>
-			<button type="submit" class="button icon icon_add"/><g:message code="fedreg.link.create" /></button>
+			<button type="submit" class="button icon icon_add"/><g:message code="label.create" /></button>
 		</g:form>
 		
 		<script type="text/javascript">

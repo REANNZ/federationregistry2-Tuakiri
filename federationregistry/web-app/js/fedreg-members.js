@@ -2,70 +2,27 @@
 window.fedreg = window.fedreg || {};
 var fedreg = window.fedreg;
 
-//Growl
-fedreg.growl = function(type, msg, period) {
-    if(!period) period = 2000;
-
-    if (type == 'success')
-      $.jGrowl(msg, { life: period, header: '<span class=\'icon icon_tick\'>&nbsp;</span>' });
-
-    if (type == 'error')
-      $.jGrowl(msg, { life: period, header: '<span class=\'icon icon_cross\'>&nbsp;</span>' });
-
-    if (type == 'info')
-      $.jGrowl(msg, { life: period, header: '<span class=\'icon icon_information\'>&nbsp;</span>' });
-
-    if (type == 'help')
-      $.jGrowl(msg, { life: period, header: '<span class=\'icon icon_cross\'>&nbsp;</span>' });
-
-    if (type == 'flagred')
-      $.jGrowl(msg, { life: period, header: '<span class=\'icon icon_flag_red\'>&nbsp;</span>' });
-
-    if (type == 'flaggreen')
-      $.jGrowl(msg, { life: period, header: '<span class=\'icon icon_flag_green\'>&nbsp;</span>' });
-
-    if (type == 'flagblue')
-      $.jGrowl(msg, { life: period, header: '<span class=\'icon icon_flag_blue\'>&nbsp;</span>' });
-};
-
-// Dialog support
+// AJAX indicator
 $(function() {
-	$(	'<div id="confirmationdialog" title="" style="display:none" class="popup">'+
-		'<p id="confirmationcontent">&nbsp;</p>'+
-		'<div class="buttons">'+
-		'<a id="confirmaccept" href="#" class="ui-button ui-button-text-icon ui-widget ui-state-default ui-corner-all" onClick="confirmAction(); $(\'#confirmationdialog\').dialog(\'close\');">' +
-		'<span class="ui-button-icon-primary ui-icon ui-icon-check"></span>' +
-		'<span class="ui-button-text"></span>' +
-		'</a>' +
-		'<a id="confirmcancel" href="#" class="ui-button ui-button-text-icon ui-widget ui-state-default ui-corner-all" onClick="$(\'#confirmationdialog\').dialog(\'close\');">' +
-		'<span class="ui-button-icon-primary ui-icon ui-icon-cancel"></span>' +
-		'<span class="ui-button-text"></span>' +
-		'</a>' +	 
-		'</div>'+
-		'</div>').appendTo(document.body);
-
-	$("#confirmationdialog").dialog({
-		bgiframe: true,
-		resizable: false,
-		modal: true,
-		autoOpen: false,
-		width: 400,
-		overlay: {
-			backgroundColor: '#000',
-			opacity: 0.5
+	$("#working").hide();
+	
+	$("#working").bind("fedreg.working", function(){
+		if( $(this).is(':hidden') ) {
+			$(this).css({left: $(window).scrollLeft() + 6, top: $(window).scrollTop() + 6})
+			$(this).fadeIn();
+		}
+	 }).bind("ajaxComplete", function(){
+		if( $(this).is(':visible') ) {
+			$(this).fadeOut();
+		}
+	 });
+	
+	$("form").bind("keypress", function(e) {
+		if (e.keyCode == 13) {
+			return false;
 		}
 	});
 });
-
-fedreg.wasConfirmed = function(title, msg, accept, cancel) {
-	$("#confirmationtitle").html(title);
-	$("#confirmationcontent").html(msg); 
-	$("#confirmaccept>.ui-button-text").html(accept);
-	$("#confirmcancel>.ui-button-text").html(cancel);
-	
-	$("#confirmationdialog").dialog('option', 'title', title);
-	$("#confirmationdialog").dialog('open');		
-};
 
 // Key Descriptor
 fedreg.keyDescriptor_verify = function() {
@@ -100,11 +57,11 @@ fedreg.keyDescriptor_create = function() {
 			$("#newcertificatedetails").html('');
 			$("#newcertificate").hide('slide');
 			$("#addcertificate").show('slide');
-			fedreg.growl('success', res);
+			nimble.growl('success', res);
 			fedreg.keyDescriptor_list()
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
-			fedreg.growl('error', xhr.responseText);
+			nimble.growl('error', xhr.responseText);
 	    }
 	});
 };
@@ -117,7 +74,7 @@ fedreg.keyDescriptor_list = function() {
 			$("#certificates").html(res)
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
-			fedreg.growl('error', xhr.responseText);
+			nimble.growl('error', xhr.responseText);
 	    }
 	});
 };
@@ -130,11 +87,11 @@ fedreg.keyDescriptor_delete = function(id) {
 		url: certificateDeleteEndpoint,
 		data: dataString,
 		success: function(res) {
-			fedreg.growl('success', res);
+			nimble.growl('success', res);
 			fedreg.keyDescriptor_list()
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
-			fedreg.growl('error', xhr.responseText);
+			nimble.growl('error', xhr.responseText);
 	    }
 	});
 };
@@ -169,7 +126,7 @@ fedreg.contact_search = function(id) {
 			$("#availablecontacts").show('slide');
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
-			fedreg.growl('error', xhr.responseText);
+			nimble.growl('error', xhr.responseText);
 	    }
 	});
 };
@@ -192,10 +149,10 @@ fedreg.contact_create = function(contactType) {
 		success: function(res) {
 			fedreg.contact_list();
 			$("#contactconfirmationdialog").dialog('close');
-			fedreg.growl('success', res);
+			nimble.growl('success', res);
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
-			fedreg.growl('error', xhr.responseText);
+			nimble.growl('error', xhr.responseText);
 	    }
 	});
 };
@@ -209,10 +166,10 @@ fedreg.contact_delete = function(contactID) {
 		data: dataString,
 		success: function(res) {
 			fedreg.contact_list();
-			fedreg.growl('success', res);
+			nimble.growl('success', res);
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
-			fedreg.growl('error', xhr.responseText);
+			nimble.growl('error', xhr.responseText);
 	    }
 	});
 };
@@ -225,7 +182,7 @@ fedreg.contact_list = function() {
 			$("#contacts").html(res);
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
-			fedreg.growl('error', xhr.responseText);
+			nimble.growl('error', xhr.responseText);
 	    }
 	});
 };
@@ -240,11 +197,11 @@ fedreg.endpoint_delete = function(id, endpointType, containerID) {
 		url: endpointDeleteEndpoint,
 		data: dataString,
 		success: function(res) {
-			fedreg.growl('success', res);
+			nimble.growl('success', res);
 			fedreg.endpoint_list(endpointType, containerID);
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
-			fedreg.growl('error', xhr.responseText);
+			nimble.growl('error', xhr.responseText);
 	    }
 	});
 };
@@ -259,7 +216,7 @@ fedreg.endpoint_list = function(endpointType, containerID) {
 			$("#"+containerID).html(res)
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
-			fedreg.growl('error', xhr.responseText);
+			nimble.growl('error', xhr.responseText);
 	    }
 	});
 };
@@ -272,14 +229,14 @@ fedreg.endpoint_create = function(endpointType, containerID) {
 		url: endpointCreationEndpoint,
 		data: dataString,
 		success: function(res) {
-			fedreg.growl('success', res);
+			nimble.growl('success', res);
 			$(':input', "#new" + endpointType + "data")
 			 	.not(':button, :submit, :reset, :hidden, select[name=binding]')
 			 	.val('')
 			fedreg.endpoint_list(endpointType, containerID);
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
-			fedreg.growl('error', xhr.responseText);
+			nimble.growl('error', xhr.responseText);
 	    }
 	});
 };
@@ -292,11 +249,11 @@ fedreg.endpoint_toggle = function(id, endpointType, containerID) {
 		url: endpointToggleStateEndpoint,
 		data: dataString,
 		success: function(res) {
-			fedreg.growl('success', res);
+			nimble.growl('success', res);
 			fedreg.endpoint_list(endpointType, containerID);
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
-			fedreg.growl('error', xhr.responseText);
+			nimble.growl('error', xhr.responseText);
 	    }
 	});
 };
@@ -310,11 +267,11 @@ fedreg.nameIDFormat_remove = function(formatID, containerID) {
 		url: nameIDFormatRemoveEndpoint,
 		data: dataString,
 		success: function(res) {
-			fedreg.growl('success', res);
+			nimble.growl('success', res);
 			fedreg.nameIDFormat_list(containerID);
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
-			fedreg.growl('error', xhr.responseText);
+			nimble.growl('error', xhr.responseText);
 	    }
 	});
 };
@@ -329,7 +286,7 @@ fedreg.nameIDFormat_list = function(containerID) {
 			$("#"+containerID).html(res)
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
-			fedreg.growl('error', xhr.responseText);
+			nimble.growl('error', xhr.responseText);
 	    }
 	});
 };
@@ -342,11 +299,11 @@ fedreg.nameIDFormat_add = function(containerID) {
 		url: nameIDFormatAddEndpoint,
 		data: dataString,
 		success: function(res) {
-			fedreg.growl('success', res);
+			nimble.growl('success', res);
 			fedreg.nameIDFormat_list(containerID);
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
-			fedreg.growl('error', xhr.responseText);
+			nimble.growl('error', xhr.responseText);
 	    }
 	});
 };
@@ -360,11 +317,11 @@ fedreg.attribute_remove = function(attributeID, containerID) {
 		url: attributeRemoveEndpoint,
 		data: dataString,
 		success: function(res) {
-			fedreg.growl('success', res);
+			nimble.growl('success', res);
 			fedreg.attribute_list(containerID);
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
-			fedreg.growl('error', xhr.responseText);
+			nimble.growl('error', xhr.responseText);
 	    }
 	});
 };
@@ -379,7 +336,7 @@ fedreg.attribute_list = function(containerID) {
 			$("#"+containerID).html(res)
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
-			fedreg.growl('error', xhr.responseText);
+			nimble.growl('error', xhr.responseText);
 	    }
 	});
 };
@@ -392,11 +349,11 @@ fedreg.attribute_add = function(containerID) {
 		url: attributeAddEndpoint,
 		data: dataString,
 		success: function(res) {
-			fedreg.growl('success', res);
+			nimble.growl('success', res);
 			fedreg.attribute_list(containerID);
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
-			fedreg.growl('error', xhr.responseText);
+			nimble.growl('error', xhr.responseText);
 	    }
 	});
 };

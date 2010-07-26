@@ -3,10 +3,10 @@
 		<table>
 			<thead>
 				<tr>
-					<th><g:message code="fedreg.label.givenname" /></th>
-					<th><g:message code="fedreg.label.surname" /></th>
-					<th><g:message code="fedreg.label.email" /></th>
-					<th><g:message code="fedreg.label.organization" /></th>
+					<th><g:message code="label.givenname" /></th>
+					<th><g:message code="label.surname" /></th>
+					<th><g:message code="label.email" /></th>
+					<th><g:message code="label.organization" /></th>
 					<th/>
 				</tr>
 			</thead>
@@ -18,7 +18,7 @@
 					<td>${contact.email?.uri?.encodeAsHTML()}</td>
 					<td>${contact.organization?.displayName?.encodeAsHTML()}</td>
 					<td>						
-						<fr:button href="#" onclick="fedreg.contact_confirm('${contact.id}', '${contact.givenName} ${contact.surname}', '${contact.email?.uri}');" label="${message(code:'fedreg.link.add')}" icon="plus"/>
+						<n:button href="#" onclick="fedreg.contact_confirm('${contact.id}', '${contact.givenName} ${contact.surname}', '${contact.email?.uri}');" label="${message(code:'label.add')}" icon="plus"/>
 					</td>
 				</tr>
 			</g:each>
@@ -26,6 +26,6 @@
 		</table>
 	</g:if>
 	<g:else>
-		<p class="icon icon_information"><g:message code="fedreg.label.noresults"/></p>
-		<fr:button href="${createLink(controller:'contacts', action:'create')}" label="${message(code:'fedreg.link.newcontact')}" icon="plus"/>
+		<p class="icon icon_information"><g:message code="label.noresults"/></p>
+		<n:button href="${createLink(controller:'contacts', action:'create')}" label="${message(code:'label.newcontact')}" icon="plus"/>
 	</g:else>

@@ -27,7 +27,7 @@ public class SecurityFilters extends grails.plugins.nimble.security.NimbleFilter
     def filters = {
 
         // Members
-        descriptors(controller: "(organization|IDPSSODescriptor|contacts|descriptorContacts|desccriptorKeyDescriptor|descriptorEndpoint|descriptorNameIDFormat|descriptorAttribute)") {
+        descriptors(controller: "(organization|entity|IDPSSODescriptor|SPSSODescriptor|contacts|descriptorContacts|desccriptorKeyDescriptor|descriptorEndpoint|descriptorNameIDFormat|descriptorAttribute)") {
             before = {
                 accessControl (auth: false) {
 					role(UserService.USER_ROLE)

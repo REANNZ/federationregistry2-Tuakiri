@@ -13,23 +13,23 @@
 			<table class="datatable buttons">
 				<tbody>		
 					<tr>
-						<th><g:message code="fedreg.label.description" /></th>
+						<th><g:message code="label.description" /></th>
 						<td>${fieldValue(bean: script, field: "description")}</td>
 					</tr>
 					<tr>
-						<th><g:message code="fedreg.label.created" /></th>
+						<th><g:message code="label.created" /></th>
 						<td>${fieldValue(bean: script, field: "dateCreated")}</td>
 					</tr>
 					<tr>
-						<th><g:message code="fedreg.label.lastupdated" /></th>
+						<th><g:message code="label.lastupdated" /></th>
 						<td>${fieldValue(bean: script, field: "lastUpdated")}</td>
 					</tr>
 					<tr>
-						<th><g:message code="fedreg.label.creator" /></th>
+						<th><g:message code="label.creator" /></th>
 						<td><g:link controller="user" action="show" id="${script.creator.id}">${script.creator.profile?.fullName ?: script.creator.username}</g:link></td>
 					</tr>
 					<tr>
-						<th><g:message code="fedreg.label.definition" /></th>
+						<th><g:message code="label.definition" /></th>
 						<td></td>
 					</tr>
 				</tbody>

@@ -29,6 +29,10 @@ class UrlMappings {
 		controller = "IDPSSODescriptor"
 	}
 	
+	"/membership/serviceprovider/$action?/$id?"{
+		controller = "SPSSODescriptor"
+	}
+	
 	"/membership/contacts/$action?/$id?"{
 		controller = "contacts"
 	}

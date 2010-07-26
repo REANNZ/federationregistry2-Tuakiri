@@ -6,6 +6,13 @@
 	</td>
 </tr>	
 </g:if>
+<g:else>
+<tr class="dynamicrow">
+	<td colspan="3" class="success">
+		<g:message code="fedreg.view.compliance.attributerelease.compare.valid" />
+	</td>
+</tr>
+</g:else>
 
 <tr class="dynamicrow">
 	<td colspan="3">
@@ -14,7 +21,7 @@
 </tr>
 
 <g:if test="${requiredAttributes.size() > 0}">
-	<g:each in="${requiredAttributes}" status="i" var="requestedAttribute">
+	<g:each in="${requiredAttributes.sort{it.attribute.friendlyName}}" status="i" var="requestedAttribute">
 		<tr class="dynamicrow">
 			<td>
 				${requestedAttribute.attribute.friendlyName}
@@ -22,10 +29,10 @@
 			<td />
 			<td>
 				<g:if test="${idp.attributes.contains(requestedAttribute.attribute)}">
-					<span class="icon icon_tick"><g:message code="fedreg.label.supported"/></span>
+					<span class="icon icon_tick"><g:message code="label.supported"/></span>
 				</g:if>
 				<g:else>
-					<span class="icon icon_cross"><g:message code="fedreg.label.notsupported"/></span>
+					<span class="icon icon_cross"><g:message code="label.notsupported"/></span>
 				</g:else>
 			</td>
 		</tr>
@@ -54,10 +61,10 @@
 			<td />
 			<td>
 				<g:if test="${idp.attributes.contains(requestedAttribute.attribute)}">
-					<span class="icon icon_tick"><g:message code="fedreg.label.supported"/></span>
+					<span class="icon icon_tick"><g:message code="label.supported"/></span>
 				</g:if>
 				<g:else>
-					<span class="icon icon_cross"><g:message code="fedreg.label.notsupported"/></span>
+					<span class="icon icon_cross"><g:message code="label.notsupported"/></span>
 				</g:else>
 			</td>
 		</tr>

@@ -17,15 +17,15 @@
 			<li class="${['workflowInstance', 'workflowProcess'].contains(controllerName) ? 'active' : ''}">
 				<g:link controller="workflowProcess" class=""><g:message code="fedreg.navigation.workflow" /></g:link>
 			</li>
-			<li class="${['monitor'].contains(controllerName) ? 'active' : ''}">
+			<li class="${['monitor'].contains(controllerName) ? 'directactive' : ''}">
 				<g:link controller="monitor" class=""><g:message code="fedreg.navigation.monitoring" /></g:link>
 			</li>
-			<li class="${['code'].contains(controllerName) ? 'active' : ''}">
+			<li class="${['code'].contains(controllerName) ? 'directactive' : ''}">
 				<g:link controller="code" class=""><g:message code="fedreg.navigation.codeconsole" /></g:link>
 			</li>
 		</n:isAdministrator>
 		<li class="">
-			<g:link controller="auth" action="logout" class=""><g:message code="fedreg.label.logout" /></g:link>
+			<g:link controller="auth" action="logout" class=""><g:message code="label.logout" /></g:link>
 		</li>
 	</ul>
   

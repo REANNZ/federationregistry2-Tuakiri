@@ -19,7 +19,7 @@
 </script>
 
 	<div id="addcertificate">
-		<fr:button id="addcertficatelink" label="${message(code:'fedreg.label.addcertificate')}" icon="plus"/>
+		<n:button id="addcertficatelink" label="${message(code:'label.addcertificate')}" icon="plus"/>
 	</div>
 	
 	<div id="newcertificate">
@@ -30,8 +30,8 @@
 		<div id="newcertificatedetails">
 		</div>
 		<section id="validcertificate">
-			<fr:button id="addnewcertificatelink" onclick="fedreg.keyDescriptor_create(); \$('#validcertificate').hide();" label="${message(code:'fedreg.label.add')}" icon="plus"/>
+			<n:button id="addnewcertificatelink" onclick="fedreg.keyDescriptor_create(); \$('#validcertificate').hide();" label="${message(code:'label.add')}" icon="plus"/>
 		</section>
 		<g:textArea name="newcertificatedata" rows="25" cols="80"/><br>
-		<fr:button id="closenewcertificatelink" label="${message(code:'fedreg.label.close')}" icon="close"/>
+		<n:button id="closenewcertificatelink" label="${message(code:'label.close')}" icon="close"/>
 	</div>

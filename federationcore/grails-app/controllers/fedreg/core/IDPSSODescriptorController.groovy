@@ -12,9 +12,7 @@ class IDPSSODescriptorController {
 	def workflowProcessService
 
 	def list = {
-		if(!params.max)
-			params.max = 10
-		params.sort="organization"
+		params.max = Math.min(params.max ? params.max.toInteger() : 20, 100)
 		[identityProviderList: IDPSSODescriptor.list(params), identityProviderTotal: IDPSSODescriptor.count()]
 	}
 
@@ -69,19 +67,19 @@ class IDPSSODescriptorController {
 		// Initial endpoints
 		def postBinding = SamlURI.findByUri(SamlConstants.httpPost)
 		def postLocation = new UrlURI(uri: params.idp?.post?.uri)
-		def httpPost = new SingleSignOnService(binding: postBinding, location:postLocation)
+		def httpPost = new SingleSignOnService(binding: postBinding, location:postLocation, active:params.active)
 		identityProvider.addToSingleSignOnServices(httpPost)
 		httpPost.validate()
 		
 		def redirectBinding = SamlURI.findByUri(SamlConstants.httpRedirect)
 		def redirectLocation = new UrlURI(uri: params.idp?.redirect?.uri)
-		def httpRedirect = new SingleSignOnService(binding: redirectBinding, location:redirectLocation)
+		def httpRedirect = new SingleSignOnService(binding: redirectBinding, location:redirectLocation, active:params.active)
 		identityProvider.addToSingleSignOnServices(httpRedirect)
 		httpRedirect.validate()
 		
 		def artifactBinding = SamlURI.findByUri(SamlConstants.soap)
 		def artifactLocation = new UrlURI(uri: params.idp?.artifact?.uri)
-		def soapArtifact = new ArtifactResolutionService(binding: artifactBinding, location:artifactLocation)
+		def soapArtifact = new ArtifactResolutionService(binding: artifactBinding, location:artifactLocation, active:params.active)
 		identityProvider.addToArtifactResolutionServices(soapArtifact)
 		soapArtifact.validate()
 		

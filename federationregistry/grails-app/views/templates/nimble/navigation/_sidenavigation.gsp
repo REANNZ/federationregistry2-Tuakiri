@@ -1,114 +1,58 @@
-<div class="localnavigation">
-	<h3><g:message code="nimble.template.sidenavigation.heading" /></h3>
-	<ul>
-		<li>
-			<g:link controller="user" action="list"><g:message code="nimble.link.users" /></g:link>
-		</li>
-			<g:if test="${controllerName == 'user' && actionName == 'list'}">
-				<ul>
-					<li>
-						<g:link controller="user" action="create"><g:message code="nimble.link.createuser" /></g:link>
-					</li>
-				</ul>
-			</g:if>
-			<g:if test="${controllerName == 'user' && actionName in ['show', 'edit', 'changepassword', 'changelocalpassword']}">
-			    <ul>
-					<li>
-						<g:if test="${user?.profile?.fullName}">
-							<g:link controller="user" action="show" id="${user.id}">${user.profile.fullName?.encodeAsHTML()}</g:link>
-						</g:if>
-						<g:else>
-							<g:link controller="user" action="show" id="${user.id}">${user.username?.encodeAsHTML()}</g:link>
-						</g:else>
-				
-						<ul>
-							<li>
-						        <g:link controller="user" action="edit" id="${user.id}"><g:message code="nimble.link.edit" /></g:link>
-						      </li>
-							  <g:if test="${user.external}">
-						      <li>
-						          <g:link controller="user" action="changelocalpassword" id="${user.id}"><g:message code="nimble.link.changelocalpassword" /></g:link>
-						      </li>
-							  </g:if>
-							  <g:else>
-								<g:link controller="user" action="changepassword" id="${user.id}"><g:message code="nimble.link.changepassword" /></g:link>
-							  </g:else>
-							  <g:if test="${actionName in ['show']}">
-						      	<li id="disableuser">
-							        <a onClick="nimble.disableUser('${user.id}'); return false;"><g:message code="nimble.link.disableaccount" /></a>
-							      </li>
-							      <li id="enableuser">
-							        <a onClick="nimble.enableUser('${user.id}'); return false;"><g:message code="nimble.link.enableaccount" /></a>
-							      </li>
 
-							      <li id="disableuserapi">
-							        <a onClick="nimble.disableAPI('${user.id}'); return false;"><g:message code="nimble.link.disableapi" /></a>
-							      </li>
-							      <li id="enableuserapi">
-							        <a onClick="nimble.enableAPI('${user.id}'); return false;"><g:message code="nimble.link.enableapi" /></a>
-							      </li>
-								</g:if>
-						  </ul>
-					</li>
-				</ul>
-			</g:if>
-		<li>
-			<g:link controller="role" action="list"><g:message code="nimble.link.roles" /></g:link>
-			<g:if test="${controllerName == 'role' && actionName in ['list', 'create']}">
-				<ul>
-					<li>
-						<g:link controller="role" action="create"><g:message code="nimble.link.createrole" /></g:link>
-					</li>
-				</ul>
-			</g:if>
-			<g:if test="${controllerName == 'role' && actionName in ['show', 'edit']}">
-			    <ul>
-					<li>
-						<g:link controller="role" action="show" id="${role.id}">${role.name?.encodeAsHTML()}</g:link>
-				
-						<g:if test="${!role.protect}">
-						<ul>
-							<li>
-						        <g:link controller="role" action="edit" id="${role.id}"><g:message code="nimble.link.edit" /></g:link>
-						    </li>
-							<li>
-								<n:confirmaction action="document.deleterole.submit();" title="${message(code: 'nimble.template.delete.confirm.title')}" msg="${message(code: 'nimble.role.delete.confirm')}" accept="${message(code: 'nimble.link.accept')}" cancel="${message(code: 'nimble.link.cancel')}" class=""><g:message code="nimble.link.delete" /></n:confirmaction>								
-							</li>
-						</ul>
-						</g:if>
-					</li>
-				</ul>
-			</g:if>
-		</li>
-		<li>
-			<g:link controller="group" action="list"><g:message code="nimble.link.groups" /></g:link>
-			<g:if test="${controllerName == 'group' && actionName in ['list', 'create']}">
-				<ul>
-					<li>
-						<g:link controller="group" action="create"><g:message code="nimble.link.creategroup" /></g:link>
-					</li>
-				</ul>
-			</g:if>
-			<g:if test="${controllerName == 'group' && actionName in ['show', 'edit']}">
-			    <ul>
-					<li>
-						<g:link controller="group" action="show" id="${group.id}">${group.name?.encodeAsHTML()}</g:link>
-						<g:if test="${!group.protect}">
-						<ul>
-							<li>
-						        <g:link controller="group" action="edit" id="${group.id}"><g:message code="nimble.link.edit" /></g:link>
-						    </li>
-							<li>
-								<n:confirmaction action="document.deletegroup.submit();" title="${message(code: 'nimble.template.delete.confirm.title')}" msg="${message(code: 'nimble.group.delete.confirm')}" accept="${message(code: 'nimble.link.accept')}" cancel="${message(code: 'nimble.link.cancel')}" class=""><g:message code="nimble.link.delete" /></n:confirmaction>
-							</li>			
-						</ul>
-						</g:if>
-					</li>
-				</ul>
-			</g:if>
-		</li>
-		<li>
-			<g:link controller="admins" action="index"><g:message code="nimble.link.admins" /></g:link>
-		</li>
+	<ul class="level2">
+		<li class="${controllerName == 'user' ? 'active':''}"><g:link controller="user" action="list"><g:message code="nimble.link.users" /></g:link></li>
+		<li class="${controllerName == 'role' ? 'active':''}"><g:link controller="role" action="list"><g:message code="nimble.link.roles" /></g:link></li>
+		<li class="${controllerName == 'group' ? 'active':''}"><g:link controller="group" action="list"><g:message code="nimble.link.groups" /></g:link></li>
+		<li class="${controllerName == 'admins' ? 'directactive':''}"><g:link controller="admins" action="index"><g:message code="nimble.link.admins" /></g:link></li>
 	</ul>
-</div>
+	
+	<g:if test="${controllerName == 'user'}">
+		<ul class="level3a">
+			<li class="${actionName == 'list' ? 'active':''}" ><g:link controller="user" action="list"><g:message code="label.list" /></g:link></li>
+			<li class="${actionName == 'create' ? 'active':''}" ><g:link controller="user" action="create"><g:message code="label.create" /></g:link></li>
+			<g:if test="${actionName in ['show', 'edit', 'changepassword', 'changelocalpassword']}">
+				<li> | </li>
+				<li><g:message code="fedreg.view.user.show.heading" args="[user.profile?.fullName ?: user.username]"/>: </li>
+				<li class="${actionName == 'show' ? 'active':''}" ><g:link controller="user" action="show" id="${user.id}"><g:message code="label.view" /></g:link></li>
+				<li class="${actionName == 'edit' ? 'active':''}"><g:link controller="user" action="edit" id="${user.id}"><g:message code="label.edit" /></g:link></li>
+				<g:if test="${user.external}">
+					<li class="${actionName == 'changelocalpassword' ? 'active':''}"><g:link controller="user" action="changelocalpassword" id="${user.id}"><g:message code="label.changelocalpassword" /></g:link></li>
+				</g:if>
+				<g:else>
+					<li class="${actionName == 'changepassword' ? 'active':''}"><g:link controller="user" action="changepassword" id="${user.id}"><g:message code="label.changepassword" /></g:link></li>
+				</g:else>
+				<li id="disableuser"><a href="#" onClick="nimble.disableUser('${user.id}'); return false;"><g:message code="label.disableaccount" /></a></li>
+				<li id="enableuser"><a href="#" onClick="nimble.enableUser('${user.id}'); return false;"><g:message code="label.enableaccount" /></a></li>
+				<li id="disableuserapi"><a href="#" onClick="nimble.disableAPI('${user.id}'); return false;"><g:message code="label.disableapi" /></a></li>
+				<li id="enableuserapi"><a href="#" onClick="nimble.enableAPI('${user.id}'); return false;"><g:message code="label.enableapi" /></a></li>
+			</g:if>
+		</ul>
+	</g:if>
+	
+	<g:if test="${controllerName == 'group'}">
+		<ul class="level3a">
+			<li class="${actionName == 'list' ? 'active':''}"><g:link controller="group" action="list"><g:message code="label.list" /></g:link></li>
+			<li class="${actionName == 'create' ? 'active':''}"><g:link controller="group" action="create"><g:message code="label.create" /></g:link></li>
+			<g:if test="${actionName in ['show', 'edit']}">
+				<li> | </li>
+				<li><g:message code="fedreg.view.group.show.heading" args="[group.name]"/>: </li>
+				<li class="${actionName == 'show' ? 'active':''}" ><g:link controller="group" action="show" id="${group.id}"><g:message code="label.view" /></g:link></li>
+				<li class="${actionName == 'edit' ? 'active':''}"><g:link controller="group" action="edit" id="${group.id}"><g:message code="label.edit" /></g:link></li>
+				<li><n:confirmaction action="document.deletegroup.submit();" title="${message(code: 'nimble.template.delete.confirm.title')}" msg="${message(code: 'nimble.group.delete.confirm')}" accept="${message(code: 'nimble.link.accept')}" cancel="${message(code: 'nimble.link.cancel')}" label="label.delete" plain="true"/></li>
+			</g:if>
+		</ul>
+	</g:if>
+	
+	<g:if test="${controllerName == 'role'}">
+		<ul class="level3a">
+			<li class="${actionName == 'list' ? 'active':''}"><g:link controller="role" action="list"><g:message code="label.list" /></g:link></li>
+			<li class="${actionName == 'create' ? 'active':''}"><g:link controller="role" action="create"><g:message code="label.create" /></g:link></li>
+			<g:if test="${actionName in ['show', 'edit']}">
+				<li> | </li>
+				<li><g:message code="fedreg.view.role.show.heading" args="[role.name]"/>: </li>
+				<li class="${actionName == 'show' ? 'active':''}" ><g:link controller="role" action="show" id="${role.id}"><g:message code="label.view" /></g:link></li>
+				<li class="${actionName == 'edit' ? 'active':''}"><g:link controller="role" action="edit" id="${role.id}"><g:message code="label.edit" /></g:link></li>
+				<li><n:confirmaction action="document.deleterole.submit();" title="${message(code: 'nimble.template.delete.confirm.title')}" msg="${message(code: 'nimble.role.delete.confirm')}" accept="${message(code: 'nimble.link.accept')}" cancel="${message(code: 'nimble.link.cancel')}" label="label.delete" plain="true"/></li>
+			</g:if>
+		</ul>
+	</g:if>

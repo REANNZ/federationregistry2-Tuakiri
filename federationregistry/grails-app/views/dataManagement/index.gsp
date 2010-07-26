@@ -6,18 +6,18 @@
 		<title><g:message code="fedreg.view.host.datamanagement.title"/></title>
 	</head>
 	<body>
-			
+		<section>
 			<h2><g:message code="fedreg.view.host.datamanagement.heading"/></h2>
 			
 			<g:message code="fedreg.view.host.datamanagement.descriptive"/>
 			
-			<table class="cleantable buttons">
+			<table>
 				<thead>
 					<tr>						
-						<th><g:message code="fedreg.label.username" /></th>
-						<th><g:message code="fedreg.label.remoteaddr" /></th>
-						<th><g:message code="fedreg.label.remotehost" /></th>
-						<th><g:message code="fedreg.label.datecreated" /></th>
+						<th><g:message code="label.username" /></th>
+						<th><g:message code="label.remoteaddr" /></th>
+						<th><g:message code="label.remotehost" /></th>
+						<th><g:message code="label.datecreated" /></th>
 						<th/>						 
 					</tr>
 				</thead>
@@ -42,5 +42,6 @@
 				</g:each>
 				</tbody>
 			</table>
+		</section>
 	</body>
 </html>

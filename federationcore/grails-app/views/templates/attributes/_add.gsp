@@ -17,7 +17,7 @@
 </script>
 
 <div id="addattribute" class="searcharea">
-	<fr:button id="addattributelink" label="${message(code:'fedreg.label.addattribute')}" icon="plus"/>
+	<n:button id="addattributelink" label="${message(code:'label.addattribute')}" icon="plus"/>
 </div>
 	
 <div id="newattribute"  class="searcharea">
@@ -29,14 +29,14 @@
 	<table>
 		<tbody>
 			<tr>
-				<th><g:message code="fedreg.label.attribute"/><th>
+				<th><g:message code="label.attribute"/><th>
 				<td>
 					<g:select name="attributeID" from="${Attribute.list()}" optionKey="id" optionValue="${{ it.friendlyName + ' ( ' + it.oid + ' )' }}" />
 				</td>
 			</tr>
 		</tbody>
 	</table>
-	<fr:button id="createattributelink" onclick="fedreg.attribute_add('${containerID}');" label="${message(code:'fedreg.link.add')}" icon="plus"/>
-	<fr:button id="cancelattributelink" label="${message(code:'fedreg.label.close')}" icon="cancel"/>
+	<n:button id="createattributelink" onclick="fedreg.attribute_add('${containerID}');" label="${message(code:'label.add')}" icon="plus"/>
+	<n:button id="cancelattributelink" label="${message(code:'label.close')}" icon="cancel"/>
 	</form>
 </div>

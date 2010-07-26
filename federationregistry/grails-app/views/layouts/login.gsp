@@ -7,9 +7,6 @@
     <title><g:message code="fedreg.title" /> | <g:layoutTitle /></title>
 
     <nh:nimblecore/>
-    <nh:nimbleui/>
-  
-    <nh:growl/>
 
     <link rel="stylesheet" href="${resource(dir: nimblePath, file: '/css/fedreg.css')}"/>
 

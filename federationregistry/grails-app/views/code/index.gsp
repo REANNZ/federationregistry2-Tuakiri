@@ -5,12 +5,14 @@
 		<title><g:message code="fedreg.view.host.code.title"/></title>
 	</head>
 	<body>
-		<div>
-			<h2>Live console</h2>
-			<p>This console will give you full programatic access to all objects being managed by Federation Registry and all associated Grails/GORM functionality. <strong>Changes are permanent!!</strong>.</p>
+		<section>
+			<h2><g:message code="fedreg.view.host.code.heading"/></h2>
+			
+			<p><g:message code="fedreg.view.host.code.details"/></p>
+			
 			<iframe src ="/federationregistry/console" width="100%" height="1000px" >
-			  <p>Your browser does not support iframes.</p>
+				<p>Your browser does not support iframes.</p>
 			</iframe>
-		</div>
+		</section>
 	</body>
 </html>

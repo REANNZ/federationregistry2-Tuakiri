@@ -18,7 +18,7 @@
 </script>
 
 <div id="addnameidformat" class="searcharea">
-	<fr:button id="addnameidformatlink" label="${message(code:'fedreg.label.addnameidformat')}" icon="plus"/>
+	<n:button id="addnameidformatlink" label="${message(code:'label.addnameidformat')}" icon="plus"/>
 </div>
 	
 <div id="newnameidformat"  class="searcharea">
@@ -27,14 +27,14 @@
 	<table>
 		<tbody>
 			<tr>
-				<th><g:message code="fedreg.label.nameidformat"/><th>
+				<th><g:message code="label.nameidformat"/><th>
 				<td>
 					<g:select name="formatID" from="${SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)}" optionKey="id" optionValue="uri"/>
 				</td>
 			</tr>
 		</tbody>
 	</table>
-	<fr:button onclick="fedreg.nameIDFormat_add('${containerID}');" id="createnameidformatlink" label="${message(code:'fedreg.label.add')}" icon="plus"/>
-	<fr:button id="cancelnameidformatlink" label="${message(code:'fedreg.label.close')}" icon="close"/>
+	<n:button onclick="fedreg.nameIDFormat_add('${containerID}');" id="createnameidformatlink" label="${message(code:'label.add')}" icon="plus"/>
+	<n:button id="cancelnameidformatlink" label="${message(code:'label.close')}" icon="close"/>
 	</form>
 </div>

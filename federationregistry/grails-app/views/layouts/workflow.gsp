@@ -41,7 +41,7 @@
 		<g:render template='/templates/aafheader' model="['navigation':true]"/>
     </div>
     <div id="bd">
-		<div id="working"><img src="${resource(dir:'images', file:'spinner.gif')}" width="20" height="20"><br/><g:message code="fedreg.label.working"/></div>
+		<div id="working"><img src="${resource(dir:'images', file:'spinner.gif')}" width="20" height="20"><br/><g:message code="label.working"/></div>
 		
 		<div class="container">
 	    	<div class="localnavigation">
@@ -52,7 +52,7 @@
 					<li>
 						<g:link controller="workflowProcess" action="show" id="${process.id}"><h4>${process.name?.encodeAsHTML()}</h4></g:link>
 						<ul>
-							<li><g:link controller="workflowProcess" action="edit" id="${process.id}"><g:message code="fedreg.link.edit"/></g:link></li>
+							<li><g:link controller="workflowProcess" action="edit" id="${process.id}"><g:message code="label.edit"/></g:link></li>
 						</ul>
 						<hr>
 					</li>
@@ -61,7 +61,7 @@
 					<li>
 						<g:link controller="workflowScript" action="show" id="${script.id}"><h4>${script.name?.encodeAsHTML()}</h4></g:link>
 						<ul>
-							<li><g:link controller="workflowScript" action="edit" id="${script.id}"><g:message code="fedreg.link.edit"/></g:link></li>
+							<li><g:link controller="workflowScript" action="edit" id="${script.id}"><g:message code="label.edit"/></g:link></li>
 						</ul>
 						<hr>
 					</li>
@@ -71,8 +71,8 @@
 				  	<li>
 						<h4><g:message code="fedreg.layout.workflow.navigation.process.title" /></h4>
 						<ul>
-							<li><g:link controller="workflowProcess" action="list"><g:message code="fedreg.link.list" /></g:link></li>
-							<li><g:link controller="workflowProcess" action="create"><g:message code="fedreg.link.create" /></g:link></li>
+							<li><g:link controller="workflowProcess" action="list"><g:message code="label.list" /></g:link></li>
+							<li><g:link controller="workflowProcess" action="create"><g:message code="label.create" /></g:link></li>
 						</ul>
 					</li>
 					
@@ -80,8 +80,8 @@
 				  	<li>
 						<h4><g:message code="fedreg.layout.workflow.navigation.script.title" /></h4>
 						<ul>
-							<li><g:link controller="workflowScript" action="list"><g:message code="fedreg.link.list" /></g:link></li>
-							<li><g:link controller="workflowScript" action="create"><g:message code="fedreg.link.create" /></g:link></li>
+							<li><g:link controller="workflowScript" action="list"><g:message code="label.list" /></g:link></li>
+							<li><g:link controller="workflowScript" action="create"><g:message code="label.create" /></g:link></li>
 						</ul>
 					</li>
 				</ul>

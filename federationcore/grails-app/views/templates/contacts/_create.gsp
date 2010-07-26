@@ -21,16 +21,16 @@
 
 <div>
 	<div id="addcontact" class="searcharea">
-		<fr:button id="addcontactlink" href="#" label="${message(code:'fedreg.label.addcontact')}" icon="plus"/>
+		<n:button id="addcontactlink" href="#" label="${message(code:'label.addcontact')}" icon="plus"/>
 	</div>
 	<div id="searchcontact" class="searcharea">
 		<h3><g:message code="fedreg.templates.contactmanager.searchforcontacts.heading"/></h3>
 		<table class="datatable buttons">
 			<thead>
 				<tr>
-					<th><g:message code="fedreg.label.givenname"/></th>
-					<th><g:message code="fedreg.label.surname"/></th>
-					<th><g:message code="fedreg.label.email"/></th>
+					<th><g:message code="label.givenname"/></th>
+					<th><g:message code="label.surname"/></th>
+					<th><g:message code="label.email"/></th>
 					<th/>
 				</tr>
 			</thead>
@@ -40,8 +40,8 @@
 					<td><input type="text" id="surname" name="surname" class="enhancedinput"/></td>
 					<td><input type="text" id="email" name="email" class="enhancedinput"/></td>
 					<td>
-						<fr:button href="#" onclick="fedreg.contact_search(${descriptor.id});" label="${message(code:'fedreg.link.search')}" icon="search"/>
-						<fr:button id="closesearchcontactlink" href="#" label="${message(code:'fedreg.link.close')}" icon="close"/>
+						<n:button href="#" onclick="fedreg.contact_search(${descriptor.id});" label="${message(code:'label.search')}" icon="search"/>
+						<n:button id="closesearchcontactlink" href="#" label="${message(code:'label.close')}" icon="close"/>
 		            </td>
 				</tr>
 			</tbody>
@@ -57,8 +57,8 @@
 			<p><g:message code="fedreg.template.contacts.selecttype"/></p>
 			<g:select id="contactselectedtype" name="contactType" from="${contactTypes}" optionKey="name" optionValue="displayName"/>
 			<div class="buttons">
-				<fr:button href="#" onclick="fedreg.contact_create();" label="${message(code:'fedreg.link.accept')}" icon="check" class="modal_close"/>
-				<fr:button href="#" onclick="\$('#contactconfirmationdialog').dialog('close');" label="${message(code:'fedreg.link.cancel')}" icon="cancel" class="modal_close"/>
+				<n:button href="#" onclick="fedreg.contact_create();" label="${message(code:'label.accept')}" icon="check" class="modal_close"/>
+				<n:button href="#" onclick="\$('#contactconfirmationdialog').dialog('close');" label="${message(code:'label.cancel')}" icon="cancel" class="modal_close"/>
 			</div>
 		</div>
 	</div>

@@ -2,9 +2,9 @@
 <table class="cleantable">
 	<thead>
 		<tr>
-			<th><g:message code="fedreg.label.attribute" /></th>
-			<th><g:message code="fedreg.label.oid" /></th>
-			<th><g:message code="fedreg.label.description" /></th>
+			<th><g:message code="label.attribute" /></th>
+			<th><g:message code="label.oid" /></th>
+			<th><g:message code="label.description" /></th>
 			<th/>
 		</tr>
 	</thead>
@@ -15,7 +15,7 @@
 			<td>${attr.oid.encodeAsHTML()}</td>
 			<td> ${attr.description.encodeAsHTML()}</td>
 			<td>
-				<fr:confirmaction action="fedreg.attribute_remove(${attr.id}, '${containerID}' );" title="${message(code: 'fedreg.template.attributes.remove.confirm.title')}" msg="${message(code: 'fedreg.template.attributes.remove.confirm.descriptive', args:[attr.friendlyName.encodeAsHTML()])}" accept="${message(code: 'nimble.link.accept')}" cancel="${message(code: 'nimble.link.cancel')}" icon="trash" label="fedreg.label.remove" />
+				<n:confirmaction action="fedreg.attribute_remove(${attr.id}, '${containerID}' );" title="${message(code: 'fedreg.template.attributes.remove.confirm.title')}" msg="${message(code: 'fedreg.template.attributes.remove.confirm.descriptive', args:[attr.friendlyName.encodeAsHTML()])}" accept="${message(code: 'nimble.link.accept')}" cancel="${message(code: 'nimble.link.cancel')}" icon="trash" label="label.remove" />
 			</td>
 		</tr>
 	</g:each>

@@ -34,5 +34,13 @@ class OrganizationController {
 			[organization: organization, entities:entities, contacts:contacts]
 		}
 	}
+	
+	def create = {
+		
+	}
+	
+	def edit = {
+		
+	}
 
 }

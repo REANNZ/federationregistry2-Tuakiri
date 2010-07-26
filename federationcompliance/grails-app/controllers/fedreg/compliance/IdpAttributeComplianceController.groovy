@@ -32,7 +32,7 @@ class IdpAttributeComplianceController {
 		def idp = IDPSSODescriptor.get(params.id)
         if (!idp) {
 			flash.type="error"
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'fedreg.label.identityprovider'), params.id])}"
+            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'label.identityprovider'), params.id])}"
             redirect(action: "summary")
 			return
         }
@@ -52,7 +52,7 @@ class IdpAttributeComplianceController {
 		def attribute = Attribute.get(params.id)
 		if (!attribute) {
 			flash.type="error"
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'fedreg.label.attribute'), params.id])}"
+            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'label.attribute'), params.id])}"
             redirect(action: "summary")
 			return
         }

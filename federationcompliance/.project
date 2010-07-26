@@ -12,8 +12,65 @@
 		</buildCommand>
 	</buildSpec>
 	<natures>
-	    <nature>com.springsource.sts.grails.core.nature</nature>
+		<nature>com.springsource.sts.grails.core.nature</nature>
 		<nature>org.eclipse.jdt.groovy.core.groovyNature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>federationcore-grails-app-conf</name>
+			<type>2</type>
+			<location>/Users/beddoes/Development/projects/federationregistrymaster/federationcore/grails-app/conf</location>
+		</link>
+		<link>
+			<name>federationcore-grails-app-controllers</name>
+			<type>2</type>
+			<location>/Users/beddoes/Development/projects/federationregistrymaster/federationcore/grails-app/controllers</location>
+		</link>
+		<link>
+			<name>federationcore-grails-app-domain</name>
+			<type>2</type>
+			<location>/Users/beddoes/Development/projects/federationregistrymaster/federationcore/grails-app/domain</location>
+		</link>
+		<link>
+			<name>federationcore-grails-app-i18n</name>
+			<type>2</type>
+			<location>/Users/beddoes/Development/projects/federationregistrymaster/federationcore/grails-app/i18n</location>
+		</link>
+		<link>
+			<name>federationcore-grails-app-realms</name>
+			<type>2</type>
+			<location>/Users/beddoes/Development/projects/federationregistrymaster/federationcore/grails-app/realms</location>
+		</link>
+		<link>
+			<name>federationcore-grails-app-services</name>
+			<type>2</type>
+			<location>/Users/beddoes/Development/projects/federationregistrymaster/federationcore/grails-app/services</location>
+		</link>
+		<link>
+			<name>federationcore-grails-app-taglib</name>
+			<type>2</type>
+			<location>/Users/beddoes/Development/projects/federationregistrymaster/federationcore/grails-app/taglib</location>
+		</link>
+		<link>
+			<name>federationcore-grails-app-utils</name>
+			<type>2</type>
+			<location>/Users/beddoes/Development/projects/federationregistrymaster/federationcore/grails-app/utils</location>
+		</link>
+		<link>
+			<name>federationcore-grails-app-views</name>
+			<type>2</type>
+			<location>/Users/beddoes/Development/projects/federationregistrymaster/federationcore/grails-app/views</location>
+		</link>
+		<link>
+			<name>federationcore-src-groovy</name>
+			<type>2</type>
+			<location>/Users/beddoes/Development/projects/federationregistrymaster/federationcore/src/groovy</location>
+		</link>
+		<link>
+			<name>federationcore-src-java</name>
+			<type>2</type>
+			<location>/Users/beddoes/Development/projects/federationregistrymaster/federationcore/src/java</location>
+		</link>
+	</linkedResources>
 </projectDescription>

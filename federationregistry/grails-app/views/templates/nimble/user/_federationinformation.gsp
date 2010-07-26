@@ -12,7 +12,7 @@
 			<td><g:message code="${user?.federationProvider?.details?.description}"/></td>
 		</tr>
 		<tr>
-			<th><g:message code="fedreg.label.providingentity" /></th>
+			<th><g:message code="label.providingentity" /></th>
 			<td>${user?.entityDescriptor?.entityID.encodeAsHTML()}</td>
 		</tr>
   </tbody>

@@ -6,33 +6,33 @@
 		<title><g:message code="fedreg.view.members.organization.list.title" /></title>
 	</head>
 	<body>
-		<div class="container">
+		<section>
 			<h2><g:message code="fedreg.view.members.organization.list.heading" /></h2>
-			<div>
-				<table class="enhancedtabledata">
-					<thead>
-						<tr>
-						
-							<th>${message(code: 'fedreg.label.organization')}</th>
-							<th>${message(code: 'fedreg.label.primarytype')}</th>
-							<th />
-						
-						</tr>
-					</thead>
-					<tbody>
-					<g:each in="${organizationList.sort{it.name}}" status="i" var="organization">
-						<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-							<td>${fieldValue(bean: organization, field: "displayName")}</td>
-							<td>${fieldValue(bean: organization, field: "primary.displayName")}</td>
-							<td><g:link action="show" id="${organization.id}" class="button icon icon_magnifier"><g:message code="fedreg.link.view" /></g:link></td>
-						</tr>
-					</g:each>
-					</tbody>
-				</table>
-			</div>
-			<div class="paginateButtons">
+
+			<table class="enhancedtabledata">
+				<thead>
+					<tr>
+					
+						<th>${message(code: 'label.organization')}</th>
+						<th>${message(code: 'label.primarytype')}</th>
+						<th />
+					
+					</tr>
+				</thead>
+				<tbody>
+				<g:each in="${organizationList.sort{it.name}}" status="i" var="organization">
+					<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
+						<td>${fieldValue(bean: organization, field: "displayName")}</td>
+						<td>${fieldValue(bean: organization, field: "primary.displayName")}</td>
+						<td><n:button href="${createLink(controller:'organization', action:'show', id:organization.id)}" label="label.view" icon="arrowthick-1-ne" /></td>
+					</tr>
+				</g:each>
+				</tbody>
+			</table>
+
+			<div class="paginatebuttons">
 				<g:paginate total="${organizationTotal}" />
 			</div>
-		</div>
+		</section>
 	</body>
 </html>

@@ -49,6 +49,7 @@ class Organization  {	// Also called a participant in AAF land
 
 	static mapping = {
 		autoImport false
+		sort "name"
 	}
 
 	static constraints = {

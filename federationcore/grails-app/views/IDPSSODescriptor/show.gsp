@@ -44,23 +44,23 @@
 		<table>
 			<tbody>		
 				<tr>
-					<th><g:message code="fedreg.label.displayname"/></th>
+					<th><g:message code="label.displayname"/></th>
 					<td>${fieldValue(bean: identityProvider, field: "displayName")}</td>
 				</tr>
 				<tr>
-					<th><g:message code="fedreg.label.description"/></th>
+					<th><g:message code="label.description"/></th>
 					<td>${fieldValue(bean: identityProvider, field: "description")}</td>
 				</tr>
 				<tr>
-					<th><g:message code="fedreg.label.organization"/></th>
+					<th><g:message code="label.organization"/></th>
 					<td><g:link controller="organization" action="show" id="${identityProvider.organization.id}">${fieldValue(bean: identityProvider, field: "organization.displayName")}</g:link></td>
 				</tr>
 				<tr>
-					<th><g:message code="fedreg.label.entitydescriptor"/></th>
+					<th><g:message code="label.entitydescriptor"/></th>
 					<td><g:link controller="entity" action="show" id="${identityProvider.entityDescriptor.id}">${fieldValue(bean: identityProvider, field: "entityDescriptor.entityID")}</g:link></td>
 				</tr>
 				<tr>
-					<th><g:message code="fedreg.label.protocolsupport"/></th>
+					<th><g:message code="label.protocolsupport"/></th>
 					<td>
 						<g:each in="${identityProvider.protocolSupportEnumerations}" status="i" var="pse">
 						${pse.uri} <br/>
@@ -68,28 +68,28 @@
 					</td>
 				<g:if test="${identityProvider.errorURL}">
 				<tr>
-					<th><g:message code="fedreg.label.errorurl"/></th>
+					<th><g:message code="label.errorurl"/></th>
 					<td><a href="${identityProvider.errorURL}">${fieldValue(bean: identityProvider, field: "errorURL")}</a></td>
 				</tr>
 				</g:if>
 				<tr>
-					<th><g:message code="fedreg.label.status"/></th>
+					<th><g:message code="label.status"/></th>
 					<td>
 						<g:if test="${identityProvider.active}">
-							<div class="icon icon_tick"><g:message code="fedreg.label.active" /></div>
+							<div class="icon icon_tick"><g:message code="label.active" /></div>
 						</g:if>
 						<g:else>
-							<div class="icon icon_cross"><g:message code="fedreg.label.inactive" /></div>
+							<div class="icon icon_cross"><g:message code="label.inactive" /></div>
 						</g:else>
 					</td>
 				<tr>
-					<th><g:message code="fedreg.label.requiresignedauthn"/></th>
+					<th><g:message code="label.requiresignedauthn"/></th>
 					<td>
 						<g:if test="${identityProvider.wantAuthnRequestsSigned}">
-							<div class="icon icon_tick"><g:message code="fedreg.label.yes" /></div>
+							<div class="icon icon_tick"><g:message code="label.yes" /></div>
 						</g:if>
 						<g:else>
-							<div class="icon icon_cross"><g:message code="fedreg.label.no" /></div>
+							<div class="icon icon_cross"><g:message code="label.no" /></div>
 						</g:else>
 					</td>
 				</tr>
@@ -98,15 +98,15 @@
 			
 			<div id="tabs">
 				<ul>
-					<li><a href="#tab-contacts" class="icon icon_user_comment"><g:message code="fedreg.label.contacts" /></a></li>
-					<li><a href="#tab-crypto" class="icon icon_lock"><g:message code="fedreg.label.crypto" /></a></li>
-					<li><a href="#tab-endpoints" class="icon icon_link"><g:message code="fedreg.label.endpoints" /></a></li>
-					<li><a href="#tab-attributes" class="icon icon_vcard"><g:message code="fedreg.label.supportedattributes" /></a></li>
-					<li><a href="#tab-nameidformats" class="icon icon_database_key"><g:message code="fedreg.label.supportednameidformats" /></a></li>
+					<li><a href="#tab-contacts" class="icon icon_user_comment"><g:message code="label.contacts" /></a></li>
+					<li><a href="#tab-crypto" class="icon icon_lock"><g:message code="label.crypto" /></a></li>
+					<li><a href="#tab-endpoints" class="icon icon_link"><g:message code="label.endpoints" /></a></li>
+					<li><a href="#tab-attributes" class="icon icon_vcard"><g:message code="label.supportedattributes" /></a></li>
+					<li><a href="#tab-nameidformats" class="icon icon_database_key"><g:message code="label.supportednameidformats" /></a></li>
 				</ul>
 				
 				<div id="tab-contacts" class="tabcontent">
-					<h3><g:message code="fedreg.label.contacts" /></h3>
+					<h3><g:message code="label.contacts" /></h3>
 					<div id="contacts">
 						<g:render template="/templates/contacts/list" model="[descriptor:identityProvider, allowremove:true]" />
 					</div>
@@ -114,7 +114,7 @@
 					<g:render template="/templates/contacts/create" model="[descriptor:identityProvider, contactTypes:contactTypes]"/>
 				</div>
 				<div id="tab-crypto" class="tabcontent">
-					<h3><g:message code="fedreg.label.publishedcertificates" /></h3>
+					<h3><g:message code="label.publishedcertificates" /></h3>
 					<div id="certificates">
 						<g:render template="/templates/certificates/list" model="[descriptor:identityProvider, allowremove:true]" />
 					</div>
@@ -122,12 +122,12 @@
 					<g:render template="/templates/certificates/create" model="[descriptor:identityProvider]"/>
 				</div>
 				<div id="tab-endpoints" class="tabcontent">
-					<h3><g:message code="fedreg.label.supportedendpoints" /></h3>
+					<h3><g:message code="label.supportedendpoints" /></h3>
 					<div id="tabs2">
 						<ul>
-							<li><a href="#tab-sso" class="icon icon_cog"><g:message code="fedreg.label.ssoservices" /></a></li>
-							<li><a href="#tab-ars" class="icon icon_cog"><g:message code="fedreg.label.artifactresolutionservices" /></a></li>
-							<li><a href="#tab-slo" class="icon icon_cog"><g:message code="fedreg.label.sloservices" /></a></li>
+							<li><a href="#tab-sso" class="icon icon_cog"><g:message code="label.ssoservices" /></a></li>
+							<li><a href="#tab-ars" class="icon icon_cog"><g:message code="label.artifactresolutionservices" /></a></li>
+							<li><a href="#tab-slo" class="icon icon_cog"><g:message code="label.sloservices" /></a></li>
 						</ul>
 						
 						<div id="tab-sso" class="componentlist">
@@ -155,7 +155,7 @@
 					</div>
 				</div>
 				<div id="tab-attributes" class="tabcontent">
-					<h3><g:message code="fedreg.label.supportedattributes" /></h3>
+					<h3><g:message code="label.supportedattributes" /></h3>
 					<div id="attributes">
 						<g:render template="/templates/attributes/list" model="[attrs:identityProvider.attributes, containerID:'attributes']" />
 					</div>
@@ -163,7 +163,7 @@
 					<g:render template="/templates/attributes/add" model="[type:'idp', containerID:'attributes']"/>
 				</div>
 				<div id="tab-nameidformats" class="tabcontent">
-					<h3><g:message code="fedreg.label.supportednameidformats" /></h3>
+					<h3><g:message code="label.supportednameidformats" /></h3>
 					<div id="nameidformats">
 						<g:render template="/templates/nameidformats/list" model="[nameIDFormats:identityProvider.nameIDFormats, containerID:'nameidformats']" />
 					</div>

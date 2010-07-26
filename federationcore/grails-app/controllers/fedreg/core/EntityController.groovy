@@ -10,7 +10,7 @@ class EntityController {
 
 	def list = {
 		params.max = Math.min(params.max ? params.max.toInteger() : 10, 100)
-		[entityList: EntityDescriptor.list(params), entitynTotal: EntityDescriptor.count()]
+		[entityList: EntityDescriptor.list(params), entityTotal: EntityDescriptor.count()]
 	}
 
 	def show = {
@@ -23,6 +23,14 @@ class EntityController {
 		else {
 			[entity: entity]
 		}
+	}
+	
+	def create = {
+		
+	}
+	
+	def edit = {
+		
 	}
 
 }

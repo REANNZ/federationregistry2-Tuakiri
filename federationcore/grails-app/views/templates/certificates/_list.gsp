@@ -4,45 +4,45 @@
 		<g:each in="${descriptor.keyDescriptors.sort{it.dateCreated}}" status="i" var="kd">
 			<tr><td colspan="2"><h4>Certificate ${i+1}</h4></td></tr>
 			<tr>
-				<th><g:message code="fedreg.label.keytype" /></th>
+				<th><g:message code="label.keytype" /></th>
 				<td>${kd.keyType.encodeAsHTML()}</td>
 				<td>
 					<g:if test="${allowremove}">
-						<fr:confirmaction action="fedreg.keyDescriptor_delete(${kd.id});" title="${message(code: 'fedreg.template.certificates.remove.confirm.title')}" msg="${message(code: 'fedreg.template.certificates.remove.confirm.descriptive')}" accept="${message(code: 'fedreg.link.accept')}" cancel="${message(code: 'fedreg.link.cancel')}" label="${message(code: 'fedreg.label.delete')}" icon="trash" />
+						<n:confirmaction action="fedreg.keyDescriptor_delete(${kd.id});" title="${message(code: 'fedreg.template.certificates.remove.confirm.title')}" msg="${message(code: 'fedreg.template.certificates.remove.confirm.descriptive')}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" label="${message(code: 'label.delete')}" icon="trash" />
 					</g:if>
 				</td>
 			</tr>
 			<tr>
-				<th><g:message code="fedreg.label.name" /></th>
+				<th><g:message code="label.name" /></th>
 				<td colspan="2">${(kd.keyInfo.keyName?:"N/A").encodeAsHTML()}</td>
 			</tr>
 			<tr>
-				<th><g:message code="fedreg.label.issuer" /></th>
+				<th><g:message code="label.issuer" /></th>
 				<td colspan="2">${kd.keyInfo.certificate.issuer.encodeAsHTML()}</td>
 			</tr>
 			<tr>
-				<th><g:message code="fedreg.label.subject" /></th>
+				<th><g:message code="label.subject" /></th>
 				<td>${kd.keyInfo.certificate.subject.encodeAsHTML()}</td>
 			</tr>
 			<tr>
-				<th><g:message code="fedreg.label.expirydate" /></th>
+				<th><g:message code="label.expirydate" /></th>
 				<td colspan="2">
 					${kd.keyInfo.certificate.expiryDate.encodeAsHTML()}
 					<g:if test="${kd.keyInfo.certificate.criticalAlert()}">
 						<div class="critical">
-							<p class="icon icon_exclamation"><g:message code="fedreg.label.certificatecritical"/></p>
+							<p class="icon icon_exclamation"><g:message code="label.certificatecritical"/></p>
 						</div>
 					</g:if>
 					<g:else>
 						<g:if test="${kd.keyInfo.certificate.warnAlert()}">
 							<div class="warning">
-								<p class="icon icon_error"><g:message code="fedreg.label.certificatewarning"/></p>
+								<p><g:message code="label.certificatewarning"/></p>
 							</div>
 						</g:if>
 						<g:else>
 							<g:if test="${kd.keyInfo.certificate.infoAlert()}">
 								<div class="information">
-									<p class="icon icon_information"><g:message code="fedreg.label.certificateinfo"/></p>
+									<p><g:message code="label.certificateinfo"/></p>
 								</div>
 							</g:if>
 						</g:else>
@@ -50,13 +50,13 @@
 				</td>
 			</tr>
 			<tr>
-				<th><g:message code="fedreg.label.selfsigned" /></th>
+				<th><g:message code="label.selfsigned" /></th>
 				<td colspan="2">
 					<g:if test="${kd.keyInfo.certificate.subject.equals(kd.keyInfo.certificate.issuer)}">
-						<div class="icon icon_tick"><g:message code="fedreg.label.yes" /></div>
+						<g:message code="label.yes" />
 					</g:if>
 					<g:else>
-						<div class="icon icon_cross"><g:message code="fedreg.label.no" /></div>
+						<g:message code="label.no" />
 					</g:else>
 				</td>
 			</tr>

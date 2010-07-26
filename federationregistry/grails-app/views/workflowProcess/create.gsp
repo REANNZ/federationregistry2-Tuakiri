@@ -23,7 +23,7 @@
 		<g:form action="save">
 			<g:textArea name="code" value="${(process.definition ?: '// insert workflow here').encodeAsHTML()}" rows="5" cols="40"/>
 			<br>
-			<button type="submit" class="button icon icon_add"/><g:message code="fedreg.link.create" /></button>
+			<button type="submit" class="button icon icon_add"/><g:message code="label.create" /></button>
 		</g:form>
 		
 		<script type="text/javascript">

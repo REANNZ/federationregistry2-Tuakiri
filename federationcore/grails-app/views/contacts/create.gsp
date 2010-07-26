@@ -5,70 +5,69 @@
 		<title><g:message code="fedreg.view.members.contacts.create.title" /></title>
 	</head>
 	<body>
-		<h2><g:message code="fedreg.view.members.contacts.create.heading" /></h2>
-		
-		<div id="contact">
+		<section>
+			<h2><g:message code="fedreg.view.members.contacts.create.heading" /></h2>
 			
 			<n:errors bean="${contact}"/>
 			
-			<div>
-				<g:form action="save">
-				<table class="datatable buttons">
+			<g:form action="save">
+				<table>
 					<tbody>		
 						<tr>
-							<th><g:message code="fedreg.label.givenname" /></th>
+							<th><g:message code="label.givenname" /></th>
 							<td><input type="text" name="givenname" value="${fieldValue(bean: contact, field: 'givenName')}" /></td>
 						</tr>
 						<tr>
 							<tr>
-								<th><g:message code="fedreg.label.surname" /></th>
+								<th><g:message code="label.surname" /></th>
 								<td><input type="text" name="surname" value="${fieldValue(bean: contact, field: 'surname')}" /></td>
 							</tr>
 						</tr>
 						<tr>
 							<tr>
-								<th><g:message code="fedreg.label.email" /></th>
+								<th><g:message code="label.email" /></th>
 								<td><input type="text" name="email" value="${fieldValue(bean: contact, field: 'email.uri')}" /></td>
 							</tr>
 						</tr>
 						<tr>
-							<th><g:message code="fedreg.label.secondaryemail" /></th>
+							<th><g:message code="label.secondaryemail" /></th>
 							<td>
 								<input type="text" name="secondaryEmail" value="${fieldValue(bean: contact, field: 'secondaryEmail.uri')}" />
 							</td>
 						</tr>
 						<tr>
-							<th><g:message code="fedreg.label.workphone" /></th>
+							<th><g:message code="label.workphone" /></th>
 							<td>
 								<input type="text" name="workPhone" value="${fieldValue(bean: contact, field: 'workPhone.uri')}" />
 							</td>
 						</tr>
 						<tr>
-							<th><g:message code="fedreg.label.mobilephone" /></th>
+							<th><g:message code="label.mobilephone" /></th>
 							<td>
 								<input type="text" name="mobilePhone" value="${fieldValue(bean: contact, field: 'mobilePhone.uri')}" />
 							</td>
 						</tr>
 						<tr>
-							<th><g:message code="fedreg.label.homephone" /></th>
+							<th><g:message code="label.homephone" /></th>
 							<td>
 								<input type="text" name="homePhone" value="${fieldValue(bean: contact, field: 'homePhone.uri')}" />
 							</td>
 						</tr>
 						<tr>
-							<th><g:message code="fedreg.label.description" /></th>
+							<th><g:message code="label.description" /></th>
 							<td>
-								<textarea rows="2" cols="20" name="description">${fieldValue(bean: contact, field: 'description')}</textarea>
+								<textarea rows="10" cols="40" name="description">${fieldValue(bean: contact, field: 'description')}</textarea>
 							</td>
 						</tr>
-						<tr>
-							<td colspan="2"><button class="button icon icon_user_add" type="submit"><g:message code="fedreg.link.create" /></button> <g:link action="list"  class="button icon icon_cancel"><g:message code="fedreg.link.cancel" /></g:link></td>
 					</tbody>
 				</table>
-					
-				</g:form>
-			</div>
-		</div>
-		
+				
+				<div class="buttons">
+					<n:button onclick="\$('form').submit();" label="label.create" icon="plus"/>
+					<n:button href="${createLink(action:'list')}"  label="label.cancel" icon="cancel"/>
+				</div>
+				
+			</g:form>
+		</section>	
 	</body>
 </html>

@@ -23,6 +23,12 @@ nimble {
 		login = 'login'
     }
 
+    resources {
+        jslibrary = 'jquery'
+        usejsdev = true
+        usecssdev = false
+    }
+
     organization {
         name = ""
         displayname = ""

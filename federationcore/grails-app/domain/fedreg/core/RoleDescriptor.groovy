@@ -46,6 +46,7 @@ class RoleDescriptor  {
 
 	static mapping = {
 		tablePerHierarchy false
+		sort "displayName"
 	}
 
 	static constraints = {
