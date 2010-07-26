@@ -4,21 +4,11 @@
 <script type="text/javascript">
 	$(function() {
 		$("#newnameidformat").hide();
-	
-		$("#addnameidformatlink").click(function() {
-			$("#addnameidformat").hide();
-			$("#newnameidformat").show('slide');
-		});
-		
-		$("#cancelnameidformatlink").click(function() {
-			$("#newnameidformat").hide();
-			$("#addnameidformat").show('slide');
-		});
 	});
 </script>
 
 <div id="addnameidformat" class="searcharea">
-	<n:button id="addnameidformatlink" label="${message(code:'label.addnameidformat')}" icon="plus"/>
+	<n:button onclick="\$('#addnameidformat').fadeOut(); \$('#newnameidformat').fadeIn();" label="${message(code:'label.addnameidformat')}" icon="plus"/>
 </div>
 	
 <div id="newnameidformat"  class="searcharea">
@@ -35,6 +25,6 @@
 		</tbody>
 	</table>
 	<n:button onclick="fedreg.nameIDFormat_add('${containerID}');" id="createnameidformatlink" label="${message(code:'label.add')}" icon="plus"/>
-	<n:button id="cancelnameidformatlink" label="${message(code:'label.close')}" icon="close"/>
+	<n:button onclick="\$('#newnameidformat').fadeOut(); \$('#addnameidformat').fadeIn();" label="${message(code:'label.close')}" icon="close"/>
 	</form>
 </div>

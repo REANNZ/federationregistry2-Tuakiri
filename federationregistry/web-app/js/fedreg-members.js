@@ -55,8 +55,8 @@ fedreg.keyDescriptor_create = function() {
 		success: function(res) {
 			$("#newcertificatedata").val('');
 			$("#newcertificatedetails").html('');
-			$("#newcertificate").hide('slide');
-			$("#addcertificate").show('slide');
+			$("#newcertificate").fadeOut();
+			$("#addcertificate").fadeIn();
 			nimble.growl('success', res);
 			fedreg.keyDescriptor_list()
 	    },
@@ -114,7 +114,7 @@ fedreg.contact_dialogInit = function() {
 
 fedreg.contact_search = function(id) {
 	$("#working").trigger("fedreg.working");
-	$("#availablecontacts").hide('slide').html('');
+	$("#availablecontacts").fadeOut().html('');
 	var dataString = "givenName=" + $('#givenName').val() + '&surname=' + $('#surname').val() + '&email=' + $('#email').val()
 	$.ajax({
 		type: "POST",
@@ -123,7 +123,7 @@ fedreg.contact_search = function(id) {
 		success: function(res) {
 			$("#availablecontacts").empty();
 			$("#availablecontacts").append(res);
-			$("#availablecontacts").show('slide');
+			$("#availablecontacts").fadeIn();
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
 			nimble.growl('error', xhr.responseText);

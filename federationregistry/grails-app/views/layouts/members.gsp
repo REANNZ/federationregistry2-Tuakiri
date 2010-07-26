@@ -129,7 +129,7 @@
 	</nav>
 	
 	<section>
-		<div id="working"><img src="${resource(dir:'images', file:'spinner.gif')}" width="20" height="20"><br/><g:message code="label.working"/></div>
+		<div id="working"><img src="${resource(dir:'images', file:'spinner.gif')}" width="20" height="20"> <br> <g:message code="label.working"/></div>
 
 		<g:layoutBody/>
     </section>

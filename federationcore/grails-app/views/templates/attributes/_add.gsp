@@ -3,21 +3,11 @@
 <script type="text/javascript">
 	$(function() {
 		$("#newattribute").hide();
-	
-		$("#addattributelink").click(function() {
-			$("#addattribute").hide();
-			$("#newattribute").show('slide');
-		});
-		
-		$("#cancelattributelink").click(function() {
-			$("#newattribute").hide();
-			$("#addattribute").show('slide');
-		});
 	});
 </script>
 
 <div id="addattribute" class="searcharea">
-	<n:button id="addattributelink" label="${message(code:'label.addattribute')}" icon="plus"/>
+	<n:button onclick="\$('#addattribute').fadeOut(); \$('#newattribute').fadeIn();" label="${message(code:'label.addattribute')}" icon="plus"/>
 </div>
 	
 <div id="newattribute"  class="searcharea">
@@ -37,6 +27,6 @@
 		</tbody>
 	</table>
 	<n:button id="createattributelink" onclick="fedreg.attribute_add('${containerID}');" label="${message(code:'label.add')}" icon="plus"/>
-	<n:button id="cancelattributelink" label="${message(code:'label.close')}" icon="cancel"/>
+	<n:button onclick="\$('#newattribute').fadeOut(); \$('#addattribute').fadeIn();" label="${message(code:'label.close')}" icon="cancel"/>
 	</form>
 </div>

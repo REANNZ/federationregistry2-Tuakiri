@@ -5,22 +5,11 @@
 	$(function() {
 		$("#new${endpointType}").hide();
 		$("#new${endpointType}data").validate();
-	
-		$("#add${endpointType}link").click(function() {
-			$("#add${endpointType}").hide();
-			$("#new${endpointType}").show('slide');
-			$("#new${endpointType}[name]").focus();
-		});
-		
-		$("#cancel${endpointType}link").click(function() {
-			$("#new${endpointType}").hide();
-			$("#add${endpointType}").show('slide');
-		});
 	});
 </script>
 
 <div id="add${endpointType}" class="searcharea">
-	<n:button id="add${endpointType}link" label="${message(code:'label.addendpoint')}" icon="plus"/>
+	<n:button onclick="\$('#add${endpointType}').fadeOut(); \$('#new${endpointType}').fadeIn();" label="${message(code:'label.addendpoint')}" icon="plus"/>
 </div>
 	
 <div id="new${endpointType}" class="searcharea">
@@ -56,7 +45,7 @@
 			</tr>
 		</tbody>
 	</table>
-	<n:button id="create${endpointType}link" onclick="if(\$('#new${endpointType}data').valid()) fedreg.endpoint_create('${endpointType}', '${containerID}');" label="${message(code:'label.add')}" icon="plus"/>
-	<n:button id="cancel${endpointType}link" label="${message(code:'label.close')}" icon="close"/>
+	<n:button onclick="if(\$('#new${endpointType}data').valid()) fedreg.endpoint_create('${endpointType}', '${containerID}');" label="${message(code:'label.add')}" icon="plus"/>
+	<n:button onclick="\$('#new${endpointType}').fadeOut(); \$('#add${endpointType}').fadeIn();" label="${message(code:'label.close')}" icon="close"/>
 	</form>
 </div>
