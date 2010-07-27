@@ -44,10 +44,10 @@ class Contact {
 	]
 
 	static constraints = {
-		description(nullable: true, blank:true)
-		organization(nullable: true)
-		givenName(blank: false)
-		surname(blank: false)
+		givenName(nullable:false, blank: false)
+		surname(nullable:false, blank: false)
+		description(nullable:true, blank:true)
+		email(nullable:false)
 		secondaryEmail(nullable:true)
 		workPhone(nullable:true)
 		homePhone(nullable:true)

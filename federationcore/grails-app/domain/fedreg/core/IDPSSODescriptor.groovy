@@ -26,6 +26,8 @@ class IDPSSODescriptor extends SSODescriptor  {
 	boolean wantAuthnRequestsSigned
 	AttributeAuthorityDescriptor collaborator
 
+	List singleSignOnServices
+
 	static belongsTo = [entityDescriptor:EntityDescriptor]
 
 	static hasMany = [
