@@ -41,14 +41,30 @@ class IDPSSODescriptorController {
 		[identityProvider: identityProvider, organizationList: Organization.list(), attributeList: Attribute.list(), nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)]
 	}
 	
-	def save = {
-		
+	def save = {		
 		/* There is a lot of moving parts when creating an IdP (+AA hybrid) so below is more complex then usual,
 			you'll note validation calls on most larger objects, this is to get finer grained object error population
 			for views to render */
 		
+		// Organization
+		def organization = Organization.get(params.organization?.id)
+
+		// Contact
+		def contact = Contact.get(params.contact?.id)
+		if(!contact) {
+			contact = new Contact(givenName: params.contact?.givenName, surname: params.contact?.surname, email: new MailURI(uri:params.contact?.email), organization:organization).save()
+		}
+		
+		// Entity Descriptor
+		def entityDescriptor = EntityDescriptor.get(params.entity.id)
+		if(!entityDescriptor) {
+			entityDescriptor = new EntityDescriptor(active: params.active, entityID: params.entity?.identifier, organization: organization)
+			def entContactPerson = new ContactPerson(contact:contact, type:ContactType.findByName(params.contact?.type))
+			entityDescriptor.addToContacts(entContactPerson)
+		}
+		
 		// IDP
-		def identityProvider = new IDPSSODescriptor(active:params.active, displayName: params.idp.displayName, description: params.idp.description)
+		def identityProvider = new IDPSSODescriptor(active:params.active, displayName: params.idp?.displayName, description: params.idp?.description, organization: organization)
 		params.idp.attributes.each { attrID -> 
 			if(attrID.value == "on") {
 				def attr = Attribute.get(attrID.key)
@@ -63,6 +79,8 @@ class IDPSSODescriptorController {
 					identityProvider.addToNameIDFormats(nameid)
 			}
 		}
+		def idpContactPerson = new ContactPerson(contact:contact, type:ContactType.findByName(params.contact?.type))
+		identityProvider.addToContacts(idpContactPerson)	
 		
 		// Initial endpoints
 		def postBinding = SamlURI.findByUri(SamlConstants.httpPost)
@@ -70,19 +88,19 @@ class IDPSSODescriptorController {
 		def httpPost = new SingleSignOnService(binding: postBinding, location:postLocation, active:params.active)
 		identityProvider.addToSingleSignOnServices(httpPost)
 		httpPost.validate()
-		
+
 		def redirectBinding = SamlURI.findByUri(SamlConstants.httpRedirect)
 		def redirectLocation = new UrlURI(uri: params.idp?.redirect?.uri)
 		def httpRedirect = new SingleSignOnService(binding: redirectBinding, location:redirectLocation, active:params.active)
 		identityProvider.addToSingleSignOnServices(httpRedirect)
 		httpRedirect.validate()
-		
+
 		def artifactBinding = SamlURI.findByUri(SamlConstants.soap)
 		def artifactLocation = new UrlURI(uri: params.idp?.artifact?.uri)
 		def soapArtifact = new ArtifactResolutionService(binding: artifactBinding, location:artifactLocation, active:params.active)
 		identityProvider.addToArtifactResolutionServices(soapArtifact)
 		soapArtifact.validate()
-		
+
 		// Cryptography
 		// Signing
 		if(params.idp?.crypto?.sig) {
@@ -105,7 +123,7 @@ class IDPSSODescriptorController {
 		// Attribute Authority
 		def attributeAuthority
 		if(params.aa?.create) {
-			attributeAuthority = new AttributeAuthorityDescriptor(active:params.active, displayName: params.aa.displayName, description: params.aa.description, collaborator: identityProvider)
+			attributeAuthority = new AttributeAuthorityDescriptor(active:params.active, displayName: params.aa.displayName, description: params.aa.description, collaborator: identityProvider, organization:organization)
 			identityProvider.collaborator = attributeAuthority
 			
 			def attributeServiceBinding = SamlURI.findByUri('urn:oasis:names:tc:SAML:2.0:bindings:SOAP')
@@ -141,47 +159,29 @@ class IDPSSODescriptorController {
 			}
 		}
 		
-		// Entity Descriptor
-		def entityDescriptor = EntityDescriptor.get(params.entity?.id)
-		if(!entityDescriptor) {
-			entityDescriptor = new EntityDescriptor(active: params.active, entityID: params.entity?.identifier)
-		}
-		
-		// Organization
-		def organization = Organization.get(params.organization?.id)
-		if(!organization) {
-			flash.type="error"
-			flash.message="fedreg.core.idpssodescriptor.save.validation.error.organization"
-			render view: 'create', model:[entityDescriptor: entityDescriptor, identityProvider:identityProvider, attributeAuthority: attributeAuthority, 
-			httpPost: httpPost, httpRedirect: httpRedirect, soapArtifact: soapArtifact, organizationList: Organization.list(), attributeList: Attribute.list(), nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding)]
-			return
-		}
-		organization.addToEntityDescriptors(entityDescriptor)
-		identityProvider.organization = organization
-		
-		if(params.aa?.create)
-			attributeAuthority.organization = organization
-			
 		// Submission validation
-		if(!entityDescriptor.validate()) {
-			entityDescriptor.errors.each { log.error it }
+		if(!entityDescriptor.save()) {
+			entityDescriptor?.errors.each { log.error it }
 			flash.type="error"
 			flash.message="fedreg.core.idpssodescriptor.save.validation.error.entitydescriptor"
 			render view: 'create', model:[organization:organization, entityDescriptor: entityDescriptor, identityProvider:identityProvider, attributeAuthority: attributeAuthority, 
-			httpPost: httpPost, httpRedirect: httpRedirect, soapArtifact: soapArtifact, organizationList: Organization.list(), attributeList: Attribute.list(), nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding)]
+			httpPost: httpPost, httpRedirect: httpRedirect, soapArtifact: soapArtifact, organizationList: Organization.list(), attributeList: Attribute.list(), nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding), contact: contact]
 			return
 		}
+		identityProvider.entityDescriptor = entityDescriptor
 		entityDescriptor.addToIdpDescriptors(identityProvider)
 		
-		if(params.aa?.create)
+		if(params.aa?.create) {
+			attributeAuthority.entityDescriptor = entityDescriptor
 			entityDescriptor.addToAttributeAuthorityDescriptors(attributeAuthority)
-					
+		}
+		
 		if(!identityProvider.validate()) {			
-			identityProvider.errors.each {log.debug it}
+			identityProvider.errors.each { log.debug it }
 			flash.type="error"
 			flash.message="fedreg.core.idpssodescriptor.save.validation.error.identityprovider"
 			render view: 'create', model:[organization:organization, entityDescriptor: entityDescriptor, identityProvider:identityProvider, attributeAuthority: attributeAuthority, 
-			httpPost: httpPost, httpRedirect: httpRedirect, soapArtifact: soapArtifact, organizationList: Organization.list(), attributeList: Attribute.list(), nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding)]
+			httpPost: httpPost, httpRedirect: httpRedirect, soapArtifact: soapArtifact, organizationList: Organization.list(), attributeList: Attribute.list(), nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding), contact: contact]
 			return
 		}
 		
@@ -191,16 +191,16 @@ class IDPSSODescriptorController {
 				flash.type="error"
 				flash.message="fedreg.core.idpssodescriptor.save.validation.error.attributeauthority"
 				render view: 'create', model:[organization:organization, entityDescriptor: entityDescriptor, identityProvider:identityProvider, attributeAuthority: attributeAuthority, 
-				httpPost: httpPost, httpRedirect: httpRedirect, soapArtifact: soapArtifact, organizationList: Organization.list(), attributeList: Attribute.list(), nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding)]
+				httpPost: httpPost, httpRedirect: httpRedirect, soapArtifact: soapArtifact, organizationList: Organization.list(), attributeList: Attribute.list(), nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding), contact: contact]
 				return
 			}
-
+		
 		if(!identityProvider.save()) {			
-			identityProvider.errors.each {log.debug it}
+			organization.errors.each {log.debug it}
 			flash.type="error"
 			flash.message="fedreg.core.idpssodescriptor.save.failed"
 			render view: 'create', model:[organization:organization, entityDescriptor: entityDescriptor, identityProvider:identityProvider, attributeAuthority: attributeAuthority, 
-			httpPost: httpPost, httpRedirect: httpRedirect, soapArtifact: soapArtifact, organizationList: Organization.list(), attributeList: Attribute.list(), nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding)]
+			httpPost: httpPost, httpRedirect: httpRedirect, soapArtifact: soapArtifact, organizationList: Organization.list(), attributeList: Attribute.list(), nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding), contact: contact]
 			return
 		}
 		

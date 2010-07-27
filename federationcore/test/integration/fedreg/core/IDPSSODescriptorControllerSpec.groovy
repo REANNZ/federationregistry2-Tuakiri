@@ -62,7 +62,7 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		def model = controller.list()
 
 		then:
-		model.identityProviderList.size() == 10
+		model.identityProviderList.size() == 20
 	}
 	
 	def "Validate list with max set"() {
@@ -150,7 +150,7 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		model.nameIDFormatList.size() == 12
 	}
 	
-	def "Save succeeds when valid initial IDPSSODescriptor and AttributeAuthorityDescriptor data are provided (without existing EntityDescriptor)"() {
+	def "Save succeeds when valid initial IDPSSODescriptor and AttributeAuthorityDescriptor data are provided (without existing EntityDescriptor or contact)"() {
 		setup:
 		setupBindings()
 		setupCrypto()
@@ -161,6 +161,7 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		def nameID1 = SamlURI.build().save()
 		def nameID2 = SamlURI.build().save()
 		def pk = loadPK()
+		def ct = ContactType.build().save()
 
 		controller.params.organization = [id: organization.id]
 		controller.params.active = true
@@ -168,6 +169,7 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		controller.params.idp = [displayName:"test name", description:"test desc", attributes:[(attr1.id):'on', (attr2.id):'on'], nameidformats:[(nameID1.id):'on', (nameID2.id):'on'], crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], post:[uri:"http://idp.test.com/SAML2/POST/SSO"], 
 								redirect:[uri:"http://idp.test.com/SAML2/Redirect/SSO"], artifact:[uri:"http://idp.test.com/SAML2/SOAP/ArtifactResolution"]]
 		controller.params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], attributeservice:[uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery"], attributes:[(attr1.id):'on', (attr2.id):'on']]
+		controller.params.contact = [givenName:"Bradley", surname:"Beddoes", email:"bradleybeddoes@intient.com", type:ct.name]
 		
 		def wfProcessName, wfDescription, wfPriority, wfParams
 		
@@ -224,6 +226,119 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		idp.nameIDFormats != null
 		idp.nameIDFormats.size() == 2
 		
+		idp.contacts.size() == 1
+		idp.contacts.toList().get(0).type.name == ct.name
+		idp.contacts.toList().get(0).contact.givenName == "Bradley"
+		idp.contacts.toList().get(0).contact.surname == "Beddoes"
+		idp.contacts.toList().get(0).contact.email.uri == "bradleybeddoes@intient.com"
+		
+		def aa = AttributeAuthorityDescriptor.list().get(0)
+		aa.organization == organization
+		aa.entityDescriptor == entityDescriptor
+		aa.collaborator == idp
+		idp.collaborator == aa
+		aa.keyDescriptors.size() == 2
+		aa.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
+		aa.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
+		aa.attributeServices.toList().get(0).location.uri == "http://idp.test.com/SAML2/SOAP/AttributeQuery"
+		
+		aa.attributes != null
+		aa.attributes.size() == 2
+		
+		wfProcessName == "idpssodescriptor_create"
+		wfDescription == "Approval for creation of IDPSSODescriptor test name"
+		wfPriority == ProcessPriority.MEDIUM
+		wfParams.size() == 4
+		wfParams.creator == controller.authenticatedUser.id
+		wfParams.identityProvider == idp.id
+		wfParams.organization == organization.name
+		
+		controller.response.redirectedUrl == "/IDPSSODescriptor/show/${idp.id}"
+	}
+	
+	def "Save succeeds when valid initial IDPSSODescriptor and AttributeAuthorityDescriptor data are provided (without existing EntityDescriptor but with existing contact)"() {
+		setup:
+		setupBindings()
+		setupCrypto()
+
+		def organization = Organization.build().save()
+		def attr1 = Attribute.build(name: "attr1").save()
+		def attr2 = Attribute.build(name: "attr2").save()
+		def nameID1 = SamlURI.build().save()
+		def nameID2 = SamlURI.build().save()
+		def pk = loadPK()
+		def contact = Contact.build(organization: organization).save()
+		def ct = ContactType.build().save()
+
+		controller.params.organization = [id: organization.id]
+		controller.params.active = true
+		controller.params.entity = [identifier:"http://idp.test.com"]
+		controller.params.idp = [displayName:"test name", description:"test desc", attributes:[(attr1.id):'on', (attr2.id):'on'], nameidformats:[(nameID1.id):'on', (nameID2.id):'on'], crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], post:[uri:"http://idp.test.com/SAML2/POST/SSO"], 
+								redirect:[uri:"http://idp.test.com/SAML2/Redirect/SSO"], artifact:[uri:"http://idp.test.com/SAML2/SOAP/ArtifactResolution"]]
+		controller.params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], attributeservice:[uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery"], attributes:[(attr1.id):'on', (attr2.id):'on']]
+		controller.params.contact = [id: contact.id, type: ct.name]
+		
+		def wfProcessName, wfDescription, wfPriority, wfParams
+		
+		when:
+		WorkflowProcessService.metaClass.initiate =  { String processName, String instanceDescription, ProcessPriority priority, Map params ->
+			wfProcessName = processName
+			wfDescription = instanceDescription
+			wfPriority = priority
+			wfParams = params
+			[:]
+		}
+		WorkflowProcessService.metaClass.run = { def processInstance -> }
+		def model = controller.save()
+		
+		then:
+		Organization.count() == 1
+		SamlURI.count() == 6
+		EntityDescriptor.count() == 1
+		IDPSSODescriptor.count() == 1
+		AttributeAuthorityDescriptor.count() == 1
+		
+		def entityDescriptor = EntityDescriptor.list().get(0)
+		entityDescriptor.entityID == "http://idp.test.com"
+		
+		def idp = IDPSSODescriptor.list().get(0)
+		idp.organization == organization
+		idp.entityDescriptor == entityDescriptor
+		idp.entityDescriptor.organization == organization
+		
+		idp.displayName == "test name"
+		idp.description == "test desc"
+		idp.keyDescriptors.size() == 2
+		idp.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
+		idp.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
+		
+		idp.singleSignOnServices.size() == 2
+		def sso1 = idp.singleSignOnServices.toList().get(0)
+		def sso2 = idp.singleSignOnServices.toList().get(1)
+		if(sso1.binding == SamlURI.findByUri(SamlConstants.httpPost)) {
+			sso1.location.uri == "http://idp.test.com/SAML2/POST/SSO"
+			sso2.location.uri == "http://idp.test.com/SAML2/Redirect/SSO"
+		}
+		else {
+			sso1.location.uri == "http://idp.test.com/SAML2/Redirect/SSO"
+			sso2.location.uri == "http://idp.test.com/SAML2/POST/SSO"
+		}
+				
+		idp.artifactResolutionServices.size() == 1
+		idp.artifactResolutionServices.toList().get(0).location.uri == "http://idp.test.com/SAML2/SOAP/ArtifactResolution"
+		
+		idp.attributes != null
+		idp.attributes.size() == 2
+		
+		idp.nameIDFormats != null
+		idp.nameIDFormats.size() == 2
+		
+		idp.contacts.size() == 1
+		idp.contacts.toList().get(0).type.name == ct.name
+		idp.contacts.toList().get(0).contact.givenName == contact.givenName
+		idp.contacts.toList().get(0).contact.surname == contact.surname
+		idp.contacts.toList().get(0).contact.email.uri == contact.email.uri
+		
 		def aa = AttributeAuthorityDescriptor.list().get(0)
 		aa.organization == organization
 		aa.entityDescriptor == entityDescriptor
@@ -258,6 +373,8 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		def attr1 = Attribute.build(name: "attr1").save()
 		def attr2 = Attribute.build(name: "attr2").save()
 		def pk = loadPK()
+		def contact = Contact.build(organization: organization).save()
+		def ct = ContactType.build().save()
 
 		controller.params.organization = [id: organization.id]
 		controller.params.active = true
@@ -265,6 +382,7 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		controller.params.idp = [displayName:"test name", description:"test desc", attributes:[(attr1.id):'on', (attr2.id):'on'], crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], post:[uri:"http://idp.test.com/SAML2/POST/SSO"], 
 								redirect:[uri:"http://idp.test.com/SAML2/Redirect/SSO"], artifact:[uri:"http://idp.test.com/SAML2/SOAP/ArtifactResolution"]]
 		controller.params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], attributeservice:[uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery"], attributes:[(attr1.id):'on', (attr2.id):'on']]
+		controller.params.contact = [id: contact.id, type: ct.name]
 		
 		def wfProcessName, wfDescription, wfPriority, wfParams
 		
@@ -317,6 +435,12 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		idp.attributes != null
 		idp.attributes.size() == 2
 		
+		idp.contacts.size() == 1
+		idp.contacts.toList().get(0).type.name == ct.name
+		idp.contacts.toList().get(0).contact.givenName == contact.givenName
+		idp.contacts.toList().get(0).contact.surname == contact.surname
+		idp.contacts.toList().get(0).contact.email.uri == contact.email.uri
+		
 		def aa = AttributeAuthorityDescriptor.list().get(0)
 		aa.organization == organization
 		aa.entityDescriptor == entityDescriptor
@@ -353,6 +477,8 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		def attr1 = Attribute.build().save()
 		def attr2 = Attribute.build().save()
 		def pk = loadPK()
+		def contact = Contact.build(organization: organization).save()
+		def ct = ContactType.build().save()
 
 		controller.params.organization = [id: organization.id]
 		controller.params.active = true
@@ -360,6 +486,7 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		controller.params.idp = [description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], post:[uri:"http://idp.test.com/SAML2/POST/SSO"], 
 								redirect:[uri:"http://idp.test.com/SAML2/Redirect/SSO"], artifact:[uri:"http://idp.test.com/SAML2/SOAP/ArtifactResolution"]]
 		controller.params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], attributeservice:[uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
+		controller.params.contact = [id: contact.id, type: ct.name]
 		
 		when:
 		def model = controller.save()
@@ -370,6 +497,8 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		EntityDescriptor.count() == 1
 		IDPSSODescriptor.count() == 0
 		AttributeAuthorityDescriptor.count() == 0
+
+		println controller.modelAndView.model.identityProvider
 
 		def idp = controller.modelAndView.model.identityProvider
 		idp.organization == organization
@@ -396,6 +525,9 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		idp.artifactResolutionServices.contains(soapArtifact)
 		soapArtifact.location.uri == "http://idp.test.com/SAML2/SOAP/ArtifactResolution"
 		
+		idp.contacts.size() == 1
+		idp.contacts.toList().get(0).id == null
+		
 		def aa = controller.modelAndView.model.attributeAuthority
 		aa.organization == organization
 		aa.entityDescriptor == entityDescriptor
@@ -420,6 +552,8 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		def attr1 = Attribute.build().save()
 		def attr2 = Attribute.build().save()
 		def pk = loadPK()
+		def contact = Contact.build(organization: organization).save()
+		def ct = ContactType.build().save()
 
 		controller.params.organization = [id: organization.id]
 		controller.params.active = true
@@ -427,6 +561,7 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		controller.params.idp = [displayName: "test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], post:[uri:"/SAML2/POST/SSO"], 
 								redirect:[uri:"http://idp.test.com/SAML2/Redirect/SSO"], artifact:[uri:"http://idp.test.com/SAML2/SOAP/ArtifactResolution"]]
 		controller.params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], attributeservice:[uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
+		controller.params.contact = [id: contact.id, type: ct.name]
 		
 		when:
 		def model = controller.save()
@@ -488,6 +623,8 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		def attr1 = Attribute.build().save()
 		def attr2 = Attribute.build().save()
 		def pk = loadPK()
+		def contact = Contact.build(organization: organization).save()
+		def ct = ContactType.build().save()
 
 		controller.params.organization = [id: organization.id]
 		controller.params.active = true
@@ -495,6 +632,7 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		controller.params.idp = [displayName: "test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], 
 								redirect:[uri:"http://idp.test.com/SAML2/Redirect/SSO"], artifact:[uri:"http://idp.test.com/SAML2/SOAP/ArtifactResolution"]]
 		controller.params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], attributeservice:[uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
+		controller.params.contact = [id: contact.id, type: ct.name]
 		
 		when:
 		def model = controller.save()
@@ -558,6 +696,8 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		def attr1 = Attribute.build().save()
 		def attr2 = Attribute.build().save()
 		def pk = loadPK()
+		def contact = Contact.build(organization: organization).save()
+		def ct = ContactType.build().save()
 
 		controller.params.organization = [id: organization.id]
 		controller.params.active = true
@@ -565,6 +705,7 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		controller.params.idp = [displayName: "test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], post:[uri:"http://idp.test.com/SAML2/POST/SSO"], 
 								redirect:[uri:"asdfasdasdf"], artifact:[uri:"http://idp.test.com/SAML2/SOAP/ArtifactResolution"]]
 		controller.params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], attributeservice:[uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
+		controller.params.contact = [id: contact.id, type: ct.name]
 		
 		when:
 		def model = controller.save()
@@ -626,6 +767,8 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		def attr1 = Attribute.build().save()
 		def attr2 = Attribute.build().save()
 		def pk = loadPK()
+		def contact = Contact.build(organization: organization).save()
+		def ct = ContactType.build().save()
 
 		controller.params.organization = [id: organization.id]
 		controller.params.active = true
@@ -633,6 +776,7 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		controller.params.idp = [displayName: "test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], post:[uri:"http://idp.test.com/SAML2/POST/SSO"],
 								artifact:[uri:"http://idp.test.com/SAML2/SOAP/ArtifactResolution"]]
 		controller.params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], attributeservice:[uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
+		controller.params.contact = [id: contact.id, type: ct.name]
 		
 		when:
 		def model = controller.save()
@@ -696,6 +840,8 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		def attr1 = Attribute.build().save()
 		def attr2 = Attribute.build().save()
 		def pk = loadPK()
+		def contact = Contact.build(organization: organization).save()
+		def ct = ContactType.build().save()
 
 		controller.params.organization = [id: organization.id]
 		controller.params.active = true
@@ -703,6 +849,7 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		controller.params.idp = [displayName: "test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], post:[uri:"http://idp.test.com/SAML2/POST/SSO"], 
 								redirect:[uri:"http://idp.test.com/SAML2/Redirect/SSO"], artifact:[uri:"/SAML2/SOAP/ArtifactResolution"]]
 		controller.params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], attributeservice:[uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
+		controller.params.contact = [id: contact.id, type: ct.name]
 		
 		when:
 		def model = controller.save()
@@ -764,6 +911,8 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		def attr1 = Attribute.build().save()
 		def attr2 = Attribute.build().save()
 		def pk = loadPK()
+		def contact = Contact.build(organization: organization).save()
+		def ct = ContactType.build().save()
 
 		controller.params.organization = [id: organization.id]
 		controller.params.active = true
@@ -771,6 +920,7 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		controller.params.idp = [displayName: "test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], post:[uri:"http://idp.test.com/SAML2/POST/SSO"],
 								redirect:[uri:"http://idp.test.com/SAML2/Redirect/SSO"]]
 		controller.params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], attributeservice:[uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
+		controller.params.contact = [id: contact.id, type: ct.name]
 		
 		when:
 		def model = controller.save()
@@ -834,6 +984,8 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		def attr1 = Attribute.build().save()
 		def attr2 = Attribute.build().save()
 		def pk = loadPK()
+		def contact = Contact.build(organization: organization).save()
+		def ct = ContactType.build().save()
 
 		controller.params.organization = [id: organization.id]
 		controller.params.active = true
@@ -841,6 +993,7 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		controller.params.idp = [displayName: "test name", description:"test desc",  post:[uri:"http://idp.test.com/SAML2/POST/SSO"],
 								redirect:[uri:"http://idp.test.com/SAML2/Redirect/SSO"], artifact:[uri:"http://idp.test.com/SAML2/SOAP/ArtifactResolution"]]
 		controller.params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], attributeservice:[uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
+		controller.params.contact = [id: contact.id, type: ct.name]
 		
 		def wfProcessName, wfDescription, wfPriority, wfParams
 		
@@ -909,6 +1062,8 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		def attr1 = Attribute.build().save()
 		def attr2 = Attribute.build().save()
 		def pk = loadPK()
+		def contact = Contact.build(organization: organization).save()
+		def ct = ContactType.build().save()
 
 		controller.params.organization = [id: organization.id]
 		controller.params.active = true
@@ -916,6 +1071,7 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		controller.params.idp = [displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], post:[uri:"http://idp.test.com/SAML2/POST/SSO"], 
 								redirect:[uri:"http://idp.test.com/SAML2/Redirect/SSO"], artifact:[uri:"http://idp.test.com/SAML2/SOAP/ArtifactResolution"]]
 		controller.params.aa = [create: false]
+		controller.params.contact = [id: contact.id, type: ct.name]
 		
 		def wfProcessName, wfDescription, wfPriority, wfParams
 		
@@ -982,12 +1138,15 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		def attr1 = Attribute.build().save()
 		def attr2 = Attribute.build().save()
 		def pk = loadPK()
+		def contact = Contact.build(organization: organization).save()
+		def ct = ContactType.build().save()
 
 		controller.params.organization = [id: organization.id]
 		controller.params.active = true
 		controller.params.entity = [id: entityDescriptor.id]
 		controller.params.idp = [displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], post:[uri:"http://idp.test.com/SAML2/POST/SSO"], 
 								redirect:[uri:"http://idp.test.com/SAML2/Redirect/SSO"], artifact:[uri:"http://idp.test.com/SAML2/SOAP/ArtifactResolution"]]
+		controller.params.contact = [id: contact.id, type: ct.name]
 		
 		def wfProcessName, wfDescription, wfPriority, wfParams
 		
@@ -1054,6 +1213,8 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		def attr1 = Attribute.build().save()
 		def attr2 = Attribute.build().save()
 		def pk = loadPK()
+		def contact = Contact.build(organization: organization).save()
+		def ct = ContactType.build().save()
 
 		controller.params.organization = [id: organization.id]
 		controller.params.active = true
@@ -1061,6 +1222,7 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		controller.params.idp = [displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], post:[uri:"http://idp.test.com/SAML2/POST/SSO"], 
 								redirect:[uri:"http://idp.test.com/SAML2/Redirect/SSO"], artifact:[uri:"http://idp.test.com/SAML2/SOAP/ArtifactResolution"]]
 		controller.params.aa = [create: true, description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], attributeservice:[uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
+		controller.params.contact = [id: contact.id, type: ct.name]
 		
 		when:
 		def model = controller.save()
@@ -1114,6 +1276,8 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		def attr1 = Attribute.build().save()
 		def attr2 = Attribute.build().save()
 		def pk = loadPK()
+		def contact = Contact.build(organization: organization).save()
+		def ct = ContactType.build().save()
 
 		controller.params.organization = [id: organization.id]
 		controller.params.active = true
@@ -1121,6 +1285,7 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		controller.params.idp = [displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], post:[uri:"http://idp.test.com/SAML2/POST/SSO"], 
 								redirect:[uri:"http://idp.test.com/SAML2/Redirect/SSO"], artifact:[uri:"http://idp.test.com/SAML2/SOAP/ArtifactResolution"]]
 		controller.params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], attributeservice:[uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
+		controller.params.contact = [id: contact.id, type: ct.name]
 		
 		when:
 		def model = controller.save()
@@ -1183,6 +1348,8 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		def attr1 = Attribute.build().save()
 		def attr2 = Attribute.build().save()
 		def pk = loadPK()
+		def contact = Contact.build(organization: organization).save()
+		def ct = ContactType.build().save()
 
 		controller.params.organization = [id: organization.id]
 		controller.params.active = true
@@ -1190,6 +1357,7 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		controller.params.idp = [displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], post:[uri:"http://idp.test.com/SAML2/POST/SSO"], 
 								redirect:[uri:"http://idp.test.com/SAML2/Redirect/SSO"], artifact:[uri:"http://idp.test.com/SAML2/SOAP/ArtifactResolution"]]
 		controller.params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], attributeservice:[uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
+		controller.params.contact = [id: contact.id, type: ct.name]
 		
 		when:
 		def model = controller.save()
@@ -1253,6 +1421,8 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		def attr1 = Attribute.build().save()
 		def attr2 = Attribute.build().save()
 		def pk = loadPK()
+		def contact = Contact.build(organization: organization).save()
+		def ct = ContactType.build().save()
 
 		controller.params.organization = [id: organization.id + 1]
 		controller.params.active = true
@@ -1260,6 +1430,7 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		controller.params.idp = [displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], post:[uri:"http://idp.test.com/SAML2/POST/SSO"], 
 								redirect:[uri:"http://idp.test.com/SAML2/Redirect/SSO"], artifact:[uri:"http://idp.test.com/SAML2/SOAP/ArtifactResolution"]]
 		controller.params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, sigdata:pk, enc:true, encdata:pk], attributeservice:[uri:"http://idp.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
+		controller.params.contact = [id: contact.id, type: ct.name]
 		
 		when:
 		def model = controller.save()
