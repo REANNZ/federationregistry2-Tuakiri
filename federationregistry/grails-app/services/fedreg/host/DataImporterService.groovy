@@ -251,14 +251,15 @@ class DataImporterService implements InitializingBean {
 	
 	def linkContact(def row, def ent) {
 		def type
-		def contact = Contact.findByEmail(MailURI.findByUri(row.email))
-		
-		type = ContactType.findByName(row.contactType)
-		if(!type)
-			type = ContactType.findByName('other')
-		def contactPerson = new ContactPerson(contact:contact, entity:ent, type:type)
-		ent.addToContacts(contactPerson)
-		log.debug "Linked contact ${contactPerson?.contact?.givenName} ${contactPerson?.contact?.surname} to entity ${ent.entityID}"
+		def contact = MailURI.findByUri(row.email)?.contact
+		if(contact) {
+			type = ContactType.findByName(row.contactType)
+			if(!type)
+				type = ContactType.findByName('other')
+			def contactPerson = new ContactPerson(contact:contact, entity:ent, type:type)
+			ent.addToContacts(contactPerson)
+			log.debug "Linked contact ${contactPerson?.contact?.givenName} ${contactPerson?.contact?.surname} to entity ${ent.entityID}"
+		}
 	}
 
 	def importIDPSSODescriptors() {

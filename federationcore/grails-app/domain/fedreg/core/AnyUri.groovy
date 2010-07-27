@@ -24,10 +24,17 @@ package fedreg.core
  */
 class AnyUri extends Uri  {
 
-  	static belongsTo = [Organization, Endpoint, Contact, RoleDescriptor]
+  	static belongsTo = [organization:Organization, endpoint:Endpoint, contact:Contact, descriptor:RoleDescriptor]
 
   	static mapping = {
 		tablePerHierarchy false
+	}
+	
+	static constraints = {
+		organization(nullable: true)
+		endpoint(nullable: true)
+		contact(nullable: true)
+		descriptor(nullable: true)
 	}
 
 	public String toString() {	"anyuri:[id:$id, uri: $uri]" }

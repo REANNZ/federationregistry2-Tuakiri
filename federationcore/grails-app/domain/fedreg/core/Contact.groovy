@@ -35,6 +35,7 @@ class Contact {
 	TelNumURI mobilePhone
 	
 	boolean userLink = false;
+	long userID;
 	
 	Date dateCreated
 	Date lastUpdated

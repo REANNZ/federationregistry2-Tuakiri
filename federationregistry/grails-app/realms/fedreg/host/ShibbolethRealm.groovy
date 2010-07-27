@@ -9,6 +9,8 @@ import grails.plugins.nimble.InstanceGenerator
 import grails.plugins.nimble.core.*
 
 import fedreg.core.EntityDescriptor
+import fedreg.core.Contact
+import fedreg.core.MailURI
 
 /**
  * Integrates with Shiro to establish a session for users accessing the system based
@@ -52,75 +54,98 @@ class ShibbolethRealm {
 			throw new UnknownAccountException("Authentication attempt for Shibboleth provider, denying attempt as no Entity matching (ShibbolethToken.entityID) is available. Has bootstrap occured?")
 		}
 
-		def user = UserBase.findByUsername(authToken.principal)
-		if (!user) {
-			log.info("No account representing user ${authToken.principal} exists")
-			def shibbolethFederationProvider = FederationProvider.findByUid(ShibbolethService.federationProviderUid)
-			if (shibbolethFederationProvider && shibbolethFederationProvider.autoProvision) {	
-				log.info("Shibboleth auto provision is enabled, creating user account for ${authToken.principal} belonging to Entity ${authToken.entityID}")
+		UserBase.withTransaction {
+			def user = UserBase.findByUsername(authToken.principal)
+			if (!user) {
+				log.info("No account representing user ${authToken.principal} exists")
+				def shibbolethFederationProvider = FederationProvider.findByUid(ShibbolethService.federationProviderUid)
+				if (shibbolethFederationProvider && shibbolethFederationProvider.autoProvision) {	
+					log.info("Shibboleth auto provision is enabled, creating user account for ${authToken.principal} belonging to Entity ${authToken.entityID}")
 
-				UserBase newUser = InstanceGenerator.user()
-				newUser.username = authToken.principal
-				newUser.enabled = true
-				newUser.external = true
-				newUser.federated = true
-				newUser.federationProvider = shibbolethFederationProvider
-				newUser.entityDescriptor = entityDescriptor
+					UserBase newUser = InstanceGenerator.user()
+					newUser.username = authToken.principal
+					newUser.enabled = true
+					newUser.external = true
+					newUser.federated = true
+					newUser.federationProvider = shibbolethFederationProvider
+					newUser.entityDescriptor = entityDescriptor
 			
-				newUser.profile = InstanceGenerator.profile()
-				newUser.profile.owner = newUser
-				newUser.profile.fullName = "${authToken.givenName} ${authToken.surname}"
-				newUser.profile.email = (authToken.email == "") ? null : authToken.email
+					newUser.profile = InstanceGenerator.profile()
+					newUser.profile.owner = newUser
+					newUser.profile.fullName = "${authToken.givenName} ${authToken.surname}"
+					newUser.profile.email = (authToken.email == "") ? null : authToken.email
 					
-				user = userService.createUser(newUser)
-				if (user.hasErrors()) {
-					log.error("Error creating user account from Shibboleth credentials for ${authToken.principal}")
-					user.errors.each {
-						log.error(it)
+					user = userService.createUser(newUser)
+					if (user.hasErrors()) {
+						log.error("Error creating user account from Shibboleth credentials for ${authToken.principal}")
+						user.errors.each {
+							log.error(it)
+						}
+						throw new RuntimeException("Account creation exception for new shibboleth based account");
 					}
-					throw new RuntimeException("Account creation exception for new shibboleth based account");
+				
+					// Attempt to link to local contact instance
+					def contact = MailURI.findByUri(newUser.profile.email)?.contact
+					if(!contact) {
+						contact = new Contact(givenName:authToken.givenName, surname:authToken.surname, email:new MailURI(uri:authToken.email), userLink:true, userID: user.id, organization: entityDescriptor.organization)
+						if(!contact.save()) {
+							log.error "Unable to create Contact to link with incoming user" 
+							contact.errors.each { log.error it }
+							throw new UnknownAccountException("Unable to create Contact to link with incoming user")
+						}
+					}
+					log.info("Created new user [$user.id]$user.username and associated ${contact} from Shibboleth attribute statement")
+				
+					// To assist with bootstrap provide the first real user account with admin privilledges
+					// ==2 because we creat internaladministrator in bootstrap and saved above
+					if(UserBase.count() == 2) {
+						adminsService.add(user)
+						log.info("Issued account $user.username with admin right as this was the first account entering the system")
+					}
 				}
-				log.info("Created new user [$user.id]$user.username from Shibboleth attribute statement")
-
-				// To assist with bootstrap provide the first real user account with admin privilledges
-				// ==2 because we creat internaladministrator in bootstrap and saved above
-				if(UserBase.count() == 2) {
-					adminsService.add(user)
-					log.info("Issued account $user.username with admin right as this was the first account entering the system")
+				else
+					throw new UnknownAccountException("No account representing user $username exists and autoProvision is false")
+			}else {
+				// Update name and email to what IDP has supplied - this could be extended to role membership etc in the future
+				boolean change = false
+				def fullName = "${authToken.givenName} ${authToken.surname}"
+				def email = (authToken.email == "") ? null : authToken.email 
+				def contact = MailURI.findByUri(user.profile.email).contact
+			
+				if(user.profile.fullName != fullName) {
+					change = true
+					contact.givenName = authToken.givenName
+					contact.surname = authToken.surname
+					user.profile.fullName = fullName
+				}	
+				if(user.profile.email != email) {
+					change = true
+					contact.email.uri = email
+					user.profile.email = email
+				}
+				if(user.entityDescriptor != entityDescriptor) {
+					change = true
+					user.entityDescriptor = entityDescriptor
+				}
+				if(change) {
+					userService.updateUser(user)
+					if(!contact.save()) {
+						log.error "Unable to update Contact to link new details of incoming user" 
+						throw new UnknownAccountException("Unable to update Contact to link new details of incoming user")
+					}
+				
+					log.info("Updated account ${authToken.principal} and associated ${contact} with new IDP supplied values for fullname $fullName and email $email")
 				}
 			}
-			else
-				throw new UnknownAccountException("No account representing user $username exists and autoProvision is false")
-		}else {
-			// Update name and email to what IDP has supplied - this could be extended to role membership etc in the future
-			boolean change = false
-			def fullName = "${authToken.givenName} ${authToken.surname}"
-			def email = (authToken.email == "") ? null : authToken.email 
-			if(user.profile.fullName != fullName) {
-				change = true
-				user.profile.fullName = fullName
-			}	
-			if(user.profile.email != email) {
-				change = true
-				user.profile.email = email
-			}
-			if(user.entityDescriptor != entityDescriptor) {
-				change = true
-				user.entityDescriptor = entityDescriptor
-			}
-			if(change) {
-				userService.updateUser(user)
-				log.info("Updated account ${authToken.principal} with new IDP supplied values for fullname $fullName and email $email")
-			}
-		}
 		
-		if (!user.enabled) {
-			log.warn("Attempt to authenticate using using Shibboleth with locally disabled account [$user.id]$user.username")
-			throw new DisabledAccountException("The account [$user.id]$user.username accessed via Shibboleth is disabled")
+			if (!user.enabled) {
+				log.warn("Attempt to authenticate using using Shibboleth with locally disabled account [$user.id]$user.username")
+				throw new DisabledAccountException("The account [$user.id]$user.username accessed via Shibboleth is disabled")
+			}
+			log.info("Successfully logged in user [$user.id]$user.username using Shibboleth")
+			def account = new SimpleAccount(user.id, authToken.principal, "redreg.realm.ShibbolethRealm")
+			return account
 		}
-		log.info("Successfully logged in user [$user.id]$user.username using Shibboleth")
-		def account = new SimpleAccount(user.id, authToken.principal, "redreg.realm.ShibbolethRealm")
-		return account
 	}
 
 	public String toString() {

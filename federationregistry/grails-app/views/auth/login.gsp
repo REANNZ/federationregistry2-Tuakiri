@@ -33,8 +33,8 @@
 					  	<g:form action="devauth" method="post">
 							<g:hiddenField name="uniqueID" value="https://idp.qut.edu.au/idp/shibboleth!https://manager.aaf.edu.au/shibboleth!d2404817-6fb9-4165-90d8-2" />
 							<g:hiddenField name="givenName" value="Optimus" />
-							<g:hiddenField name="surname" value="Prime" />
-							<g:hiddenField name="email" value="optimus@autobots.com" />
+							<g:hiddenField name="surname" value="Primez" />
+							<g:hiddenField name="email" value="optimus.prime@autobots.com" />
 							<g:hiddenField name="entityID" value="https://auth-test-idp.qut.edu.au/idp/shibboleth" />
 							<g:hiddenField name="homeOrganization" value="qut.edu.au" />
 							<g:hiddenField name="homeOrganizationType" value="university:australia" />
