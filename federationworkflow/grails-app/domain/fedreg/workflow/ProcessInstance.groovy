@@ -10,7 +10,6 @@ class ProcessInstance {
 
 	Date dateCreated
 	Date lastUpdated
-	UserBase initiatedBy
 	
 	boolean completionAcknowlegded = false
 	

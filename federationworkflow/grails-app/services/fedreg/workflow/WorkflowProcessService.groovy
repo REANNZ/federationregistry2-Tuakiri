@@ -81,7 +81,7 @@ class WorkflowProcessService {
 			processedParams.put(it.key, it.toString())
 		}
 
-		def processInstance = new ProcessInstance(process: process, description: instanceDescription, status: ProcessStatus.INPROGRESS, priority: priority ?:ProcessPriority.LOW, initiatedBy: authenticatedUser, params:processedParams)
+		def processInstance = new ProcessInstance(process: process, description: instanceDescription, status: ProcessStatus.INPROGRESS, priority: priority ?:ProcessPriority.LOW, params:processedParams)
 		process.addToInstances(processInstance)
 		
 		processInstance.save()
