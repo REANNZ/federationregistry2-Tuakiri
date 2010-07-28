@@ -1,5 +1,7 @@
 <script type="text/javascript">
+	var certificateValidationEndpoint = "${createLink(controller:'coreUtilities', action:'validateCertificate')}";
 	var newCertificateValid = false;
+	
 	$(function() {	
 
 		$('form').validate({
@@ -70,11 +72,48 @@
 	
 </script>
 
-<g:form action="save">
+<g:form action="${saveAction}">
 	<g:hiddenField name="active" value="true"/>
 	<g:hiddenField name="aa.create" value="true"/>
-	<g:hiddenField name="contact.id" value="${fr.contactID()}"/>
+	<g:if test="${!requiresContactDetails}">
+		<g:hiddenField name="contact.id" value="${fr.contactID()}"/>
+	</g:if>
 	<g:hiddenField name="contact.type" value="administrative" />
+	
+	<g:if test="${requiresContactDetails}">
+		<div class="step" id="contact">
+			<h3><g:message code="fedreg.templates.identityprovider.create.contact.heading" /></h3>
+			<p>
+				<g:message code="fedreg.templates.identityprovider.create.contact.details" />
+			</p>
+			<table>
+				<tr>
+					<td>
+						<label for="contact.givenName"><g:message code="label.givenname" /></label>
+					</td>
+					<td>
+						<g:textField name="contact.fullName"  size="50" class="required" minlength="4"/>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label for="contact.surname"><g:message code="label.surname" /></label>
+					</td>
+					<td>
+						<g:textField name="contact.surname"  size="50" class="required" minlength="4"/>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label for="contact.email"><g:message code="label.email" /></label>
+					</td>
+					<td>
+						<g:textField name="contact.email"  size="50" class="required email" minlength="4"/>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</g:if>
 	
 	<div class="step" id="basic">
 		<h3><g:message code="fedreg.templates.identityprovider.create.basicinformation.heading" /></h3>

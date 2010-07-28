@@ -8,7 +8,6 @@ class IDPSSODescriptorService {
 	def workflowProcessService
 	
 	def create(def params) {
-		println 'XXXXXXXXXXXXX'
 		/* There is a lot of moving parts when creating an IdP (+AA hybrid) so below is more complex then usual,
 			you'll note validation calls on most larger objects, this is to get finer grained object error population */
 		
@@ -18,7 +17,9 @@ class IDPSSODescriptorService {
 		// Contact
 		def contact = Contact.get(params.contact?.id)
 		if(!contact) {
-			contact = new Contact(givenName: params.contact?.givenName, surname: params.contact?.surname, email: new MailURI(uri:params.contact?.email), organization:organization).save()
+			contact = MailURI.findByUri(params.contact?.email)?.contact		// We may already have them referenced by email address and user doesn't realize
+			if(!contact)
+				contact = new Contact(givenName: params.contact?.givenName, surname: params.contact?.surname, email: new MailURI(uri:params.contact?.email), organization:organization).save()
 		}
 		
 		// Entity Descriptor
@@ -154,7 +155,7 @@ class IDPSSODescriptorService {
 			return [false, organization, entityDescriptor, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, Organization.list(), Attribute.list(), SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding), contact]
 		}
 		
-		def workflowParams = [ creator:authenticatedUser.id, identityProvider:identityProvider?.id, attributeAuthority:attributeAuthority?.id, organization:organization.name ]
+		def workflowParams = [ creator:contact?.id, identityProvider:identityProvider?.id, attributeAuthority:attributeAuthority?.id, organization:organization.name ]
 		def processInstance = workflowProcessService.initiate( "idpssodescriptor_create", "Approval for creation of IDPSSODescriptor ${identityProvider.displayName}", ProcessPriority.MEDIUM, workflowParams)
 		workflowProcessService.run(processInstance)
 		
