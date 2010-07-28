@@ -46,6 +46,34 @@ class NimbleAuthTagLib {
     }
 
     /**
+     * Provides markup that renders the ID of the logged in user
+     */
+    def principalID = {
+        Long id = SecurityUtils.getSubject()?.getPrincipal()
+
+        if (id) {
+            def user = UserBase.get(id)
+
+            if (user)
+            out << user.id
+        }
+    }
+
+    /**
+     * Provides markup that renders the username of the logged in user
+     */
+    def getAuthenticatedUser = {
+        Long id = SecurityUtils.getSubject()?.getPrincipal()
+
+        if (id) {
+            def user = UserBase.get(id)
+
+            if (user)
+            return authenticatedUser
+        }
+    }
+
+    /**
      * Provides markup the renders the name of the logged in user
      */
     def principalName = {attrs, body ->

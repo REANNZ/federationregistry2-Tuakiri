@@ -33,6 +33,7 @@ class UserController {
   def groupService
   def roleService
   def permissionService
+  def grailsApplication
 
   def index = {
     redirect action: list, params: params

@@ -83,6 +83,6 @@ $(function() {
 
 nimble.createTabs = function(id) {
     $(function() {
-        $('#'+id).tabs();
+        $('#'+id).tabs({ fxFade: true, fxSpeed: 'normal' });
     });
 };
