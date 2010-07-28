@@ -16,5 +16,12 @@
 				<g:link controller="organization" action="show" id="${user?.entityDescriptor?.organization?.id}">${user?.entityDescriptor?.organization?.displayName?.encodeAsHTML()}</g:link>
 			</td>
 		</tr>
+		<g:if test="${user?.contact}">
+		<tr>
+	    	<th><g:message code="label.contact" /></th>
+			<td>
+				<n:button href="${createLink(controller:'contacts', action:'show', id:user.contact.id)}" label="label.show" plain="true" />
+		</tr>
+		</g:if>
 	</tbody>
 </table>

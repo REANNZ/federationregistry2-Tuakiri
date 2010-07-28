@@ -276,8 +276,8 @@ class DataImporterService implements InitializingBean {
 			
 			sql.eachRow("select * from objectDescriptions where objectID=${it.homeOrgID} and objectType='homeOrg'",
 			{
-				idp.displayName = it.descriptiveName
-				idp.description = it.description
+				idp.displayName = it.descriptiveName?:"N/A"
+				idp.description = it.description?:"N/A"
 			})
 			
 			sql.eachRow("select * from serviceLocations where objectID=${it.homeOrgID} and serviceType='SingleSignOnService'",
@@ -331,18 +331,13 @@ class DataImporterService implements InitializingBean {
 		sql.eachRow("select * from homeOrgs",
 		{			
 			def entity = EntityDescriptor.findWhere(entityID:it.entityID)
-			def aa = new AttributeAuthorityDescriptor(active:true, entityDescriptor:entity, organization:entity.organization)
+			def idp = entity.idpDescriptors.toList().get(0)	// We know entities in RR space are closely linked to both an IDP and AA descriptor
+			def aa = new AttributeAuthorityDescriptor(active:true, entityDescriptor:entity, organization:entity.organization, displayName:idp.displayName, description:idp.description)
 			aa.save()
 			if(aa.hasErrors()) {
 				aa.errors.each {log.error it}
 			}
 			aa.addToProtocolSupportEnumerations(samlNamespace)
-			
-			sql.eachRow("select * from objectDescriptions where objectID=${it.homeOrgID} and objectType='homeOrg'",
-			{
-				aa.displayName = it.descriptiveName
-				aa.description = it.description
-			})
 			
 			sql.eachRow("select * from serviceLocations where objectID=${it.homeOrgID} and serviceType='AttributeService'",
 			{
@@ -372,6 +367,13 @@ class DataImporterService implements InitializingBean {
 			}
 			else
 				log.debug "Added new AttributeAuthorityDescriptor to Entity ${entity.entityID}"
+				
+			aa.collaborator = idp
+			aa.save()
+			
+			idp.collaborator = aa
+			idp.save()
+			
 		})
 	}
 
@@ -489,7 +491,7 @@ class DataImporterService implements InitializingBean {
 		{
 			try {
 			def data = "-----BEGIN CERTIFICATE-----\n${it.certData}\n-----END CERTIFICATE-----"
-			log.debug "Importing certificate data\n${data}"
+			//log.debug "Importing certificate data\n${data}"
 			def cert = new Certificate(data:data)	
 			cert.expiryDate = cryptoService.expiryDate(cert)
 			cert.issuer = cryptoService.issuer(cert)
