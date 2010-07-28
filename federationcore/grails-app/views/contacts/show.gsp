@@ -23,26 +23,24 @@
 					<tr>
 						<tr>
 							<th><g:message code="label.email" /></th>
-							<td><a href="mailto:${fieldValue(bean: contact, field: "email.uri")}" class="icon icon_email">${fieldValue(bean: contact, field: "email.uri")}</a></td>
+							<td><a href="mailto:${fieldValue(bean: contact, field: "email.uri")}">${fieldValue(bean: contact, field: "email.uri")}</a></td>
 						</tr>
 					</tr>
 					<tr>
 						<tr>
 							<th><g:message code="label.linkedaccount" /></th>
-							<td>
-								<g:if test="${contact.userLink}">
-									<span class="icon icon_tick"><g:message code="label.yes"/></span>
-								</g:if>
-								<g:else>
-									<span class="icon icon_cross"><g:message code="label.no" /></span>
-								</g:else>
-							</td>
+							<g:if test="${contact.userLink}">
+								<td><n:button href="${createLink(controller:'user', action:'show', id:contact.userID)}" label="label.yes" plain="true"/><td>
+							</g:if>
+							<g:else>
+								<td><g:message code="label.no" /></td>
+							</g:else>
 						</tr>
 					</tr>
 					<g:if test="${contact.secondaryEmail}">
 						<tr>
 							<th><g:message code="label.secondaryemail" /></th>
-							<td><a href="mailto:${fieldValue(bean: contact, field: "secondaryEmail.uri")}" class="icon icon_email">${fieldValue(bean: contact, field: "secondaryEmail.uri")}</a></td>
+							<td><a href="mailto:${fieldValue(bean: contact, field: "secondaryEmail.uri")}">${fieldValue(bean: contact, field: "secondaryEmail.uri")}</a></td>
 						</tr>
 					</g:if>
 					<tr>

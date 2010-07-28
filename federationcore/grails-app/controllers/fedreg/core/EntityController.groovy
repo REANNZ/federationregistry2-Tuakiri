@@ -9,7 +9,7 @@ class EntityController {
 	}
 
 	def list = {
-		params.max = Math.min(params.max ? params.max.toInteger() : 10, 100)
+		params.max = Math.min(params.max ? params.max.toInteger() : 20, 100)
 		[entityList: EntityDescriptor.list(params), entityTotal: EntityDescriptor.count()]
 	}
 

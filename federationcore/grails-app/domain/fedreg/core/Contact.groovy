@@ -48,6 +48,7 @@ class Contact {
 		givenName(nullable:false, blank: false)
 		surname(nullable:false, blank: false)
 		description(nullable:true, blank:true)
+		organization(nullable:true)
 		email(nullable:false)
 		secondaryEmail(nullable:true)
 		workPhone(nullable:true)

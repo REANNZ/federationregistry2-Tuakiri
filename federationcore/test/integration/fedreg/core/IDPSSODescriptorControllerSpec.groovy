@@ -12,6 +12,7 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 	def cryptoService
 	def savedMetaClasses
 	def workflowProcessService
+	def IDPSSODescriptorService
 	
 	def setup () {
 		savedMetaClasses = [:]
@@ -19,7 +20,7 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		SpecHelpers.registerMetaClass(WorkflowProcessService, savedMetaClasses)
 		workflowProcessService.metaClass = WorkflowProcessService.metaClass
 		
-		controller = new IDPSSODescriptorController(cryptoService: cryptoService, workflowProcessService: workflowProcessService)
+		controller = new IDPSSODescriptorController(IDPSSODescriptorService:IDPSSODescriptorService/*cryptoService: cryptoService, workflowProcessService: workflowProcessService*/)
 		def user = UserBase.build()
 		SpecHelpers.setupShiroEnv(user)
 	}
@@ -497,8 +498,6 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		EntityDescriptor.count() == 1
 		IDPSSODescriptor.count() == 0
 		AttributeAuthorityDescriptor.count() == 0
-
-		println controller.modelAndView.model.identityProvider
 
 		def idp = controller.modelAndView.model.identityProvider
 		idp.organization == organization
