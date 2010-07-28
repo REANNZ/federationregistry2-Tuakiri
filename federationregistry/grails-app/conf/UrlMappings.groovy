@@ -55,7 +55,15 @@ class UrlMappings {
 	
 	"/membership/backend/attribute/$action?/$id?"{
 		controller = "descriptorAttribute"
-	} 
+	}
+	
+	"/bootstrap/$action?/$id?"{
+		controller = "bootstrap"
+	}
+	
+	"/coreutils/$action?/$id?"{
+		controller = "coreUtilities"
+	}
 	
 	"/workflow/$action?/$id?"{
 		controller = "workflowManager"
@@ -71,11 +79,6 @@ class UrlMappings {
 	
 	"/workflow/$action?/$id?" {
 			controller = "workflowInstance"
-	}
-	
-	"/bootstrap" {
-			controller = "dataManagement"
-			action = "bootstrap"
 	}
 	
 	"/datamanagement/$action?/$id?"{
