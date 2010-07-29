@@ -135,8 +135,8 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		def aa = AttributeAuthorityDescriptor.list().get(0)
 		attributeAuthority.organization == organization
 		attributeAuthority.entityDescriptor == entityDescriptor
-		attributeAuthority.collaborator == idp
-		identityProvider.collaborator == aa
+		attributeAuthority.collaborator == identityProvider
+		identityProvider.collaborator == attributeAuthority
 		attributeAuthority.keyDescriptors.size() == 2
 		attributeAuthority.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
 		attributeAuthority.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
@@ -239,8 +239,8 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		def aa = AttributeAuthorityDescriptor.list().get(0)
 		attributeAuthority.organization == organization
 		attributeAuthority.entityDescriptor == entityDescriptor
-		attributeAuthority.collaborator == idp
-		identityProvider.collaborator == aa
+		attributeAuthority.collaborator == identityProvider
+		identityProvider.collaborator == attributeAuthority
 		attributeAuthority.keyDescriptors.size() == 2
 		attributeAuthority.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
 		attributeAuthority.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
@@ -339,8 +339,8 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		def aa = AttributeAuthorityDescriptor.list().get(0)
 		attributeAuthority.organization == organization
 		attributeAuthority.entityDescriptor == entityDescriptor
-		attributeAuthority.collaborator == idp
-		identityProvider.collaborator == aa
+		attributeAuthority.collaborator == identityProvider
+		identityProvider.collaborator == attributeAuthority
 		attributeAuthority.active 
 		!attributeAuthority.approved
 		attributeAuthority.keyDescriptors.size() == 2
@@ -422,7 +422,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		attributeAuthority.organization == organization
 		attributeAuthority.entityDescriptor == entityDescriptor
-		attributeAuthority.collaborator == idp
+		attributeAuthority.collaborator == identityProvider
 		attributeAuthority.keyDescriptors.size() == 2
 		attributeAuthority.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
 		attributeAuthority.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
@@ -490,7 +490,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		attributeAuthority.organization == organization
 		attributeAuthority.entityDescriptor == entityDescriptor
-		attributeAuthority.collaborator == idp
+		attributeAuthority.collaborator == identityProvider
 		attributeAuthority.keyDescriptors.size() == 2
 		attributeAuthority.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
 		attributeAuthority.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
@@ -560,7 +560,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		attributeAuthority.organization == organization
 		attributeAuthority.entityDescriptor == entityDescriptor
-		attributeAuthority.collaborator == idp
+		attributeAuthority.collaborator == identityProvider
 		attributeAuthority.keyDescriptors.size() == 2
 		attributeAuthority.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
 		attributeAuthority.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
@@ -628,7 +628,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		attributeAuthority.organization == organization
 		attributeAuthority.entityDescriptor == entityDescriptor
-		attributeAuthority.collaborator == idp
+		attributeAuthority.collaborator == identityProvider
 		attributeAuthority.keyDescriptors.size() == 2
 		attributeAuthority.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
 		attributeAuthority.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
@@ -698,7 +698,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		attributeAuthority.organization == organization
 		attributeAuthority.entityDescriptor == entityDescriptor
-		attributeAuthority.collaborator == idp
+		attributeAuthority.collaborator == identityProvider
 		attributeAuthority.keyDescriptors.size() == 2
 		attributeAuthority.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
 		attributeAuthority.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
@@ -766,7 +766,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		attributeAuthority.organization == organization
 		attributeAuthority.entityDescriptor == entityDescriptor
-		attributeAuthority.collaborator == idp
+		attributeAuthority.collaborator == identityProvider
 		attributeAuthority.keyDescriptors.size() == 2
 		attributeAuthority.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
 		attributeAuthority.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
@@ -836,7 +836,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		attributeAuthority.organization == organization
 		attributeAuthority.entityDescriptor == entityDescriptor
-		attributeAuthority.collaborator == idp
+		attributeAuthority.collaborator == identityProvider
 		attributeAuthority.keyDescriptors.size() == 2
 		attributeAuthority.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
 		attributeAuthority.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
@@ -890,7 +890,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		identityProvider.organization == organization
 		identityProvider.entityDescriptor == entityDescriptor
 		identityProvider.entityDescriptor.organization == organization
-		identityProvider.collaborator == aa
+		identityProvider.collaborator == attributeAuthority
 		
 		identityProvider.displayName == "test name"
 		identityProvider.description == "test desc"
@@ -1187,7 +1187,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		attributeAuthority.organization == organization
 		attributeAuthority.entityDescriptor == null
-		attributeAuthority.collaborator == idp
+		attributeAuthority.collaborator == identityProvider
 		attributeAuthority.keyDescriptors.size() == 2
 		attributeAuthority.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
 		attributeAuthority.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
@@ -1254,7 +1254,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		attributeAuthority.organization == organization
 		attributeAuthority.entityDescriptor == null
-		attributeAuthority.collaborator == idp
+		attributeAuthority.collaborator == identityProvider
 		attributeAuthority.keyDescriptors.size() == 2
 		attributeAuthority.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
 		attributeAuthority.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
@@ -1321,7 +1321,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		attributeAuthority.organization == null
 		attributeAuthority.entityDescriptor == null
-		attributeAuthority.collaborator == idp
+		attributeAuthority.collaborator == identityProvider
 		attributeAuthority.keyDescriptors.size() == 2
 		attributeAuthority.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
 		attributeAuthority.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
