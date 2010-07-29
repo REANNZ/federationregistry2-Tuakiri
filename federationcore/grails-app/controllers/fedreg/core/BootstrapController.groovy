@@ -47,7 +47,15 @@ class BootstrapController {
 			soapArtifact:soapArtifact, organizationList:organizationList, attributeList:attributeList, nameIDFormatList:nameIDFormatList, contact:contact])
 	}
 	
-	def delete = {
+	def organization = {
+		
+	}
+	
+	def organizationregistered = {
+		
+	}
+	
+	def saveorganization = {
 		
 	}
 	
