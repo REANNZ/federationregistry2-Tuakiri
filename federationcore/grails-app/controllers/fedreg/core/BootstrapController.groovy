@@ -34,7 +34,7 @@ class BootstrapController {
 			return
 		}
 
-		[identityProvider: identityProvider, contactTypes:ContactType.list()]
+		[identityProvider: identityProvider]
 	}
 	
 	def saveidp = {
@@ -48,15 +48,37 @@ class BootstrapController {
 	}
 	
 	def organization = {
-		
+		def organization = new Organization()
+		[organization:organization, organizationTypes: OrganizationType.list()]
 	}
 	
 	def organizationregistered = {
+		if(!params.id) {
+			log.warn "Organization ID was not present"
+			flash.type="error"
+			flash.message = message(code: 'fedreg.controllers.namevalue.missing')
+			redirect(action: "list")
+			return
+		}
 		
+		def identityProvider = IDPSSODescriptor.get(params.id)
+		if (!identityProvider) {
+			flash.type="error"
+			flash.message = message(code: 'fedreg.core.organization.nonexistant')
+			redirect(action: "list")
+			return
+		}
+
+		[organization: organization]
 	}
 	
 	def saveorganization = {
+		def (created, organization, contact) = OrganizationService.create(params)
 		
+		if(created)
+			redirect (action: "organizationregistered", id: organization.id)
+		else
+			render (view:'organization', model:[organization:organization, contact:contact])
 	}
 	
 }

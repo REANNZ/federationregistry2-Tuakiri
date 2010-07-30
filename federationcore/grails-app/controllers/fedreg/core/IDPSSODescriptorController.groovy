@@ -2,11 +2,10 @@ package fedreg.core
 
 class IDPSSODescriptorController {
 
-	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
-
-	def defaultAction = "list"
-	
 	def IDPSSODescriptorService
+
+	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+	def defaultAction = "list"
 
 	def list = {
 		params.max = Math.min(params.max ? params.max.toInteger() : 20, 100)
@@ -43,8 +42,11 @@ class IDPSSODescriptorController {
 		
 		if(created)
 			redirect (action: "show", id: identityProvider.id)
-		else
+		else {
+			flash.type="error"
+			flash.message = message(code: 'fedreg.core.idpssoroledescriptor.save.validation.error')
 			render (view:'create', model:[organization:organization, entityDescriptor:entityDescriptor, identityProvider:identityProvider, attributeAuthority:attributeAuthority, httpPost:httpPost, httpRedirect:httpRedirect, 
 			soapArtifact:soapArtifact, organizationList:organizationList, attributeList:attributeList, nameIDFormatList:nameIDFormatList, contact:contact])
+		}
 	}
 }
