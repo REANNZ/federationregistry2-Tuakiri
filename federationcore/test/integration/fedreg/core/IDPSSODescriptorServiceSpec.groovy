@@ -50,7 +50,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		new File('./test/integration/data/newcertminimal.pem').text
 	}
 	
-	def "Save succeeds when valid initial IDPSSODescriptor and AttributeAuthorityDescriptor data are provided (without existing EntityDescriptor or contact)"() {
+	def "Create succeeds when valid initial IDPSSODescriptor and AttributeAuthorityDescriptor data are provided (without existing EntityDescriptor or contact)"() {
 		setup:
 		setupBindings()
 		setupCrypto()
@@ -153,7 +153,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		wfParams.organization == organization.name
 	}
 	
-	def "Save succeeds when valid initial IDPSSODescriptor and AttributeAuthorityDescriptor data are provided (without existing EntityDescriptor but with existing contact)"() {
+	def "Create succeeds when valid initial IDPSSODescriptor and AttributeAuthorityDescriptor data are provided (without existing EntityDescriptor but with existing contact)"() {
 		setup:
 		setupBindings()
 		setupCrypto()
@@ -258,7 +258,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		wfParams.organization == organization.name
 	}
 	
-	def "Save succeeds when valid initial IDPSSODescriptor and AttributeAuthorityDescriptor data are provided (with existing EntityDescriptor)"() {
+	def "Create succeeds when valid initial IDPSSODescriptor and AttributeAuthorityDescriptor data are provided (with existing EntityDescriptor)"() {
 		setup:
 		setupBindings()
 		setupCrypto()
@@ -360,7 +360,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		wfParams.organization == organization.name
 	}
 	
-	def "Save fails when IDPSSODescriptor fails constraints even though a valid AttributeAuthorityDescriptor is provided"() {
+	def "Create fails when IDPSSODescriptor fails constraints even though a valid AttributeAuthorityDescriptor is provided"() {
 		setup:
 		setupBindings()
 		setupCrypto()
@@ -429,7 +429,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		attributeAuthority.attributeServices.toList().get(0).location.uri == "http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"
 	}
 	
-	def "Save fails when IDPSSODescriptor post endpoint fails constraints"() {
+	def "Create fails when IDPSSODescriptor post endpoint fails constraints"() {
 		setup:
 		setupBindings()
 		setupCrypto()
@@ -497,7 +497,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		attributeAuthority.attributeServices.toList().get(0).location.uri == "http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"
 	}
 	
-	def "Save fails when IDPSSODescriptor post endpoint not supplied"() {
+	def "Create fails when IDPSSODescriptor post endpoint not supplied"() {
 		setup:
 		setupBindings()
 		setupCrypto()
@@ -567,7 +567,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		attributeAuthority.attributeServices.toList().get(0).location.uri == "http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"
 	}
 	
-	def "Save fails when IDPSSODescriptor redirect endpoint fails constraints"() {
+	def "Create fails when IDPSSODescriptor redirect endpoint fails constraints"() {
 		setup:
 		setupBindings()
 		setupCrypto()
@@ -635,7 +635,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		attributeAuthority.attributeServices.toList().get(0).location.uri == "http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"
 	}
 	
-	def "Save fails when IDPSSODescriptor redirect endpoint not supplied"() {
+	def "Create fails when IDPSSODescriptor redirect endpoint not supplied"() {
 		setup:
 		setupBindings()
 		setupCrypto()
@@ -705,7 +705,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		attributeAuthority.attributeServices.toList().get(0).location.uri == "http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"
 	}
 	
-	def "Save fails when IDPSSODescriptor artifact endpoint fails constraints"() {
+	def "Create fails when IDPSSODescriptor artifact endpoint fails constraints"() {
 		setup:
 		setupBindings()
 		setupCrypto()
@@ -773,7 +773,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		attributeAuthority.attributeServices.toList().get(0).location.uri == "http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"
 	}
 	
-	def "Save fails when IDPSSODescriptor artifact endpoint not supplied"() {
+	def "Create fails when IDPSSODescriptor artifact endpoint not supplied"() {
 		setup:
 		setupBindings()
 		setupCrypto()
@@ -843,7 +843,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		attributeAuthority.attributeServices.toList().get(0).location.uri == "http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"
 	}
 	
-	def "Save succeeds when IDPSSODescriptor crypto not supplied"() {
+	def "Create succeeds when IDPSSODescriptor crypto not supplied"() {
 		setup:
 		setupBindings()
 		setupCrypto()
@@ -919,7 +919,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		wfParams.organization == organization.name
 	}
 	
-	def "Save succeeds when AttributeAuthorityDescriptor not required"() {
+	def "Create succeeds when AttributeAuthorityDescriptor not required"() {
 		setup:
 		setupBindings()
 		setupCrypto()
@@ -993,7 +993,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		wfParams.organization == organization.name
 	}
 	
-	def "Save succeeds when AttributeAuthorityDescriptor data not presented"() {
+	def "Create succeeds when AttributeAuthorityDescriptor data not presented"() {
 		setup:
 		setupBindings()
 		setupCrypto()
@@ -1066,7 +1066,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		wfParams.organization == organization.name
 	}
 	
-	def "Save fails when AttributeAuthorityDescriptor fails to meet constraints"() {
+	def "Create fails when AttributeAuthorityDescriptor fails to meet constraints"() {
 		setup:
 		setupBindings()
 		setupCrypto()
@@ -1126,7 +1126,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		attributeAuthority.displayName == null
 	}
 	
-	def "Save fails when invalid existing EnityDescriptor provided"() {
+	def "Create fails when invalid existing EnityDescriptor provided"() {
 		setup:
 		setupBindings()
 		setupCrypto()
@@ -1194,7 +1194,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		attributeAuthority.attributeServices.toList().get(0).location.uri == "http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"
 	}
 	
-	def "Save fails when EnityDescriptor does not meet constraints"() {
+	def "Create fails when EnityDescriptor does not meet constraints"() {
 		setup:
 		setupBindings()
 		setupCrypto()
@@ -1261,7 +1261,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		attributeAuthority.attributeServices.toList().get(0).location.uri == "http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"
 	}
 	
-	def "Save fails when invalid Organization provided"() {
+	def "Create fails when invalid Organization provided"() {
 		setup:
 		setupBindings()
 		setupCrypto()
