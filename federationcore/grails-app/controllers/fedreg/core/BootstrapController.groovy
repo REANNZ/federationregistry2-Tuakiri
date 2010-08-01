@@ -4,13 +4,10 @@ import fedreg.workflow.ProcessPriority
 
 class BootstrapController {
 	
-	static allowedMethods = [saveIDP: "POST", update: "POST", delete: "POST"]
-	
 	def IDPSSODescriptorService
+	def organizationService
 	
-	def show = {
-		
-	}
+	static allowedMethods = [saveIDP: "POST", update: "POST", delete: "POST"]
 	
 	def idp = {
 		def identityProvider = new IDPSSODescriptor()
@@ -61,8 +58,8 @@ class BootstrapController {
 			return
 		}
 		
-		def identityProvider = IDPSSODescriptor.get(params.id)
-		if (!identityProvider) {
+		def organization = Organization.get(params.id)
+		if (!organization) {
 			flash.type="error"
 			flash.message = message(code: 'fedreg.core.organization.nonexistant')
 			redirect(action: "list")
@@ -73,7 +70,7 @@ class BootstrapController {
 	}
 	
 	def saveorganization = {
-		def (created, organization, contact) = OrganizationService.create(params)
+		def (created, organization, contact) = organizationService.create(params)
 		
 		if(created)
 			redirect (action: "organizationregistered", id: organization.id)

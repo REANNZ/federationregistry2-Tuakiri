@@ -2,6 +2,8 @@ package fedreg.core
 
 class OrganizationController {
 
+	def organizationService
+
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
 	def index = {
@@ -36,11 +38,17 @@ class OrganizationController {
 	}
 	
 	def create = {
-		
+		def organization = new Organization()
+		[organization:organization, organizationTypes: OrganizationType.list()]
 	}
 	
-	def edit = {
+	def save = {
+		def (created, organization, contact) = organizationService.create(params)
 		
+		if(created)
+			redirect (action: "show", id: organization.id)
+		else
+			render (view:'create', model:[organization:organization, contact:contact])
 	}
 
 }

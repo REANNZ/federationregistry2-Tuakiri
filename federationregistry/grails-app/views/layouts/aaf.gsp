@@ -28,8 +28,8 @@
     </header>
 	
 	<nav>
-	<n:isLoggedIn>
 		<g:render template='/templates/aaftopnavigation'/>
+	<n:isLoggedIn>
 		
 		<ul class="level2">
 			<li class="${controllerName == 'user' ? 'active':''}"><g:link controller="user" action="list"><g:message code="label.users" /></g:link></li>

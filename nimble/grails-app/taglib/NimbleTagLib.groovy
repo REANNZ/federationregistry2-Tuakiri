@@ -114,7 +114,7 @@ class NimbleTagLib {
 		if(attrs.onclick)
 			onclick = "onClick= \"${attrs.onclick}\""
 		
-		def href = ""
+		def href = "href='#'"
 		if(attrs.href)
 			href = "href=\'${attrs.href}\'"
 		
@@ -130,7 +130,7 @@ class NimbleTagLib {
 			if(type.contains('icon'))
 				out << "<span class='ui-button-icon-primary ui-icon ui-icon-${attrs.icon}'></span>"
 			if(type.contains('text'))
-				out << "<span class='ui-button-text'>${attrs.label}</span>"
+				out << "<span class='ui-button-text'>${message(code:attrs.label)}</span>"
 			out << "</a>"
 		}
 	}

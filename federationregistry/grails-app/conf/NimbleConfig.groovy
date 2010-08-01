@@ -18,9 +18,8 @@
 nimble {
 	
 	layout {
-        application = 'aaf'
         administration = 'aaf'
-		login = 'login'
+		login = 'public'
     }
 
     resources {

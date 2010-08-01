@@ -57,7 +57,7 @@ class UrlMappings {
 		controller = "descriptorAttribute"
 	}
 	
-	"/bootstrap/$action?/$id?"{
+	"/registration/$action?/$id?"{
 		controller = "bootstrap"
 	}
 	

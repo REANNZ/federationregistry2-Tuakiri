@@ -39,28 +39,28 @@
 
             <g:form id="locallogin" action="signin" name="signin">
               <fieldset>
-                <label for="username" class="append-1"><g:message code="nimble.label.username" /></label>
+                <label for="username" class="append-1"><g:message code="label.username" /></label>
                 <input id="username" type="text" name="username" class="title"/>
 
-                <label for="password" class="append-1"><g:message code="nimble.label.password" /></label>
+                <label for="password" class="append-1"><g:message code="label.password" /></label>
                 <input id="password" type="password" name="password" class="title"/>
               </fieldset>
 
               <fieldset>
                 <g:checkBox id="rememberme" name="rememberme"/>
-                <label><g:message code="nimble.label.rememberme" /></label>
+                <label><g:message code="label.rememberme" /></label>
               </fieldset>
 
               <fieldset class="loginbuttons">
-                <button type="submit" class="button darkbutton icon icon_user_green"><g:message code="nimble.link.login.basic" /></button>
+                <button type="submit" class="button darkbutton icon icon_user_green"><g:message code="label.login.basic" /></button>
               </fieldset>
 
             </g:form>
 
             <div class="accountoptions">
-              <g:link controller="account" action="forgottenpassword" class="textlink icon icon_flag_purple"><g:message code="nimble.link.forgottenpassword" /></g:link>
+              <g:link controller="account" action="forgottenpassword" class="textlink icon icon_flag_purple"><g:message code="label.forgottenpassword" /></g:link>
               <g:if test="${registration}">
-                <a href="#" id="accountcreationpolicybtn" rel="accountcreationpolicy" class="textlink icon icon_user_go"><g:message code="nimble.link.newuser" /></a>
+                <a href="#" id="accountcreationpolicybtn" rel="accountcreationpolicy" class="textlink icon icon_user_go"><g:message code="label.newuser" /></a>
               </g:if>
             </div>
           </div>
@@ -74,7 +74,7 @@
 			  <g:message code="nimble.template.login.facebook.descriptive" />
             </p>
             <div id="loginfacebookcontinue">
-              <a href="${createLink(controller: "auth", action: "facebook")}" class="button icon icon_user_green"><g:message code="nimble.link.login.basic" /></a>
+              <a href="${createLink(controller: "auth", action: "facebook")}" class="button icon icon_user_green"><g:message code="label.login.basic" /></a>
             </div>
 
             <div id="loginfacebookenable">
@@ -91,7 +91,7 @@
 			  <g:message code="nimble.template.login.google.descriptive" />
             </p>
             <p>
-              <a href="${createLink(controller: "auth", action: "googlereq")}" class="button icon icon_user_green"><g:message code="nimble.link.login.basic" /></a>
+              <a href="${createLink(controller: "auth", action: "googlereq")}" class="button icon icon_user_green"><g:message code="label.login.basic" /></a>
             </p>
           </div>
 
@@ -102,7 +102,7 @@
 			  <g:message code="nimble.template.login.yahoo.descriptive" />
             </p>
             <p>
-              <a href="${createLink(controller: "auth", action: "yahooreq")}" class="button icon icon_user_green"><g:message code="nimble.link.login.basic" /></a>
+              <a href="${createLink(controller: "auth", action: "yahooreq")}" class="button icon icon_user_green"><g:message code="label.login.basic" /></a>
             </p>
           </div>
 
@@ -115,7 +115,7 @@
             <g:form controller="auth" action="openidreq">
               <strong><g:message code="nimble.template.login.openid.identifier" /></strong>
               <input id="openiduri" type="text" name="openiduri" class="easyinput" value="http://"/>
-              <button type="submit" class="button icon icon_user_green"><g:message code="nimble.link.login.basic" /></button>
+              <button type="submit" class="button icon icon_user_green"><g:message code="label.login.basic" /></button>
             </g:form>
           </div>
 
@@ -129,7 +129,7 @@
               <label for="openiduri" class="append-1"><g:message code="nimble.template.login.blogger.identifier" /></label>
               <input id="openiduri" type="text" name="openiduri" class="easyinput"/>
               <fieldset>
-                <button type="submit" class="button darkbutton icon icon_user_green"><g:message code="nimble.link.login.basic" /></button>
+                <button type="submit" class="button darkbutton icon icon_user_green"><g:message code="label.login.basic" /></button>
               </fieldset>
             </g:form>
           </div>
@@ -144,7 +144,7 @@
               <label for="openiduri" class="append-1"><g:message code="nimble.template.login.wordpress.identifier" /></label>
               <input id="openiduri" type="text" name="openiduri" class="easyinput"/>
               <fieldset>
-                <button type="submit" class="button darkbutton icon icon_user_green"><g:message code="nimble.link.login.basic" /></button>
+                <button type="submit" class="button darkbutton icon icon_user_green"><g:message code="label.login.basic" /></button>
               </fieldset>
             </g:form>
           </div>
@@ -159,7 +159,7 @@
               <label for="openiduri" class="append-1"><g:message code="nimble.template.login.technorati.identifier" /></label>
               <input id="openiduri" type="text" name="technoratiusername" class="easyinput"/>
               <fieldset>
-                <button type="submit" class="button darkbutton icon icon_user_green"><g:message code="nimble.link.login.basic" /></button>
+                <button type="submit" class="button darkbutton icon icon_user_green"><g:message code="label.login.basic" /></button>
               </fieldset>
             </g:form>
           </div>
@@ -171,7 +171,7 @@
               <g:message code="nimble.template.login.flickr.descriptive" />
             </p>
             <p>
-              <a href="${createLink(controller: "auth", action: "flickreq")}" class="button icon icon_user_green"><g:message code="nimble.link.login.basic" /></a>
+              <a href="${createLink(controller: "auth", action: "flickreq")}" class="button icon icon_user_green"><g:message code="label.login.basic" /></a>
             </p>
           </div>
         </g:if>
@@ -188,38 +188,38 @@
           <tr>
             <td>
               <g:if test="${openid}">
-                <a href="#" class="" onClick="changeLogin('openid');"><n:socialimg name="openid" size="64" alt="Login using OpenID"/><g:message code="nimble.label.openid" /></a>
+                <a href="#" class="" onClick="changeLogin('openid');"><n:socialimg name="openid" size="64" alt="Login using OpenID"/><g:message code="label.openid" /></a>
               </g:if>
             </td>
             <td>
               <g:if test="${facebook}">
-                <a href="#" class="" onClick="changeLogin('facebook');"><n:socialimg name="facebook" size="64" alt="Login using Facebook"/><g:message code="nimble.label.facebook" /></a>
+                <a href="#" class="" onClick="changeLogin('facebook');"><n:socialimg name="facebook" size="64" alt="Login using Facebook"/><g:message code="label.facebook" /></a>
               </g:if>
             </td>
           </tr>
           <g:if test="${openid}">
             <tr>
               <td>
-                <a class="" onClick="changeLogin('google');"><n:socialimg name="google" size="64" alt="Login using Google"/><g:message code="nimble.label.google" /></a>
+                <a class="" onClick="changeLogin('google');"><n:socialimg name="google" size="64" alt="Login using Google"/><g:message code="label.google" /></a>
               </td>
               <td>
-                <a class="" onClick="changeLogin('yahoo');"><n:socialimg name="yahoo" size="64" alt="Login using Yahoo!"/><g:message code="nimble.label.yahoo" /></a>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <a href="#" class="" onClick="changeLogin('blogger');"><n:socialimg name="blogger" size="64" alt="Login using Blogger"/><g:message code="nimble.label.blogger" /></a>
-              </td>
-              <td>
-                <a href="#" class="" onClick="changeLogin('wordpress');"><n:socialimg name="wordpress" size="64" alt="Login using Wordpress"/><g:message code="nimble.label.wordpress" /></a>
+                <a class="" onClick="changeLogin('yahoo');"><n:socialimg name="yahoo" size="64" alt="Login using Yahoo!"/><g:message code="label.yahoo" /></a>
               </td>
             </tr>
             <tr>
               <td>
-                <a href="#" class="" onClick="changeLogin('technorati');"><n:socialimg name="technorati" size="64" alt="Login using Technorati"/><g:message code="nimble.label.technorati" /></a>
+                <a href="#" class="" onClick="changeLogin('blogger');"><n:socialimg name="blogger" size="64" alt="Login using Blogger"/><g:message code="label.blogger" /></a>
               </td>
               <td>
-                <a href="#" class="" onClick="changeLogin('flickr');"><n:socialimg name="flickr" size="64" alt="Login using Flickr"/><g:message code="nimble.label.flickr" /></a>
+                <a href="#" class="" onClick="changeLogin('wordpress');"><n:socialimg name="wordpress" size="64" alt="Login using Wordpress"/><g:message code="label.wordpress" /></a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a href="#" class="" onClick="changeLogin('technorati');"><n:socialimg name="technorati" size="64" alt="Login using Technorati"/><g:message code="label.technorati" /></a>
+              </td>
+              <td>
+                <a href="#" class="" onClick="changeLogin('flickr');"><n:socialimg name="flickr" size="64" alt="Login using Flickr"/><g:message code="label.flickr" /></a>
               </td>
             </tr>
           </g:if>
@@ -244,28 +244,28 @@
           <input type="hidden" name="targetUri" value="${targetUri}"/>
 
           <fieldset>
-            <label for="username" class="append-1"><g:message code="nimble.label.username" /></label>
+            <label for="username" class="append-1"><g:message code="label.username" /></label>
             <input id="username" type="text" name="username" class="title"/>
 
-            <label for="password" class="append-1"><g:message code="nimble.label.password" /></label>
+            <label for="password" class="append-1"><g:message code="label.password" /></label>
             <input id="password" type="password" name="password" class="title"/>
           </fieldset>
 
           <fieldset>
             <g:checkBox id="rememberme" name="rememberme"/>
-            <label><g:message code="nimble.label.rememberme" /></label>
+            <label><g:message code="label.rememberme" /></label>
           </fieldset>
 
           <fieldset class="loginbuttons">
-            <button type="submit" class="button darkbutton icon icon_user_green"><g:message code="nimble.link.login.basic" /></button>
+            <button type="submit" class="button darkbutton icon icon_user_green"><g:message code="label.login.basic" /></button>
           </fieldset>
 
         </g:form>
 
         <div class="accountoptions">
-          <g:link controller="account" action="forgottenpassword" class="textlink icon icon_flag_purple"><g:message code="nimble.link.forgottenpassword" /></g:link>
+          <g:link controller="account" action="forgottenpassword" class="textlink icon icon_flag_purple"><g:message code="label.forgottenpassword" /></g:link>
           <g:if test="${registration}">
-            <g:link controller="account" action="createuser" class="textlink icon icon_user_go"><g:message code="nimble.link.newuser" /></g:link>
+            <g:link controller="account" action="createuser" class="textlink icon icon_user_go"><g:message code="label.newuser" /></g:link>
           </g:if>
         </div>
       </div>

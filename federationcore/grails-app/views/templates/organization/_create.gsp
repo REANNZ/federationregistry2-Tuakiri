@@ -22,11 +22,11 @@
 
 <g:form action="${saveAction}">
 	<g:hiddenField name="active" value="true"/>
-	<g:hiddenField name="aa.create" value="true"/>
 	<g:if test="${!requiresContactDetails}">
 		<g:hiddenField name="contact.id" value="${fr.contactID()}"/>
 	</g:if>
 	<g:hiddenField name="contact.type" value="administrative" />
+	<g:hiddenField name="organization.lang" value="en" />
 	
 	<g:if test="${requiresContactDetails}">
 		<div class="step" id="contact">
@@ -74,7 +74,7 @@
 					<label for="organization.name"><g:message code="label.name" /></label>
 				</td>
 				<td>
-					<g:textField name="organization.displayName"  size="50" class="required" minlength="4"/>
+					<g:textField name="organization.name"  size="50" class="required" minlength="4"/>
 				</td>
 			</tr>
 			<tr>

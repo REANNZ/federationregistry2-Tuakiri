@@ -3,11 +3,11 @@
 <table class="datatable">
  	<tbody>
 		<tr>
-	    	<th><g:message code="nimble.label.fullname" /></th>
+	    	<th><g:message code="label.fullname" /></th>
 			<td>${user.profile?.fullName?.encodeAsHTML()}</td>
 		</tr>
 		<tr>
-	    	<th><g:message code="nimble.label.email" /></th>
+	    	<th><g:message code="label.email" /></th>
 			<td>${user.profile?.email?.encodeAsHTML()}</td>
 		</tr>
 		<tr>

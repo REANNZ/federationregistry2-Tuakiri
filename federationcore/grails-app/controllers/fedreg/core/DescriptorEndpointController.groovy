@@ -159,26 +159,25 @@ class DescriptorEndpointController {
 			return
 		}
 		
-		def endpoint = Endpoint.get(params.id)
+		def endpoint = Endpoint.lock(params.id)
 		if(!endpoint) {
 			log.warn "Endpoint identified by id $params.id was not located"
 			render message(code: 'fedreg.endpoint.nonexistant', args: [params.id])
 			response.setStatus(500)
 			return
 		}
-		
+	
 		log.info "Toggling Endpoint State"
 		endpoint.active = !endpoint.active
-		endpoint.save()
-		if(!endpoint.hasErrors()) {
+		endpoint.descriptor.save(flush:true)
+		if(!endpoint.hasErrors() && !endpoint.descriptor.hasErrors()) {
 			log.debug "Toggled state for endpoint ID ${params.id}"
 			render message(code: 'fedreg.endpoint.toggle.success')
 		}
 		else {
 			log.warn "Unable to toggle state for endpoint ID ${params.id}"
-			endpoint.errors.each {
-				log.warn it
-			}
+			endpoint.errors.each { log.warn it }
+			endpoint.descriptor.errors.each { log.warn it }
 			render message(code: 'fedreg.endpoint.toggle.failed')
 		}
 	}

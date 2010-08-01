@@ -1,9 +1,9 @@
 
 	<ul class="level2">
-		<li class="${controllerName == 'user' ? 'active':''}"><g:link controller="user" action="list"><g:message code="nimble.link.users" /></g:link></li>
-		<li class="${controllerName == 'role' ? 'active':''}"><g:link controller="role" action="list"><g:message code="nimble.link.roles" /></g:link></li>
-		<li class="${controllerName == 'group' ? 'active':''}"><g:link controller="group" action="list"><g:message code="nimble.link.groups" /></g:link></li>
-		<li class="${controllerName == 'admins' ? 'directactive':''}"><g:link controller="admins" action="index"><g:message code="nimble.link.admins" /></g:link></li>
+		<li class="${controllerName == 'user' ? 'active':''}"><g:link controller="user" action="list"><g:message code="label.users" /></g:link></li>
+		<li class="${controllerName == 'role' ? 'active':''}"><g:link controller="role" action="list"><g:message code="label.roles" /></g:link></li>
+		<li class="${controllerName == 'group' ? 'active':''}"><g:link controller="group" action="list"><g:message code="label.groups" /></g:link></li>
+		<li class="${controllerName == 'admins' ? 'directactive':''}"><g:link controller="admins" action="index"><g:message code="label.admins" /></g:link></li>
 	</ul>
 	
 	<g:if test="${controllerName == 'user'}">
@@ -38,7 +38,7 @@
 				<li><g:message code="fedreg.view.group.show.heading" args="[group.name]"/>: </li>
 				<li class="${actionName == 'show' ? 'active':''}" ><g:link controller="group" action="show" id="${group.id}"><g:message code="label.view" /></g:link></li>
 				<li class="${actionName == 'edit' ? 'active':''}"><g:link controller="group" action="edit" id="${group.id}"><g:message code="label.edit" /></g:link></li>
-				<li><n:confirmaction action="document.deletegroup.submit();" title="${message(code: 'nimble.template.delete.confirm.title')}" msg="${message(code: 'nimble.group.delete.confirm')}" accept="${message(code: 'nimble.link.accept')}" cancel="${message(code: 'nimble.link.cancel')}" label="label.delete" plain="true"/></li>
+				<li><n:confirmaction action="document.deletegroup.submit();" title="${message(code: 'nimble.template.delete.confirm.title')}" msg="${message(code: 'nimble.group.delete.confirm')}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" label="label.delete" plain="true"/></li>
 			</g:if>
 		</ul>
 	</g:if>
@@ -52,7 +52,7 @@
 				<li><g:message code="fedreg.view.role.show.heading" args="[role.name]"/>: </li>
 				<li class="${actionName == 'show' ? 'active':''}" ><g:link controller="role" action="show" id="${role.id}"><g:message code="label.view" /></g:link></li>
 				<li class="${actionName == 'edit' ? 'active':''}"><g:link controller="role" action="edit" id="${role.id}"><g:message code="label.edit" /></g:link></li>
-				<li><n:confirmaction action="document.deleterole.submit();" title="${message(code: 'nimble.template.delete.confirm.title')}" msg="${message(code: 'nimble.role.delete.confirm')}" accept="${message(code: 'nimble.link.accept')}" cancel="${message(code: 'nimble.link.cancel')}" label="label.delete" plain="true"/></li>
+				<li><n:confirmaction action="document.deleterole.submit();" title="${message(code: 'nimble.template.delete.confirm.title')}" msg="${message(code: 'nimble.role.delete.confirm')}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" label="label.delete" plain="true"/></li>
 			</g:if>
 		</ul>
 	</g:if>
