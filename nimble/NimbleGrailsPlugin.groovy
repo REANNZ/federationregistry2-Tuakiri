@@ -30,11 +30,11 @@ class NimbleGrailsPlugin {
     def version = "0.4"
 
     // the version or versions of Grails the plugin is designed for
-    def grailsVersion = "1.1 > *"
+    def grailsVersion = "1.3 > *"
 
     // the other plugins this plugin depends on
-    def dependsOn = [ shiro: "1.0.1",
-        mail: "0.6 > *",
+    def dependsOn = [ shiro: "1.1",
+        mail: "0.9 > *",
     ]
     
     // resources that are excluded from plugin packaging
@@ -45,7 +45,7 @@ class NimbleGrailsPlugin {
                       'grails-app/conf/NimbleBootStrap.groovy',
     ]
 
-    def author = "Bradley Beddoes, Chris Doty, Mike Wille and open source contributors"
+    def author = "Bradley Beddoes"
     def authorEmail = "nimbleproject@googlegroups.com"
     def title = "Nimble"
     def description = '''\\

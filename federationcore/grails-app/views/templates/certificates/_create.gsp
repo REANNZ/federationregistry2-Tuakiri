@@ -3,7 +3,7 @@
 	$(function() {
 		$("#newcertificate").hide();
 		$("#validcertificate").hide();
-		$("#newcertificatedata").bind('paste', function() { setTimeout(function() {fedreg.keyDescriptor_verify(); if(newCertificateValid) $("#validcertificate").show('highlight'); else $("#validcertificate").fadeOut(); }, 100); });
+		$("#newcertificatedata").bind('paste', function() { setTimeout(function() {fedreg.keyDescriptor_verify(); 		if(newCertificateValid) $("#validcertificate").fadeIn(); else $("#validcertificate").fadeOut(); }, 100); });
 	});
 </script>
 
@@ -18,9 +18,9 @@
 		</p>
 		<div id="newcertificatedetails">
 		</div>
-		<section id="validcertificate">
-			<n:button id="addnewcertificatelink" onclick="fedreg.keyDescriptor_create(); \$('#validcertificate').fadeOut();" label="${message(code:'label.add')}" icon="plus"/>
-		</section>
 		<g:textArea name="newcertificatedata" rows="25" cols="80"/><br>
+		<div id="validcertificate">
+			<n:button id="addnewcertificatelink" onclick="fedreg.keyDescriptor_create(); \$('#validcertificate').fadeOut();" label="${message(code:'label.add')}" icon="plus"/>
+		</div>
 		<n:button onclick="\$('#newcertificate').fadeOut(); \$('#addcertificate').fadeIn();" label="${message(code:'label.close')}" icon="close"/>
 	</div>

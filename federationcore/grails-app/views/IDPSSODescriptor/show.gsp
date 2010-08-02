@@ -16,7 +16,7 @@
 			var certificateListEndpoint = "${createLink(controller:'descriptorKeyDescriptor', action:'list', id:identityProvider.id )}";
 			var certificateCreationEndpoint = "${createLink(controller:'descriptorKeyDescriptor', action:'create', id:identityProvider.id)}";
 			var certificateDeleteEndpoint = "${createLink(controller:'descriptorKeyDescriptor', action:'delete')}";
-			var certificateValidationEndpoint = "${createLink(controller:'descriptorKeyDescriptor', action:'validateCertificate')}";
+			var certificateValidationEndpoint = "${createLink(controller:'coreUtilities', action:'validateCertificate')}";
 			
 			var endpointDeleteEndpoint = "${createLink(controller:'descriptorEndpoint', action:'delete')}";
 			var endpointListEndpoint = "${createLink(controller:'descriptorEndpoint', action:'list', id:identityProvider.id)}";
@@ -108,18 +108,18 @@
 				<div id="tab-contacts" class="tabcontent">
 					<h3><g:message code="label.contacts" /></h3>
 					<div id="contacts">
-						<g:render template="/templates/contacts/list" model="[descriptor:identityProvider, allowremove:true]" />
+						<g:render template="/templates/contacts/list" plugin="federationcore" model="[descriptor:identityProvider, allowremove:true]" />
 					</div>
 					<hr>
-					<g:render template="/templates/contacts/create" model="[descriptor:identityProvider, contactTypes:contactTypes]"/>
+					<g:render template="/templates/contacts/create" plugin="federationcore" model="[descriptor:identityProvider, contactTypes:contactTypes]"/>
 				</div>
 				<div id="tab-crypto" class="tabcontent">
-					<h3><g:message code="label.publishedcertificates" /></h3>
+					<h3><g:message code="label.publishedcertificates" plugin="federationcore" /></h3>
 					<div id="certificates">
-						<g:render template="/templates/certificates/list" model="[descriptor:identityProvider, allowremove:true]" />
+						<g:render template="/templates/certificates/list" plugin="federationcore" model="[descriptor:identityProvider, allowremove:true]" />
 					</div>
 					<hr>
-					<g:render template="/templates/certificates/create" model="[descriptor:identityProvider]"/>
+					<g:render template="/templates/certificates/create" plugin="federationcore" model="[descriptor:identityProvider]"/>
 				</div>
 				<div id="tab-endpoints" class="tabcontent">
 					<h3><g:message code="label.supportedendpoints" /></h3>
@@ -132,43 +132,43 @@
 						
 						<div id="tab-sso" class="componentlist">
 							<div id="ssoendpoints">
-								<g:render template="/templates/endpoints/list" model="[endpoints:identityProvider.singleSignOnServices, allowremove:true, endpointType:'singleSignOnServices', containerID:'ssoendpoints']" />
+								<g:render template="/templates/endpoints/list" plugin="federationcore" model="[endpoints:identityProvider.singleSignOnServices, allowremove:true, endpointType:'singleSignOnServices', containerID:'ssoendpoints']" />
 							</div>
 							<hr>
-							<g:render template="/templates/endpoints/create" model="[endpointType:'singleSignOnServices', containerID:'ssoendpoints']" />
+							<g:render template="/templates/endpoints/create" plugin="federationcore" model="[endpointType:'singleSignOnServices', containerID:'ssoendpoints']" />
 							
 						</div>
 						<div id="tab-ars" class="componentlist">
 							<div id="artifactendpoints">
-								<g:render template="/templates/endpoints/list" model="[endpoints:identityProvider.artifactResolutionServices, allowremove:true, endpointType:'artifactResolutionServices', containerID:'artifactendpoints']" />
+								<g:render template="/templates/endpoints/list" plugin="federationcore" model="[endpoints:identityProvider.artifactResolutionServices, allowremove:true, endpointType:'artifactResolutionServices', containerID:'artifactendpoints']" />
 							</div>
 							<hr>
-							<g:render template="/templates/endpoints/create" model="[endpointType:'artifactResolutionServices', containerID:'artifactendpoints']" />
+							<g:render template="/templates/endpoints/create" plugin="federationcore" model="[endpointType:'artifactResolutionServices', containerID:'artifactendpoints']" />
 						</div>
 						<div id="tab-slo" class="componentlist">
 							<div id="singlelogoutendpoints">
-								<g:render template="/templates/endpoints/list" model="[endpoints:identityProvider.singleLogoutServices, allowremove:true, endpointType:'singleLogoutServices', containerID:'singlelogoutendpoints']" />
+								<g:render template="/templates/endpoints/list" plugin="federationcore" model="[endpoints:identityProvider.singleLogoutServices, allowremove:true, endpointType:'singleLogoutServices', containerID:'singlelogoutendpoints']" />
 							</div>
 							<hr>
-							<g:render template="/templates/endpoints/create" model="[endpointType:'singleLogoutServices', containerID:'singlelogoutendpoints']" />
+							<g:render template="/templates/endpoints/create" plugin="federationcore" model="[endpointType:'singleLogoutServices', containerID:'singlelogoutendpoints']" />
 						</div>
 					</div>
 				</div>
 				<div id="tab-attributes" class="tabcontent">
 					<h3><g:message code="label.supportedattributes" /></h3>
 					<div id="attributes">
-						<g:render template="/templates/attributes/list" model="[attrs:identityProvider.attributes, containerID:'attributes']" />
+						<g:render template="/templates/attributes/list" plugin="federationcore" model="[attrs:identityProvider.attributes, containerID:'attributes']" />
 					</div>
 					<hr>
-					<g:render template="/templates/attributes/add" model="[type:'idp', containerID:'attributes']"/>
+					<g:render template="/templates/attributes/add" plugin="federationcore" model="[type:'idp', containerID:'attributes']"/>
 				</div>
 				<div id="tab-nameidformats" class="tabcontent">
 					<h3><g:message code="label.supportednameidformats" /></h3>
 					<div id="nameidformats">
-						<g:render template="/templates/nameidformats/list" model="[nameIDFormats:identityProvider.nameIDFormats, containerID:'nameidformats']" />
+						<g:render template="/templates/nameidformats/list" plugin="federationcore" model="[nameIDFormats:identityProvider.nameIDFormats, containerID:'nameidformats']" />
 					</div>
 					<hr>
-					<g:render template="/templates/nameidformats/add" model="[containerID:'nameidformats']"/>
+					<g:render template="/templates/nameidformats/add" plugin="federationcore" model="[containerID:'nameidformats']"/>
 				</div>
 			</div>
 			

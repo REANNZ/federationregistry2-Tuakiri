@@ -24,7 +24,7 @@ nimble {
 
     resources {
         jslibrary = 'jquery'
-        usejsdev = true
+        usejsdev = false
         usecssdev = false
     }
 

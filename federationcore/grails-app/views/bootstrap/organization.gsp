@@ -9,7 +9,7 @@
         <section>
             <h2><g:message code="fedreg.view.members.bootstrap.organization.heading" /></h2>
 			
-			<g:render template="/templates/organization/create" model="[saveAction:'saveorganization', requiresContactDetails:true]"/>
+			<g:render template="/templates/organization/create" plugin="federationcore" model="[saveAction:'saveorganization', requiresContactDetails:true]"/>
 
         </section>
     </body>
