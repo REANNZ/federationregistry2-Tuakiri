@@ -21,10 +21,10 @@ class DataManagementController {
 	}
 	
 	// TODO
-	// Only allow this to run when no Users are populated into the database as an inital bootstrap process
+	// Only allow this to run when no Users (apart from internaladministrator) are populated into the database as an inital bootstrap process
 	// This will need to be extended and made more solid as resource registry is phased out.
 	def bootstrap = {
-		if((User.count() == 0 ) && (DataLoadRecord.count() == 0) ) {
+		if((User.count() == 1 ) && (DataLoadRecord.count() == 0) ) {
 			log.info("Doing initial bootstrap process..")
 			dataImporterService.initialPopulate()
 			dataImporterService.populate(request)
