@@ -191,7 +191,7 @@ fedreg.contact_list = function() {
 // Endpoint
 fedreg.endpoint_delete = function(id, endpointType, containerID) {
 	$("#working").trigger("fedreg.working");
-	var dataString = "id=" + id;
+	var dataString = "id=" + id + "&endpointType=" + endpointType;
 	$.ajax({
 		type: "POST",
 		url: endpointDeleteEndpoint,

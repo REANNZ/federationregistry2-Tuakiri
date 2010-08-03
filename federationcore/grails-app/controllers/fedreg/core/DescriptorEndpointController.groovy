@@ -19,6 +19,13 @@ class DescriptorEndpointController {
 			return
 		}
 		
+		if(!params.endpointType) {
+			log.warn "Endpoint type was not present"
+			render message(code: 'fedreg.controllers.namevalue.missing')
+			response.setStatus(500)
+			return
+		}
+		
 		def endpoint = Endpoint.get(params.id)
 		if(!endpoint) {
 			log.warn "Endpoint identified by id $params.id was not located"
@@ -28,7 +35,10 @@ class DescriptorEndpointController {
 		}
 		
 		log.info "Deleting Endpoint"
-		endpoint.delete()
+		def descriptor = endpoint.descriptor
+		descriptor."removeFrom${capitalize(params.endpointType)}"(endpoint)
+		descriptor.save(flush:true)
+		endpoint.delete(flush:true)
 		render message(code: 'fedreg.endpoint.delete.success')
 	}
 	
@@ -62,6 +72,7 @@ class DescriptorEndpointController {
 			return
 		}
 		
+		descriptor.refresh()
 		def endpoint = params.endpointType
 		if(allowedEndpoints.containsKey(endpoint) && descriptor.hasProperty(endpoint)) {
 			log.debug "Listing endpoints for descriptor ID ${params.id} of type ${endpoint}"
@@ -125,7 +136,7 @@ class DescriptorEndpointController {
 			log.debug "Creating endpoint for descriptor ID ${params.id} of type ${endpoint} at location ${params.location}"
 			
 			def location = new UrlURI(uri:params.location)
-			def service = grailsApplication.classLoader.loadClass(allowedEndpoints.get(endpoint)).newInstance(binding: binding, location: location, active:true)
+			def service = grailsApplication.classLoader.loadClass(allowedEndpoints.get(endpoint)).newInstance(descriptor:descriptor, binding: binding, location: location, active:true)
 			descriptor."addTo${capitalize(endpoint)}"(service)
 			descriptor.save(flush:true)
 			if(descriptor.hasErrors()) {

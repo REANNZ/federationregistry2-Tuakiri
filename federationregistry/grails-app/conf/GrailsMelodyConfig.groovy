@@ -17,7 +17,7 @@ The parameter disabled (false by default) just disables the monitoring.
 /*
 Turn on Grails Service monitoring by adding 'spring' in displayed-counters parameter.
  */
-javamelody.'displayed-counters' = 'http,sql,error,log,spring'
+javamelody.'displayed-counters' = 'http,sql,error,log,spring,jsp'
 
 
 
