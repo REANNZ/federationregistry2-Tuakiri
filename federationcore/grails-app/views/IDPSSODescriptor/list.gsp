@@ -1,7 +1,7 @@
 
 <html>
 	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		
 		<meta name="layout" content="members" />
 		<title><g:message code="fedreg.view.members.identityprovider.list.title" /></title>
 	</head>
