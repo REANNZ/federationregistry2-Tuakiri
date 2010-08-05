@@ -36,6 +36,10 @@ class AttributeBase  {
 	AttributeScope scope
 	AttributeCategory category
 	
+	boolean specificationRequired = false	// Generally used for something like Entitlement where values are potentially huge and privacy leaking. 
+											// This will force service providers to manually specify the set of values they require to operate 
+											// Potentially future extented to IDPSSODescriptor management to indicate the set supported
+	
 	Date dateCreated
 	Date lastUpdated
 

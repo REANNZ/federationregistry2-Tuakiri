@@ -30,8 +30,13 @@ class SPSSODescriptorController {
 			redirect(action: "list")
 			return
 		}
+		
+		def attributes = AttributeBase.list()
+		// Remove anything we don't want to add, currently just entitlement as we handle it as a special case
+		def specAttr = AttributeBase.findAllWhere(specificationRequired:true)
+		attributes.removeAll(specAttr)
 
-		[serviceProvider: serviceProvider, contactTypes:ContactType.list()]
+		[serviceProvider: serviceProvider, contactTypes:ContactType.list(), availableAttributes:attributes, specificationAttributes: specAttr]
 	}
 	
 	def create = {

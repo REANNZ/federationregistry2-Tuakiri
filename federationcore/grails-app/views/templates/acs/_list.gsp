@@ -23,6 +23,7 @@
 			</td>
 		</tr>
 		<tr>
+			<td/>
 			<td colspan="2">
 				<script type="text/javascript">
 					$(function() {
@@ -45,7 +46,7 @@
 								<tr>
 									<th><g:message code="label.attribute"/><th>
 									<td>
-										<g:select name="attrid" from="${AttributeBase.list().sort{it.friendlyName}}" optionKey="id" optionValue="${{ it.friendlyName + ' ( ' + it.oid + ' )' }}" class="required"/>
+										<g:select name="attrid" from="${availableAttributes.sort{it.friendlyName}}" optionKey="id" optionValue="${{ it.friendlyName + ' ( ' + it.oid + ' )' }}" class="required"/>
 									</td>
 								</tr>
 								<tr>
@@ -67,6 +68,36 @@
 					</form>
 				</div>
 			</td>
+		</tr>
+		<g:each in="${specificationAttributes}" status="j" var="specAttr">
+			<tr>
+				<th><g:message code="label.requested" /> ${specAttr.friendlyName}</th>
+				<td colspan="2">
+					<div id="acsspecattr${j}">
+						<g:if test="${acs.requestedAttributes.contains(specAttr)}">
+							<g:each in="${ra.values}" status="l" var="val">
+								${val}
+							</g:each>
+						</g:if>
+						<g:else>
+							<div class="information">
+								HARDCODE - No values currently being requested
+							</div>
+						</g:else>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td/>
+				<td>
+					<div id="addnewspecattributeval${j}" class="searcharea">
+						<n:button onclick="\$('#addnewspecattributeval${j}').fadeOut(); \$('#newspecattributeval${j}').fadeIn();" label="${message(code:'label.addvalue')}" icon="plus"/>
+					</div>
+				</td>
+			</tr>
+		</g:each>
+		<tr>
+			<td colspan="3"><hr></td>
 		</tr>
 	</g:each>
 	</tbody>
