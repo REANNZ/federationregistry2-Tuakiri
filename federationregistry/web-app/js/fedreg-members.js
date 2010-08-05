@@ -258,6 +258,59 @@ fedreg.endpoint_toggle = function(id, endpointType, containerID) {
 	});
 };
 
+// Attribute Consuming Services
+fedreg.acs_reqattribute_add = function(acsID, formID, containerID) {
+	$("#working").trigger("fedreg.working");
+	var dataString = "id=" + acsID + "&" + $("#" + formID).serialize();
+	$.ajax({
+		type: "POST",
+		url: acsAddAttr,
+		data: dataString,
+		success: function(res) {
+			nimble.growl('success', res);
+			$(':input', "#" + formID)
+			 	.not(':button, :submit, :reset, :hidden, select[name=binding]')
+			 	.val('')
+			fedreg.acs_reqattribute_list(acsID, containerID);
+	    },
+	    error: function (xhr, ajaxOptions, thrownError) {
+			nimble.growl('error', xhr.responseText);
+	    }
+	});
+};
+
+fedreg.acs_reqattribute_remove = function(raID, acsID, containerID) {
+	$("#working").trigger("fedreg.working");
+	var dataString = "raid=" + raID;
+	$.ajax({
+		type: "POST",
+		url: acsRemoveAttr,
+		data: dataString,
+		success: function(res) {
+			nimble.growl('success', res);
+			fedreg.acs_reqattribute_list(acsID, containerID);
+	    },
+	    error: function (xhr, ajaxOptions, thrownError) {
+			nimble.growl('error', xhr.responseText);
+	    }
+	});
+};
+
+fedreg.acs_reqattribute_list = function(acsID, containerID) {
+	var dataString = "id=" + acsID + "&containerID=" + containerID;
+	$.ajax({
+		type: "GET",
+		url: acsListAttr,
+		data: dataString,
+		success: function(res) {
+			$("#"+containerID).html(res)
+	    },
+	    error: function (xhr, ajaxOptions, thrownError) {
+			nimble.growl('error', xhr.responseText);
+	    }
+	});
+};
+
 // Name ID Formats
 fedreg.nameIDFormat_remove = function(formatID, containerID) {
 	$("#working").trigger("fedreg.working");

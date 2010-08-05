@@ -25,7 +25,6 @@ package fedreg.core
 class AttributeConsumingService {
 
 	boolean isDefault
-	int index
 	String lang
 	
 	Date dateCreated

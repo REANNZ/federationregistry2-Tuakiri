@@ -159,10 +159,10 @@
 		<table id="samlbasicmode">
 			<tr>
 				<td>
-					<label for="hostname"><g:message code="label.hostname" /></label>
+					<label for="hostname"><g:message code="label.url" /></label>
 				</td>
 				<td>
-					<g:textField name="hostname" size="50" class="required url"/>
+					<g:textField name="hostname" size="50" class="required url"/> <em> e.g https://idp.example.org
 				</td>
 			</tr>
 		</table>

@@ -468,7 +468,7 @@ class DataImporterService implements InitializingBean {
 			{
 				def required = it.attributeUseType.equals("required")	// change to boolean for sanity..
 				def attr = Attribute.findByName(it.attributeURN)
-				def reqAttr = new RequestedAttribute(isRequired:required, attribute:attr)
+				def reqAttr = new RequestedAttribute(isRequired:required, reasoning:'autoimport', attribute:attr)
 				acs.addToRequestedAttributes(reqAttr)
 			})
 			sp.addToAttributeConsumingServices(acs)

@@ -15,7 +15,23 @@ class SPSSODescriptorController {
 	}
 	
 	def show = {
+		if(!params.id) {
+			log.warn "SPSSODescriptor ID was not present"
+			flash.type="error"
+			flash.message = message(code: 'fedreg.controllers.namevalue.missing')
+			redirect(action: "list")
+			return
+		}
 		
+		def serviceProvider = SPSSODescriptor.get(params.id)
+		if (!serviceProvider) {
+			flash.type="error"
+			flash.message = message(code: 'fedreg.core.spssoroledescriptor.nonexistant')
+			redirect(action: "list")
+			return
+		}
+
+		[serviceProvider: serviceProvider, contactTypes:ContactType.list()]
 	}
 	
 	def create = {

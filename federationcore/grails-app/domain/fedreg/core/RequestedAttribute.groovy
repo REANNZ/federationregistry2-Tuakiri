@@ -23,14 +23,17 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class RequestedAttribute  {
-	boolean approved = false
-	boolean isRequired
 	Attribute attribute
+	String reasoning
+	boolean isRequired
+	boolean approved = false
 	
 	Date dateCreated
 	Date lastUpdated
 	
 	static constraints = {
+		attribute(nullable:false)
+		reasoning(nullable:false, blank:false)
 		dateCreated(nullable:true)
 		lastUpdated(nullable:true)
 	}

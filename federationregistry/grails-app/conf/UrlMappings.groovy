@@ -57,6 +57,10 @@ class UrlMappings {
 		controller = "descriptorAttribute"
 	}
 	
+	"/membership/backend/attributeconumingservice/$action?/$id?"{
+		controller = "attributeConsumingService"
+	}
+	
 	"/registration/$action?/$id?"{
 		controller = "bootstrap"
 	}

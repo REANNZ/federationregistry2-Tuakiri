@@ -31,5 +31,5 @@ class ServiceCategory {
 		description(nullable: false)
  	}
 
-	public String toString() {	"servicevategory:[id:$id, name: $name]" }
+	public String toString() {	"servicecategory:[id:$id, name: $name]" }
 }

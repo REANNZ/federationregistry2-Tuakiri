@@ -3,32 +3,36 @@
 	<head>
 		<meta name="layout" content="members" />
 
-		<title><g:message code="fedreg.view.members.identityprovider.show.title" /></title>
+		<title><g:message code="fedreg.view.members.serviceprovider.show.title" /></title>
 		
 		<script type="text/javascript">
 			var activeContact
-			var contactCreateEndpoint = "${createLink(controller:'descriptorContact', action:'create', id:identityProvider.id )}";
+			var contactCreateEndpoint = "${createLink(controller:'descriptorContact', action:'create', id:serviceProvider.id )}";
 			var contactDeleteEndpoint = "${createLink(controller:'descriptorContact', action:'delete' )}";
-			var contactListEndpoint = "${createLink(controller:'descriptorContact', action:'list', id:identityProvider.id ) }";
+			var contactListEndpoint = "${createLink(controller:'descriptorContact', action:'list', id:serviceProvider.id ) }";
 			var contactSearchEndpoint = "${createLink(controller:'descriptorContact', action:'search')}";
 			
-			var certificateListEndpoint = "${createLink(controller:'descriptorKeyDescriptor', action:'list', id:identityProvider.id )}";
-			var certificateCreationEndpoint = "${createLink(controller:'descriptorKeyDescriptor', action:'create', id:identityProvider.id)}";
+			var acsAddAttr = "${createLink(controller:'attributeConsumingService', action:'addRequestedAttribute')}";
+			var acsListAttr = "${createLink(controller:'attributeConsumingService', action:'listRequestedAttributes')}";
+			var acsRemoveAttr = "${createLink(controller:'attributeConsumingService', action:'removeRequestedAttribute')}";
+			
+			var certificateListEndpoint = "${createLink(controller:'descriptorKeyDescriptor', action:'list', id:serviceProvider.id )}";
+			var certificateCreationEndpoint = "${createLink(controller:'descriptorKeyDescriptor', action:'create', id:serviceProvider.id)}";
 			var certificateDeleteEndpoint = "${createLink(controller:'descriptorKeyDescriptor', action:'delete')}";
 			var certificateValidationEndpoint = "${createLink(controller:'coreUtilities', action:'validateCertificate')}";
 			
 			var endpointDeleteEndpoint = "${createLink(controller:'descriptorEndpoint', action:'delete')}";
-			var endpointListEndpoint = "${createLink(controller:'descriptorEndpoint', action:'list', id:identityProvider.id)}";
-			var endpointCreationEndpoint = "${createLink(controller:'descriptorEndpoint', action:'create', id:identityProvider.id)}";
+			var endpointListEndpoint = "${createLink(controller:'descriptorEndpoint', action:'list', id:serviceProvider.id)}";
+			var endpointCreationEndpoint = "${createLink(controller:'descriptorEndpoint', action:'create', id:serviceProvider.id)}";
 			var endpointToggleStateEndpoint = "${createLink(controller:'descriptorEndpoint', action:'toggle')}";
 			
-			var nameIDFormatRemoveEndpoint = "${createLink(controller:'descriptorNameIDFormat', action:'remove', id:identityProvider.id )}";
-			var nameIDFormatListEndpoint = "${createLink(controller:'descriptorNameIDFormat', action:'list', id:identityProvider.id )}";
-			var nameIDFormatAddEndpoint = "${createLink(controller:'descriptorNameIDFormat', action:'add', id:identityProvider.id )}";
+			var nameIDFormatRemoveEndpoint = "${createLink(controller:'descriptorNameIDFormat', action:'remove', id:serviceProvider.id )}";
+			var nameIDFormatListEndpoint = "${createLink(controller:'descriptorNameIDFormat', action:'list', id:serviceProvider.id )}";
+			var nameIDFormatAddEndpoint = "${createLink(controller:'descriptorNameIDFormat', action:'add', id:serviceProvider.id )}";
 			
-			var attributeRemoveEndpoint = "${createLink(controller:'descriptorAttribute', action:'remove', id:identityProvider.id )}";
-			var attributeListEndpoint = "${createLink(controller:'descriptorAttribute', action:'list', id:identityProvider.id )}";
-			var attributeAddEndpoint = "${createLink(controller:'descriptorAttribute', action:'add', id:identityProvider.id )}";
+			var attributeRemoveEndpoint = "${createLink(controller:'descriptorAttribute', action:'remove', id:serviceProvider.id )}";
+			var attributeListEndpoint = "${createLink(controller:'descriptorAttribute', action:'list', id:serviceProvider.id )}";
+			var attributeAddEndpoint = "${createLink(controller:'descriptorAttribute', action:'add', id:serviceProvider.id )}";
 			
 			$(function() {
 				$("#tabs").tabs();
@@ -39,56 +43,57 @@
 	<body>
 		<section>
 			
-		<h2><g:message code="fedreg.view.members.identityprovider.show.heading" args="[identityProvider.displayName]"/></h2>
+		<h2><g:message code="fedreg.view.members.serviceprovider.show.heading" args="[serviceProvider.displayName]"/></h2>
 		<table>
 			<tbody>		
 				<tr>
 					<th><g:message code="label.displayname"/></th>
-					<td>${fieldValue(bean: identityProvider, field: "displayName")}</td>
+					<td>${fieldValue(bean: serviceProvider, field: "displayName")}</td>
 				</tr>
 				<tr>
 					<th><g:message code="label.description"/></th>
-					<td>${fieldValue(bean: identityProvider, field: "description")}</td>
+					<td>${fieldValue(bean: serviceProvider, field: "description")}</td>
 				</tr>
 				<tr>
 					<th><g:message code="label.organization"/></th>
-					<td><g:link controller="organization" action="show" id="${identityProvider.organization.id}">${fieldValue(bean: identityProvider, field: "organization.displayName")}</g:link></td>
+					<td><g:link controller="organization" action="show" id="${serviceProvider.organization.id}">${fieldValue(bean: serviceProvider, field: "organization.displayName")}</g:link></td>
 				</tr>
 				<tr>
 					<th><g:message code="label.entitydescriptor"/></th>
-					<td><g:link controller="entity" action="show" id="${identityProvider.entityDescriptor.id}">${fieldValue(bean: identityProvider, field: "entityDescriptor.entityID")}</g:link></td>
+					<td><g:link controller="entity" action="show" id="${serviceProvider.entityDescriptor.id}">${fieldValue(bean: serviceProvider, field: "entityDescriptor.entityID")}</g:link></td>
 				</tr>
 				<tr>
 					<th><g:message code="label.protocolsupport"/></th>
 					<td>
-						<g:each in="${identityProvider.protocolSupportEnumerations}" status="i" var="pse">
+						<g:each in="${serviceProvider.protocolSupportEnumerations}" status="i" var="pse">
 						${pse.uri} <br/>
 						</g:each>
 					</td>
-				<g:if test="${identityProvider.errorURL}">
+				<g:if test="${serviceProvider.errorURL}">
 				<tr>
 					<th><g:message code="label.errorurl"/></th>
-					<td><a href="${identityProvider.errorURL}">${fieldValue(bean: identityProvider, field: "errorURL")}</a></td>
+					<td><a href="${serviceProvider.errorURL}">${fieldValue(bean: serviceProvider, field: "errorURL")}</a></td>
 				</tr>
 				</g:if>
 				<tr>
 					<th><g:message code="label.status"/></th>
 					<td>
-						<g:if test="${identityProvider.active}">
-							<div class="icon icon_tick"><g:message code="label.active" /></div>
+						<g:if test="${serviceProvider.active}">
+							<g:message code="label.active" />
 						</g:if>
 						<g:else>
-							<div class="icon icon_cross"><g:message code="label.inactive" /></div>
+							<g:message code="label.inactive" />
 						</g:else>
 					</td>
+				</tr>
 				<tr>
-					<th><g:message code="label.requiresignedauthn"/></th>
+					<th><g:message code="label.approved"/></th>
 					<td>
-						<g:if test="${identityProvider.wantAuthnRequestsSigned}">
-							<div class="icon icon_tick"><g:message code="label.yes" /></div>
+						<g:if test="${serviceProvider.active}">
+							<g:message code="label.yes" />
 						</g:if>
 						<g:else>
-							<div class="icon icon_cross"><g:message code="label.no" /></div>
+							<g:message code="label.no" />
 						</g:else>
 					</td>
 				</tr>
@@ -97,56 +102,54 @@
 			
 			<div id="tabs">
 				<ul>
-					<li><a href="#tab-contacts" class="icon icon_user_comment"><g:message code="label.contacts" /></a></li>
-					<li><a href="#tab-crypto" class="icon icon_lock"><g:message code="label.crypto" /></a></li>
-					<li><a href="#tab-endpoints" class="icon icon_link"><g:message code="label.endpoints" /></a></li>
-					<li><a href="#tab-attributes" class="icon icon_vcard"><g:message code="label.supportedattributes" /></a></li>
-					<li><a href="#tab-nameidformats" class="icon icon_database_key"><g:message code="label.supportednameidformats" /></a></li>
+					<li><a href="#tab-contacts"><g:message code="label.contacts" /></a></li>
+					<li><a href="#tab-crypto"><g:message code="label.crypto" /></a></li>
+					<li><a href="#tab-endpoints"><g:message code="label.endpoints" /></a></li>
+					<li><a href="#tab-attributes"><g:message code="label.attributeconsumingservices" /></a></li>
+					<li><a href="#tab-nameidformats"><g:message code="label.supportednameidformats" /></a></li>
 				</ul>
 				
 				<div id="tab-contacts" class="tabcontent">
 					<h3><g:message code="label.contacts" /></h3>
 					<div id="contacts">
-						<g:render template="/templates/contacts/list" plugin="federationcore" model="[descriptor:identityProvider, allowremove:true]" />
+						<g:render template="/templates/contacts/list" plugin="federationcore" model="[descriptor:serviceProvider, allowremove:true]" />
 					</div>
 					<hr>
-					<g:render template="/templates/contacts/create" plugin="federationcore" model="[descriptor:identityProvider, contactTypes:contactTypes]"/>
+					<g:render template="/templates/contacts/create" plugin="federationcore" model="[descriptor:serviceProvider, contactTypes:contactTypes]"/>
 				</div>
 				<div id="tab-crypto" class="tabcontent">
 					<h3><g:message code="label.publishedcertificates" plugin="federationcore" /></h3>
 					<div id="certificates">
-						<g:render template="/templates/certificates/list" plugin="federationcore" model="[descriptor:identityProvider, allowremove:true]" />
+						<g:render template="/templates/certificates/list" plugin="federationcore" model="[descriptor:serviceProvider, allowremove:true]" />
 					</div>
 					<hr>
-					<g:render template="/templates/certificates/create" plugin="federationcore" model="[descriptor:identityProvider]"/>
+					<g:render template="/templates/certificates/create" plugin="federationcore" model="[descriptor:serviceProvider]"/>
 				</div>
 				<div id="tab-endpoints" class="tabcontent">
 					<h3><g:message code="label.supportedendpoints" /></h3>
 					<div id="tabs2">
 						<ul>
-							<li><a href="#tab-sso" class="icon icon_cog"><g:message code="label.ssoservices" /></a></li>
-							<li><a href="#tab-ars" class="icon icon_cog"><g:message code="label.artifactresolutionservices" /></a></li>
-							<li><a href="#tab-slo" class="icon icon_cog"><g:message code="label.sloservices" /></a></li>
+							<li><a href="#tab-acs"><g:message code="label.assertionconsumerservice" /></a></li>
+							<li><a href="#tab-ars"><g:message code="label.artifactresolutionservices" /></a></li>
+							<li><a href="#tab-slo"><g:message code="label.sloservices" /></a></li>
 						</ul>
-						
-						<div id="tab-sso" class="componentlist">
-							<div id="ssoendpoints">
-								<g:render template="/templates/endpoints/list" plugin="federationcore" model="[endpoints:identityProvider.singleSignOnServices, allowremove:true, endpointType:'singleSignOnServices', containerID:'ssoendpoints']" />
+						<div id="tab-acs" class="componentlist">
+							<div id="assertionconsumerendpoints">
+								<g:render template="/templates/endpoints/list" plugin="federationcore" model="[endpoints:serviceProvider.assertionConsumerServices, allowremove:true, endpointType:'assertionConsumerServices', containerID:'assertionconsumerendpoints']" />
 							</div>
 							<hr>
-							<g:render template="/templates/endpoints/create" plugin="federationcore" model="[endpointType:'singleSignOnServices', containerID:'ssoendpoints']" />
-							
+							<g:render template="/templates/endpoints/create" plugin="federationcore" model="[endpointType:'assertionConsumerServices', containerID:'assertionconsumerendpoints']" />
 						</div>
 						<div id="tab-ars" class="componentlist">
 							<div id="artifactendpoints">
-								<g:render template="/templates/endpoints/list" plugin="federationcore" model="[endpoints:identityProvider.artifactResolutionServices, allowremove:true, endpointType:'artifactResolutionServices', containerID:'artifactendpoints']" />
+								<g:render template="/templates/endpoints/list" plugin="federationcore" model="[endpoints:serviceProvider.artifactResolutionServices, allowremove:true, endpointType:'artifactResolutionServices', containerID:'artifactendpoints']" />
 							</div>
 							<hr>
 							<g:render template="/templates/endpoints/create" plugin="federationcore" model="[endpointType:'artifactResolutionServices', containerID:'artifactendpoints']" />
 						</div>
 						<div id="tab-slo" class="componentlist">
 							<div id="singlelogoutendpoints">
-								<g:render template="/templates/endpoints/list" plugin="federationcore" model="[endpoints:identityProvider.singleLogoutServices, allowremove:true, endpointType:'singleLogoutServices', containerID:'singlelogoutendpoints']" />
+								<g:render template="/templates/endpoints/list" plugin="federationcore" model="[endpoints:serviceProvider.singleLogoutServices, allowremove:true, endpointType:'singleLogoutServices', containerID:'singlelogoutendpoints']" />
 							</div>
 							<hr>
 							<g:render template="/templates/endpoints/create" plugin="federationcore" model="[endpointType:'singleLogoutServices', containerID:'singlelogoutendpoints']" />
@@ -154,17 +157,13 @@
 					</div>
 				</div>
 				<div id="tab-attributes" class="tabcontent">
-					<h3><g:message code="label.supportedattributes" /></h3>
-					<div id="attributes">
-						<g:render template="/templates/attributes/list" plugin="federationcore" model="[attrs:identityProvider.attributes, containerID:'attributes']" />
-					</div>
-					<hr>
-					<g:render template="/templates/attributes/add" plugin="federationcore" model="[type:'idp', containerID:'attributes']"/>
+					<h3><g:message code="label.attributeconsumingservices" /></h3>
+					<g:render template="/templates/acs/list" plugin="federationcore" model="[attributeConsumingServices:serviceProvider.attributeConsumingServices, allowremove:true]"/>
 				</div>
 				<div id="tab-nameidformats" class="tabcontent">
 					<h3><g:message code="label.supportednameidformats" /></h3>
 					<div id="nameidformats">
-						<g:render template="/templates/nameidformats/list" plugin="federationcore" model="[nameIDFormats:identityProvider.nameIDFormats, containerID:'nameidformats']" />
+						<g:render template="/templates/nameidformats/list" plugin="federationcore" model="[nameIDFormats:serviceProvider.nameIDFormats, containerID:'nameidformats']" />
 					</div>
 					<hr>
 					<g:render template="/templates/nameidformats/add" plugin="federationcore" model="[containerID:'nameidformats']"/>

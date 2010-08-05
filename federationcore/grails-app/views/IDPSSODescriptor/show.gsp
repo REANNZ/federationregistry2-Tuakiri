@@ -76,12 +76,24 @@
 					<th><g:message code="label.status"/></th>
 					<td>
 						<g:if test="${identityProvider.active}">
-							<div class="icon icon_tick"><g:message code="label.active" /></div>
+							<g:message code="label.active" />
 						</g:if>
 						<g:else>
-							<div class="icon icon_cross"><g:message code="label.inactive" /></div>
+							<g:message code="label.inactive" />
 						</g:else>
 					</td>
+				</tr>
+				<tr>
+					<th><g:message code="label.approved"/></th>
+					<td>
+						<g:if test="${identityProvider.active}">
+							<g:message code="label.yes" />
+						</g:if>
+						<g:else>
+							<g:message code="label.no" />
+						</g:else>
+					</td>
+				</tr>
 				<tr>
 					<th><g:message code="label.requiresignedauthn"/></th>
 					<td>

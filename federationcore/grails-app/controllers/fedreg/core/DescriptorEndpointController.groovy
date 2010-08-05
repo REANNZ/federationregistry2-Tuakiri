@@ -7,7 +7,7 @@ class DescriptorEndpointController {
 	static allowedMethods = [delete: "POST", listEndpoints:"GET"]
 	// Maps allowed endpoints to internal class representation
 	def allowedEndpoints = [singleSignOnServices:"fedreg.core.SingleSignOnService", artifactResolutionServices:"fedreg.core.ArtifactResolutionService", 
-							singleLogoutServices:"fedreg.core.SingleLogoutService"]
+							singleLogoutServices:"fedreg.core.SingleLogoutService", assertionConsumerServices:"fedreg.core.AssertionConsumerService"]
 
 	def cryptoService
 

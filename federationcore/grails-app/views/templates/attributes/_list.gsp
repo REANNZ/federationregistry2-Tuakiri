@@ -1,5 +1,5 @@
 <g:if test="${attrs}">
-<table class="cleantable">
+<table>
 	<thead>
 		<tr>
 			<th><g:message code="label.attribute" /></th>
