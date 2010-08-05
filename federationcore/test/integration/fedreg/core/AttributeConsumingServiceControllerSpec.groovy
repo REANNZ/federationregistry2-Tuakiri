@@ -12,7 +12,7 @@ class AttributeConsumingServiceControllerSpec extends IntegrationSpec {
 		setup:
 		def controller = new AttributeConsumingServiceController()
 		def acs = AttributeConsumingService.build().save()
-		def attr = Attribute.build().save()
+		def attr = AttributeBase.build().save()
 		
 		controller.params.id = acs.id
 		controller.params.attrid = attr.id
@@ -29,13 +29,12 @@ class AttributeConsumingServiceControllerSpec extends IntegrationSpec {
 		setup:
 		def controller = new AttributeConsumingServiceController()
 		def acs = AttributeConsumingService.build().save()
-		def attr = Attribute.build().save()
-		def ra1 = RequestedAttribute.build(attribute:attr).save()
+		def ra1 = RequestedAttribute.build().save()
 		acs.addToRequestedAttributes(ra1)
 		acs.save()
 		
 		controller.params.id = acs.id
-		controller.params.attrid = attr.id
+		controller.params.attrid = ra1.base.id
 		controller.params.reasoning = "I really need it!"
 		
 		when:
@@ -66,8 +65,8 @@ class AttributeConsumingServiceControllerSpec extends IntegrationSpec {
 		setup:
 		def controller = new AttributeConsumingServiceController()
 		def acs = AttributeConsumingService.build().save()
-		def attr = Attribute.build().save()
-		def ra1 = RequestedAttribute.build(attribute:attr).save()
+		def attr = AttributeBase.build().save()
+		def ra1 = RequestedAttribute.build(base:attr).save()
 		acs.addToRequestedAttributes(ra1)
 		acs.save()
 		

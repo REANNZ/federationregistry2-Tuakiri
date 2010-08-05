@@ -131,7 +131,7 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		}
 		
 		(1..11).each { i ->
-			Attribute.build(name: "attr$i").save()
+			AttributeBase.build(name: "attr$i").save()
 		}
 		
 		(1..12).each { i ->

@@ -34,7 +34,7 @@ class IDPSSODescriptorController {
 	
 	def create = {
 		def identityProvider = new IDPSSODescriptor()
-		[identityProvider: identityProvider, organizationList: Organization.list(), attributeList: Attribute.list(), nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)]
+		[identityProvider: identityProvider, organizationList: Organization.list(), attributeList: AttributeBase.list(), nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)]
 	}
 	
 	def save = {

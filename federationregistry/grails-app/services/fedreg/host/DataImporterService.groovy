@@ -138,10 +138,10 @@ class DataImporterService implements InitializingBean {
 		{
 			def scope = AttributeScope.findByName(it.scope)
 			def category = AttributeCategory.findByName(it.status)
-			def attr = new Attribute(id: it.attributeID, oid: it.attributeOID, name: it.attributeURN, friendlyName: it.attributeFullName, headerName: it.headerName, 
+			def attr = new AttributeBase(id: it.attributeID, oid: it.attributeOID, name: it.attributeURN, friendlyName: it.attributeFullName, headerName: it.headerName, 
 										alias:it.alias, description:it.description, scope: scope, category: category)
 								
-			def existingAttr = Attribute.get(attr.id)
+			def existingAttr = AttributeBase.get(attr.id)
 			if(!existingAttr) {
 				attr.save()
 				if(attr.hasErrors()) {
@@ -303,13 +303,6 @@ class DataImporterService implements InitializingBean {
 				else
 					log.warn ("No SamlURI binding for uri ${it.serviceBinding} exists, not importing ArtifactResolutionService")
 			})
-			sql.eachRow("select attributeOID from attributes INNER JOIN homeOrgAttributes ON attributes.attributeID=homeOrgAttributes.attributeID where homeOrgAttributes.homeOrgID=${it.homeOrgID};",
-			{
-				def attr = Attribute.findByOid(it.attributeOID)
-				if(attr)
-					idp.addToAttributes(attr)
-			})
-			
 			// RR doesn't store any flag to indicate that AA publishes encyption type in MD so we won't create an enc key.....
 			importCrypto(it.homeOrgID, idp, false)
 			
@@ -320,6 +313,17 @@ class DataImporterService implements InitializingBean {
 			}
 			else
 				log.debug "Added new IDPSSODescriptor to Entity ${entity.entityID}"
+				
+			sql.eachRow("select attributeOID from attributes INNER JOIN homeOrgAttributes ON attributes.attributeID=homeOrgAttributes.attributeID where homeOrgAttributes.homeOrgID=${it.homeOrgID};",
+			{
+				def base = AttributeBase.findByOid(it.attributeOID)
+				if(base) {
+					def attr = new Attribute(base: base, idpSSODescriptor:idp)
+					idp.addToAttributes(attr)
+				}
+			})
+			idp.save()
+			
 		})	
 	}
 	
@@ -350,13 +354,6 @@ class DataImporterService implements InitializingBean {
 				else 
 					log.warn ("No SamlURI binding for uri ${it.serviceBinding} exists, not importing, not importing AttributeService")
 			})
-			sql.eachRow("select attributeOID from attributes INNER JOIN homeOrgAttributes ON attributes.attributeID=homeOrgAttributes.attributeID where homeOrgAttributes.homeOrgID=${it.homeOrgID};",
-			{
-				def attr = Attribute.findByOid(it.attributeOID)
-				if(attr)
-					aa.addToAttributes(attr)
-			})
-			
 			// RR doesn't store any flag to indicate that AA publishes encyption type in MD so we won't create an enc key.....
 			importCrypto(it.homeOrgID, aa, false)
 			
@@ -374,6 +371,15 @@ class DataImporterService implements InitializingBean {
 			idp.collaborator = aa
 			idp.save()
 			
+			sql.eachRow("select attributeOID from attributes INNER JOIN homeOrgAttributes ON attributes.attributeID=homeOrgAttributes.attributeID where homeOrgAttributes.homeOrgID=${it.homeOrgID};",
+			{
+				def base = AttributeBase.findByOid(it.attributeOID)
+				if(base) {
+					def attr = new Attribute(base: base, attributeAuthorityDescriptor:aa)
+					aa.addToAttributes(attr)
+				}
+			})
+			aa.save()
 		})
 	}
 
@@ -465,11 +471,13 @@ class DataImporterService implements InitializingBean {
 			})
 			
 			sql.eachRow("select attributeUse.attributeUseType, attributes.attributeURN from attributeUse INNER JOIN attributes ON attributes.attributeID=attributeUse.attributeID where attributeUse.resourceID=${it.resourceID}",
-			{
-				def required = it.attributeUseType.equals("required")	// change to boolean for sanity..
-				def attr = Attribute.findByName(it.attributeURN)
-				def reqAttr = new RequestedAttribute(isRequired:required, reasoning:'autoimport', attribute:attr)
-				acs.addToRequestedAttributes(reqAttr)
+			{	
+				def base = AttributeBase.findByName(it.attributeURN)
+				if(base) {
+					def required = it.attributeUseType.equals("required")	// change to boolean for sanity..
+					def reqAttr = new RequestedAttribute(isRequired:required, reasoning:'autoimport', base:base)
+					acs.addToRequestedAttributes(reqAttr)
+				}
 			})
 			sp.addToAttributeConsumingServices(acs)
 			

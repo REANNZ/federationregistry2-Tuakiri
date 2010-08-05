@@ -22,22 +22,12 @@ package fedreg.core
 /**
  * @author Bradley Beddoes
  */
-class Attribute  {
-	AttributeBase base
+class AttributeValue  {
+
+	String value
+	
 	Date dateCreated
 	Date lastUpdated
-	
-	static hasMany = [
-		values: AttributeValue
-	]
-	
-	static belongsTo = [idpSSODescriptor: IDPSSODescriptor, attributeAuthorityDescriptor:AttributeAuthorityDescriptor]
-	
-	static constraints = {
-		idpSSODescriptor(nullable:true)
-		attributeAuthorityDescriptor(nullable:true)
-		base(nullable:false)
-	}
-	
-	public String toString() {	"attribute:[id:$id]" }
+
+	public String toString() {	"attributevalue:[id:$id, value: $value]" }
 }

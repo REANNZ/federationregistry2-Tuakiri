@@ -9,13 +9,13 @@
 		</tr>
 	</thead>
 	<tbody>
-	<g:each in="${attrs.sort{it.friendlyName}}" status="i" var="attr">
+	<g:each in="${attrs.sort{it.base.friendlyName}}" status="i" var="attr">
 		<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-			<td>${attr.friendlyName.encodeAsHTML()}</td>
-			<td>${attr.oid.encodeAsHTML()}</td>
-			<td> ${attr.description.encodeAsHTML()}</td>
+			<td>${attr.base.friendlyName.encodeAsHTML()}</td>
+			<td>${attr.base.oid.encodeAsHTML()}</td>
+			<td> ${attr.base.description.encodeAsHTML()}</td>
 			<td>
-				<n:confirmaction action="fedreg.attribute_remove(${attr.id}, '${containerID}' );" title="${message(code: 'fedreg.template.attributes.remove.confirm.title')}" msg="${message(code: 'fedreg.template.attributes.remove.confirm.descriptive', args:[attr.friendlyName.encodeAsHTML()])}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" icon="trash" label="label.remove" />
+				<n:confirmaction action="fedreg.attribute_remove(${attr.id}, '${containerID}' );" title="${message(code: 'fedreg.template.attributes.remove.confirm.title')}" msg="${message(code: 'fedreg.template.attributes.remove.confirm.descriptive', args:[attr.base.friendlyName.encodeAsHTML()])}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" icon="trash" label="label.remove" />
 			</td>
 		</tr>
 	</g:each>

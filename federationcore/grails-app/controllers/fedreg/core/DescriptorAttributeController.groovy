@@ -36,25 +36,25 @@ class DescriptorAttributeController {
 		}
 		
 		if(!descriptor.attributes.contains(attribute)) {
-			log.warn "Attribute identified by id ${params.attributeID} isn't supported by descriptor ${params.id}"
+			log.warn "${attribute} isn't supported by descriptor ${params.id}"
 			response.setStatus(500)
-			render message(code: 'fedreg.attribute.remove.notsupported', args:[attribute.friendlyName])
+			render message(code: 'fedreg.attribute.remove.notsupported', args:[attribute.base.friendlyName])
 			return
 		}
 		
-		log.info "Removing attribute (${params.attributeID})${attribute.friendlyName} from descriptor ${params.id}"
+		log.info "Removing ${attribute} from descriptor ${params.id}"
 		descriptor.removeFromAttributes(attribute)
 		descriptor.save()
 		if(descriptor.hasErrors()) {
-			log.warn "Removing attribute (${params.attributeID})${attribute.friendlyName} from descriptor ${params.id} failed"
+			log.warn "Removing ${attribute} from descriptor ${params.id} failed"
 			descriptor.errors.each {
 				log.debug it
 			}
-			render message(code: 'fedreg.attribute.remove.failed', args:[attribute.friendlyName])
+			render message(code: 'fedreg.attribute.remove.failed', args:[attribute.base.friendlyName])
 			response.setStatus(500)
 			return
 		}else {
-			render message(code: 'fedreg.attribute.remove.success', args:[attribute.friendlyName])
+			render message(code: 'fedreg.attribute.remove.success', args:[attribute.base.friendlyName])
 		}
 	}
 	
@@ -107,33 +107,35 @@ class DescriptorAttributeController {
 			return
 		}
 		
-		def attribute = Attribute.get(params.attributeID)
-		if(!attribute) {
-			log.warn "Attribute identified by id ${params.attributeID} was not located"
+		def base = AttributeBase.get(params.attributeID)
+		if(!base) {
+			log.warn "Attribute Base identified by id ${params.attributeID} was not located"
 			render message(code: 'fedreg.nameidformat.nonexistant', args: [params.attributeID])
 			response.setStatus(500)
 			return
 		}
 		
-		if(descriptor.attributes.contains(attribute)) {
-			log.warn "Attribute identified by id ${params.attributeID} was already supported by descriptor ${params.id}"
-			response.setStatus(500)
-			render message(code: 'fedreg.attribute.add.alreadysupported', args:[attribute.friendlyName])
-			return
+		for( a in descriptor.attributes) {
+			if(a.base == base) {
+				log.warn "${base} is already supported by descriptor ${params.id}"
+				response.setStatus(500)
+				render message(code: 'fedreg.attribute.add.alreadysupported', args:[base.friendlyName])
+				return
+			}
 		}
 		
-		descriptor.addToAttributes(attribute)
+		descriptor.addToAttributes(new Attribute(base:base))
 		descriptor.save()
 		if(descriptor.hasErrors()) {
-			log.warn "Adding attribute (${params.attributeID})${attribute.friendlyName} to descriptor ${params.id} failed"
+			log.warn "Adding ${attribute} to descriptor ${params.id} failed"
 			descriptor.errors.each {
 				log.debug it
 			}
-			render message(code: 'fedreg.attribute.add.failed', args:[attribute.friendlyName])
+			render message(code: 'fedreg.attribute.add.failed', args:[base.friendlyName])
 			response.setStatus(500)
 			return
 		}else {
-			render message(code: 'fedreg.attribute.add.success', args:[attribute.friendlyName])
+			render message(code: 'fedreg.attribute.add.success', args:[base.friendlyName])
 		}
 	}
 

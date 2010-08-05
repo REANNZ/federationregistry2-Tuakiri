@@ -34,7 +34,7 @@ class AttributeConsumingServiceController {
 			return
 		}
 		
-		def attr = Attribute.get(params.attrid)
+		def attr = AttributeBase.get(params.attrid)
 		if(!attr) {
 			log.warn "Attribute identified by id ${params.attrid} was not located"
 			render message(code: 'fedreg.attr.nonexistant', args: [params.id])
@@ -43,7 +43,7 @@ class AttributeConsumingServiceController {
 		}
 		
 		for( a in acs.requestedAttributes) {
-			if(a.attribute == attr) {
+			if(a.base == attr) {
 				log.warn "${a} already supported by ${acs} and ${acs.descriptor} not adding"
 				render message(code: 'fedreg.attributeconsumingservice.requestedattribute.add.already.exists')
 				response.setStatus(500)
@@ -51,7 +51,7 @@ class AttributeConsumingServiceController {
 			}
 		}
 		
-		def reqAttr = new RequestedAttribute(reasoning:params.reasoning, attribute: attr, isRequired: params.isrequired, approved: false)
+		def reqAttr = new RequestedAttribute(reasoning:params.reasoning, base: attr, isRequired: params.isrequired, approved: false)
 		acs.addToRequestedAttributes(reqAttr)
 		acs.save(flush:true)
 		if(acs.hasErrors()) {
@@ -119,7 +119,7 @@ class AttributeConsumingServiceController {
 		}
 		requestedAttribute.delete()
 		
-		log.debug "Removed ${requestedAttribute} referencing ${requestedAttribute.attribute} from ${acs}"
+		log.debug "Removed ${requestedAttribute} referencing ${requestedAttribute.base} from ${acs}"
 		render message(code: 'fedreg.attributeconsumingservice.requestedattribute.remove.success')
 	}
 	

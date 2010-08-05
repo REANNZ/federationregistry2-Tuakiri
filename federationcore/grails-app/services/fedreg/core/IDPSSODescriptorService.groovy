@@ -34,9 +34,9 @@ class IDPSSODescriptorService {
 		def identityProvider = new IDPSSODescriptor(active:params.active, displayName: params.idp?.displayName, description: params.idp?.description, organization: organization)
 		params.idp.attributes.each { attrID -> 
 			if(attrID.value == "on") {
-				def attr = Attribute.get(attrID.key)
+				def attr = AttributeBase.get(attrID.key)
 				if(attr)
-					identityProvider.addToAttributes(attr)
+					identityProvider.addToAttributes(new Attribute(base:attr))
 			}
 		}
 		params.idp.nameidformats.each { nameFormatID -> 
@@ -100,9 +100,9 @@ class IDPSSODescriptorService {
 			attributeAuthority.addToAttributeServices(attributeService)
 			params.aa.attributes.each { attrID -> 
 				if(attrID.value == "on") {
-					def attr = Attribute.get(attrID.key)
+					def attr = AttributeBase.get(attrID.key)
 					if(attr)
-						attributeAuthority.addToAttributes(attr)
+						attributeAuthority.addToAttributes(new Attribute(base:attr))
 				}
 			}
 			
@@ -129,7 +129,7 @@ class IDPSSODescriptorService {
 		// Submission validation
 		if(!entityDescriptor.save()) {
 			entityDescriptor?.errors.each { log.error it }
-			return [false, organization, entityDescriptor, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, Organization.list(), Attribute.list(), SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding), contact]
+			return [false, organization, entityDescriptor, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, Organization.list(), AttributeBase.list(), SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding), contact]
 		}
 		identityProvider.entityDescriptor = entityDescriptor
 		entityDescriptor.addToIdpDescriptors(identityProvider)
@@ -141,24 +141,24 @@ class IDPSSODescriptorService {
 		
 		if(!identityProvider.validate()) {			
 			identityProvider.errors.each { log.debug it }
-			return [false, organization, entityDescriptor, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, Organization.list(), Attribute.list(), SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding), contact]
+			return [false, organization, entityDescriptor, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, Organization.list(), AttributeBase.list(), SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding), contact]
 		}
 		
 		if(params.aa?.create)
 			if(!attributeAuthority.validate()) {			
 				attributeAuthority.errors.each {log.debug it}
-				return [false, organization, entityDescriptor, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, Organization.list(), Attribute.list(), SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding), contact]
+				return [false, organization, entityDescriptor, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, Organization.list(), AttributeBase.list(), SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding), contact]
 			}
 		
 		if(!identityProvider.save()) {			
 			identityProvider.errors.each {log.debug it}
-			return [false, organization, entityDescriptor, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, Organization.list(), Attribute.list(), SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding), contact]
+			return [false, organization, entityDescriptor, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, Organization.list(), AttributeBase.list(), SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding), contact]
 		}
 		
 		def workflowParams = [ creator:contact?.id, identityProvider:identityProvider?.id, attributeAuthority:attributeAuthority?.id, organization:organization.name ]
 		def processInstance = workflowProcessService.initiate( "idpssodescriptor_create", "Approval for creation of IDPSSODescriptor ${identityProvider.displayName}", ProcessPriority.MEDIUM, workflowParams)
 		workflowProcessService.run(processInstance)
 		
-		return [true, organization, entityDescriptor, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, Organization.list(), Attribute.list(), SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding), contact]
+		return [true, organization, entityDescriptor, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, Organization.list(), AttributeBase.list(), SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding), contact]
 	}
 }

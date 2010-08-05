@@ -56,8 +56,8 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		setupCrypto()
 
 		def organization = Organization.build().save()
-		def attr1 = Attribute.build(name: "attr1").save()
-		def attr2 = Attribute.build(name: "attr2").save()
+		def attr1 = AttributeBase.build(name: "attr1").save()
+		def attr2 = AttributeBase.build(name: "attr2").save()
 		def nameID1 = SamlURI.build().save()
 		def nameID2 = SamlURI.build().save()
 		def pk = loadPK()
@@ -159,8 +159,8 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		setupCrypto()
 
 		def organization = Organization.build().save()
-		def attr1 = Attribute.build(name: "attr1").save()
-		def attr2 = Attribute.build(name: "attr2").save()
+		def attr1 = AttributeBase.build(name: "attr1").save()
+		def attr2 = AttributeBase.build(name: "attr2").save()
 		def nameID1 = SamlURI.build().save()
 		def nameID2 = SamlURI.build().save()
 		def pk = loadPK()
@@ -265,8 +265,8 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 
 		def organization = Organization.build().save()
 		def entityDescriptor = EntityDescriptor.build(organization:organization).save()
-		def attr1 = Attribute.build(name: "attr1").save()
-		def attr2 = Attribute.build(name: "attr2").save()
+		def attr1 = AttributeBase.build(name: "attr1").save()
+		def attr2 = AttributeBase.build(name: "attr2").save()
 		def pk = loadPK()
 		def contact = Contact.build(organization: organization).save()
 		def ct = ContactType.build().save()

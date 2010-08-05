@@ -1,4 +1,4 @@
-<%@page import="fedreg.core.Attribute" %>
+<%@page import="fedreg.core.AttributeBase" %>
 <g:if test="${attributeConsumingServices}">
 <table>
 	<tbody>
@@ -45,7 +45,7 @@
 								<tr>
 									<th><g:message code="label.attribute"/><th>
 									<td>
-										<g:select name="attrid" from="${Attribute.list().sort{it.friendlyName}}" optionKey="id" optionValue="${{ it.friendlyName + ' ( ' + it.oid + ' )' }}" class="required"/>
+										<g:select name="attrid" from="${AttributeBase.list().sort{it.friendlyName}}" optionKey="id" optionValue="${{ it.friendlyName + ' ( ' + it.oid + ' )' }}" class="required"/>
 									</td>
 								</tr>
 								<tr>
