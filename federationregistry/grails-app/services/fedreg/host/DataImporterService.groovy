@@ -138,8 +138,13 @@ class DataImporterService implements InitializingBean {
 		{
 			def scope = AttributeScope.findByName(it.scope)
 			def category = AttributeCategory.findByName(it.status)
+			
+			def specificationRequired = false
+			if(it.attributeOID == "1.3.6.1.4.1.5923.1.1.1.7")
+				specificationRequired = true
+				
 			def attr = new AttributeBase(id: it.attributeID, oid: it.attributeOID, name: it.attributeURN, friendlyName: it.attributeFullName, headerName: it.headerName, 
-										alias:it.alias, description:it.description, scope: scope, category: category)
+										alias:it.alias, description:it.description, scope: scope, category: category, specificationRequired:specificationRequired)
 								
 			def existingAttr = AttributeBase.get(attr.id)
 			if(!existingAttr) {

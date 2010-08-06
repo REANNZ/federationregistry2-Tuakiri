@@ -15,6 +15,10 @@
 			var acsAddAttr = "${createLink(controller:'attributeConsumingService', action:'addRequestedAttribute')}";
 			var acsListAttr = "${createLink(controller:'attributeConsumingService', action:'listRequestedAttributes')}";
 			var acsRemoveAttr = "${createLink(controller:'attributeConsumingService', action:'removeRequestedAttribute')}";
+			var acsAddSpecAttrVal = "${createLink(controller:'attributeConsumingService', action:'addSpecifiedAttributeValue')}";
+			var acsRemoveSpecAttrVal = "${createLink(controller:'attributeConsumingService', action:'removeSpecifiedAttributeValue')}";
+			var acsListSpecAttrVal = "${createLink(controller:'attributeConsumingService', action:'listSpecifiedAttributeValue')}";
+			var acsListSpecAttrsVal = "${createLink(controller:'attributeConsumingService', action:'listSpecifiedAttributes')}";
 			
 			var certificateListEndpoint = "${createLink(controller:'descriptorKeyDescriptor', action:'list', id:serviceProvider.id )}";
 			var certificateCreationEndpoint = "${createLink(controller:'descriptorKeyDescriptor', action:'create', id:serviceProvider.id)}";

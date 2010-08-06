@@ -4,6 +4,170 @@ class AttributeConsumingServiceController {
 	
 	static allowedMethods = [remove: "POST"]
 	
+	def listRequestedAttributes = {
+		if(!params.id) {
+			log.warn "Attribute Consuming Service ID was not present"
+			render message(code: 'fedreg.controllers.namevalue.missing')
+			response.setStatus(500)
+			return
+		}
+		if(!params.containerID) {
+			log.warn "Rendering container ID was not present"
+			render message(code: 'fedreg.controllers.namevalue.missing')
+			response.setStatus(500)
+			return
+		}
+		
+		def acs = AttributeConsumingService.get(params.id)
+		if(!acs) {
+			log.warn "Attribute Consuming Service identified by id ${params.id} was not located"
+			render message(code: 'fedreg.attributeconsumingservice.nonexistant', args: [params.id])
+			response.setStatus(500)
+			return
+		}
+		render (template:"/templates/acs/listrequestedattributes", contextPath: pluginContextPath, model:[requestedAttributes:acs.requestedAttributes, containerID:params.containerID])
+	}
+	
+	def listSpecifiedAttributes = {
+		if(!params.id) {
+			log.warn "Attribute Consuming Service ID was not present"
+			render message(code: 'fedreg.controllers.namevalue.missing')
+			response.setStatus(500)
+			return
+		}
+		if(!params.containerID) {
+			log.warn "Rendering container ID was not present"
+			render message(code: 'fedreg.controllers.namevalue.missing')
+			response.setStatus(500)
+			return
+		}
+		
+		def acs = AttributeConsumingService.get(params.id)
+		if(!acs) {
+			log.warn "Attribute Consuming Service identified by id ${params.id} was not located"
+			render message(code: 'fedreg.attributeconsumingservice.nonexistant', args: [params.id])
+			response.setStatus(500)
+			return
+		}
+		render (template:"/templates/acs/listspecifiedattributes", contextPath: pluginContextPath, model:[requestedAttributes:acs.requestedAttributes, specificationAttributes: AttributeBase.findAllWhere(specificationRequired:true), containerID:params.containerID])
+	}
+	
+	def listSpecifiedAttributeValue = {
+		if(!params.id) {
+			log.warn "Attribute Consuming Service ID was not present"
+			render message(code: 'fedreg.controllers.namevalue.missing')
+			response.setStatus(500)
+			return
+		}
+		if(!params.containerID) {
+			log.warn "Rendering container ID was not present"
+			render message(code: 'fedreg.controllers.namevalue.missing')
+			response.setStatus(500)
+			return
+		}
+		
+		def reqAttr = RequestedAttribute.get(params.id)
+		if(!reqAttr) {
+			log.warn "Requested Attribute identified by id ${params.id} was not located"
+			render message(code: 'fedreg.attr.nonexistant', args: [params.id])
+			response.setStatus(500)
+			return
+		}
+		
+		render (template:"/templates/acs/listspecifiedattributevalues", contextPath: pluginContextPath, model:[requestedAttribute:reqAttr, containerID:params.containerID])
+	}
+	
+	def addSpecifiedAttributeValue = {
+		if(!params.id) {
+			log.warn "RequestedAttribute ID was not present"
+			render message(code: 'fedreg.controllers.namevalue.missing')
+			response.setStatus(500)
+			return
+		}
+		
+		if(!params.value) {
+			log.warn "Value to add was not present"
+			render message(code: 'fedreg.controllers.namevalue.missing')
+			response.setStatus(500)
+			return
+		}
+		
+		def reqAttr = RequestedAttribute.get(params.id)
+		if(!reqAttr) {
+			log.warn "Requested Attribute identified by id ${params.id} was not located"
+			render message(code: 'fedreg.attr.nonexistant', args: [params.id])
+			response.setStatus(500)
+			return
+		}
+		
+		reqAttr.addToValues(new AttributeValue(value:params.value))
+		reqAttr.save(flush:true)
+		if(reqAttr.hasErrors()) {
+			reqAttr.errors.each {
+				log.warn it
+			}
+			render message(code: 'fedreg.attributeconsumingservice.requestedattribute.add.failed')
+			response.setStatus(500)
+			return
+		}
+		
+		log.debug "Added value ${params.value} to ${reqAttr} referencing ${reqAttr.base}"
+		render message(code: 'fedreg.attributeconsumingservice.requestedattribute.specifiedvalue.add.success')
+	}
+	
+	def removeSpecifiedAttributeValue = {
+		if(!params.id) {
+			log.warn "RequestedAttribute ID was not present"
+			render message(code: 'fedreg.controllers.namevalue.missing')
+			response.setStatus(500)
+			return
+		}
+		
+		if(!params.valueid || !params.valueid.isLong()) {
+			log.warn "Value to add was not present"
+			render message(code: 'fedreg.controllers.namevalue.missing')
+			response.setStatus(500)
+			return
+		}
+		
+		def reqAttr = RequestedAttribute.get(params.id)
+		if(!reqAttr) {
+			log.warn "Requested Attribute identified by id ${params.id} was not located"
+			render message(code: 'fedreg.attr.nonexistant', args: [params.id])
+			response.setStatus(500)
+			return
+		}
+		
+		def val
+		for(v in reqAttr.values) {
+			if(v.id == params.valueid.toLong()) {
+				val = v
+				break
+			}
+		}
+		
+		if(!val) {
+			log.warn "Value identified by id ${params.valueid} was not associated with ${reqAttr}"
+			render message(code: 'fedreg.attr.nonexistant', args: [params.id])
+			response.setStatus(500)
+			return
+		}
+		
+		reqAttr.removeFromValues(val)
+		reqAttr.save(flush:true)
+		if(reqAttr.hasErrors()) {
+			reqAttr.errors.each {
+				log.warn it
+			}
+			render message(code: 'fedreg.attributeconsumingservice.requestedattribute.remove.failed')
+			response.setStatus(500)
+			return
+		}
+		
+		log.debug "Removed ${val} from ${reqAttr} referencing ${reqAttr.base}"
+		render message(code: 'fedreg.attributeconsumingservice.requestedattribute.specifiedvalue.remove.success')
+	}
+	
 	def addRequestedAttribute = {
 		if(!params.id) {
 			log.warn "Attribute Consuming Service ID was not present"
@@ -65,30 +229,6 @@ class AttributeConsumingServiceController {
 		
 		log.debug "Added ${reqAttr} referencing ${attr} to ${acs} and ${acs.descriptor}"
 		render message(code: 'fedreg.attributeconsumingservice.requestedattribute.add.success')
-	}
-	
-	def listRequestedAttributes = {
-		if(!params.id) {
-			log.warn "Attribute Consuming Service ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
-			response.setStatus(500)
-			return
-		}
-		if(!params.containerID) {
-			log.warn "Rendering container ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
-			response.setStatus(500)
-			return
-		}
-		
-		def acs = AttributeConsumingService.get(params.id)
-		if(!acs) {
-			log.warn "Attribute Consuming Service identified by id ${params.id} was not located"
-			render message(code: 'fedreg.attributeconsumingservice.nonexistant', args: [params.id])
-			response.setStatus(500)
-			return
-		}
-		render (template:"/templates/acs/listrequestedattributes", contextPath: pluginContextPath, model:[requestedAttributes:acs.requestedAttributes, containerID:params.containerID])
 	}
 	
 	def removeRequestedAttribute = {		

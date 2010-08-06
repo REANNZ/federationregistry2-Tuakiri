@@ -272,6 +272,7 @@ fedreg.acs_reqattribute_add = function(acsID, formID, containerID) {
 			 	.not(':button, :submit, :reset, :hidden, select[name=binding]')
 			 	.val('')
 			fedreg.acs_reqattribute_list(acsID, containerID);
+			fedreg.acs_specattributes_list(acsID, 'acsspecattributes');
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
 			nimble.growl('error', xhr.responseText);
@@ -289,6 +290,7 @@ fedreg.acs_reqattribute_remove = function(raID, acsID, containerID) {
 		success: function(res) {
 			nimble.growl('success', res);
 			fedreg.acs_reqattribute_list(acsID, containerID);
+			fedreg.acs_specattributes_list(acsID, 'acsspecattributes');
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
 			nimble.growl('error', xhr.responseText);
@@ -301,6 +303,73 @@ fedreg.acs_reqattribute_list = function(acsID, containerID) {
 	$.ajax({
 		type: "GET",
 		url: acsListAttr,
+		data: dataString,
+		success: function(res) {
+			$("#"+containerID).html(res)
+	    },
+	    error: function (xhr, ajaxOptions, thrownError) {
+			nimble.growl('error', xhr.responseText);
+	    }
+	});
+};
+
+fedreg.acs_specattribute_add = function(id, formID, containerID) {
+	$("#working").trigger("fedreg.working");
+	var dataString = "id=" + id + "&" + $("#" + formID).serialize();
+	$.ajax({
+		type: "POST",
+		url: acsAddSpecAttrVal,
+		data: dataString,
+		success: function(res) {
+			nimble.growl('success', res);
+			$(':input', "#" + formID)
+			 	.not(':button, :submit, :reset, :hidden, select[name=binding]')
+			 	.val('')
+			fedreg.acs_specattribute_list(id, containerID)
+	    },
+	    error: function (xhr, ajaxOptions, thrownError) {
+			nimble.growl('error', xhr.responseText);
+	    }
+	});
+}
+
+fedreg.acs_specattribute_remove = function(id, valueID, containerID) {
+	$("#working").trigger("fedreg.working");
+	var dataString = "id=" + id + "&valueid=" + valueID;
+	$.ajax({
+		type: "POST",
+		url: acsRemoveSpecAttrVal,
+		data: dataString,
+		success: function(res) {
+			nimble.growl('success', res);
+			fedreg.acs_specattribute_list(id, containerID)
+	    },
+	    error: function (xhr, ajaxOptions, thrownError) {
+			nimble.growl('error', xhr.responseText);
+	    }
+	});
+}
+
+fedreg.acs_specattribute_list = function(id, containerID) {
+	var dataString = "id=" + id + "&containerID=" + containerID;
+	$.ajax({
+		type: "GET",
+		url: acsListSpecAttrVal,
+		data: dataString,
+		success: function(res) {
+			$("#"+containerID).html(res)
+	    },
+	    error: function (xhr, ajaxOptions, thrownError) {
+			nimble.growl('error', xhr.responseText);
+	    }
+	});
+};
+
+fedreg.acs_specattributes_list = function(id, containerID) {
+	var dataString = "id=" + id + "&containerID=" + containerID;
+	$.ajax({
+		type: "GET",
+		url: acsListSpecAttrsVal,
 		data: dataString,
 		success: function(res) {
 			$("#"+containerID).html(res)
