@@ -35,10 +35,10 @@ class DescriptorEndpointController {
 		}
 		
 		log.info "Deleting Endpoint"
+		endpoint.delete(flush:true)
 		def descriptor = endpoint.descriptor
 		descriptor."removeFrom${capitalize(params.endpointType)}"(endpoint)
 		descriptor.save(flush:true)
-		endpoint.delete(flush:true)
 		render message(code: 'fedreg.endpoint.delete.success')
 	}
 	
@@ -131,16 +131,20 @@ class DescriptorEndpointController {
 			return
 		}
 		
-		def endpoint = params.endpointType
-		if(allowedEndpoints.containsKey(endpoint) && descriptor.hasProperty(endpoint)) {
-			log.debug "Creating endpoint for descriptor ID ${params.id} of type ${endpoint} at location ${params.location}"
+		def endpointType = params.endpointType
+		if(allowedEndpoints.containsKey(endpointType) && descriptor.hasProperty(endpointType)) {
+			log.debug "Creating endpoint for ${descriptor} of type ${endpointType} at location ${params.location}"
 			
 			def location = new UrlURI(uri:params.location)
-			def service = grailsApplication.classLoader.loadClass(allowedEndpoints.get(endpoint)).newInstance(descriptor:descriptor, binding: binding, location: location, active:true)
-			descriptor."addTo${capitalize(endpoint)}"(service)
-			descriptor.save(flush:true)
-			if(descriptor.hasErrors()) {
+			def endpoint = grailsApplication.classLoader.loadClass(allowedEndpoints.get(endpointType)).newInstance(descriptor:descriptor, binding: binding, location: location, active:true)
+			descriptor."addTo${capitalize(endpointType)}"(endpoint)
+			endpoint.save()
+			descriptor.save()
+			if(descriptor.hasErrors() || endpoint.hasErrors()) {
 				descriptor.errors.each {
+					log.warn it
+				}
+				endpoint.errors.each {
 					log.warn it
 				}
 				render message(code: 'fedreg.endpoint.create.failed')
@@ -149,14 +153,14 @@ class DescriptorEndpointController {
 			}
 			else {
 				descriptor.refresh()
-				log.debug "Created endpoint for descriptor ID ${params.id} of type ${endpoint} at location ${params.location}"
+				log.debug "Created endpoint for ${descriptor} of type ${endpointType} at location ${params.location}"
 				render message(code: 'fedreg.endpoint.create.success')
 				return
 			}
 		}
 		else {
-			log.warn "Endpoint ${endpoint} is invalid for Descriptor with id ${params.id}, unable to create"
-			render message(code: 'fedreg.endpoint.invalid', args: [endpoint])
+			log.warn "Endpoint ${endpointType} is invalid for ${descriptor}, unable to create"
+			render message(code: 'fedreg.endpoint.invalid', args: [endpointType])
 			response.setStatus(500)
 			return
 		}

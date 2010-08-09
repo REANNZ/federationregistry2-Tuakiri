@@ -31,7 +31,9 @@ class IDPSSODescriptorService {
 		}
 		
 		// IDP
+		def samlNamespace = SamlURI.findByUri('urn:oasis:names:tc:SAML:2.0:protocol')
 		def identityProvider = new IDPSSODescriptor(active:params.active, displayName: params.idp?.displayName, description: params.idp?.description, organization: organization)
+		identityProvider.addToProtocolSupportEnumerations(samlNamespace)
 		params.idp.attributes.each { attrID -> 
 			if(attrID.value == "on") {
 				def attr = AttributeBase.get(attrID.key)
@@ -156,7 +158,7 @@ class IDPSSODescriptorService {
 		}
 		
 		def workflowParams = [ creator:contact?.id, identityProvider:identityProvider?.id, attributeAuthority:attributeAuthority?.id, organization:organization.name ]
-		def processInstance = workflowProcessService.initiate( "idpssodescriptor_create", "Approval for creation of IDPSSODescriptor ${identityProvider.displayName}", ProcessPriority.MEDIUM, workflowParams)
+		def processInstance = workflowProcessService.initiate( "idpssodescriptor_create", "Approval for creation of ${identityProvider}", ProcessPriority.MEDIUM, workflowParams)
 		workflowProcessService.run(processInstance)
 		
 		return [true, organization, entityDescriptor, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, Organization.list(), AttributeBase.list(), SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding), contact]
