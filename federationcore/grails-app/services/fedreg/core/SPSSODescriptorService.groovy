@@ -14,16 +14,19 @@ class SPSSODescriptorService {
 		// Contact
 		def contact = Contact.get(params.contact?.id)
 		if(!contact) {
-			contact = MailURI.findByUri(params.contact?.email)?.contact		// We may already have them referenced by email address and user doesn't realize
+			if(params.contact?.email)
+				contact = MailURI.findByUri(params.contact?.email)?.contact		// We may already have them referenced by email address and user doesn't realize
 			if(!contact)
-				contact = new Contact(givenName: params.contact?.givenName, surname: params.contact?.surname, email: new MailURI(uri:params.contact?.email), organization:organization).save()
+				contact = new Contact(givenName: params.contact?.givenName, surname: params.contact?.surname, email: new MailURI(uri:params.contact?.email), organization:organization)
+				contact.save()
 		}
+		def ct = params.contact?.type ?: 'administrative'
 		
 		// Entity Descriptor
 		def entityDescriptor = EntityDescriptor.get(params.entity.id)
 		if(!entityDescriptor) {
 			entityDescriptor = new EntityDescriptor(active: params.active, entityID: params.entity?.identifier, organization: organization)
-			def entContactPerson = new ContactPerson(contact:contact, type:ContactType.findByName(params.contact?.type))
+			def entContactPerson = new ContactPerson(contact:contact, type:ContactType.findByName(ct))
 			entityDescriptor.addToContacts(entContactPerson)
 		}
 		
@@ -31,13 +34,19 @@ class SPSSODescriptorService {
 		def samlNamespace = SamlURI.findByUri('urn:oasis:names:tc:SAML:2.0:protocol')
 		def serviceProvider = new SPSSODescriptor(active:params.active, displayName: params.sp?.displayName, description: params.sp?.description, organization: organization, authnRequestsSigned:true, wantAssertionsSigned: true)
 		serviceProvider.addToProtocolSupportEnumerations(samlNamespace)
-		params.sp.attributes.each { attrID -> 
-			if(attrID.value == "on") {
-				def attr = AttributeBase.get(attrID.key)
+		
+		def acs = new AttributeConsumingService(lang:params.lang ?:'en')
+		acs.addToServiceNames(params.sp?.displayName ?: '')
+		acs.addToServiceDescriptions(params.sp?.description ?: '')
+		params.sp.attributes.each { a -> 
+			if(a.value.requested == "on") {
+				def attr = AttributeBase.get(a.key)
 				if(attr)
-					serviceProvider.addToAttributes(new Attribute(base:attr))
+					acs.addToRequestedAttributes(new RequestedAttribute(base:attr, reasoning: a.value.reasoning, isRequired: (a.value.required == 'on') ))
 			}
 		}
+		serviceProvider.addToAttributeConsumingServices(acs)
+		
 		params.sp.nameidformats.each { nameFormatID -> 
 			if(nameFormatID.value == "on") {
 				def nameid = SamlURI.get(nameFormatID.key)
@@ -45,7 +54,7 @@ class SPSSODescriptorService {
 					serviceProvider.addToNameIDFormats(nameid)
 			}
 		}
-		def spContactPerson = new ContactPerson(contact:contact, type:ContactType.findByName(params.contact?.type))
+		def spContactPerson = new ContactPerson(contact:contact, type:ContactType.findByName(ct))
 		serviceProvider.addToContacts(spContactPerson)
 		
 		// Initial endpoints
@@ -63,31 +72,32 @@ class SPSSODescriptorService {
 		soapArtifactACS.validate()
 		
 		// Single Logout Services
-		if(params.sp.slo.artifact.uri){
+		def sloArtifact, sloRedirect, sloSOAP, sloPost
+		if(params.sp?.slo?.artifact?.uri){
 			def sloArtifactBinding = SamlURI.findByUri(SamlConstants.httpArtifact)
 			def sloArtifactLocation = new UrlURI(uri: params.sp?.slo?.artifact?.uri)
-			def sloArtifact = new SingleLogoutService(binding: sloArtifactBinding, location:sloArtifactLocation, active:params.active)
+			sloArtifact = new SingleLogoutService(binding: sloArtifactBinding, location:sloArtifactLocation, active:params.active)
 			serviceProvider.addToSingleLogoutServices(sloArtifact)
 			sloArtifact.validate()
 		}
-		if(params.sp.slo.redirect.uri){
+		if(params.sp?.slo?.redirect?.uri){
 			def sloRedirectBinding = SamlURI.findByUri(SamlConstants.httpRedirect)
 			def sloRedirectLocation = new UrlURI(uri: params.sp?.slo?.redirect?.uri)
-			def sloRedirect	= new SingleLogoutService(binding: sloRedirectBinding, location:sloRedirectLocation, active:params.active)
+			sloRedirect	= new SingleLogoutService(binding: sloRedirectBinding, location:sloRedirectLocation, active:params.active)
 			serviceProvider.addToSingleLogoutServices(sloRedirect)
 			sloRedirect.validate()
 		}
-		if(params.sp.slo.soap.uri){
+		if(params.sp?.slo?.soap?.uri){
 			def sloSOAPBinding = SamlURI.findByUri(SamlConstants.soap)
 			def sloSOAPLocation = new UrlURI(uri: params.sp?.slo?.soap?.uri)
-			def sloSOAP = new SingleLogoutService(binding: sloSOAPBinding, location:sloSOAPLocation, active:params.active)
+			sloSOAP = new SingleLogoutService(binding: sloSOAPBinding, location:sloSOAPLocation, active:params.active)
 			serviceProvider.addToSingleLogoutServices(sloSOAP)
 			sloSOAP.validate()
 		}
-		if(params.sp.slo.post.uri){
+		if(params.sp?.slo?.post?.uri){
 			def sloPostBinding = SamlURI.findByUri(SamlConstants.httpPost)
 			def sloPostLocation = new UrlURI(uri: params.sp?.slo?.post?.uri)
-			def sloPost = new SingleLogoutService(binding: sloPostBinding, location:sloPostLocation, active:params.active)
+			sloPost = new SingleLogoutService(binding: sloPostBinding, location:sloPostLocation, active:params.active)
 			serviceProvider.addToSingleLogoutServices(sloPost)
 			sloPost.validate()
 		}
@@ -110,6 +120,12 @@ class SPSSODescriptorService {
 			def keyDescriptorEnc = new KeyDescriptor(keyInfo:keyInfoEnc, keyType:KeyTypes.encryption, roleDescriptor:serviceProvider)
 			serviceProvider.addToKeyDescriptors(keyDescriptorEnc)
 		}
+		
+		// Service Description
+		def serviceDescription = new ServiceDescription(connectURL: params.sp?.servicedescription?.connecturl, logo: params.sp?.servicedescription?.logo, furtherInfo: params.sp?.servicedescription?.furtherInfo, 
+			provides: params.sp?.servicedescription?.provides, benefits: params.sp?.servicedescription?.benefits, audience: params.sp?.servicedescription?.audience, restrictions: params.sp?.servicedescription?.restrictions, 
+			accessing: params.sp?.servicedescription?.accessing, support: params.sp?.servicedescription?.support, maintenance: params.sp?.servicedescription?.maintenance)
+		serviceProvider.serviceDescription = serviceDescription
 		
 		// Submission validation
 		if(!entityDescriptor.save()) {

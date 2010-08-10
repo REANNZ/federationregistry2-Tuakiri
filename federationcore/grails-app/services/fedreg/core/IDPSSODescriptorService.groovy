@@ -17,16 +17,19 @@ class IDPSSODescriptorService {
 		// Contact
 		def contact = Contact.get(params.contact?.id)
 		if(!contact) {
-			contact = MailURI.findByUri(params.contact?.email)?.contact		// We may already have them referenced by email address and user doesn't realize
+			if(params.contact?.email)
+				contact = MailURI.findByUri(params.contact?.email)?.contact		// We may already have them referenced by email address and user doesn't realize
 			if(!contact)
-				contact = new Contact(givenName: params.contact?.givenName, surname: params.contact?.surname, email: new MailURI(uri:params.contact?.email), organization:organization).save()
+				contact = new Contact(givenName: params.contact?.givenName, surname: params.contact?.surname, email: new MailURI(uri:params.contact?.email), organization:organization)
+				contact.save()
 		}
+		def ct = params.contact?.type ?: 'administrative'
 		
 		// Entity Descriptor
 		def entityDescriptor = EntityDescriptor.get(params.entity.id)
 		if(!entityDescriptor) {
 			entityDescriptor = new EntityDescriptor(active: params.active, entityID: params.entity?.identifier, organization: organization)
-			def entContactPerson = new ContactPerson(contact:contact, type:ContactType.findByName(params.contact?.type))
+			def entContactPerson = new ContactPerson(contact:contact, type:ContactType.findByName(ct))
 			entityDescriptor.addToContacts(entContactPerson)
 		}
 		
@@ -48,7 +51,7 @@ class IDPSSODescriptorService {
 					identityProvider.addToNameIDFormats(nameid)
 			}
 		}
-		def idpContactPerson = new ContactPerson(contact:contact, type:ContactType.findByName(params.contact?.type))
+		def idpContactPerson = new ContactPerson(contact:contact, type:ContactType.findByName(ct))
 		identityProvider.addToContacts(idpContactPerson)	
 		
 		// Initial endpoints

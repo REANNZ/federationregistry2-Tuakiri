@@ -55,6 +55,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		setupBindings()
 		setupCrypto()
 
+		def saml2Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:2.0:protocol').save()
 		def organization = Organization.build().save()
 		def attr1 = AttributeBase.build(name: "attr1").save()
 		def attr2 = AttributeBase.build(name: "attr2").save()
@@ -86,7 +87,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		then:
 		Organization.count() == 1
-		SamlURI.count() == 6
+		SamlURI.count() == 7
 		EntityDescriptor.count() == 1
 		IDPSSODescriptor.count() == 1
 		AttributeAuthorityDescriptor.count() == 1
@@ -146,7 +147,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		attributeAuthority.attributes.size() == 2
 		
 		wfProcessName == "idpssodescriptor_create"
-		wfDescription == "Approval for creation of IDPSSODescriptor test name"
+		
 		wfPriority == ProcessPriority.MEDIUM
 		wfParams.size() == 4
 		wfParams.identityProvider == identityProvider.id
@@ -158,6 +159,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		setupBindings()
 		setupCrypto()
 
+		def saml2Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:2.0:protocol').save()
 		def organization = Organization.build().save()
 		def attr1 = AttributeBase.build(name: "attr1").save()
 		def attr2 = AttributeBase.build(name: "attr2").save()
@@ -190,7 +192,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		then:
 		Organization.count() == 1
-		SamlURI.count() == 6
+		SamlURI.count() == 7
 		EntityDescriptor.count() == 1
 		IDPSSODescriptor.count() == 1
 		AttributeAuthorityDescriptor.count() == 1
@@ -250,7 +252,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		attributeAuthority.attributes.size() == 2
 		
 		wfProcessName == "idpssodescriptor_create"
-		wfDescription == "Approval for creation of IDPSSODescriptor test name"
+		
 		wfPriority == ProcessPriority.MEDIUM
 		wfParams.size() == 4
 		wfParams.creator == contact.id
@@ -263,6 +265,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		setupBindings()
 		setupCrypto()
 
+		def saml2Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:2.0:protocol').save()
 		def organization = Organization.build().save()
 		def entityDescriptor = EntityDescriptor.build(organization:organization).save()
 		def attr1 = AttributeBase.build(name: "attr1").save()
@@ -294,7 +297,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		then:
 		Organization.count() == 1
-		SamlURI.count() == 4
+		SamlURI.count() == 5
 		EntityDescriptor.count() == 1
 		IDPSSODescriptor.count() == 1
 		AttributeAuthorityDescriptor.count() == 1
@@ -352,7 +355,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		attributeAuthority.attributes.size() == 2
 		
 		wfProcessName == "idpssodescriptor_create"
-		wfDescription == "Approval for creation of IDPSSODescriptor test name"
+		
 		wfPriority == ProcessPriority.MEDIUM
 		wfParams.size() == 4
 		wfParams.creator == contact.id
@@ -365,6 +368,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		setupBindings()
 		setupCrypto()
 
+		def saml2Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:2.0:protocol').save()
 		def organization = Organization.build().save()
 		def entityDescriptor = EntityDescriptor.build(organization:organization).save()
 		def attr1 = Attribute.build().save()
@@ -386,7 +390,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		then:
 		Organization.count() == 1
-		SamlURI.count() == 4
+		SamlURI.count() == 5
 		EntityDescriptor.count() == 1
 		IDPSSODescriptor.count() == 0
 		AttributeAuthorityDescriptor.count() == 0
@@ -434,6 +438,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		setupBindings()
 		setupCrypto()
 
+		def saml2Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:2.0:protocol').save()
 		def organization = Organization.build().save()
 		def entityDescriptor = EntityDescriptor.build(organization:organization).save()
 		def attr1 = Attribute.build().save()
@@ -455,7 +460,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		then:
 		Organization.count() == 1
-		SamlURI.count() == 4
+		SamlURI.count() == 5
 		EntityDescriptor.count() == 1
 		IDPSSODescriptor.count() == 0
 		AttributeAuthorityDescriptor.count() == 0
@@ -502,6 +507,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		setupBindings()
 		setupCrypto()
 
+		def saml2Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:2.0:protocol').save()
 		def organization = Organization.build().save()
 		def entityDescriptor = EntityDescriptor.build(organization:organization).save()
 		def attr1 = Attribute.build().save()
@@ -523,7 +529,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		then:
 		Organization.count() == 1
-		SamlURI.count() == 4
+		SamlURI.count() == 5
 		EntityDescriptor.count() == 1
 		IDPSSODescriptor.count() == 0
 		AttributeAuthorityDescriptor.count() == 0
@@ -572,6 +578,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		setupBindings()
 		setupCrypto()
 
+		def saml2Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:2.0:protocol').save()
 		def organization = Organization.build().save()
 		def entityDescriptor = EntityDescriptor.build(organization:organization).save()
 		def attr1 = Attribute.build().save()
@@ -593,7 +600,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		then:
 		Organization.count() == 1
-		SamlURI.count() == 4
+		SamlURI.count() == 5
 		EntityDescriptor.count() == 1
 		IDPSSODescriptor.count() == 0
 		AttributeAuthorityDescriptor.count() == 0
@@ -640,6 +647,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		setupBindings()
 		setupCrypto()
 
+		def saml2Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:2.0:protocol').save()
 		def organization = Organization.build().save()
 		def entityDescriptor = EntityDescriptor.build(organization:organization).save()
 		def attr1 = Attribute.build().save()
@@ -661,7 +669,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		then:
 		Organization.count() == 1
-		SamlURI.count() == 4
+		SamlURI.count() == 5
 		EntityDescriptor.count() == 1
 		IDPSSODescriptor.count() == 0
 		AttributeAuthorityDescriptor.count() == 0
@@ -710,6 +718,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		setupBindings()
 		setupCrypto()
 
+		def saml2Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:2.0:protocol').save()
 		def organization = Organization.build().save()
 		def entityDescriptor = EntityDescriptor.build(organization:organization).save()
 		def attr1 = Attribute.build().save()
@@ -731,7 +740,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		then:
 		Organization.count() == 1
-		SamlURI.count() == 4
+		SamlURI.count() == 5
 		EntityDescriptor.count() == 1
 		IDPSSODescriptor.count() == 0
 		AttributeAuthorityDescriptor.count() == 0
@@ -778,6 +787,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		setupBindings()
 		setupCrypto()
 
+		def saml2Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:2.0:protocol').save()
 		def organization = Organization.build().save()
 		def entityDescriptor = EntityDescriptor.build(organization:organization).save()
 		def attr1 = Attribute.build().save()
@@ -799,7 +809,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		then:
 		Organization.count() == 1
-		SamlURI.count() == 4
+		SamlURI.count() == 5
 		EntityDescriptor.count() == 1
 		IDPSSODescriptor.count() == 0
 		AttributeAuthorityDescriptor.count() == 0
@@ -848,6 +858,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		setupBindings()
 		setupCrypto()
 
+		def saml2Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:2.0:protocol').save()
 		def organization = Organization.build().save()
 		def entityDescriptor = EntityDescriptor.build(organization:organization).save()
 		def attr1 = Attribute.build().save()
@@ -879,7 +890,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		then:
 		Organization.count() == 1
-		SamlURI.count() == 4
+		SamlURI.count() == 5
 		EntityDescriptor.count() == 1
 		IDPSSODescriptor.count() == 1
 		AttributeAuthorityDescriptor.count() == 1
@@ -911,7 +922,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		identityProvider.artifactResolutionServices.toList().get(0).location.uri == "http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution"
 		
 		wfProcessName == "idpssodescriptor_create"
-		wfDescription == "Approval for creation of IDPSSODescriptor test name"
+		
 		wfPriority == ProcessPriority.MEDIUM
 		wfParams.size() == 4
 		wfParams.creator == contact.id
@@ -924,6 +935,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		setupBindings()
 		setupCrypto()
 
+		def saml2Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:2.0:protocol').save()
 		def organization = Organization.build().save()
 		def entityDescriptor = EntityDescriptor.build(organization:organization).save()
 		def attr1 = Attribute.build().save()
@@ -955,7 +967,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		then:
 		Organization.count() == 1
-		SamlURI.count() == 4
+		SamlURI.count() == 5
 		EntityDescriptor.count() == 1
 		IDPSSODescriptor.count() == 1
 		AttributeAuthorityDescriptor.count() == 0
@@ -985,7 +997,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		identityProvider.artifactResolutionServices.toList().get(0).location.uri == "http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution"
 		
 		wfProcessName == "idpssodescriptor_create"
-		wfDescription == "Approval for creation of IDPSSODescriptor test name"
+		
 		wfPriority == ProcessPriority.MEDIUM
 		wfParams.size() == 4
 		wfParams.creator == contact.id
@@ -998,6 +1010,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		setupBindings()
 		setupCrypto()
 
+		def saml2Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:2.0:protocol').save()
 		def organization = Organization.build().save()
 		def entityDescriptor = EntityDescriptor.build(organization:organization).save()
 		def attr1 = Attribute.build().save()
@@ -1028,7 +1041,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		then:
 		Organization.count() == 1
-		SamlURI.count() == 4
+		SamlURI.count() == 5
 		EntityDescriptor.count() == 1
 		IDPSSODescriptor.count() == 1
 		AttributeAuthorityDescriptor.count() == 0
@@ -1058,7 +1071,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		identityProvider.artifactResolutionServices.toList().get(0).location.uri == "http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution"
 		
 		wfProcessName == "idpssodescriptor_create"
-		wfDescription == "Approval for creation of IDPSSODescriptor test name"
+		
 		wfPriority == ProcessPriority.MEDIUM
 		wfParams.size() == 4
 		wfParams.creator == contact.id
@@ -1071,6 +1084,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		setupBindings()
 		setupCrypto()
 
+		def saml2Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:2.0:protocol').save()
 		def organization = Organization.build().save()
 		def entityDescriptor = EntityDescriptor.build(organization:organization).save()
 		def attr1 = Attribute.build().save()
@@ -1092,7 +1106,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		then:
 		Organization.count() == 1
-		SamlURI.count() == 4
+		SamlURI.count() == 5
 		EntityDescriptor.count() == 1
 		IDPSSODescriptor.count() == 0
 		AttributeAuthorityDescriptor.count() == 0
@@ -1131,6 +1145,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		setupBindings()
 		setupCrypto()
 
+		def saml2Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:2.0:protocol').save()
 		def organization = Organization.build().save()
 		def entityDescriptor = EntityDescriptor.build(organization:organization).save()
 		def attr1 = Attribute.build().save()
@@ -1152,7 +1167,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		then:
 		Organization.count() == 1
-		SamlURI.count() == 4
+		SamlURI.count() == 5
 		EntityDescriptor.count() == 1
 		IDPSSODescriptor.count() == 0
 		AttributeAuthorityDescriptor.count() == 0
@@ -1199,6 +1214,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		setupBindings()
 		setupCrypto()
 
+		def saml2Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:2.0:protocol').save()
 		def organization = Organization.build().save()
 		def attr1 = Attribute.build().save()
 		def attr2 = Attribute.build().save()
@@ -1219,7 +1235,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		then:
 		Organization.count() == 1
-		SamlURI.count() == 4
+		SamlURI.count() == 5
 		EntityDescriptor.count() == 0
 		IDPSSODescriptor.count() == 0
 		AttributeAuthorityDescriptor.count() == 0
@@ -1266,6 +1282,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		setupBindings()
 		setupCrypto()
 
+		def saml2Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:2.0:protocol').save()
 		def organization = Organization.build().save()
 		def attr1 = Attribute.build().save()
 		def attr2 = Attribute.build().save()
@@ -1286,7 +1303,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		then:
 		Organization.count() == 1
-		SamlURI.count() == 4
+		SamlURI.count() == 5
 		EntityDescriptor.count() == 0
 		IDPSSODescriptor.count() == 0
 		AttributeAuthorityDescriptor.count() == 0

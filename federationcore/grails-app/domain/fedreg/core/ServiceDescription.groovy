@@ -26,7 +26,7 @@ class ServiceDescription {
 	boolean publish = false
 	
 	String connectURL		// URL for end users to access service
-	String logo				// URL to image of the services logo
+	String logoURL			// URL to image of the services logo
 	
 	String furtherInfo		// Further information URL
 	String provides			// What the Service Provides
@@ -40,11 +40,11 @@ class ServiceDescription {
 	Date dateCreated
 	Date lastUpdated
 	
-	static belongsTo = [spSSODescriptor:SPSSODescriptor]
+	static belongsTo = [descriptor:SPSSODescriptor]
 	
 	static constraints = {
 		connectURL(nullable:true)
-		logo(nullable:true)
+		logoURL(nullable:true)
 		furtherInfo(nullable:true)
 		provides(nullable:true)
 		benefits(nullable:true)

@@ -4,6 +4,8 @@ import fedreg.workflow.ProcessPriority
 
 class SPSSODescriptorController {
 	
+	def SPSSODescriptorService
+	
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
 	def defaultAction = "list"
@@ -38,7 +40,21 @@ class SPSSODescriptorController {
 	}
 	
 	def create = {
+		def serviceProvider = new SPSSODescriptor()
+		[serviceProvider: serviceProvider, organizationList: Organization.list(), attributeList: AttributeBase.list(), nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)]
+	}
+	
+	def save = {
+		def (created, organization, entityDescriptor, serviceProvider, httpPostACS, soapArtifactACS, sloArtifact, sloRedirect, sloSOAP, sloPost, organizationList, attributeList, nameIDFormatList, contact) = SPSSODescriptorService.create(params)
 		
+		if(created)
+			redirect (action: "show", id: serviceProvider.id)
+		else {
+			flash.type="error"
+			flash.message = message(code: 'fedreg.core.spssoroledescriptor.save.validation.error')
+			render (view:'create', model:[organization:organization, entityDescriptor:entityDescriptor, serviceProvider:serviceProvider, httpPostACS:httpPostACS, soapArtifactACS:soapArtifactACS, contact:contact,
+										sloArtifact:sloArtifact, sloRedirect:sloRedirect, sloSOAP:sloSOAP, sloPost:sloPost, organizationList:organizationList, attributeList:attributeList, nameIDFormatList:nameIDFormatList])
+		}
 	}
 	
 	def edit = {
