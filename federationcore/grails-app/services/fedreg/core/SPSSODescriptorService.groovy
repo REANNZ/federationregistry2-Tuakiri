@@ -168,7 +168,6 @@ class SPSSODescriptorService {
 	
 	
 	def update(def params) {
-		println params
 		def serviceProvider = SPSSODescriptor.get(params.id)
 		if(!serviceProvider)
 			return [false, null]

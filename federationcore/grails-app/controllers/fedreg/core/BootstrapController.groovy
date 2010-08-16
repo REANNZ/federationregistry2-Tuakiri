@@ -8,7 +8,7 @@ class BootstrapController {
 	def SPSSODescriptorService
 	def organizationService
 	
-	static allowedMethods = [saveIDP: "POST", update: "POST", delete: "POST"]
+	static allowedMethods = [saveidp: "POST", savesp: "POST", saveorganization: "POST"]
 	
 	def idp = {
 		def identityProvider = new IDPSSODescriptor()

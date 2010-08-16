@@ -22,7 +22,7 @@ class UrlMappings {
 	}
 	
 	"/membership/entity/$action?/$id?"{
-		controller = "entity"
+		controller = "entityDescriptor"
 	}
 	
 	"/membership/identityprovider/$action?/$id?"{

@@ -7,7 +7,6 @@ class SPSSODescriptorController {
 	def SPSSODescriptorService
 	
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
-
 	def defaultAction = "list"
 	
 	def list = {
@@ -102,10 +101,6 @@ class SPSSODescriptorController {
 			flash.message = message(code: 'fedreg.core.spssoroledescriptor.update.validation.error')
 			render (view:'edit', model:[serviceProvider:serviceProvider])
 		}
-	}
-	
-	def delete = {
-		
 	}
 	
 }

@@ -99,7 +99,7 @@
 										<div class="icon icon_cross"><g:message code="label.inactive" /></div>
 									</g:else>
 								</td>
-								<td><n:button href="${createLink(controller:'entity', action:'show', id:ent.id)}" label="label.view" icon="arrowthick-1-ne" /></td>
+								<td><n:button href="${createLink(controller:'entityDescriptor', action:'show', id:ent.id)}" label="label.view" icon="arrowthick-1-ne" /></td>
 							</tr>
 						</g:each>
 						</tbody>

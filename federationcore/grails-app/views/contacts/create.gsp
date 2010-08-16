@@ -62,10 +62,10 @@
 					</tbody>
 				</table>
 				
-				<div class="buttons">
+				<nav>
 					<n:button onclick="\$('form').submit();" label="label.create" icon="plus"/>
 					<n:button href="${createLink(action:'list')}"  label="label.cancel" icon="cancel"/>
-				</div>
+				</nav>
 				
 			</g:form>
 		</section>	

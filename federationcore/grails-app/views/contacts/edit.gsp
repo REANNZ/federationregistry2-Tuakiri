@@ -61,10 +61,10 @@
 					</tbody>
 				</table>
 				
-				<div class="buttons">
+				<nav>
 					<n:button onclick="\$('form').submit();" label="label.update" icon="plus"/>
 					<n:button href="${createLink(action:'show', id:contact.id)}"  label="label.cancel" icon="cancel"/>
-				</div>
+				</nav>
 					
 			</g:form>
 		</section>

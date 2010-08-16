@@ -11,6 +11,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 	def cryptoService
 	def savedMetaClasses
 	def workflowProcessService
+	def entityDescriptorService
 	def idpssoDescriptorService
 	def params
 	
@@ -20,7 +21,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		SpecHelpers.registerMetaClass(WorkflowProcessService, savedMetaClasses)
 		workflowProcessService.metaClass = WorkflowProcessService.metaClass
 		
-		idpssoDescriptorService = new IDPSSODescriptorService(cryptoService:cryptoService, workflowProcessService:workflowProcessService)
+		idpssoDescriptorService = new IDPSSODescriptorService(cryptoService:cryptoService, workflowProcessService:workflowProcessService, entityDescriptorService:entityDescriptorService)
 		def user = UserBase.build()
 		SpecHelpers.setupShiroEnv(user)
 		

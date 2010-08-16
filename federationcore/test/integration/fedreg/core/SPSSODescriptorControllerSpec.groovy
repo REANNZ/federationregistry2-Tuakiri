@@ -197,9 +197,6 @@ class SPSSODescriptorControllerSpec extends IntegrationSpec {
 		controller.params.id = 1
 		
 		when:
-		spssoDescriptorService.metaClass.update = { def p -> 
-			return [true, serviceProvider]
-		} 
 		def model = controller.update()
 		
 		then:

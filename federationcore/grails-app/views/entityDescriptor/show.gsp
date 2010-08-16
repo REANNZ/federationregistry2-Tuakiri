@@ -17,13 +17,17 @@
 						<td>${fieldValue(bean: entity, field: "entityID")}</td>
 					</tr>
 					<tr>
+						<th><g:message code="label.organization"/></th>
+						<td><g:link controller="organization" action="show" id="${entity.organization.id}">${fieldValue(bean: entity, field: "organization.displayName")}</g:link></td>
+					</tr>
+					<tr>
 						<th><g:message code="label.status"/></th>
 						<td>
 							<g:if test="${entity.active}">
-								<div class="icon icon_tick"><g:message code="label.active" /></div>
+								<g:message code="label.active" />
 							</g:if>
 							<g:else>
-								<div class="icon icon_cross"><g:message code="label.inactive" /></div>
+								<g:message code="label.inactive" />
 							</g:else>
 						</td>
 					</tr>

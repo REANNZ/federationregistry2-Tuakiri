@@ -6,6 +6,7 @@ class IDPSSODescriptorService {
 	
 	def cryptoService
 	def workflowProcessService
+	def entityDescriptorService
 	
 	def create(def params) {
 		/* There is a lot of moving parts when creating an IdP (+AA hybrid) so below is more complex then usual,
@@ -26,11 +27,15 @@ class IDPSSODescriptorService {
 		def ct = params.contact?.type ?: 'administrative'
 		
 		// Entity Descriptor
-		def entityDescriptor = EntityDescriptor.get(params.entity.id)
+		
+		def entityDescriptor
+		if(params.entity?.id) {		
+			entityDescriptor = EntityDescriptor.get(params.entity?.id)
+		}
+		
 		if(!entityDescriptor) {
-			entityDescriptor = new EntityDescriptor(active: params.active, entityID: params.entity?.identifier, organization: organization)
-			def entContactPerson = new ContactPerson(contact:contact, type:ContactType.findByName(ct))
-			entityDescriptor.addToContacts(entContactPerson)
+			def created
+			(created, entityDescriptor) = entityDescriptorService.create(params)	// If it doesn't create we don't really care it is caught below
 		}
 		
 		// IDP
