@@ -58,7 +58,50 @@ class SPSSODescriptorController {
 	}
 	
 	def edit = {
+		if(!params.id) {
+			log.warn "SPSSODescriptor ID was not present"
+			flash.type="error"
+			flash.message = message(code: 'fedreg.controllers.namevalue.missing')
+			redirect(action: "list")
+			return
+		}
 		
+		def serviceProvider = SPSSODescriptor.get(params.id)
+		if (!serviceProvider) {
+			flash.type="error"
+			flash.message = message(code: 'fedreg.core.spssoroledescriptor.nonexistant')
+			redirect(action: "list")
+			return
+		}	
+		
+		[serviceProvider: serviceProvider]	
+	}
+	
+	def update = {
+		if(!params.id) {
+			log.warn "SPSSODescriptor ID was not present"
+			flash.type="error"
+			flash.message = message(code: 'fedreg.controllers.namevalue.missing')
+			redirect(action: "list")
+			return
+		}
+		
+		def serviceProvider_ = SPSSODescriptor.get(params.id)
+		if (!serviceProvider_) {
+			flash.type="error"
+			flash.message = message(code: 'fedreg.core.spssoroledescriptor.nonexistant')
+			redirect(action: "list")
+			return
+		}
+		
+		def (updated, serviceProvider) = SPSSODescriptorService.update(params)
+		if(updated)
+			redirect (action: "show", id: serviceProvider.id)
+		else {
+			flash.type="error"
+			flash.message = message(code: 'fedreg.core.spssoroledescriptor.update.validation.error')
+			render (view:'edit', model:[serviceProvider:serviceProvider])
+		}
 	}
 	
 	def delete = {

@@ -614,4 +614,58 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 		sloPost_.location.uri == "https://service.test.com/Shibboleth.sso/SLO/Post"
 	}
 	
+	def "Attempt to update non existant service provider fails"() {
+		setup:
+		params.id = 1
+		
+		when: 
+		def (updated, serviceProvider_) = spssoDescriptorService.update(params)
+		
+		then:
+		!updated
+		serviceProvider_ == null
+	}
+	
+	def "Updating an existing service provider with valid changed content succeeds"() {
+		setup:
+		def organization = Organization.build().save()
+		def ed = EntityDescriptor.build(organization: organization).save()
+		def sd = ServiceDescription.build(connectURL: "http://connecturl.com", furtherInfo:"this is further info")
+		def sp = SPSSODescriptor.build(entityDescriptor:ed, serviceDescription:sd).save()
+		params.id = sp.id
+		params.sp = [displayName:"new displayName", description:"new description"]
+		params.sp.servicedescription = [connecturl: "http://newconnecturl.com", furtherinfo:"this is new further info"]
+		
+		when:
+		def (updated, serviceProvider_) = spssoDescriptorService.update(params)
+		
+		then:
+		updated
+		serviceProvider_.displayName == "new displayName"
+		serviceProvider_.description == "new description"
+		serviceProvider_.serviceDescription.connectURL == "http://newconnecturl.com"
+		serviceProvider_.serviceDescription.furtherInfo == "this is new further info"
+	}
+
+	def "Updating an existing service provider with invalid changed content fails"() {
+		setup:
+		def organization = Organization.build().save()
+		def ed = EntityDescriptor.build(organization: organization).save()
+		def sd = ServiceDescription.build(connectURL: "http://connecturl.com", furtherInfo:"this is further info")
+		def sp = SPSSODescriptor.build(entityDescriptor:ed, serviceDescription:sd).save()
+		params.id = sp.id
+		params.sp = [displayName:"", description:"new description"]
+		params.sp.servicedescription = [connecturl: "http://newconnecturl.com", furtherinfo:"this is new further info"]
+		
+		when:
+		def (updated, serviceProvider_) = spssoDescriptorService.update(params)
+		
+		then:
+		!updated
+		serviceProvider_.hasErrors()
+		serviceProvider_.displayName == ""
+		serviceProvider_.description == "new description"
+		serviceProvider_.serviceDescription.connectURL == "http://newconnecturl.com"
+		serviceProvider_.serviceDescription.furtherInfo == "this is new further info"
+	}
 }

@@ -127,7 +127,7 @@
 					<label for="sp.description"><g:message code="label.description" /></label>
 				</td>
 				<td>
-					<g:textField name="sp.description"  size="50" class="required" minlength="4"/>
+					<g:textArea name="sp.description"  class="required" minlength="4" rows="8" cols="36"/>
 				</td>
 			</tr>
 			<tr>

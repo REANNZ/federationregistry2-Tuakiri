@@ -165,4 +165,34 @@ class SPSSODescriptorService {
 		
 		return [true, organization, entityDescriptor, serviceProvider, httpPostACS, soapArtifactACS, sloArtifact, sloRedirect, sloSOAP, sloPost, Organization.list(), AttributeBase.list(), SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding), contact]
 	}
+	
+	
+	def update(def params) {
+		println params
+		def serviceProvider = SPSSODescriptor.get(params.id)
+		if(!serviceProvider)
+			return [false, null]
+		
+		serviceProvider.displayName = params.sp.displayName
+		serviceProvider.description = params.sp.description
+		
+		serviceProvider.serviceDescription.connectURL = params.sp?.servicedescription?.connecturl
+		serviceProvider.serviceDescription.logoURL = params.sp?.servicedescription?.logo
+		serviceProvider.serviceDescription.furtherInfo = params.sp?.servicedescription?.furtherinfo
+		serviceProvider.serviceDescription.provides = params.sp?.servicedescription?.provides
+		serviceProvider.serviceDescription.benefits = params.sp?.servicedescription?.benefits
+		serviceProvider.serviceDescription.audience = params.sp?.servicedescription?.audience
+		serviceProvider.serviceDescription.restrictions = params.sp?.servicedescription?.restrictions
+		serviceProvider.serviceDescription.accessing = params.sp?.servicedescription?.accessing
+		serviceProvider.serviceDescription.support = params.sp?.servicedescription?.support
+		serviceProvider.serviceDescription.maintenance = params.sp?.servicedescription?.maintenance
+		
+		if(!serviceProvider.save()) {			
+			serviceProvider.errors.each {log.warn it}
+			return [false, serviceProvider]
+		}
+		
+		return [true, serviceProvider]
+	}
+
 }

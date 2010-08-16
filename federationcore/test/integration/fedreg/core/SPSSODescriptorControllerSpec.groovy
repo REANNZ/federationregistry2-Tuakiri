@@ -35,21 +35,8 @@ class SPSSODescriptorControllerSpec extends IntegrationSpec {
 		def httpArtifact = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact', description:'').save()
 	}
 	
-	def setupCrypto() {
-		def ca = new File('./test/integration/data/demoCA/cacertminimal.pem').text
-		def caCert = new CACertificate(data:ca)
-		def caKeyInfo = new CAKeyInfo(certificate:caCert)
-		caKeyInfo.save()
-	}
-	
-	def String loadPK() {
-		new File('./test/integration/data/newcertminimal.pem').text
-	}
-	
 	def "Validate list"() {
 		setup:
-		setupCrypto()
-		def pk = loadPK()
 		
 		(1..25).each { i ->
 			def ed = EntityDescriptor.build(entityID:"http://sp.test.com/$i")
@@ -151,13 +138,13 @@ class SPSSODescriptorControllerSpec extends IntegrationSpec {
 	
 	def "Validate successful save"() {
 		setup:
-		def params = [:]
 		def organization = Organization.build().save()
 		def entityDescriptor = EntityDescriptor.build(organization:organization).save()
 		def serviceProvider = SPSSODescriptor.build(entityDescriptor:entityDescriptor).save()
 		
 		when:
 		spssoDescriptorService.metaClass.create = { def p -> 
+			println "X"
 			return [true, organization, entityDescriptor, serviceProvider]	//.. deliberately leaving out other return vals here
 		} 
 		def model = controller.save()
@@ -168,14 +155,13 @@ class SPSSODescriptorControllerSpec extends IntegrationSpec {
 	
 	def "Validate failed save"() {
 		setup:
-		def params = [:]
 		def organization = Organization.build().save()
 		def entityDescriptor = EntityDescriptor.build(organization:organization).save()
 		def serviceProvider = SPSSODescriptor.build(entityDescriptor:entityDescriptor).save()
 		
 		when:
 		spssoDescriptorService.metaClass.create = { def p -> 
-			return [true, organization, entityDescriptor, serviceProvider]	//.. deliberately leaving out other return vals here
+			return [false, organization, entityDescriptor, serviceProvider]	//.. deliberately leaving out other return vals here
 		} 
 		def model = controller.save()
 		
@@ -186,5 +172,62 @@ class SPSSODescriptorControllerSpec extends IntegrationSpec {
 		
 		controller.flash.type = "error"
 		controller.flash.message = "fedreg.core.spssoroledescriptor.save.validation.error"	
+	}
+	
+	def "Validate successful update"() {
+		setup:
+		def organization = Organization.build().save()
+		def entityDescriptor = EntityDescriptor.build(organization:organization).save()
+		def serviceProvider = SPSSODescriptor.build(entityDescriptor:entityDescriptor).save()
+		
+		controller.params.id = serviceProvider.id
+		
+		when:
+		spssoDescriptorService.metaClass.update = { def p -> 
+			return [true, serviceProvider]
+		} 
+		def model = controller.update()
+		
+		then:
+		controller.response.redirectedUrl == "/SPSSODescriptor/show/${serviceProvider.id}"	
+	}
+	
+	def "Invalid or non existing SPSSODescriptor fails update"() {
+		setup:		
+		controller.params.id = 1
+		
+		when:
+		spssoDescriptorService.metaClass.update = { def p -> 
+			return [true, serviceProvider]
+		} 
+		def model = controller.update()
+		
+		then:
+		controller.response.redirectedUrl == "/SPSSODescriptor/list"	
+		controller.flash.type = "error"
+		controller.flash.message = "fedreg.core.spssoroledescriptor.nonexistant"
+	}
+	
+	def "Invalid service response fails update"() {
+		setup:
+		def organization = Organization.build().save()
+		def entityDescriptor = EntityDescriptor.build(organization:organization).save()
+		def serviceProvider = SPSSODescriptor.build(entityDescriptor:entityDescriptor).save()
+		
+		controller.params.id = serviceProvider.id
+		
+		when:
+		spssoDescriptorService.metaClass.update = { def p -> 
+			return [false, serviceProvider]
+		} 
+		def model = controller.update()
+		
+		then:
+		//organization == controller.modelAndView.model.organization	
+		//entityDescriptor == controller.modelAndView.model.entityDescriptor	
+		//serviceProvider == controller.modelAndView.model.serviceProvider
+		
+		controller.flash.type = "error"
+		controller.flash.message = "fedreg.core.spssoroledescriptor.update.validation.error"	
 	}
 }
