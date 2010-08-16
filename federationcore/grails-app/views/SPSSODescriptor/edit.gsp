@@ -26,7 +26,7 @@
 	<body>
 
 		<section>
-			<h2><g:message code="fedreg.view.members.serviceprovider.edit.heading" /></h2>
+			<h2><g:message code="fedreg.view.members.serviceprovider.edit.heading" args="[serviceProvider.displayName]"/></h2>
 			
 			<g:form action="update" id="${serviceProvider.id}">			
 				<div class="step" id="basic">
@@ -40,7 +40,7 @@
 								<label for="sp.displayName"><g:message code="label.displayname" /></label>
 							</td>
 							<td>
-								<g:textField name="sp.displayName"  value="${serviceProvider.displayName}" size="50" class="required" minlength="4"/>
+								<g:textField name="sp.displayName"  value="${serviceProvider.displayName}" size="50" class="required" minlength="4" maxlength="255" />
 							</td>
 						</tr>
 						<tr>
@@ -48,7 +48,7 @@
 								<label for="sp.description"><g:message code="label.description" /></label>
 							</td>
 							<td>
-								<g:textArea name="sp.description"  value="${serviceProvider.description}" class="required" minlength="4" rows="8" cols="36"/>
+								<g:textArea name="sp.description"  value="${serviceProvider.description}" class="required" minlength="4" rows="8" cols="36" maxlength="2000"/>
 							</td>
 						</tr>
 						<tr>
@@ -56,7 +56,7 @@
 								<label for="sp.servicedescription.connecturl"><g:message code="label.serviceurl" /></label>
 							</td>
 							<td>
-								<g:textField name="sp.servicedescription.connecturl" value="${serviceProvider.serviceDescription.connectURL}" size="50" class="required url"/>
+								<g:textField name="sp.servicedescription.connecturl" value="${serviceProvider.serviceDescription.connectURL}" size="50" class="required url" maxlength="255"/>
 							</td>
 						</tr>
 						<tr>
@@ -64,7 +64,7 @@
 								<label for="sp.servicedescription.logourl"><g:message code="label.servicelogourl" /></label>
 							</td>
 							<td>
-								<g:textField name="sp.servicedescription.logourl" value="${serviceProvider.serviceDescription.logoURL}" size="50" class="url"/> (100x100px should be publicly accessible)
+								<g:textField name="sp.servicedescription.logourl" value="${serviceProvider.serviceDescription.logoURL}" size="50" class="url" maxlength="255"/>
 							</td>
 						</tr>
 					</table>
@@ -81,7 +81,7 @@
 								<label for="sp.servicedescription.furtherInfo"><g:message code="label.furtherinfo" /></label>
 							</td>
 							<td>
-								<g:textArea name="sp.servicedescription.furtherinfo" value="${serviceProvider.serviceDescription.furtherInfo}" rows="8" cols="48"/>
+								<g:textArea name="sp.servicedescription.furtherinfo" value="${serviceProvider.serviceDescription.furtherInfo}" rows="8" cols="48" maxlength="2000"/>
 							</td>
 						</tr>
 						<tr>
@@ -89,7 +89,7 @@
 								<label for="sp.servicedescription.provides"><g:message code="label.provides" /></label>
 							</td>
 							<td>
-								<g:textArea name="sp.servicedescription.provides" value="${serviceProvider.serviceDescription.provides}" rows="8" cols="48"/>
+								<g:textArea name="sp.servicedescription.provides" value="${serviceProvider.serviceDescription.provides}" rows="8" cols="48" maxlength="2000"/>
 							</td>
 						</tr>
 						<tr>
@@ -97,7 +97,7 @@
 								<label for="sp.servicedescription.benefits"><g:message code="label.benefits" /></label>
 							</td>
 							<td>
-								<g:textArea name="sp.servicedescription.benefits" value="${serviceProvider.serviceDescription.benefits}" rows="8" cols="48"/>
+								<g:textArea name="sp.servicedescription.benefits" value="${serviceProvider.serviceDescription.benefits}" rows="8" cols="48" maxlength="2000"/>
 							</td>
 						</tr>
 						<tr>
@@ -105,7 +105,7 @@
 								<label for="sp.servicedescription.audience"><g:message code="label.audience" /></label>
 							</td>
 							<td>
-								<g:textArea name="sp.servicedescription.audience" value="${serviceProvider.serviceDescription.audience}" rows="8" cols="48"/>
+								<g:textArea name="sp.servicedescription.audience" value="${serviceProvider.serviceDescription.audience}" rows="8" cols="48" maxlength="2000"/>
 							</td>
 						</tr>
 						<tr>
@@ -113,7 +113,7 @@
 								<label for="sp.servicedescription.restrictions"><g:message code="label.restrictions" /></label>
 							</td>
 							<td>
-								<g:textArea name="sp.servicedescription.restrictions" value="${serviceProvider.serviceDescription.restrictions}" rows="8" cols="48"/>
+								<g:textArea name="sp.servicedescription.restrictions" value="${serviceProvider.serviceDescription.restrictions}" rows="8" cols="48" maxlength="2000"/>
 							</td>
 						</tr>
 						<tr>
@@ -121,7 +121,7 @@
 								<label for="sp.servicedescription.accessing"><g:message code="label.accessing" /></label>
 							</td>
 							<td>
-								<g:textArea name="sp.servicedescription.accessing" value="${serviceProvider.serviceDescription.accessing}" rows="8" cols="48"/>
+								<g:textArea name="sp.servicedescription.accessing" value="${serviceProvider.serviceDescription.accessing}" rows="8" cols="48" maxlength="2000"/>
 							</td>
 						</tr>
 						<tr>
@@ -129,7 +129,7 @@
 								<label for="sp.servicedescription.support"><g:message code="label.support" /></label>
 							</td>
 							<td>
-								<g:textArea name="sp.servicedescription.support" value="${serviceProvider.serviceDescription.support}" rows="8" cols="48"/>
+								<g:textArea name="sp.servicedescription.support" value="${serviceProvider.serviceDescription.support}" rows="8" cols="48" maxlength="2000"/>
 							</td>
 						</tr>
 						<tr>
@@ -137,7 +137,7 @@
 								<label for="sp.servicedescription.maintenance"><g:message code="label.maintenance" /></label>
 							</td>
 							<td>
-								<g:textArea name="sp.servicedescription.maintenance" value="${serviceProvider.serviceDescription.maintenance}" rows="8" cols="48"/>
+								<g:textArea name="sp.servicedescription.maintenance" value="${serviceProvider.serviceDescription.maintenance}" rows="8" cols="48" maxlength="2000"/>
 							</td>
 						</tr>
 					</table>

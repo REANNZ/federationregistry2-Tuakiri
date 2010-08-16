@@ -45,16 +45,16 @@ class ServiceDescription {
 	static constraints = {
 		connectURL(nullable:true)
 		logoURL(nullable:true)
-		furtherInfo(nullable:true)
-		provides(nullable:true)
-		benefits(nullable:true)
-		audience(nullable:true)
-		restrictions(nullable:true)
-		accessing(nullable:true)
-		support(nullable:true)
-		maintenance(nullable:true)
-		dateCreated(nullable:true)
-		lastUpdated(nullable:true)
+		furtherInfo(nullable:true, maxSize:2000)
+		provides(nullable:true, maxSize:2000)
+		benefits(nullable:true, maxSize:2000)
+		audience(nullable:true, maxSize:2000)
+		restrictions(nullable:true, maxSize:2000)
+		accessing(nullable:true, maxSize:2000)
+		support(nullable:true, maxSize:2000)
+		maintenance(nullable:true, maxSize:2000)
+		dateCreated(nullable:true, maxSize:2000)
+		lastUpdated(nullable:true, maxSize:2000)
 	}
 	
 	public String toString() {	"servicedescription:[id:$id, publish:$publish]" }

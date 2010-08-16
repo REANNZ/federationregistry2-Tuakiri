@@ -5,6 +5,7 @@ import fedreg.workflow.ProcessPriority
 class BootstrapController {
 	
 	def IDPSSODescriptorService
+	def SPSSODescriptorService
 	def organizationService
 	
 	static allowedMethods = [saveIDP: "POST", update: "POST", delete: "POST"]
@@ -27,7 +28,7 @@ class BootstrapController {
 		if (!identityProvider) {
 			flash.type="error"
 			flash.message = message(code: 'fedreg.core.idpssoroledescriptor.nonexistant')
-			redirect(action: "list")
+			redirect( "/" )
 			return
 		}
 
@@ -42,6 +43,44 @@ class BootstrapController {
 		else
 			render (view:'idp', model:[organization:organization, entityDescriptor:entityDescriptor, identityProvider:identityProvider, attributeAuthority:attributeAuthority, httpPost:httpPost, httpRedirect:httpRedirect, 
 			soapArtifact:soapArtifact, organizationList:organizationList, attributeList:attributeList, nameIDFormatList:nameIDFormatList, contact:contact])
+	}
+	
+	def sp = {
+		def serviceProvider = new SPSSODescriptor()
+		[serviceProvider: serviceProvider, organizationList: Organization.list(), attributeList: AttributeBase.list(), nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)]
+	}
+	
+	def savesp = {
+		def (created, organization, entityDescriptor, serviceProvider, httpPostACS, soapArtifactACS, sloArtifact, sloRedirect, sloSOAP, sloPost, organizationList, attributeList, nameIDFormatList, contact) = SPSSODescriptorService.create(params)
+		
+		if(created)
+			redirect (action: "spregistered", id: serviceProvider.id)
+		else {
+			flash.type="error"
+			flash.message = message(code: 'fedreg.core.spssoroledescriptor.save.validation.error')
+			render (view:'sp', model:[organization:organization, entityDescriptor:entityDescriptor, serviceProvider:serviceProvider, httpPostACS:httpPostACS, soapArtifactACS:soapArtifactACS, contact:contact,
+										sloArtifact:sloArtifact, sloRedirect:sloRedirect, sloSOAP:sloSOAP, sloPost:sloPost, organizationList:organizationList, attributeList:attributeList, nameIDFormatList:nameIDFormatList])
+		}
+	}
+	
+	def spregistered = {
+		if(!params.id) {
+			log.warn "SPSSODescriptor ID was not present"
+			flash.type="error"
+			flash.message = message(code: 'fedreg.controllers.namevalue.missing')
+			redirect(action: "list")
+			return
+		}
+		
+		def serviceProvider = SPSSODescriptor.get(params.id)
+		if (!serviceProvider) {
+			flash.type="error"
+			flash.message = message(code: 'fedreg.core.spssoroledescriptor.nonexistant')
+			redirect( "/" )
+			return
+		}
+
+		[serviceProvider: serviceProvider]
 	}
 	
 	def organization = {

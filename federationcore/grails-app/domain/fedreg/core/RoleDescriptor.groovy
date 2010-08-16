@@ -50,8 +50,11 @@ class RoleDescriptor  {
 	}
 
 	static constraints = {
+		displayName(nullable:false, blank:false)
+		description(nullable:false, blank: false, maxSize:2000)
+		
 		organization(nullable: false)
-		extensions(nullable: true)
+		extensions(nullable: true, maxSize:2000)
 		errorURL(nullable:true)
 		protocolSupportEnumerations(nullable: true)
 		contacts(nullable: true)
@@ -60,8 +63,6 @@ class RoleDescriptor  {
 		})
 		dateCreated(nullable:true)
 		lastUpdated(nullable:true)
-		displayName(nullable:false, blank:false)
-		description(nullable:false, blank: false)
 	}
 	
 	public String toString() {	"roledescriptor:[id:$id, displayName: $displayName]" }
