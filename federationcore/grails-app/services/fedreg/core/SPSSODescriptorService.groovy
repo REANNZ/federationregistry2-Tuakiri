@@ -39,10 +39,24 @@ class SPSSODescriptorService {
 		acs.addToServiceNames(params.sp?.displayName ?: '')
 		acs.addToServiceDescriptions(params.sp?.description ?: '')
 		params.sp.attributes.each { a -> 
-			if(a.value.requested == "on") {
-				def attr = AttributeBase.get(a.key)
-				if(attr)
-					acs.addToRequestedAttributes(new RequestedAttribute(base:attr, reasoning: a.value.reasoning, isRequired: (a.value.required == 'on') ))
+			def attrID = a.key
+			def val = a.value
+			
+			if(!( val instanceof String )) {					// org.codehaus.groovy.grails.web.servlet.mvc.GrailsParameterMap oddities where vals are both in maps and individually presented as Strings
+				if(val.requested && val.requested == "on") {
+					def attr = AttributeBase.get(attrID)
+					if(attr) {
+						def ra = new RequestedAttribute(base:attr, reasoning: val.reasoning, isRequired: (val.required == 'on') )
+						acs.addToRequestedAttributes(ra)
+						
+						if(val.requestedvalues) {
+							val.requestedvalues.each {
+								if(it.value && it.value.size() > 0)
+									ra.addToValues( new AttributeValue(value: it.value) )
+							}
+						}
+					}
+				}
 			}
 		}
 		serviceProvider.addToAttributeConsumingServices(acs)

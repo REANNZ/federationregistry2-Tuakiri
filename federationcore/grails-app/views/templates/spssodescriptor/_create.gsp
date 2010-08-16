@@ -2,9 +2,9 @@
 	var certificateValidationEndpoint = "${createLink(controller:'coreUtilities', action:'validateCertificate')}";
 	var newCertificateValid = false;
 	
-	$(function() {	
-
+	$(function() {			
 		$('form').validate({
+				ignore: ":disabled",
 				success: function(label) {
 					if($(label).next())
 						$(label).next().remove()	// fix annoying bug where success labels are left laying about if duplicate validations
@@ -66,7 +66,7 @@
 	<g:hiddenField name="contact.type" value="administrative" />
 	
 	<g:if test="${requiresContactDetails}">
-		<div class="stepz" id="contact">
+		<div class="step" id="contact">
 			<h3><g:message code="fedreg.templates.serviceprovider.create.contact.heading" /></h3>
 			<p>
 				<g:message code="fedreg.templates.serviceprovider.create.contact.details" />
@@ -100,7 +100,7 @@
 		</div>
 	</g:if>
 	
-	<div class="stepz" id="basic">
+	<div class="step" id="basic">
 		<h3><g:message code="fedreg.templates.serviceprovider.create.basicinformation.heading" /></h3>
 		<p>
 			<g:message code="fedreg.templates.serviceprovider.create.basicinformation.details" />
@@ -143,13 +143,13 @@
 					<label for="sp.servicedescription.logourl"><g:message code="label.servicelogourl" /></label>
 				</td>
 				<td>
-					<g:textField name="sp.servicedescription.logourl" size="50" class="required url"/> (100x100px should be publicly accessible)
+					<g:textField name="sp.servicedescription.logourl" size="50" class="url"/> (100x100px should be publicly accessible)
 				</td>
 			</tr>
 		</table>
 	</div>
 	
-	<div class="stepz" id="servicedescription">
+	<div class="step" id="servicedescription">
 		<h3><g:message code="fedreg.templates.serviceprovider.create.servicedescription.heading" /></h3>
 		<p>
 			<g:message code="fedreg.templates.serviceprovider.create.servicedescription.details" />
@@ -222,7 +222,7 @@
 		</table>
 	</div>
 	
-	<div class="stepz" id="saml">
+	<div class="step" id="saml">
 		<h3><g:message code="fedreg.templates.serviceprovider.create.saml.heading" /></h3>
 		<p>
 			<g:message code="fedreg.templates.serviceprovider.create.saml.details" />
@@ -298,7 +298,7 @@
 		</table>
 	</div>
 	
-	<div class="stepz" id="crypto">
+	<div class="step" id="crypto">
 		<h3><g:message code="fedreg.templates.serviceprovider.create.crypto.heading" /></h3>
 		<p>
 			<g:message code="fedreg.templates.serviceprovider.create.crypto.details" />
@@ -321,7 +321,7 @@
 		</table>
 	</div>
 	
-	<div class="stepz" id="attributesupport">
+	<div class="step" id="attributesupport">
 		<h3><g:message code="fedreg.templates.serviceprovider.create.attributesupport.heading" /></h3>
 		<p>
 			<g:message code="fedreg.templates.serviceprovider.create.attributesupport.details" />
@@ -345,13 +345,13 @@
 								${fieldValue(bean: attr, field: "description")}
 							</td>
 							<td>
-								<g:checkBox name="sp.attributes.${attr.id}.requested"/>
+								<g:checkBox name="sp.attributes.${attr.id}.requested" id="sp.attributes.${attr.id}.requested" onClick="\$('#spattributes${attr.id}reasoning').toggleClass('required');"/>
 							</td>
 							<td>
 								<g:checkBox name="sp.attributes.${attr.id}.required"/>
 							</td>
 							<td>
-								<g:textField name="sp.attributes.${attr.id}.reasoning" size="40" class="required"/>
+								<input name="sp.attributes.${attr.id}.reasoning" id="spattributes${attr.id}reasoning" size="40" />
 							</td>
 						</tr>
 					</g:if>
@@ -360,7 +360,7 @@
 		</table>
 	</div>
 	
-	<div class="stepz" id="specifiedattributesupport">
+	<div class="step" id="specifiedattributesupport">
 		<h3><g:message code="fedreg.templates.serviceprovider.create.specifiedattributesupport.heading" /></h3>
 		<p>
 			<g:message code="fedreg.templates.serviceprovider.create.specifiedattributesupport.details" />
@@ -384,13 +384,13 @@
 									${fieldValue(bean: attr, field: "description")}
 								</td>
 								<td>
-									<g:checkBox name="sp.attributes.${attr.id}.requested"/>
+									<g:checkBox name="sp.attributes.${attr.id}.requested" onClick="\$('#spattributes${attr.id}reasoning').toggleClass('required'); \$('#spattributes${attr.id}requestedvalues1').toggleClass('required');"/>
 								</td>
 								<td>
 									<g:checkBox name="sp.attributes.${attr.id}.required"/>
 								</td>
 								<td>
-									<g:textField name="sp.attributes.${attr.id}.reasoning" size="40" class="required"/>
+									<g:textField name="sp.attributes.${attr.id}.reasoning" id="spattributes${attr.id}reasoning" size="40"/>
 								</td>
 							</tr>
 							<tr>
@@ -404,7 +404,7 @@
 												</th>
 												<td colspan="4">
 													<g:each in="${1..10}" var="v">
-														<g:textField name="sp.attributes.${attr.id}.requestedvalues.${v}" size="40" class="required"/><br>
+														<g:textField name="sp.attributes.${attr.id}.requestedvalues.${v}" id="spattributes${attr.id}requestedvalues${v}" size="40"/><br>
 													</g:each>
 												</td>
 											</tr>
@@ -417,7 +417,7 @@
 			</table>
 	</div>
 	
-	<div class="stepz" id="nameidformatsupport">
+	<div class="step" id="nameidformatsupport">
 		<h3><g:message code="fedreg.templates.serviceprovider.create.nameidformatsupport.heading" /></h3>
 		<p>
 			<g:message code="fedreg.templates.serviceprovider.create.nameidformatsupport.details" />
@@ -444,7 +444,7 @@
 		</table>
 	</div>
 	
-	<div class="stepz submit_step" id="creationsummary">
+	<div class="step submit_step" id="creationsummary">
 		<h3><g:message code="fedreg.templates.serviceprovider.create.summary.heading" /></h3>
 		<p>
 			<g:message code="fedreg.templates.serviceprovider.create.summary.details" />

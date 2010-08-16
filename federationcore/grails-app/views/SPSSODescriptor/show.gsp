@@ -106,12 +106,20 @@
 			
 			<div id="tabs">
 				<ul>
+					<li><a href="#tab-details"><g:message code="label.details" /></a></li>
 					<li><a href="#tab-contacts"><g:message code="label.contacts" /></a></li>
 					<li><a href="#tab-crypto"><g:message code="label.crypto" /></a></li>
 					<li><a href="#tab-endpoints"><g:message code="label.endpoints" /></a></li>
 					<li><a href="#tab-attributes"><g:message code="label.attributeconsumingservices" /></a></li>
 					<li><a href="#tab-nameidformats"><g:message code="label.supportednameidformats" /></a></li>
 				</ul>
+				
+				<div id="tab-details" class="tabcontent">
+					<h3><g:message code="label.details" /></h3>
+					<div id="details">
+						<g:render template="/templates/spssodescriptor/details" plugin="federationcore" model="[serviceProvider:serviceProvider]" />
+					</div>
+				</div>
 				
 				<div id="tab-contacts" class="tabcontent">
 					<h3><g:message code="label.contacts" /></h3>
