@@ -33,7 +33,7 @@ class MailURI extends AnyUri  {
 	public boolean equals(Object obj) {
 		if ( !(obj instanceof MailURI) ) return false
 		
-		MailURI uri = (MailURI) obj
+		MailURI mailURI = (MailURI) obj
 		if(mailURI.uri.equals(uri)) return true
 		
 		return false

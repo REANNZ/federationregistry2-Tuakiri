@@ -31,6 +31,7 @@ class OrganizationType {
 	boolean discoveryServiceCategory = false
 	
 	static constraints = {
+		name(unique: true, blank:false)
 		description(nullable:true)
 		dateCreated(nullable:true)
 		lastUpdated(nullable:true)
@@ -38,4 +39,12 @@ class OrganizationType {
 	
 	public String toString() {	"organizationtype:[id:$id, name:$name, displayName: $displayName]" }
 
+	public boolean equals(Object obj) {
+		if ( !(obj instanceof OrganizationType) ) return false
+		
+		OrganizationType ot = (OrganizationType) obj
+		if(ot.name.equals(name)) return true
+		
+		return false
+	}
 }

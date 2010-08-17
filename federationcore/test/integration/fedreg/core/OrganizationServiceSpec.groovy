@@ -174,4 +174,52 @@ class OrganizationServiceSpec extends IntegrationSpec {
 		contact_.email.uri == "zzz"
 	}
 	
+	def "Update succeeds when providing valid data"() {
+		setup:
+		def ot = OrganizationType.build(name:'ot1').save()
+		def ot2 = OrganizationType.build(name:'ot2').save()
+		def ot3 = OrganizationType.build(name:'ot3').save()
+		def ot4 = OrganizationType.build(name:'ot4').save()
+		def organization = Organization.build(primary: ot).save();
+		
+		params.id = organization.id
+		params.organization = [name: "Test Org", displayName:"Test Org Pty Ltd", url:"http://test.org", primary:ot2.id, lang:'en', active:'true', types:[(ot3.id):'on', (ot4.id):'on']]
+		
+		when:
+		def (updated, organization_) = organizationService.update(params)
+		
+		then:
+		updated
+		organization_.name == "Test Org"
+		organization_.displayName == "Test Org Pty Ltd"
+		organization_.primary == ot2
+		organization_.url.uri == "http://test.org"
+		organization_.types.contains(ot3)
+		organization_.types.contains(ot4)
+	}
+	
+	def "Update fails when providing invalid data"() {
+		setup:
+		def ot = OrganizationType.build(name:'ot1').save()
+		def ot2 = OrganizationType.build(name:'ot2').save()
+		def ot3 = OrganizationType.build(name:'ot3').save()
+		def ot4 = OrganizationType.build(name:'ot4').save()
+		def organization = Organization.build(primary: ot).save();
+		
+		params.id = organization.id
+		params.organization = [name: "", displayName:"Test Org Pty Ltd", url:"http://test.org", primary:ot2.id, lang:'en', active:'true', types:[(ot3.id):'on', (ot4.id):'on']]
+		
+		when:
+		def (updated, organization_) = organizationService.update(params)
+		
+		then:
+		!updated
+		organization_.name == ""
+		organization_.displayName == "Test Org Pty Ltd"
+		organization_.primary == ot2
+		organization_.url.uri == "http://test.org"
+		organization_.types.contains(ot3)
+		organization_.types.contains(ot4)
+	}
+	
 }

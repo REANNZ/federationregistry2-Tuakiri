@@ -4,7 +4,7 @@ class OrganizationController {
 
 	def organizationService
 
-	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+	static allowedMethods = [save: "POST", update: "POST"]
 
 	def index = {
 		redirect(action: "list", params: params)
@@ -27,7 +27,7 @@ class OrganizationController {
 		def organization = Organization.get(params.id)
 		if (!organization) {
 			flash.type="error"
-			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'organization.label'), params.id])}"
+			flash.message = message(code: 'fedreg.core.organization.nonexistant')
 			redirect(action: "list")
 		}
 		else {
@@ -49,6 +49,53 @@ class OrganizationController {
 			redirect (action: "show", id: organization.id)
 		else
 			render (view:'create', model:[organization:organization, contact:contact])
+	}
+	
+	def edit = {
+		if(!params.id) {
+			log.warn "Organization ID was not present"
+			flash.type="error"
+			flash.message = message(code: 'fedreg.controllers.namevalue.missing')
+			redirect(action: "list")
+			return
+		}
+		
+		def organization = Organization.get(params.id)
+		if (!organization) {
+			flash.type="error"
+			flash.message = message(code: 'fedreg.core.organization.nonexistant')
+			redirect(action: "list")
+			return
+		}	
+		
+		[organization: organization, organizationTypes: OrganizationType.list()]	
+	}
+	
+	def update = {
+		if(!params.id) {
+			log.warn "Organization ID was not present"
+			flash.type="error"
+			flash.message = message(code: 'fedreg.controllers.namevalue.missing')
+			redirect(action: "list")
+			return
+		}
+		
+		def organization_ = Organization.get(params.id)
+		if (!organization_) {
+			flash.type="error"
+			flash.message = message(code: 'fedreg.core.organization.nonexistant')
+			redirect(action: "list")
+			return
+		}
+		
+		def (updated, organization) = organizationService.update(params)
+		if(updated)
+			redirect (action: "show", id: organization.id)
+		else {
+			flash.type="error"
+			flash.message = message(code: 'fedreg.core.organization.update.validation.error')
+			render (view:'edit', model:[organization:organization, organizationTypes: OrganizationType.list()])
+		}
 	}
 
 }

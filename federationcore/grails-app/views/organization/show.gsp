@@ -29,17 +29,39 @@
 						<td><a href="${organization.url.uri}">${organization.url.uri}</a></td>
 					</tr>
 					<tr>
+						<th><g:message code="label.status"/></th>
+						<td>
+							<g:if test="${organization.active}">
+								<g:message code="label.active" />
+							</g:if>
+							<g:else>
+								<g:message code="label.inactive" />
+							</g:else>
+						</td>
+					</tr>
+					<tr>
+						<th><g:message code="label.approved"/></th>
+						<td>
+							<g:if test="${organization.approved}">
+								<g:message code="label.yes" />
+							</g:if>
+							<g:else>
+								<g:message code="label.no" /> <div class="error"><g:message code="label.warningmetadata" /></div>
+							</g:else>
+						</td>
+					</tr>
+					<tr>
 						<th><g:message code="label.primarytype" /></th>
 						<td>${fieldValue(bean: organization, field: "primary.displayName")}</td>
 					</tr>
 					<g:if test="${organization.types}">
 					<tr>
-						<th><g:message code="label.secondarytypes" /></th>
-						<td valign="top"  class="value">
-							<ul>
-							<g:each in="${organization.types}" var="t">
-								<li>${fieldValue(bean: t, field: "displayName")}</li>
-							</g:each>
+						<th><g:message code="label.organizationsecondarytypes" /></th>
+						<td>
+							<ul class="clean">
+								<g:each in="${organization.types}" var="t">
+									<li>${fieldValue(bean: t, field: "displayName")}</li>
+								</g:each>
 							</ul>
 						</td>
 					</tr>

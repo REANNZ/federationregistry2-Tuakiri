@@ -35,4 +35,30 @@ class OrganizationService {
 		
 		return [ true, organization, contact ]
 	}
+	
+	def update(def params) {
+		def organization = Organization.get(params.id)
+		if(!organization)
+			return [false, null]
+		
+		organization.displayName = params.organization.displayName
+		organization.name = params.organization.name
+		organization.lang = params.organization.lang
+		organization.active = params.organization.active == 'true'
+		organization.url.uri = params.organization.url
+		organization.primary = OrganizationType.get(params.organization.primary)
+		organization.types = []
+		params.organization.types.each {
+			if(it.value == 'on') {
+				organization.addToTypes(OrganizationType.get(it.key))
+			}
+		}
+		
+		if(!organization.save()) {			
+			organization.errors.each {log.warn it}
+			return [false, organization]
+		}
+		
+		return [true, organization]
+	}
 }
