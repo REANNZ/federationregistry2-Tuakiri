@@ -90,7 +90,7 @@
 							<g:message code="label.yes" />
 						</g:if>
 						<g:else>
-							<g:message code="label.no" />
+							<div class="error"><g:message code="label.no" /></div>
 						</g:else>
 					</td>
 				</tr>
@@ -102,6 +102,17 @@
 						</g:if>
 						<g:else>
 							<div class="icon icon_cross"><g:message code="label.no" /></div>
+						</g:else>
+					</td>
+				</tr>
+				<tr>
+					<th><g:message code="label.autoacceptservices"/></th>
+					<td>
+						<g:if test="${identityProvider.autoAcceptServices}">
+							<g:message code="label.yes" />
+						</g:if>
+						<g:else>
+							<g:message code="label.no" />
 						</g:else>
 					</td>
 				</tr>

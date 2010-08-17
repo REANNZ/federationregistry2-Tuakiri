@@ -22,9 +22,10 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class IDPSSODescriptor extends SSODescriptor  {
-
-	boolean wantAuthnRequestsSigned
 	AttributeAuthorityDescriptor collaborator
+		
+	boolean wantAuthnRequestsSigned = true
+	boolean autoAcceptServices = true
 
 	List singleSignOnServices
 
