@@ -22,14 +22,14 @@
 			return newCertificateValid == true; 
 		}, jQuery.format("PEM data invalid"));
 		
-		$('#newcertificatedata').rules("add", {
+		$('#cert').rules("add", {
 		     required: true,
 		     validcert: true
 		});
 		
 		$('#samladvancedmode').hide();
 		
-		$('#newcertificatedata').change( function() {
+		$('#cert').change( function() {
 			$('#sp\\.crypto\\.encdata').val($(this).val());
 			$('#sp\\.crypto\\.sigdata').val($(this).val());
 		});
@@ -44,7 +44,7 @@
 			$('#sp\\.slo\\.post\\.uri').val($(this).val() + '/Shibboleth.sso/SLO/POST');
 		});
 		
-		$("#newcertificatedata").bind('paste', function() { setTimeout(function() { validateCertificate(); }, 100); });
+		$("#cert").bind('paste', function() { setTimeout(function() { validateCertificate(); }, 100); });
 	});
 	
 	function validateCertificate() {
@@ -315,7 +315,7 @@
 					<g:hiddenField name="sp.crypto.sig" value="${true}" />
 					<g:hiddenField name="sp.crypto.encdata" />
 					<g:hiddenField name="sp.crypto.enc" value="${true}" />
-					<g:textArea name="newcertificatedata" id="newcertificatedata" rows="25" cols="60" />
+					<g:textArea name="cert" id="cert" rows="25" cols="60" />
 				</td>
 			</tr>
 		</table>

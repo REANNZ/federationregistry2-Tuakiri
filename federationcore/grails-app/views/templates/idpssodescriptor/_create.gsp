@@ -22,7 +22,7 @@
 			return newCertificateValid == true; 
 		}, jQuery.format("PEM data invalid"));
 		
-		$('#newcertificatedata').rules("add", {
+		$('#cert').rules("add", {
 		     required: true,
 		     validcert: true
 		});
@@ -38,7 +38,7 @@
 		$('#idp\\.description').bind('blur', function() {
 		    $('#aa\\.description').val($(this).val());
 		});
-		$('#newcertificatedata').change( function() {
+		$('#cert').change( function() {
 			$('#idp\\.crypto\\.encdata').val($(this).val());
 			$('#aa\\.crypto\\.sigdata').val($(this).val());
 			$('#aa\\.crypto\\.encdata').val($(this).val());
@@ -52,7 +52,7 @@
 			$('#aa\\.attributeservice\\.uri').val($(this).val() + '/idp/profile/SAML2/SOAP/AttributeQuery');
 		});
 		
-		$("#newcertificatedata").bind('paste', function() { setTimeout(function() { validateCertificate(); }, 100); });
+		$("#cert").bind('paste', function() { setTimeout(function() { validateCertificate(); }, 100); });
 	});
 	
 	function attrchange(id) {
@@ -232,7 +232,7 @@
 					<g:hiddenField name="aa.crypto.sig" value="${true}" />
 					<g:hiddenField name="aa.crypto.encdata" />
 					<g:hiddenField name="aa.crypto.enc" value="${true}" />
-					<g:textArea name="newcertificatedata" id="newcertificatedata" rows="25" cols="60" />
+					<g:textArea name="cert" id="cert" rows="25" cols="60" />
 				</td>
 			</tr>
 		</table>
