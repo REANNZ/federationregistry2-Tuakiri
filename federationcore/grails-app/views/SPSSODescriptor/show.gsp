@@ -20,9 +20,9 @@
 			var acsListSpecAttrVal = "${createLink(controller:'attributeConsumingService', action:'listSpecifiedAttributeValue')}";
 			var acsListSpecAttrsVal = "${createLink(controller:'attributeConsumingService', action:'listSpecifiedAttributes')}";
 			
-			var certificateListEndpoint = "${createLink(controller:'descriptorKeyDescriptor', action:'list', id:serviceProvider.id )}";
-			var certificateCreationEndpoint = "${createLink(controller:'descriptorKeyDescriptor', action:'create', id:serviceProvider.id)}";
-			var certificateDeleteEndpoint = "${createLink(controller:'descriptorKeyDescriptor', action:'delete')}";
+			var certificateListEndpoint = "${createLink(controller:'roleDescriptorCrypto', action:'list', id:serviceProvider.id )}";
+			var certificateCreationEndpoint = "${createLink(controller:'roleDescriptorCrypto', action:'create', id:serviceProvider.id)}";
+			var certificateDeleteEndpoint = "${createLink(controller:'roleDescriptorCrypto', action:'delete')}";
 			var certificateValidationEndpoint = "${createLink(controller:'coreUtilities', action:'validateCertificate')}";
 			
 			var endpointDeleteEndpoint = "${createLink(controller:'descriptorEndpoint', action:'delete')}";

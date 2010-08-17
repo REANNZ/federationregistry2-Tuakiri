@@ -71,22 +71,24 @@ class RoleDescriptorCryptoController {
 		}
 		
 		def associated
-		if(params.signing == "on")
+		if(params.signing == "on") {
 			associated = cryptoService.associateCertificate(descriptor, params.cert, params.certname, KeyTypes.signing)
 		
-		if(!associated) {
-			render message(code: 'fedreg.keydescriptor.create.signing.failed')
-			response.setStatus(500)
-			return
+			if(!associated) {
+				render message(code: 'fedreg.keydescriptor.create.signing.failed')
+				response.setStatus(500)
+				return
+			}
 		}
 			
-		if(params.encryption == "on")
+		if(params.encryption == "on") {
 			associated = cryptoService.associateCertificate(descriptor, params.cert, params.certname, KeyTypes.encryption)
 			
-		if(!associated) {
-			render message(code: 'fedreg.keydescriptor.create.encryption.failed')
-			response.setStatus(500)
-			return
+			if(!associated) {
+				render message(code: 'fedreg.keydescriptor.create.encryption.failed')
+				response.setStatus(500)
+				return
+			}
 		}
 		
 		render message(code: 'fedreg.keydescriptor.create.success')

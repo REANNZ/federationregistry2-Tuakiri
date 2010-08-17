@@ -2,8 +2,8 @@
 	var newCertificateValid = false;
 	$(function() {
 		$("#newcertificate").hide();
-		$("#validcertificate").hide();
-		$("#newcertificatedata").bind('paste', function() { setTimeout(function() {fedreg.keyDescriptor_verify(); 		if(newCertificateValid) $("#validcertificate").fadeIn(); else $("#validcertificate").fadeOut(); }, 100); });
+		$("#addnewcertificatelink").hide();
+		$("#cert").bind('paste', function() { setTimeout(function() {fedreg.keyDescriptor_verify(); 		if(newCertificateValid) $("#addnewcertificatelink").fadeIn(); else $("#addnewcertificatelink").fadeOut(); }, 100); });
 	});
 </script>
 
@@ -16,11 +16,36 @@
 		<p>
 			<g:message code="fedreg.template.certificates.certificatemanagement.addnew.requestformat" />
 		</p>
-		<div id="newcertificatedetails">
-		</div>
-		<g:textArea name="newcertificatedata" rows="25" cols="80"/><br>
-		<div id="validcertificate">
-			<n:button id="addnewcertificatelink" onclick="fedreg.keyDescriptor_create(); \$('#validcertificate').fadeOut();" label="${message(code:'label.add')}" icon="plus"/>
-		</div>
-		<n:button onclick="\$('#newcertificate').fadeOut(); \$('#addcertificate').fadeIn();" label="${message(code:'label.close')}" icon="close"/>
+		<form id="newcryptoform">
+			<div id="newcertificatedetails">
+			</div>
+			<table>
+				<tbody>
+					<tr>
+						<th><g:message code="label.name"/></th>
+						<td><g:textField name="certname" size="50"/></td>
+					</tr>
+					<tr>
+						<th><g:message code="label.certificate"/></th>
+						<td><g:textArea name="cert" rows="25" cols="80"/></td>
+					</tr>
+					<tr>
+						<th><g:message code="label.signing" /></th>
+						<td><g:checkBox name="signing" value="${true}" /></td>
+					</tr>
+					<tr>
+						<th><g:message code="label.encryption" /></th>
+						<td><g:checkBox name="encryption" /></td>
+					</tr>
+					<tr>
+						<td/>
+						<td>
+							<n:button id="addnewcertificatelink" onclick="fedreg.keyDescriptor_create(); \$('#validcertificate').fadeOut();" label="${message(code:'label.add')}" icon="plus"/>
+							<n:button onclick="\$('#newcertificate').fadeOut(); \$('#addcertificate').fadeIn();" label="${message(code:'label.close')}" icon="close"/>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			
+		</form>
 	</div>

@@ -27,7 +27,7 @@ $(function() {
 // Key Descriptor
 fedreg.keyDescriptor_verify = function() {
 	$("#working").trigger("fedreg.working");
-	var dataString = "cert=" + $("#newcertificatedata").val();
+	var dataString = "cert=" + $("#cert").val();
 	newCertificateValid = false;
 	$.ajax({
 		async: false,
@@ -47,7 +47,7 @@ fedreg.keyDescriptor_verify = function() {
 
 fedreg.keyDescriptor_create = function() {
 	$("#working").trigger("fedreg.working");
-	var dataString = "cert=" + $("#newcertificatedata").val() + "&certname=" + $("#newcertificatename").val();
+	var dataString = $("#newcryptoform").serialize();
 	$.ajax({
 		type: "POST",
 		url: certificateCreationEndpoint,

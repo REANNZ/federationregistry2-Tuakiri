@@ -13,9 +13,9 @@
 			var contactListEndpoint = "${createLink(controller:'descriptorContact', action:'list', id:identityProvider.id ) }";
 			var contactSearchEndpoint = "${createLink(controller:'descriptorContact', action:'search')}";
 			
-			var certificateListEndpoint = "${createLink(controller:'descriptorKeyDescriptor', action:'list', id:identityProvider.id )}";
-			var certificateCreationEndpoint = "${createLink(controller:'descriptorKeyDescriptor', action:'create', id:identityProvider.id)}";
-			var certificateDeleteEndpoint = "${createLink(controller:'descriptorKeyDescriptor', action:'delete')}";
+			var certificateListEndpoint = "${createLink(controller:'roleDescriptorCrypto', action:'list', id:identityProvider.id )}";
+			var certificateCreationEndpoint = "${createLink(controller:'roleDescriptorCrypto', action:'create', id:identityProvider.id)}";
+			var certificateDeleteEndpoint = "${createLink(controller:'roleDescriptorCrypto', action:'delete')}";
 			var certificateValidationEndpoint = "${createLink(controller:'coreUtilities', action:'validateCertificate')}";
 			
 			var endpointDeleteEndpoint = "${createLink(controller:'descriptorEndpoint', action:'delete')}";

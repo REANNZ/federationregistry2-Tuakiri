@@ -9,7 +9,7 @@ class CryptoService {
 	
 	def associateCertificate(RoleDescriptor descriptor, String data, String name, KeyTypes type) {
 		def cert = createCertificate(data)	
-		if(validateCertificate(cert)) {		
+		if(validateCertificate(cert, false)) {		
 			def keyInfo = new KeyInfo(certificate:cert, keyName:name)
 			def keyDescriptor = new KeyDescriptor(keyInfo:keyInfo, keyType:type, roleDescriptor:descriptor)
 		
@@ -52,9 +52,12 @@ class CryptoService {
 		validateCertificate(certificate, false)
 	}
 	
-	def boolean validateCertificate(fedreg.core.Certificate certificate, boolean requireChain) {	
-		if(!requireChain && certificate.subject.equals(certificate.issuer)) 
-			return true 	// self signed
+	def boolean validateCertificate(fedreg.core.Certificate certificate, boolean requireChain) {
+		log.debug "Validating certificate ${certificate.subject} with issuer ${certificate.issuer}"	
+		if(!requireChain && certificate.subject.equals(certificate.issuer)) {
+			log.debug "requireChain is false and cert is self signed, valid."
+			return true
+		}
 			
 		CertificateFactory cf = CertificateFactory.getInstance("X.509")
 		CertPathValidator cpv = CertPathValidator.getInstance("PKIX")

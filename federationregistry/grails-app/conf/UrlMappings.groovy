@@ -41,8 +41,8 @@ class UrlMappings {
 		controller = "descriptorContact"
 	}
 	
-	"/membership/backend/keydescriptor/$action?/$id?"{
-		controller = "descriptorKeyDescriptor"
+	"/membership/backend/roleDescriptorCrypto/$action?/$id?"{
+		controller = "roleDescriptorCrypto"
 	}
 	
 	"/membership/backend/endpoint/$action?/$id?"{
