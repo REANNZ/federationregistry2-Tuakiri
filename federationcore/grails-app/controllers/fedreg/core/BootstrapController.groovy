@@ -12,27 +12,7 @@ class BootstrapController {
 	
 	def idp = {
 		def identityProvider = new IDPSSODescriptor()
-		[identityProvider: identityProvider, organizationList: Organization.list(), attributeList: Attribute.list(), nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)]
-	}
-	
-	def idpregistered = {
-		if(!params.id) {
-			log.warn "IDPSSODescriptor ID was not present"
-			flash.type="error"
-			flash.message = message(code: 'fedreg.controllers.namevalue.missing')
-			redirect(action: "list")
-			return
-		}
-		
-		def identityProvider = IDPSSODescriptor.get(params.id)
-		if (!identityProvider) {
-			flash.type="error"
-			flash.message = message(code: 'fedreg.core.idpssoroledescriptor.nonexistant')
-			redirect( "/" )
-			return
-		}
-
-		[identityProvider: identityProvider]
+		[identityProvider: identityProvider, organizationList: Organization.list(), attributeList: AttributeBase.list(), nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)]
 	}
 	
 	def saveidp = {
@@ -40,9 +20,32 @@ class BootstrapController {
 		
 		if(created)
 			redirect (action: "idpregistered", id: identityProvider.id)
-		else
+		else {
+			flash.type="error"
+			flash.message = message(code: 'fedreg.core.idpssoroledescriptor.register.validation.error')
 			render (view:'idp', model:[organization:organization, entityDescriptor:entityDescriptor, identityProvider:identityProvider, attributeAuthority:attributeAuthority, httpPost:httpPost, httpRedirect:httpRedirect, 
 			soapArtifact:soapArtifact, organizationList:organizationList, attributeList:attributeList, nameIDFormatList:nameIDFormatList, contact:contact])
+		}
+	}
+	
+	def idpregistered = {
+		if(!params.id) {
+			log.warn "IDPSSODescriptor ID was not present"
+			flash.type="error"
+			flash.message = message(code: 'fedreg.controllers.namevalue.missing')
+			redirect uri:"/"
+			return
+		}
+		
+		def identityProvider = IDPSSODescriptor.get(params.id)
+		if (!identityProvider) {
+			flash.type="error"
+			flash.message = message(code: 'fedreg.core.idpssoroledescriptor.nonexistant')
+			redirect uri:"/"
+			return
+		}
+
+		[identityProvider: identityProvider]
 	}
 	
 	def sp = {
@@ -68,7 +71,7 @@ class BootstrapController {
 			log.warn "SPSSODescriptor ID was not present"
 			flash.type="error"
 			flash.message = message(code: 'fedreg.controllers.namevalue.missing')
-			redirect(action: "list")
+			redirect uri:"/"
 			return
 		}
 		
@@ -76,7 +79,7 @@ class BootstrapController {
 		if (!serviceProvider) {
 			flash.type="error"
 			flash.message = message(code: 'fedreg.core.spssoroledescriptor.nonexistant')
-			redirect( "/" )
+			redirect uri: "/"
 			return
 		}
 
@@ -88,12 +91,23 @@ class BootstrapController {
 		[organization:organization, organizationTypes: OrganizationType.list()]
 	}
 	
+	def saveorganization = {
+		def (created, organization, contact) = organizationService.create(params)
+		
+		if(created)
+			redirect (action: "organizationregistered", id: organization.id)
+		else {
+			flash.message = message(code: 'fedreg.core.organization.register.validation.error')
+			render (view:'organization', model:[organization:organization, contact:contact])
+		}
+	}
+	
 	def organizationregistered = {
 		if(!params.id) {
 			log.warn "Organization ID was not present"
 			flash.type="error"
 			flash.message = message(code: 'fedreg.controllers.namevalue.missing')
-			redirect(action: "list")
+			redirect uri: "/"
 			return
 		}
 		
@@ -101,20 +115,10 @@ class BootstrapController {
 		if (!organization) {
 			flash.type="error"
 			flash.message = message(code: 'fedreg.core.organization.nonexistant')
-			redirect(action: "list")
+			redirect uri: "/"
 			return
 		}
 
 		[organization: organization]
 	}
-	
-	def saveorganization = {
-		def (created, organization, contact) = organizationService.create(params)
-		
-		if(created)
-			redirect (action: "organizationregistered", id: organization.id)
-		else
-			render (view:'organization', model:[organization:organization, contact:contact])
-	}
-	
 }
