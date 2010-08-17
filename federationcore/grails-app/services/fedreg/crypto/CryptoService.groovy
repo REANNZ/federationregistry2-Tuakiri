@@ -7,6 +7,39 @@ import fedreg.core.*
 
 class CryptoService {
 	
+	def associateCertificate(RoleDescriptor descriptor, String data, String name, KeyTypes type) {
+		def cert = createCertificate(data)	
+		if(validateCertificate(cert)) {		
+			def keyInfo = new KeyInfo(certificate:cert, keyName:name)
+			def keyDescriptor = new KeyDescriptor(keyInfo:keyInfo, keyType:type, roleDescriptor:descriptor)
+		
+			descriptor.addToKeyDescriptors(keyDescriptor)
+			descriptor.save()
+			keyDescriptor.save()
+			
+			if(descriptor.hasErrors()) {
+				descriptor.errors.each {
+					log.warn it
+				}
+				return false
+			}
+			return true
+		}
+		false
+	}
+	
+	def unassociateCertificate(KeyDescriptor key) {
+		key.disabled = true
+		key.save()
+		if(key.hasErrors()) {
+			key.errors.each {
+				log.warn it
+			}
+			return false
+		}
+		true
+	}
+	
 	def fedreg.core.Certificate createCertificate(String data) {
 		def cert = new fedreg.core.Certificate(data: data)	
 		cert.expiryDate = expiryDate(cert)
@@ -20,9 +53,8 @@ class CryptoService {
 	}
 	
 	def boolean validateCertificate(fedreg.core.Certificate certificate, boolean requireChain) {	
-		
-		if(!requireChain && certificate.subject.equals(certificate.issuer)) 	// self signed
-			return true
+		if(!requireChain && certificate.subject.equals(certificate.issuer)) 
+			return true 	// self signed
 			
 		CertificateFactory cf = CertificateFactory.getInstance("X.509")
 		CertPathValidator cpv = CertPathValidator.getInstance("PKIX")
@@ -41,13 +73,13 @@ class CryptoService {
 			def certList = [cf.generateCertificate(new ByteArrayInputStream(certificate.data.getBytes("ASCII")))] as List
 	
 			cpv.validate(cf.generateCertPath(certList), p)
-			return true
+			true
 		}
 		catch(Exception e) {
 			log.warn "Unable to validate certificate against current trust anchors"
 			log.debug e.getLocalizedMessage()
 			certificate.errors.rejectValue("data", "fedreg.core.certificate.data.invalid")
-			return false
+		 	false
 		}
 	}
 	

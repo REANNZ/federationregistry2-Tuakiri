@@ -21,11 +21,12 @@ package fedreg.core
 /*
  * @author Bradley Beddoes
  */
-class KeyDescriptor  {
-
+class KeyDescriptor  {	
 	KeyInfo keyInfo
 	EncryptionMethod encryptionMethod
 	KeyTypes keyType
+	
+	boolean disabled = false
 	
 	Date dateCreated
 	Date lastUpdated

@@ -308,7 +308,7 @@ class DataImporterService implements InitializingBean {
 				else
 					log.warn ("No SamlURI binding for uri ${it.serviceBinding} exists, not importing ArtifactResolutionService")
 			})
-			// RR doesn't store any flag to indicate that AA publishes encyption type in MD so we won't create an enc key.....
+			// RR doesn't store any flag to indicate that IDP publishes encyption type in MD so we won't create an enc key.....
 			importCrypto(it.homeOrgID, idp, false)
 			
 			entity.addToIdpDescriptors(idp)
