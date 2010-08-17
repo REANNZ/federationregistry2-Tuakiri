@@ -49,4 +49,51 @@ class IDPSSODescriptorController {
 			soapArtifact:soapArtifact, organizationList:organizationList, attributeList:attributeList, nameIDFormatList:nameIDFormatList, contact:contact])
 		}
 	}
+	
+	def edit = {
+		if(!params.id) {
+			log.warn "IDPSSODescriptor ID was not present"
+			flash.type="error"
+			flash.message = message(code: 'fedreg.controllers.namevalue.missing')
+			redirect(action: "list")
+			return
+		}
+		
+		def identityProvider = IDPSSODescriptor.get(params.id)
+		if (!identityProvider) {
+			flash.type="error"
+			flash.message = message(code: 'fedreg.core.idpssoroledescriptor.nonexistant')
+			redirect(action: "list")
+			return
+		}	
+		
+		[identityProvider: identityProvider]	
+	}
+	
+	def update = {
+		if(!params.id) {
+			log.warn "IDPSSODescriptor ID was not present"
+			flash.type="error"
+			flash.message = message(code: 'fedreg.controllers.namevalue.missing')
+			redirect(action: "list")
+			return
+		}
+		
+		def identityProvider_ = IDPSSODescriptor.get(params.id)
+		if (!identityProvider_) {
+			flash.type="error"
+			flash.message = message(code: 'fedreg.core.idpssoroledescriptor.nonexistant')
+			redirect(action: "list")
+			return
+		}
+		
+		def (updated, identityProvider) = IDPSSODescriptorService.update(params)
+		if(updated)
+			redirect (action: "show", id: identityProvider.id)
+		else {
+			flash.type="error"
+			flash.message = message(code: 'fedreg.core.idpssoroledescriptor.update.validation.error')
+			render (view:'edit', model:[identityProvider:identityProvider])
+		}
+	}
 }

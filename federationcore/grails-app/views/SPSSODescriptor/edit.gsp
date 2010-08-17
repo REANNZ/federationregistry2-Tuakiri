@@ -30,9 +30,9 @@
 			
 			<g:form action="update" id="${serviceProvider.id}">			
 				<div class="step" id="basic">
-					<h3><g:message code="fedreg.templates.serviceprovider.edit.basicinformation.heading" /></h3>
+					<h3><g:message code="fedreg.view.members.serviceprovider.edit.basicinformation.heading" /></h3>
 					<p>
-						<g:message code="fedreg.templates.serviceprovider.edit.basicinformation.details" />
+						<g:message code="fedreg.view.members.serviceprovider.edit.basicinformation.details" />
 					</p>
 					<table>
 						<tr>
@@ -71,71 +71,71 @@
 				</div>
 
 				<div class="step" id="servicedescription">
-					<h3><g:message code="fedreg.templates.serviceprovider.edit.servicedescription.heading" /></h3>
+					<h3><g:message code="fedreg.view.members.serviceprovider.edit.servicedescription.heading" /></h3>
 					<p>
-						<g:message code="fedreg.templates.serviceprovider.edit.servicedescription.details" />
+						<g:message code="fedreg.view.members.serviceprovider.edit.servicedescription.details" />
 					</p>
 					<table>
 						<tr>
-							<td>
+							<th>
 								<label for="sp.servicedescription.furtherInfo"><g:message code="label.furtherinfo" /></label>
-							</td>
+							</th>
 							<td>
 								<g:textArea name="sp.servicedescription.furtherinfo" value="${serviceProvider.serviceDescription.furtherInfo}" rows="8" cols="48" maxlength="2000"/>
 							</td>
 						</tr>
 						<tr>
-							<td>
+							<th>
 								<label for="sp.servicedescription.provides"><g:message code="label.provides" /></label>
-							</td>
+							</th>
 							<td>
 								<g:textArea name="sp.servicedescription.provides" value="${serviceProvider.serviceDescription.provides}" rows="8" cols="48" maxlength="2000"/>
 							</td>
 						</tr>
 						<tr>
-							<td>
+							<th>
 								<label for="sp.servicedescription.benefits"><g:message code="label.benefits" /></label>
-							</td>
+							</th>
 							<td>
 								<g:textArea name="sp.servicedescription.benefits" value="${serviceProvider.serviceDescription.benefits}" rows="8" cols="48" maxlength="2000"/>
 							</td>
 						</tr>
 						<tr>
-							<td>
+							<th>
 								<label for="sp.servicedescription.audience"><g:message code="label.audience" /></label>
-							</td>
+							</th>
 							<td>
 								<g:textArea name="sp.servicedescription.audience" value="${serviceProvider.serviceDescription.audience}" rows="8" cols="48" maxlength="2000"/>
 							</td>
 						</tr>
 						<tr>
-							<td>
+							<th>
 								<label for="sp.servicedescription.restrictions"><g:message code="label.restrictions" /></label>
-							</td>
+							</th>
 							<td>
 								<g:textArea name="sp.servicedescription.restrictions" value="${serviceProvider.serviceDescription.restrictions}" rows="8" cols="48" maxlength="2000"/>
 							</td>
 						</tr>
 						<tr>
-							<td>
+							<th>
 								<label for="sp.servicedescription.accessing"><g:message code="label.accessing" /></label>
-							</td>
+							</th>
 							<td>
 								<g:textArea name="sp.servicedescription.accessing" value="${serviceProvider.serviceDescription.accessing}" rows="8" cols="48" maxlength="2000"/>
 							</td>
 						</tr>
 						<tr>
-							<td>
+							<th>
 								<label for="sp.servicedescription.support"><g:message code="label.support" /></label>
-							</td>
+							</th>
 							<td>
 								<g:textArea name="sp.servicedescription.support" value="${serviceProvider.serviceDescription.support}" rows="8" cols="48" maxlength="2000"/>
 							</td>
 						</tr>
 						<tr>
-							<td>
+							<th>
 								<label for="sp.servicedescription.maintenance"><g:message code="label.maintenance" /></label>
-							</td>
+							</th>
 							<td>
 								<g:textArea name="sp.servicedescription.maintenance" value="${serviceProvider.serviceDescription.maintenance}" rows="8" cols="48" maxlength="2000"/>
 							</td>
@@ -144,9 +144,9 @@
 				</div>
 				
 				<div class="step submit_step" id="creationsummary">
-					<h3><g:message code="fedreg.templates.serviceprovider.edit.summary.heading" /></h3>
+					<h3><g:message code="fedreg.view.members.serviceprovider.edit.summary.heading" /></h3>
 					<p>
-						<g:message code="fedreg.templates.serviceprovider.edit.summary.details" />
+						<g:message code="fedreg.view.members.serviceprovider.edit.summary.details" />
 					</p>
 				</div>
 

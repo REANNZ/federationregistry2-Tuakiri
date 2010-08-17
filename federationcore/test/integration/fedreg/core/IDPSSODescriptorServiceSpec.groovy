@@ -1346,4 +1346,42 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		attributeAuthority.attributeServices.toList().get(0).location.uri == "http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"
 	}
 	
+	def "Updating an existing identity provider with valid changed content succeeds"() {
+		setup:
+		def organization = Organization.build().save()
+		def entityDescriptor = EntityDescriptor.build(organization:organization).save()
+		def idp = IDPSSODescriptor.build(entityDescriptor:entityDescriptor, active:false, wantAuthnRequestsSigned:false).save()
+		params.id = idp.id
+		params.idp = [displayName:"new displayName", description:"new description", status:'true', wantauthnrequestssigned:'true']
+		
+		when:
+		def (updated, identityProvider_) = idpssoDescriptorService.update(params)
+		
+		then:
+		updated
+		identityProvider_.displayName == "new displayName"
+		identityProvider_.description == "new description"
+		identityProvider_.active
+		identityProvider_.wantAuthnRequestsSigned
+	}
+	
+	def "Updating an existing identity provider with invalid changed content fails"() {
+		setup:
+		def organization = Organization.build().save()
+		def entityDescriptor = EntityDescriptor.build(organization:organization).save()
+		def idp = IDPSSODescriptor.build(entityDescriptor:entityDescriptor, active:false, wantAuthnRequestsSigned:false).save()
+		params.id = idp.id
+		params.idp = [displayName:"", description:"new description", status:'true', wantauthnrequestssigned:'true']
+		
+		when:
+		def (updated, identityProvider_) = idpssoDescriptorService.update(params)
+		
+		then:
+		!updated
+		identityProvider_.displayName == ""
+		identityProvider_.description == "new description"
+		identityProvider_.active
+		identityProvider_.wantAuthnRequestsSigned
+	}
+	
 }

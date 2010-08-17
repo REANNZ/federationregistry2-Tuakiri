@@ -204,4 +204,41 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		controller.flash.type = "error"
 		controller.flash.message = "fedreg.core.idpssoroledescriptor.save.validation.error"	
 	}
+	
+	def "Validate successful update"() {
+		setup:
+		def organization = Organization.build().save()
+		def entityDescriptor = EntityDescriptor.build(organization:organization).save()
+		def identityProvider = IDPSSODescriptor.build(entityDescriptor:entityDescriptor).save()
+		
+		controller.params.id = identityProvider.id
+		
+		when:
+		idpssoDescriptorService.metaClass.update = { def p -> 
+			return [true, identityProvider]
+		} 
+		def model = controller.update()
+		
+		then:
+		controller.response.redirectedUrl == "/IDPSSODescriptor/show/${identityProvider.id}"	
+	}
+	
+	def "Validate failed update"() {
+		setup:
+		def organization = Organization.build().save()
+		def entityDescriptor = EntityDescriptor.build(organization:organization).save()
+		def identityProvider = IDPSSODescriptor.build(entityDescriptor:entityDescriptor).save()
+		
+		controller.params.id = identityProvider.id
+		
+		when:
+		idpssoDescriptorService.metaClass.update = { def p -> 
+			return [false, identityProvider]
+		} 
+		def model = controller.update()
+		
+		then:
+		controller.flash.type = "error"
+		controller.flash.message = "fedreg.core.idpssoroledescriptor.update.validation.error"	
+	}
 }

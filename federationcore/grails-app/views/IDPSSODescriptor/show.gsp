@@ -79,18 +79,18 @@
 							<g:message code="label.active" />
 						</g:if>
 						<g:else>
-							<g:message code="label.inactive" />
+							<g:message code="label.inactive" /> <div class="error"><g:message code="label.warningmetadata" /></div>
 						</g:else>
 					</td>
 				</tr>
 				<tr>
 					<th><g:message code="label.approved"/></th>
 					<td>
-						<g:if test="${identityProvider.active}">
+						<g:if test="${identityProvider.approved}">
 							<g:message code="label.yes" />
 						</g:if>
 						<g:else>
-							<div class="error"><g:message code="label.no" /></div>
+							<g:message code="label.no" /> <div class="error"><g:message code="label.warningmetadata" /></div>
 						</g:else>
 					</td>
 				</tr>
@@ -98,10 +98,10 @@
 					<th><g:message code="label.requiresignedauthn"/></th>
 					<td>
 						<g:if test="${identityProvider.wantAuthnRequestsSigned}">
-							<div class="icon icon_tick"><g:message code="label.yes" /></div>
+							<g:message code="label.yes" />
 						</g:if>
 						<g:else>
-							<div class="icon icon_cross"><g:message code="label.no" /></div>
+							<g:message code="label.no" />
 						</g:else>
 					</td>
 				</tr>

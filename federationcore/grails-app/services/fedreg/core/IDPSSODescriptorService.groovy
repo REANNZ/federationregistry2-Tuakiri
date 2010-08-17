@@ -171,4 +171,25 @@ class IDPSSODescriptorService {
 		
 		return [true, organization, entityDescriptor, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, Organization.list(), AttributeBase.list(), SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding), contact]
 	}
+	
+	def update(def params) {
+		def identityProvider = IDPSSODescriptor.get(params.id)
+		if(!identityProvider)
+			return [false, null]
+		
+		identityProvider.displayName = params.idp.displayName
+		identityProvider.description = params.idp.description
+		identityProvider.active = params.idp.status == 'true'
+		identityProvider.wantAuthnRequestsSigned = params.idp.wantauthnrequestssigned == 'true'
+		
+		log.debug "Updating $identityProvider active: ${identityProvider.active}, requestSigned: ${identityProvider.wantAuthnRequestsSigned}"
+		
+		if(!identityProvider.save()) {			
+			identityProvider.errors.each {log.warn it}
+			return [false, identityProvider]
+		}
+		
+		return [true, identityProvider]
+	}
+	
 }
