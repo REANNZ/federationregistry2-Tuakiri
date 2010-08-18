@@ -29,7 +29,7 @@ class EntityDescriptorController {
 			return
 		}
 		
-		[entity: entity]
+		[entity: entity, contactTypes:ContactType.list()]
 	}
 	
 	def create = {

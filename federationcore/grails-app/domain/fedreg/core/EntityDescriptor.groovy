@@ -22,7 +22,7 @@ package fedreg.core
 /**
  * @author Bradley Beddoes
  */
-class EntityDescriptor {
+class EntityDescriptor extends Descriptor  {
 
 	// Organization is the top teir in our model. All entities must belong to an organization definition
 	Organization organization

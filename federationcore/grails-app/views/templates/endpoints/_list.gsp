@@ -2,7 +2,7 @@
 <g:if test="${endpoints}">
 <table>
 	<tbody>
-	<g:each in="${endpoints}" status="i" var="ep">
+	<g:each in="${endpoints.sort { it.binding.uri }}" status="i" var="ep">
 		<tr>
 			<td colspan="3"><h4><g:message code="label.endpoint"/> ${i+1}</h4></td>
 		</tr>

@@ -22,7 +22,7 @@ package fedreg.core
 /**
  * @author Bradley Beddoes
  */
-class RoleDescriptor  {
+class RoleDescriptor extends Descriptor {
 	def cryptoService
 	
 	Organization organization

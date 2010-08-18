@@ -1,10 +1,18 @@
 
-<%@ page import="fedreg.core.Organization" %>
 <html>
 	<head>
 		
 		<meta name="layout" content="members" />
 		<title><g:message code="fedreg.view.members.entity.show.title" /></title>
+		
+		<script type="text/javascript">
+			var activeContact
+			var contactCreateEndpoint = "${createLink(controller:'descriptorContact', action:'create', id:entity.id )}";
+			var contactDeleteEndpoint = "${createLink(controller:'descriptorContact', action:'delete' )}";
+			var contactListEndpoint = "${createLink(controller:'descriptorContact', action:'list', id:entity.id ) }";
+			var contactSearchEndpoint = "${createLink(controller:'descriptorContact', action:'search')}";
+		</script>
+		
 	</head>
 	<body>
 		<section>
@@ -49,24 +57,12 @@
 				</ul>
 				
 				<div id="tab-contacts" class="tabcontent">
-					<table>
-						<thead>
-							<tr>
-								<th><g:message code="label.name" /></th>
-								<th><g:message code="label.email" /></th>
-								<th><g:message code="label.type" /></th>
-							</tr>
-						</thead>
-						<tbody>
-						<g:each in="${entity.contacts}" var="contactPerson" status="i">
-							<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-								<td>${contactPerson.contact.givenName?.encodeAsHTML()} ${contactPerson.contact.surname?.encodeAsHTML()}</td>
-								<td><a href="mailto:${contactPerson.contact.email?.uri.encodeAsHTML()}">${contactPerson.contact.email?.uri.encodeAsHTML()}</a></td>
-								<td>${contactPerson.type.displayName.encodeAsHTML()}</td>
-							</tr>
-						</g:each>
-						</tbody>
-					</table>
+					<h3><g:message code="label.contacts" /></h3>
+					<div id="contacts">
+						<g:render template="/templates/contacts/list" plugin="federationcore" model="[descriptor:entity, allowremove:true]" />
+					</div>
+					<hr>
+					<g:render template="/templates/contacts/create" plugin="federationcore" model="[descriptor:entity, contactTypes:contactTypes]"/>
 				</div>
 				<div id="tab-idp" class="tabcontent">
 					<g:if test="${entity.idpDescriptors}">

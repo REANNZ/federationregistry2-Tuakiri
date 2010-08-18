@@ -1,7 +1,5 @@
 package fedreg.core
 
-import fedreg.workflow.ProcessPriority
-
 class SPSSODescriptorController {
 	
 	def SPSSODescriptorService
@@ -11,7 +9,6 @@ class SPSSODescriptorController {
 	
 	def list = {
 		params.max = Math.min(params.max ? params.max.toInteger() : 20, 100)
-		params.sort="organization"
 		[serviceProviderList: SPSSODescriptor.list(params), serviceProviderTotal: SPSSODescriptor.count()]
 	}
 	

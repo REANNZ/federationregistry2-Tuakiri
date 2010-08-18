@@ -34,7 +34,7 @@ class DescriptorContactController {
 			return
 		}
 		
-		def descriptor = RoleDescriptor.get(params.id)
+		def descriptor = Descriptor.get(params.id)
 		if(!descriptor) {
 			log.warn "RoleDescriptor identified by id $params.id was not located"
 			render message(code: 'fedreg.roledescriptor.nonexistant', args: [params.id])
@@ -58,9 +58,15 @@ class DescriptorContactController {
 			return
 		}
 		
-		log.debug "Creating contactType ${params.contactType} linked to contact ${contact.email.uri} for descriptor ${descriptor.displayName}"
+		log.debug "Creating contactType ${params.contactType} linked to ${contact} for ${descriptor}"
 		
-		def contactPerson = new ContactPerson(contact:contact, type:contactType, descriptor: descriptor)
+		def contactPerson
+		
+		if(descriptor instanceof RoleDescriptor)
+			contactPerson = new ContactPerson(contact:contact, type:contactType, descriptor: descriptor)
+		else
+			contactPerson = new ContactPerson(contact:contact, type:contactType, entity: descriptor)
+			
 		contactPerson.save()
 		if(contactPerson.hasErrors()) {
 			contactPerson.errors.each {
@@ -102,7 +108,7 @@ class DescriptorContactController {
 			return
 		}
 		
-		def descriptor = RoleDescriptor.get(params.id)
+		def descriptor = Descriptor.get(params.id)
 		if(!descriptor) {
 			log.warn "RoleDescriptor identified by id $params.id was not located"
 			render message(code: 'fedreg.roledescriptor.nonexistant', args: [params.id])
