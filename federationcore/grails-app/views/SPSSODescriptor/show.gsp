@@ -64,7 +64,7 @@
 				</tr>
 				<tr>
 					<th><g:message code="label.entitydescriptor"/></th>
-					<td><g:link controller="entity" action="show" id="${serviceProvider.entityDescriptor.id}">${fieldValue(bean: serviceProvider, field: "entityDescriptor.entityID")}</g:link></td>
+					<td><g:link controller="entityDescriptor" action="show" id="${serviceProvider.entityDescriptor.id}">${fieldValue(bean: serviceProvider, field: "entityDescriptor.entityID")}</g:link></td>
 				</tr>
 				<tr>
 					<th><g:message code="label.protocolsupport"/></th>
