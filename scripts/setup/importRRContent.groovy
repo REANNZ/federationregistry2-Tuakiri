@@ -1,43 +1,18 @@
-package fedreg.host
 
-import org.springframework.beans.factory.InitializingBean
-import groovy.sql.Sql
+	import groovy.sql.Sql
+	import fedreg.core.*
 
-import fedreg.core.*
-
-class DataImporterService implements InitializingBean {
-
-    boolean transactional = true
-
-	def grailsApplication
-	def sql
+	/*
+	 This is a temporary piece of code to assist with a slow orderly migration from an existing PHP based resource registry
+	 Unlike the rest of Federation Registry I haven't built any extensive test suites to go along with this script. Your schema may be slightly different or have various hacks applied.
+	 I highly reccomend extensive tests in your respective development and test environments before letting loose on production.
+	 This should be run from the provided FR online Groovy console to be able to access various Grails features.
+	*/
 	def cryptoService
-
-	// This entire service is a temporary piece of code to assist with a slow orderly migration from a PHP based resource registry to a new generation Grails version
-	// It is anticipated that over time all data being sourced from the RR will be created in this app and this service and all methods will be totally discontinued
 	
-	void afterPropertiesSet()
-    {
-		def oldrr = grailsApplication.config.fedreg.oldrr		
-        sql = Sql.newInstance(oldrr.connection, oldrr.user, oldrr.password, oldrr.driver)	
-    }
-
-	def populate(def request) {
-		importCACertificates()
-		importOrganizations()
-		importContacts()
-		importAttributes()
-		importEntities()
-		importIDPSSODescriptors()
-		importAttributeAuthorityDescriptors()
-		importSPSSODescriptors()
-		
-		if(request)
-		{
-			def dataLoadRecord = new DataLoadRecord(invoker:authenticatedUser?:null, remoteAddr: request.getRemoteAddr(), remoteHost: request.getRemoteHost(), userAgent:request.getHeader("User-Agent"))
-			dataLoadRecord.save()
-		}
-	}
+    sql = Sql.newInstance("jdbc:mysql://localhost:3306/resourceregistry", "rr", "password", "com.mysql.jdbc.Driver")
+	initialPopulate()
+	populate()
 	
 	def initialPopulate() {		
 		// Attribute Scopes (Non standard)	
@@ -79,22 +54,18 @@ class DataImporterService implements InitializingBean {
 		def bill = new ContactType(name:'billing', displayName:'Billing', description: 'Billing contacts').save()
 		def supp = new ContactType(name:'support', displayName:'Support', description: 'Support contacts').save()
 		def admin = new ContactType(name:'administrative', displayName:'Administrative', description: 'Administrative contacts').save()
-		def other = new ContactType(name:'other', displayName:'Other', description: 'Other contacts').save()
-		
+		def other = new ContactType(name:'other', displayName:'Other', description: 'Other contacts').save()	
 	}
-
-	def dumpData() {
-		log.debug("Executing dump data process")
-		User.list().each { it.entityDescriptor = null; it.save(); }
-		SPSSODescriptor.list().each { it.delete(); }
-		AttributeAuthorityDescriptor.list().each { it.delete(); }
-		IDPSSODescriptor.list().each { it.delete(); }
-		EntityDescriptor.list().each { it.delete(); }
-		Contact.list().each { it.delete(); }
-		Attribute.list().each { it.delete(); }
-		Organization.list().each { it.delete(); }
-		OrganizationType.list().each { it.delete(); }
-		CAKeyInfo.list().each { it.delete(); }
+	
+	def populate() {
+		importCACertificates()
+		importOrganizations()
+		importContacts()
+		importAttributes()
+		importEntities()
+		importIDPSSODescriptors()
+		importAttributeAuthorityDescriptors()
+		importSPSSODescriptors()
 	}
 	
 	def importCACertificates() {
@@ -125,7 +96,6 @@ class DataImporterService implements InitializingBean {
 			// If organization does not yet exist it must only be providing services in which case we mark as being of Type 'other'
 			def org = Organization.findByName(it.homeOrg)
 			if(!org) {
-				log.debug "Loading organization which is only providing services ${it.homeOrg}"
 				def orgType = OrganizationType.findByName('others')
 				org = new Organization(name:it.homeOrg, displayName:it.homeOrg, lang:it.mainLanguage, url: new UrlURI(uri:it.errorURL ?:'http://aaf.edu.au/support'), primary: orgType)
 				org.save()
@@ -150,9 +120,9 @@ class DataImporterService implements InitializingBean {
 			if(!existingAttr) {
 				attr.save()
 				if(attr.hasErrors()) {
-					log.warn "Unable to import attribute identified by oid: $attr.oid and name $attr.name"
+					println "Unable to import attribute identified by oid: $attr.oid and name $attr.name"
 					attr.errors.each {
-						log.warn it
+						println it
 					}
 				}
 			}
@@ -161,9 +131,9 @@ class DataImporterService implements InitializingBean {
 				attr.properties.each { k,v-> if (!k in ['class','id']) existingAttr."${k}" = v }
 				existingAttr.save()
 				if(existingAttr.hasErrors()) {
-					log.warn "Unable to update values for attribute identified by oid: $existingAttr.oid and name $existingAttr.name"
+					println "Unable to update values for attribute identified by oid: $existingAttr.oid and name $existingAttr.name"
 					existingAttr.errors.each {
-						log.warn it
+						println it
 					}
 				}
 			}
@@ -196,7 +166,7 @@ class DataImporterService implements InitializingBean {
 								
 				contact.save(flush:true)
 				if(contact.hasErrors()) {
-					contact.errors.each { err -> log.error err}
+					contact.errors.each { err -> println err}
 				}
 			}
 			else {
@@ -208,7 +178,7 @@ class DataImporterService implements InitializingBean {
 						contact.organization = organization
 						contact.save()
 						if(contact.hasErrors()) {
-							contact.errors.each { err -> log.error err}
+							contact.errors.each { err -> println err}
 						}
 					}
 				}
@@ -217,16 +187,16 @@ class DataImporterService implements InitializingBean {
 	}
 
 	def importEntities() {
-		log.debug "Importing entities from upstream resource registry"
+		println "Importing entities from upstream resource registry"
 		sql.eachRow("select * from homeOrgs",
 		{
 			def org = Organization.findByName(it.homeOrgName)
 			def entity = new EntityDescriptor(entityID:it.entityID, organization:org, active:it.approved)
 			entity.save()
 			if(entity.hasErrors()) {
-				entity.errors.each {log.error it}
+				entity.errors.each {println it}
 			}
-			log.debug "Imported entity ${entity.entityID}"
+			println "Imported entity ${entity.entityID}"
 			
 			// Create ContactPerson instances and link entities to contacts
 			sql.eachRow("select email, contactType from contacts INNER JOIN homeOrgs ON contacts.objectID=homeOrgs.homeOrgID WHERE homeOrgs.entityID=${entity.entityID}",
@@ -240,10 +210,6 @@ class DataImporterService implements InitializingBean {
 		{
 			def org = Organization.findByName(it.homeOrg)
 			def entity = new EntityDescriptor(entityID:it.providerID, organization:org, active:it.visible).save()
-			if(entity.hasErrors()) {
-				entity.errors.each {log.error it}
-			}
-			log.debug "Imported entity ${entity.entityID}"
 			
 			// Create ContactPerson instances and link entities to contacts
 			sql.eachRow("select email, contactType from contacts INNER JOIN resources ON contacts.objectID=resources.resourceID WHERE resources.providerID=${entity.entityID}",
@@ -263,7 +229,6 @@ class DataImporterService implements InitializingBean {
 				type = ContactType.findByName('other')
 			def contactPerson = new ContactPerson(contact:contact, entity:ent, type:type)
 			ent.addToContacts(contactPerson)
-			log.debug "Linked contact ${contactPerson?.contact?.givenName} ${contactPerson?.contact?.surname} to entity ${ent.entityID}"
 		}
 	}
 
@@ -294,7 +259,7 @@ class DataImporterService implements InitializingBean {
 					idp.addToSingleSignOnServices(ssoService)
 				}
 				else 
-					log.warn ("No SamlURI binding for uri ${it.serviceBinding} exists, not importing, not importing SingleSignOnService")
+					println("No SamlURI binding for uri ${it.serviceBinding} exists, not importing, not importing SingleSignOnService")
 			})
 			def index = 0
 			sql.eachRow("select * from serviceLocations where objectID=${it.homeOrgID} and serviceType='ArtifactResolutionService'",
@@ -306,7 +271,7 @@ class DataImporterService implements InitializingBean {
 					idp.addToArtifactResolutionServices(artServ)
 				}
 				else
-					log.warn ("No SamlURI binding for uri ${it.serviceBinding} exists, not importing ArtifactResolutionService")
+					println("No SamlURI binding for uri ${it.serviceBinding} exists, not importing ArtifactResolutionService")
 			})
 			// RR doesn't store any flag to indicate that IDP publishes encyption type in MD so we won't create an enc key.....
 			importCrypto(it.homeOrgID, idp, false)
@@ -314,10 +279,10 @@ class DataImporterService implements InitializingBean {
 			entity.addToIdpDescriptors(idp)
 			entity.save()
 			if(entity.hasErrors()) {
-				entity.errors.each {log.error it}
+				entity.errors.each {println it}
 			}
 			else
-				log.debug "Added new IDPSSODescriptor to Entity ${entity.entityID}"
+				println "Added new IDPSSODescriptor to Entity ${entity.entityID}"
 				
 			sql.eachRow("select attributeOID from attributes INNER JOIN homeOrgAttributes ON attributes.attributeID=homeOrgAttributes.attributeID where homeOrgAttributes.homeOrgID=${it.homeOrgID};",
 			{
@@ -344,7 +309,7 @@ class DataImporterService implements InitializingBean {
 			def aa = new AttributeAuthorityDescriptor(active:true, entityDescriptor:entity, organization:entity.organization, displayName:idp.displayName, description:idp.description)
 			aa.save()
 			if(aa.hasErrors()) {
-				aa.errors.each {log.error it}
+				aa.errors.each {println it}
 			}
 			aa.addToProtocolSupportEnumerations(samlNamespace)
 			
@@ -357,7 +322,7 @@ class DataImporterService implements InitializingBean {
 					aa.addToAttributeServices(attrService)
 				}
 				else 
-					log.warn ("No SamlURI binding for uri ${it.serviceBinding} exists, not importing, not importing AttributeService")
+					println("No SamlURI binding for uri ${it.serviceBinding} exists, not importing, not importing AttributeService")
 			})
 			// RR doesn't store any flag to indicate that AA publishes encyption type in MD so we won't create an enc key.....
 			importCrypto(it.homeOrgID, aa, false)
@@ -365,10 +330,10 @@ class DataImporterService implements InitializingBean {
 			entity.addToAttributeAuthorityDescriptors(aa)
 			entity.save()
 			if(entity.hasErrors()) {
-				entity.errors.each {log.error it}
+				entity.errors.each {println it}
 			}
 			else
-				log.debug "Added new AttributeAuthorityDescriptor to Entity ${entity.entityID}"
+				println "Added new AttributeAuthorityDescriptor to Entity ${entity.entityID}"
 				
 			aa.collaborator = idp
 			aa.save()
@@ -424,7 +389,7 @@ class DataImporterService implements InitializingBean {
 						saml1 = true
 				}
 				else 
-					log.warn ("No SamlURI binding for uri ${it.serviceBinding} exists, not importing, not importing SingleLogoutService")
+					println("No SamlURI binding for uri ${it.serviceBinding} exists, not importing, not importing SingleLogoutService")
 			})
 			def index = 0
 			sql.eachRow("select * from serviceLocations where objectID=${it.resourceID} and serviceType='AssertionConsumerService'",
@@ -441,7 +406,7 @@ class DataImporterService implements InitializingBean {
 						saml1 = true
 				}
 				else 
-					log.warn ("No SamlURI binding for uri ${it.serviceBinding} exists, not importing, not importing AssertionConsumerService")
+					println("No SamlURI binding for uri ${it.serviceBinding} exists, not importing, not importing AssertionConsumerService")
 			})
 			sql.eachRow("select * from serviceLocations where objectID=${it.resourceID} and serviceType='ManageNameIDService'",
 			{
@@ -457,7 +422,7 @@ class DataImporterService implements InitializingBean {
 						saml1 = true
 				}
 				else 
-					log.warn ("No SamlURI binding for uri ${it.serviceBinding} exists, not importing, not importing ManageNameIDService")
+					println("No SamlURI binding for uri ${it.serviceBinding} exists, not importing, not importing ManageNameIDService")
 			})
 			
 			if(saml2)
@@ -492,10 +457,10 @@ class DataImporterService implements InitializingBean {
 			entity.addToSpDescriptors(sp)
 			entity.save()
 			if(entity.hasErrors()) {
-				entity.errors.each {log.error it}
+				entity.errors.each {println it}
 			}
 			else
-				log.debug "Added new SPSSODescriptor to Entity ${entity.entityID}"
+				println "Added new SPSSODescriptor to Entity ${entity.entityID}"
 		})
 	}
 	
@@ -504,7 +469,7 @@ class DataImporterService implements InitializingBean {
 		{
 			try {
 			def data = "-----BEGIN CERTIFICATE-----\n${it.certData}\n-----END CERTIFICATE-----"
-			//log.debug "Importing certificate data\n${data}"
+			//println "Importing certificate data\n${data}"
 			def cert = new Certificate(data:data)	
 			cert.expiryDate = cryptoService.expiryDate(cert)
 			cert.issuer = cryptoService.issuer(cert)
@@ -527,9 +492,7 @@ class DataImporterService implements InitializingBean {
 			}
 			}
 			catch(Exception e) {
-				log.error "Error importing crypto for descriptor ${descriptor.displayName}"
+				println "Error importing crypto for descriptor ${descriptor.displayName}"
 			}
 		})
 	}
-
-}

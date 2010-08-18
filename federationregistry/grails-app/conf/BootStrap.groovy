@@ -34,12 +34,6 @@ class BootStrap {
 		suMetaClass.'static'.getSubject = {[getPrincipal:{User.findByUsername('internaladministrator').id}] as Subject}
 		suMetaClass.initialize()
 		SecurityUtils.metaClass = suMetaClass
-			
-		// Auto populate RR data in dev mode
-        if(grails.util.GrailsUtil.isDevelopmentEnv()) {
-			dataImporterService.initialPopulate()
-			dataImporterService.populate(null)
-		}
 		
 		// Populate Workflow Scripts on initial deployment name is set as filename <name>.groovy
 		if(WorkflowScript.count() == 0) {	

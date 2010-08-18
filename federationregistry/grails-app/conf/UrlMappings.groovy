@@ -101,6 +101,10 @@ class UrlMappings {
 		controller = "console"
 	}
 	
+	"/bootstrap/$action?/$id?" {
+		controller = "initialBootstrap"
+	}
+	
 	"/greenmail/$action?/$id?"{
 		controller = "greenmail"
 	}

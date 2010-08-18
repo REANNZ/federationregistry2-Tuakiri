@@ -16,6 +16,7 @@
  */
 import grails.plugins.nimble.core.AdminsService
 import grails.plugins.nimble.core.UserService
+import fedreg.core.EntityDescriptor
 
 /**
  * Filter that works with Nimble security model to protect controllers, actions, views for Federation Registry
@@ -24,7 +25,17 @@ import grails.plugins.nimble.core.UserService
  */
 public class SecurityFilters extends grails.plugins.nimble.security.NimbleFilterBase {
 
+	def grailsApplication
+
     def filters = {
+	
+		// Undertake bootstrap
+		all(controller: '*') {
+			before = {
+				if( !['initialBootstrap','console'].contains(controllerName) && grailsApplication.config.fedreg.bootstrap)
+					redirect (controller: "initialBootstrap")
+			}
+		}
 
         // Members
         descriptors(controller: "(organization|entityDescriptor|IDPSSODescriptor|SPSSODescriptor|contacts|descriptorContacts|desccriptorKeyDescriptor|descriptorEndpoint|descriptorNameIDFormat|descriptorAttribute)") {
@@ -80,14 +91,21 @@ public class SecurityFilters extends grails.plugins.nimble.security.NimbleFilter
             }
         }
 
-		// Groovy Console
-		console(controller: "(code|console)") {
+		// Console and initial bootstrap
+		console(controller: "(code|console|initialBootstrap)") {
             before = {
-                accessControl {
-                    role(AdminsService.ADMIN_ROLE)
-                }
+				if( ['initialBootstrap'].contains(controllerName) && !grailsApplication.config.fedreg.bootstrap)
+					redirect (controller: "organization")
+				else {	
+					if(!grailsApplication.config.fedreg.bootstrap) {
+		                accessControl {
+		                    role(AdminsService.ADMIN_ROLE)
+		                }
+					}
+				}
             }
         }
+
     }
 
 }

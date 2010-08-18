@@ -106,7 +106,7 @@
    </div>
    
    <div id="editor">
-      <textarea id="code" style="width: 100%; height: 300px;" rows="25" cols="100">${(session['_grails_console_last_code_'] ?: "// Groovy Code here\n").encodeAsHTML()}</textarea>  
+      <textarea id="code" style="width: 100%; height: 400px;" rows="40" cols="100">${(session['_grails_console_last_code_'] ?: "").encodeAsHTML()}</textarea>  
       <div class="bottom-toolbar">  
          <div class="buttons">
             <button id="submit" title="(Ctrl + Return)">Execute</button>
