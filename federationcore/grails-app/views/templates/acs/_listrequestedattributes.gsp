@@ -22,7 +22,7 @@
 					</td>
 					<td> ${ra.reasoning?.encodeAsHTML()}</td>
 					<td>
-						<n:confirmaction action="fedreg.acs_reqattribute_remove(${ra.id}, ${ra.attributeConsumingService.id}, '${containerID}' );" title="${message(code: 'fedreg.template.acs.reqattributes.remove.confirm.title')}" msg="${message(code: 'fedreg.template.acs.reqattributes.remove.confirm.descriptive', args:[ra.base.friendlyName.encodeAsHTML()])}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" icon="trash" label="label.remove" />
+						<n:confirmaction action="fedreg.acs_reqattribute_remove(${ra.id}, ${ra.attributeConsumingService.id}, '${containerID}' );" title="${message(code: 'fedreg.templates.acs.reqattributes.remove.confirm.title')}" msg="${message(code: 'fedreg.templates.acs.reqattributes.remove.confirm.descriptive', args:[ra.base.friendlyName.encodeAsHTML()])}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" icon="trash" label="label.remove" />
 					</td>
 				</tr>
 			</g:each>
@@ -31,6 +31,6 @@
 </g:if>
 <g:else>
 	<div class="warning">
-		<g:message code="fedreg.template.acs.reqattributes.not.requested" />
+		<g:message code="fedreg.templates.acs.reqattributes.not.requested" />
 	</div>
 </g:else>

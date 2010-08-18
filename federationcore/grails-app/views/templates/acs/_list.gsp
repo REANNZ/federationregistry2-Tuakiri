@@ -36,9 +36,9 @@
 				</div>
 
 				<div id="newattribute${i}">
-					<h3><g:message code="fedreg.template.acs.reqattributes.add.heading"/></h3>
+					<h3><g:message code="fedreg.templates.acs.reqattributes.add.heading"/></h3>
 					<p>
-						<g:message code="fedreg.template.acs.reqattributes.add.details"/>
+						<g:message code="fedreg.templates.acs.reqattributes.add.details"/>
 					</p>
 					<form id="newattributedata${i}">
 						<table>

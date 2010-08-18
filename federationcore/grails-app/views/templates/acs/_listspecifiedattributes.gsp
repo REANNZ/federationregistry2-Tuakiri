@@ -27,9 +27,9 @@
 													<n:button onclick="\$('#addnewspecattributeval${j}').fadeOut(); \$('#newspecattributeval${j}').fadeIn();" label="${message(code:'label.addvalue')}" icon="plus"/>
 												</div>
 												<div id="newspecattributeval${j}">
-													<h3><g:message code="fedreg.template.acs.specattributes.add.heading"/></h3>
+													<h3><g:message code="fedreg.templates.acs.specattributes.add.heading"/></h3>
 													<p>
-														<g:message code="fedreg.template.acs.specattributes.add.details"/>
+														<g:message code="fedreg.templates.acs.specattributes.add.details"/>
 													</p>
 													<form id="newspecattributedata${j}">
 														<table>
