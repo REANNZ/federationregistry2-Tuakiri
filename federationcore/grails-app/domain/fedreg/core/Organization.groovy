@@ -53,7 +53,7 @@ class Organization  {	// Also called a participant in AAF land
 	}
 
 	static constraints = {
-		name(nullable: false, blank: false)
+		name(nullable: false, blank: false, unique:true)
 		displayName(nullable: false, blank: false)
 		lang(nullable: false, blank: false)
 		url(nullable: false, blank: false, url: true)
