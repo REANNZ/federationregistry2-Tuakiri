@@ -101,6 +101,10 @@ class UrlMappings {
 		controller = "console"
 	}
 	
+	"/greenmail/$action?/$id?"{
+		controller = "greenmail"
+	}
+	
     "/"(view:"/index")
 	  "500"(view:'/error')
 	}

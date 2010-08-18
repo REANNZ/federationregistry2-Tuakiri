@@ -2,7 +2,7 @@
 <html>
 	<head></head>
 	<body>
-		<p><g:message code="fedreg.templates.mail.idpssoroledescriptor.register.description" /></p>
+		<p><g:message code="fedreg.templates.mail.spssoroledescriptor.register.description" /></p>
 			
 		<table>
 			<tr>

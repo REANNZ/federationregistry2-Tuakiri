@@ -80,15 +80,12 @@ nimble {
         }
 
         mail {
-            from = "App <app@company.com>"
+            from = "noreply@aaf.edu.au"
             host = ""
-            port = 25
+            port = com.icegreen.greenmail.util.ServerSetupTest.SMTP.port
             username = ""
             password = ""
-            props = ["mail.smtp.auth": "false",
-              "mail.smtp.socketFactory.port": "25",
-              "mail.smtp.socketFactory.class": "javax.net.ssl.SSLSocketFactory",
-              "mail.smtp.socketFactory.fallback": "false"]
+            props = ["mail.smtp.auth": "false"]
         }
     }
 
