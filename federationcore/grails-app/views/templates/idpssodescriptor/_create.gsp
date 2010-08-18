@@ -144,7 +144,7 @@
 				</td>
 				<td>
 					<g:hiddenField name="aa.description" />
-					<g:textField name="idp.description"  size="50" class="required" minlength="4"/>
+					<g:textArea name="idp.description"  class="required" minlength="4" rows="8" cols="36"/>
 				</td>
 			</tr>
 		</table>
