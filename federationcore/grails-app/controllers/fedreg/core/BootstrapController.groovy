@@ -7,6 +7,7 @@ class BootstrapController {
 	def IDPSSODescriptorService
 	def SPSSODescriptorService
 	def organizationService
+	def grailsApplication
 	
 	static allowedMethods = [saveidp: "POST", savesp: "POST", saveorganization: "POST"]
 	
@@ -18,8 +19,15 @@ class BootstrapController {
 	def saveidp = {
 		def (created, organization, entityDescriptor, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact) = IDPSSODescriptorService.create(params)
 		
-		if(created)
+		if(created) {
+			sendMail {
+			  to contact.email.uri
+			  subject message(code: 'fedreg.templates.mail.idpssoroledescriptor.register.subject')
+			  html g.render(template:"/templates/mail/idpssodescriptorregistered", plugin:"federationcore", model:[identityProvider:identityProvider, httpPost:httpPost, httpRedirect:httpRedirect, soapArtifact:soapArtifact])
+			}
+			
 			redirect (action: "idpregistered", id: identityProvider.id)
+		}
 		else {
 			flash.type="error"
 			flash.message = message(code: 'fedreg.core.idpssoroledescriptor.register.validation.error')
@@ -56,8 +64,15 @@ class BootstrapController {
 	def savesp = {
 		def (created, organization, entityDescriptor, serviceProvider, httpPostACS, soapArtifactACS, sloArtifact, sloRedirect, sloSOAP, sloPost, organizationList, attributeList, nameIDFormatList, contact) = SPSSODescriptorService.create(params)
 		
-		if(created)
+		if(created) {
+			sendMail {
+			  to contact.email.uri
+			  subject message(code: 'fedreg.templates.mail.spssoroledescriptor.register.subject')
+			  html g.render(template:"/templates/mail/spssodescriptorregistered", plugin:"federationcore", model:[serviceProvider:serviceProvider])
+			}
+			
 			redirect (action: "spregistered", id: serviceProvider.id)
+		}
 		else {
 			flash.type="error"
 			flash.message = message(code: 'fedreg.core.spssoroledescriptor.save.validation.error')
@@ -94,8 +109,15 @@ class BootstrapController {
 	def saveorganization = {
 		def (created, organization, contact) = organizationService.create(params)
 		
-		if(created)
+		if(created) {
+			sendMail {
+			  to contact.email.uri
+			  subject message(code: 'fedreg.templates.mail.organization.register.subject')
+			  html g.render(template:"/templates/mail/organizationregistered", plugin:"federationcore", model:[organization:organization])
+			}
+			
 			redirect (action: "organizationregistered", id: organization.id)
+		}
 		else {
 			flash.message = message(code: 'fedreg.core.organization.register.validation.error')
 			render (view:'organization', model:[organization:organization, contact:contact])

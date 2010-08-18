@@ -5,9 +5,11 @@ import grails.plugin.spock.*
 import fedreg.core.*
 import fedreg.workflow.*
 import grails.plugins.nimble.core.*
+import com.icegreen.greenmail.util.*
 
 class BootstrapControllerSpec extends IntegrationSpec {
 	
+	def greenMail
 	def controller
 	def savedMetaClasses
 	def idpssoDescriptorService = new IDPSSODescriptorService()
@@ -19,6 +21,7 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		idpssoDescriptorService.metaClass = IDPSSODescriptorService.metaClass
 		spssoDescriptorService.metaClass = SPSSODescriptorService.metaClass
 		organizationService.metaClass = OrganizationService.metaClass
+		greenMail.deleteAllMessages()
 	}
 	
 	def setup () {
@@ -68,9 +71,9 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		def entityDescriptor = EntityDescriptor.build(organization:organization).save()
 		def identityProvider = IDPSSODescriptor.build(entityDescriptor:entityDescriptor).save()
 		def attributeAuthority = AttributeAuthorityDescriptor.build(entityDescriptor:entityDescriptor).save()
-		def httpPost = SamlURI.build().save()
-		def httpRedirect = SamlURI.build().save()
-		def soapArtifact = SamlURI.build().save()
+		def httpPost = SingleSignOnService.build(descriptor:identityProvider).save()
+		def httpRedirect = SingleSignOnService.build(descriptor:identityProvider).save()
+		def soapArtifact = SingleSignOnService.build(descriptor:identityProvider).save()
 		def organizationList = [organization]
 		def attributeList = [Attribute.build().save()]
 		def nameIDFormatList = [SamlURI.build().save()]
@@ -83,7 +86,15 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		def model = controller.saveidp()
 		
 		then:
-		controller.response.redirectedUrl == "/bootstrap/idpregistered/${identityProvider.id}"	
+		controller.response.redirectedUrl == "/bootstrap/idpregistered/${identityProvider.id}"
+		greenMail.getReceivedMessages().length == 1
+		def message = greenMail.getReceivedMessages()[0]
+		message.subject == "fedreg.templates.mail.idpssoroledescriptor.register.subject"
+		GreenMailUtil.getBody(message).contains(organization.displayName)
+		GreenMailUtil.getBody(message).contains(httpPost.location.uri)
+		GreenMailUtil.getBody(message).contains(httpRedirect.location.uri)
+		GreenMailUtil.getBody(message).contains(httpRedirect.location.uri)
+		GreenMailUtil.getBody(message).contains("fedreg.templates.mail.get.support")
 	}
 	
 	def "Validate failed IDP registration"() {
@@ -165,15 +176,23 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		def organization = Organization.build().save()
 		def entityDescriptor = EntityDescriptor.build(organization:organization).save()
 		def serviceProvider = SPSSODescriptor.build(entityDescriptor:entityDescriptor).save()
+		def contact = Contact.build().save()
 		
 		when:
 		spssoDescriptorService.metaClass.create = { def p -> 
-			return [true, organization, entityDescriptor, serviceProvider]	//.. deliberately leaving out other return vals here
+			return [true, organization, entityDescriptor, serviceProvider, null, null, null, null, null, null, null, null, null, contact]
 		} 
 		def model = controller.savesp()
 		
 		then:
 		controller.response.redirectedUrl == "/bootstrap/spregistered/${serviceProvider.id}"	
+		greenMail.getReceivedMessages().length == 1
+		def message = greenMail.getReceivedMessages()[0]
+		message.subject == "fedreg.templates.mail.spssoroledescriptor.register.subject"
+		GreenMailUtil.getBody(message).contains(organization.displayName)
+		GreenMailUtil.getBody(message).contains(entityDescriptor.entityID)
+		GreenMailUtil.getBody(message).contains(serviceProvider.displayName)
+		GreenMailUtil.getBody(message).contains("fedreg.templates.mail.get.support")
 	}
 	
 	def "Validate failed SP registration"() {
@@ -234,15 +253,20 @@ class BootstrapControllerSpec extends IntegrationSpec {
 	def "Validate successful organization register"() {
 		setup:
 		def organization = Organization.build().save()
+		def contact = Contact.build().save()
 		
 		when:
 		organizationService.metaClass.create = { def p -> 
-			return [true, organization]
+			return [true, organization, contact]
 		} 
 		def model = controller.saveorganization()
 		
 		then:
 		controller.response.redirectedUrl == "/bootstrap/organizationregistered/${organization.id}"	
+		greenMail.getReceivedMessages().length == 1
+		def message = greenMail.getReceivedMessages()[0]
+		message.subject == "fedreg.templates.mail.organization.register.subject"
+		GreenMailUtil.getBody(message).contains(organization.displayName)
 	}
 	
 	def "Validate failed  organization register"() {

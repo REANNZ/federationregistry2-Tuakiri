@@ -12,6 +12,14 @@ environments {
 				console name:'stdout', layout:pattern(conversionPattern: '%d %-5p: %m%n')
 			}
 		}
+		nimble {
+			messaging {
+				mail {
+					host = 'localhost'
+					port = com.icegreen.greenmail.util.ServerSetupTest.SMTP.port
+				}
+			}
+		}
 	}
 }
 // The following properties have been added by the Upgrade process...
