@@ -1,15 +1,12 @@
 package fedreg.compliance
 
-import fedreg.core.Attribute
+import fedreg.core.AttributeBase
 import fedreg.core.AttributeCategory
 import fedreg.core.IDPSSODescriptor
 import fedreg.compliance.CategorySupportStatus
 
-class IdpAttributeComplianceController {
-	
-	def index = {
-		redirect action:summary
-	}
+class IDPSSODescriptorAttributeComplianceController {
+	def defaultAction = "summary"
 	
 	def summary = {
 		def idpInstanceList = IDPSSODescriptor.list()
@@ -18,9 +15,9 @@ class IdpAttributeComplianceController {
 		idpInstanceList.each { idp ->			
 			def categories = AttributeCategory.listOrderByName()
 			categories.each {
-				def total = Attribute.countByCategory(it)
-				def supported = idp.attributes.findAll{a ->	a.category == it }
-				def summary = new CategorySupportStatus(totalCount:total, supportedCount:supported.size(), name:it.name, idp: idp)
+				def total = AttributeBase.countByCategory(it)
+				def supported = idp.attributes.findAll{a ->	a.base.category == it }
+				def summary = new CategorySupportStatus(totalCount:total, supportedCount:supported.size(), name:it.base.name, idp: idp)
 				categorySupportSummaries.add(summary)
 			}
 		}
