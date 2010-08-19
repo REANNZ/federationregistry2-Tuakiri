@@ -36,8 +36,8 @@
 		<g:render template='/templates/aaftopnavigation'/>
 		
 		<ul class="level2a">
-			<li class="${controllerName == 'idpAttributeCompliance' ? 'active':''}">
-				<g:link controller="idpAttributeCompliance" action="summary"><g:message code="label.attributesummary" /></g:link>
+			<li class="${controllerName == 'IDPSSODescriptorAttributeCompliance' ? 'active':''}">
+				<g:link controller="IDPSSODescriptorAttributeCompliance" action="summary"><g:message code="label.attributesummary" /></g:link>
 		 	</li>
 			<li class="${controllerName == 'attributeRelease' ? 'active':''}">
 				<g:link controller="attributeRelease" action="index"><g:message code="label.attributerelease" /></g:link>

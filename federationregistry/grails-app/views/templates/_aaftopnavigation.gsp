@@ -16,8 +16,8 @@
 			</li>
 		</n:isNotLoggedIn>
 		<n:isLoggedIn>
-			<li class="${['idpAttributeCompliance', 'attributeRelease', 'certifyingAuthorityUsage'].contains(controllerName) ? 'active' : ''}">
-				<g:link controller="idpAttributeCompliance" action="summary" class=""><g:message code="fedreg.navigation.compliance" /></g:link>
+			<li class="${['IDPSSODescriptorAttributeCompliance', 'attributeRelease', 'certifyingAuthorityUsage'].contains(controllerName) ? 'active' : ''}">
+				<g:link controller="IDPSSODescriptorAttributeCompliance" action="summary" class=""><g:message code="fedreg.navigation.compliance" /></g:link>
 			</li>
 			<li class="${['organization', 'entity', 'IDPSSODescriptor', 'SPSSODescriptor', 'contacts'].contains(controllerName) ? 'active' : ''}">
 				<g:link controller="organization" action="list" class=""><g:message code="fedreg.navigation.membership" /></g:link>

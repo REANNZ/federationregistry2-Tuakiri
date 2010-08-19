@@ -6,7 +6,7 @@ class UrlMappings {
 	}
 	
 	"/compliance/identityprovider/attributes/$action?/$id?"{
-		controller = "idpAttributeCompliance"
+		controller = "IDPSSODescriptorAttributeCompliance"
 	}
 	
 	"/compliance/attributes/release/$action?/$id?"{

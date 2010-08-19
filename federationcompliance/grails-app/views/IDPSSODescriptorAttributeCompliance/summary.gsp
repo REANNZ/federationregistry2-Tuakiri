@@ -20,7 +20,7 @@
 					</tr>
 				</thead>
 				<tbody>
-				<g:each in="${idpInstanceList}" status="i" var="idp">
+				<g:each in="${identityProviderList}" status="i" var="idp">
 					<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 						<td class="organizationname">${idp?.displayName?.encodeAsHTML()}</td>
 							<g:findAll in="${categorySupportSummaries}" expr="it.idp == idp">
@@ -31,7 +31,7 @@
 							</td>							
 						</g:findAll>
 						<td>
-							<n:button href="${createLink(controller: 'idpAttributeCompliance', action:'comprehensive', id: idp.id)}" label="${message(code:'label.view')}" icon="arrowthick-1-ne"/>
+							<n:button href="${createLink(controller: 'IDPSSODescriptorAttributeCompliance', action:'comprehensive', id: idp.id)}" label="${message(code:'label.view')}" icon="arrowthick-1-ne"/>
 						</td>
 					</tr>
 				</g:each>
