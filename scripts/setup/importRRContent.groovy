@@ -3,7 +3,7 @@
 	import fedreg.core.*
 
 	/*
-	 This is a temporary piece of code to assist with a slow orderly migration from an existing PHP based resource registry
+	 This scripts assists with bootstrap and provides migration from an existing PHP based resource registry.
 	 Unlike the rest of Federation Registry I haven't built any extensive test suites to go along with this script. Your schema may be slightly different or have various hacks applied.
 	 I highly reccomend extensive tests in your respective development and test environments before letting loose on production.
 	 This should be run from the provided FR online Groovy console to be able to access various Grails features.
