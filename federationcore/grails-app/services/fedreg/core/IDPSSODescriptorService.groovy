@@ -181,6 +181,7 @@ class IDPSSODescriptorService {
 		identityProvider.description = params.idp.description
 		identityProvider.active = params.idp.status == 'true'
 		identityProvider.wantAuthnRequestsSigned = params.idp.wantauthnrequestssigned == 'true'
+		identityProvider.autoAcceptServices = params.idp.autoacceptservices == 'true'
 		
 		log.debug "Updating $identityProvider active: ${identityProvider.active}, requestSigned: ${identityProvider.wantAuthnRequestsSigned}"
 		

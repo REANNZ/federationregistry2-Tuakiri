@@ -71,6 +71,16 @@
 								</g:radioGroup>
 							</td>
 						</tr>
+						<tr>
+							<th>
+								<label for="idp.autoacceptservices"><g:message code="label.autoacceptservices" /></label>
+							</th>
+							<td>
+								<g:radioGroup name="idp.autoacceptservices" values="['true', 'false']" labels="['label.true', 'label.false']" value="${identityProvider.autoAcceptServices}" >
+									 ${it.radio} <g:message code="${it.label}" /> <br>
+								</g:radioGroup>
+							</td>
+						</tr>
 					</table>
 				</div>
 				
