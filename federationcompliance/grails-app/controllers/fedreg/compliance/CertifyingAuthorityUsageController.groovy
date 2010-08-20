@@ -13,21 +13,10 @@ class CertifyingAuthorityUsageController {
 	
 	def index = {
 		def ca = [:]
-		def ss = [:]
 		Certificate.list().each { cert ->
 			def subject = cryptoService.subject(cert)
 			def issuer = cryptoService.issuer(cert)
-			if(issuer.equals(subject)){		// Self signed
-				def members = ss.get(issuer)
-				if(!members) {
-					ss.put(issuer,[cert.keyInfo.keyDescriptor.roleDescriptor.entityDescriptor])
-				}
-				else {
-					if(!members.contains(cert.keyInfo.keyDescriptor.roleDescriptor.entityDescriptor))
-						members.add(cert.keyInfo.keyDescriptor.roleDescriptor.entityDescriptor)
-				}
-			}
-			else {		// External CA
+			if(!issuer.equals(subject)){		// External CA
 				def members = ca.get(issuer)
 				if(!members) {
 					ca.put(issuer,[cert.keyInfo.keyDescriptor.roleDescriptor.entityDescriptor])
@@ -38,8 +27,8 @@ class CertifyingAuthorityUsageController {
 				}
 			}
 		}
-		// cheeky reverse sort ;)
-		[causage:ca.sort{-it.value.size()}, ssusage:ss]
+
+		[causage:ca.sort{-it.value.size()}]				// cheeky reverse sort ;)
 	}
 	
 }

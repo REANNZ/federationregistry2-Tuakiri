@@ -41,25 +41,6 @@
 				</tbody>
 			</table>
 
-			<h3><g:message code="label.selfsigningca"/></h3>
-			<table>
-				<thead>
-					<tr>
-						<th><g:message code="label.entitydescriptor"/></th>
-					</tr>
-				</thead>
- 				<tbody>
-				<g:each in="${ssusage.keySet()}" status="i" var="k">
-					<tr>
-							<td>
-							<g:each in="${ssusage.get(k)}" status="j" var="rd">
-								${rd.entityID.encodeAsHTML()}<br/>
-							</g:each>
-							</td>
-					</tr>
-				</g:each>
-                   </tbody>
-			</table>
 		</section>
     </body>
 </html>
