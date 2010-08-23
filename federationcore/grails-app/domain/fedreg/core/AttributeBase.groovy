@@ -33,7 +33,6 @@ class AttributeBase  {
 	String alias
 	String description
 	
-	AttributeScope scope
 	AttributeCategory category
 	
 	boolean specificationRequired = false	// Generally used for something like Entitlement where values are potentially huge and privacy leaking. 
