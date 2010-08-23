@@ -14,15 +14,6 @@
 	initialPopulate()
 	populate()
 	
-	def initialPopulate() {		
-		// Attribute Scopes (Non standard)	
-		def fedScope = new AttributeScope(name:'Federation').save()
-		def localScope = new AttributeScope(name:'Local').save()
-		def mandatoryCategory = new AttributeCategory(name:'Mandatory').save()
-		def recommendedCategory = new AttributeCategory(name:'Recommended').save()
-		def optionalCategory = new AttributeCategory(name:'Optional').save()
-	}
-	
 	def populate() {
 		importCACertificates()
 		importOrganizations()
