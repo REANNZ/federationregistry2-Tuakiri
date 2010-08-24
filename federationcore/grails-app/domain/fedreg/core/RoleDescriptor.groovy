@@ -56,7 +56,7 @@ class RoleDescriptor extends Descriptor {
 		organization(nullable: false)
 		extensions(nullable: true, maxSize:2000)
 		errorURL(nullable:true)
-		protocolSupportEnumerations(nullable: true)
+		protocolSupportEnumerations(nullable: false, minSize:1)
 		contacts(nullable: true)
 		keyDescriptors(nullable: true, validator: { val, obj ->
 			obj.validateKeyDescriptors()
