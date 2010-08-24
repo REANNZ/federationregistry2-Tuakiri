@@ -1,9 +1,0 @@
---Output from Test valid endpoint generation--
---Output from Test valid endpoint generation with response--
---Output from Test valid indexed endpoint generation--
---Output from Test valid indexed endpoint generation with response--
---Output from Test valid organization generation--
---Output from Test valid contact person generation--
---Output from Test valid contact person generation with only mobile phone--
---Output from Test valid IDPSSODescriptor generation--
-
