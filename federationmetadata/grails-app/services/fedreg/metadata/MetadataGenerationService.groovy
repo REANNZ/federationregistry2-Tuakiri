@@ -70,12 +70,12 @@ class MetadataGenerationService {
 		}
 	}
 	
-	def indexedEndpoint(builder, type, endpoint) { 
+	def indexedEndpoint(builder, type, endpoint, index) { 
 		if(endpoint.active && endpoint.approved) {
 			if(!endpoint.responseLocation)
-				builder."$type"(Binding: endpoint.binding.uri, Location:endpoint.location.uri, index:endpoint.endpointIndex, isDefault:endpoint.isDefault)
+				builder."$type"(Binding: endpoint.binding.uri, Location:endpoint.location.uri, index:index, isDefault:endpoint.isDefault)
 			else
-				builder."$type"(Binding: endpoint.binding.uri, Location:endpoint.location.uri, ResponseLocation: endpoint.responseLocation.uri, index:endpoint.endpointIndex, isDefault:endpoint.isDefault)
+				builder."$type"(Binding: endpoint.binding.uri, Location:endpoint.location.uri, ResponseLocation: endpoint.responseLocation.uri, index:index, isDefault:endpoint.isDefault)
 		}
 	}
 	
@@ -83,17 +83,68 @@ class MetadataGenerationService {
 		builder."$type"(uri.uri)
 	}
 	
+	def attribute(builder, attr) {
+		builder.'saml:Attribute'(Name: attr.base.name, NameFormat:attr.base.nameFormat?.uri, FriendlyName:attr.base.friendlyName) {
+			attr.values?.sort{it?.value}.each {
+				'saml:AttributeValue'(it.value)
+			}
+		}
+	}
+	
+	def requestedAttribute(builder, attr) {
+		if(attr.approved) {
+			builder.RequestedAttribute(Name: attr.base.name, NameFormat:attr.base.nameFormat?.uri, FriendlyName:attr.base.friendlyName, isRequired:attr.isRequired) {
+				attr.values?.sort{it?.value}.each {
+					'saml:AttributeValue'(it.value)
+				}
+			}
+		}
+	}
+	
+	def attributeConsumingService(builder, acs, index) {
+		builder.AttributeConsumingService(index:index, isDefault:acs.isDefault) {
+			acs.serviceNames?.sort{it}.each {
+				localizedName(builder, "ServiceName", acs.lang, it)
+			}
+			acs.serviceDescriptions?.sort{it}.each {
+				localizedName(builder, "ServiceDescription", acs.lang, it)
+			}
+			acs.requestedAttributes?.sort{it.base.name}.each{ attr -> requestedAttribute(builder, attr)}
+		}
+	}
+	
+	def roleDescriptor(builder, roleDescriptor) {
+		roleDescriptor.keyDescriptors?.sort{it.keyType}.each{keyDescriptor(builder, it)}
+		organization(builder, roleDescriptor.organization)
+		roleDescriptor.contacts?.sort{it.contact.email.uri}.each{cp -> contactPerson(builder, cp)}
+	}
+	
+	def ssoDescriptor(builder, ssoDescriptor) {
+		ssoDescriptor.artifactResolutionServices?.sort{it.location.uri}.eachWithIndex{ars, i -> indexedEndpoint(builder, "ArtifactResolutionService", ars, i+1)}
+		ssoDescriptor.singleLogoutServices?.sort{it.location.uri}.each{sls -> endpoint(builder, "SingleLogoutService", sls)}
+		ssoDescriptor.manageNameIDServices?.sort{it.location.uri}.each{mnids -> endpoint(builder, "ManageNameIDService", mnids)}
+		ssoDescriptor.nameIDFormats?.sort{it.location.uri}.each{nidf -> samlURI(builder, "NameIDFormat", nidf)}
+	}
+	
 	def idpSSODescriptor(builder, idpSSODescriptor) {
-		builder.IDPSSODescriptor(protocolSupportEnumeration: idpSSODescriptor.protocolSupportEnumerations.collect({it.uri}).join(' ')) {
-			idpSSODescriptor.keyDescriptors.sort{it.keyType}.each{keyDescriptor(builder, it)}
-			organization(builder, idpSSODescriptor.organization)
-			idpSSODescriptor.contacts.each{cp -> contactPerson(builder, cp)}
+		builder.IDPSSODescriptor(protocolSupportEnumeration: idpSSODescriptor.protocolSupportEnumerations.sort{it.uri}.collect({it.uri}).join(' '), WantAuthnRequestsSigned:idpSSODescriptor.wantAuthnRequestsSigned) {
+			roleDescriptor(builder, idpSSODescriptor)
+			ssoDescriptor(builder, idpSSODescriptor)
 			
-			// SSODescriptorType
-			idpSSODescriptor.artifactResolutionServices.eachWithIndex{ars, i -> indexedEndpoint(builder, "ArtifactResolutionService", ars)}
-			idpSSODescriptor.singleLogoutServices.each{sls -> endpoint(builder, "SingleLogoutService", sls)}
-			idpSSODescriptor.manageNameIDServices.each{mnids -> endpoint(builder, "ManageNameIDService", mnids)}
-			idpSSODescriptor.nameIDFormats.each{nidf -> samlURI(builder, "NameIDFormat", nidf)}
+			idpSSODescriptor.singleSignOnServices.sort{it.location.uri}.each{ sso -> endpoint(builder, "SingleSignOnService", sso) }
+			idpSSODescriptor.nameIDMappingServices.sort{it.location.uri}.each{ nidms -> endpoint(builder, "NameIDMappingService", nidms) }
+			idpSSODescriptor.assertionIDRequestServices.sort{it.location.uri}.each{ aidrs -> endpoint(builder, "AssertionIDRequestService", aidrs) }
+			idpSSODescriptor.attributes.sort{it.base.name}.each{ attr -> attribute(builder, attr)}
+		}
+	}
+	
+	def spSSODescriptor(builder, spSSODescriptor) {
+		builder.SPSSODescriptor(protocolSupportEnumeration: spSSODescriptor.protocolSupportEnumerations.sort{it.uri}.collect({it.uri}).join(' '), AuthnRequestsSigned:spSSODescriptor.authnRequestsSigned, WantAssertionsSigned:spSSODescriptor.wantAssertionsSigned) {
+			roleDescriptor(builder, spSSODescriptor)
+			ssoDescriptor(builder, spSSODescriptor)
+			
+			spSSODescriptor.assertionConsumerServices.sort{it.location.uri}.eachWithIndex{ ars, i -> indexedEndpoint(builder, "AssertionConsumerService", ars, i+1) }
+			spSSODescriptor.attributeConsumingServices.sort{it.id}.eachWithIndex{ acs, i -> attributeConsumingService(builder, acs, i) }
 		}
 	}
 	
