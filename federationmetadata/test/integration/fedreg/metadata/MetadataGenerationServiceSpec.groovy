@@ -44,7 +44,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		setup:
 		setupBindings()
 		def location = new UrlURI(uri:"https://test.example.com/SSO")
-		def sso = SingleSignOnService.build(binding:httpPost, location:location).save()
+		def sso = SingleSignOnService.build(active:true, approved:true, binding:httpPost, location:location).save()
 		def result = loadResult('testvalidendpointgeneration')
 		
 		when:
@@ -60,7 +60,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		setupBindings()
 		def location = new UrlURI(uri:"https://test.example.com/SSO")
 		def responseLocation = new UrlURI(uri:"https://test.example.com/response")
-		def sso = SingleSignOnService.build(binding:httpPost, location:location, responseLocation:responseLocation).save()
+		def sso = SingleSignOnService.build(active:true, approved:true, binding:httpPost, location:location, responseLocation:responseLocation).save()
 		def result = loadResult('testvalidendpointgenerationresponse')
 		
 		when:
@@ -71,15 +71,43 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		xml == result
 	}
 	
+	def "Test endpoint generation when endpoint inactive"() {
+		setup:
+		setupBindings()
+		def location = new UrlURI(uri:"https://test.example.com/SSO")
+		def sso = SingleSignOnService.build(active:false, approved:true, binding:httpPost, location:location).save()
+		
+		when:
+		metadataGenerationService.endpoint(builder, "SingleSignOnService", sso)
+		
+		then:
+		def xml = writer.toString()
+		xml == ""
+	}
+	
+	def "Test endpoint generation when endpoint not approved"() {
+		setup:
+		setupBindings()
+		def location = new UrlURI(uri:"https://test.example.com/SSO")
+		def sso = SingleSignOnService.build(active:true, approved:false, binding:httpPost, location:location).save()
+		
+		when:
+		metadataGenerationService.endpoint(builder, "SingleSignOnService", sso)
+		
+		then:
+		def xml = writer.toString()
+		xml == ""
+	}
+	
 	def "Test valid indexed endpoint generation"() {
 		setup:
 		setupBindings()
 		def location = new UrlURI(uri:"https://test.example.com/artifact")
-		def ars = ArtifactResolutionService.build(binding:httpPost, location:location).save()
+		def ars = ArtifactResolutionService.build(active:true, approved:true, binding:httpPost, location:location, endpointIndex:1).save()
 		def result = loadResult('testvalidindexedendpointgeneration')
 		
 		when:
-		metadataGenerationService.indexedEndpoint(builder, "ArtifactResolutionService", ars, 1)
+		metadataGenerationService.indexedEndpoint(builder, "ArtifactResolutionService", ars)
 		
 		then:
 		def xml = writer.toString()
@@ -91,15 +119,43 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		setupBindings()
 		def location = new UrlURI(uri:"https://test.example.com/artifact")
 		def responseLocation = new UrlURI(uri:"https://test.example.com/response")
-		def ars = ArtifactResolutionService.build(binding:httpPost, location:location, responseLocation:responseLocation).save()
+		def ars = ArtifactResolutionService.build(active:true, approved:true, binding:httpPost, location:location, responseLocation:responseLocation, endpointIndex:1).save()
 		def result = loadResult('testvalidindexedendpointgenerationresponse')
 		
 		when:
-		metadataGenerationService.indexedEndpoint(builder, "ArtifactResolutionService", ars, 1)
+		metadataGenerationService.indexedEndpoint(builder, "ArtifactResolutionService", ars)
 		
 		then:
 		def xml = writer.toString()
 		xml == result
+	}
+	
+	def "Test indexed endpoint generation when not active"() {
+		setup:
+		setupBindings()
+		def location = new UrlURI(uri:"https://test.example.com/artifact")
+		def ars = ArtifactResolutionService.build(active:false, approved:true, binding:httpPost, location:location, endpointIndex:1).save()
+		
+		when:
+		metadataGenerationService.indexedEndpoint(builder, "ArtifactResolutionService", ars)
+		
+		then:
+		def xml = writer.toString()
+		xml == ""
+	}
+	
+	def "Test indexed endpoint generation when not approved"() {
+		setup:
+		setupBindings()
+		def location = new UrlURI(uri:"https://test.example.com/artifact")
+		def ars = ArtifactResolutionService.build(active:true, approved:false, binding:httpPost, location:location, endpointIndex:1).save()
+		
+		when:
+		metadataGenerationService.indexedEndpoint(builder, "ArtifactResolutionService", ars)
+		
+		then:
+		def xml = writer.toString()
+		xml == ""
 	}
 	
 	def "Test valid organization generation"() {
@@ -150,7 +206,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def xml = writer.toString()
 		xml == result
 	}
-	
+
 	def "Test valid IDPSSODescriptor generation"() {
 		setup:
 		setupBindings()
@@ -176,11 +232,24 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def keyInfo2 = new KeyInfo(keyName:"key2", certificate:certificate)
 		def keyDescriptor2 = new KeyDescriptor(keyInfo:keyInfo2, keyType:KeyTypes.signing)
 		
-		def idp = IDPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, organization:organization)
-		idp.addToContacts(contactPerson)
+		def ars = new ArtifactResolutionService(active:true, approved:true, endpointIndex:1, isDefault:true, binding:soap, location:new UrlURI(uri:"https://test.example.com/ars/artifact"))
+		def ars2 = new ArtifactResolutionService(active:true, approved:true, endpointIndex:1, isDefault:false, binding:soap, location:new UrlURI(uri:"https://test.example.com/ars/artifact2"))
 		
+		def slo = new SingleLogoutService(active:true, approved:true, binding:httpPost, location:new UrlURI(uri:"https://test.example.com/slo/POST"))
+		def mnid = new ManageNameIDService(active:true, approved:true, binding:httpRedirect, location:new UrlURI(uri:"https://test.example.com/mnid/REDIRECT"))
+		def nidf = new SamlURI(uri:"supported:nameid:format:urn")
+		
+		def idp = IDPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, organization:organization)
 		idp.addToKeyDescriptors(keyDescriptor)
 		idp.addToKeyDescriptors(keyDescriptor2)
+		idp.addToContacts(contactPerson)
+		
+		idp.addToArtifactResolutionServices(ars)
+		idp.addToArtifactResolutionServices(ars2)
+		idp.addToSingleLogoutServices(slo)
+		idp.addToManageNameIDServices(mnid)
+		idp.addToNameIDFormats(nidf)
+		
 		
 		idp.save()
 		
@@ -194,7 +263,6 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		println xml
 		xml == result
 	}
-	
 	
 	
 	

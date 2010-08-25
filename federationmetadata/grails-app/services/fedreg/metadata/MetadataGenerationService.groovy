@@ -61,27 +61,39 @@ class MetadataGenerationService {
 		}
 	}
 		
-	def endpoint(builder, type, endpoint) { 
-		if(!endpoint.responseLocation)
-			builder."$type"(Binding: endpoint.binding.uri, Location:endpoint.location.uri)
-		else
-			builder."$type"(Binding: endpoint.binding.uri, Location:endpoint.location.uri, ResponseLocation: endpoint.responseLocation.uri)
+	def endpoint(builder, type, endpoint) {
+		if(endpoint.active && endpoint.approved) {
+			if(!endpoint.responseLocation)
+				builder."$type"(Binding: endpoint.binding.uri, Location:endpoint.location.uri)
+			else
+				builder."$type"(Binding: endpoint.binding.uri, Location:endpoint.location.uri, ResponseLocation: endpoint.responseLocation.uri)
+		}
 	}
 	
-	def indexedEndpoint(builder, type, endpoint, index) { 
-		if(!endpoint.responseLocation)
-			builder."$type"(Binding: endpoint.binding.uri, Location:endpoint.location.uri, index:index)
-		else
-			builder."$type"(Binding: endpoint.binding.uri, Location:endpoint.location.uri, ResponseLocation: endpoint.responseLocation.uri, index:index)
+	def indexedEndpoint(builder, type, endpoint) { 
+		if(endpoint.active && endpoint.approved) {
+			if(!endpoint.responseLocation)
+				builder."$type"(Binding: endpoint.binding.uri, Location:endpoint.location.uri, index:endpoint.endpointIndex, isDefault:endpoint.isDefault)
+			else
+				builder."$type"(Binding: endpoint.binding.uri, Location:endpoint.location.uri, ResponseLocation: endpoint.responseLocation.uri, index:endpoint.endpointIndex, isDefault:endpoint.isDefault)
+		}
+	}
+	
+	def samlURI(builder, type, uri) {
+		builder."$type"(uri.uri)
 	}
 	
 	def idpSSODescriptor(builder, idpSSODescriptor) {
 		builder.IDPSSODescriptor(protocolSupportEnumeration: idpSSODescriptor.protocolSupportEnumerations.collect({it.uri}).join(' ')) {
 			idpSSODescriptor.keyDescriptors.sort{it.keyType}.each{keyDescriptor(builder, it)}
 			organization(builder, idpSSODescriptor.organization)
-			idpSSODescriptor.contacts.each{contactPerson(builder, it)}
+			idpSSODescriptor.contacts.each{cp -> contactPerson(builder, cp)}
 			
 			// SSODescriptorType
+			idpSSODescriptor.artifactResolutionServices.eachWithIndex{ars, i -> indexedEndpoint(builder, "ArtifactResolutionService", ars)}
+			idpSSODescriptor.singleLogoutServices.each{sls -> endpoint(builder, "SingleLogoutService", sls)}
+			idpSSODescriptor.manageNameIDServices.each{mnids -> endpoint(builder, "ManageNameIDService", mnids)}
+			idpSSODescriptor.nameIDFormats.each{nidf -> samlURI(builder, "NameIDFormat", nidf)}
 		}
 	}
 	
