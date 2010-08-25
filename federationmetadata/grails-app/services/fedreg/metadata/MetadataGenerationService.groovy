@@ -114,7 +114,7 @@ class MetadataGenerationService {
 	}
 	
 	def roleDescriptor(builder, roleDescriptor) {
-		roleDescriptor.keyDescriptors?.sort{it.keyType}.each{keyDescriptor(builder, it)}
+		roleDescriptor.keyDescriptors?.sort{it.keyType}.each{keyDescriptor(builder, it)}		
 		organization(builder, roleDescriptor.organization)
 		roleDescriptor.contacts?.sort{it.contact.email.uri}.each{cp -> contactPerson(builder, cp)}
 	}
@@ -134,6 +134,7 @@ class MetadataGenerationService {
 			idpSSODescriptor.singleSignOnServices.sort{it.location.uri}.each{ sso -> endpoint(builder, "SingleSignOnService", sso) }
 			idpSSODescriptor.nameIDMappingServices.sort{it.location.uri}.each{ nidms -> endpoint(builder, "NameIDMappingService", nidms) }
 			idpSSODescriptor.assertionIDRequestServices.sort{it.location.uri}.each{ aidrs -> endpoint(builder, "AssertionIDRequestService", aidrs) }
+			idpSSODescriptor.attributeProfiles?.sort{it.location.uri}.each{ ap -> samlURI(builder, "AttributeProfile", ap) }
 			idpSSODescriptor.attributes.sort{it.base.name}.each{ attr -> attribute(builder, attr)}
 		}
 	}
@@ -145,6 +146,29 @@ class MetadataGenerationService {
 			
 			spSSODescriptor.assertionConsumerServices.sort{it.location.uri}.eachWithIndex{ ars, i -> indexedEndpoint(builder, "AssertionConsumerService", ars, i+1) }
 			spSSODescriptor.attributeConsumingServices.sort{it.id}.eachWithIndex{ acs, i -> attributeConsumingService(builder, acs, i) }
+		}
+	}
+	
+	def attributeAuthorityDescriptor(builder, aaDescriptor) {
+		builder.AttributeAuthorityDescriptor(protocolSupportEnumeration: aaDescriptor.protocolSupportEnumerations.sort{it.uri}.collect({it.uri}).join(' ')) {
+			if(aaDescriptor.collaborator) {
+				// We don't currently provide direct AA manipulation to reduce general end user complexity.
+				// So where a collaborative relationship exists we use all common data from the IDP to render the AA
+				roleDescriptor(builder, aaDescriptor.collaborator)	
+				aaDescriptor.attributeServices?.sort{it.location.uri}.each{ attrserv -> endpoint(builder, "AttributeService", attrserv) }
+				aaDescriptor.collaborator.assertionIDRequestServices?.sort{it.location.uri}.each{ aidrs -> endpoint(builder, "AssertionIDRequestService", aidrs) }
+				aaDescriptor.collaborator.nameIDFormats?.sort{it.location.uri}.each{ nidf -> samlURI(builder, "NameIDFormat", nidf) }
+				aaDescriptor.collaborator.attributeProfiles?.sort{it.location.uri}.each{ ap -> samlURI(builder, "AttributeProfile", ap) }
+				aaDescriptor.collaborator.attributes?.sort{it.base.name}.each{ attr -> attribute(builder, attr) }
+			}
+			else {
+				roleDescriptor(builder, aaDescriptor)	
+				aaDescriptor.attributeServices?.sort{it.location.uri}.each{ attrserv -> endpoint(builder, "AttributeService", attrserv) }
+				aaDescriptor.assertionIDRequestServices?.sort{it.location.uri}.each{ aidrs -> endpoint(builder, "AssertionIDRequestService", aidrs) }
+				aaDescriptor.nameIDFormats?.sort{it.location.uri}.each{ nidf -> samlURI(builder, "NameIDFormat", nidf) }
+				aaDescriptor.attributeProfiles?.sort{it.location.uri}.each{ ap -> samlURI(builder, "AttributeProfile", ap) }
+				aaDescriptor.attributes?.sort{it.base.name}.each{ attr -> attribute(builder, attr) }
+			}
 		}
 	}
 	
