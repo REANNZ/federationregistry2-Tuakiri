@@ -31,7 +31,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor {
 	static hasMany = [
 		  attributeServices: AttributeService,
 		  assertionIDRequestServices: AssertionIDRequestService,
-		  nameIDFormats: String,
+		  nameIDFormats: SamlURI,
 		  attributeProfiles: String,
 		  attributes: Attribute
 	]
