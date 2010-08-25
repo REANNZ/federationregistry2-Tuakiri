@@ -87,6 +87,8 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		def (created, org, entityDescriptor_, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact_) = idpssoDescriptorService.create(params)
 		
 		then:
+		created
+		
 		Organization.count() == 1
 		SamlURI.count() == 7
 		EntityDescriptor.count() == 1
@@ -192,6 +194,8 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		def (created, org, entityDescriptor_, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact_) = idpssoDescriptorService.create(params)
 		
 		then:
+		created
+		
 		Organization.count() == 1
 		SamlURI.count() == 7
 		EntityDescriptor.count() == 1
@@ -297,6 +301,8 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		def (created, org, entityDescriptor_, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact_) = idpssoDescriptorService.create(params)
 		
 		then:
+		created
+		
 		Organization.count() == 1
 		SamlURI.count() == 5
 		EntityDescriptor.count() == 1
@@ -390,13 +396,14 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		def (created, org, entityDescriptor_, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact_) = idpssoDescriptorService.create(params)
 		
 		then:
+		!created
+		
 		Organization.count() == 1
 		SamlURI.count() == 5
 		EntityDescriptor.count() == 1
 		IDPSSODescriptor.count() == 0
 		AttributeAuthorityDescriptor.count() == 0
 
-		
 		identityProvider.organization == organization
 		identityProvider.entityDescriptor == entityDescriptor
 		identityProvider.entityDescriptor.organization == organization
@@ -460,13 +467,16 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		def (created, org, entityDescriptor_, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact_) = idpssoDescriptorService.create(params)
 		
 		then:
+		!created
+		
+		println "ID IS -- " + identityProvider.id
+		
 		Organization.count() == 1
 		SamlURI.count() == 5
 		EntityDescriptor.count() == 1
 		IDPSSODescriptor.count() == 0
 		AttributeAuthorityDescriptor.count() == 0
 
-		
 		identityProvider.organization == organization
 		identityProvider.entityDescriptor == entityDescriptor
 		identityProvider.entityDescriptor.organization == organization
@@ -529,6 +539,8 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		def (created, org, entityDescriptor_, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact_) = idpssoDescriptorService.create(params)
 		
 		then:
+		!created
+		
 		Organization.count() == 1
 		SamlURI.count() == 5
 		EntityDescriptor.count() == 1
@@ -600,6 +612,8 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		def (created, org, entityDescriptor_, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact_) = idpssoDescriptorService.create(params)
 		
 		then:
+		!created
+		
 		Organization.count() == 1
 		SamlURI.count() == 5
 		EntityDescriptor.count() == 1
@@ -669,6 +683,8 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		def (created, org, entityDescriptor_, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact_) = idpssoDescriptorService.create(params)
 		
 		then:
+		!created
+		
 		Organization.count() == 1
 		SamlURI.count() == 5
 		EntityDescriptor.count() == 1
@@ -740,6 +756,8 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		def (created, org, entityDescriptor_, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact_) = idpssoDescriptorService.create(params)
 		
 		then:
+		!created
+		
 		Organization.count() == 1
 		SamlURI.count() == 5
 		EntityDescriptor.count() == 1
@@ -809,6 +827,8 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		def (created, org, entityDescriptor_, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact_) = idpssoDescriptorService.create(params)
 		
 		then:
+		!created
+		
 		Organization.count() == 1
 		SamlURI.count() == 5
 		EntityDescriptor.count() == 1
@@ -890,6 +910,8 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		def (created, org, entityDescriptor_, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact_) = idpssoDescriptorService.create(params)
 		
 		then:
+		created
+		
 		Organization.count() == 1
 		SamlURI.count() == 5
 		EntityDescriptor.count() == 1
@@ -967,6 +989,8 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		def (created, org, entityDescriptor_, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact_) = idpssoDescriptorService.create(params)
 		
 		then:
+		created
+		
 		Organization.count() == 1
 		SamlURI.count() == 5
 		EntityDescriptor.count() == 1
@@ -1041,6 +1065,8 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		def (created, org, entityDescriptor_, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact_) = idpssoDescriptorService.create(params)
 		
 		then:
+		created
+		
 		Organization.count() == 1
 		SamlURI.count() == 5
 		EntityDescriptor.count() == 1
@@ -1106,6 +1132,8 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		def (created, org, entityDescriptor_, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact_) = idpssoDescriptorService.create(params)
 		
 		then:
+		!created
+		
 		Organization.count() == 1
 		SamlURI.count() == 5
 		EntityDescriptor.count() == 1
@@ -1167,6 +1195,8 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		def (created, org, entityDescriptor_, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact_) = idpssoDescriptorService.create(params)
 		
 		then:
+		!created
+		
 		Organization.count() == 1
 		SamlURI.count() == 5
 		EntityDescriptor.count() == 1
@@ -1235,6 +1265,8 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		def (created, org, entityDescriptor_, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact_) = idpssoDescriptorService.create(params)
 		
 		then:
+		!created
+		
 		Organization.count() == 1
 		SamlURI.count() == 5
 		EntityDescriptor.count() == 0
@@ -1303,6 +1335,8 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		def (created, org, entityDescriptor_, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact_) = idpssoDescriptorService.create(params)
 		
 		then:
+		!created
+		
 		Organization.count() == 1
 		SamlURI.count() == 5
 		EntityDescriptor.count() == 0
@@ -1359,6 +1393,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		then:
 		updated
+		
 		identityProvider_.displayName == "new displayName"
 		identityProvider_.description == "new description"
 		identityProvider_.active
@@ -1378,6 +1413,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		then:
 		!updated
+		
 		identityProvider_.displayName == ""
 		identityProvider_.description == "new description"
 		identityProvider_.active

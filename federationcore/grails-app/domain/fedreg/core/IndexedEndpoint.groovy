@@ -33,5 +33,10 @@ class IndexedEndpoint extends Endpoint  {
 		tablePerHierarchy false
   	}
 
-	public String toString() { "indexedendpoint:[id:$id, location: $location]" }
+	static constraints = {
+		endpointIndex()
+		isDefault(nullable:false)
+	}
+
+	public String toString() { "indexedendpoint:[id:$id, location: $location, index:$endpointIndex]" }
 }

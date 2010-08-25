@@ -24,8 +24,8 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class Endpoint	{
-	boolean active
-	boolean approved
+	boolean active = false
+	boolean approved = false
 	
 	SamlURI binding
 	UrlURI location

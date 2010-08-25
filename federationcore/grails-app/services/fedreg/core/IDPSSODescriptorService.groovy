@@ -27,7 +27,6 @@ class IDPSSODescriptorService {
 		def ct = params.contact?.type ?: 'administrative'
 		
 		// Entity Descriptor
-		
 		def entityDescriptor
 		if(params.entity?.id) {		
 			entityDescriptor = EntityDescriptor.get(params.entity?.id)
@@ -74,7 +73,7 @@ class IDPSSODescriptorService {
 
 		def artifactBinding = SamlURI.findByUri(SamlConstants.soap)
 		def artifactLocation = new UrlURI(uri: params.idp?.artifact?.uri)
-		def soapArtifact = new ArtifactResolutionService(binding: artifactBinding, location:artifactLocation, active:params.active)
+		def soapArtifact = new ArtifactResolutionService(binding: artifactBinding, location:artifactLocation, active:params.active, approved: false, isDefault:true, endpointIndex:1)
 		identityProvider.addToArtifactResolutionServices(soapArtifact)
 		soapArtifact.validate()
 
@@ -101,13 +100,14 @@ class IDPSSODescriptorService {
 		def attributeAuthority
 		if(params.aa?.create) {
 			attributeAuthority = new AttributeAuthorityDescriptor(active:params.active, displayName: params.aa.displayName, description: params.aa.description, collaborator: identityProvider, organization:organization)
+			attributeAuthority.addToProtocolSupportEnumerations(samlNamespace)
 			identityProvider.collaborator = attributeAuthority
 			
 			def attributeServiceBinding = SamlURI.findByUri('urn:oasis:names:tc:SAML:2.0:bindings:SOAP')
 			def attributeServiceLocation = new UrlURI(uri: params.aa?.attributeservice?.uri)
-		
-			def attributeService = new AttributeService(binding: attributeServiceBinding, location:attributeServiceLocation)
+			def attributeService = new AttributeService(binding: attributeServiceBinding, location:attributeServiceLocation, active:params.active, approved:false)
 			attributeAuthority.addToAttributeServices(attributeService)
+			
 			params.aa.attributes.each { attrID -> 
 				if(attrID.value == "on") {
 					def attr = AttributeBase.get(attrID.key)
@@ -137,23 +137,23 @@ class IDPSSODescriptorService {
 		}
 		
 		// Submission validation
-		if(!entityDescriptor.save()) {
+		if(!entityDescriptor.validate()) {
 			entityDescriptor?.errors.each { log.error it }
 			return [false, organization, entityDescriptor, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, Organization.list(), AttributeBase.list(), SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding), contact]
 		}
 		identityProvider.entityDescriptor = entityDescriptor
 		entityDescriptor.addToIdpDescriptors(identityProvider)
-		
+
 		if(params.aa?.create) {
 			attributeAuthority.entityDescriptor = entityDescriptor
 			entityDescriptor.addToAttributeAuthorityDescriptors(attributeAuthority)
 		}
-		
-		if(!identityProvider.validate()) {			
+
+		if(!identityProvider.validate()) {
 			identityProvider.errors.each { log.debug it }
 			return [false, organization, entityDescriptor, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, Organization.list(), AttributeBase.list(), SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding), contact]
 		}
-		
+
 		if(params.aa?.create)
 			if(!attributeAuthority.validate()) {			
 				attributeAuthority.errors.each {log.debug it}
