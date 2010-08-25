@@ -87,38 +87,33 @@ class SPSSODescriptorService {
 		
 		// Single Logout Services
 		def sloArtifact, sloRedirect, sloSOAP, sloPost
-		def sloIndex = 1
 		if(params.sp?.slo?.artifact?.uri){
 			def sloArtifactBinding = SamlURI.findByUri(SamlConstants.httpArtifact)
 			def sloArtifactLocation = new UrlURI(uri: params.sp?.slo?.artifact?.uri)
-			sloArtifact = new SingleLogoutService(binding: sloArtifactBinding, location:sloArtifactLocation, active:params.active, endpointIndex:sloIndex, isDefault:params.sp?.slo?.artifact?.isdefault)
+			sloArtifact = new SingleLogoutService(binding: sloArtifactBinding, location:sloArtifactLocation, active:params.active, isDefault:params.sp?.slo?.artifact?.isdefault)
 			serviceProvider.addToSingleLogoutServices(sloArtifact)
 			sloArtifact.validate()
-			sloIndex++
 		}
 		if(params.sp?.slo?.redirect?.uri){
 			def sloRedirectBinding = SamlURI.findByUri(SamlConstants.httpRedirect)
 			def sloRedirectLocation = new UrlURI(uri: params.sp?.slo?.redirect?.uri)
-			sloRedirect	= new SingleLogoutService(binding: sloRedirectBinding, location:sloRedirectLocation, active:params.active, endpointIndex:sloIndex, isDefault:params.sp?.slo?.redirect?.isdefault)
+			sloRedirect	= new SingleLogoutService(binding: sloRedirectBinding, location:sloRedirectLocation, active:params.active, isDefault:params.sp?.slo?.redirect?.isdefault)
 			serviceProvider.addToSingleLogoutServices(sloRedirect)
 			sloRedirect.validate()
-			sloIndex++
 		}
 		if(params.sp?.slo?.soap?.uri){
 			def sloSOAPBinding = SamlURI.findByUri(SamlConstants.soap)
 			def sloSOAPLocation = new UrlURI(uri: params.sp?.slo?.soap?.uri)
-			sloSOAP = new SingleLogoutService(binding: sloSOAPBinding, location:sloSOAPLocation, active:params.active, endpointIndex:sloIndex, isDefault:params.sp?.slo?.soap?.isdefault)
+			sloSOAP = new SingleLogoutService(binding: sloSOAPBinding, location:sloSOAPLocation, active:params.active, isDefault:params.sp?.slo?.soap?.isdefault)
 			serviceProvider.addToSingleLogoutServices(sloSOAP)
 			sloSOAP.validate()
-			sloIndex++
 		}
 		if(params.sp?.slo?.post?.uri){
 			def sloPostBinding = SamlURI.findByUri(SamlConstants.httpPost)
 			def sloPostLocation = new UrlURI(uri: params.sp?.slo?.post?.uri)
-			sloPost = new SingleLogoutService(binding: sloPostBinding, location:sloPostLocation, active:params.active, endpointIndex:sloIndex, isDefault:params.sp?.slo?.post?.isdefault)
+			sloPost = new SingleLogoutService(binding: sloPostBinding, location:sloPostLocation, active:params.active, isDefault:params.sp?.slo?.post?.isdefault)
 			serviceProvider.addToSingleLogoutServices(sloPost)
 			sloPost.validate()
-			sloIndex++
 		}
 		
 		// Cryptography
