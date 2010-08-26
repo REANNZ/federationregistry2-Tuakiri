@@ -8,6 +8,10 @@ testDataConfig {
 			def i = 1
 			name = {-> "name${i++}" } 
 		}
+		'fedreg.core.EntityDescriptor' {
+			def i = 1
+			entityID = {-> "http://test.case.com/${i++}" } 
+		}
 	}
 }
 
