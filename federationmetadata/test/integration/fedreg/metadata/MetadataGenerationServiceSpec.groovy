@@ -26,10 +26,10 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 	}
 	
 	def setupBindings() {
-		soap = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:SOAP', description:'').save()
-		httpRedirect = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect', description:'').save()
-		httpPost = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST', description:'').save()
-		httpArtifact = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact', description:'').save()
+		soap = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:SOAP', description:'')
+		httpRedirect = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect', description:'')
+		httpPost = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST', description:'')
+		httpArtifact = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact', description:'')
 	}
 	
 	def loadResult(file) {
@@ -44,7 +44,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		setup:
 		setupBindings()
 		def location = new UrlURI(uri:"https://test.example.com/SSO")
-		def sso = SingleSignOnService.build(active:true, approved:true, binding:httpPost, location:location).save()
+		def sso = SingleSignOnService.build(active:true, approved:true, binding:httpPost, location:location)
 		def result = loadResult('testvalidendpointgeneration')
 		
 		when:
@@ -60,7 +60,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		setupBindings()
 		def location = new UrlURI(uri:"https://test.example.com/SSO")
 		def responseLocation = new UrlURI(uri:"https://test.example.com/response")
-		def sso = SingleSignOnService.build(active:true, approved:true, binding:httpPost, location:location, responseLocation:responseLocation).save()
+		def sso = SingleSignOnService.build(active:true, approved:true, binding:httpPost, location:location, responseLocation:responseLocation)
 		def result = loadResult('testvalidendpointgenerationresponse')
 		
 		when:
@@ -75,7 +75,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		setup:
 		setupBindings()
 		def location = new UrlURI(uri:"https://test.example.com/SSO")
-		def sso = SingleSignOnService.build(active:false, approved:true, binding:httpPost, location:location).save()
+		def sso = SingleSignOnService.build(active:false, approved:true, binding:httpPost, location:location)
 		
 		when:
 		metadataGenerationService.endpoint(builder, "SingleSignOnService", sso)
@@ -89,7 +89,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		setup:
 		setupBindings()
 		def location = new UrlURI(uri:"https://test.example.com/SSO")
-		def sso = SingleSignOnService.build(active:true, approved:false, binding:httpPost, location:location).save()
+		def sso = SingleSignOnService.build(active:true, approved:false, binding:httpPost, location:location)
 		
 		when:
 		metadataGenerationService.endpoint(builder, "SingleSignOnService", sso)
@@ -103,7 +103,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		setup:
 		setupBindings()
 		def location = new UrlURI(uri:"https://test.example.com/artifact")
-		def ars = ArtifactResolutionService.build(active:true, approved:true, binding:httpPost, location:location).save()
+		def ars = ArtifactResolutionService.build(active:true, approved:true, binding:httpPost, location:location)
 		def result = loadResult('testvalidindexedendpointgeneration')
 		
 		when:
@@ -119,7 +119,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		setupBindings()
 		def location = new UrlURI(uri:"https://test.example.com/artifact")
 		def responseLocation = new UrlURI(uri:"https://test.example.com/response")
-		def ars = ArtifactResolutionService.build(active:true, approved:true, binding:httpPost, location:location, responseLocation:responseLocation).save()
+		def ars = ArtifactResolutionService.build(active:true, approved:true, binding:httpPost, location:location, responseLocation:responseLocation)
 		def result = loadResult('testvalidindexedendpointgenerationresponse')
 		
 		when:
@@ -134,7 +134,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		setup:
 		setupBindings()
 		def location = new UrlURI(uri:"https://test.example.com/artifact")
-		def ars = ArtifactResolutionService.build(active:false, approved:true, binding:httpPost, location:location).save()
+		def ars = ArtifactResolutionService.build(active:false, approved:true, binding:httpPost, location:location)
 		
 		when:
 		metadataGenerationService.indexedEndpoint(builder, "ArtifactResolutionService", ars, 1)
@@ -148,7 +148,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		setup:
 		setupBindings()
 		def location = new UrlURI(uri:"https://test.example.com/artifact")
-		def ars = ArtifactResolutionService.build(active:true, approved:false, binding:httpPost, location:location).save()
+		def ars = ArtifactResolutionService.build(active:true, approved:false, binding:httpPost, location:location)
 		
 		when:
 		metadataGenerationService.indexedEndpoint(builder, "ArtifactResolutionService", ars, 1)
@@ -160,7 +160,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 	
 	def "Test valid organization generation"() {
 		setup:
-		def organization = Organization.build(name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com")).save()
+		def organization = Organization.build(name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
 		def result = loadResult('testvalidorganization')
 		
 		when:
@@ -173,13 +173,13 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 	
 	def "Test valid contact person generation"() {
 		setup:
-		def email = new MailURI(uri:"test@example.com").save()
-		def home = new TelNumURI(uri:"(07) 1111 1111").save()
-		def work = new TelNumURI(uri:"(567) 222 22222").save()
-		def mobile = new TelNumURI(uri:"0413 867 208").save()
-		def contact = Contact.build(givenName:"Test", surname:"User", email:email, homePhone:home, workPhone:work, mobilePhone:mobile).save()
-		def admin = ContactType.build(name:"administrative").save()
-		def contactPerson = ContactPerson.build(contact:contact, type:admin).save()
+		def email = new MailURI(uri:"test@example.com")
+		def home = new TelNumURI(uri:"(07) 1111 1111")
+		def work = new TelNumURI(uri:"(567) 222 22222")
+		def mobile = new TelNumURI(uri:"0413 867 208")
+		def contact = Contact.build(givenName:"Test", surname:"User", email:email, homePhone:home, workPhone:work, mobilePhone:mobile)
+		def admin = ContactType.build(name:"administrative")
+		def contactPerson = ContactPerson.build(contact:contact, type:admin)
 		def result = loadResult('testvalidcontact')
 		
 		when:
@@ -192,15 +192,103 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 	
 	def "Test valid contact person generation with only mobile phone"() {
 		setup:
-		def email = new MailURI(uri:"test@example.com").save()
-		def mobile = new TelNumURI(uri:"0413 867 208").save()
-		def contact = Contact.build(givenName:"Test", surname:"User", email:email, mobilePhone:mobile).save()
-		def admin = ContactType.build(name:"administrative").save()
-		def contactPerson = ContactPerson.build(contact:contact, type:admin).save()
+		def email = new MailURI(uri:"test@example.com")
+		def mobile = new TelNumURI(uri:"0413 867 208")
+		def contact = Contact.build(givenName:"Test", surname:"User", email:email, mobilePhone:mobile)
+		def admin = ContactType.build(name:"administrative")
+		def contactPerson = ContactPerson.build(contact:contact, type:admin)
 		def result = loadResult('testvalidcontactonlymobile')
 		
 		when:
 		metadataGenerationService.contactPerson(builder, contactPerson)
+		
+		then:
+		def xml = writer.toString()
+		xml == result
+	}
+	
+	def "Test valid EntitiesDescriptor generation"() {
+		setup:
+		def organization = Organization.build(name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
+		def email = new MailURI(uri:"test@example.com")
+		def home = new TelNumURI(uri:"(07) 1111 1111")
+		def work = new TelNumURI(uri:"(567) 222 22222")
+		def mobile = new TelNumURI(uri:"0413 867 208")
+		def contact = Contact.build(givenName:"Test", surname:"User", email:email, homePhone:home, workPhone:work, mobilePhone:mobile)
+		def admin = ContactType.build(name:"administrative")
+		def contactPerson = ContactPerson.build(contact:contact, type:admin)
+		
+		def entitiesDescriptor = new EntitiesDescriptor(name:"some.test.name")
+		(1..2).each { i ->
+			def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.example.com/myuniqueID$i", active:true, approved:true)
+			entityDescriptor.addToContacts(contactPerson)
+			entityDescriptor.addToIdpDescriptors(IDPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true))
+			entityDescriptor.addToSpDescriptors(SPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true))
+			entityDescriptor.addToAttributeAuthorityDescriptors(AttributeAuthorityDescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true))
+			
+			entitiesDescriptor.addToEntityDescriptors(entityDescriptor)
+		}
+		
+		def keyInfo = new CAKeyInfo(certificate:new CACertificate(data:loadPK()))
+		def certificate2 = cryptoService.createCertificate(loadPK())
+		def keyInfo2 = new CAKeyInfo(certificate:new CACertificate(data:loadPK()))
+		def certificateAuthorities = []
+		certificateAuthorities.add(keyInfo)
+		certificateAuthorities.add(keyInfo2)
+		
+		def validUntil = new GregorianCalendar(2009, Calendar.JULY, 22)
+		def cacheExpires = new GregorianCalendar(2009, Calendar.JULY, 06)
+			
+		def result = loadResult('testvalidentitiesdescriptor')
+		
+		
+		when:
+		metadataGenerationService.entitiesDescriptor(builder, entitiesDescriptor, validUntil.getTime(), cacheExpires.getTime(), certificateAuthorities)
+		
+		then:
+		def xml = writer.toString()
+		xml == result
+	}
+	
+	def "Test valid EntitiesDescriptor generation with embedded entitiesdescriptors"() {
+		setup:
+		def organization = Organization.build(name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
+		def email = new MailURI(uri:"test@example.com")
+		def home = new TelNumURI(uri:"(07) 1111 1111")
+		def work = new TelNumURI(uri:"(567) 222 22222")
+		def mobile = new TelNumURI(uri:"0413 867 208")
+		def contact = Contact.build(givenName:"Test", surname:"User", email:email, homePhone:home, workPhone:work, mobilePhone:mobile)
+		def admin = ContactType.build(name:"administrative")
+		def contactPerson = ContactPerson.build(contact:contact, type:admin)
+		
+		def entitiesDescriptor = new EntitiesDescriptor(name:"some.test.name")
+		def entitiesDescriptor1 = new EntitiesDescriptor()
+		entitiesDescriptor.addToEntitiesDescriptors(entitiesDescriptor1)
+		(1..2).each { i ->
+			def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.example.com/myuniqueID$i", active:true, approved:true)
+			entityDescriptor.addToContacts(contactPerson)
+			entityDescriptor.addToIdpDescriptors(IDPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true))
+			entityDescriptor.addToSpDescriptors(SPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true))
+			entityDescriptor.addToAttributeAuthorityDescriptors(AttributeAuthorityDescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true))
+			
+			entitiesDescriptor1.addToEntityDescriptors(entityDescriptor)
+		}
+		
+		def keyInfo = new CAKeyInfo(certificate:new CACertificate(data:loadPK()))
+		def certificate2 = cryptoService.createCertificate(loadPK())
+		def keyInfo2 = new CAKeyInfo(certificate:new CACertificate(data:loadPK()))
+		def certificateAuthorities = []
+		certificateAuthorities.add(keyInfo)
+		certificateAuthorities.add(keyInfo2)
+		
+		def validUntil = new GregorianCalendar(2009, Calendar.JULY, 22)
+		def cacheExpires = new GregorianCalendar(2009, Calendar.JULY, 06)
+			
+		def result = loadResult('testvalidentitiesdescriptorembedded')
+		
+		
+		when:
+		metadataGenerationService.entitiesDescriptor(builder, entitiesDescriptor, validUntil.getTime(), cacheExpires.getTime(), certificateAuthorities)
 		
 		then:
 		def xml = writer.toString()
@@ -231,16 +319,16 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		xml == ""
 	}
 	
-	def "Test valid EntityDescriptor validation"() {
+	def "Test valid EntityDescriptor generation"() {
 		setup:
 		def organization = Organization.build(name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
-		def email = new MailURI(uri:"test@example.com").save()
-		def home = new TelNumURI(uri:"(07) 1111 1111").save()
-		def work = new TelNumURI(uri:"(567) 222 22222").save()
-		def mobile = new TelNumURI(uri:"0413 867 208").save()
-		def contact = Contact.build(givenName:"Test", surname:"User", email:email, homePhone:home, workPhone:work, mobilePhone:mobile).save()
-		def admin = ContactType.build(name:"administrative").save()
-		def contactPerson = ContactPerson.build(contact:contact, type:admin).save()
+		def email = new MailURI(uri:"test@example.com")
+		def home = new TelNumURI(uri:"(07) 1111 1111")
+		def work = new TelNumURI(uri:"(567) 222 22222")
+		def mobile = new TelNumURI(uri:"0413 867 208")
+		def contact = Contact.build(givenName:"Test", surname:"User", email:email, homePhone:home, workPhone:work, mobilePhone:mobile)
+		def admin = ContactType.build(name:"administrative")
+		def contactPerson = ContactPerson.build(contact:contact, type:admin)
 		
 		def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.example.com/myuniqueID", active:true, approved:true)
 		entityDescriptor.addToContacts(contactPerson)
@@ -258,7 +346,6 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		
 		then:
 		def xml = writer.toString()
-		println xml
 		xml == result
 	}
 	
@@ -289,18 +376,18 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 	def "Test valid IDPSSODescriptor generation"() {
 		setup:
 		setupBindings()
-		def saml2Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:2.0:protocol').save()
-		def saml1Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:1.1:protocol urn:mace:shibboleth:1.0').save()
+		def saml2Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:2.0:protocol')
+		def saml1Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:1.1:protocol urn:mace:shibboleth:1.0')
 		def protocolSupportEnumerations = [saml1Prot, saml2Prot]
 		
-		def organization = Organization.build(name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com")).save()
-		def email = new MailURI(uri:"test@example.com").save()
-		def home = new TelNumURI(uri:"(07) 1111 1111").save()
-		def work = new TelNumURI(uri:"(567) 222 22222").save()
-		def mobile = new TelNumURI(uri:"0413 867 208").save()
-		def contact = Contact.build(givenName:"Test", surname:"User", email:email, homePhone:home, workPhone:work, mobilePhone:mobile).save()
-		def admin = ContactType.build(name:"administrative").save()
-		def contactPerson = ContactPerson.build(contact:contact, type:admin).save()
+		def organization = Organization.build(name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
+		def email = new MailURI(uri:"test@example.com")
+		def home = new TelNumURI(uri:"(07) 1111 1111")
+		def work = new TelNumURI(uri:"(567) 222 22222")
+		def mobile = new TelNumURI(uri:"0413 867 208")
+		def contact = Contact.build(givenName:"Test", surname:"User", email:email, homePhone:home, workPhone:work, mobilePhone:mobile)
+		def admin = ContactType.build(name:"administrative")
+		def contactPerson = ContactPerson.build(contact:contact, type:admin)
 		
 		def certificate = cryptoService.createCertificate(loadPK())
 		def keyInfo = new KeyInfo(keyName:"key1", certificate:certificate)
@@ -351,8 +438,6 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		idp.addToAttributes(attr2)
 		idp.addToAttributes(attr3)
 		
-		idp.save()
-		
 		def result = loadResult('testvalididpssodescriptor')
 		
 		when:
@@ -390,18 +475,18 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 	def "Test valid SPSSODescriptor generation"() {
 		setup:
 		setupBindings()
-		def saml2Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:2.0:protocol').save()
-		def saml1Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:1.1:protocol urn:mace:shibboleth:1.0').save()
+		def saml2Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:2.0:protocol')
+		def saml1Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:1.1:protocol urn:mace:shibboleth:1.0')
 		def protocolSupportEnumerations = [saml1Prot, saml2Prot]
 		
-		def organization = Organization.build(name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com")).save()
-		def email = new MailURI(uri:"test@example.com").save()
-		def home = new TelNumURI(uri:"(07) 1111 1111").save()
-		def work = new TelNumURI(uri:"(567) 222 22222").save()
-		def mobile = new TelNumURI(uri:"0413 867 208").save()
-		def contact = Contact.build(givenName:"Test", surname:"User", email:email, homePhone:home, workPhone:work, mobilePhone:mobile).save()
-		def admin = ContactType.build(name:"administrative").save()
-		def contactPerson = ContactPerson.build(contact:contact, type:admin).save()
+		def organization = Organization.build(name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
+		def email = new MailURI(uri:"test@example.com")
+		def home = new TelNumURI(uri:"(07) 1111 1111")
+		def work = new TelNumURI(uri:"(567) 222 22222")
+		def mobile = new TelNumURI(uri:"0413 867 208")
+		def contact = Contact.build(givenName:"Test", surname:"User", email:email, homePhone:home, workPhone:work, mobilePhone:mobile)
+		def admin = ContactType.build(name:"administrative")
+		def contactPerson = ContactPerson.build(contact:contact, type:admin)
 		
 		def certificate = cryptoService.createCertificate(loadPK())
 		def keyInfo = new KeyInfo(keyName:"key1", certificate:certificate)
@@ -457,8 +542,6 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		sp.addToAssertionConsumerServices(acs)
 		sp.addToAttributeConsumingServices(attrService)
 		
-		sp.save()
-		
 		def result = loadResult('testvalidspssodescriptor')
 		
 		when:
@@ -496,18 +579,18 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 	def "Test valid AttributeAuthorityDescriptor creation when collaborating with IDP"() {
 		setup:
 		setupBindings()
-		def saml2Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:2.0:protocol').save()
-		def saml1Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:1.1:protocol urn:mace:shibboleth:1.0').save()
+		def saml2Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:2.0:protocol')
+		def saml1Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:1.1:protocol urn:mace:shibboleth:1.0')
 		def protocolSupportEnumerations = [saml1Prot, saml2Prot]
 
-		def organization = Organization.build(name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com")).save()
-		def email = new MailURI(uri:"test@example.com").save()
-		def home = new TelNumURI(uri:"(07) 1111 1111").save()
-		def work = new TelNumURI(uri:"(567) 222 22222").save()
-		def mobile = new TelNumURI(uri:"0413 867 208").save()
-		def contact = Contact.build(givenName:"Test", surname:"User", email:email, homePhone:home, workPhone:work, mobilePhone:mobile).save()
-		def admin = ContactType.build(name:"administrative").save()
-		def contactPerson = ContactPerson.build(contact:contact, type:admin).save()
+		def organization = Organization.build(name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
+		def email = new MailURI(uri:"test@example.com")
+		def home = new TelNumURI(uri:"(07) 1111 1111")
+		def work = new TelNumURI(uri:"(567) 222 22222")
+		def mobile = new TelNumURI(uri:"0413 867 208")
+		def contact = Contact.build(givenName:"Test", surname:"User", email:email, homePhone:home, workPhone:work, mobilePhone:mobile)
+		def admin = ContactType.build(name:"administrative")
+		def contactPerson = ContactPerson.build(contact:contact, type:admin)
 
 		def certificate = cryptoService.createCertificate(loadPK())
 		def keyInfo = new KeyInfo(keyName:"key1", certificate:certificate)
@@ -544,14 +627,12 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		idp.addToAttributes(attr2)
 		idp.addToAttributes(attr3)
 		
-		idp.save()
-		
 		def aa = AttributeAuthorityDescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, approved:true, active:true)
 		aa.collaborator = idp
-		aa.save()
+		aa
 		
 		idp.collaborator = aa
-		idp.save()
+		idp
 		
 		def result = loadResult('testvalidaadescriptor')
 		
@@ -566,18 +647,18 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 	def "Test valid AttributeAuthorityDescriptor creation when not collaborating with IDP"() {
 		setup:
 		setupBindings()
-		def saml2Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:2.0:protocol').save()
-		def saml1Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:1.1:protocol urn:mace:shibboleth:1.0').save()
+		def saml2Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:2.0:protocol')
+		def saml1Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:1.1:protocol urn:mace:shibboleth:1.0')
 		def protocolSupportEnumerations = [saml1Prot, saml2Prot]
 
-		def organization = Organization.build(name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com")).save()
-		def email = new MailURI(uri:"test@example.com").save()
-		def home = new TelNumURI(uri:"(07) 1111 1111").save()
-		def work = new TelNumURI(uri:"(567) 222 22222").save()
-		def mobile = new TelNumURI(uri:"0413 867 208").save()
-		def contact = Contact.build(givenName:"Test", surname:"User", email:email, homePhone:home, workPhone:work, mobilePhone:mobile).save()
-		def admin = ContactType.build(name:"administrative").save()
-		def contactPerson = ContactPerson.build(contact:contact, type:admin).save()
+		def organization = Organization.build(name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
+		def email = new MailURI(uri:"test@example.com")
+		def home = new TelNumURI(uri:"(07) 1111 1111")
+		def work = new TelNumURI(uri:"(567) 222 22222")
+		def mobile = new TelNumURI(uri:"0413 867 208")
+		def contact = Contact.build(givenName:"Test", surname:"User", email:email, homePhone:home, workPhone:work, mobilePhone:mobile)
+		def admin = ContactType.build(name:"administrative")
+		def contactPerson = ContactPerson.build(contact:contact, type:admin)
 
 		def certificate = cryptoService.createCertificate(loadPK())
 		def keyInfo = new KeyInfo(keyName:"key1", certificate:certificate)
@@ -613,9 +694,6 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		aa.addToAttributes(attr1)
 		aa.addToAttributes(attr2)
 		aa.addToAttributes(attr3)
-		
-		aa.save()
-
 		
 		def result = loadResult('testvalidaadescriptor')	// deliberate both paths should give same outcome
 		

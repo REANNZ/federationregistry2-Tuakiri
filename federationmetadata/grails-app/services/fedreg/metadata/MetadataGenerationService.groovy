@@ -1,8 +1,11 @@
 package fedreg.metadata
 
 import groovy.xml.MarkupBuilder
+import java.text.SimpleDateFormat
 
 class MetadataGenerationService {
+	
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
 	
 	def localizedName(builder, type, lang, content) {
 		builder."$type"('xml:lang':lang, content)
@@ -36,6 +39,84 @@ class MetadataGenerationService {
 		}
 	}
 	
+	def caKeyInfo(builder, keyInfo) {
+		builder.'ds:KeyInfo'('xmlns:ds':'http://www.w3.org/2000/09/xmldsig#') {
+			if(keyInfo.keyName)
+				'ds:KeyName'(keyInfo.keyName)
+			'ds:X509Data'() {
+				def data = keyInfo.certificate.data
+				if(data.startsWith('-----BEGIN CERTIFICATE-----'))
+					data = data.replace('-----BEGIN CERTIFICATE-----', '')
+				if(data.endsWith('-----END CERTIFICATE-----'))
+					data = data.replace('-----END CERTIFICATE-----', '')
+				'ds:X509Certificate'(data)
+			}
+		}
+	}
+	
+	def keyInfo(builder, keyInfo) {
+		builder.'ds:KeyInfo'('xmlns:ds':'http://www.w3.org/2000/09/xmldsig#') {
+			if(keyInfo.keyName)
+				'ds:KeyName'(keyInfo.keyName)
+			'ds:X509Data'() {
+				def data = keyInfo.certificate.data
+				if(data?.startsWith('-----BEGIN CERTIFICATE-----'))
+					data = data.replace('-----BEGIN CERTIFICATE-----', '')
+				if(data?.endsWith('-----END CERTIFICATE-----'))
+					data = data.replace('-----END CERTIFICATE-----', '')
+				'ds:X509Certificate'(data)
+			}
+		}
+	}
+	
+	def keyDescriptor(builder, keyDescriptor) {
+		builder.KeyDescriptor(use: keyDescriptor.keyType) {
+			keyInfo(builder, keyDescriptor.keyInfo)
+			if(keyDescriptor.encryptionMethod) {
+				EncryptionMethod(Algorithm:keyDescriptor.encryptionMethod.algorithm) {
+					if(keyDescriptor.encryptionMethod.keySize)
+						'xenc:KeySize'('xmlns:xenc':'http://www.w3.org/2001/04/xmlenc#', keyDescriptor.encryptionMethod.keySize)
+					if(keyDescriptor.encryptionMethod.oaeParams)
+					'xenc:OAEPparams'('xmlns:xenc':'http://www.w3.org/2001/04/xmlenc#', keyDescriptor.encryptionMethod.oaeParams)
+				}
+			}
+		}
+	}
+	
+	def entitiesDescriptor(builder, entitiesDescriptor, validUntil, cacheDuration, certificateAuthorities) {
+		builder.EntitiesDescriptor(validUntil:sdf.format(validUntil), cacheDuration:sdf.format(cacheDuration), Name:entitiesDescriptor.name, 
+			"xmlns":"urn:oasis:names:tc:SAML:2.0:metadata", "xmlns:xsi":"http://www.w3.org/2001/XMLSchema-instance", 
+			"xsi:schemaLocation":"urn:oasis:names:tc:SAML:2.0:metadata sstc-saml-schema-metadata-2.0.xsd urn:mace:shibboleth:metadata:1.0 shibboleth-metadata-1.0.xsd http://www.w3.org/2000/09/xmldsig# xmldsig-core-schema.xsd") {
+				
+			if(certificateAuthorities && certificateAuthorities.size() != 0) {
+				builder.Extensions() {
+					builder."shibmd:KeyAuthority"("xmlns:shibmd":"urn:mace:shibboleth:metadata:1.0", VerifyDepth: 5) {
+						certificateAuthorities.each { ca ->
+							caKeyInfo(builder, ca)
+						}
+					}
+				}
+			}
+			entitiesDescriptor.entitiesDescriptors.each { eds ->
+				this.entitiesDescriptor(builder, eds)
+			}
+			entitiesDescriptor.entityDescriptors?.sort{it.entityID}.each { ed ->
+				entityDescriptor(builder, ed)
+			}
+		}
+	}
+	
+	def entitiesDescriptor(builder, entitiesDescriptor) {
+		builder.EntitiesDescriptor() {
+			entitiesDescriptor.entitiesDescriptors.each { eds ->
+				this.entitiesDescriptor(builder, eds)
+			}
+			entitiesDescriptor.entityDescriptors?.sort{it.entityID}.each { ed ->
+				entityDescriptor(builder, ed)
+			}
+		}
+	}
+	
 	def entityDescriptor(builder, entityDescriptor) {
 		if(entityDescriptor.approved && entityDescriptor.active) {
 			builder.EntityDescriptor(entityID:entityDescriptor.entityID) {
@@ -44,31 +125,6 @@ class MetadataGenerationService {
 				entityDescriptor.attributeAuthorityDescriptors.each { aa -> attributeAuthorityDescriptor(builder, aa)}
 				organization(builder, entityDescriptor.organization)
 				entityDescriptor.contacts?.sort{it.contact.email.uri}.each{cp -> contactPerson(builder, cp)}
-			}
-		}
-	}
-	
-	def keyDescriptor(builder, keyDescriptor) {
-		builder.KeyDescriptor(use: keyDescriptor.keyType) {
-			'ds:KeyInfo'('xmlns:ds':'http://www.w3.org/2000/09/xmldsig#') {
-				if(keyDescriptor.keyInfo.keyName)
-					'ds:KeyName'(keyDescriptor.keyInfo.keyName)
-				'ds:X509Data'() {
-					def data = keyDescriptor.keyInfo.certificate.data
-					if(data.startsWith('-----BEGIN CERTIFICATE-----'))
-						data = data.replace('-----BEGIN CERTIFICATE-----', '')
-					if(data.endsWith('-----END CERTIFICATE-----'))
-						data = data.replace('-----END CERTIFICATE-----', '')
-					'ds:X509Certificate'(data)
-				}
-			}
-			if(keyDescriptor.encryptionMethod) {
-				EncryptionMethod(Algorithm:keyDescriptor.encryptionMethod.algorithm) {
-					if(keyDescriptor.encryptionMethod.keySize)
-						'xenc:KeySize'('xmlns:xenc':'http://www.w3.org/2001/04/xmlenc#', keyDescriptor.encryptionMethod.keySize)
-					if(keyDescriptor.encryptionMethod.oaeParams)
-					'xenc:OAEPparams'('xmlns:xenc':'http://www.w3.org/2001/04/xmlenc#', keyDescriptor.encryptionMethod.oaeParams)
-				}
 			}
 		}
 	}
