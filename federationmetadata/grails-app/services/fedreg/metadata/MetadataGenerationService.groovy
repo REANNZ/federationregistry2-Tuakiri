@@ -36,6 +36,18 @@ class MetadataGenerationService {
 		}
 	}
 	
+	def entityDescriptor(builder, entityDescriptor) {
+		if(entityDescriptor.approved && entityDescriptor.active) {
+			builder.EntityDescriptor(entityID:entityDescriptor.entityID) {
+				entityDescriptor.idpDescriptors.each { idp -> idpSSODescriptor(builder, idp) }
+				entityDescriptor.spDescriptors.each { sp -> spSSODescriptor(builder, sp) }
+				entityDescriptor.attributeAuthorityDescriptors.each { aa -> attributeAuthorityDescriptor(builder, aa)}
+				organization(builder, entityDescriptor.organization)
+				entityDescriptor.contacts?.sort{it.contact.email.uri}.each{cp -> contactPerson(builder, cp)}
+			}
+		}
+	}
+	
 	def keyDescriptor(builder, keyDescriptor) {
 		builder.KeyDescriptor(use: keyDescriptor.keyType) {
 			'ds:KeyInfo'('xmlns:ds':'http://www.w3.org/2000/09/xmldsig#') {
@@ -127,47 +139,54 @@ class MetadataGenerationService {
 	}
 	
 	def idpSSODescriptor(builder, idpSSODescriptor) {
-		builder.IDPSSODescriptor(protocolSupportEnumeration: idpSSODescriptor.protocolSupportEnumerations.sort{it.uri}.collect({it.uri}).join(' '), WantAuthnRequestsSigned:idpSSODescriptor.wantAuthnRequestsSigned) {
-			roleDescriptor(builder, idpSSODescriptor)
-			ssoDescriptor(builder, idpSSODescriptor)
+		if(idpSSODescriptor.approved && idpSSODescriptor.active) {
+			builder.IDPSSODescriptor(protocolSupportEnumeration: idpSSODescriptor.protocolSupportEnumerations.sort{it.uri}.collect({it.uri}).join(' '), WantAuthnRequestsSigned:idpSSODescriptor.wantAuthnRequestsSigned) {
+				roleDescriptor(builder, idpSSODescriptor)
+				ssoDescriptor(builder, idpSSODescriptor)
 			
-			idpSSODescriptor.singleSignOnServices.sort{it.location.uri}.each{ sso -> endpoint(builder, "SingleSignOnService", sso) }
-			idpSSODescriptor.nameIDMappingServices.sort{it.location.uri}.each{ nidms -> endpoint(builder, "NameIDMappingService", nidms) }
-			idpSSODescriptor.assertionIDRequestServices.sort{it.location.uri}.each{ aidrs -> endpoint(builder, "AssertionIDRequestService", aidrs) }
-			idpSSODescriptor.attributeProfiles?.sort{it.location.uri}.each{ ap -> samlURI(builder, "AttributeProfile", ap) }
-			idpSSODescriptor.attributes.sort{it.base.name}.each{ attr -> attribute(builder, attr)}
+				idpSSODescriptor.singleSignOnServices?.sort{it.location.uri}.each{ sso -> endpoint(builder, "SingleSignOnService", sso) }
+				idpSSODescriptor.nameIDMappingServices?.sort{it.location.uri}.each{ nidms -> endpoint(builder, "NameIDMappingService", nidms) }
+				idpSSODescriptor.assertionIDRequestServices?.sort{it.location.uri}.each{ aidrs -> endpoint(builder, "AssertionIDRequestService", aidrs) }
+				idpSSODescriptor.attributeProfiles?.sort{it.location.uri}.each{ ap -> samlURI(builder, "AttributeProfile", ap) }
+				idpSSODescriptor.attributes?.sort{it.base.name}.each{ attr -> attribute(builder, attr)}
+			}
 		}
 	}
 	
 	def spSSODescriptor(builder, spSSODescriptor) {
-		builder.SPSSODescriptor(protocolSupportEnumeration: spSSODescriptor.protocolSupportEnumerations.sort{it.uri}.collect({it.uri}).join(' '), AuthnRequestsSigned:spSSODescriptor.authnRequestsSigned, WantAssertionsSigned:spSSODescriptor.wantAssertionsSigned) {
-			roleDescriptor(builder, spSSODescriptor)
-			ssoDescriptor(builder, spSSODescriptor)
+		if(spSSODescriptor.active && spSSODescriptor.approved) {
+			builder.SPSSODescriptor(protocolSupportEnumeration: spSSODescriptor.protocolSupportEnumerations.sort{it.uri}.collect({it.uri}).join(' '), AuthnRequestsSigned:spSSODescriptor.authnRequestsSigned, WantAssertionsSigned:spSSODescriptor.wantAssertionsSigned) {
+				roleDescriptor(builder, spSSODescriptor)
+				ssoDescriptor(builder, spSSODescriptor)
 			
-			spSSODescriptor.assertionConsumerServices.sort{it.location.uri}.eachWithIndex{ ars, i -> indexedEndpoint(builder, "AssertionConsumerService", ars, i+1) }
-			spSSODescriptor.attributeConsumingServices.sort{it.id}.eachWithIndex{ acs, i -> attributeConsumingService(builder, acs, i) }
+				spSSODescriptor.assertionConsumerServices?.sort{it.location.uri}.eachWithIndex{ ars, i -> indexedEndpoint(builder, "AssertionConsumerService", ars, i+1) }
+				spSSODescriptor.attributeConsumingServices?.sort{it.id}.eachWithIndex{ acs, i -> attributeConsumingService(builder, acs, i) }
+			}
 		}
 	}
 	
 	def attributeAuthorityDescriptor(builder, aaDescriptor) {
-		builder.AttributeAuthorityDescriptor(protocolSupportEnumeration: aaDescriptor.protocolSupportEnumerations.sort{it.uri}.collect({it.uri}).join(' ')) {
-			if(aaDescriptor.collaborator) {
-				// We don't currently provide direct AA manipulation to reduce general end user complexity.
-				// So where a collaborative relationship exists we use all common data from the IDP to render the AA
-				roleDescriptor(builder, aaDescriptor.collaborator)	
-				aaDescriptor.attributeServices?.sort{it.location.uri}.each{ attrserv -> endpoint(builder, "AttributeService", attrserv) }
-				aaDescriptor.collaborator.assertionIDRequestServices?.sort{it.location.uri}.each{ aidrs -> endpoint(builder, "AssertionIDRequestService", aidrs) }
-				aaDescriptor.collaborator.nameIDFormats?.sort{it.location.uri}.each{ nidf -> samlURI(builder, "NameIDFormat", nidf) }
-				aaDescriptor.collaborator.attributeProfiles?.sort{it.location.uri}.each{ ap -> samlURI(builder, "AttributeProfile", ap) }
-				aaDescriptor.collaborator.attributes?.sort{it.base.name}.each{ attr -> attribute(builder, attr) }
-			}
-			else {
-				roleDescriptor(builder, aaDescriptor)	
-				aaDescriptor.attributeServices?.sort{it.location.uri}.each{ attrserv -> endpoint(builder, "AttributeService", attrserv) }
-				aaDescriptor.assertionIDRequestServices?.sort{it.location.uri}.each{ aidrs -> endpoint(builder, "AssertionIDRequestService", aidrs) }
-				aaDescriptor.nameIDFormats?.sort{it.location.uri}.each{ nidf -> samlURI(builder, "NameIDFormat", nidf) }
-				aaDescriptor.attributeProfiles?.sort{it.location.uri}.each{ ap -> samlURI(builder, "AttributeProfile", ap) }
-				aaDescriptor.attributes?.sort{it.base.name}.each{ attr -> attribute(builder, attr) }
+		if(aaDescriptor.approved && aaDescriptor.active) {
+			builder.AttributeAuthorityDescriptor(protocolSupportEnumeration: aaDescriptor.protocolSupportEnumerations.sort{it.uri}.collect({it.uri}).join(' ')) {
+				if(aaDescriptor.collaborator) {
+					// We don't currently provide direct AA manipulation to reduce general end user complexity.
+					// So where a collaborative relationship exists we use all common data from the IDP to render the AA
+					// If it isn't collaborative we'll assume manual DB intervention and render direct ;-).
+					roleDescriptor(builder, aaDescriptor.collaborator)	
+					aaDescriptor.attributeServices?.sort{it.location.uri}.each{ attrserv -> endpoint(builder, "AttributeService", attrserv) }
+					aaDescriptor.collaborator.assertionIDRequestServices?.sort{it.location.uri}.each{ aidrs -> endpoint(builder, "AssertionIDRequestService", aidrs) }
+					aaDescriptor.collaborator.nameIDFormats?.sort{it.location.uri}.each{ nidf -> samlURI(builder, "NameIDFormat", nidf) }
+					aaDescriptor.collaborator.attributeProfiles?.sort{it.location.uri}.each{ ap -> samlURI(builder, "AttributeProfile", ap) }
+					aaDescriptor.collaborator.attributes?.sort{it.base.name}.each{ attr -> attribute(builder, attr) }
+				}
+				else {
+					roleDescriptor(builder, aaDescriptor)	
+					aaDescriptor.attributeServices?.sort{it.location.uri}.each{ attrserv -> endpoint(builder, "AttributeService", attrserv) }
+					aaDescriptor.assertionIDRequestServices?.sort{it.location.uri}.each{ aidrs -> endpoint(builder, "AssertionIDRequestService", aidrs) }
+					aaDescriptor.nameIDFormats?.sort{it.location.uri}.each{ nidf -> samlURI(builder, "NameIDFormat", nidf) }
+					aaDescriptor.attributeProfiles?.sort{it.location.uri}.each{ ap -> samlURI(builder, "AttributeProfile", ap) }
+					aaDescriptor.attributes?.sort{it.base.name}.each{ attr -> attribute(builder, attr) }
+				}
 			}
 		}
 	}

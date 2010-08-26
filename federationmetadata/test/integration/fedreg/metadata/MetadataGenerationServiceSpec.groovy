@@ -206,6 +206,85 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def xml = writer.toString()
 		xml == result
 	}
+	
+	def "Test inactive EntityDescriptor generation"() {
+		setup:
+		def ed = EntityDescriptor.build(active:false)
+		
+		when:
+		metadataGenerationService.entityDescriptor(builder, ed)
+		
+		then:
+		def xml = writer.toString()
+		xml == ""
+	}
+	
+	def "Test not approved EntityDescriptor generation"() {
+		setup:
+		def ed = EntityDescriptor.build(approved:false)
+		
+		when:
+		metadataGenerationService.entityDescriptor(builder, ed)
+		
+		then:
+		def xml = writer.toString()
+		xml == ""
+	}
+	
+	def "Test valid EntityDescriptor validation"() {
+		setup:
+		def organization = Organization.build(name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
+		def email = new MailURI(uri:"test@example.com").save()
+		def home = new TelNumURI(uri:"(07) 1111 1111").save()
+		def work = new TelNumURI(uri:"(567) 222 22222").save()
+		def mobile = new TelNumURI(uri:"0413 867 208").save()
+		def contact = Contact.build(givenName:"Test", surname:"User", email:email, homePhone:home, workPhone:work, mobilePhone:mobile).save()
+		def admin = ContactType.build(name:"administrative").save()
+		def contactPerson = ContactPerson.build(contact:contact, type:admin).save()
+		
+		def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.example.com/myuniqueID", active:true, approved:true)
+		entityDescriptor.addToContacts(contactPerson)
+		entityDescriptor.addToIdpDescriptors(IDPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true))
+		entityDescriptor.addToIdpDescriptors(IDPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true))
+		entityDescriptor.addToSpDescriptors(SPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true))
+		entityDescriptor.addToSpDescriptors(SPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true))
+		entityDescriptor.addToSpDescriptors(SPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true))
+		entityDescriptor.addToAttributeAuthorityDescriptors(AttributeAuthorityDescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true))
+		
+		def result = loadResult('testvalidentitydescriptor')
+		
+		when:
+		metadataGenerationService.entityDescriptor(builder, entityDescriptor)
+		
+		then:
+		def xml = writer.toString()
+		println xml
+		xml == result
+	}
+	
+	def "Test inactive IDPSSODescriptor generation"() {
+		setup:
+		def idp = IDPSSODescriptor.build(active:false)
+		
+		when:
+		metadataGenerationService.idpSSODescriptor(builder, idp)
+		
+		then:
+		def xml = writer.toString()
+		xml == ""
+	}
+	
+	def "Test not approved IDPSSODescriptor generation"() {
+		setup:
+		def idp = IDPSSODescriptor.build(approved:false)
+		
+		when:
+		metadataGenerationService.idpSSODescriptor(builder, idp)
+		
+		then:
+		def xml = writer.toString()
+		xml == ""
+	}
 
 	def "Test valid IDPSSODescriptor generation"() {
 		setup:
@@ -254,7 +333,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def attr2 = new Attribute(base:base2)
 		def attr3 = new Attribute(base:base3)
 		
-		def idp = IDPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, organization:organization)
+		def idp = IDPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, organization:organization, approved:true, active:true)
 		idp.addToKeyDescriptors(keyDescriptor)
 		idp.addToKeyDescriptors(keyDescriptor2)
 		idp.addToContacts(contactPerson)
@@ -282,6 +361,30 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		then:
 		def xml = writer.toString()
 		xml == result
+	}
+	
+	def "Test inactive SPSSODescriptor generation"() {
+		setup:
+		def sp = SPSSODescriptor.build(active:false)
+		
+		when:
+		metadataGenerationService.spSSODescriptor(builder, sp)
+		
+		then:
+		def xml = writer.toString()
+		xml == ""
+	}
+	
+	def "Test not approved SPSSODescriptor generation"() {
+		setup:
+		def sp = SPSSODescriptor.build(approved:false)
+		
+		when:
+		metadataGenerationService.spSSODescriptor(builder, sp)
+		
+		then:
+		def xml = writer.toString()
+		xml == ""
 	}
 	
 	def "Test valid SPSSODescriptor generation"() {
@@ -340,7 +443,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		attrService.addToRequestedAttributes(attr3)
 		attrService.addToRequestedAttributes(attr4)
 		
-		def sp = SPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, organization:organization)
+		def sp = SPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, organization:organization, approved:true, active:true)
 		sp.addToKeyDescriptors(keyDescriptor)
 		sp.addToKeyDescriptors(keyDescriptor2)
 		sp.addToContacts(contactPerson)
@@ -364,6 +467,30 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		then:
 		def xml = writer.toString()
 		xml == result
+	}
+	
+	def "Test inactive AttributeAuthorityDescriptor generation"() {
+		setup:
+		def aa = AttributeAuthorityDescriptor.build(active:false)
+		
+		when:
+		metadataGenerationService.attributeAuthorityDescriptor(builder, aa)
+		
+		then:
+		def xml = writer.toString()
+		xml == ""
+	}
+	
+	def "Test not approved AttributeAuthorityDescriptor generation"() {
+		setup:
+		def aa = AttributeAuthorityDescriptor.build(approved:false)
+		
+		when:
+		metadataGenerationService.attributeAuthorityDescriptor(builder, aa)
+		
+		then:
+		def xml = writer.toString()
+		xml == ""
 	}
 	
 	def "Test valid AttributeAuthorityDescriptor creation when collaborating with IDP"() {
@@ -405,7 +532,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def attr2 = new Attribute(base:base2)
 		def attr3 = new Attribute(base:base3)
 		
-		def idp = IDPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, organization:organization)
+		def idp = IDPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, organization:organization, approved:true, active:true)
 		idp.addToKeyDescriptors(keyDescriptor)
 		idp.addToKeyDescriptors(keyDescriptor2)
 		idp.addToContacts(contactPerson)
@@ -419,7 +546,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		
 		idp.save()
 		
-		def aa = AttributeAuthorityDescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations)
+		def aa = AttributeAuthorityDescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, approved:true, active:true)
 		aa.collaborator = idp
 		aa.save()
 		
@@ -475,7 +602,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def attr2 = new Attribute(base:base2)
 		def attr3 = new Attribute(base:base3)
 		
-		def aa = AttributeAuthorityDescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, organization:organization)
+		def aa = AttributeAuthorityDescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, organization:organization, approved:true, active:true)
 		aa.addToKeyDescriptors(keyDescriptor)
 		aa.addToKeyDescriptors(keyDescriptor2)
 		aa.addToContacts(contactPerson)
