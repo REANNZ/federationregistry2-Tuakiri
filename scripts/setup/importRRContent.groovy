@@ -8,22 +8,16 @@
 	 I highly reccomend extensive tests in your respective development and test environments before letting loose on production.
 	 This should be run from the provided FR online Groovy console to be able to access various Grails features.
 	*/
-	def cryptoService
-	
+	cryptoService = ctx.getBean("cryptoService")
     sql = Sql.newInstance("jdbc:mysql://localhost:3306/resourceregistry", "rr", "password", "com.mysql.jdbc.Driver")
-	initialPopulate()
-	populate()
-	
-	def populate() {
-		importCACertificates()
-		importOrganizations()
-		importContacts()
-		importAttributes()
-		importEntities()
-		importIDPSSODescriptors()
-		importAttributeAuthorityDescriptors()
-		importSPSSODescriptors()
-	}
+
+	importCACertificates()
+	importOrganizations()
+	importContacts()
+	importEntities()
+	importIDPSSODescriptors()
+	importAttributeAuthorityDescriptors()
+	importSPSSODescriptors()
 	
 	def importCACertificates() {
 		sql.eachRow("select * from certData where objectType='issuingca'", {
@@ -31,6 +25,10 @@
 			def caCert = new CACertificate(data:data)
 			def caKeyInfo = new CAKeyInfo(certificate:caCert)
 			caKeyInfo.save()
+			if(caKeyInfo.hasErrors()) {
+				println "Error importing CA"
+				caKeyInfo.errors.each {println it}
+			}
 		})
 	}
 
@@ -60,43 +58,6 @@
 		})
 	}
 
-    def importAttributes() {
-		sql.eachRow("select * from attributes", 
-		{
-			def scope = AttributeScope.findByName(it.scope)
-			def category = AttributeCategory.findByName(it.status)
-			
-			def specificationRequired = false
-			if(it.attributeOID == "1.3.6.1.4.1.5923.1.1.1.7")
-				specificationRequired = true
-				
-			def attr = new AttributeBase(id: it.attributeID, oid: it.attributeOID, name: it.attributeURN, friendlyName: it.attributeFullName, headerName: it.headerName, 
-										alias:it.alias, description:it.description, scope: scope, category: category, specificationRequired:specificationRequired)
-								
-			def existingAttr = AttributeBase.get(attr.id)
-			if(!existingAttr) {
-				attr.save()
-				if(attr.hasErrors()) {
-					println "Unable to import attribute identified by oid: $attr.oid and name $attr.name"
-					attr.errors.each {
-						println it
-					}
-				}
-			}
-			else {
-				// Update local version	to keep exisiting RR and our stuff in sync				
-				attr.properties.each { k,v-> if (!k in ['class','id']) existingAttr."${k}" = v }
-				existingAttr.save()
-				if(existingAttr.hasErrors()) {
-					println "Unable to update values for attribute identified by oid: $existingAttr.oid and name $existingAttr.name"
-					existingAttr.errors.each {
-						println it
-					}
-				}
-			}
-		})
-    }
-
 	def importContacts() {
 		//Import contacts associated with 'homeOrgs'
 		sql.eachRow("select email, contactName, homeOrgName from contacts LEFT JOIN homeOrgs ON contacts.objectID=homeOrgs.homeOrgID ORDER BY (email)",
@@ -113,7 +74,7 @@
 				surname = it.contactName
 			}
 
-			// Doesn't already exist (RR data is crapppppy!!) so create
+			// Doesn't already exist so create
 			if(!MailURI.findByUri(it.email)) {
 				def organization
 				if(it.homeOrgName)
@@ -148,7 +109,7 @@
 		sql.eachRow("select * from homeOrgs",
 		{
 			def org = Organization.findByName(it.homeOrgName)
-			def entity = new EntityDescriptor(entityID:it.entityID, organization:org, active:it.approved)
+			def entity = new EntityDescriptor(entityID:it.entityID, organization:org, active:true, approved:it.approved)
 			entity.save()
 			if(entity.hasErrors()) {
 				entity.errors.each {println it}
@@ -197,7 +158,7 @@
 		sql.eachRow("select * from homeOrgs",
 		{			
 			def entity = EntityDescriptor.findWhere(entityID:it.entityID)
-			def idp = new IDPSSODescriptor(active:true, entityDescriptor:entity, organization:entity.organization)
+			def idp = new IDPSSODescriptor(active:true, approved:true, entityDescriptor:entity, organization:entity.organization)
 			idp.addToNameIDFormats(trans)	// RR hard codes everything to only advertise NameIDForm of transient so we need to do the same, in FR this is modifable and DB driven
 			idp.addToProtocolSupportEnumerations(samlNamespace)
 			
@@ -212,7 +173,7 @@
 				def binding = SamlURI.findByUri(it.serviceBinding)
 				if(binding) {
 					def location = new UrlURI(uri:it.serviceLocation)
-					def ssoService = new SingleSignOnService(binding: binding, location: location, active:true)
+					def ssoService = new SingleSignOnService(binding: binding, location: location, active:true, approved:true)
 					idp.addToSingleSignOnServices(ssoService)
 				}
 				else 
@@ -224,7 +185,7 @@
 				def binding = SamlURI.findByUri(it.serviceBinding)
 				if(binding) {
 					def location = new UrlURI(uri:it.serviceLocation)
-					def artServ = new ArtifactResolutionService(binding: binding, location: location, isDefault: it.defaultLocation, active:true, endpointIndex:index++)
+					def artServ = new ArtifactResolutionService(binding: binding, location: location, isDefault: it.defaultLocation, active:true, approved:true, endpointIndex:index++)
 					idp.addToArtifactResolutionServices(artServ)
 				}
 				else
@@ -263,7 +224,7 @@
 		{			
 			def entity = EntityDescriptor.findWhere(entityID:it.entityID)
 			def idp = entity.idpDescriptors.toList().get(0)	// We know entities in RR space are closely linked to both an IDP and AA descriptor
-			def aa = new AttributeAuthorityDescriptor(active:true, entityDescriptor:entity, organization:entity.organization, displayName:idp.displayName, description:idp.description)
+			def aa = new AttributeAuthorityDescriptor(active:true, approved:true, entityDescriptor:entity, organization:entity.organization, displayName:idp.displayName, description:idp.description)
 			aa.save()
 			if(aa.hasErrors()) {
 				aa.errors.each {println it}
@@ -275,7 +236,7 @@
 				def binding = SamlURI.findByUri(it.serviceBinding)
 				if(binding) {
 					def location = new UrlURI(uri:it.serviceLocation)
-					def attrService = new AttributeService(binding: binding, location: location, active:true)
+					def attrService = new AttributeService(binding: binding, location: location, active:true, approved:true)
 					aa.addToAttributeServices(attrService)
 				}
 				else 
@@ -323,7 +284,7 @@
 			
 			def entity = EntityDescriptor.findWhere(entityID:it.providerID)
 			def sd = new ServiceDescription()
-			def sp = new SPSSODescriptor(active:true, entityDescriptor:entity, organization:entity.organization, visible:it.visible, serviceDescription:sd)
+			def sp = new SPSSODescriptor(active:true, approved:true, entityDescriptor:entity, organization:entity.organization, visible:it.visible, serviceDescription:sd)
 			sp.addToProtocolSupportEnumerations(samlNamespace)
 			
 			sql.eachRow("select * from objectDescriptions where objectID=${it.resourceID} and objectType='resource'",
@@ -337,7 +298,7 @@
 				def binding = SamlURI.findByUri(it.serviceBinding)
 				if(binding) {
 					def location = new UrlURI(uri:it.serviceLocation)
-					def sls = new SingleLogoutService(binding: binding, location: location, active:true)
+					def sls = new SingleLogoutService(binding: binding, location: location, active:true, approved:true)
 					sp.addToSingleLogoutServices(sls)
 					
 					if(it.serviceBinding.contains('SAML:2.0'))
@@ -354,7 +315,7 @@
 				def binding = SamlURI.findByUri(it.serviceBinding)
 				if(binding) {
 					def location = new UrlURI(uri:it.serviceLocation)
-					def acs = new AssertionConsumerService(binding: binding, location: location, isDefault: it.defaultLocation, active:true, endpointIndex:index++)
+					def acs = new AssertionConsumerService(binding: binding, location: location, isDefault: it.defaultLocation, active:true, approved:true, endpointIndex:index++)
 					sp.addToAssertionConsumerServices(acs)
 					
 					if(it.serviceBinding.contains('SAML:2.0'))
@@ -370,7 +331,7 @@
 				def binding = SamlURI.findByUri(it.serviceBinding)
 				if(binding) {
 					def location = new UrlURI(uri:it.serviceLocation)
-					def mnids = new ManageNameIDService(binding: binding, location: location, active:true)
+					def mnids = new ManageNameIDService(binding: binding, location: location, active:true, approved:true)
 					sp.addToManageNameIDServices(mnids)
 					
 					if(it.serviceBinding.contains('SAML:2.0'))
@@ -402,8 +363,13 @@
 				def base = AttributeBase.findByName(it.attributeURN)
 				if(base) {
 					def required = it.attributeUseType.equals("required")	// change to boolean for sanity..
-					def reqAttr = new RequestedAttribute(isRequired:required, reasoning:'autoimport', base:base)
+					def reqAttr = new RequestedAttribute(isRequired:required, reasoning:'autoimport', base:base, approved:true, attributeConsumingService:acs)
 					acs.addToRequestedAttributes(reqAttr)
+					reqAttr.validate()
+					if(reqAttr.hasErrors()) {
+						println "Error importing attribute support for $sp"
+						reqAttr.errors.each {println it}
+					}
 				}
 			})
 			sp.addToAttributeConsumingServices(acs)
@@ -427,29 +393,34 @@
 			try {
 			def data = "-----BEGIN CERTIFICATE-----\n${it.certData}\n-----END CERTIFICATE-----"
 			//println "Importing certificate data\n${data}"
-			def cert = new Certificate(data:data)	
-			cert.expiryDate = cryptoService.expiryDate(cert)
-			cert.issuer = cryptoService.issuer(cert)
-			cert.subject = cryptoService.subject(cert)
-			
+			def cert = cryptoService.createCertificate(data)	
 			def keyInfo = new KeyInfo(certificate:cert)
 			def keyDescriptor = new KeyDescriptor(keyInfo:keyInfo, keyType:KeyTypes.signing, roleDescriptor:descriptor)
+			keyDescriptor.validate()
+			if(keyDescriptor.hasErrors()){
+				println "Error import crypto for $descriptor"
+				keyDescriptor.errors.each { println it}
+			}
+			
 			
 			descriptor.addToKeyDescriptors(keyDescriptor)
 			
 			if(enc){
-				def certEnc = new Certificate(data:data)
-				certEnc.expiryDate = cryptoService.expiryDate(certEnc)
-				certEnc.issuer = cryptoService.issuer(certEnc)
-				certEnc.subject = cryptoService.subject(certEnc)
-				
+				def certEnc = cryptoService.createCertificate(data)	
 				def keyInfoEnc = new KeyInfo(certificate:certEnc)
 				def keyDescriptorEnc = new KeyDescriptor(keyInfo:keyInfoEnc, keyType:KeyTypes.encryption, roleDescriptor:descriptor)
+				keyDescriptorEnc.validate()
+				if(keyDescriptorEnc.hasErrors()){
+					println "Error import crypto for $descriptor"
+					keyDescriptorEnc.errors.each { println it}
+				}
+				
 				descriptor.addToKeyDescriptors(keyDescriptorEnc)
 			}
 			}
 			catch(Exception e) {
 				println "Error importing crypto for descriptor ${descriptor.displayName}"
+				println e.getMessage()
 			}
 		})
 	}
