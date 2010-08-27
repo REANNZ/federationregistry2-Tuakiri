@@ -61,6 +61,10 @@ class UrlMappings {
 		controller = "bootstrap"
 	}
 	
+	"/metadata/$action"{
+		controller = "metadata"
+	}
+	
 	"/coreutils/$action?/$id?"{
 		controller = "coreUtilities"
 	}
