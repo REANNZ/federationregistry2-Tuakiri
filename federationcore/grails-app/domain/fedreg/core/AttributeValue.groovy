@@ -26,6 +26,8 @@ class AttributeValue  {
 
 	String value
 	
+	boolean approved = true
+	
 	Date dateCreated
 	Date lastUpdated
 
