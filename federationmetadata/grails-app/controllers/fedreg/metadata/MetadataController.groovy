@@ -18,6 +18,7 @@ class MetadataController {
 		def builder = new MarkupBuilder(writer)
 		
 		def entitiesDescriptor = new EntitiesDescriptor(name:federation)
+		entitiesDescriptor.entityDescriptors = EntityDescriptor.list()
 		
 		metadataGenerationService.entitiesDescriptor(builder, entitiesDescriptor, validUntil, cacheDuration, certificateAuthorities)
 		def xml = writer.toString()

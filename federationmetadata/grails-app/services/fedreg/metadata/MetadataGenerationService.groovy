@@ -85,7 +85,7 @@ class MetadataGenerationService {
 	
 	def entitiesDescriptor(builder, entitiesDescriptor, validUntil, cacheDuration, certificateAuthorities) {
 		builder.EntitiesDescriptor(validUntil:sdf.format(validUntil), cacheDuration:sdf.format(cacheDuration), Name:entitiesDescriptor.name, 
-			"xmlns":"urn:oasis:names:tc:SAML:2.0:metadata", "xmlns:xsi":"http://www.w3.org/2001/XMLSchema-instance", 
+			"xmlns":"urn:oasis:names:tc:SAML:2.0:metadata", "xmlns:xsi":"http://www.w3.org/2001/XMLSchema-instance", 'xmlns:saml':'urn:oasis:names:tc:SAML:2.0:assertion',
 			"xsi:schemaLocation":"urn:oasis:names:tc:SAML:2.0:metadata sstc-saml-schema-metadata-2.0.xsd urn:mace:shibboleth:metadata:1.0 shibboleth-metadata-1.0.xsd http://www.w3.org/2000/09/xmldsig# xmldsig-core-schema.xsd") {
 				
 			if(certificateAuthorities && certificateAuthorities.size() != 0) {
@@ -191,7 +191,7 @@ class MetadataGenerationService {
 		ssoDescriptor.artifactResolutionServices?.sort{it.location.uri}.eachWithIndex{ars, i -> indexedEndpoint(builder, "ArtifactResolutionService", ars, i+1)}
 		ssoDescriptor.singleLogoutServices?.sort{it.location.uri}.each{sls -> endpoint(builder, "SingleLogoutService", sls)}
 		ssoDescriptor.manageNameIDServices?.sort{it.location.uri}.each{mnids -> endpoint(builder, "ManageNameIDService", mnids)}
-		ssoDescriptor.nameIDFormats?.sort{it.location.uri}.each{nidf -> samlURI(builder, "NameIDFormat", nidf)}
+		ssoDescriptor.nameIDFormats?.sort{it.uri}.each{nidf -> samlURI(builder, "NameIDFormat", nidf)}
 	}
 	
 	def idpSSODescriptor(builder, idpSSODescriptor) {
