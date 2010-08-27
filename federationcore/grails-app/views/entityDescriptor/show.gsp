@@ -19,7 +19,11 @@
 			<h2><g:message code="fedreg.view.members.entity.show.heading" args="[entity.entityID]"/></h2>
 
 			<table>
-				<tbody>		
+				<tbody>
+					<tr>
+						<th><g:message code="label.organization"/></th>
+						<td><g:link controller="organization" action="show" id="${entity.organization.id}">${fieldValue(bean: entity, field: "organization.displayName")}</g:link></td>
+					</tr>		
 					<tr>
 						<th><g:message code="label.entitydescriptor"/></th>
 						<td>${fieldValue(bean: entity, field: "entityID")}</td>
@@ -40,9 +44,16 @@
 						</td>
 					</tr>
 					<tr>
-						<th><g:message code="label.organization"/></th>
-						<td>${fieldValue(bean: entity, field: "organization.displayName")}</td>
-					</tr>			
+						<th><g:message code="label.approved"/></th>
+						<td>
+							<g:if test="${entity.approved}">
+								<g:message code="label.yes" />
+							</g:if>
+							<g:else>
+								<g:message code="label.no" /> <div class="error"><g:message code="label.warningmetadata" /></div>
+							</g:else>
+						</td>
+					</tr>		
 				</tbody>
 			</table>
 		

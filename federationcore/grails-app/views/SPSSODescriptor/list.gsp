@@ -13,6 +13,8 @@
 					<tr>
 						<g:sortableColumn property="displayName" title="${message(code: 'label.serviceprovider')}" />
 						<g:sortableColumn property="organization" title="${message(code: 'label.organization')}" />
+						<th><g:message code="label.active" /></th>
+						<th><g:message code="label.approved" /></th>
 						<th/>
 					</tr>
 				</thead>
@@ -20,7 +22,9 @@
 				<g:each in="${serviceProviderList}" status="i" var="serviceProvider">
 					<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 						<td>${fieldValue(bean: serviceProvider, field: "displayName")}</td>
-						<td>${fieldValue(bean: serviceProvider, field: "organization.name")}</td>					
+						<td>${fieldValue(bean: serviceProvider, field: "organization.name")}</td>
+						<td>${fieldValue(bean: serviceProvider, field: "active")}</td>
+						<td>${fieldValue(bean: serviceProvider, field: "approved")}</td>
 						<td>
 							<n:button href="${createLink(controller:'SPSSODescriptor', action:'show', id: serviceProvider.id)}" label="${message(code:'label.view')}" icon="arrowthick-1-ne"/>
 						</td>

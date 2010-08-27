@@ -15,6 +15,7 @@
 						<g:sortableColumn property="displayName" title="${message(code: 'label.identityprovider')}" />
 						<g:sortableColumn property="organization" title="${message(code: 'label.organization')}" />
 						<th><g:message code="label.active" /></th>
+						<th><g:message code="label.approved" /></th>
 						<th/>
 					</tr>
 				</thead>
@@ -24,6 +25,7 @@
 						<td>${fieldValue(bean: identityProvider, field: "displayName")}</td>
 						<td>${fieldValue(bean: identityProvider, field: "organization.name")}</td>
 						<td>${fieldValue(bean: identityProvider, field: "active")}</td>
+						<td>${fieldValue(bean: identityProvider, field: "approved")}</td>
 						<td>
 							<n:button href="${createLink(controller:'IDPSSODescriptor', action:'show', id: identityProvider.id)}" label="${message(code:'label.view')}" icon="arrowthick-1-ne"/>
 						</td>
