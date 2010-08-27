@@ -118,7 +118,7 @@ class MetadataGenerationService {
 	}
 	
 	def entityDescriptor(builder, entityDescriptor) {
-		if(entityDescriptor.approved && entityDescriptor.active) {
+		if(entityDescriptor.approved && entityDescriptor.active && entityDescriptor.organization.approved && entityDescriptor.organization.active) {
 			builder.EntityDescriptor(entityID:entityDescriptor.entityID) {
 				entityDescriptor.idpDescriptors.each { idp -> idpSSODescriptor(builder, idp) }
 				entityDescriptor.spDescriptors.each { sp -> spSSODescriptor(builder, sp) }

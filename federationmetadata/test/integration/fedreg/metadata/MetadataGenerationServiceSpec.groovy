@@ -209,7 +209,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 	
 	def "Test valid EntitiesDescriptor generation"() {
 		setup:
-		def organization = Organization.build(name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
+		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
 		def email = new MailURI(uri:"test@example.com")
 		def home = new TelNumURI(uri:"(07) 1111 1111")
 		def work = new TelNumURI(uri:"(567) 222 22222")
@@ -252,7 +252,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 	
 	def "Test valid EntitiesDescriptor generation with embedded entitiesdescriptors"() {
 		setup:
-		def organization = Organization.build(name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
+		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
 		def email = new MailURI(uri:"test@example.com")
 		def home = new TelNumURI(uri:"(07) 1111 1111")
 		def work = new TelNumURI(uri:"(567) 222 22222")
@@ -321,7 +321,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 	
 	def "Test valid EntityDescriptor generation"() {
 		setup:
-		def organization = Organization.build(name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
+		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
 		def email = new MailURI(uri:"test@example.com")
 		def home = new TelNumURI(uri:"(07) 1111 1111")
 		def work = new TelNumURI(uri:"(567) 222 22222")
