@@ -139,13 +139,15 @@ class NimbleTagLib {
 		if(attrs.action == null || attrs.title == null || attrs.msg == null || attrs.accept == null || attrs.cancel == null)
         	throwTagError("Confirm action tag requires action, title, msg, accept and cancel attributes")
 
+
+
 		def btnAttrs = [:]
 		btnAttrs.id = attrs.id
 		btnAttrs.class = attrs.class
 		btnAttrs.onclick = "confirmAction = function() { ${attrs.action} }; nimble.wasConfirmed('${attrs.title}', '${attrs.msg}', '${attrs.accept}', '${attrs.cancel}');"
 		btnAttrs.label = attrs.label
 		btnAttrs.icon = attrs.icon
-		btnAttrs.plain = attrs.plain ?:false
+		btnAttrs.plain = attrs.plain
 
 		out << button(btnAttrs)
 	}
