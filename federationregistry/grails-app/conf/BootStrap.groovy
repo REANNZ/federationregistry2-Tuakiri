@@ -1,6 +1,8 @@
 
-import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.runtime.InvokerHelper
+
+import org.codehaus.groovy.grails.commons.GrailsApplication
+import org.codehaus.groovy.grails.commons.ApplicationAttributes
 
 import grails.util.GrailsUtil
 
@@ -22,6 +24,8 @@ class BootStrap {
 	def sessionFactory
 
      def init = { servletContext ->
+		def applicationContext = servletContext.getAttribute(ApplicationAttributes.APPLICATION_CONTEXT) 
+		
 		// Populate default administrative account if required
 		if(User.count() == 0) {
 			def profile = new Profile(email:'internaladministrator@federation.reg')
@@ -56,6 +60,21 @@ class BootStrap {
 		}
 		
 		SecurityUtils.metaClass = null
+		
+		if(GrailsUtil.environment == "development") {
+			def base = new File("../scripts/setup/samlBase.groovy")
+			def attrBase = new File("../scripts/setup/aafAttributePopulation.groovy")
+			def rrData = new File("../scripts/setup/importRRContent.groovy")
+			
+			def shell = new GroovyShell(grailsApplication.classLoader, new Binding(
+			            'application': grailsApplication,
+			            'context': applicationContext, 'ctx': applicationContext))
+			shell.'shell' = shell
+			
+			shell.evaluate(base.text)
+			shell.evaluate(attrBase.text)
+			shell.evaluate(rrData.text)
+		}
      }
 
      def destroy = {
