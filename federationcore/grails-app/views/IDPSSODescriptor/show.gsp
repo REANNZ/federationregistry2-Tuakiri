@@ -150,6 +150,9 @@
 						<ul>
 							<li><a href="#tab-sso" class="icon icon_cog"><g:message code="label.ssoservices" /></a></li>
 							<li><a href="#tab-ars" class="icon icon_cog"><g:message code="label.artifactresolutionservices" /></a></li>
+							<g:if test="${identityProvider.collaborator}">
+								<li><a href="#tab-attrs" class="icon icon_cog"><g:message code="label.attributeservices" /></a></li>
+							</g:if>
 							<li><a href="#tab-slo" class="icon icon_cog"><g:message code="label.sloservices" /></a></li>
 						</ul>
 						
@@ -175,6 +178,15 @@
 							<hr>
 							<g:render template="/templates/endpoints/create" plugin="federationcore" model="[endpointType:'singleLogoutServices', containerID:'singlelogoutendpoints']" />
 						</div>
+						<g:if test="${identityProvider.collaborator}">
+							<div id="tab-attrs" class="componentlist">
+								<div id="attributeserviceendpoints">
+									<g:render template="/templates/endpoints/list" plugin="federationcore" model="[endpoints:identityProvider.collaborator.attributeServices, allowremove:true, endpointType:'attributeServices', containerID:'attributeserviceendpoints']" />
+								</div>
+								<hr>
+								<g:render template="/templates/endpoints/create" plugin="federationcore" model="[endpointType:'attributeServices', containerID:'attributeserviceendpoints']" />
+							</div>
+						</g:if>
 					</div>
 				</div>
 				<div id="tab-attributes" class="tabcontent">
