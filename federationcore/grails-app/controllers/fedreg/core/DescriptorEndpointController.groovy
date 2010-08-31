@@ -10,7 +10,7 @@ class DescriptorEndpointController {
 	def allowedEndpoints = [singleSignOnServices:"fedreg.core.SingleSignOnService", artifactResolutionServices:"fedreg.core.ArtifactResolutionService", 
 							singleLogoutServices:"fedreg.core.SingleLogoutService", assertionConsumerServices:"fedreg.core.AssertionConsumerService", attributeServices:"fedreg.core.AttributeService"]
 
-	def cryptoService
+	def endpointService
 
 	def delete = {
 		if(!params.id) {
@@ -35,11 +35,7 @@ class DescriptorEndpointController {
 			return
 		}
 		
-		log.info "Deleting Endpoint"
-		endpoint.delete(flush:true)
-		def descriptor = endpoint.descriptor
-		descriptor."removeFrom${capitalize(params.endpointType)}"(endpoint)
-		descriptor.save(flush:true)
+		endpointService.delete(endpoint, params.endpointType)
 		render message(code: 'fedreg.endpoint.delete.success')
 	}
 	
@@ -145,36 +141,13 @@ class DescriptorEndpointController {
 		}
 		
 		if(allowedEndpoints.containsKey(endpointType) && descriptor.hasProperty(endpointType)) {
-			log.debug "Creating endpoint for ${descriptor} of type ${endpointType} at location ${params.location}"
-			
-			def location = new UrlURI(uri:params.location)
-			def endpoint = grailsApplication.classLoader.loadClass(allowedEndpoints.get(endpointType)).newInstance(descriptor:descriptor, binding: binding, location: location, active:true)
-			descriptor."addTo${capitalize(endpointType)}"(endpoint)
-			endpoint.save()
-			descriptor.save()
-			if(descriptor.hasErrors() || endpoint.hasErrors()) {
-				descriptor.errors.each {
-					log.warn it
-				}
-				endpoint.errors.each {
-					log.warn it
-				}
-				render message(code: 'fedreg.endpoint.create.failed')
-				response.setStatus(500)
-				return
-			}
-			else {
-				descriptor.refresh()
-				log.debug "Created endpoint for ${descriptor} of type ${endpointType} at location ${params.location}"
-				render message(code: 'fedreg.endpoint.create.success')
-				return
-			}
+			endpointService.create(descriptor, allowedEndpoints.get(endpointType), endpointType, binding, params.location)
+			render message(code: 'fedreg.endpoint.create.success')
 		}
 		else {
 			log.warn "Endpoint ${endpointType} is invalid for ${descriptor}, unable to create"
 			render message(code: 'fedreg.endpoint.invalid', args: [endpointType])
 			response.setStatus(500)
-			return
 		}
 	}
 	
@@ -186,7 +159,7 @@ class DescriptorEndpointController {
 			return
 		}
 		
-		def endpoint = Endpoint.lock(params.id)
+		def endpoint = Endpoint.get(params.id)
 		if(!endpoint) {
 			log.warn "Endpoint identified by id $params.id was not located"
 			render message(code: 'fedreg.endpoint.nonexistant', args: [params.id])
@@ -194,18 +167,7 @@ class DescriptorEndpointController {
 			return
 		}
 	
-		log.info "Toggling Endpoint State"
-		endpoint.active = !endpoint.active
-		endpoint.descriptor.save(flush:true)
-		if(!endpoint.hasErrors() && !endpoint.descriptor.hasErrors()) {
-			log.debug "Toggled state for endpoint ID ${params.id}"
-			render message(code: 'fedreg.endpoint.toggle.success')
-		}
-		else {
-			log.warn "Unable to toggle state for endpoint ID ${params.id}"
-			endpoint.errors.each { log.warn it }
-			endpoint.descriptor.errors.each { log.warn it }
-			render message(code: 'fedreg.endpoint.toggle.failed')
-		}
+		endpointService.toggle(endpoint)
+		render message(code: 'fedreg.endpoint.toggle.success')
 	}
 }
