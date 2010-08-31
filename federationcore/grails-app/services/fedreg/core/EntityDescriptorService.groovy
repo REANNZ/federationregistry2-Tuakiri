@@ -31,9 +31,14 @@ class EntityDescriptorService {
 		def entContactPerson = new ContactPerson(contact:contact, type:ContactType.findByName(ct))
 		entityDescriptor.addToContacts(entContactPerson)
 		
-		if(!entityDescriptor.save()) {
-			entityDescriptor?.errors.each { log.error it }
+		if(!entityDescriptor.validate()) {			
+			entityDescriptor.errors.each {log.warn it}
 			return [false, entityDescriptor]
+		}
+		
+		if(!entityDescriptor.save()) {			
+			entityDescriptor.errors.each {log.warn it}
+			throw new RuntimeException("Unable to save when creating ${entityDescriptor}")
 		}
 		
 		return [true, entityDescriptor]
@@ -46,9 +51,14 @@ class EntityDescriptorService {
 		
 		entityDescriptor.entityID = params.entity.identifier
 		
-		if(!entityDescriptor.save()) {			
+		if(!entityDescriptor.validate()) {			
 			entityDescriptor.errors.each {log.warn it}
 			return [false, entityDescriptor]
+		}
+		
+		if(!entityDescriptor.save()) {			
+			entityDescriptor.errors.each {log.warn it}
+			throw new RuntimeException("Unable to save when updating ${entityDescriptor}")
 		}
 		
 		return [true, entityDescriptor]

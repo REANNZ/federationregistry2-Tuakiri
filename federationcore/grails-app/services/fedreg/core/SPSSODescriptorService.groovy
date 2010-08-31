@@ -156,7 +156,7 @@ class SPSSODescriptorService {
 		
 		if(!serviceProvider.save()) {			
 			serviceProvider.errors.each {log.warn it}
-			return [false, organization, entityDescriptor, serviceProvider, httpPostACS, soapArtifactACS, sloArtifact, sloRedirect, sloSOAP, sloPost, Organization.list(), AttributeBase.list(), SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding), contact]
+			throw new RuntimeException("Unable to save when creating ${serviceProvider}")
 		}
 		
 		def workflowParams = [ creator:contact?.id, serviceProvider:serviceProvider?.id, organization:organization.name ]
@@ -186,9 +186,14 @@ class SPSSODescriptorService {
 		serviceProvider.serviceDescription.support = params.sp?.servicedescription?.support
 		serviceProvider.serviceDescription.maintenance = params.sp?.servicedescription?.maintenance
 		
-		if(!serviceProvider.save()) {			
+		if(!serviceProvider.validate()) {			
 			serviceProvider.errors.each {log.warn it}
 			return [false, serviceProvider]
+		}
+		
+		if(!serviceProvider.save()) {			
+			serviceProvider.errors.each {log.warn it}
+			throw new RuntimeException("Unable to save when updating ${serviceProvider}")
 		}
 		
 		return [true, serviceProvider]

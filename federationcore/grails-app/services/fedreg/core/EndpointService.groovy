@@ -21,7 +21,7 @@ class EndpointService {
 			endpoint.errors?.each {
 				log.error it
 			}
-			// throw RTE
+			throw new RuntimeException("Unable to save when creating ${endpoint} for ${descriptor}")
 		}
 	}
 	
@@ -34,7 +34,7 @@ class EndpointService {
 			endpoint.errors.each {
 				log.error it
 			}
-			// throw RTE
+			throw new RuntimeException("Unable to save when toggling active state for ${endpoint}")
 		}
 	}
 	
@@ -49,7 +49,7 @@ class EndpointService {
 			descriptor.errors.each {
 				log.error it
 			}
-			// throw RTE
+			throw new RuntimeException("Unable to save when removing ${endpoint} from ${descriptor}")
 		}
 		
 		endpoint.delete()

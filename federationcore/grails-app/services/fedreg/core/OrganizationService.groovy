@@ -18,15 +18,26 @@ class OrganizationService {
 				contact = new Contact(givenName: params.contact?.givenName, surname: params.contact?.surname, email: new MailURI(uri:params.contact?.email), organization:organization)
 		}
 		
+		if(!organization.validate()) {
+			organization?.errors.each { log.error it }
+			return [ false, organization, contact ]
+		}
+		
 		if(!organization.save()) {
 			organization?.errors.each { log.error it }
+			throw new RuntimeException("Unable to save when creating ${organization}")
+		}
+		
+		if(!contact.validate()) {
+			contact?.errors.each { log.error it }
+			TransactionAspectSupport.currentTransactionInfo().setRollbackOnly() 
 			return [ false, organization, contact ]
 		}
 		
 		if(!contact.save()) {
 			contact?.errors.each { log.error it }
 			TransactionAspectSupport.currentTransactionInfo().setRollbackOnly() 
-			return [ false, organization, contact ]
+			throw new RuntimeException("Unable to save when creating ${contact}")
 		}
 		
 		def workflowParams = [ creator:contact?.id, organization:organization?.id ]
@@ -54,9 +65,14 @@ class OrganizationService {
 			}
 		}
 		
-		if(!organization.save()) {			
-			organization.errors.each {log.warn it}
-			return [false, organization]
+		if(!organization.validate()) {
+			organization?.errors.each { log.error it }
+			return [ false, organization ]
+		}
+		
+		if(!organization.save()) {
+			organization?.errors.each { log.error it }
+			throw new RuntimeException("Unable to save when updating ${organization}")
 		}
 		
 		return [true, organization]

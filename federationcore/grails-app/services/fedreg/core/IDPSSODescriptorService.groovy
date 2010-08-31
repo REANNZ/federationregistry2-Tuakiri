@@ -143,7 +143,7 @@ class IDPSSODescriptorService {
 		
 		if(!identityProvider.save()) {			
 			identityProvider.errors.each {log.debug it}
-			return [false, organization, entityDescriptor, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, Organization.list(), AttributeBase.list(), SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding), contact]
+			throw new RuntimeException("Unable to save when creating ${identityProvider}")
 		}
 		
 		def workflowParams = [ creator:contact?.id, identityProvider:identityProvider?.id, attributeAuthority:attributeAuthority?.id, organization:organization.name ]
@@ -166,9 +166,14 @@ class IDPSSODescriptorService {
 		
 		log.debug "Updating $identityProvider active: ${identityProvider.active}, requestSigned: ${identityProvider.wantAuthnRequestsSigned}"
 		
-		if(!identityProvider.save()) {			
+		if(!identityProvider.validate()) {			
 			identityProvider.errors.each {log.warn it}
 			return [false, identityProvider]
+		}
+		
+		if(!identityProvider.save()) {			
+			identityProvider.errors.each {log.warn it}
+			throw new RuntimeException("Unable to save when updating ${identityProvider}")
 		}
 		
 		return [true, identityProvider]

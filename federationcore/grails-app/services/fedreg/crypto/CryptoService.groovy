@@ -17,11 +17,14 @@ class CryptoService {
 			descriptor.save()
 			keyDescriptor.save()
 			
-			if(descriptor.hasErrors()) {
-				descriptor.errors.each {
+			if(descriptor.hasErrors() || keyDescriptor.hasErrors()) {
+				descriptor.errors?.each {
 					log.warn it
 				}
-				return false
+				keyDescriptor.errors?.each {
+					log.warn it
+				}
+				throw new RuntimeException("Unable to associate ${keyDescriptor} with ${descriptor}")
 			}
 			return true
 		}
@@ -35,7 +38,7 @@ class CryptoService {
 			key.errors.each {
 				log.warn it
 			}
-			return false
+			throw new RuntimeException("Unable to unassociate ${key}")
 		}
 		true
 	}
