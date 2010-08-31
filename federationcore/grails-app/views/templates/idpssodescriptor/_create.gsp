@@ -40,8 +40,6 @@
 		});
 		$('#cert').change( function() {
 			$('#idp\\.crypto\\.encdata').val($(this).val());
-			$('#aa\\.crypto\\.sigdata').val($(this).val());
-			$('#aa\\.crypto\\.encdata').val($(this).val());
 			$('#idp\\.crypto\\.sigdata').val($(this).val());
 		});
 		$('#hostname').bind('blur',  function() {
@@ -227,11 +225,6 @@
 					<g:hiddenField name="idp.crypto.sig" value="${true}" />
 					<g:hiddenField name="idp.crypto.encdata" />
 					<g:hiddenField name="idp.crypto.enc" value="${true}" />
-				
-					<g:hiddenField name="aa.crypto.sigdata" />
-					<g:hiddenField name="aa.crypto.sig" value="${true}" />
-					<g:hiddenField name="aa.crypto.encdata" />
-					<g:hiddenField name="aa.crypto.enc" value="${true}" />
 					<g:textArea name="cert" id="cert" rows="25" cols="60" />
 				</td>
 			</tr>

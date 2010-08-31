@@ -115,25 +115,6 @@ class IDPSSODescriptorService {
 						attributeAuthority.addToAttributes(new Attribute(base:attr))
 				}
 			}
-			
-			// Cryptography
-			// Signing
-			if(params.aa?.crypto?.sig) {
-				def cert = cryptoService.createCertificate(params.aa?.crypto?.sigdata)
-				cryptoService.validateCertificate(cert)
-				def keyInfo = new KeyInfo(certificate: cert)
-				def keyDescriptor = new KeyDescriptor(keyInfo:keyInfo, keyType:KeyTypes.signing, roleDescriptor:attributeAuthority)
-				attributeAuthority.addToKeyDescriptors(keyDescriptor)
-			}
-
-			// Encryption
-			if(params.aa?.crypto?.enc) {
-				def certEnc = cryptoService.createCertificate(params.aa?.crypto?.encdata)
-				cryptoService.validateCertificate(certEnc)
-				def keyInfoEnc = new KeyInfo(certificate:certEnc)
-				def keyDescriptorEnc = new KeyDescriptor(keyInfo:keyInfoEnc, keyType:KeyTypes.encryption, roleDescriptor:attributeAuthority)
-				attributeAuthority.addToKeyDescriptors(keyDescriptorEnc)
-			}
 		}
 		
 		// Submission validation

@@ -141,10 +141,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		attributeAuthority.entityDescriptor == entityDescriptor
 		attributeAuthority.collaborator == identityProvider
 		identityProvider.collaborator == attributeAuthority
-		attributeAuthority.keyDescriptors.size() == 2
-		attributeAuthority.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
-		attributeAuthority.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
-		attributeAuthority.attributeServices.toList().get(0).location.uri == "http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"
+
 		
 		attributeAuthority.attributes != null
 		attributeAuthority.attributes.size() == 2
@@ -248,10 +245,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		attributeAuthority.entityDescriptor == entityDescriptor
 		attributeAuthority.collaborator == identityProvider
 		identityProvider.collaborator == attributeAuthority
-		attributeAuthority.keyDescriptors.size() == 2
-		attributeAuthority.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
-		attributeAuthority.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
-		attributeAuthority.attributeServices.toList().get(0).location.uri == "http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"
+
 		
 		attributeAuthority.attributes != null
 		attributeAuthority.attributes.size() == 2
@@ -353,10 +347,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		identityProvider.collaborator == attributeAuthority
 		attributeAuthority.active 
 		!attributeAuthority.approved
-		attributeAuthority.keyDescriptors.size() == 2
-		attributeAuthority.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
-		attributeAuthority.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
-		attributeAuthority.attributeServices.toList().get(0).location.uri == "http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"
+
 		
 		attributeAuthority.attributes != null
 		attributeAuthority.attributes.size() == 2
@@ -435,10 +426,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		attributeAuthority.organization == organization
 		attributeAuthority.entityDescriptor == entityDescriptor
 		attributeAuthority.collaborator == identityProvider
-		attributeAuthority.keyDescriptors.size() == 2
-		attributeAuthority.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
-		attributeAuthority.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
-		attributeAuthority.attributeServices.toList().get(0).location.uri == "http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"
+
 	}
 	
 	def "Create fails when IDPSSODescriptor post endpoint fails constraints"() {
@@ -507,10 +495,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		attributeAuthority.organization == organization
 		attributeAuthority.entityDescriptor == entityDescriptor
 		attributeAuthority.collaborator == identityProvider
-		attributeAuthority.keyDescriptors.size() == 2
-		attributeAuthority.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
-		attributeAuthority.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
-		attributeAuthority.attributeServices.toList().get(0).location.uri == "http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"
+
 	}
 	
 	def "Create fails when IDPSSODescriptor post endpoint not supplied"() {
@@ -580,10 +565,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		attributeAuthority.organization == organization
 		attributeAuthority.entityDescriptor == entityDescriptor
 		attributeAuthority.collaborator == identityProvider
-		attributeAuthority.keyDescriptors.size() == 2
-		attributeAuthority.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
-		attributeAuthority.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
-		attributeAuthority.attributeServices.toList().get(0).location.uri == "http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"
+
 	}
 	
 	def "Create fails when IDPSSODescriptor redirect endpoint fails constraints"() {
@@ -651,10 +633,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		attributeAuthority.organization == organization
 		attributeAuthority.entityDescriptor == entityDescriptor
 		attributeAuthority.collaborator == identityProvider
-		attributeAuthority.keyDescriptors.size() == 2
-		attributeAuthority.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
-		attributeAuthority.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
-		attributeAuthority.attributeServices.toList().get(0).location.uri == "http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"
+
 	}
 	
 	def "Create fails when IDPSSODescriptor redirect endpoint not supplied"() {
@@ -724,10 +703,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		attributeAuthority.organization == organization
 		attributeAuthority.entityDescriptor == entityDescriptor
 		attributeAuthority.collaborator == identityProvider
-		attributeAuthority.keyDescriptors.size() == 2
-		attributeAuthority.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
-		attributeAuthority.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
-		attributeAuthority.attributeServices.toList().get(0).location.uri == "http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"
+
 	}
 	
 	def "Create fails when IDPSSODescriptor artifact endpoint fails constraints"() {
@@ -795,10 +771,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		attributeAuthority.organization == organization
 		attributeAuthority.entityDescriptor == entityDescriptor
 		attributeAuthority.collaborator == identityProvider
-		attributeAuthority.keyDescriptors.size() == 2
-		attributeAuthority.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
-		attributeAuthority.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
-		attributeAuthority.attributeServices.toList().get(0).location.uri == "http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"
+
 	}
 	
 	def "Create fails when IDPSSODescriptor artifact endpoint not supplied"() {
@@ -868,10 +841,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		attributeAuthority.organization == organization
 		attributeAuthority.entityDescriptor == entityDescriptor
 		attributeAuthority.collaborator == identityProvider
-		attributeAuthority.keyDescriptors.size() == 2
-		attributeAuthority.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
-		attributeAuthority.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
-		attributeAuthority.attributeServices.toList().get(0).location.uri == "http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"
+
 	}
 	
 	def "Create succeeds when IDPSSODescriptor crypto not supplied"() {
@@ -1234,10 +1204,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		attributeAuthority.organization == organization
 		attributeAuthority.entityDescriptor == null
 		attributeAuthority.collaborator == identityProvider
-		attributeAuthority.keyDescriptors.size() == 2
-		attributeAuthority.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
-		attributeAuthority.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
-		attributeAuthority.attributeServices.toList().get(0).location.uri == "http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"
+
 	}
 	
 	def "Create fails when EnityDescriptor does not meet constraints"() {
@@ -1304,10 +1271,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		attributeAuthority.organization == organization
 		attributeAuthority.entityDescriptor == null
 		attributeAuthority.collaborator == identityProvider
-		attributeAuthority.keyDescriptors.size() == 2
-		attributeAuthority.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
-		attributeAuthority.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
-		attributeAuthority.attributeServices.toList().get(0).location.uri == "http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"
+
 	}
 	
 	def "Create fails when invalid Organization provided"() {
@@ -1374,10 +1338,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		attributeAuthority.organization == null
 		attributeAuthority.entityDescriptor == null
 		attributeAuthority.collaborator == identityProvider
-		attributeAuthority.keyDescriptors.size() == 2
-		attributeAuthority.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
-		attributeAuthority.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
-		attributeAuthority.attributeServices.toList().get(0).location.uri == "http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"
+
 	}
 	
 	def "Updating an existing identity provider with valid changed content succeeds"() {
