@@ -58,26 +58,11 @@ class RoleDescriptor extends Descriptor {
 		errorURL(nullable:true)
 		protocolSupportEnumerations(nullable: false, minSize:1)
 		contacts(nullable: true)
-		keyDescriptors(nullable: true, validator: { val, obj ->
-			obj.validateKeyDescriptors()
-		})
+		keyDescriptors(nullable: true)
 		dateCreated(nullable:true)
 		lastUpdated(nullable:true)
 	}
 	
 	public String toString() {	"roledescriptor:[id:$id, displayName: $displayName]" }
-	
-	def validateKeyDescriptors = {
-		if(!keyDescriptors || keyDescriptors.size() == 0)
-			return true
-		
-		keyDescriptors.each { kd ->
-			if(!cryptoService.validateCertificate(kd.keyInfo.certificate)) {
-				return ['fedreg.core.roledescriptor.validation.crypto.invalid', kd.keyInfo.keyName]
-			}
-		}
-		
-		return true
-	}
 
 }
