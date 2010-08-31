@@ -44,7 +44,8 @@ nimble.wasConfirmed = function(title, msg, accept, cancel) {
 	$("#confirmcancel>.ui-button-text").html(cancel);
 	
 	$("#confirmationdialog").dialog('option', 'title', title);
-	$("#confirmationdialog").dialog('open');		
+	$("#confirmationdialog").dialog('open');	
+	return false;	
 };
 
 // Session Termination
