@@ -4,7 +4,8 @@ import static org.apache.commons.lang.StringUtils.*
 
 class DescriptorEndpointController {
 
-	static allowedMethods = [delete: "POST", listEndpoints:"GET"]
+	static allowedMethods = [delete: "POST", create: "POST", toggle:"POST", listEndpoints:"GET"]
+	
 	// Maps allowed endpoints to internal class representation
 	def allowedEndpoints = [singleSignOnServices:"fedreg.core.SingleSignOnService", artifactResolutionServices:"fedreg.core.ArtifactResolutionService", 
 							singleLogoutServices:"fedreg.core.SingleLogoutService", assertionConsumerServices:"fedreg.core.AssertionConsumerService", attributeServices:"fedreg.core.AttributeService"]
