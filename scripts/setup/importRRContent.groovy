@@ -225,6 +225,7 @@
 			def entity = EntityDescriptor.findWhere(entityID:it.entityID)
 			def idp = entity.idpDescriptors.toList().get(0)	// We know entities in RR space are closely linked to both an IDP and AA descriptor
 			def aa = new AttributeAuthorityDescriptor(active:true, approved:true, entityDescriptor:entity, organization:entity.organization, displayName:idp.displayName, description:idp.description)
+			aa.addToProtocolSupportEnumerations(samlNamespace)
 			aa.save()
 			if(aa.hasErrors()) {
 				aa.errors.each {println it}
