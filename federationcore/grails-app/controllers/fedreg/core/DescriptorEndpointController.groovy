@@ -7,7 +7,7 @@ class DescriptorEndpointController {
 	static allowedMethods = [delete: "POST", listEndpoints:"GET"]
 	// Maps allowed endpoints to internal class representation
 	def allowedEndpoints = [singleSignOnServices:"fedreg.core.SingleSignOnService", artifactResolutionServices:"fedreg.core.ArtifactResolutionService", 
-							singleLogoutServices:"fedreg.core.SingleLogoutService", assertionConsumerServices:"fedreg.core.AssertionConsumerService"]
+							singleLogoutServices:"fedreg.core.SingleLogoutService", assertionConsumerServices:"fedreg.core.AssertionConsumerService", attributeServices:"fedreg.core.AttributeService"]
 
 	def cryptoService
 
@@ -64,6 +64,7 @@ class DescriptorEndpointController {
 			return
 		}
 		
+		def endpointType = params.endpointType
 		def descriptor = RoleDescriptor.get(params.id)
 		if (!descriptor) {
 			log.warn "Descriptor was not found for id ${params.id}"
@@ -72,15 +73,19 @@ class DescriptorEndpointController {
 			return
 		}
 		
-		descriptor.refresh()
-		def endpoint = params.endpointType
-		if(allowedEndpoints.containsKey(endpoint) && descriptor.hasProperty(endpoint)) {
-			log.debug "Listing endpoints for descriptor ID ${params.id} of type ${endpoint}"
-			render template:"/templates/endpoints/list", contextPath: pluginContextPath, model:[endpoints:descriptor."${endpoint}", allowremove:true, endpointType:endpoint, containerID:params.containerID]
+		// Determine if we're actually listing from the collaborator (useful for AA endpoints on IDP screen)
+		if(!descriptor.hasProperty(endpointType)) {
+			if(descriptor.collaborator.hasProperty(endpointType))
+				descriptor = descriptor.collaborator
+		}
+		
+		if(allowedEndpoints.containsKey(endpointType) && descriptor.hasProperty(endpointType)) {
+			log.debug "Listing endpoints for descriptor ID ${params.id} of type ${endpointType}"
+			render template:"/templates/endpoints/list", contextPath: pluginContextPath, model:[endpoints:descriptor."${endpointType}", allowremove:true, endpointType:endpointType, containerID:params.containerID]
 		}
 		else {
-			log.warn "Endpoint ${endpoint} is invalid for Descriptor with id ${params.id}"
-			render message(code: 'fedreg.endpoint.invalid', args: [endpoint])
+			log.warn "Endpoint ${endpointType} is invalid for Descriptor with id ${params.id}"
+			render message(code: 'fedreg.endpoint.invalid', args: [endpointType])
 			response.setStatus(500)
 			return
 		}
@@ -115,12 +120,19 @@ class DescriptorEndpointController {
 			return
 		}
 		
+		def endpointType = params.endpointType
 		def descriptor = RoleDescriptor.get(params.id)
 		if (!descriptor) {
 			log.warn "Descriptor was not found for id ${params.id}"
 			render message(code: 'fedreg.roledescriptor.nonexistant', args: [params.id])
 			response.setStatus(500)
 			return
+		}
+		
+		// Determine if we're actually updating the collaborator (useful for AA endpoints on IDP screen)
+		if(!descriptor.hasProperty(endpointType)) {
+			if(descriptor.collaborator.hasProperty(endpointType))
+				descriptor = descriptor.collaborator
 		}
 		
 		def binding = SamlURI.get(params.binding)
@@ -131,7 +143,6 @@ class DescriptorEndpointController {
 			return
 		}
 		
-		def endpointType = params.endpointType
 		if(allowedEndpoints.containsKey(endpointType) && descriptor.hasProperty(endpointType)) {
 			log.debug "Creating endpoint for ${descriptor} of type ${endpointType} at location ${params.location}"
 			
