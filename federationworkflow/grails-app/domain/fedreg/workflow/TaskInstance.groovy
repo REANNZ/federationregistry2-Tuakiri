@@ -12,7 +12,7 @@ class TaskInstance {
 	Date dateCreated
 	Date lastUpdated
 
-	static hasMany = [messages: WorkflowMessage]
+	static hasMany = [messages: WorkflowMessage, potentialApprovers: UserBase]
 	static belongsTo = [processInstance: ProcessInstance, task: Task]
 	static constraints = {
 		approver(nullable:true)

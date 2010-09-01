@@ -336,6 +336,7 @@ class WorkflowTaskService {
 		else {
 			userList.each { u ->
 				messageApprovalRequest(u, taskInstance)
+				taskInstance.addToPotentialApprovers(u)
 			}
 			// Messages have been queued to all concerned requesting approval so we're now in a wait state
 			log.debug "Located valid approver(s) for process '${taskInstance.processInstance.description}' and task '${taskInstance.task.name}', task will continue once approved"
