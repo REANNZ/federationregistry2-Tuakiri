@@ -2,7 +2,6 @@
 
 <html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
     <title><g:message code="fedreg.title" /> | <g:layoutTitle /></title>
 
 	<link rel="stylesheet" href="${resource(dir:'css',file:'jquery-ui-1.8.2.custom.css')}" />

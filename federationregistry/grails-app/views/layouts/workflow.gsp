@@ -1,100 +1,72 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
-  "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE html>
 
 <html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
     <title><g:message code="fedreg.title" /> | <g:layoutTitle /></title>
     
-	<nh:nimblecore/>
-    <nh:nimbleui/>
-  
-    <nh:growl/>
-    <script type="text/javascript">
-      	<njs:flashgrowl/>
-
-		$(function() {
-		  	$("#working").hide();
-			$("#working").bind("fedreg.working", function(){
-				if( $(this).is(':hidden') ) {
-					$(this).css({left: $("body").scrollLeft() + 10, top: $("body").scrollTop() + 10})
-					$(this).show('blind')
-				}
-			 }).bind("ajaxComplete", function(){
-				if( $(this).is(':visible') ) {
-					$(this).hide('blind');
-				}
-			 });
-		});
-    </script>
-
-	<link rel="stylesheet" href="${resource(file: '/css/icons.css')}"/>
-	<link rel="stylesheet" href="${resource(file: '/css/fedreg.css')}"/>
+	<link rel="stylesheet" href="${resource(dir:'css',file:'jquery-ui-1.8.2.custom.css')}" />
+	<link rel="stylesheet" href="${resource(dir:'css',file:'jquery.jqplot.min.css')}" />
+	<link rel="stylesheet" href="${resource(dir:'css',file:'jquery.jgrowl.css')}" />
+	
+	<link rel="stylesheet/less" href="${resource(dir:'css',file:'aaftheme.less')}" />
+		
+	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/jquery-1.4.2.min.js')}"></script>
+	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/jquery-ui-1.8.2.custom.min.js')}"></script>
+	<script type="text/javascript" src="${resource(dir: 'js', file: 'less-1.0.32.min.js')}"></script>
+	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/jquery.jgrowl.min.js')}"></script>
+	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/jquery.validate.pack.js')}"></script>
+	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/jquery.validate.additional-methods.js')}"></script>
+	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/jquery.form.wizard-2.0.1-min.js')}"></script>
+			
+	<script type="text/javascript" src="${resource(dir: 'js', file: '/fedreg-members.js')}"></script>
+	<nh:nimbleui/>
+		
+	<script type="text/javascript">
+      <njs:flashgrowl/>
+	</script>
 	
     <g:layoutHead />
+
 </head>
 
 <body>
 
-  <div id="doc">
-    <div id="hd">
-		<g:render template='/templates/aafheader' model="['navigation':true]"/>
-    </div>
-    <div id="bd">
-		<div id="working"><img src="${resource(dir:'images', file:'spinner.gif')}" width="20" height="20"><br/><g:message code="label.working"/></div>
-		
-		<div class="container">
-	    	<div class="localnavigation">
-			  <h3><g:message code="fedreg.layout.workflow.navigation.title" /></h3>
-			    <ul>
-					
-					<g:if test="${controllerName == 'workflowProcess' && actionName in ['show', 'edit']}">
-					<li>
-						<g:link controller="workflowProcess" action="show" id="${process.id}"><h4>${process.name?.encodeAsHTML()}</h4></g:link>
-						<ul>
-							<li><g:link controller="workflowProcess" action="edit" id="${process.id}"><g:message code="label.edit"/></g:link></li>
-						</ul>
-						<hr>
-					</li>
+    <header>
+		<g:render template='/templates/aafheader' />
+    </header>
+    
+	<nav>
+		<n:isLoggedIn>
+			<g:render template='/templates/aaftopnavigation'/>
+
+			<ul class="level2">
+				<li class="${controllerName == 'workflowProcess' ? 'active':''}">
+					<g:link controller="workflowProcess" action="list"><g:message code="label.processes" /></g:link>
+				</li>
+				<li class="${controllerName == 'workflowScript' ? 'active':''}">
+					<g:link controller="workflowScript" action="list"><g:message code="label.scripts" /></g:link>
+				</li>
+			</ul>
+			
+			<g:if test="${controllerName == 'workflowProcess'}">
+				<ul class="level3a">
+					<li class="${actionName == 'list' ? 'active':''}"><g:link controller="workflowProcess" action="list"><g:message code="label.list"/></g:link></li>
+					<li class="${actionName == 'create' ? 'active':''}"><g:link controller="workflowProcess" action="create"><g:message code="label.create"/></g:link></li>
+					<g:if test="${actionName in ['show', 'edit']}">
+					<li> | </li>
+					<li><g:message code="fedreg.view.workflow.process.show.heading" args="[process.name]"/>: </li>
+					<li class="${actionName == 'show' ? 'active':''}"><g:link controller="workflowProcess" action="show" id="${process.id}"><g:message code="label.view"/></g:link></li>
+					<li class="${actionName == 'edit' ? 'active':''}"><g:link controller="workflowProcess" action="edit" id="${process.id}" class="${actionName == 'edit' ? 'active':''}"><g:message code="label.edit"/></g:link></li>
 					</g:if>
-					<g:if test="${controllerName == 'workflowScript' && actionName in ['show', 'edit']}">
-					<li>
-						<g:link controller="workflowScript" action="show" id="${script.id}"><h4>${script.name?.encodeAsHTML()}</h4></g:link>
-						<ul>
-							<li><g:link controller="workflowScript" action="edit" id="${script.id}"><g:message code="label.edit"/></g:link></li>
-						</ul>
-						<hr>
-					</li>
-					</g:if>
-					
-					<!-- Processes -->
-				  	<li>
-						<h4><g:message code="fedreg.layout.workflow.navigation.process.title" /></h4>
-						<ul>
-							<li><g:link controller="workflowProcess" action="list"><g:message code="label.list" /></g:link></li>
-							<li><g:link controller="workflowProcess" action="create"><g:message code="label.create" /></g:link></li>
-						</ul>
-					</li>
-					
-					<!-- Scripts -->
-				  	<li>
-						<h4><g:message code="fedreg.layout.workflow.navigation.script.title" /></h4>
-						<ul>
-							<li><g:link controller="workflowScript" action="list"><g:message code="label.list" /></g:link></li>
-							<li><g:link controller="workflowScript" action="create"><g:message code="label.create" /></g:link></li>
-						</ul>
-					</li>
 				</ul>
-			</div>
-			<div class="content">
-	      		<g:layoutBody/>
-			</div>
-		</div>
-    </div>
-    <div id="ft">
-	
-    </div>
-  </div>
+			</g:if>
+		</n:isLoggedIn>
+	</nav>
+	<section>
+		<div id="working"><img src="${resource(dir:'images', file:'spinner.gif')}" width="20" height="20"> <br> <g:message code="label.working"/></div>
+
+		<g:layoutBody/>
+    </section>
 
 <n:sessionterminated/>
 

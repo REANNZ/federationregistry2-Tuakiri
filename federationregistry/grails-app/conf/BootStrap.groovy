@@ -47,6 +47,12 @@ class BootStrap {
 				def s = new WorkflowScript(name: name[0][1], definition: script.getText(), creator:User.findByUsername('internaladministrator'))
 				if(!s.save()) {
 					log.error "Unable to correctly process workflow script $script during bootstrap"
+					s.errors.each {
+						log.error it
+					}
+				}
+				else {
+					log.info "Loaded valid workflow script $script"
 				}
 			}
 		}
