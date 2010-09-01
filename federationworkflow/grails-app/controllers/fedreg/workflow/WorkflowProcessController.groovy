@@ -1,12 +1,12 @@
 package fedreg.workflow
 
 class WorkflowProcessController {
-	
-	def processService
-	def defaultAction = "list"
+	static defaultAction = "list"
+		
+	def workflowProcessService
 
 	def list = {
-		def processList = Process.findWhere(active: true)
+		def processList = Process.findAllWhere(active: true)
 		[processList: processList]
 	}
 	
@@ -23,9 +23,9 @@ class WorkflowProcessController {
 			return
 		}
 		
-		def process
+		def created, process
 		try {
-			process = processService.create(params.code)
+			(created, process) = workflowProcessService.create(params.code)
 		}
 		catch(Exception e) {
 			process = new Process(definition: params.code)
@@ -35,7 +35,10 @@ class WorkflowProcessController {
 			return
 		}
 		
-		if(process.hasErrors()) {
+		if(!created) {
+			process.errors.each {
+				log.debug it
+			}
 			flash.type = "error"
 		    flash.message = message(code: 'fedreg.workflow.process.create.error')
 			render view: "create", model: [process: process]
@@ -99,31 +102,27 @@ class WorkflowProcessController {
 			return
 		}
 		
-		def updatedProcess
+		def updated, process_
 		try {
-			updatedProcess = processService.update(process.name, params.code)
+			(updated, process_) = workflowProcessService.update(process.name, params.code)
 		}
 		catch(Exception e) {
 			flash.type = "error"
 		    flash.message = message(code: 'fedreg.workflow.process.update.totalfailure')
-			render view: "create", model: [process: process]
+			render view: "edit", model: [process: process]
 			return
 		}
 		
-		if(!updatedProcess) {
-			flash.type = "error"
-		    flash.message = message(code: 'fedreg.workflow.process.nonexistant', args: [params.id])
-			render view: "list"
-			return
-		}
-		
-		if(updatedProcess.hasErrors()) {
+		if(!updated) {
+			process_.errors.each {
+				log.debug it
+			}
 			flash.type = "error"
 		    flash.message = message(code: 'fedreg.workflow.process.update.error')
-			render view: "edit", model: [process: updatedProcess]
+			render view: "edit", model: [process: process_]
 			return
 		}
 		
-		redirect action: "show", id: updatedProcess.id
+		redirect action: "show", id: process_.id
 	}
 }

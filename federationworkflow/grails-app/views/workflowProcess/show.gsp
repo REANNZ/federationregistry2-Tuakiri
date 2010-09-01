@@ -7,10 +7,10 @@
 	</head>
 	
 	<body>
-		
-		<h2><g:message code="fedreg.view.workflow.process.show.heading" args="[process.name]"/></h2>
-		<div class="details">
-			<table class="datatable buttons">
+		<section>
+			<h2><g:message code="fedreg.view.workflow.process.show.heading" args="[process.name]"/></h2>
+
+			<table>
 				<tbody>		
 					<tr>
 						<th><g:message code="label.description" /></th>
@@ -33,14 +33,13 @@
 						<td><g:link controller="user" action="show" id="${process.creator.id}">${process.creator.profile?.fullName ?: process.creator.username}</g:link></td>
 					</tr>
 					<tr>
-						<th><g:message code="label.definition" /></th>
+						<th><g:message code="label.definition" />:</th>
 						<td></td>
 					</tr>
 				</tbody>
 			</table>
 			<pre style="padding: 24px;">${fieldValue(bean: process, field: "definition")}</pre>
-		</div>
+		</section>
 		
 	</body>
-	
 </html>

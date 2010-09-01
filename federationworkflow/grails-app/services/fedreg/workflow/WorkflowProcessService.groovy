@@ -73,6 +73,14 @@ class WorkflowProcessService {
 			throw new RuntimeException("Unable to save when interpreting ${process}")
 		}
 		
+		processes.each {
+			if(it.active) {
+				it.active = false;
+				if(!it.save())
+					throw new RuntimeException("Unable to save when deactivating ${process}")
+			}
+		}
+		
 		[true, process]
 	}
 	
