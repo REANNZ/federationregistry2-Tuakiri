@@ -60,6 +60,20 @@
 					</g:if>
 				</ul>
 			</g:if>
+			
+			<g:if test="${controllerName == 'workflowScript'}">
+				<ul class="level3a">
+					<li class="${actionName == 'list' ? 'active':''}"><g:link controller="workflowScript" action="list"><g:message code="label.list"/></g:link></li>
+					<li class="${actionName == 'create' ? 'active':''}"><g:link controller="workflowScript" action="create"><g:message code="label.create"/></g:link></li>
+					<g:if test="${actionName in ['show', 'edit']}">
+					<li> | </li>
+					<li><g:message code="fedreg.view.workflow.script.show.heading" args="[script.name]"/>: </li>
+					<li class="${actionName == 'show' ? 'active':''}"><g:link controller="workflowScript" action="show" id="${script.id}"><g:message code="label.view"/></g:link></li>
+					<li class="${actionName == 'edit' ? 'active':''}"><g:link controller="workflowScript" action="edit" id="${script.id}" class="${actionName == 'edit' ? 'active':''}"><g:message code="label.edit"/></g:link></li>
+					</g:if>
+				</ul>
+			</g:if>
+			
 		</n:isLoggedIn>
 	</nav>
 	<section>

@@ -7,10 +7,10 @@
 	</head>
 	
 	<body>
-		
-		<h2><g:message code="fedreg.view.workflow.script.show.heading" args="[script.name]"/></h2>
-		<div class="details">
-			<table class="datatable buttons">
+		<section>
+			<h2><g:message code="fedreg.view.workflow.script.show.heading" args="[script.name]"/></h2>
+
+			<table>
 				<tbody>		
 					<tr>
 						<th><g:message code="label.description" /></th>
@@ -35,8 +35,8 @@
 				</tbody>
 			</table>
 			<pre style="padding: 24px;">${fieldValue(bean: script, field: "definition")}</pre>
-		</div>
-		
+
+		</section>
 	</body>
 	
 </html>

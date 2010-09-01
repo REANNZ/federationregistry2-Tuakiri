@@ -6,26 +6,30 @@
 		<title><g:message code="fedreg.view.workflow.script.list.title" /></title>
 	</head>
 	<body>
-		<h2><g:message code="fedreg.view.workflow.script.list.heading" /></h2>
+		<section>
+			<h2><g:message code="fedreg.view.workflow.script.list.heading" /></h2>
 		
-		<table class="enhancedtabledata">
-			<thead>
-				<tr>
-					<g:sortableColumn property="name" title="${message(code: 'label.name')}" />
-					<g:sortableColumn property="description" title="${message(code: 'label.description')}" />
-					<th/>
-					<th/>
-				</tr>
-			</thead>
-			<tbody>
-			<g:each in="${scriptList}" var="p" status="i">
-				<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-					<td>${fieldValue(bean: p, field: "name")}</td>
-					<td>${fieldValue(bean: p, field: "description")}</td>
-					<td><g:link action="show" id="${p.id}" class="button icon icon_magnifier"><g:message code="label.view" /></g:link></td>
-				</tr>
-			</g:each>
-			</tbody>
-		</table>
+			<table>
+				<thead>
+					<tr>
+						<g:sortableColumn property="name" title="${message(code: 'label.name')}" />
+						<g:sortableColumn property="description" title="${message(code: 'label.description')}" />
+						<th/>
+						<th/>
+					</tr>
+				</thead>
+				<tbody>
+				<g:each in="${scriptList}" var="p" status="i">
+					<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
+						<td>${fieldValue(bean: p, field: "name")}</td>
+						<td>${fieldValue(bean: p, field: "description")}</td>
+						<td>
+							<n:button href="${createLink(controller:'workflowScript', action:'show', id: p.id)}" label="${message(code:'label.view')}" icon="arrowthick-1-ne"/>
+						</td>
+					</tr>
+				</g:each>
+				</tbody>
+			</table>
+		</section>
 	</body>
 </html>
