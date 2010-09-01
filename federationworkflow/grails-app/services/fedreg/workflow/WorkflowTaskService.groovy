@@ -44,7 +44,6 @@ class WorkflowTaskService {
 		// This will generally only be the case where a task is a join point in 
 		// our flow and must wait for multiple dependenices to complete
 		processInstance.taskInstances.each { ti ->
-			log.debug "WTF ${ti.task} ${ti.status}"
 			if(ti.task.id == task.id && ti.status == TaskStatus.DEPENDENCYWAIT ) {
 				log.info "Located existing $ti to represent $task within $processInstance"
 				taskInstance = ti
@@ -57,22 +56,22 @@ class WorkflowTaskService {
 			task.addToInstances(taskInstance)
 			processInstance.addToTaskInstances(taskInstance)
 	
-			if(!processInstance.save(flush:true)) {
+			if(!processInstance.save()) {
 				log.error "Unable to update $processInstance with new taskInstance"
 				task.errors.each { log.error it }
-				return
+				// RTE
 			}
 	
-			if(!task.save(flush:true)) {
+			if(!task.save()) {
 				log.error "Unable to update Task with new instance for $processInstance and $task"
 				task.errors.each { log.error it }
-				return
+				// RTE
 			}
 	
-			if(!taskInstance.save(flush:true)) {
+			if(!taskInstance.save()) {
 				log.error "Unable to create taskInstance for $processInstance and $task"
 				task.errors.each { log.error it }
-				return
+				// RTE
 			}
 		}
 	
@@ -99,9 +98,10 @@ class WorkflowTaskService {
 				log.info "Task $task has dependencies ${task.dependencies} which are not all complete, sleeping until all are ready"
 				taskInstance.status = TaskStatus.DEPENDENCYWAIT
 
-				if(!taskInstance.save(flush:true)) {
+				if(!taskInstance.save()) {
 					log.error "While attempting to update taskInstance ${taskInstance.id} with DEPENDENCYWAIT status a failure occured"
 					taskInstance.errors.each { log.error it }
+					// RTE
 				}
 				return
 			}
@@ -132,9 +132,10 @@ class WorkflowTaskService {
 		}
 		log.info "Terminating execution of $taskInstance in ${taskInstance.processInstance}"
 		taskInstance.status = TaskStatus.TERMINATED
-		if(!taskInstance.save(flush:true)) {
+		if(!taskInstance.save()) {
 			log.error "While attempting to update taskInstance ${taskInstance.id} with TERMINATED status a failure occured"
 			taskInstance.errors.each { log.error it }
+			// RTE
 		}
 	}
 	
@@ -147,10 +148,10 @@ class WorkflowTaskService {
 		log.info "Approving execution of $taskInstance in ${taskInstance.processInstance}"
 		taskInstance.status = TaskStatus.APPROVALGRANTED
 		taskInstance.approver = authenticatedUser
-		if(!taskInstance.save(flush:true)) {
+		if(!taskInstance.save()) {
 			log.error "While attempting to update taskInstance ${taskInstance.id} with APPROVALGRANTED status a failure occured"
 			taskInstance.errors.each { log.error it }
-			return
+			// RTE
 		}
 		if(taskInstance.task.executes()) {
 			log.debug "Triggering execute for taskInstance ${taskInstance.id} bound to task ${taskInstance.task.name}"
@@ -181,10 +182,10 @@ class WorkflowTaskService {
 		log.info "Rejecting execution of $taskInstance in ${taskInstance.processInstance} due to $rejectionName with additional comment $rejectionComment"
 		taskInstance.status = TaskStatus.APPROVALREJECTED
 		taskInstance.approver = authenticatedUser
-		if(!taskInstance.save(flush:true)) {
+		if(!taskInstance.save()) {
 			log.error "While attempting to update $taskInstance with APPROVALREJECTED status a failure occured"
 			taskInstance.errors.each { log.error it }
-			return
+			// RTE
 		}
 		
 		terminateAndStartTasks(taskInstance, rejection)
@@ -198,10 +199,10 @@ class WorkflowTaskService {
 		}
 		
 		taskInstance.status = TaskStatus.INPROGRESS
-		if(!taskInstance.save(flush:true)) {
+		if(!taskInstance.save()) {
 			log.error "While attempting to update $taskInstance with INPROGRESS status a failure occured"
 			taskInstance.errors.each { log.error it }
-			return
+			// RTE
 		}
 		
 		log.debug "Executing $taskInstance for ${taskInstance.processInstance}"
@@ -225,10 +226,10 @@ class WorkflowTaskService {
 		}
 		
 		taskInstance.status = TaskStatus.SUCCESSFUL
-		if(!taskInstance.save(flush:true)) {
+		if(!taskInstance.save()) {
 			log.error "While attempting to update taskInstance ${taskInstance.id} with SUCCESSFUL status a failure occured"
 			taskInstance.errors.each { log.error it }
-			return
+			// RTE
 		}
 		
 		log.info "Completed $taskInstance for ${taskInstance.processInstance} with outcome $outcomeName"
@@ -243,10 +244,10 @@ class WorkflowTaskService {
 		}
 		
 		taskInstance.status = TaskStatus.FINALIZED
-		if(!taskInstance.save(flush:true)) {
+		if(!taskInstance.save()) {
 			log.error "While attempting to update $taskInstance with FINALIZED status a failure occured"
 			taskInstance.errors.each { log.error it }
-			return
+			// RTE
 		}
 		log.info "Finalized $taskInstance for ${taskInstance.processInstance}"
 	}
@@ -326,9 +327,10 @@ class WorkflowTaskService {
 			// The task requires approval but all avenues to locate an authoritative source have failed. The process is now effectively dead
 			log.error "Unable to locate a valid approver for process '${taskInstance.processInstance.description}' and task '${taskInstance.task.name}', process is invalid and will be terminated"
 			taskInstance.status = TaskStatus.APPROVALFAILURE
-			if(!taskInstance.save(flush:true)) {
+			if(!taskInstance.save()) {
 				log.error "While attempting to update taskInstance ${taskInstance.id} with APPROVALFAILURE status a failure occured"
 				taskInstance.errors.each { log.error it }
+				// RTE
 			}
 		}
 		else {
@@ -338,9 +340,10 @@ class WorkflowTaskService {
 			// Messages have been queued to all concerned requesting approval so we're now in a wait state
 			log.debug "Located valid approver(s) for process '${taskInstance.processInstance.description}' and task '${taskInstance.task.name}', task will continue once approved"
 			taskInstance.status = TaskStatus.APPROVALREQUIRED
-			if(!taskInstance.save(flush:true)) {
+			if(!taskInstance.save()) {
 				log.error "While attempting to update taskInstance ${taskInstance.id} with REQUIRESAPPROVAL status a failure occured"
 				taskInstance.errors.each { log.error it }
+				// RTE
 			}
 		}
 	}
@@ -352,8 +355,8 @@ class WorkflowTaskService {
 		sendMail {
             to user.profile.email		
 			from grailsApplication.config.workflow.messaging.mail.from
-            subject messageSource.getMessage('workflow.requestapproval.mail.subject', args, 'workflow.requestapproval.mail.subject', new Locale("EN"))	// TODO: Draw language from user object when supported by Nimble
-            body(view: '/templates/mail/_workflow_requestapproval', model: [taskInstance: taskInstance])
+            subject messageSource.getMessage('fedreg.workflow.requestapproval.mail.subject', args, 'fedreg.workflow.requestapproval.mail.subject', new Locale("EN"))	// TODO: Draw language from user object when supported by Nimble
+            body(view: '/templates/mail/_workflow_requestapproval', plugin: "federationworkflow", model: [taskInstance: taskInstance])
         }
 	}
 	

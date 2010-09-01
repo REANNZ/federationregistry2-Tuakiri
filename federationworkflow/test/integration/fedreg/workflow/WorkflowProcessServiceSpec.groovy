@@ -32,14 +32,17 @@ class WorkflowProcessServiceSpec extends IntegrationSpec {
 		setup:
 		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:workflowProcessService.authenticatedUser)
 		testScript.save()
-		testScript.errors.each {println it}
+
 		minimalDefinition = new File('test/data/minimal.pr').getText()
 		
 		when:
-		workflowProcessService.create(minimalDefinition)
+		def(created, process_) = workflowProcessService.create(minimalDefinition)
 		
 		then:
+		created
+		
 		def process = Process.findByName('Minimal Test Process')
+		process == process_
 		
 		process.tasks.get(0).outcomes.get('testoutcome1').start.contains('task2')
 		process.tasks.get(0).needsApproval() == true
@@ -73,12 +76,15 @@ class WorkflowProcessServiceSpec extends IntegrationSpec {
 		def process = Process.findByName('Minimal Test Process')
 		
 		when:		
-		workflowProcessService.initiate(process.name, "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
+		def(created, processInstance_) = workflowProcessService.initiate(process.name, "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
 		
 		then:
+		created
 		def processInstance = ProcessInstance.get(1)
+		processInstance == processInstance_
 		processInstance.process == process
 		processInstance.description == "Approving XYZ Widget"
+
 		processInstance.params.get('TEST_VAR').equals('VALUE_1')
 		processInstance.params.get('TEST_VAR2').equals('VALUE_2')
 		processInstance.params.get('TEST_VAR3').equals('VALUE_3')
@@ -91,9 +97,10 @@ class WorkflowProcessServiceSpec extends IntegrationSpec {
 		minimalDefinition = new File('test/data/minimal-broken.pr').getText()
 		
 		when:		
-		def process = workflowProcessService.create(minimalDefinition)
+		def (created, process) = workflowProcessService.create(minimalDefinition)
 		
 		then:
+		!created
 		process.hasErrors()
 	}
 	
@@ -105,10 +112,14 @@ class WorkflowProcessServiceSpec extends IntegrationSpec {
 		workflowProcessService.create(minimalDefinition)
 		
 		when:		
-		workflowProcessService.update('Minimal Test Process', updatedDefinition)
+		def (updated, process_) = workflowProcessService.update('Minimal Test Process', updatedDefinition)
 		
 		then:
+		updated
+		
 		def process = Process.findWhere(name: 'Minimal Test Process', active: true)
+		process == process_
+		
 		process.description == 'Minimal test process description mkII'
 		process.processVersion == 2
 		process.tasks.get(0).description == 'Description of task1 mkII'
@@ -149,15 +160,20 @@ class WorkflowProcessServiceSpec extends IntegrationSpec {
 		workflowProcessService.create(minimalDefinition)
 		
 		when:		
-		def processInstance = workflowProcessService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
-		workflowProcessService.update('Minimal Test Process', updatedDefinition)
-		def processInstance2 = workflowProcessService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
+		def (initiated, processInstance) = workflowProcessService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
+		def (updated, newProcess) = workflowProcessService.update('Minimal Test Process', updatedDefinition)
+		def (initiated_, processInstance_) = workflowProcessService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
 		
 		then:
+		initiated
+		updated
+		initiated_
+		
 		Process.countByName('Minimal Test Process') == 2
-		processInstance.process != processInstance2.process
+		processInstance.process != processInstance_.process
+		processInstance_.process == newProcess
 		processInstance.process.description == 'Minimal test process description'
-		processInstance2.process.description == 'Minimal test process description mkII'
+		processInstance_.process.description == 'Minimal test process description mkII'
 	}
 	
 }

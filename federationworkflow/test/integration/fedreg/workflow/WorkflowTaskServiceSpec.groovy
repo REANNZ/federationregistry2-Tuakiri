@@ -18,7 +18,6 @@ import com.icegreen.greenmail.util.*
 import org.codehaus.groovy.runtime.InvokerHelper
 
 class WorkflowTaskServiceSpec extends IntegrationSpec {
-	static transactional = true
 	
 	def workflowProcessService
 	def workflowTaskService
@@ -45,15 +44,13 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 	def "Validate first task in minimal process requires approval when process is run"() {
 		setup:
 		SpecHelpers.registerMetaClass(WorkflowTaskService, savedMetaClasses)
-		workflowTaskService.metaClass = WorkflowTaskService.metaClass	// Register existing metaClass and utilize new instance with injected service
+		workflowTaskService.metaClass = WorkflowTaskService.metaClass
+		
+		
+		def result = new BlockingVariable<Boolean>(2, TimeUnit.SECONDS)
 		
 		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:workflowProcessService.authenticatedUser).save()
 		minimalDefinition = new File('test/data/minimal.pr').getText()
-		workflowProcessService.create(minimalDefinition)
-		def processInstance = workflowProcessService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
-		
-		// Utilize new (31/5/10) Spock 0.4 support for spec'ing multi-threaded code (very cool use of CountDownLatch)
-		def result = new BlockingVariable<Boolean>(2, TimeUnit.SECONDS)
 		
 		def originalMethod = WorkflowTaskService.metaClass.getMetaMethod("requestApproval", [Object])
 		WorkflowTaskService.metaClass.requestApproval = { def taskInstanceID ->
@@ -61,34 +58,38 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 			result.set(true)
 		}
 		
-		when:				
+		def initiated, processInstance	// Spock bug, tuple assignment combined with cleanup explodes so we need to pre-declare
+		
+		when:
+		workflowProcessService.create(minimalDefinition)
+		(initiated, processInstance) = workflowProcessService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
 		workflowProcessService.run(processInstance)
 		
 		then:
-		result.get() == true
-		sessionFactory.getCurrentSession().clear();
+		result.get()
 		processInstance.taskInstances.size() == 1
 		TaskInstance.list().get(0).status == TaskStatus.APPROVALREQUIRED
 		greenMail.getReceivedMessages().length == 1
 		def message = greenMail.getReceivedMessages()[0]
-		message.subject == 'workflow.requestapproval.mail.subject'
+		message.subject == 'fedreg.workflow.requestapproval.mail.subject'
 		
 		cleanup:
 		SpecHelpers.resetMetaClasses(savedMetaClasses)
-		workflowTaskService.metaClass = WorkflowTaskService.metaClass	// Restore to default metaClass and restore service
+		workflowTaskService.metaClass = WorkflowTaskService.metaClass
 	}
 	
 	def "Validate first task in minimal process requires approval when process is run and approval is provided to users in role1, also validates correct variable substition to workflow script"() {
 		setup:
 		SpecHelpers.registerMetaClass(WorkflowTaskService, savedMetaClasses)
-		workflowTaskService.metaClass = WorkflowTaskService.metaClass	// Register existing metaClass and utilize new instance with injected service
+		workflowTaskService.metaClass = WorkflowTaskService.metaClass
 		
 		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:workflowProcessService.authenticatedUser).save()
 		minimalDefinition = new File('test/data/minimal.pr').getText()
 		workflowProcessService.create(minimalDefinition)
-		def processInstance = workflowProcessService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'role1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
+		def initiated, processInstance
+		(initiated, processInstance) = workflowProcessService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'role1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
 		
-		// Utilize new (31/5/10) Spock 0.4 support for spec'ing multi-threaded code (very cool use of CountDownLatch)
+		
 		def result = new BlockingVariable<Boolean>(2, TimeUnit.SECONDS)
 		
 		def originalMethod = WorkflowTaskService.metaClass.getMetaMethod("requestApproval", [Object])
@@ -108,33 +109,33 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 		
 		then:
 		result.get() == true
-		sessionFactory.getCurrentSession().clear();
 		processInstance.taskInstances.size() == 1
 		TaskInstance.list().get(0).status == TaskStatus.APPROVALREQUIRED
 		greenMail.getReceivedMessages().length == 2
 		def message = greenMail.getReceivedMessages()[0]
-		'workflow.requestapproval.mail.subject' == message.subject
+		'fedreg.workflow.requestapproval.mail.subject' == message.subject
 		'test@testdomain.com' == GreenMailUtil.getAddressList(message.getRecipients(javax.mail.Message.RecipientType.TO))
 		def message2 = greenMail.getReceivedMessages()[1]
-		'workflow.requestapproval.mail.subject' == message2.subject
+		'fedreg.workflow.requestapproval.mail.subject' == message2.subject
 		'test2@testdomain.com' == GreenMailUtil.getAddressList(message2.getRecipients(javax.mail.Message.RecipientType.TO))
 		
 		cleanup:
 		SpecHelpers.resetMetaClasses(savedMetaClasses)
-		workflowTaskService.metaClass = WorkflowTaskService.metaClass	// Restore to default metaClass and restore service
+		workflowTaskService.metaClass = WorkflowTaskService.metaClass
 	}
 	
 	def "Validate first task in minimal process requires approval when process is run and approval is provided to users in group1, also validates correct variable substition to workflow script"() {
 		setup:
 		SpecHelpers.registerMetaClass(WorkflowTaskService, savedMetaClasses)
-		workflowTaskService.metaClass = WorkflowTaskService.metaClass	// Register existing metaClass and utilize new instance with injected service
+		workflowTaskService.metaClass = WorkflowTaskService.metaClass
 		
 		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:workflowProcessService.authenticatedUser).save()
 		minimalDefinition = new File('test/data/minimal.pr').getText()
 		workflowProcessService.create(minimalDefinition)
-		def processInstance = workflowProcessService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'TEST_VAR1', 'TEST_VAR2':'group1', 'TEST_VAR3':'VALUE_3'])
+		def initiated, processInstance
+		(initiated, processInstance) = workflowProcessService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'TEST_VAR1', 'TEST_VAR2':'group1', 'TEST_VAR3':'VALUE_3'])
 		
-		// Utilize new (31/5/10) Spock 0.4 support for spec'ing multi-threaded code (very cool use of CountDownLatch)
+		
 		def result = new BlockingVariable<Boolean>(2, TimeUnit.SECONDS)
 		
 		def originalMethod = WorkflowTaskService.metaClass.getMetaMethod("requestApproval", [Object])
@@ -154,20 +155,19 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 		
 		then:
 		result.get() == true
-		sessionFactory.getCurrentSession().clear();
 		processInstance.taskInstances.size() == 1
 		TaskInstance.list().get(0).status == TaskStatus.APPROVALREQUIRED
 		greenMail.getReceivedMessages().length == 2
 		def message = greenMail.getReceivedMessages()[0]
-		'workflow.requestapproval.mail.subject' == message.subject
+		'fedreg.workflow.requestapproval.mail.subject' == message.subject
 		'test@testdomain.com' == GreenMailUtil.getAddressList(message.getRecipients(javax.mail.Message.RecipientType.TO))
 		def message2 = greenMail.getReceivedMessages()[1]
-		'workflow.requestapproval.mail.subject' == message2.subject
+		'fedreg.workflow.requestapproval.mail.subject' == message2.subject
 		'test2@testdomain.com' == GreenMailUtil.getAddressList(message2.getRecipients(javax.mail.Message.RecipientType.TO))
 		
 		cleanup:
 		SpecHelpers.resetMetaClasses(savedMetaClasses)
-		workflowTaskService.metaClass = WorkflowTaskService.metaClass	// Restore to default metaClass and restore service
+		workflowTaskService.metaClass = WorkflowTaskService.metaClass
 	}
 
 	def "Validate first task in minimal process executes when process is run and task approved"() {
@@ -180,7 +180,8 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 		minimalDefinition = new File('test/data/minimal.pr').getText()
 		workflowProcessService.create(minimalDefinition)
 		def env = ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3']
-		def processInstance = workflowProcessService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, env)
+		def initiated, processInstance
+		(initiated, processInstance) = workflowProcessService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, env)
 		
 		def requestApproval = WorkflowTaskService.metaClass.getMetaMethod("requestApproval", [Object])
 		WorkflowTaskService.metaClass.requestApproval = { def taskInstanceID ->
@@ -197,13 +198,11 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 		when:				
 		workflowProcessService.run(processInstance)
 		if(block.approvalRequested) {
-			sessionFactory.getCurrentSession().clear();
 			workflowTaskService.approve(TaskInstance.list().get(0).id)
 		}
 		
 		then:
 		block.executed == true
-		sessionFactory.getCurrentSession().clear();
 		TaskInstance.list().get(0).status == TaskStatus.INPROGRESS
 		
 		cleanup:
@@ -219,7 +218,8 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:workflowProcessService.authenticatedUser).save()
 		minimalDefinition = new File('test/data/minimal.pr').getText()
 		workflowProcessService.create(minimalDefinition)
-		def processInstance = workflowProcessService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
+		def initiated, processInstance
+		(initiated, processInstance) = workflowProcessService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
 		
 		BlockingVariables block = new BlockingVariables(4, TimeUnit.SECONDS)
 		
@@ -240,7 +240,6 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 		when:				
 		workflowProcessService.run(processInstance)
 		if(block.approvalRequested) {
-			sessionFactory.getCurrentSession().clear();
 			workflowTaskService.reject(TaskInstance.list().get(0).id, 'rejection1', 'supplied test reason')
 		}
 		
@@ -250,7 +249,6 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 		block.starts == 1
 		block.startTask6 == true
 		
-		sessionFactory.getCurrentSession().clear();
 		TaskInstance.list().get(0).status == TaskStatus.APPROVALREJECTED
 		
 		cleanup:
@@ -266,7 +264,8 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:workflowProcessService.authenticatedUser).save()
 		minimalDefinition = new File('test/data/minimal.pr').getText()
 		workflowProcessService.create(minimalDefinition)
-		def processInstance = workflowProcessService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
+		def initiated, processInstance
+		(initiated, processInstance) = workflowProcessService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
 		
 		BlockingVariables block = new BlockingVariables(4, TimeUnit.SECONDS)
 		
@@ -291,12 +290,10 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 		when:				
 		workflowProcessService.run(processInstance)
 		if(block.approvalRequested) {
-			sessionFactory.getCurrentSession().clear();
 			workflowTaskService.approve(TaskInstance.list().get(0).id)
 		}
 		
 		if(block.executed) {
-			sessionFactory.getCurrentSession().clear();
 			workflowTaskService.complete(TaskInstance.list().get(0).id, 'testoutcome1')
 		}
 		
@@ -317,7 +314,8 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:workflowProcessService.authenticatedUser).save()
 		minimalDefinition = new File('test/data/minimal.pr').getText()
 		workflowProcessService.create(minimalDefinition)
-		def processInstance = workflowProcessService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
+		def initiated, processInstance
+		(initiated, processInstance) = workflowProcessService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
 		
 		BlockingVariables block = new BlockingVariables(4, TimeUnit.SECONDS)
 		
@@ -348,12 +346,10 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 		when:				
 		workflowProcessService.run(processInstance)
 		if(block.approval0) {
-			sessionFactory.getCurrentSession().clear()
 			workflowTaskService.approve(TaskInstance.list().get(0).id)
 		}
 		
 		if(block.execute0) {
-			sessionFactory.getCurrentSession().clear();
 			workflowTaskService.complete(TaskInstance.list().get(0).id, 'testoutcome1')
 		}
 		
@@ -363,7 +359,6 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 		executeCount == 1
 		block.complete0 == true
 		completeCount == 1
-		sessionFactory.getCurrentSession().clear();
 		TaskInstance.list().get(0).status == TaskStatus.SUCCESSFUL
 		TaskInstance.list().get(1).status == TaskStatus.APPROVALREQUIRED
 		
@@ -380,7 +375,8 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:workflowProcessService.authenticatedUser).save()
 		minimalDefinition = new File('test/data/minimal.pr').getText()
 		workflowProcessService.create(minimalDefinition)
-		def processInstance = workflowProcessService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
+		def initiated, processInstance
+		(initiated, processInstance) = workflowProcessService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
 		
 		BlockingVariables block = new BlockingVariables(4, TimeUnit.SECONDS)
 		
@@ -411,22 +407,18 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 		when:		
 		workflowProcessService.run(processInstance)
 		if(block.approval0) {
-			sessionFactory.getCurrentSession().clear()
 			workflowTaskService.approve(TaskInstance.list().get(0).id)
 		}
 		
 		if(block.execute0) {
-			sessionFactory.getCurrentSession().clear();
 			workflowTaskService.complete(TaskInstance.list().get(0).id, 'testoutcome1')
 		}
 		
 		if(block.complete0 && block.approval1) {
-			sessionFactory.getCurrentSession().clear()
 			workflowTaskService.approve(TaskInstance.list().get(1).id)
 		}
 		
 		if(block.execute1) {
-			sessionFactory.getCurrentSession().clear();
 			workflowTaskService.complete(TaskInstance.list().get(1).id, 'testoutcome2')
 		}
 		
@@ -435,7 +427,6 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 		approvalCount == 3
 		block.execute2 == true
 		executeCount = 3
-		sessionFactory.getCurrentSession().clear();
 		TaskInstance.list().get(0).status == TaskStatus.SUCCESSFUL				// Task 1
 		TaskInstance.list().get(1).status == TaskStatus.SUCCESSFUL				// Task 2
 		TaskInstance.list().get(2).status == TaskStatus.APPROVALREQUIRED		// Task 3
@@ -454,7 +445,8 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:workflowProcessService.authenticatedUser).save()
 		minimalDefinition = new File('test/data/minimal.pr').getText()
 		workflowProcessService.create(minimalDefinition)
-		def processInstance = workflowProcessService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
+		def initiated, processInstance
+		(initiated, processInstance) = workflowProcessService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
 		
 		BlockingVariables block = new BlockingVariables(4, TimeUnit.SECONDS)
 		
@@ -485,27 +477,22 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 		when:		
 		workflowProcessService.run(processInstance)
 		if(block.approval0) {
-			sessionFactory.getCurrentSession().clear()
 			workflowTaskService.approve(TaskInstance.list().get(0).id)
 		}
 		
 		if(block.execute0) {
-			sessionFactory.getCurrentSession().clear();
 			workflowTaskService.complete(TaskInstance.list().get(0).id, 'testoutcome1')
 		}
 		
 		if(block.complete0 && block.approval1) {
-			sessionFactory.getCurrentSession().clear()
 			workflowTaskService.approve(TaskInstance.list().get(1).id)
 		}
 		
 		if(block.execute1) {
-			sessionFactory.getCurrentSession().clear();
 			workflowTaskService.complete(TaskInstance.list().get(1).id, 'testoutcome2')
 		}
 		
 		if(block.execute2) {
-			sessionFactory.getCurrentSession().clear();
 			workflowTaskService.complete(TaskInstance.list().get(3).id, 'testoutcome5')
 		}
 		
@@ -514,7 +501,6 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 		approvalCount == 3
 		block.execute2 == true
 		executeCount = 3
-		sessionFactory.getCurrentSession().clear();
 		TaskInstance.list().get(0).status == TaskStatus.SUCCESSFUL				// Task 1
 		TaskInstance.list().get(1).status == TaskStatus.SUCCESSFUL				// Task 2
 		TaskInstance.list().get(2).status == TaskStatus.APPROVALREQUIRED		// Task 3
@@ -535,7 +521,8 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:workflowProcessService.authenticatedUser).save()
 		minimalDefinition = new File('test/data/minimal.pr').getText()
 		workflowProcessService.create(minimalDefinition)
-		def processInstance = workflowProcessService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
+		def initiated, processInstance
+		(initiated, processInstance) = workflowProcessService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
 		
 		BlockingVariables block = new BlockingVariables(4, TimeUnit.SECONDS)
 		
@@ -566,31 +553,25 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 		when:		
 		workflowProcessService.run(processInstance)
 		if(block.approval0) {
-			sessionFactory.getCurrentSession().clear()
 			workflowTaskService.approve(TaskInstance.list().get(0).id)
 		}
 		
 		if(block.execute0) {
-			sessionFactory.getCurrentSession().clear();
 			workflowTaskService.complete(TaskInstance.list().get(0).id, 'testoutcome1')
 		}
 		
 		if(block.complete0 && block.approval1) {
-			sessionFactory.getCurrentSession().clear()
 			workflowTaskService.approve(TaskInstance.list().get(1).id)
 		}
 		
 		if(block.execute1) {
-			sessionFactory.getCurrentSession().clear();
 			workflowTaskService.complete(TaskInstance.list().get(1).id, 'testoutcome2')
 		}
 		
 		if(block.complete1) {
-			sessionFactory.getCurrentSession().clear();
 			workflowTaskService.approve(TaskInstance.list().get(2).id)
 		}
 		if(block.execute2) {
-			sessionFactory.getCurrentSession().clear();
 			workflowTaskService.complete(TaskInstance.list().get(3).id, 'testoutcome5')
 		}
 		
@@ -602,7 +583,6 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 		block.complete2 == true
 		block.complete3 == true
 		completeCount == 4
-		sessionFactory.getCurrentSession().clear();
 		TaskInstance.list().get(0).status == TaskStatus.SUCCESSFUL			// Task 1
 		TaskInstance.list().get(1).status == TaskStatus.SUCCESSFUL			// Task 2
 		TaskInstance.list().get(2).status == TaskStatus.SUCCESSFUL			// Task 3
@@ -623,7 +603,8 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:workflowProcessService.authenticatedUser).save()
 		minimalDefinition = new File('test/data/minimal.pr').getText()
 		workflowProcessService.create(minimalDefinition)
-		def processInstance = workflowProcessService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
+		def initiated, processInstance
+		(initiated, processInstance) = workflowProcessService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
 		
 		BlockingVariables block = new BlockingVariables(4, TimeUnit.SECONDS)
 		
@@ -654,36 +635,29 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 		when:		
 		workflowProcessService.run(processInstance)
 		if(block.approval0) {
-			sessionFactory.getCurrentSession().clear()
 			workflowTaskService.approve(TaskInstance.list().get(0).id)
 		}
 		
 		if(block.execute0) {
-			sessionFactory.getCurrentSession().clear();
 			workflowTaskService.complete(TaskInstance.list().get(0).id, 'testoutcome1')
 		}
 		
 		if(block.complete0 && block.approval1) {
-			sessionFactory.getCurrentSession().clear()
 			workflowTaskService.approve(TaskInstance.list().get(1).id)
 		}
 		
 		if(block.execute1) {
-			sessionFactory.getCurrentSession().clear();
 			workflowTaskService.complete(TaskInstance.list().get(1).id, 'testoutcome2')
 		}
 		
 		if(block.complete1) {
-			sessionFactory.getCurrentSession().clear();
 			workflowTaskService.approve(TaskInstance.list().get(2).id)
 		}
 		if(block.execute2) {
-			sessionFactory.getCurrentSession().clear();
 			workflowTaskService.complete(TaskInstance.list().get(3).id, 'testoutcome5')
 		}
 		
 		if(block.execute3) {
-			sessionFactory.getCurrentSession().clear();
 			workflowTaskService.complete(TaskInstance.list().get(4).id, 'testoutcome6')
 		}
 		
@@ -694,7 +668,6 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 		executeCount = 3
 		block.complete4 == true
 		completeCount == 5
-		sessionFactory.getCurrentSession().clear();
 		TaskInstance.list().get(0).status == TaskStatus.SUCCESSFUL			// Task 1
 		TaskInstance.list().get(1).status == TaskStatus.SUCCESSFUL			// Task 2
 		TaskInstance.list().get(2).status == TaskStatus.SUCCESSFUL			// Task 3
@@ -717,7 +690,8 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 		minimalDefinition = new File('test/data/minimal.pr').getText()
 		def updatedDefinition = new File('test/data/minimal4.pr').getText()
 		workflowProcessService.create(minimalDefinition)
-		def processInstance = workflowProcessService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
+		def initiated, processInstance
+		(initiated, processInstance) = workflowProcessService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
 		
 		BlockingVariables block = new BlockingVariables(4, TimeUnit.SECONDS)
 		
@@ -748,38 +722,31 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 		when:		
 		workflowProcessService.run(processInstance)
 		if(block.approval0) {
-			sessionFactory.getCurrentSession().clear()
 			workflowTaskService.approve(TaskInstance.list().get(0).id)
 		}
 		
 		if(block.execute0) {
-			sessionFactory.getCurrentSession().clear();
 			workflowTaskService.complete(TaskInstance.list().get(0).id, 'testoutcome1')
 		}
 		
 		workflowProcessService.update('Minimal Test Process', updatedDefinition)
 		
 		if(block.complete0 && block.approval1) {
-			sessionFactory.getCurrentSession().clear()
 			workflowTaskService.approve(TaskInstance.list().get(1).id)
 		}
 		
 		if(block.execute1) {
-			sessionFactory.getCurrentSession().clear();
 			workflowTaskService.complete(TaskInstance.list().get(1).id, 'testoutcome2')
 		}
 		
 		if(block.complete1) {
-			sessionFactory.getCurrentSession().clear();
 			workflowTaskService.approve(TaskInstance.list().get(2).id)
 		}
 		if(block.execute2) {
-			sessionFactory.getCurrentSession().clear();
 			workflowTaskService.complete(TaskInstance.list().get(3).id, 'testoutcome5')
 		}
 		
 		if(block.execute3) {
-			sessionFactory.getCurrentSession().clear();
 			workflowTaskService.complete(TaskInstance.list().get(4).id, 'testoutcome6')
 		}
 		
@@ -790,7 +757,6 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 		executeCount = 3
 		block.complete4 == true
 		completeCount == 5
-		sessionFactory.getCurrentSession().clear();
 		TaskInstance.list().get(0).status == TaskStatus.SUCCESSFUL			// Task 1
 		TaskInstance.list().get(1).status == TaskStatus.SUCCESSFUL			// Task 2
 		TaskInstance.list().get(2).status == TaskStatus.SUCCESSFUL			// Task 3

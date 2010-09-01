@@ -14,7 +14,9 @@ class WorkflowProcessService {
 		
 		def script = new GroovyShell().parse(definition)
 		script.binding = binding
-		return script.run()
+		def (created, process) = script.run()
+		
+		[created, process]
 	}
 	
 	def update(String processName, def definition) {
@@ -22,7 +24,7 @@ class WorkflowProcessService {
 		if (!process) {
 			log.error "Unable to update process ${processName}"
 			log.error "The process definition for ${processName} was not found, no such process by name or no process definition is active"
-			return null
+			return [false, null]
 		}
 		
 		Binding binding = new Binding()
@@ -32,17 +34,18 @@ class WorkflowProcessService {
 	
 		def script = new GroovyShell().parse(definition)
 		script.binding = binding
-		def newProcess = script.run()
+		def (created, newProcess) = script.run()
 		
 		process.active = false
-		process.save()
-		if(process.hasErrors()) {
+		if(!process.save()) {
 			log.error "Unable to update ${process} with false active state"
 			process.errors.each {
 				log.error it
 			}
+			throw new RuntimeException("Unable to save when applying update to ${process}")
 		}
-		newProcess
+		
+		[created, newProcess]
 	}
 	
 	def interpret(Map m, String definition, Closure closure) {
@@ -56,15 +59,21 @@ class WorkflowProcessService {
 		closure.delegate = new ProcessDelegate(process)
 		closure()
 		
-		def p = process.save()
-		if(process.hasErrors()) {
+		if(!process.validate()) {
 			process.errors.each {
 				log.error it
 			}
-			return process
+			return [false, process]
 		}
 		
-		p
+		if(!process.save()) {
+			process.errors.each {
+				log.error it
+			}
+			throw new RuntimeException("Unable to save when interpreting ${process}")
+		}
+		
+		[true, process]
 	}
 	
 	def initiate(String processName, String instanceDescription, ProcessPriority priority, Map params) {
@@ -73,36 +82,29 @@ class WorkflowProcessService {
 		if (!process) {
 			log.error "Unable to initiate an instance of process ${processName}"
 			log.error "The process definition for ${processName} was not found, no such process by name or no process definition is active"
-			return null
-		}
-		
-		def processedParams = [:]
-		params.each {
-			processedParams.put(it.key, it.toString())
+			return [false, null]
 		}
 
-		def processInstance = new ProcessInstance(process: process, description: instanceDescription, status: ProcessStatus.INPROGRESS, priority: priority ?:ProcessPriority.LOW, params:processedParams)
+		def processInstance = new ProcessInstance(process: process, description: instanceDescription, status: ProcessStatus.INPROGRESS, priority: priority ?:ProcessPriority.LOW, params:params)
 		process.addToInstances(processInstance)
 		
-		processInstance.save()
-		if(processInstance.hasErrors()) {
+		if(!processInstance.save()) {
 			log.error "Unable to initiate an instance of process ${processName}"
 			processInstance.errors.each {
 				log.error it
 			}
-			return null
+			throw new RuntimeException("Unable to save ${processInstance} when initiating instance of ${process}")
 		}
 		
-		process.save()
-		if(process.hasErrors()) {
+		if(!process.save()) {
 			log.error "Unable to initiate an instance of process ${processName}"
 			process.errors.each {
 				log.error it
 			}
-			return null
+			throw new RuntimeException("Unable to save ${process} when initiating instance for ${instanceDescription}")
 		}
 
-        return processInstance
+        [true, processInstance]
 	}
 	
 	def run(ProcessInstance processInstance) {
