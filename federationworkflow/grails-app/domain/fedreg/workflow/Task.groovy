@@ -1,9 +1,5 @@
 package fedreg.workflow
 
-import grails.plugins.nimble.core.UserBase
-import grails.plugins.nimble.core.Role
-import grails.plugins.nimble.core.Group
-
 class Task {
 
     String name
