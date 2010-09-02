@@ -4,6 +4,7 @@ classes
 stacktrace.log
 docs.tar.gz
 FedRegConfig.groovy
+NimbleConfig.groovy
 
 *~
 *.ipr

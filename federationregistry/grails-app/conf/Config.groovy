@@ -3,7 +3,8 @@
 def externalConf = System.getenv("FEDREG_CONFIG")
 if(externalConf) {
 	println( "Including configuration file: ${externalConf}" )
-	grails.config.locations = ["file:${externalConf}/FedRegConfig.groovy"]
+	grails.config.locations = ["file:${externalConf}/FedRegConfig.groovy",
+							   "file:${externalConf}/NimbleConfig.groovy"]
 } else {
 	println "No external configuration location specified as environment variable FEDREG_CONFIG, terminating startup"
 	throw new RuntimeException("No external configuration location specified as environment variable FEDREG_CONFIG, terminating startup")
