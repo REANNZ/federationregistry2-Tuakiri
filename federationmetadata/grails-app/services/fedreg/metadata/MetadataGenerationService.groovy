@@ -83,7 +83,7 @@ class MetadataGenerationService {
 		}
 	}
 	
-	def entitiesDescriptor(builder, entitiesDescriptor, validUntil, cacheDuration, certificateAuthorities) {
+	def entitiesDescriptor(builder, all, entitiesDescriptor, validUntil, cacheDuration, certificateAuthorities) {
 		builder.EntitiesDescriptor(validUntil:sdf.format(validUntil), cacheDuration:sdf.format(cacheDuration), Name:entitiesDescriptor.name, 
 			"xmlns":"urn:oasis:names:tc:SAML:2.0:metadata", "xmlns:xsi":"http://www.w3.org/2001/XMLSchema-instance", 'xmlns:saml':'urn:oasis:names:tc:SAML:2.0:assertion',
 			"xsi:schemaLocation":"urn:oasis:names:tc:SAML:2.0:metadata sstc-saml-schema-metadata-2.0.xsd urn:mace:shibboleth:metadata:1.0 shibboleth-metadata-1.0.xsd http://www.w3.org/2000/09/xmldsig# xmldsig-core-schema.xsd") {
@@ -98,31 +98,31 @@ class MetadataGenerationService {
 				}
 			}
 			entitiesDescriptor.entitiesDescriptors.each { eds ->
-				this.entitiesDescriptor(builder, eds)
+				this.entitiesDescriptor(builder, all, eds)
 			}
 			entitiesDescriptor.entityDescriptors?.sort{it.entityID}.each { ed ->
-				entityDescriptor(builder, ed)
+				entityDescriptor(builder, all, ed)
 			}
 		}
 	}
 	
-	def entitiesDescriptor(builder, entitiesDescriptor) {
+	def entitiesDescriptor(builder, all, entitiesDescriptor) {
 		builder.EntitiesDescriptor() {
 			entitiesDescriptor.entitiesDescriptors.each { eds ->
 				this.entitiesDescriptor(builder, eds)
 			}
 			entitiesDescriptor.entityDescriptors?.sort{it.entityID}.each { ed ->
-				entityDescriptor(builder, ed)
+				entityDescriptor(builder, all, ed)
 			}
 		}
 	}
 	
-	def entityDescriptor(builder, entityDescriptor) {
-		if(entityDescriptor.approved && entityDescriptor.active && entityDescriptor.organization.approved && entityDescriptor.organization.active) {
+	def entityDescriptor(builder, all, entityDescriptor) {
+		if(all || (entityDescriptor.approved && entityDescriptor.active && entityDescriptor.organization.approved && entityDescriptor.organization.active)) {
 			builder.EntityDescriptor(entityID:entityDescriptor.entityID) {
-				entityDescriptor.idpDescriptors.each { idp -> idpSSODescriptor(builder, idp) }
-				entityDescriptor.spDescriptors.each { sp -> spSSODescriptor(builder, sp) }
-				entityDescriptor.attributeAuthorityDescriptors.each { aa -> attributeAuthorityDescriptor(builder, aa)}
+				entityDescriptor.idpDescriptors.each { idp -> idpSSODescriptor(builder, all, idp) }
+				entityDescriptor.spDescriptors.each { sp -> spSSODescriptor(builder, all, sp) }
+				entityDescriptor.attributeAuthorityDescriptors.each { aa -> attributeAuthorityDescriptor(builder, all, aa)}
 				organization(builder, entityDescriptor.organization)
 				entityDescriptor.contacts?.sort{it.contact.email.uri}.each{cp -> contactPerson(builder, cp)}
 			}
@@ -194,8 +194,8 @@ class MetadataGenerationService {
 		ssoDescriptor.nameIDFormats?.sort{it.uri}.each{nidf -> samlURI(builder, "NameIDFormat", nidf)}
 	}
 	
-	def idpSSODescriptor(builder, idpSSODescriptor) {
-		if(idpSSODescriptor.approved && idpSSODescriptor.active) {
+	def idpSSODescriptor(builder, all, idpSSODescriptor) {
+		if(all || (idpSSODescriptor.approved && idpSSODescriptor.active)) {
 			builder.IDPSSODescriptor(protocolSupportEnumeration: idpSSODescriptor.protocolSupportEnumerations.sort{it.uri}.collect({it.uri}).join(' '), WantAuthnRequestsSigned:idpSSODescriptor.wantAuthnRequestsSigned) {
 				roleDescriptor(builder, idpSSODescriptor)
 				ssoDescriptor(builder, idpSSODescriptor)
@@ -209,8 +209,8 @@ class MetadataGenerationService {
 		}
 	}
 	
-	def spSSODescriptor(builder, spSSODescriptor) {
-		if(spSSODescriptor.active && spSSODescriptor.approved) {
+	def spSSODescriptor(builder, all, spSSODescriptor) {
+		if(all || (spSSODescriptor.active && spSSODescriptor.approved)) {
 			builder.SPSSODescriptor(protocolSupportEnumeration: spSSODescriptor.protocolSupportEnumerations.sort{it.uri}.collect({it.uri}).join(' '), AuthnRequestsSigned:spSSODescriptor.authnRequestsSigned, WantAssertionsSigned:spSSODescriptor.wantAssertionsSigned) {
 				roleDescriptor(builder, spSSODescriptor)
 				ssoDescriptor(builder, spSSODescriptor)
@@ -221,8 +221,8 @@ class MetadataGenerationService {
 		}
 	}
 	
-	def attributeAuthorityDescriptor(builder, aaDescriptor) {
-		if(aaDescriptor.approved && aaDescriptor.active) {
+	def attributeAuthorityDescriptor(builder, all, aaDescriptor) {
+		if(all || (aaDescriptor.approved && aaDescriptor.active)) {
 			builder.AttributeAuthorityDescriptor(protocolSupportEnumeration: aaDescriptor.protocolSupportEnumerations.sort{it.uri}.collect({it.uri}).join(' ')) {
 				if(aaDescriptor.collaborator) {
 					// We don't currently provide direct AA manipulation to reduce general end user complexity.

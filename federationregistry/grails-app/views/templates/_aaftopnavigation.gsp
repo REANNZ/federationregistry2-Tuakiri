@@ -16,11 +16,14 @@
 			</li>
 		</n:isNotLoggedIn>
 		<n:isLoggedIn>
+			<li class="${['organization', 'entity', 'IDPSSODescriptor', 'SPSSODescriptor', 'contacts'].contains(controllerName) ? 'active' : ''}">
+				<g:link controller="organization" action="list" class=""><g:message code="fedreg.navigation.membership" /></g:link>
+			</li>
 			<li class="${['IDPSSODescriptorAttributeCompliance', 'attributeRelease', 'certifyingAuthorityUsage'].contains(controllerName) ? 'active' : ''}">
 				<g:link controller="IDPSSODescriptorAttributeCompliance" action="summary" class=""><g:message code="fedreg.navigation.compliance" /></g:link>
 			</li>
-			<li class="${['organization', 'entity', 'IDPSSODescriptor', 'SPSSODescriptor', 'contacts'].contains(controllerName) ? 'active' : ''}">
-				<g:link controller="organization" action="list" class=""><g:message code="fedreg.navigation.membership" /></g:link>
+			<li class="${['metadata'].contains(controllerName) ? 'active' : ''}">
+				<g:link controller="metadata" action="view" class=""><g:message code="fedreg.navigation.metadata" /></g:link>
 			</li>
 			<n:isAdministrator>
 				<li class="${['admins', 'user', 'role', 'group'].contains(controllerName) ? 'active' : ''}">

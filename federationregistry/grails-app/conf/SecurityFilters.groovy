@@ -64,11 +64,11 @@ public class SecurityFilters extends grails.plugins.nimble.security.NimbleFilter
             }
         }
 
-		// Data reload functionality
-		datamgt(controller: "dataManagement", action:"(index|refreshdata)") {
+		// Metadata
+		datamgt(controller: "metadata", action:"(view|viewall)") {
             before = {
                 accessControl {
-                    role(AdminsService.ADMIN_ROLE)
+                    role(UserService.USER_ROLE)
                 }
             }
         }

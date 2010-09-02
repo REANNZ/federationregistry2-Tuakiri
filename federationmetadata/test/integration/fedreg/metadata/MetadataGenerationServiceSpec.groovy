@@ -243,7 +243,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		
 		
 		when:
-		metadataGenerationService.entitiesDescriptor(builder, entitiesDescriptor, validUntil.getTime(), cacheExpires.getTime(), certificateAuthorities)
+		metadataGenerationService.entitiesDescriptor(builder, false, entitiesDescriptor, validUntil.getTime(), cacheExpires.getTime(), certificateAuthorities)
 		
 		then:
 		def xml = writer.toString()
@@ -288,7 +288,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		
 		
 		when:
-		metadataGenerationService.entitiesDescriptor(builder, entitiesDescriptor, validUntil.getTime(), cacheExpires.getTime(), certificateAuthorities)
+		metadataGenerationService.entitiesDescriptor(builder, false, entitiesDescriptor, validUntil.getTime(), cacheExpires.getTime(), certificateAuthorities)
 		
 		then:
 		def xml = writer.toString()
@@ -300,7 +300,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def ed = EntityDescriptor.build(active:false)
 		
 		when:
-		metadataGenerationService.entityDescriptor(builder, ed)
+		metadataGenerationService.entityDescriptor(builder, false, ed)
 		
 		then:
 		def xml = writer.toString()
@@ -312,7 +312,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def ed = EntityDescriptor.build(approved:false)
 		
 		when:
-		metadataGenerationService.entityDescriptor(builder, ed)
+		metadataGenerationService.entityDescriptor(builder, false, ed)
 		
 		then:
 		def xml = writer.toString()
@@ -342,7 +342,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def result = loadResult('testvalidentitydescriptor')
 		
 		when:
-		metadataGenerationService.entityDescriptor(builder, entityDescriptor)
+		metadataGenerationService.entityDescriptor(builder, false, entityDescriptor)
 		
 		then:
 		def xml = writer.toString()
@@ -354,7 +354,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def idp = IDPSSODescriptor.build(active:false)
 		
 		when:
-		metadataGenerationService.idpSSODescriptor(builder, idp)
+		metadataGenerationService.idpSSODescriptor(builder, false, idp)
 		
 		then:
 		def xml = writer.toString()
@@ -366,7 +366,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def idp = IDPSSODescriptor.build(approved:false)
 		
 		when:
-		metadataGenerationService.idpSSODescriptor(builder, idp)
+		metadataGenerationService.idpSSODescriptor(builder, false, idp)
 		
 		then:
 		def xml = writer.toString()
@@ -441,7 +441,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def result = loadResult('testvalididpssodescriptor')
 		
 		when:
-		metadataGenerationService.idpSSODescriptor(builder, idp)
+		metadataGenerationService.idpSSODescriptor(builder, false, idp)
 		
 		then:
 		def xml = writer.toString()
@@ -453,7 +453,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def sp = SPSSODescriptor.build(active:false)
 		
 		when:
-		metadataGenerationService.spSSODescriptor(builder, sp)
+		metadataGenerationService.spSSODescriptor(builder, false, sp)
 		
 		then:
 		def xml = writer.toString()
@@ -465,7 +465,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def sp = SPSSODescriptor.build(approved:false)
 		
 		when:
-		metadataGenerationService.spSSODescriptor(builder, sp)
+		metadataGenerationService.spSSODescriptor(builder, false, sp)
 		
 		then:
 		def xml = writer.toString()
@@ -545,7 +545,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def result = loadResult('testvalidspssodescriptor')
 		
 		when:
-		metadataGenerationService.spSSODescriptor(builder, sp)
+		metadataGenerationService.spSSODescriptor(builder, false, sp)
 		
 		then:
 		def xml = writer.toString()
@@ -557,7 +557,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def aa = AttributeAuthorityDescriptor.build(active:false)
 		
 		when:
-		metadataGenerationService.attributeAuthorityDescriptor(builder, aa)
+		metadataGenerationService.attributeAuthorityDescriptor(builder, false, aa)
 		
 		then:
 		def xml = writer.toString()
@@ -569,7 +569,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def aa = AttributeAuthorityDescriptor.build(approved:false)
 		
 		when:
-		metadataGenerationService.attributeAuthorityDescriptor(builder, aa)
+		metadataGenerationService.attributeAuthorityDescriptor(builder, false, aa)
 		
 		then:
 		def xml = writer.toString()
@@ -615,7 +615,9 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def attr2 = new Attribute(base:base2)
 		def attr3 = new Attribute(base:base3)
 		
-		def idp = IDPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, organization:organization, approved:true, active:true)
+		def ed = EntityDescriptor.build(entityID:"https://test.com", organization:organization)
+		
+		def idp = IDPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, entityDescriptor:ed, organization:organization, approved:true, active:true)
 		idp.addToKeyDescriptors(keyDescriptor)
 		idp.addToKeyDescriptors(keyDescriptor2)
 		idp.addToContacts(contactPerson)
@@ -627,7 +629,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		idp.addToAttributes(attr2)
 		idp.addToAttributes(attr3)
 		
-		def aa = AttributeAuthorityDescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, approved:true, active:true)
+		def aa = AttributeAuthorityDescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, entityDescriptor:ed, organization:organization, approved:true, active:true)
 		aa.collaborator = idp
 		aa
 		
@@ -637,7 +639,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def result = loadResult('testvalidaadescriptor')
 		
 		when:
-		metadataGenerationService.attributeAuthorityDescriptor(builder, aa)
+		metadataGenerationService.attributeAuthorityDescriptor(builder, false, aa)
 		
 		then:
 		def xml = writer.toString()
@@ -698,7 +700,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def result = loadResult('testvalidaadescriptor')	// deliberate both paths should give same outcome
 		
 		when:
-		metadataGenerationService.attributeAuthorityDescriptor(builder, aa)
+		metadataGenerationService.attributeAuthorityDescriptor(builder, false, aa)
 		
 		then:
 		def xml = writer.toString()
