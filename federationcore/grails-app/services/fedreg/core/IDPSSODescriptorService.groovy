@@ -146,9 +146,13 @@ class IDPSSODescriptorService {
 			throw new RuntimeException("Unable to save when creating ${identityProvider}")
 		}
 		
-		def workflowParams = [ creator:contact?.id, identityProvider:identityProvider?.id, attributeAuthority:attributeAuthority?.id, organization:organization.name ]
-		def processInstance = workflowProcessService.initiate( "idpssodescriptor_create", "Approval for creation of ${identityProvider}", ProcessPriority.MEDIUM, workflowParams)
-		workflowProcessService.run(processInstance)
+		def workflowParams = [ creator:contact?.id?.toString(), identityProvider:identityProvider?.id?.toString(), attributeAuthority:attributeAuthority?.id?.toString(), organization:organization.name ]
+		def (initiated, processInstance) = workflowProcessService.initiate( "idpssodescriptor_create", "Approval for creation of ${identityProvider}", ProcessPriority.MEDIUM, workflowParams)
+		
+		if(initiated)
+			workflowProcessService.run(processInstance)
+		else
+			throw new RuntimeException("Unable to execute workflow when creating ${identityProvider}")
 		
 		return [true, organization, entityDescriptor, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, Organization.list(), AttributeBase.list(), SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding), contact]
 	}

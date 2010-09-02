@@ -159,9 +159,13 @@ class SPSSODescriptorService {
 			throw new RuntimeException("Unable to save when creating ${serviceProvider}")
 		}
 		
-		def workflowParams = [ creator:contact?.id, serviceProvider:serviceProvider?.id, organization:organization.name ]
-		def processInstance = workflowProcessService.initiate( "spssodescriptor_create", "Approval for creation of ${serviceProvider}", ProcessPriority.MEDIUM, workflowParams)
-		workflowProcessService.run(processInstance)
+		def workflowParams = [ creator:contact?.id?.toString(), serviceProvider:serviceProvider?.id?.toString(), organization:organization.name ]
+		def (initiated, processInstance) = workflowProcessService.initiate( "spssodescriptor_create", "Approval for creation of ${serviceProvider}", ProcessPriority.MEDIUM, workflowParams)
+		
+		if(initiated)
+			workflowProcessService.run(processInstance)
+		else
+			throw new RuntimeException("Unable to execute workflow when creating ${serviceProvider}")
 		
 		return [true, organization, entityDescriptor, serviceProvider, httpPostACS, soapArtifactACS, sloArtifact, sloRedirect, sloSOAP, sloPost, Organization.list(), AttributeBase.list(), SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding), contact]
 	}

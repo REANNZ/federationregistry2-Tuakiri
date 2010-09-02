@@ -40,9 +40,13 @@ class OrganizationService {
 			throw new RuntimeException("Unable to save when creating ${contact}")
 		}
 		
-		def workflowParams = [ creator:contact?.id, organization:organization?.id ]
-		def processInstance = workflowProcessService.initiate( "organization_create", "Approval for creation of Organization ${organization.displayName}", ProcessPriority.MEDIUM, workflowParams)
-		workflowProcessService.run(processInstance)
+		def workflowParams = [ creator:contact?.id?.toString(), organization:organization?.id?.toString() ]
+		def (initiated, processInstance) = workflowProcessService.initiate( "organization_create", "Approval for creation of Organization ${organization.displayName}", ProcessPriority.MEDIUM, workflowParams)
+		
+		if(initiated)
+			workflowProcessService.run(processInstance)
+		else
+			throw new RuntimeException("Unable to execute workflow when creating ${organization}")
 		
 		return [ true, organization, contact ]
 	}
