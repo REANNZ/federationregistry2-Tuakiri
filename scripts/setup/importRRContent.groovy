@@ -42,7 +42,7 @@
 		sql.eachRow("select * from homeOrgs",
 		{
 			def orgType = OrganizationType.findByName(it.homeOrgType)
-			def org = new Organization(name:it.homeOrgName, displayName:it.homeOrgName, lang:it.mainLanguage, url: new UrlURI(uri:it.errorURL ?:'http://aaf.edu.au/support'), primary: orgType)
+			def org = new Organization(active:true, approved:true, name:it.homeOrgName, displayName:it.homeOrgName, lang:it.mainLanguage, url: new UrlURI(uri:it.errorURL ?:'http://aaf.edu.au/support'), primary: orgType)
 			org.save()
 		})
 		
