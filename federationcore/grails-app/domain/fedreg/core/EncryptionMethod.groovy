@@ -35,6 +35,7 @@ class EncryptionMethod  {
 
 	static constraints = {
 		algorithm(nullable:false, blank:false)
+		keySize(nullable: true)
 		oaeParams(nullable: true)
 		dateCreated(nullable:true)
 		lastUpdated(nullable:true)
