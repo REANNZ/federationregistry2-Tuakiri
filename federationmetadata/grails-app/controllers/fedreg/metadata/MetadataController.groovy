@@ -46,8 +46,8 @@ class MetadataController {
 	
 	def allMetadata() {
 		def now = new Date();
-		def validUntil = now + grailsApplication.config.fedreg.metadata.current.validForDays
-		def cacheDuration = now + grailsApplication.config.fedreg.metadata.current.cacheForDays
+		def validUntil = now + grailsApplication.config.fedreg.metadata.all.validForDays
+		def cacheDuration = now + grailsApplication.config.fedreg.metadata.all.cacheForDays
 		def federation = grailsApplication.config.fedreg.metadata.federation
 		def certificateAuthorities = CAKeyInfo.list()
 		
