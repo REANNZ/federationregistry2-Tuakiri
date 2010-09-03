@@ -48,7 +48,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def result = loadResult('testvalidendpointgeneration')
 		
 		when:
-		metadataGenerationService.endpoint(builder, "SingleSignOnService", sso)
+		metadataGenerationService.endpoint(builder, false, "SingleSignOnService", sso)
 		
 		then:
 		def xml = writer.toString()
@@ -64,7 +64,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def result = loadResult('testvalidendpointgenerationresponse')
 		
 		when:
-		metadataGenerationService.endpoint(builder, "SingleSignOnService", sso)
+		metadataGenerationService.endpoint(builder, false, "SingleSignOnService", sso)
 		
 		then:
 		def xml = writer.toString()
@@ -78,7 +78,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def sso = SingleSignOnService.build(active:false, approved:true, binding:httpPost, location:location)
 		
 		when:
-		metadataGenerationService.endpoint(builder, "SingleSignOnService", sso)
+		metadataGenerationService.endpoint(builder, false, "SingleSignOnService", sso)
 		
 		then:
 		def xml = writer.toString()
@@ -92,7 +92,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def sso = SingleSignOnService.build(active:true, approved:false, binding:httpPost, location:location)
 		
 		when:
-		metadataGenerationService.endpoint(builder, "SingleSignOnService", sso)
+		metadataGenerationService.endpoint(builder, false, "SingleSignOnService", sso)
 		
 		then:
 		def xml = writer.toString()
@@ -107,7 +107,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def result = loadResult('testvalidindexedendpointgeneration')
 		
 		when:
-		metadataGenerationService.indexedEndpoint(builder, "ArtifactResolutionService", ars, 1)
+		metadataGenerationService.indexedEndpoint(builder, false, "ArtifactResolutionService", ars, 1)
 		
 		then:
 		def xml = writer.toString()
@@ -123,7 +123,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def result = loadResult('testvalidindexedendpointgenerationresponse')
 		
 		when:
-		metadataGenerationService.indexedEndpoint(builder, "ArtifactResolutionService", ars, 1)
+		metadataGenerationService.indexedEndpoint(builder, false, "ArtifactResolutionService", ars, 1)
 		
 		then:
 		def xml = writer.toString()
@@ -137,7 +137,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def ars = ArtifactResolutionService.build(active:false, approved:true, binding:httpPost, location:location)
 		
 		when:
-		metadataGenerationService.indexedEndpoint(builder, "ArtifactResolutionService", ars, 1)
+		metadataGenerationService.indexedEndpoint(builder, false, "ArtifactResolutionService", ars, 1)
 		
 		then:
 		def xml = writer.toString()
@@ -151,7 +151,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def ars = ArtifactResolutionService.build(active:true, approved:false, binding:httpPost, location:location)
 		
 		when:
-		metadataGenerationService.indexedEndpoint(builder, "ArtifactResolutionService", ars, 1)
+		metadataGenerationService.indexedEndpoint(builder, false, "ArtifactResolutionService", ars, 1)
 		
 		then:
 		def xml = writer.toString()
