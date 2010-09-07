@@ -27,11 +27,14 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 	def grailsApplication
 	def greenMail
 	
+	def user
+	def profile
+	
 	def setup() {
 		savedMetaClasses = [:]
 		
-		def profile = new ProfileBase(email:'test@testdomain.com')
-		def user = new UserBase(username:'testuser', profile: profile).save()
+		profile = new ProfileBase(email:'test@testdomain.com')
+		user = new UserBase(username:'testuser', profile: profile).save()
 
 		SpecHelpers.setupShiroEnv(user)
 	}
@@ -39,6 +42,9 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 	def cleanup() {
 		greenMail.deleteAllMessages()
 		UserBase.findWhere(username:'testuser').delete()
+		
+		user = null
+		profile = null
 	}
 	
 	def "Validate first task in minimal process requires approval when process is run"() {
@@ -240,7 +246,7 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 		when:				
 		workflowProcessService.run(processInstance)
 		if(block.approvalRequested) {
-			workflowTaskService.reject(TaskInstance.list().get(0).id, 'rejection1', 'supplied test reason')
+			workflowTaskService.reject(TaskInstance.list().get(0).id, 'rejection1')
 		}
 		
 		then:
@@ -771,5 +777,52 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 		cleanup:
 		SpecHelpers.resetMetaClasses(savedMetaClasses)
 		workflowTaskService.metaClass = WorkflowTaskService.metaClass
+	}
+	
+	def "Ensure all task instances that a user can approve are returned when requested"() {
+		setup:
+		def profile2 = new ProfileBase(email:'test2@testdomain.com')
+		def user2 = new UserBase(username:'testuser2', profile: profile)
+		user2.save()
+		
+		def process = new Process(name:'test', description:'test description', processVersion:1, definition: 'return true', creator: user)
+		def task = new Task(process:process, name:"test task", description:"test task description", finishOnThisTask:true)
+		process.addToTasks(task)
+		process.save()
+		
+		def processInstance = new ProcessInstance(process:process, description: "process instance description", priority: ProcessPriority.LOW, status:ProcessStatus.INPROGRESS)
+		(1..5).each { i ->					
+			def ti = new TaskInstance(processInstance:processInstance, task:task, status:TaskStatus.DEPENDENCYWAIT)
+			ti.addToPotentialApprovers(user)
+			processInstance.addToTaskInstances(ti)
+		}
+	
+		(1..5).each { i ->					
+			def ti = new TaskInstance(processInstance:processInstance, task:task, status:TaskStatus.APPROVALREQUIRED)
+			ti.addToPotentialApprovers(user)
+			processInstance.addToTaskInstances(ti)
+		}
+			
+		(1..5).each { i ->					
+			def ti = new TaskInstance(processInstance:processInstance, task:task, status:TaskStatus.APPROVALREQUIRED)
+			ti.addToPotentialApprovers(user2)
+			processInstance.addToTaskInstances(ti)
+		}
+		
+		(1..5).each { i ->					
+			def ti = new TaskInstance(processInstance:processInstance, task:task, status:TaskStatus.APPROVALGRANTED)
+			ti.addToPotentialApprovers(user)
+			processInstance.addToTaskInstances(ti)
+		}
+		
+		processInstance.save()
+		
+		
+		when:
+		def tasks = workflowTaskService.retrieveTasksAwaitingApproval(user)
+		
+		then:
+		TaskInstance.count() == 20
+		tasks.size() == 5
 	}
 }

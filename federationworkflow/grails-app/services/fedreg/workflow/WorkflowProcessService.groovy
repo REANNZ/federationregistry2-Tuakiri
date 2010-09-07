@@ -85,7 +85,6 @@ class WorkflowProcessService {
 	}
 	
 	def initiate(String processName, String instanceDescription, ProcessPriority priority, Map params) {
-
 		def process = Process.findWhere(name: processName, active: true)
 		if (!process) {
 			log.error "Unable to initiate an instance of process ${processName}"
@@ -111,7 +110,6 @@ class WorkflowProcessService {
 			}
 			throw new RuntimeException("Unable to save ${process} when initiating instance for ${instanceDescription}")
 		}
-
         [true, processInstance]
 	}
 	

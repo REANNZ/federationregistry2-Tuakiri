@@ -25,12 +25,12 @@
 			<li class="${['metadata'].contains(controllerName) ? 'active' : ''}">
 				<g:link controller="metadata" action="view" class=""><g:message code="fedreg.navigation.metadata" /></g:link>
 			</li>
+			<li class="${['workflowInstance', 'workflowProcess', 'workflowApproval'].contains(controllerName) ? 'active' : ''}">
+				<g:link controller="workflowApproval" class=""><g:message code="fedreg.navigation.workflow" /></g:link>
+			</li>
 			<n:isAdministrator>
 				<li class="${['admins', 'user', 'role', 'group'].contains(controllerName) ? 'active' : ''}">
 					<g:link controller="user" class=""><g:message code="fedreg.navigation.accesscontrol" /></g:link>
-				</li>
-				<li class="${['workflowInstance', 'workflowProcess'].contains(controllerName) ? 'active' : ''}">
-					<g:link controller="workflowProcess" class=""><g:message code="fedreg.navigation.workflow" /></g:link>
 				</li>
 				<li class="${['code'].contains(controllerName) ? 'directactive' : ''}">
 					<g:link controller="code" class=""><g:message code="fedreg.navigation.codeconsole" /></g:link>

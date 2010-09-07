@@ -59,19 +59,19 @@ class WorkflowTaskService {
 			if(!processInstance.save()) {
 				log.error "Unable to update $processInstance with new taskInstance"
 				task.errors.each { log.error it }
-				// RTE
+				throw new RuntimeException("Unable to save ${processInstance} when initiating ${taskInstance}")
 			}
 	
 			if(!task.save()) {
 				log.error "Unable to update Task with new instance for $processInstance and $task"
 				task.errors.each { log.error it }
-				// RTE
+				throw new RuntimeException("Unable to save ${task} when initiating ${taskInstance}")
 			}
 	
 			if(!taskInstance.save()) {
 				log.error "Unable to create taskInstance for $processInstance and $task"
 				task.errors.each { log.error it }
-				// RTE
+				throw new RuntimeException("Unable to save when initiating ${taskInstance}")
 			}
 		}
 	
@@ -101,7 +101,7 @@ class WorkflowTaskService {
 				if(!taskInstance.save()) {
 					log.error "While attempting to update taskInstance ${taskInstance.id} with DEPENDENCYWAIT status a failure occured"
 					taskInstance.errors.each { log.error it }
-					// RTE
+					throw new RuntimeException("Unable to save when waiting for dependencies of ${taskInstance}")
 				}
 				return
 			}
@@ -135,7 +135,7 @@ class WorkflowTaskService {
 		if(!taskInstance.save()) {
 			log.error "While attempting to update taskInstance ${taskInstance.id} with TERMINATED status a failure occured"
 			taskInstance.errors.each { log.error it }
-			// RTE
+			throw new RuntimeException("Unable to save when terminating ${taskInstance}")
 		}
 	}
 	
@@ -151,7 +151,7 @@ class WorkflowTaskService {
 		if(!taskInstance.save()) {
 			log.error "While attempting to update taskInstance ${taskInstance.id} with APPROVALGRANTED status a failure occured"
 			taskInstance.errors.each { log.error it }
-			// RTE
+			throw new RuntimeException("Unable to save when approving ${taskInstance}")
 		}
 		if(taskInstance.task.executes()) {
 			log.debug "Triggering execute for taskInstance ${taskInstance.id} bound to task ${taskInstance.task.name}"
@@ -166,7 +166,7 @@ class WorkflowTaskService {
 				finalize(taskInstance.id)
 	}
 	
-	def reject(def taskInstanceID, def rejectionName, def rejectionComment) {
+	def reject(def taskInstanceID, def rejectionName) {
 		def taskInstance = TaskInstance.lock(taskInstanceID)
 		if(!taskInstance) {
 			log.error "Rejection requested on taskInstanceID $taskInstanceID but no such instance exists"
@@ -179,13 +179,13 @@ class WorkflowTaskService {
 			return
 		}
 		
-		log.info "Rejecting execution of $taskInstance in ${taskInstance.processInstance} due to $rejectionName with additional comment $rejectionComment"
+		log.info "Rejecting execution of $taskInstance in ${taskInstance.processInstance} due to $rejectionName"
 		taskInstance.status = TaskStatus.APPROVALREJECTED
 		taskInstance.approver = authenticatedUser
 		if(!taskInstance.save()) {
 			log.error "While attempting to update $taskInstance with APPROVALREJECTED status a failure occured"
 			taskInstance.errors.each { log.error it }
-			// RTE
+			throw new RuntimeException("Unable to save when rejecting ${taskInstance}")
 		}
 		
 		terminateAndStartTasks(taskInstance, rejection)
@@ -202,7 +202,7 @@ class WorkflowTaskService {
 		if(!taskInstance.save()) {
 			log.error "While attempting to update $taskInstance with INPROGRESS status a failure occured"
 			taskInstance.errors.each { log.error it }
-			// RTE
+			throw new RuntimeException("Unable to save when executing ${taskInstance}")
 		}
 		
 		log.debug "Executing $taskInstance for ${taskInstance.processInstance}"
@@ -229,7 +229,7 @@ class WorkflowTaskService {
 		if(!taskInstance.save()) {
 			log.error "While attempting to update taskInstance ${taskInstance.id} with SUCCESSFUL status a failure occured"
 			taskInstance.errors.each { log.error it }
-			// RTE
+			throw new RuntimeException("Unable to save when completing ${taskInstance}")
 		}
 		
 		log.info "Completed $taskInstance for ${taskInstance.processInstance} with outcome $outcomeName"
@@ -247,7 +247,7 @@ class WorkflowTaskService {
 		if(!taskInstance.save()) {
 			log.error "While attempting to update $taskInstance with FINALIZED status a failure occured"
 			taskInstance.errors.each { log.error it }
-			// RTE
+			throw new RuntimeException("Unable to save when finalizing ${taskInstance}")
 		}
 		log.info "Finalized $taskInstance for ${taskInstance.processInstance}"
 	}
@@ -330,7 +330,7 @@ class WorkflowTaskService {
 			if(!taskInstance.save()) {
 				log.error "While attempting to update taskInstance ${taskInstance.id} with APPROVALFAILURE status a failure occured"
 				taskInstance.errors.each { log.error it }
-				// RTE
+				throw new RuntimeException("Unable to save invalid approval request for ${taskInstance}")
 			}
 		}
 		else {
@@ -344,7 +344,7 @@ class WorkflowTaskService {
 			if(!taskInstance.save()) {
 				log.error "While attempting to update taskInstance ${taskInstance.id} with REQUIRESAPPROVAL status a failure occured"
 				taskInstance.errors.each { log.error it }
-				// RTE
+				throw new RuntimeException("Unable to save when requesting approval for ${taskInstance}")
 			}
 		}
 	}
@@ -355,7 +355,7 @@ class WorkflowTaskService {
 		Object[] args = [taskInstance.task.name]
 		sendMail {
             to user.profile.email		
-			from grailsApplication.config.workflow.messaging.mail.from
+			from grailsApplication.config.nimble.messaging.mail.from
             subject messageSource.getMessage('fedreg.workflow.requestapproval.mail.subject', args, 'fedreg.workflow.requestapproval.mail.subject', new Locale("EN"))	// TODO: Draw language from user object when supported by Nimble
             body(view: '/templates/mail/_workflow_requestapproval', plugin: "federationworkflow", model: [taskInstance: taskInstance])
         }
@@ -390,6 +390,21 @@ class WorkflowTaskService {
 	            val = params.get(key[0][1])
 	    }
 		return val
+	}
+	
+	def retrieveTasksAwaitingApproval(def user) {
+		def c = TaskInstance.createCriteria()
+		def tasks = c.listDistinct {
+			and {
+				eq("status", TaskStatus.APPROVALREQUIRED)
+				potentialApprovers {
+					eq("username", user.username)
+				}
+				processInstance {
+					eq("status", ProcessStatus.INPROGRESS)
+				}
+			}
+		}
 	}
 
 }
