@@ -46,7 +46,7 @@ class OrganizationServiceSpec extends IntegrationSpec {
 			wfDescription = instanceDescription
 			wfPriority = priority
 			wfParams = params
-			[:]
+			[true, [:]]
 		}
 		WorkflowProcessService.metaClass.run = { def processInstance -> }
 		
@@ -70,7 +70,7 @@ class OrganizationServiceSpec extends IntegrationSpec {
 		wfDescription == "Approval for creation of Organization Test Org Pty Ltd"
 		wfPriority == ProcessPriority.MEDIUM
 		wfParams.size() == 2
-		wfParams.organization == organization_.id
+		wfParams.organization == "${organization_.id}"
 		wfParams.creator = contact_.id
 	}
 	
@@ -89,7 +89,7 @@ class OrganizationServiceSpec extends IntegrationSpec {
 			wfDescription = instanceDescription
 			wfPriority = priority
 			wfParams = params
-			[:]
+			[true, [:]]
 		}
 		WorkflowProcessService.metaClass.run = { def processInstance -> }
 		
@@ -115,7 +115,7 @@ class OrganizationServiceSpec extends IntegrationSpec {
 		wfDescription == "Approval for creation of Organization Test Org Pty Ltd"
 		wfPriority == ProcessPriority.MEDIUM
 		wfParams.size() == 2
-		wfParams.organization == organization_.id
+		wfParams.organization == "${organization_.id}"
 		wfParams.creator = contact_.id
 	}
 	

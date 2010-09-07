@@ -81,7 +81,7 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 			wfDescription = instanceDescription
 			wfPriority = priority
 			wfParams = params
-			[:]
+			[true, [:]]
 		}
 		WorkflowProcessService.metaClass.run = { def processInstance -> }
 		def (created, organization_, entityDescriptor_, serviceProvider_, httpPostACS_, soapArtifactACS_, sloArtifact_, sloRedirect_, sloSOAP_, sloPost_, organizationList_, attributeList_, nameIDFormatList_, contact_) = spssoDescriptorService.create(params)
@@ -115,7 +115,7 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 		wfProcessName == "spssodescriptor_create"
 		wfPriority == ProcessPriority.MEDIUM
 		wfParams.size() == 3
-		wfParams.serviceProvider == serviceProvider_.id
+		wfParams.serviceProvider == "${serviceProvider_.id}"
 		wfParams.organization == organization_.name
 		
 		httpPostACS_.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/POST"
@@ -159,7 +159,7 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 			wfDescription = instanceDescription
 			wfPriority = priority
 			wfParams = params
-			[:]
+			[true, [:]]
 		}
 		WorkflowProcessService.metaClass.run = { def processInstance -> }
 		def (created, organization_, entityDescriptor_, serviceProvider_, httpPostACS_, soapArtifactACS_, sloArtifact_, sloRedirect_, sloSOAP_, sloPost_, organizationList_, attributeList_, nameIDFormatList_, contact_) = spssoDescriptorService.create(params)
@@ -194,7 +194,7 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 		wfProcessName == "spssodescriptor_create"
 		wfPriority == ProcessPriority.MEDIUM
 		wfParams.size() == 3
-		wfParams.serviceProvider == serviceProvider_.id
+		wfParams.serviceProvider == "${serviceProvider_.id}"
 		wfParams.organization == organization_.name
 		
 		httpPostACS_.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/POST"
@@ -236,7 +236,7 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 			wfDescription = instanceDescription
 			wfPriority = priority
 			wfParams = params
-			[:]
+			[true, [:]]
 		}
 		WorkflowProcessService.metaClass.run = { def processInstance -> }
 		def (created, organization_, entityDescriptor_, serviceProvider_, httpPostACS_, soapArtifactACS_, sloArtifact_, sloRedirect_, sloSOAP_, sloPost_, organizationList_, attributeList_, nameIDFormatList_, contact_) = spssoDescriptorService.create(params)
@@ -270,7 +270,7 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 		wfProcessName == "spssodescriptor_create"
 		wfPriority == ProcessPriority.MEDIUM
 		wfParams.size() == 3
-		wfParams.serviceProvider == serviceProvider_.id
+		[true, [:]]
 		wfParams.organization == organization_.name
 		
 		httpPostACS_.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/POST"
@@ -312,7 +312,7 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 			wfDescription = instanceDescription
 			wfPriority = priority
 			wfParams = params
-			[:]
+			[true, [:]]
 		}
 		WorkflowProcessService.metaClass.run = { def processInstance -> }
 		def (created, organization_, entityDescriptor_, serviceProvider_, httpPostACS_, soapArtifactACS_, sloArtifact_, sloRedirect_, sloSOAP_, sloPost_, organizationList_, attributeList_, nameIDFormatList_, contact_) = spssoDescriptorService.create(params)
@@ -385,7 +385,7 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 			wfDescription = instanceDescription
 			wfPriority = priority
 			wfParams = params
-			[:]
+			[true, [:]]
 		}
 		WorkflowProcessService.metaClass.run = { def processInstance -> }
 		def (created, organization_, entityDescriptor_, serviceProvider_, httpPostACS_, soapArtifactACS_, sloArtifact_, sloRedirect_, sloSOAP_, sloPost_, organizationList_, attributeList_, nameIDFormatList_, contact_) = spssoDescriptorService.create(params)
@@ -456,7 +456,7 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 			wfDescription = instanceDescription
 			wfPriority = priority
 			wfParams = params
-			[:]
+			[true, [:]]
 		}
 		WorkflowProcessService.metaClass.run = { def processInstance -> }
 		def (created, organization_, entityDescriptor_, serviceProvider_, httpPostACS_, soapArtifactACS_, sloArtifact_, sloRedirect_, sloSOAP_, sloPost_, organizationList_, attributeList_, nameIDFormatList_, contact_) = spssoDescriptorService.create(params)
@@ -519,7 +519,7 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 			wfDescription = instanceDescription
 			wfPriority = priority
 			wfParams = params
-			[:]
+			[true, [:]]
 		}
 		WorkflowProcessService.metaClass.run = { def processInstance -> }
 		def (created, organization_, entityDescriptor_, serviceProvider_, httpPostACS_, soapArtifactACS_, sloArtifact_, sloRedirect_, sloSOAP_, sloPost_, organizationList_, attributeList_, nameIDFormatList_, contact_) = spssoDescriptorService.create(params)
@@ -582,7 +582,7 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 			wfDescription = instanceDescription
 			wfPriority = priority
 			wfParams = params
-			[:]
+			[true, [:]]
 		}
 		WorkflowProcessService.metaClass.run = { def processInstance -> }
 		def (created, organization_, entityDescriptor_, serviceProvider_, httpPostACS_, soapArtifactACS_, sloArtifact_, sloRedirect_, sloSOAP_, sloPost_, organizationList_, attributeList_, nameIDFormatList_, contact_) = spssoDescriptorService.create(params)
@@ -628,7 +628,8 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 	
 	def "Updating an existing service provider with valid changed content succeeds"() {
 		setup:
-		def organization = Organization.build().save()
+		def orgType = new OrganizationType(name:"test", displayName:"test")
+		def organization = Organization.build(name:"test org", primary: orgType).save()
 		def ed = EntityDescriptor.build(organization: organization).save()
 		def sd = ServiceDescription.build(connectURL: "http://connecturl.com", furtherInfo:"this is further info")
 		def sp = SPSSODescriptor.build(entityDescriptor:ed, serviceDescription:sd).save()
@@ -649,7 +650,8 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 
 	def "Updating an existing service provider with invalid changed content fails"() {
 		setup:
-		def organization = Organization.build().save()
+		def orgType = new OrganizationType(name:"test", displayName:"test")
+		def organization = Organization.build(name:"test org", primary: orgType).save()
 		def ed = EntityDescriptor.build(organization: organization).save()
 		def sd = ServiceDescription.build(connectURL: "http://connecturl.com", furtherInfo:"this is further info")
 		def sp = SPSSODescriptor.build(entityDescriptor:ed, serviceDescription:sd).save()

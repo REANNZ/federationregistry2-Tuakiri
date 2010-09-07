@@ -81,7 +81,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 			wfDescription = instanceDescription
 			wfPriority = priority
 			wfParams = params
-			[:]
+			[true, [:]]
 		}
 		WorkflowProcessService.metaClass.run = { def processInstance -> }
 		def (created, org, entityDescriptor_, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact_) = idpssoDescriptorService.create(params)
@@ -150,7 +150,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		wfPriority == ProcessPriority.MEDIUM
 		wfParams.size() == 4
-		wfParams.identityProvider == identityProvider.id
+		wfParams.identityProvider == "${identityProvider.id}"
 		wfParams.organization == organization.name
 	}
 	
@@ -185,7 +185,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 			wfDescription = instanceDescription
 			wfPriority = priority
 			wfParams = params
-			[:]
+			[true, [:]]
 		}
 		WorkflowProcessService.metaClass.run = { def processInstance -> }
 		def (created, org, entityDescriptor_, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact_) = idpssoDescriptorService.create(params)
@@ -254,8 +254,8 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		wfPriority == ProcessPriority.MEDIUM
 		wfParams.size() == 4
-		wfParams.creator == contact.id
-		wfParams.identityProvider == identityProvider.id
+		wfParams.creator == "${contact.id}"
+		wfParams.identityProvider == "${identityProvider.id}"
 		wfParams.organization == organization.name
 	}
 	
@@ -289,7 +289,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 			wfDescription = instanceDescription
 			wfPriority = priority
 			wfParams = params
-			[:]
+			[true, [:]]
 		}
 		WorkflowProcessService.metaClass.run = { def processInstance -> }
 		def (created, org, entityDescriptor_, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact_) = idpssoDescriptorService.create(params)
@@ -356,8 +356,8 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		wfPriority == ProcessPriority.MEDIUM
 		wfParams.size() == 4
-		wfParams.creator == contact.id
-		wfParams.identityProvider == identityProvider.id
+		wfParams.creator == "${contact.id}"
+		wfParams.identityProvider == "${identityProvider.id}"
 		wfParams.organization == organization.name
 	}
 	
@@ -874,7 +874,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 			wfDescription = instanceDescription
 			wfPriority = priority
 			wfParams = params
-			[:]
+			[true, [:]]
 		}
 		WorkflowProcessService.metaClass.run = { def processInstance -> }
 		def (created, org, entityDescriptor_, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact_) = idpssoDescriptorService.create(params)
@@ -918,8 +918,8 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		wfPriority == ProcessPriority.MEDIUM
 		wfParams.size() == 4
-		wfParams.creator == contact.id
-		wfParams.identityProvider == identityProvider.id
+		wfParams.creator == "${contact.id}"
+		wfParams.identityProvider == "${identityProvider.id}"
 		wfParams.organization == organization.name
 	}
 	
@@ -953,7 +953,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 			wfDescription = instanceDescription
 			wfPriority = priority
 			wfParams = params
-			[:]
+			[true, [:]]
 		}
 		WorkflowProcessService.metaClass.run = { def processInstance -> }
 		def (created, org, entityDescriptor_, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact_) = idpssoDescriptorService.create(params)
@@ -995,8 +995,8 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		wfPriority == ProcessPriority.MEDIUM
 		wfParams.size() == 4
-		wfParams.creator == contact.id
-		wfParams.identityProvider == identityProvider.id
+		wfParams.creator == "${contact.id}"
+		wfParams.identityProvider == "${identityProvider.id}"
 		wfParams.organization == organization.name
 	}
 	
@@ -1029,7 +1029,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 			wfDescription = instanceDescription
 			wfPriority = priority
 			wfParams = params
-			[:]
+			[true, [:]]
 		}
 		WorkflowProcessService.metaClass.run = { def processInstance -> }
 		def (created, org, entityDescriptor_, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact_) = idpssoDescriptorService.create(params)
@@ -1071,8 +1071,8 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		wfPriority == ProcessPriority.MEDIUM
 		wfParams.size() == 4
-		wfParams.creator == contact.id
-		wfParams.identityProvider == identityProvider.id
+		wfParams.creator == "${contact.id}"
+		wfParams.identityProvider == "${identityProvider.id}"
 		wfParams.organization == organization.name
 	}
 	
