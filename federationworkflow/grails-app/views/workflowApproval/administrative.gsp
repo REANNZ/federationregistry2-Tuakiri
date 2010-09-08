@@ -16,6 +16,7 @@
 							<th><g:message code="label.name" /></th>
 							<th><g:message code="label.description" /></th>
 							<th><g:message code="label.processinstance" /></th>
+							<th><g:message code="label.waitingon" /></th>
 							<th><g:message code="label.action" /></th>
 						</tr>
 					</thead>
@@ -36,6 +37,13 @@
 									<g:if test="${instance.processInstance.params.containsKey('organization') && instance.processInstance.params.organization.isNumber()}">
 										<n:button href="${createLink(controller:'organization', action:'show', id:instance.processInstance.params.organization)}" label="${message(code: 'label.view')} ${message(code: 'label.organization')}" icon="arrowthick-1-ne"/>
 									</g:if>
+								</td>
+								<td>
+									<ul class="clean">
+									<g:each in="${instance.potentialApprovers}" var="approver">
+										<li><g:link controller="user" action="show" id="${approver.id}">${fieldValue(bean: approver, field: "profile.email")}</g:link></li>
+									</g:each>
+									</ul>
 								</td>
 								<td>
 									<g:form action="approve" id="${instance.id}" name="submitapproval${i}"></g:form>
