@@ -2,6 +2,8 @@ package fedreg.core
 
 import static org.apache.commons.lang.StringUtils.*
 
+import org.apache.shiro.SecurityUtils
+
 class DescriptorEndpointController {
 
 	static allowedMethods = [delete: "POST", create: "POST", toggle:"POST", listEndpoints:"GET"]
@@ -35,8 +37,14 @@ class DescriptorEndpointController {
 			return
 		}
 		
-		endpointService.delete(endpoint, params.endpointType)
-		render message(code: 'fedreg.endpoint.delete.success')
+		if(SecurityUtils.subject.isPermitted("descriptor:${endpoint.descriptor.id}:endpoint:remove")) {
+			endpointService.delete(endpoint, params.endpointType)
+			render message(code: 'fedreg.endpoint.delete.success')
+		}
+		else {
+			log.warn("Attempt to remove $endpoint by $authenticatedUser was denied, incorrect permission set")
+			response.sendError(403)
+		}
 	}
 	
 	def list = {
@@ -126,28 +134,34 @@ class DescriptorEndpointController {
 			return
 		}
 		
-		// Determine if we're actually updating the collaborator (useful for AA endpoints on IDP screen)
-		if(!descriptor.hasProperty(endpointType)) {
-			if(descriptor.collaborator.hasProperty(endpointType))
-				descriptor = descriptor.collaborator
-		}
+		if(SecurityUtils.subject.isPermitted("descriptor:${descriptor.id}:endpoint:create")) {
+			// Determine if we're actually updating the collaborator (useful for AA endpoints on IDP screen)
+			if(!descriptor.hasProperty(endpointType)) {
+				if(descriptor.collaborator.hasProperty(endpointType))
+					descriptor = descriptor.collaborator
+			}
 		
-		def binding = SamlURI.get(params.binding)
-		if (!binding) {
-			log.warn "SamURI (binding) was not found for id ${params.id}"
-			render message(code: 'fedreg.samluri.nonexistant', args: [params.binding])
-			response.setStatus(500)
-			return
-		}
+			def binding = SamlURI.get(params.binding)
+			if (!binding) {
+				log.warn "SamURI (binding) was not found for id ${params.id}"
+				render message(code: 'fedreg.samluri.nonexistant', args: [params.binding])
+				response.setStatus(500)
+				return
+			}
 		
-		if(allowedEndpoints.containsKey(endpointType) && descriptor.hasProperty(endpointType)) {
-			endpointService.create(descriptor, allowedEndpoints.get(endpointType), endpointType, binding, params.location)
-			render message(code: 'fedreg.endpoint.create.success')
+			if(allowedEndpoints.containsKey(endpointType) && descriptor.hasProperty(endpointType)) {
+				endpointService.create(descriptor, allowedEndpoints.get(endpointType), endpointType, binding, params.location)
+				render message(code: 'fedreg.endpoint.create.success')
+			}
+			else {
+				log.warn "Endpoint ${endpointType} is invalid for ${descriptor}, unable to create"
+				render message(code: 'fedreg.endpoint.invalid', args: [endpointType])
+				response.setStatus(500)
+			}
 		}
 		else {
-			log.warn "Endpoint ${endpointType} is invalid for ${descriptor}, unable to create"
-			render message(code: 'fedreg.endpoint.invalid', args: [endpointType])
-			response.setStatus(500)
+			log.warn("Attempt to create endpoint for $descriptor by $authenticatedUser was denied, incorrect permission set")
+			response.sendError(403)
 		}
 	}
 	
@@ -167,7 +181,13 @@ class DescriptorEndpointController {
 			return
 		}
 	
-		endpointService.toggle(endpoint)
-		render message(code: 'fedreg.endpoint.toggle.success')
+		if(SecurityUtils.subject.isPermitted("descriptor:${endpoint.descriptor.id}:endpoint:toggle")) {
+			endpointService.toggle(endpoint)
+			render message(code: 'fedreg.endpoint.toggle.success')
+		}
+		else {
+			log.warn("Attempt to toggle endpoint for $descriptor by $authenticatedUser was denied, incorrect permission set")
+			response.sendError(403)
+		}
 	}
 }
