@@ -268,9 +268,7 @@ fedreg.acs_reqattribute_add = function(acsID, formID, containerID) {
 		data: dataString,
 		success: function(res) {
 			nimble.growl('success', res);
-			$(':input', "#" + formID)
-			 	.not(':button, :submit, :reset, :hidden, select[name=binding]')
-			 	.val('')
+			$(':input[name=reasoning]').val('')
 			fedreg.acs_reqattribute_list(acsID, containerID);
 			fedreg.acs_specattributes_list(acsID, 'acsspecattributes');
 	    },
