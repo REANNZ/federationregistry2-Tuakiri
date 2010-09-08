@@ -1,5 +1,7 @@
 package fedreg.core
 
+import org.apache.shiro.SecurityUtils
+
 class IDPSSODescriptorController {
 
 	def IDPSSODescriptorService
@@ -33,20 +35,32 @@ class IDPSSODescriptorController {
 	}
 	
 	def create = {
-		def identityProvider = new IDPSSODescriptor()
-		[identityProvider: identityProvider, organizationList: Organization.findAllWhere(active:true, approved:true), attributeList: AttributeBase.list(), nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)]
+		if(SecurityUtils.subject.isPermitted("idpssodescriptor:create")) {
+			def identityProvider = new IDPSSODescriptor()
+			[identityProvider: identityProvider, organizationList: Organization.findAllWhere(active:true, approved:true), attributeList: AttributeBase.list(), nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)]
+		}
+		else {
+			log.warn("Attempt to create identity provider by $authenticatedUser was denied, incorrect permission set")
+			response.sendError(403)
+		}
 	}
 	
 	def save = {
-		def (created, organization, entityDescriptor, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact) = IDPSSODescriptorService.create(params)
+		if(SecurityUtils.subject.isPermitted("organization:${params.organization.id}:components:idpssodescriptor:create")) {
+			def (created, organization, entityDescriptor, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact) = IDPSSODescriptorService.create(params)
 		
-		if(created)
-			redirect (action: "show", id: identityProvider.id)
+			if(created)
+				redirect (action: "show", id: identityProvider.id)
+			else {
+				flash.type="error"
+				flash.message = message(code: 'fedreg.core.idpssoroledescriptor.save.validation.error')
+				render (view:'create', model:[organization:organization, entityDescriptor:entityDescriptor, identityProvider:identityProvider, attributeAuthority:attributeAuthority, httpPost:httpPost, httpRedirect:httpRedirect, 
+				soapArtifact:soapArtifact, organizationList:organizationList, attributeList:attributeList, nameIDFormatList:nameIDFormatList, contact:contact])
+			}
+		}
 		else {
-			flash.type="error"
-			flash.message = message(code: 'fedreg.core.idpssoroledescriptor.save.validation.error')
-			render (view:'create', model:[organization:organization, entityDescriptor:entityDescriptor, identityProvider:identityProvider, attributeAuthority:attributeAuthority, httpPost:httpPost, httpRedirect:httpRedirect, 
-			soapArtifact:soapArtifact, organizationList:organizationList, attributeList:attributeList, nameIDFormatList:nameIDFormatList, contact:contact])
+			log.warn("Attempt to save identity provider by $authenticatedUser was denied, incorrect permission set")
+			response.sendError(403)
 		}
 	}
 	
@@ -67,7 +81,13 @@ class IDPSSODescriptorController {
 			return
 		}	
 		
-		[identityProvider: identityProvider]	
+		if(SecurityUtils.subject.isPermitted("descriptor:${identityProvider.id}:update")) {
+			[identityProvider: identityProvider]	
+		}
+		else {
+			log.warn("Attempt to edit $identityProvider by $authenticatedUser was denied, incorrect permission set")
+			response.sendError(403)
+		}
 	}
 	
 	def update = {
@@ -86,14 +106,19 @@ class IDPSSODescriptorController {
 			redirect(action: "list")
 			return
 		}
-		
-		def (updated, identityProvider) = IDPSSODescriptorService.update(params)
-		if(updated)
-			redirect (action: "show", id: identityProvider.id)
+		if(SecurityUtils.subject.isPermitted("descriptor:${identityProvider.id}:update")) {
+			def (updated, identityProvider) = IDPSSODescriptorService.update(params)
+			if(updated)
+				redirect (action: "show", id: identityProvider.id)
+			else {
+				flash.type="error"
+				flash.message = message(code: 'fedreg.core.idpssoroledescriptor.update.validation.error')
+				render (view:'edit', model:[identityProvider:identityProvider])
+			}
+		}
 		else {
-			flash.type="error"
-			flash.message = message(code: 'fedreg.core.idpssoroledescriptor.update.validation.error')
-			render (view:'edit', model:[identityProvider:identityProvider])
+			log.warn("Attempt to update $identityProvider by $authenticatedUser was denied, incorrect permission set")
+			response.sendError(403)
 		}
 	}
 }
