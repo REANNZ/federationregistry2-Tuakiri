@@ -102,7 +102,7 @@ class AttributeConsumingServiceController {
 			return
 		}
 		
-		if(SecurityUtils.subject.isPermitted("spssodescriptor:${reqAttr.attributeConsumingService.descriptor.id}:attribute:value:add")) {
+		if(SecurityUtils.subject.isPermitted("descriptor:${reqAttr.attributeConsumingService.descriptor.id}:attribute:value:add")) {
 			reqAttr.addToValues(new AttributeValue(value:params.value))
 			reqAttr.save(flush:true)
 			if(reqAttr.hasErrors()) {
@@ -144,7 +144,7 @@ class AttributeConsumingServiceController {
 			response.setStatus(500)
 			return
 		}
-		if(SecurityUtils.subject.isPermitted("spssodescriptor:${reqAttr.attributeConsumingService.descriptor.id}:attribute:value:remove")) {
+		if(SecurityUtils.subject.isPermitted("descriptor:${reqAttr.attributeConsumingService.descriptor.id}:attribute:value:remove")) {
 			def val
 			for(v in reqAttr.values) {
 				if(v.id == params.valueid.toLong()) {
@@ -209,7 +209,7 @@ class AttributeConsumingServiceController {
 			return
 		}
 		
-		if(SecurityUtils.subject.isPermitted("spssodescriptor:${acs.descriptor.id}:attribute:add")) {
+		if(SecurityUtils.subject.isPermitted("descriptor:${acs.descriptor.id}:attribute:add")) {
 			def attr = AttributeBase.get(params.attrid)
 			if(!attr) {
 				log.warn "Attribute identified by id ${params.attrid} was not located"
@@ -265,7 +265,7 @@ class AttributeConsumingServiceController {
 		
 		def acs = requestedAttribute.attributeConsumingService
 		
-		if(SecurityUtils.subject.isPermitted("spssodescriptor:${acs.descriptor.id}:attribute:remove")) {
+		if(SecurityUtils.subject.isPermitted("descriptor:${acs.descriptor.id}:attribute:remove")) {
 			acs.removeFromRequestedAttributes(requestedAttribute)
 			acs.save()
 			if(acs.hasErrors()) {
