@@ -1,12 +1,13 @@
 package fedreg.core
 
+import org.apache.shiro.SecurityUtils
+
 class EntityDescriptorController {
-	
+	static defaultAction = "list"
+	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+		
 	def entityDescriptorService
 	
-	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
-	def defaultAction = "list"
-
 	def list = {
 		params.max = Math.min(params.max ? params.max.toInteger() : 20, 100)
 		[entityList: EntityDescriptor.list(params), entityTotal: EntityDescriptor.count()]
@@ -33,19 +34,31 @@ class EntityDescriptorController {
 	}
 	
 	def create = {
-		def entityDescriptor = new EntityDescriptor()
-		[entity: entityDescriptor, organizationList: Organization.list()]
+		if(SecurityUtils.subject.isPermitted("entitydescriptor:create")) {
+			def entityDescriptor = new EntityDescriptor()
+			[entity: entityDescriptor, organizationList: Organization.list()]
+		}
+		else {
+			log.warn("Attempt to create entity descriptor by $authenticatedUser was denied, incorrect permission set")
+			response.sendError(403)
+		}
 	}
 	
 	def save = {
-		def (created, entityDescriptor) = entityDescriptorService.create(params)
+		if(SecurityUtils.subject.isPermitted("organization:${params.organization.id}:components:add") && SecurityUtils.subject.isPermitted("entitydescriptor:create")) {
+			def (created, entityDescriptor) = entityDescriptorService.create(params)
 		
-		if(created)
-			redirect (action: "show", id: entityDescriptor.id)
+			if(created)
+				redirect (action: "show", id: entityDescriptor.id)
+			else {
+				flash.type="error"
+				flash.message = message(code: 'fedreg.core.entitydescriptor.save.validation.error')
+				render (view:'create', model:[entity:entityDescriptor, organizationList: Organization.list()])
+			}
+		}
 		else {
-			flash.type="error"
-			flash.message = message(code: 'fedreg.core.entitydescriptor.save.validation.error')
-			render (view:'create', model:[entity:entityDescriptor, organizationList: Organization.list()])
+			log.warn("Attempt to save entity descriptor by $authenticatedUser was denied, incorrect permission set")
+			response.sendError(403)
 		}
 	}
 	
@@ -66,7 +79,13 @@ class EntityDescriptorController {
 			return
 		}	
 		
-		[entity: entityDescriptor]
+		if(SecurityUtils.subject.isPermitted("descriptor:${entityDescriptor.id}:update")) {
+			[entity: entityDescriptor]
+		}
+		else {
+			log.warn("Attempt to edit $entityDescriptor by $authenticatedUser was denied, incorrect permission set")
+			response.sendError(403)
+		}		
 	}
 	
 	def update = {
@@ -86,13 +105,19 @@ class EntityDescriptorController {
 			return
 		}
 		
-		def (updated, entityDescriptor) = entityDescriptorService.update(params)
-		if(updated)
-			redirect (action: "show", id: entityDescriptor.id)
+		if(SecurityUtils.subject.isPermitted("descriptor:${entityDescriptor_.id}:update")) {
+			def (updated, entityDescriptor) = entityDescriptorService.update(params)
+			if(updated)
+				redirect (action: "show", id: entityDescriptor.id)
+			else {
+				flash.type="error"
+				flash.message = message(code: 'fedreg.core.entitydescriptor.update.validation.error')
+				render (view:'edit', model:[entity:entityDescriptor])
+			}
+		}
 		else {
-			flash.type="error"
-			flash.message = message(code: 'fedreg.core.entitydescriptor.update.validation.error')
-			render (view:'edit', model:[entity:entityDescriptor])
+			log.warn("Attempt to update $entityDescriptor by $authenticatedUser was denied, incorrect permission set")
+			response.sendError(403)
 		}
 	}
 
