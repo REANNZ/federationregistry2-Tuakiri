@@ -1,5 +1,7 @@
 package fedreg.core
 
+import org.apache.shiro.SecurityUtils
+
 class OrganizationController {
 
 	def organizationService
@@ -38,17 +40,29 @@ class OrganizationController {
 	}
 	
 	def create = {
-		def organization = new Organization()
-		[organization:organization, organizationTypes: OrganizationType.list()]
+		if(SecurityUtils.subject.isPermitted("organization:create")) {
+			def organization = new Organization()
+			[organization:organization, organizationTypes: OrganizationType.list()]
+		}
+		else {
+			log.warn("Attempt to create organization by $authenticatedUser was denied, incorrect permission set")
+			response.sendError(403)
+		}
 	}
 	
 	def save = {
-		def (created, organization, contact) = organizationService.create(params)
+		if(SecurityUtils.subject.isPermitted("organization:create")) {
+			def (created, organization, contact) = organizationService.create(params)
 		
-		if(created)
-			redirect (action: "show", id: organization.id)
-		else
-			render (view:'create', model:[organization:organization, contact:contact])
+			if(created)
+				redirect (action: "show", id: organization.id)
+			else
+				render (view:'create', model:[organization:organization, contact:contact])
+		}
+		else {
+			log.warn("Attempt to save organization by $authenticatedUser was denied, incorrect permission set")
+			response.sendError(403)
+		}
 	}
 	
 	def edit = {
@@ -68,7 +82,13 @@ class OrganizationController {
 			return
 		}	
 		
-		[organization: organization, organizationTypes: OrganizationType.list()]	
+		if(SecurityUtils.subject.isPermitted("organization:${organization.id}:update")) {
+			[organization: organization, organizationTypes: OrganizationType.list()]	
+		}
+		else {
+			log.warn("Attempt to edit $organization by $authenticatedUser was denied, incorrect permission set")
+			response.sendError(403)
+		}
 	}
 	
 	def update = {
@@ -88,13 +108,19 @@ class OrganizationController {
 			return
 		}
 		
-		def (updated, organization) = organizationService.update(params)
-		if(updated)
-			redirect (action: "show", id: organization.id)
+		if(SecurityUtils.subject.isPermitted("organization:${organization_.id}:update")) {
+			def (updated, organization) = organizationService.update(params)
+			if(updated)
+				redirect (action: "show", id: organization.id)
+			else {
+				flash.type="error"
+				flash.message = message(code: 'fedreg.core.organization.update.validation.error')
+				render (view:'edit', model:[organization:organization, organizationTypes: OrganizationType.list()])
+			}
+		}
 		else {
-			flash.type="error"
-			flash.message = message(code: 'fedreg.core.organization.update.validation.error')
-			render (view:'edit', model:[organization:organization, organizationTypes: OrganizationType.list()])
+			log.warn("Attempt to update $organization_ by $authenticatedUser was denied, incorrect permission set")
+			response.sendError(403)
 		}
 	}
 
