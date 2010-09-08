@@ -1,5 +1,7 @@
 package fedreg.core
 
+import org.apache.shiro.SecurityUtils
+
 class DescriptorContactController {
 
 	static allowedMethods = []
@@ -42,42 +44,48 @@ class DescriptorContactController {
 			return
 		}
 		
-		def contact = Contact.get(params.contactID)
-		if(!contact) {
-			log.warn "Contact identified by id $params.contactID was not located"
-			render message(code: 'fedreg.contact.nonexistant', args: [params.contactID])
-			response.setStatus(500)
-			return
-		}
-		
-		def contactType = ContactType.findByName(params.contactType)
-		if(!contactType) {
-			log.warn "ContactType identified by id $params.contactType was not located"
-			render message(code: 'fedreg.contacttype.nonexistant', args: [params.contactID])
-			response.setStatus(500)
-			return
-		}
-		
-		log.debug "Creating contactType ${params.contactType} linked to ${contact} for ${descriptor}"
-		
-		def contactPerson
-		
-		if(descriptor instanceof RoleDescriptor)
-			contactPerson = new ContactPerson(contact:contact, type:contactType, descriptor: descriptor)
-		else
-			contactPerson = new ContactPerson(contact:contact, type:contactType, entity: descriptor)
-			
-		contactPerson.save()
-		if(contactPerson.hasErrors()) {
-			contactPerson.errors.each {
-				log.error it
+		if(SecurityUtils.subject.isPermitted("descriptor:${descriptor.id}:contact:add")) {
+			def contact = Contact.get(params.contactID)
+			if(!contact) {
+				log.warn "Contact identified by id $params.contactID was not located"
+				render message(code: 'fedreg.contact.nonexistant', args: [params.contactID])
+				response.setStatus(500)
+				return
 			}
-			render message(code: 'fedreg.contactperson.create.error')
-			response.setStatus(500)
-			return
-		}
 		
-		render message(code: 'fedreg.contactperson.create.success')
+			def contactType = ContactType.findByName(params.contactType)
+			if(!contactType) {
+				log.warn "ContactType identified by id $params.contactType was not located"
+				render message(code: 'fedreg.contacttype.nonexistant', args: [params.contactID])
+				response.setStatus(500)
+				return
+			}
+		
+			log.debug "Creating contactType ${params.contactType} linked to ${contact} for ${descriptor}"
+		
+			def contactPerson
+		
+			if(descriptor instanceof RoleDescriptor)
+				contactPerson = new ContactPerson(contact:contact, type:contactType, descriptor: descriptor)
+			else
+				contactPerson = new ContactPerson(contact:contact, type:contactType, entity: descriptor)
+			
+			contactPerson.save()
+			if(contactPerson.hasErrors()) {
+				contactPerson.errors.each {
+					log.error it
+				}
+				render message(code: 'fedreg.contactperson.create.error')
+				response.setStatus(500)
+				return
+			}
+		
+			render message(code: 'fedreg.contactperson.create.success')
+		}
+		else {
+			log.warn("Attempt to link contact to $descriptor by $authenticatedUser was denied, incorrect permission set")
+			response.sendError(403)
+		}
 	}
 	
 	def delete = {
@@ -96,8 +104,20 @@ class DescriptorContactController {
 			return
 		}
 		
-		contactPerson.delete();
-		render message(code: 'fedreg.contactperson.delete.success')
+		def id 
+		if(contactPerson.descriptor)
+			id = contactPerson.descriptor.id
+		else
+			id = contactPerson.entity.id
+		
+		if(SecurityUtils.subject.isPermitted("descriptor:$id:contact:remove")) {
+			contactPerson.delete();
+			render message(code: 'fedreg.contactperson.delete.success')
+		}
+		else {
+			log.warn("Attempt to remove $contactPerson from descriptor $id by $authenticatedUser was denied, incorrect permission set")
+			response.sendError(403)
+		}
 	}
 	
 	def list = {
