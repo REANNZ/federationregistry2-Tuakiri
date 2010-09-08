@@ -356,7 +356,7 @@ class WorkflowTaskService {
 		sendMail {
             to user.profile.email		
 			from grailsApplication.config.nimble.messaging.mail.from
-            subject messageSource.getMessage('fedreg.workflow.requestapproval.mail.subject', args, 'fedreg.workflow.requestapproval.mail.subject', new Locale("EN"))	// TODO: Draw language from user object when supported by Nimble
+            subject messageSource.getMessage('fedreg.templates.mail.workflow.requestapproval.subject', args, 'fedreg.templates.mail.workflow.requestapproval.subject', new Locale("EN"))
             body(view: '/templates/mail/_workflow_requestapproval', plugin: "federationworkflow", model: [taskInstance: taskInstance])
         }
 	}
