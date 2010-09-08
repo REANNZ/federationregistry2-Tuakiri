@@ -39,13 +39,13 @@ class EntityDescriptorController {
 			[entity: entityDescriptor, organizationList: Organization.list()]
 		}
 		else {
-			log.warn("Attempt to create entity descriptor by $authenticatedUser was denied, incorrect permission set")
+			log.warn("Attempt to create identity provider by $authenticatedUser was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}
 	
 	def save = {
-		if(SecurityUtils.subject.isPermitted("organization:${params.organization.id}:components:add") && SecurityUtils.subject.isPermitted("entitydescriptor:create")) {
+		if(SecurityUtils.subject.isPermitted("organization:${params.organization.id}:components:entitydescriptor:create")) {
 			def (created, entityDescriptor) = entityDescriptorService.create(params)
 		
 			if(created)
