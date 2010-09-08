@@ -71,13 +71,15 @@ class MetadataGenerationService {
 	
 	def keyDescriptor(builder, keyDescriptor) {
 		builder.KeyDescriptor(use: keyDescriptor.keyType) {
-			keyInfo(builder, keyDescriptor.keyInfo)
-			if(keyDescriptor.encryptionMethod) {
-				EncryptionMethod(Algorithm:keyDescriptor.encryptionMethod.algorithm) {
-					if(keyDescriptor.encryptionMethod.keySize)
-						'xenc:KeySize'('xmlns:xenc':'http://www.w3.org/2001/04/xmlenc#', keyDescriptor.encryptionMethod.keySize)
-					if(keyDescriptor.encryptionMethod.oaeParams)
-					'xenc:OAEPparams'('xmlns:xenc':'http://www.w3.org/2001/04/xmlenc#', keyDescriptor.encryptionMethod.oaeParams)
+			if(!keyDescriptor.disabled) {
+				keyInfo(builder, keyDescriptor.keyInfo)
+				if(keyDescriptor.encryptionMethod) {
+					EncryptionMethod(Algorithm:keyDescriptor.encryptionMethod.algorithm) {
+						if(keyDescriptor.encryptionMethod.keySize)
+							'xenc:KeySize'('xmlns:xenc':'http://www.w3.org/2001/04/xmlenc#', keyDescriptor.encryptionMethod.keySize)
+						if(keyDescriptor.encryptionMethod.oaeParams)
+						'xenc:OAEPparams'('xmlns:xenc':'http://www.w3.org/2001/04/xmlenc#', keyDescriptor.encryptionMethod.oaeParams)
+					}
 				}
 			}
 		}
