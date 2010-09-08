@@ -225,15 +225,17 @@ class MetadataGenerationService {
 		if(all || (aaDescriptor.approved && aaDescriptor.active)) {
 			builder.AttributeAuthorityDescriptor(protocolSupportEnumeration: aaDescriptor.protocolSupportEnumerations.sort{it.uri}.collect({it.uri}).join(' ')) {
 				if(aaDescriptor.collaborator) {
-					// We don't currently provide direct AA manipulation to reduce general end user complexity.
-					// So where a collaborative relationship exists we use all common data from the IDP to render the AA
-					// If it isn't collaborative we'll assume manual DB intervention and render direct ;-).
-					roleDescriptor(builder, aaDescriptor.collaborator)	
-					aaDescriptor.attributeServices?.sort{it.location.uri}.each{ attrserv -> endpoint(builder, all, "AttributeService", attrserv) }
-					aaDescriptor.collaborator.assertionIDRequestServices?.sort{it.location.uri}.each{ aidrs -> endpoint(builder, all, "AssertionIDRequestService", aidrs) }
-					aaDescriptor.collaborator.nameIDFormats?.sort{it.location.uri}.each{ nidf -> samlURI(builder, "NameIDFormat", nidf) }
-					aaDescriptor.collaborator.attributeProfiles?.sort{it.location.uri}.each{ ap -> samlURI(builder, "AttributeProfile", ap) }
-					aaDescriptor.collaborator.attributes?.sort{it.base.name}.each{ attr -> attribute(builder, attr) }
+					if(all || (aaDescriptor.collaborator.approved && aaDescriptor.collaborator.active)) {
+						// We don't currently provide direct AA manipulation to reduce general end user complexity.
+						// So where a collaborative relationship exists we use all common data from the IDP to render the AA
+						// If it isn't collaborative we'll assume manual DB intervention and render direct ;-).
+						roleDescriptor(builder, aaDescriptor.collaborator)	
+						aaDescriptor.attributeServices?.sort{it.location.uri}.each{ attrserv -> endpoint(builder, all, "AttributeService", attrserv) }
+						aaDescriptor.collaborator.assertionIDRequestServices?.sort{it.location.uri}.each{ aidrs -> endpoint(builder, all, "AssertionIDRequestService", aidrs) }
+						aaDescriptor.collaborator.nameIDFormats?.sort{it.location.uri}.each{ nidf -> samlURI(builder, "NameIDFormat", nidf) }
+						aaDescriptor.collaborator.attributeProfiles?.sort{it.location.uri}.each{ ap -> samlURI(builder, "AttributeProfile", ap) }
+						aaDescriptor.collaborator.attributes?.sort{it.base.name}.each{ attr -> attribute(builder, attr) }
+					}
 				}
 				else {
 					roleDescriptor(builder, aaDescriptor)	
