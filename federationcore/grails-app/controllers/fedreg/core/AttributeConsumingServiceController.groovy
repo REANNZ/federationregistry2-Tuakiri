@@ -1,5 +1,7 @@
 package fedreg.core
 
+import org.apache.shiro.SecurityUtils
+
 class AttributeConsumingServiceController {
 	
 	static allowedMethods = [remove: "POST"]
@@ -100,19 +102,24 @@ class AttributeConsumingServiceController {
 			return
 		}
 		
-		reqAttr.addToValues(new AttributeValue(value:params.value))
-		reqAttr.save(flush:true)
-		if(reqAttr.hasErrors()) {
-			reqAttr.errors.each {
-				log.warn it
+		if(SecurityUtils.subject.isPermitted("spssodescriptor:${reqAttr.attributeConsumingService.descriptor.id}:attribute:value:add")) {
+			reqAttr.addToValues(new AttributeValue(value:params.value))
+			reqAttr.save(flush:true)
+			if(reqAttr.hasErrors()) {
+				reqAttr.errors.each {
+					log.warn it
+				}
+				render message(code: 'fedreg.attributeconsumingservice.requestedattribute.add.failed')
+				response.setStatus(500)
+				return
 			}
-			render message(code: 'fedreg.attributeconsumingservice.requestedattribute.add.failed')
-			response.setStatus(500)
-			return
-		}
 		
-		log.debug "Added value ${params.value} to ${reqAttr} referencing ${reqAttr.base}"
-		render message(code: 'fedreg.attributeconsumingservice.requestedattribute.specifiedvalue.add.success')
+			log.debug "Added value ${params.value} to ${reqAttr} referencing ${reqAttr.base}"
+			render message(code: 'fedreg.attributeconsumingservice.requestedattribute.specifiedvalue.add.success')
+		} else {
+			log.warn("Attempt to add a specifed attribute value by $authenticatedUser was denied, incorrect permission set")
+			response.sendError(403)
+		}
 	}
 	
 	def removeSpecifiedAttributeValue = {
@@ -137,35 +144,39 @@ class AttributeConsumingServiceController {
 			response.setStatus(500)
 			return
 		}
-		
-		def val
-		for(v in reqAttr.values) {
-			if(v.id == params.valueid.toLong()) {
-				val = v
-				break
+		if(SecurityUtils.subject.isPermitted("spssodescriptor:${reqAttr.attributeConsumingService.descriptor.id}:attribute:value:remove")) {
+			def val
+			for(v in reqAttr.values) {
+				if(v.id == params.valueid.toLong()) {
+					val = v
+					break
+				}
 			}
-		}
 		
-		if(!val) {
-			log.warn "Value identified by id ${params.valueid} was not associated with ${reqAttr}"
-			render message(code: 'fedreg.attr.nonexistant', args: [params.id])
-			response.setStatus(500)
-			return
-		}
-		
-		reqAttr.removeFromValues(val)
-		reqAttr.save(flush:true)
-		if(reqAttr.hasErrors()) {
-			reqAttr.errors.each {
-				log.warn it
+			if(!val) {
+				log.warn "Value identified by id ${params.valueid} was not associated with ${reqAttr}"
+				render message(code: 'fedreg.attr.nonexistant', args: [params.id])
+				response.setStatus(500)
+				return
 			}
-			render message(code: 'fedreg.attributeconsumingservice.requestedattribute.remove.failed')
-			response.setStatus(500)
-			return
-		}
 		
-		log.debug "Removed ${val} from ${reqAttr} referencing ${reqAttr.base}"
-		render message(code: 'fedreg.attributeconsumingservice.requestedattribute.specifiedvalue.remove.success')
+			reqAttr.removeFromValues(val)
+			reqAttr.save(flush:true)
+			if(reqAttr.hasErrors()) {
+				reqAttr.errors.each {
+					log.warn it
+				}
+				render message(code: 'fedreg.attributeconsumingservice.requestedattribute.remove.failed')
+				response.setStatus(500)
+				return
+			}
+		
+			log.debug "Removed ${val} from ${reqAttr} referencing ${reqAttr.base}"
+			render message(code: 'fedreg.attributeconsumingservice.requestedattribute.specifiedvalue.remove.success')
+		} else {
+			log.warn("Attempt to remove a specifed attribute value by $authenticatedUser was denied, incorrect permission set")
+			response.sendError(403)
+		}
 	}
 	
 	def addRequestedAttribute = {
@@ -198,37 +209,42 @@ class AttributeConsumingServiceController {
 			return
 		}
 		
-		def attr = AttributeBase.get(params.attrid)
-		if(!attr) {
-			log.warn "Attribute identified by id ${params.attrid} was not located"
-			render message(code: 'fedreg.attr.nonexistant', args: [params.id])
-			response.setStatus(500)
-			return
-		}
-		
-		for( a in acs.requestedAttributes) {
-			if(a.base == attr) {
-				log.warn "${a} already supported by ${acs} and ${acs.descriptor} not adding"
-				render message(code: 'fedreg.attributeconsumingservice.requestedattribute.add.already.exists')
+		if(SecurityUtils.subject.isPermitted("spssodescriptor:${acs.descriptor.id}:attribute:add")) {
+			def attr = AttributeBase.get(params.attrid)
+			if(!attr) {
+				log.warn "Attribute identified by id ${params.attrid} was not located"
+				render message(code: 'fedreg.attr.nonexistant', args: [params.id])
 				response.setStatus(500)
 				return
 			}
-		}
 		
-		def reqAttr = new RequestedAttribute(reasoning:params.reasoning, base: attr, isRequired: params.isrequired, approved: false)
-		acs.addToRequestedAttributes(reqAttr)
-		acs.save(flush:true)
-		if(acs.hasErrors()) {
-			acs.errors.each {
-				log.warn it
+			for( a in acs.requestedAttributes) {
+				if(a.base == attr) {
+					log.warn "${a} already supported by ${acs} and ${acs.descriptor} not adding"
+					render message(code: 'fedreg.attributeconsumingservice.requestedattribute.add.already.exists')
+					response.setStatus(500)
+					return
+				}
 			}
-			render message(code: 'fedreg.attributeconsumingservice.requestedattribute.add.failed')
-			response.setStatus(500)
-			return
-		}
 		
-		log.debug "Added ${reqAttr} referencing ${attr} to ${acs} and ${acs.descriptor}"
-		render message(code: 'fedreg.attributeconsumingservice.requestedattribute.add.success')
+			def reqAttr = new RequestedAttribute(reasoning:params.reasoning, base: attr, isRequired: params.isrequired, approved: false)
+			acs.addToRequestedAttributes(reqAttr)
+			acs.save(flush:true)
+			if(acs.hasErrors()) {
+				acs.errors.each {
+					log.warn it
+				}
+				render message(code: 'fedreg.attributeconsumingservice.requestedattribute.add.failed')
+				response.setStatus(500)
+				return
+			}
+		
+			log.debug "Added ${reqAttr} referencing ${attr} to ${acs} and ${acs.descriptor}"
+			render message(code: 'fedreg.attributeconsumingservice.requestedattribute.add.success')
+		} else {
+			log.warn("Attempt to add a requested attribute by $authenticatedUser was denied, incorrect permission set")
+			response.sendError(403)
+		}
 	}
 	
 	def removeRequestedAttribute = {		
@@ -248,19 +264,25 @@ class AttributeConsumingServiceController {
 		}
 		
 		def acs = requestedAttribute.attributeConsumingService
-		acs.removeFromRequestedAttributes(requestedAttribute)
-		acs.save()
-		if(acs.hasErrors()) {
-			acs.errors.each {log.debug it}
-			log.warn "Attempt to save ${acs} after trying to remove ${requestedAttribute} failed"
-			render message(code: 'fedreg.attributeconsumingservice.requestedattribute.remove.failed')
-			response.setStatus(500)
-			return
-		}
-		requestedAttribute.delete()
 		
-		log.debug "Removed ${requestedAttribute} referencing ${requestedAttribute.base} from ${acs}"
-		render message(code: 'fedreg.attributeconsumingservice.requestedattribute.remove.success')
+		if(SecurityUtils.subject.isPermitted("spssodescriptor:${acs.descriptor.id}:attribute:remove")) {
+			acs.removeFromRequestedAttributes(requestedAttribute)
+			acs.save()
+			if(acs.hasErrors()) {
+				acs.errors.each {log.debug it}
+				log.warn "Attempt to save ${acs} after trying to remove ${requestedAttribute} failed"
+				render message(code: 'fedreg.attributeconsumingservice.requestedattribute.remove.failed')
+				response.setStatus(500)
+				return
+			}
+			requestedAttribute.delete()
+		
+			log.debug "Removed ${requestedAttribute} referencing ${requestedAttribute.base} from ${acs}"
+			render message(code: 'fedreg.attributeconsumingservice.requestedattribute.remove.success')
+		} else {
+			log.warn("Attempt to remove a requested attribute by $authenticatedUser was denied, incorrect permission set")
+			response.sendError(403)
+		}
 	}
 	
 }
