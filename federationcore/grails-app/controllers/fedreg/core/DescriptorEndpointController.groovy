@@ -186,7 +186,7 @@ class DescriptorEndpointController {
 			render message(code: 'fedreg.endpoint.toggle.success')
 		}
 		else {
-			log.warn("Attempt to toggle endpoint for $descriptor by $authenticatedUser was denied, incorrect permission set")
+			log.warn("Attempt to toggle $endpoint state by $authenticatedUser was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}
