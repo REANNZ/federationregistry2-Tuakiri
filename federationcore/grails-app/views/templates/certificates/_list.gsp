@@ -3,14 +3,14 @@
 		<tbody>
 		<g:each in="${descriptor.keyDescriptors.sort{it.dateCreated}}" status="i" var="kd">
 			<g:if test="${!kd.disabled}">
-				<tr><td colspan="2"><h4>Certificate</h4></td></tr>
+				<tr><td colspan="2"><h4><g:message code="label.certificate"/> ${i+1}</h4></td></tr>
 				<tr>
 					<th><g:message code="label.keytype" /></th>
 					<td>${kd.keyType.encodeAsHTML()}</td>
 					<td>
-						<g:if test="${allowremove}">
+						<n:hasPermission target="descriptor:${descriptor.id}:crypto:delete">
 							<n:confirmaction action="fedreg.keyDescriptor_delete(${kd.id});" title="${message(code: 'fedreg.template.certificates.remove.confirm.title')}" msg="${message(code: 'fedreg.template.certificates.remove.confirm.descriptive')}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" label="${message(code: 'label.delete')}" icon="trash" />
-						</g:if>
+						</n:hasPermission>
 					</td>
 				</tr>
 				<tr>

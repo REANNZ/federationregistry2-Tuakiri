@@ -126,7 +126,7 @@
 					<div id="contacts">
 						<g:render template="/templates/contacts/list" plugin="federationcore" model="[descriptor:serviceProvider, allowremove:true]" />
 					</div>
-					<hr>
+					
 					<g:render template="/templates/contacts/create" plugin="federationcore" model="[descriptor:serviceProvider, contactTypes:contactTypes]"/>
 				</div>
 				<div id="tab-crypto" class="tabcontent">
@@ -134,7 +134,7 @@
 					<div id="certificates">
 						<g:render template="/templates/certificates/list" plugin="federationcore" model="[descriptor:serviceProvider, allowremove:true]" />
 					</div>
-					<hr>
+					
 					<g:render template="/templates/certificates/create" plugin="federationcore" model="[descriptor:serviceProvider]"/>
 				</div>
 				<div id="tab-endpoints" class="tabcontent">
@@ -149,21 +149,21 @@
 							<div id="assertionconsumerendpoints">
 								<g:render template="/templates/endpoints/list" plugin="federationcore" model="[endpoints:serviceProvider.assertionConsumerServices, allowremove:true, endpointType:'assertionConsumerServices', containerID:'assertionconsumerendpoints']" />
 							</div>
-							<hr>
+							
 							<g:render template="/templates/endpoints/create" plugin="federationcore" model="[endpointType:'assertionConsumerServices', containerID:'assertionconsumerendpoints']" />
 						</div>
 						<div id="tab-ars" class="componentlist">
 							<div id="artifactendpoints">
 								<g:render template="/templates/endpoints/list" plugin="federationcore" model="[endpoints:serviceProvider.artifactResolutionServices, allowremove:true, endpointType:'artifactResolutionServices', containerID:'artifactendpoints']" />
 							</div>
-							<hr>
+							
 							<g:render template="/templates/endpoints/create" plugin="federationcore" model="[endpointType:'artifactResolutionServices', containerID:'artifactendpoints']" />
 						</div>
 						<div id="tab-slo" class="componentlist">
 							<div id="singlelogoutendpoints">
 								<g:render template="/templates/endpoints/list" plugin="federationcore" model="[endpoints:serviceProvider.singleLogoutServices, allowremove:true, endpointType:'singleLogoutServices', containerID:'singlelogoutendpoints']" />
 							</div>
-							<hr>
+							
 							<g:render template="/templates/endpoints/create" plugin="federationcore" model="[endpointType:'singleLogoutServices', containerID:'singlelogoutendpoints']" />
 						</div>
 					</div>
@@ -177,7 +177,7 @@
 					<div id="nameidformats">
 						<g:render template="/templates/nameidformats/list" plugin="federationcore" model="[nameIDFormats:serviceProvider.nameIDFormats, containerID:'nameidformats']" />
 					</div>
-					<hr>
+					
 					<g:render template="/templates/nameidformats/add" plugin="federationcore" model="[containerID:'nameidformats']"/>
 				</div>
 			</div>

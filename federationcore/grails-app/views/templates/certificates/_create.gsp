@@ -1,12 +1,14 @@
-<script type="text/javascript">
-	var newCertificateValid = false;
-	$(function() {
-		$("#newcertificate").hide();
-		$("#addnewcertificatelink").hide();
-		$("#cert").bind('paste', function() { setTimeout(function() {fedreg.keyDescriptor_verify(); 		if(newCertificateValid) $("#addnewcertificatelink").fadeIn(); else $("#addnewcertificatelink").fadeOut(); }, 100); });
-	});
-</script>
 
+<n:hasPermission target="descriptor:${descriptor.id}:crypto:create">
+	<script type="text/javascript">
+		var newCertificateValid = false;
+		$(function() {
+			$("#newcertificate").hide();
+			$("#addnewcertificatelink").hide();
+			$("#cert").bind('paste', function() { setTimeout(function() {fedreg.keyDescriptor_verify(); 		if(newCertificateValid) $("#addnewcertificatelink").fadeIn(); else $("#addnewcertificatelink").fadeOut(); }, 100); });
+		});
+	</script>
+	<hr>
 	<div id="addcertificate">
 		<n:button onclick="\$('#addcertificate').fadeOut(); \$('#newcertificate').fadeIn();" label="${message(code:'label.addcertificate')}" icon="plus"/>
 	</div>
@@ -49,3 +51,4 @@
 			
 		</form>
 	</div>
+</n:hasPermission>
