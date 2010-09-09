@@ -4,9 +4,9 @@ import org.apache.shiro.SecurityUtils
 import grails.plugins.nimble.core.AdminsService
 
 class WorkflowApprovalController {
+	static defaultAction = "list"
 	
 	def workflowTaskService
-	static defaultAction = "list"
 	
 	def list = {
 		def tasks = workflowTaskService.retrieveTasksAwaitingApproval(authenticatedUser)
@@ -14,7 +14,7 @@ class WorkflowApprovalController {
 	}
 	
 	def administrative = {
-		if(SecurityUtils.subject.isPermitted("fedreg:workflow:administrator") || SecurityUtils.subject.hasRole(AdminsService.ADMIN_ROLE)) {
+		if(SecurityUtils.subject.isPermitted("workflow:approval:administrator")) {
 			def c = TaskInstance.createCriteria()
 			def tasks = c.listDistinct {
 				and {

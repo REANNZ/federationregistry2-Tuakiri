@@ -1,56 +1,82 @@
 package fedreg.workflow
 
+import org.apache.shiro.SecurityUtils
+
 class WorkflowScriptController {
 	
 	def defaultAction = "list"
 
 	def list = {
-		def scriptList = WorkflowScript.getAll()
-		[scriptList: scriptList]
+		if(SecurityUtils.subject.isPermitted("workflow:scripts:view")) {
+			def scriptList = WorkflowScript.getAll()
+			[scriptList: scriptList]
+		}
+		else {
+			log.warn("Attempt to list workflow scripts by $authenticatedUser was denied, incorrect permission set")
+			response.sendError(403)
+		}
 	}
 	
 	def create = {
-		def script = new WorkflowScript()
-		[script: script]
+		if(SecurityUtils.subject.isPermitted("workflow:script:create")) {
+			def script = new WorkflowScript()
+			[script: script]
+		}
+		else {
+			log.warn("Attempt to create workflow script by $authenticatedUser was denied, incorrect permission set")
+			response.sendError(403)
+		}
 	}
 	
 	def save = {
-		if(!params.definition) {
-			log.warn "Script definition was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
-			redirect action:list
-			return
-		}
+		if(SecurityUtils.subject.isPermitted("workflow:script:create")) {
+			if(!params.definition) {
+				log.warn "Script definition was not present"
+				render message(code: 'fedreg.controllers.namevalue.missing')
+				redirect action:list
+				return
+			}
 		
-		def script = new WorkflowScript(params)
-		script.creator = authenticatedUser
-		if(!script.save()) {
-			flash.type = "error"
-		    flash.message = message(code: 'fedreg.workflow.script.create.error')
-			render view: "create", model: [script: script]
-			return
-		}
+			def script = new WorkflowScript(params)
+			script.creator = authenticatedUser
+			if(!script.save()) {
+				flash.type = "error"
+			    flash.message = message(code: 'fedreg.workflow.script.create.error')
+				render view: "create", model: [script: script]
+				return
+			}
 		
-		redirect action: "show", id: script.id
+			redirect action: "show", id: script.id
+		}
+		else {
+			log.warn("Attempt to save workflow script by $authenticatedUser was denied, incorrect permission set")
+			response.sendError(403)
+		}
 	}
 
 	def show = {
-		if(!params.id) {
-			log.warn "Workflow Script ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
-			redirect action:list
-			return
-		}
+		if(SecurityUtils.subject.isPermitted("workflow:scripts:view")) {
+			if(!params.id) {
+				log.warn "Workflow Script ID was not present"
+				render message(code: 'fedreg.controllers.namevalue.missing')
+				redirect action:list
+				return
+			}
 		
-		def script = WorkflowScript.get(params.id)
-		if(!script) {
-			flash.type = "error"
-		    flash.message = message(code: 'fedreg.workflow.script.nonexistant', args: [params.id])
-			render view: "list"
-			return
-		}
+			def script = WorkflowScript.get(params.id)
+			if(!script) {
+				flash.type = "error"
+			    flash.message = message(code: 'fedreg.workflow.script.nonexistant', args: [params.id])
+				render view: "list"
+				return
+			}
 		
-		[script:script]
+			[script:script]
+		}
+		else {
+			log.warn("Attempt to show workflow script by $authenticatedUser was denied, incorrect permission set")
+			response.sendError(403)
+		}
 	}
 	
 	def edit = {
@@ -69,7 +95,13 @@ class WorkflowScriptController {
 			return
 		}
 		
-		[script:script]
+		if(SecurityUtils.subject.isPermitted("workflow:script:${script.id}:update")) {
+			[script:script]
+		}
+		else {
+			log.warn("Attempt to edit $script by $authenticatedUser was denied, incorrect permission set")
+			response.sendError(403)
+		}
 	}
 	
 	def update = {
@@ -88,15 +120,21 @@ class WorkflowScriptController {
 			return
 		}
 		
-		script.properties = params
-		script.save()
-		if(script.hasErrors()) {
-			flash.type = "error"
-		    flash.message = message(code: 'fedreg.workflow.script.update.error')
-			render view: "edit", model: [script: script]
-			return
-		}
+		if(SecurityUtils.subject.isPermitted("workflow:script:${script.id}:update")) {
+			script.properties = params
+			script.save()
+			if(script.hasErrors()) {
+				flash.type = "error"
+			    flash.message = message(code: 'fedreg.workflow.script.update.error')
+				render view: "edit", model: [script: script]
+				return
+			}
 		
-		redirect action: "show", id: script.id
+			redirect action: "show", id: script.id
+		}
+		else {
+			log.warn("Attempt to update $script by $authenticatedUser was denied, incorrect permission set")
+			response.sendError(403)
+		}
 	}
 }
