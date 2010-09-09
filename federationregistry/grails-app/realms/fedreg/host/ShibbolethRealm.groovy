@@ -93,12 +93,13 @@ class ShibbolethRealm {
 							contact.errors.each { log.error it }
 							throw new UnknownAccountException("Unable to create Contact to link with incoming user")
 						}
-						user.contact = contact
-						if(!user.save()) {
-							log.error "Unable to create Contact link with user" 
-							contact.errors.each { log.error it }
-							throw new UnknownAccountException("Unable to create Contact link with user")
-						}
+					}
+					
+					user.contact = contact
+					if(!user.save()) {
+						log.error "Unable to create Contact link with user" 
+						contact.errors.each { log.error it }
+						throw new UnknownAccountException("Unable to create Contact link with user")
 					}
 					log.info("Created new user [$user.id]$user.username and associated ${contact} from Shibboleth attribute statement")
 				
