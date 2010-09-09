@@ -175,10 +175,10 @@
 				<div id="tab-nameidformats" class="tabcontent">
 					<h3><g:message code="label.supportednameidformats" /></h3>
 					<div id="nameidformats">
-						<g:render template="/templates/nameidformats/list" plugin="federationcore" model="[nameIDFormats:serviceProvider.nameIDFormats, containerID:'nameidformats']" />
+						<g:render template="/templates/nameidformats/list" plugin="federationcore" model="[descriptor:serviceProvider, nameIDFormats:serviceProvider.nameIDFormats, containerID:'nameidformats']" />
 					</div>
 					
-					<g:render template="/templates/nameidformats/add" plugin="federationcore" model="[containerID:'nameidformats']"/>
+					<g:render template="/templates/nameidformats/add" plugin="federationcore" model="[descriptor:serviceProvider, containerID:'nameidformats']"/>
 				</div>
 			</div>
 			
