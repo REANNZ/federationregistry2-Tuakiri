@@ -1,4 +1,4 @@
-<n:hasPermission target="descriptor:${descriptor.id}:endpoint:add">
+<n:hasPermission target="descriptor:${descriptor.id}:endpoint:create">
 
 	<%@page import="fedreg.core.SamlURI" %>
 	<%@page import="fedreg.core.SamlURIType" %>
