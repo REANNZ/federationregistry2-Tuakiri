@@ -1,19 +1,27 @@
 
 	import groovy.sql.Sql
+	
+	import grails.plugins.nimble.InstanceGenerator
+	import grails.plugins.nimble.core.*
+	
+	import fedreg.host.*
 	import fedreg.core.*
 
 	/*
-	 This scripts assists with bootstrap and provides migration from an existing PHP based resource registry.
+	 This script assists with bootstrap and provides migration from an existing PHP based resource registry.
 	 Unlike the rest of Federation Registry I haven't built any extensive test suites to go along with this script. Your schema may be slightly different or have various hacks applied.
 	 I highly reccomend extensive tests in your respective development and test environments before letting loose on production.
 	 This should be run from the provided FR online Groovy console to be able to access various Grails features.
 	*/
 	cryptoService = ctx.getBean("cryptoService")
+	userService = ctx.getBean("userService")
+	
     sql = Sql.newInstance("jdbc:mysql://localhost:3306/resourceregistry", "rr", "password", "com.mysql.jdbc.Driver")
 
 	importCACertificates()
 	importOrganizations()
 	importContacts()
+	importUsers()
 	importEntities()
 	importIDPSSODescriptors()
 	importAttributeAuthorityDescriptors()
@@ -59,7 +67,6 @@
 	}
 
 	def importContacts() {
-		//Import contacts associated with 'homeOrgs'
 		sql.eachRow("select email, contactName, homeOrgName from contacts LEFT JOIN homeOrgs ON contacts.objectID=homeOrgs.homeOrgID ORDER BY (email)",
 		{
 			def givenName, surname
@@ -100,6 +107,52 @@
 						}
 					}
 				}
+			}
+		})
+	}
+	
+	def importUsers() {
+		def shibbolethFederationProvider = FederationProvider.findByUid(ShibbolethService.federationProviderUid)
+		
+		sql.eachRow("select uniqueID, givenName, surname, eMail, homeOrgName from users ORDER BY (email)",
+		{
+			if(it.uniqueID) {
+				def organization = Organization.findByName(it.homeOrgName)
+				if(organization) {
+					UserBase newUser = InstanceGenerator.user()
+					newUser.username = it.uniqueID
+					newUser.enabled = true
+					newUser.external = true
+					newUser.federated = true
+					newUser.federationProvider = shibbolethFederationProvider
+
+					newUser.profile = InstanceGenerator.profile()
+					newUser.profile.owner = newUser
+					newUser.profile.fullName = "${it.givenName} ${it.surname}"
+					newUser.profile.email = (it.email == "") ? null : it.email
+		
+					user = userService.createUser(newUser)
+					if (user.hasErrors()) {
+						println "Error creating user account from Shibboleth credentials for ${it.uniqueID}"
+					}
+		
+					def contact = MailURI.findByUri(newUser.profile.email)?.contact
+					if(!contact) {
+						contact = new Contact(givenName:it.givenName, surname:it.surname, email:new MailURI(uri:it.email), userLink:true, userID: user.id, organization:organization )
+						if(!contact.save()) {
+							println "Unable to create Contact to link with incoming user" 
+						}
+					}
+				
+					user.contact = contact
+					if(!user.save()) {
+						println "Unable to create Contact link with $user" 
+					}
+					
+					println "Imported user $user"
+				}
+				else
+					println "ERROR IMPORTING USER NO ORGANIZATION ${it.homeOrgName}"
 			}
 		})
 	}
