@@ -103,11 +103,11 @@ class ShibbolethRealm {
 					}
 					log.info("Created new user [$user.id]$user.username and associated ${contact} from Shibboleth attribute statement")
 				
-					// To assist with bootstrap provide the first real user account with admin privilledges
-					// ==2 because we creat internaladministrator in bootstrap and saved above
-					if(UserBase.count() == 2) {
+					// To assist with bootstrap provide the first account actually logging into the system with admin rights
+					def adminAuthority = Role.findByName(AdminsService.ADMIN_ROLE)
+					if(adminAuthority.users?.size() == 0) {
 						adminsService.add(user)
-						log.info("Issued account $user.username with admin right as this was the first account entering the system")
+						log.info("Issued account $user with admin right as this was the first account entering the system")
 					}
 				}
 				else

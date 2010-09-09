@@ -31,7 +31,7 @@ class BootStrap {
 		
 		// Populate default administrative account if required
 		if(User.count() == 0) {
-			def profile = new Profile(email:'internaladministrator@federation.reg')
+			def profile = new Profile(email:'internaladministrator@not.valid')
 			def user = new User(username:'internaladministrator', enabled: false, external:false, federated: false, profile: profile)
 			user.save(flush: true)
 		}
