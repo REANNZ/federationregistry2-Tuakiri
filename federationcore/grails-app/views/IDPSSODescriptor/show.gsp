@@ -192,10 +192,9 @@
 				<div id="tab-attributes" class="tabcontent">
 					<h3><g:message code="label.supportedattributes" /></h3>
 					<div id="attributes">
-						<g:render template="/templates/attributes/list" plugin="federationcore" model="[attrs:identityProvider.attributes, containerID:'attributes']" />
+						<g:render template="/templates/attributes/list" plugin="federationcore" model="[descriptor:identityProvider, attrs:identityProvider.attributes, containerID:'attributes']" />
 					</div>
-					<hr>
-					<g:render template="/templates/attributes/add" plugin="federationcore" model="[type:'idp', containerID:'attributes']"/>
+					<g:render template="/templates/attributes/add" plugin="federationcore" model="[descriptor:identityProvider, type:'idp', containerID:'attributes']"/>
 				</div>
 				<div id="tab-nameidformats" class="tabcontent">
 					<h3><g:message code="label.supportednameidformats" /></h3>
