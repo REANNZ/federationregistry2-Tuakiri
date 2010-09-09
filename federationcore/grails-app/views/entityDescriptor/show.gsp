@@ -72,7 +72,7 @@
 					<div id="contacts">
 						<g:render template="/templates/contacts/list" plugin="federationcore" model="[descriptor:entity, allowremove:true]" />
 					</div>
-					<hr>
+					
 					<g:render template="/templates/contacts/create" plugin="federationcore" model="[descriptor:entity, contactTypes:contactTypes]"/>
 				</div>
 				<div id="tab-idp" class="tabcontent">
