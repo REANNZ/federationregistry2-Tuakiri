@@ -1,5 +1,7 @@
 package fedreg.core
 
+import org.apache.shiro.SecurityUtils
+
 class RoleDescriptorCryptoController {
 
 	static allowedMethods = [delete: "POST", create:"POST"]
@@ -41,10 +43,15 @@ class RoleDescriptorCryptoController {
 			return
 		}
 		
-		log.info "Deleting KeyDescriptor"
-		cryptoService.unassociateCertificate(keyDescriptor)
-		
-		render message(code: 'fedreg.keydescriptor.delete.success')
+		if(SecurityUtils.subject.isPermitted("descriptor:${keyDescriptor.roleDescriptor.id}:crypto:delete")) {
+			log.info "Deleting KeyDescriptor"
+			cryptoService.unassociateCertificate(keyDescriptor)
+			render message(code: 'fedreg.keydescriptor.delete.success')
+		}
+		else {
+			log.warn("Attempt to remove $keyDescriptor from ${keyDescriptor.roleDescriptor} by $authenticatedUser was denied, incorrect permission set")
+			response.sendError(403)
+		}		
 	}
 
 	def create = {
@@ -70,27 +77,33 @@ class RoleDescriptorCryptoController {
 			return
 		}
 		
-		def associated
-		if(params.signing == "on") {
-			associated = cryptoService.associateCertificate(descriptor, params.cert, params.certname, KeyTypes.signing)
+		if(SecurityUtils.subject.isPermitted("descriptor:${descriptor.id}:crypto:create")) {
+			def associated
+			if(params.signing == "on") {
+				associated = cryptoService.associateCertificate(descriptor, params.cert, params.certname, KeyTypes.signing)
 		
-			if(!associated) {
-				render message(code: 'fedreg.keydescriptor.create.signing.failed')
-				response.setStatus(500)
-				return
+				if(!associated) {
+					render message(code: 'fedreg.keydescriptor.create.signing.failed')
+					response.setStatus(500)
+					return
+				}
 			}
-		}
 			
-		if(params.encryption == "on") {
-			associated = cryptoService.associateCertificate(descriptor, params.cert, params.certname, KeyTypes.encryption)
+			if(params.encryption == "on") {
+				associated = cryptoService.associateCertificate(descriptor, params.cert, params.certname, KeyTypes.encryption)
 			
-			if(!associated) {
-				render message(code: 'fedreg.keydescriptor.create.encryption.failed')
-				response.setStatus(500)
-				return
+				if(!associated) {
+					render message(code: 'fedreg.keydescriptor.create.encryption.failed')
+					response.setStatus(500)
+					return
+				}
 			}
-		}
 		
-		render message(code: 'fedreg.keydescriptor.create.success')
+			render message(code: 'fedreg.keydescriptor.create.success')
+		}
+		else {
+			log.warn("Attempt to add crypto to $descriptor by $authenticatedUser was denied, incorrect permission set")
+			response.sendError(403)
+		}
 	}
 }
