@@ -22,9 +22,12 @@ class BootStrap {
 	def dataImporterService
 	def workflowProcessService
 	def sessionFactory
+	def nimbleService
 
      def init = { servletContext ->
 		def applicationContext = servletContext.getAttribute(ApplicationAttributes.APPLICATION_CONTEXT) 
+		
+		nimbleService.init()
 		
 		// Populate default administrative account if required
 		if(User.count() == 0) {
