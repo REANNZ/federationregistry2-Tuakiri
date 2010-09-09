@@ -41,12 +41,6 @@ nimble {
     	number = "number"
     }
 
-    layout {
-        application = 'app'
-        administration = 'admin'
-        customcss = ''
-    }
-
     resources {
         jslibrary = grails.views.javascript.library
         usejsdev = false
