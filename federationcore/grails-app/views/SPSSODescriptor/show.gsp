@@ -150,21 +150,21 @@
 								<g:render template="/templates/endpoints/list" plugin="federationcore" model="[endpoints:serviceProvider.assertionConsumerServices, allowremove:true, endpointType:'assertionConsumerServices', containerID:'assertionconsumerendpoints']" />
 							</div>
 							
-							<g:render template="/templates/endpoints/create" plugin="federationcore" model="[endpointType:'assertionConsumerServices', containerID:'assertionconsumerendpoints']" />
+							<g:render template="/templates/endpoints/create" plugin="federationcore" model="[descriptor:serviceProvider, endpointType:'assertionConsumerServices', containerID:'assertionconsumerendpoints']" />
 						</div>
 						<div id="tab-ars" class="componentlist">
 							<div id="artifactendpoints">
 								<g:render template="/templates/endpoints/list" plugin="federationcore" model="[endpoints:serviceProvider.artifactResolutionServices, allowremove:true, endpointType:'artifactResolutionServices', containerID:'artifactendpoints']" />
 							</div>
 							
-							<g:render template="/templates/endpoints/create" plugin="federationcore" model="[endpointType:'artifactResolutionServices', containerID:'artifactendpoints']" />
+							<g:render template="/templates/endpoints/create" plugin="federationcore" model="[descriptor:serviceProvider, endpointType:'artifactResolutionServices', containerID:'artifactendpoints']" />
 						</div>
 						<div id="tab-slo" class="componentlist">
 							<div id="singlelogoutendpoints">
 								<g:render template="/templates/endpoints/list" plugin="federationcore" model="[endpoints:serviceProvider.singleLogoutServices, allowremove:true, endpointType:'singleLogoutServices', containerID:'singlelogoutendpoints']" />
 							</div>
 							
-							<g:render template="/templates/endpoints/create" plugin="federationcore" model="[endpointType:'singleLogoutServices', containerID:'singlelogoutendpoints']" />
+							<g:render template="/templates/endpoints/create" plugin="federationcore" model="[descriptor:serviceProvider, endpointType:'singleLogoutServices', containerID:'singlelogoutendpoints']" />
 						</div>
 					</div>
 				</div>
