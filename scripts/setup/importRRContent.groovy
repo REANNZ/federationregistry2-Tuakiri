@@ -15,6 +15,8 @@
 	*/
 	cryptoService = ctx.getBean("cryptoService")
 	userService = ctx.getBean("userService")
+	roleService = ctx.getBean("roleService")
+	permissionService = ctx.getBean("permissionService")
 	
     sql = Sql.newInstance("jdbc:mysql://localhost:3306/resourceregistry", "rr", "password", "com.mysql.jdbc.Driver")
 
@@ -49,9 +51,18 @@
 		
 		sql.eachRow("select * from homeOrgs",
 		{
-			def orgType = OrganizationType.findByName(it.homeOrgType)
-			def org = new Organization(active:true, approved:true, name:it.homeOrgName, displayName:it.homeOrgName, lang:it.mainLanguage, url: new UrlURI(uri:it.errorURL ?:'http://aaf.edu.au/support'), primary: orgType)
-			org.save()
+				def org = Organization.findByName(it.homeOrgName)
+				if(!org) {
+					def orgType = OrganizationType.findByName(it.homeOrgType)
+					org = new Organization(active:true, approved:true, name:it.homeOrgName, displayName:it.homeOrgName, lang:it.mainLanguage, url: new UrlURI(uri:it.errorURL ?:'http://aaf.edu.au/support'), primary: orgType)
+					org.save()
+			
+					def adminRole = roleService.createRole("organization-${org.id}-administrators", "Global administrators for the organization ${it.homeOrgName}", false)
+					LevelPermission permission = new LevelPermission()
+				    permission.populate("organization", "${org.id}", "*", null, null, null)
+				    permission.managed = false
+					permissionService.createPermission(permission, adminRole)
+				}
 		})
 		
 		sql.eachRow("select * from resources",
@@ -62,6 +73,12 @@
 				def orgType = OrganizationType.findByName('others')
 				org = new Organization(name:it.homeOrg, displayName:it.homeOrg, lang:it.mainLanguage, url: new UrlURI(uri:it.errorURL ?:'http://aaf.edu.au/support'), primary: orgType)
 				org.save()
+				
+				def adminRole = roleService.createRole("organization-${org.id}-administrators", "Global administrators for the organization ${it.homeOrg}", false)
+				LevelPermission permission = new LevelPermission()
+			    permission.populate("organization", "${org.id}", "*", null, null, null)
+			    permission.managed = false
+				permissionService.createPermission(permission, adminRole)
 			}
 		})
 	}
@@ -161,20 +178,29 @@
 		println "Importing entities from upstream resource registry"
 		sql.eachRow("select * from homeOrgs",
 		{
-			def org = Organization.findByName(it.homeOrgName)
-			def entity = new EntityDescriptor(entityID:it.entityID, organization:org, active:true, approved:it.approved)
-			entity.save()
-			if(entity.hasErrors()) {
-				entity.errors.each {println it}
-			}
-			println "Imported entity ${entity.entityID}"
+			def ed = EntityDescriptor.findWhere(entityID: it.entityID) 		// There are actually duplicate entityID's ....
+			if(ed == null){			
+				def org = Organization.findByName(it.homeOrgName)
+				def entity = new EntityDescriptor(entityID:it.entityID, organization:org, active:true, approved:it.approved)
+				entity.save()
+				if(entity.hasErrors()) {
+					entity.errors.each {println it}
+				}
+				println "Imported entity ${entity.entityID}"
 			
-			// Create ContactPerson instances and link entities to contacts
-			sql.eachRow("select email, contactType from contacts INNER JOIN homeOrgs ON contacts.objectID=homeOrgs.homeOrgID WHERE homeOrgs.entityID=${entity.entityID}",
-			{
-				linkContact(it, entity)
-			})
-			entity.save()
+				// Create ContactPerson instances and link entities to contacts
+				sql.eachRow("select email, contactType from contacts INNER JOIN homeOrgs ON contacts.objectID=homeOrgs.homeOrgID WHERE homeOrgs.entityID=${entity.entityID}",
+				{
+					linkContact(it, entity)
+				})
+				entity.save()
+			
+				def adminRole = roleService.createRole("descriptor-${entity.id}-administrators", "Global administrators for the entity ${it.entityID}", false)
+				LevelPermission permission = new LevelPermission()
+			    permission.populate("descriptor", "${entity.id}", "*", null, null, null)
+			    permission.managed = false
+				permissionService.createPermission(permission, adminRole)
+			}
 		})
 		
 		sql.eachRow("select * from resources",
@@ -265,6 +291,11 @@
 			})
 			idp.save()
 			
+			def adminRole = roleService.createRole("descriptor-${idp.id}-administrators", "Global administrators for ${idp}", false)
+			LevelPermission permission = new LevelPermission()
+		    permission.populate("descriptor", "${idp.id}", "*", null, null, null)
+		    permission.managed = false
+			permissionService.createPermission(permission, adminRole)
 		})	
 	}
 	
@@ -436,8 +467,17 @@
 			if(entity.hasErrors()) {
 				entity.errors.each {println it}
 			}
-			else
+			else {
 				println "Added new SPSSODescriptor to Entity ${entity.entityID}"
+				
+				sp.save()
+				
+				def adminRole = roleService.createRole("descriptor-${sp.id}-administrators", "Global administrators for ${sp}", false)
+				LevelPermission permission = new LevelPermission()
+			    permission.populate("descriptor", "${sp.id}", "*", null, null, null)
+			    permission.managed = false
+				permissionService.createPermission(permission, adminRole)
+			}
 		})
 	}
 	
