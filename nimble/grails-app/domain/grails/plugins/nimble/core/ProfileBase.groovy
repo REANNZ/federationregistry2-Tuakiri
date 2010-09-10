@@ -61,7 +61,7 @@ class ProfileBase {
     static constraints = {
         fullName(nullable: true, blank: false)
         nickName(nullable: true, blank: false)
-        email(nullable:true, blank:false, email: true, unique: true)
+        email(nullable:true, blank:false, email: true)
         nonVerifiedEmail(nullable:true, blank:false, email: true)
         emailHash(nullable: true, blank:true)
         dateCreated(nullable: true) // must be true to enable grails
