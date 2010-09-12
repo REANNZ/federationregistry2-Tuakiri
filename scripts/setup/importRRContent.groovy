@@ -24,6 +24,7 @@
 	importOrganizations()
 	importContacts()
 	importUsers()
+	assignOrganizationAdministrators()
 	importEntities()
 	importIDPSSODescriptors()
 	importAttributeAuthorityDescriptors()
@@ -56,12 +57,6 @@
 					def orgType = OrganizationType.findByName(it.homeOrgType)
 					org = new Organization(active:true, approved:true, name:it.homeOrgName, displayName:it.homeOrgName, lang:it.mainLanguage, url: new UrlURI(uri:it.errorURL ?:'http://aaf.edu.au/support'), primary: orgType)
 					org.save()
-			
-					def adminRole = roleService.createRole("organization-${org.id}-administrators", "Global administrators for the organization ${it.homeOrgName}", false)
-					LevelPermission permission = new LevelPermission()
-				    permission.populate("organization", "${org.id}", "*", null, null, null)
-				    permission.managed = false
-					permissionService.createPermission(permission, adminRole)
 				}
 		})
 		
@@ -79,6 +74,8 @@
 			    permission.populate("organization", "${org.id}", "*", null, null, null)
 			    permission.managed = false
 				permissionService.createPermission(permission, adminRole)
+				
+				// We'll have to manually give permissions in-tool at some later date.
 			}
 		})
 	}
@@ -173,6 +170,29 @@
 			}
 		})
 	}
+	
+	def assignOrganizationAdministrators() {
+		sql.eachRow("select * from homeOrgs",
+		{
+			def org = Organization.findByName(it.homeOrgName)
+			if(org) {
+				def adminRole = Role.findByName("organization-${org.id}-administrators")
+				if(!adminRole) {
+					adminRole = roleService.createRole("organization-${org.id}-administrators", "Global administrators for the organization ${it.homeOrgName}", false)
+					LevelPermission permission = new LevelPermission()
+				    permission.populate("organization", "${org.id}", "*", null, null, null)
+				    permission.managed = false
+					permissionService.createPermission(permission, adminRole)
+				}
+
+				sql.eachRow("select users.uniqueID from objectAdmins INNER JOIN users on objectAdmins.userID=users.userID where uniqueID not like '' and objectType='rra' and objectAdmins.objectID=${it.homeOrgID}",
+				{ u ->
+					def user = User.findWhere(username:u.uniqueID)
+					roleService.addMember(user, adminRole)
+				})
+			}
+		})
+	}
 
 	def importEntities() {
 		println "Importing entities from upstream resource registry"
@@ -200,6 +220,12 @@
 			    permission.populate("descriptor", "${entity.id}", "*", null, null, null)
 			    permission.managed = false
 				permissionService.createPermission(permission, adminRole)
+				
+				sql.eachRow("select users.uniqueID from objectAdmins INNER JOIN users on objectAdmins.userID=users.userID where uniqueID not like '' and objectType='homeOrg' and objectAdmins.objectID=${it.homeOrgID}",
+				{ u ->
+					def user = User.findWhere(username:u.uniqueID)
+					roleService.addMember(user, adminRole)
+				})
 			}
 		})
 		
@@ -214,6 +240,18 @@
 				linkContact(it, entity)
 			})
 			entity.save()
+			
+			def adminRole = roleService.createRole("descriptor-${entity.id}-administrators", "Global administrators for the entity ${entity.entityID}", false)
+			LevelPermission permission = new LevelPermission()
+		    permission.populate("descriptor", "${entity.id}", "*", null, null, null)
+		    permission.managed = false
+			permissionService.createPermission(permission, adminRole)
+			
+			sql.eachRow("select users.uniqueID from objectAdmins INNER JOIN users on objectAdmins.userID=users.userID where uniqueID not like '' and objectAdmins.objectID=${it.resourceID}",
+			{ u ->
+				def user = User.findWhere(username:u.uniqueID)
+				roleService.addMember(user, adminRole)
+			})
 		})
 	}
 	
@@ -278,24 +316,31 @@
 			if(entity.hasErrors()) {
 				entity.errors.each {println it}
 			}
-			else
+			else {
 				println "Added new IDPSSODescriptor to Entity ${entity.entityID}"
 				
-			sql.eachRow("select attributeOID from attributes INNER JOIN homeOrgAttributes ON attributes.attributeID=homeOrgAttributes.attributeID where homeOrgAttributes.homeOrgID=${it.homeOrgID};",
-			{
-				def base = AttributeBase.findByOid(it.attributeOID)
-				if(base) {
-					def attr = new Attribute(base: base, idpSSODescriptor:idp)
-					idp.addToAttributes(attr)
-				}
-			})
-			idp.save()
+				sql.eachRow("select attributeOID from attributes INNER JOIN homeOrgAttributes ON attributes.attributeID=homeOrgAttributes.attributeID where homeOrgAttributes.homeOrgID=${it.homeOrgID};",
+				{
+					def base = AttributeBase.findByOid(it.attributeOID)
+					if(base) {
+						def attr = new Attribute(base: base, idpSSODescriptor:idp)
+						idp.addToAttributes(attr)
+					}
+				})
+				idp.save()
 			
-			def adminRole = roleService.createRole("descriptor-${idp.id}-administrators", "Global administrators for ${idp}", false)
-			LevelPermission permission = new LevelPermission()
-		    permission.populate("descriptor", "${idp.id}", "*", null, null, null)
-		    permission.managed = false
-			permissionService.createPermission(permission, adminRole)
+				def adminRole = roleService.createRole("descriptor-${idp.id}-administrators", "Global administrators for ${idp}", false)
+				LevelPermission permission = new LevelPermission()
+			    permission.populate("descriptor", "${idp.id}", "*", null, null, null)
+			    permission.managed = false
+				permissionService.createPermission(permission, adminRole)
+			
+				sql.eachRow("select users.uniqueID from objectAdmins INNER JOIN users on objectAdmins.userID=users.userID where uniqueID not like '' and objectType='homeOrg' and objectAdmins.objectID=${it.homeOrgID}",
+				{ u ->
+					def user = User.findWhere(username:u.uniqueID)
+					roleService.addMember(user, adminRole)
+				})
+			}
 		})	
 	}
 	
@@ -477,6 +522,12 @@
 			    permission.populate("descriptor", "${sp.id}", "*", null, null, null)
 			    permission.managed = false
 				permissionService.createPermission(permission, adminRole)
+				
+				sql.eachRow("select users.uniqueID from objectAdmins INNER JOIN users on objectAdmins.userID=users.userID where uniqueID not like '' and objectAdmins.objectID=${it.resourceID}",
+				{ u ->
+					def user = User.findWhere(username:u.uniqueID)
+					roleService.addMember(user, adminRole)
+				})
 			}
 		})
 	}
