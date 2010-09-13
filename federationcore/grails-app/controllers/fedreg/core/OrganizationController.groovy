@@ -2,6 +2,8 @@ package fedreg.core
 
 import org.apache.shiro.SecurityUtils
 
+import grails.plugins.nimble.core.Role
+
 class OrganizationController {
 
 	def organizationService
@@ -35,7 +37,8 @@ class OrganizationController {
 		else {
 			def entities = EntityDescriptor.findAllWhere(organization:organization)
 			def contacts = Contact.findAllWhere(organization:organization)
-			[organization: organization, entities:entities, contacts:contacts]
+			def adminRole = Role.findByName("organization-${organization.id}-administrators")
+			[organization: organization, entities:entities, contacts:contacts, administrators:adminRole?.users]
 		}
 	}
 	

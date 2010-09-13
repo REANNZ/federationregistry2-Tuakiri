@@ -75,6 +75,7 @@
 					<li><a href="#tab-entities"><g:message code="label.entities" /></a></li>
 					<li><a href="#tab-idp"><g:message code="label.identityproviders" /></a></li>
 					<li><a href="#tab-sp"><g:message code="label.serviceproviders" /></a></li>
+					<li><a href="#tab-admins"><g:message code="label.administrators" /></a></li>
 					<g:if test="${organization.extensions}">
 						<li><a href="#tab-ext" class="icon icon_cog"><g:message code="label.extensions" /></a></li>
 					</g:if>
@@ -174,6 +175,9 @@
 						</g:each>
 						</tbody>
 					</table>
+				</div>
+				<div id="tab-admins">
+						<g:render template="/templates/administrators/list" plugin="federationcore" model="[administrators:administrators]" />
 				</div>
 				<g:if test="${organization.extensions}">
 					<div id="tab-ext">	
