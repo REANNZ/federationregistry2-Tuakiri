@@ -34,6 +34,7 @@ class RoleDescriptor extends Descriptor {
 	
 	boolean active
 	boolean approved
+	boolean reporting = true
 
 	Date dateCreated
 	Date lastUpdated
