@@ -16,7 +16,7 @@
 												</div>
 											</td>
 										</tr>
-										<n:hasPermission target="descriptor:${acs.descriptor.id}:attribute:value:add">
+										<n:hasPermission target="descriptor:${ra.attributeConsumingService.descriptor.id}:attribute:value:add">
 											<tr>
 												<td colspan="2" class="contentaddition">
 													<script type="text/javascript">
