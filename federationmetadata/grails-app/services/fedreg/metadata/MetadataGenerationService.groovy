@@ -161,8 +161,8 @@ class MetadataGenerationService {
 		}
 	}
 	
-	def requestedAttribute(builder, attr) {
-		if(attr.approved) {
+	def requestedAttribute(builder, all, attr) {
+		if(all || attr.approved) {
 			builder.RequestedAttribute(Name: attr.base.name, NameFormat:attr.base.nameFormat?.uri, FriendlyName:attr.base.friendlyName, isRequired:attr.isRequired) {
 				attr.values?.sort{it?.value}.each {
 					'saml:AttributeValue'(it.value)
@@ -171,7 +171,7 @@ class MetadataGenerationService {
 		}
 	}
 	
-	def attributeConsumingService(builder, acs, index) {
+	def attributeConsumingService(builder, all, acs, index) {
 		builder.AttributeConsumingService(index:index, isDefault:acs.isDefault) {
 			acs.serviceNames?.sort{it}.each {
 				localizedName(builder, "ServiceName", acs.lang, it)
@@ -179,7 +179,7 @@ class MetadataGenerationService {
 			acs.serviceDescriptions?.sort{it}.each {
 				localizedName(builder, "ServiceDescription", acs.lang, it)
 			}
-			acs.requestedAttributes?.sort{it.base.name}.each{ attr -> requestedAttribute(builder, attr)}
+			acs.requestedAttributes?.sort{it.base.name}.each{ attr -> requestedAttribute(builder, all, attr)}
 		}
 	}
 	
@@ -218,7 +218,7 @@ class MetadataGenerationService {
 				ssoDescriptor(builder, all, spSSODescriptor)
 			
 				spSSODescriptor.assertionConsumerServices?.sort{it.location.uri}.eachWithIndex{ ars, i -> indexedEndpoint(builder, all, "AssertionConsumerService", ars, i+1) }
-				spSSODescriptor.attributeConsumingServices?.sort{it.id}.eachWithIndex{ acs, i -> attributeConsumingService(builder, acs, i) }
+				spSSODescriptor.attributeConsumingServices?.sort{it.id}.eachWithIndex{ acs, i -> attributeConsumingService(builder, all, acs, i) }
 			}
 		}
 	}
