@@ -23,6 +23,7 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class AdditionalMetadataLocation  {
+	static auditable = true
 
 	UrlURI uri
 	String namespace

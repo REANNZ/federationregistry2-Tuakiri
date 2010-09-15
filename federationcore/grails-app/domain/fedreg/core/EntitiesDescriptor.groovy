@@ -23,6 +23,7 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class EntitiesDescriptor {
+	static auditable = true
 
 	String name
 	String extensions

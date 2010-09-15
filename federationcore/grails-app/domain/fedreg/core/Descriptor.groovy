@@ -22,6 +22,7 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class Descriptor  {
+	static auditable = true
 	
 	static mapping = {
 		tablePerHierarchy false

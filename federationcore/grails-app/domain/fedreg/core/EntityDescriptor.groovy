@@ -23,6 +23,7 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class EntityDescriptor extends Descriptor  {
+	static auditable = true
 
 	// Organization is the top teir in our model. All entities must belong to an organization definition
 	Organization organization

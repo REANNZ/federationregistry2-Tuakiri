@@ -23,6 +23,7 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class Organization  {	// Also called a participant in AAF land
+	static auditable = true
 
 	String name
 	String displayName

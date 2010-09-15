@@ -20,6 +20,7 @@
 package fedreg.core
 
 class OrganizationType {
+	static auditable = true
 
 	String name
 	String displayName

@@ -23,6 +23,8 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class ServiceDescription {
+	static auditable = true
+	
 	boolean publish = false
 	
 	String connectURL		// URL for end users to access service

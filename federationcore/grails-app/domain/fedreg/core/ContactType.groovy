@@ -23,6 +23,7 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class ContactType  {
+	static auditable = true
 
 	String name
 	String displayName

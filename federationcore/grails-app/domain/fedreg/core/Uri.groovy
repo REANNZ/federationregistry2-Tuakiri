@@ -23,6 +23,8 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class Uri  {
+	static auditable = true
+	
 	String uri
 	String description
 

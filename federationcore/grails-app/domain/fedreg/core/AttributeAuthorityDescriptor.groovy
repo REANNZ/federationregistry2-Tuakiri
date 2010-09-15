@@ -23,6 +23,7 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class AttributeAuthorityDescriptor extends RoleDescriptor {
+	static auditable = true
 	
 	IDPSSODescriptor collaborator    // This links the AA with an IDP that collaborates with it to provide authentication assertion services
 	

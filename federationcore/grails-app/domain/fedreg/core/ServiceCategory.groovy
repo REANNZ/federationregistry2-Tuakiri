@@ -23,6 +23,8 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class ServiceCategory {
+	static auditable = true
+	
 	String name
 	String description
 	

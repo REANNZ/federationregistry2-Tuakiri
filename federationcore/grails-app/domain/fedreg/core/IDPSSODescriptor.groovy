@@ -22,6 +22,8 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class IDPSSODescriptor extends SSODescriptor  {
+	static auditable = true
+	
 	AttributeAuthorityDescriptor collaborator
 		
 	boolean wantAuthnRequestsSigned = true

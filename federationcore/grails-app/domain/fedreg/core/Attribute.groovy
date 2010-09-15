@@ -23,6 +23,8 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class Attribute  {
+	static auditable = true
+	
 	AttributeBase base
 	Date dateCreated
 	Date lastUpdated

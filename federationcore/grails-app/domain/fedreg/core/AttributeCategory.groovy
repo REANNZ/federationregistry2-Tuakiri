@@ -19,6 +19,7 @@
 package fedreg.core
 
 class AttributeCategory {
+	static auditable = true
 	
 	String name
 	

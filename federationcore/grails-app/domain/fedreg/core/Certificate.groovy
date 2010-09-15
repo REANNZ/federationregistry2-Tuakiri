@@ -24,6 +24,7 @@ import groovy.time.TimeCategory
  * @author Bradley Beddoes
  */
 class Certificate {
+	static auditable = true
 	
 	String data
 	

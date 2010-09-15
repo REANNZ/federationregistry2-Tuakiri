@@ -22,6 +22,7 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class CACertificate {
+	static auditable = true
 	
 	String data
 	

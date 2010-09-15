@@ -23,6 +23,7 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class SingleLogoutService extends Endpoint  {
+	static auditable = true
 
 	static belongsTo = [descriptor: SSODescriptor]
 	

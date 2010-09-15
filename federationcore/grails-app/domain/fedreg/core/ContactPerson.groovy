@@ -23,6 +23,7 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class ContactPerson  {
+	static auditable = true
 
 	Contact contact
 	ContactType type

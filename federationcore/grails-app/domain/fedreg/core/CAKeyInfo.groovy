@@ -22,6 +22,7 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class CAKeyInfo  {
+	static auditable = true
 
 	String keyName
 	Date expiryDate

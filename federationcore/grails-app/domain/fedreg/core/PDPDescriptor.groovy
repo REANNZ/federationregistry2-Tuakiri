@@ -23,6 +23,7 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class PDPDescriptor extends RoleDescriptor {
+	static auditable = true
 	
 	static belongsTo = [entityDescriptor:EntityDescriptor]
 

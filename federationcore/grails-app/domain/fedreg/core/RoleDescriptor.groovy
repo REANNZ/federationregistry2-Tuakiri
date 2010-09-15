@@ -23,6 +23,8 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class RoleDescriptor extends Descriptor {
+	static auditable = true
+	
 	def cryptoService
 	
 	Organization organization

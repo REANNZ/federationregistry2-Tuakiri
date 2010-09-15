@@ -22,6 +22,7 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class KeyInfo  {
+	static auditable = true
 
 	String keyName
 	Certificate certificate

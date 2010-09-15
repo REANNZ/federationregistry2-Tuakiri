@@ -23,6 +23,7 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class EncryptionMethod  {
+	static auditable = true
 
 	String algorithm
 	String keySize

@@ -22,6 +22,7 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class TelNumURI extends AnyUri  {
+	static auditable = true
 
 	static constraints = {
 		uri(nullable: false, blank: false)

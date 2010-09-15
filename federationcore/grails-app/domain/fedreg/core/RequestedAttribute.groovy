@@ -23,6 +23,8 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class RequestedAttribute extends Attribute {
+	static auditable = true
+	
 	String reasoning
 	boolean isRequired
 	boolean approved = false

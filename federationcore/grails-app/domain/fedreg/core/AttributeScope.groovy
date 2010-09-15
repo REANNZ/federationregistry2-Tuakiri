@@ -20,6 +20,7 @@
 package fedreg.core
 
 class AttributeScope {
+	static auditable = true
 	
 	String name
 	

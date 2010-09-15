@@ -22,6 +22,8 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class KeyDescriptor  {	
+	static auditable = true
+	
 	KeyInfo keyInfo
 	EncryptionMethod encryptionMethod
 	KeyTypes keyType

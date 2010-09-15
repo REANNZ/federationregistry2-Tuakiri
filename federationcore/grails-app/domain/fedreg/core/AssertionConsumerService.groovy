@@ -23,6 +23,7 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class AssertionConsumerService extends IndexedEndpoint  {
+	static auditable = true
 
  	static belongsTo = [descriptor: SPSSODescriptor]
 

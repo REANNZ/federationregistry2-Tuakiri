@@ -24,6 +24,8 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class Endpoint	{
+	static auditable = true
+	
 	boolean active = false
 	boolean approved = false
 	

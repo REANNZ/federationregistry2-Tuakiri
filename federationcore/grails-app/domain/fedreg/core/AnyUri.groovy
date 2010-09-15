@@ -23,6 +23,7 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class AnyUri extends Uri  {
+	static auditable = true
 
   	static belongsTo = [organization:Organization, endpoint:Endpoint, contact:Contact, descriptor:RoleDescriptor]
 

@@ -23,6 +23,7 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class AttributeConsumingService {
+	static auditable = true
 
 	boolean isDefault = false
 	String lang

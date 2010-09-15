@@ -23,6 +23,7 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class AttributeBase  {
+	static auditable = true
 
 	String name
 	SamlURI nameFormat

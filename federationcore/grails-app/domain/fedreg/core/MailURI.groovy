@@ -23,6 +23,7 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class MailURI extends AnyUri  {
+	static auditable = true
 
 	static constraints = {
 		uri(nullable: false, blank: false, email: true, unique:true)

@@ -23,6 +23,7 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class AttributeValue  {
+	static auditable = true
 
 	String value
 	

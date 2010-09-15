@@ -20,6 +20,7 @@
 package fedreg.core
 
 class Contact {
+	static auditable = true
 	
 	String givenName
 	String surname

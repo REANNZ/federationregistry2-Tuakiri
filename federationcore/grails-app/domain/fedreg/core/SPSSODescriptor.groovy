@@ -23,6 +23,7 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class SPSSODescriptor extends SSODescriptor {
+	static auditable = true
 
  	boolean authnRequestsSigned
  	boolean wantAssertionsSigned

@@ -40,6 +40,12 @@ grails.converters.encoding = "UTF-8"
 grails.enable.native2ascii = true
 grails.views.gsp.sitemesh.preprocess = true
 
+auditLog {
+  actorClosure = { request, session ->
+     org.apache.shiro.SecurityUtils.getSubject()?.getPrincipal()
+  }
+}
+
 // Environmental configuration
 environments {
     test {
