@@ -106,7 +106,7 @@ class IDPSSODescriptorController {
 			redirect(action: "list")
 			return
 		}
-		if(SecurityUtils.subject.isPermitted("descriptor:${identityProvider.id}:update")) {
+		if(SecurityUtils.subject.isPermitted("descriptor:${identityProvider_.id}:update")) {
 			def (updated, identityProvider) = IDPSSODescriptorService.update(params)
 			if(updated)
 				redirect (action: "show", id: identityProvider.id)
