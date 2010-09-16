@@ -130,7 +130,7 @@
 		
 		sql.eachRow("select uniqueID, givenName, surname, eMail, homeOrgName from users ORDER BY (email)",
 		{
-			if(it.uniqueID) {
+			if(it.uniqueID && it.email) {
 				def organization = Organization.findByName(it.homeOrgName)
 				if(organization) {
 					UserBase newUser = InstanceGenerator.user()
@@ -188,7 +188,8 @@
 				sql.eachRow("select users.uniqueID from objectAdmins INNER JOIN users on objectAdmins.userID=users.userID where uniqueID not like '' and objectType='rra' and objectAdmins.objectID=${it.homeOrgID}",
 				{ u ->
 					def user = User.findWhere(username:u.uniqueID)
-					roleService.addMember(user, adminRole)
+					if(user)
+						roleService.addMember(user, adminRole)
 				})
 			}
 		})
@@ -224,7 +225,8 @@
 				sql.eachRow("select users.uniqueID from objectAdmins INNER JOIN users on objectAdmins.userID=users.userID where uniqueID not like '' and objectType='homeOrg' and objectAdmins.objectID=${it.homeOrgID}",
 				{ u ->
 					def user = User.findWhere(username:u.uniqueID)
-					roleService.addMember(user, adminRole)
+					if(user)
+						roleService.addMember(user, adminRole)
 				})
 			}
 		})
@@ -250,7 +252,9 @@
 			sql.eachRow("select users.uniqueID from objectAdmins INNER JOIN users on objectAdmins.userID=users.userID where uniqueID not like '' and objectAdmins.objectID=${it.resourceID}",
 			{ u ->
 				def user = User.findWhere(username:u.uniqueID)
-				roleService.addMember(user, adminRole)
+				
+				if(user)
+					roleService.addMember(user, adminRole)
 			})
 		})
 	}
@@ -338,7 +342,9 @@
 				sql.eachRow("select users.uniqueID from objectAdmins INNER JOIN users on objectAdmins.userID=users.userID where uniqueID not like '' and objectType='homeOrg' and objectAdmins.objectID=${it.homeOrgID}",
 				{ u ->
 					def user = User.findWhere(username:u.uniqueID)
-					roleService.addMember(user, adminRole)
+					
+					if(user)
+						roleService.addMember(user, adminRole)
 				})
 			}
 		})	
@@ -485,7 +491,6 @@
 			{
 				acs.lang = it.language
 				acs.addToServiceNames(it.descriptiveName)
-				acs.addToServiceDescriptions(it.description)
 			})
 			
 			sql.eachRow("select attributeUse.attributeUseType, attributes.attributeURN from attributeUse INNER JOIN attributes ON attributes.attributeID=attributeUse.attributeID where attributeUse.resourceID=${it.resourceID}",
@@ -526,7 +531,9 @@
 				sql.eachRow("select users.uniqueID from objectAdmins INNER JOIN users on objectAdmins.userID=users.userID where uniqueID not like '' and objectAdmins.objectID=${it.resourceID}",
 				{ u ->
 					def user = User.findWhere(username:u.uniqueID)
-					roleService.addMember(user, adminRole)
+					
+					if(user)
+						roleService.addMember(user, adminRole)
 				})
 			}
 		})

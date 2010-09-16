@@ -7,14 +7,6 @@
 			<td colspan="2"><h4><g:message code="label.attributeconsumingservice"/> ${i+1}</h4></td>
 		</tr>
 		<tr>
-			<th><g:message code="label.name" /></th>
-			<td>${acs.serviceNames.asList()?.get(0)?.encodeAsHTML()}</td>
-		</tr>
-		<tr>
-			<th><g:message code="label.description" /></th>
-			<td>${acs.serviceDescriptions.asList()?.get(0)?.encodeAsHTML()}</td>
-		</tr>
-		<tr>
 			<th><g:message code="label.requestedattributes" /></th>
 			<td>
 				<div id="acsreqattr${i}">

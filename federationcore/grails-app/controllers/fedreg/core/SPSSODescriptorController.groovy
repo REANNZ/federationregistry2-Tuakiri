@@ -108,7 +108,7 @@ class SPSSODescriptorController {
 			redirect(action: "list")
 			return
 		}
-		if(SecurityUtils.subject.isPermitted("descriptor:${serviceProvider.id}:update")) {
+		if(SecurityUtils.subject.isPermitted("descriptor:${serviceProvider_.id}:update")) {
 			def (updated, serviceProvider) = SPSSODescriptorService.update(params)
 			if(updated)
 				redirect (action: "show", id: serviceProvider.id)
