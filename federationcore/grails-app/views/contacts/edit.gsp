@@ -11,7 +11,17 @@
 			
 			<g:form action="update" id="${contact.id}">
 				<table>
-					<tbody>		
+					<tbody>	
+						<tr>
+							<th><g:message code="label.organization" /></th>
+							<td>
+								<g:select name="organization"
+								          from="${organizations}"
+										  noSelection="${['null':'No Organization']}"
+								          value="${contact?.organization?.id}"
+								          optionKey="id" optionValue="name"/>
+							</td>
+						</tr>	
 						<tr>
 							<th><g:message code="label.givenname" /></th>
 							<td><input type="text" name="givenname" value="${fieldValue(bean: contact, field: 'givenName')}" /></td>

@@ -9,7 +9,13 @@
 			<h2><g:message code="fedreg.view.members.contacts.show.heading" args="[contact.givenName, contact.surname]"/></h2>
 		
 			<table>
-				<tbody>		
+				<tbody>	
+					<g:if test="${contact.organization}">
+						<tr>
+							<th><g:message code="label.organization" /></th>
+							<td><g:link controller="organization" action="show" id="${contact.organization.id}">${fieldValue(bean: contact, field: "organization.displayName")}</g:link></td>
+						</tr>	
+					</g:if>
 					<tr>
 						<th><g:message code="label.givenname" /></th>
 						<td>${fieldValue(bean: contact, field: "givenName")}</td>

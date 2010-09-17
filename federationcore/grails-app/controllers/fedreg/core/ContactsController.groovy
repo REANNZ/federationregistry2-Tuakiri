@@ -34,7 +34,8 @@ class ContactsController {
 	def create = {
 		if(SecurityUtils.subject.isPermitted("contact:create")) {
 			def contact = new Contact()
-			[contact: contact]
+			def organizations = Organization.list()
+			[contact: contact, organizations:organizations]
 		} else {
 			log.warn("Attempt to create new contact by $authenticatedUser was denied, incorrect permission set")
 			response.sendError(403)
@@ -62,6 +63,17 @@ class ContactsController {
 			
 			if(params.homePhone)
 				contact.homePhone = new TelNumURI(uri:params.homePhone)
+				
+			if(params.organization) {
+				if(params.organization == "null") {
+					contact.organization = null
+				} else {
+					def organization = Organization.get(params.organization)
+					if(organization) {
+						contact.organization = organization
+					}
+				}
+			}
 			
 			contact.save()
 			if(contact.hasErrors()) {
@@ -70,7 +82,8 @@ class ContactsController {
 				}
 				flash.type = "error"
 			    flash.message = message(code: 'fedreg.contact.create.error')
-				render view: "create", model: [contact: contact]
+				def organizations = Organization.list()
+				render view: "create", model: [contact: contact, organizations:organizations]
 				return
 			}
 	
@@ -100,11 +113,12 @@ class ContactsController {
 		}
 		
 		if(SecurityUtils.subject.isPermitted("contact:${contact.id}:update")) {
-			[contact: contact]
-		}	else {
-				log.warn("Attempt to edit ${contact} by $authenticatedUser was denied, incorrect permission set")
-				response.sendError(403)
-			}
+			def organizations = Organization.list()
+			[contact: contact, organizations:organizations]
+		} else {
+			log.warn("Attempt to edit ${contact} by $authenticatedUser was denied, incorrect permission set")
+			response.sendError(403)
+		}
 	}
 
 	def update = {
@@ -128,6 +142,17 @@ class ContactsController {
 			contact.surname = params.surname
 			contact.email.uri = params.email
 			contact.description = params.description
+			
+			if(params.organization) {
+				if(params.organization == "null") {
+					contact.organization = null
+				} else {
+					def organization = Organization.get(params.organization)
+					if(organization) {
+						contact.organization = organization
+					}
+				}
+			}
 	
 			if(params.secondaryEmail)
 				if(!contact.secondaryEmail)
@@ -178,7 +203,8 @@ class ContactsController {
 				}
 				flash.type = "error"
 			    flash.message = message(code: 'fedreg.contact.update.error')
-				render view: "edit", model: [contact: contact]
+				def organizations = Organization.list()
+				render view: "edit", model: [contact: contact, organizations:organizations]
 				return
 			}
 	

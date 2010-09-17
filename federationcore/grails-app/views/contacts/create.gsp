@@ -12,7 +12,16 @@
 			
 			<g:form action="save">
 				<table>
-					<tbody>		
+					<tbody>	
+						<tr>
+							<th><g:message code="label.organization" /></th>
+							<td>
+								<g:select name="organization"
+								          from="${organizations}"
+										  noSelection="${['null':'No Organization']}"
+								          optionKey="id" optionValue="name"/>
+							</td>
+						</tr>	
 						<tr>
 							<th><g:message code="label.givenname" /></th>
 							<td><input type="text" name="givenname" value="${fieldValue(bean: contact, field: 'givenName')}" /></td>

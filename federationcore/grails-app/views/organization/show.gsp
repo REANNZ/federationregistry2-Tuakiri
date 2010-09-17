@@ -5,6 +5,15 @@
 		
 		<meta name="layout" content="members" />
 		<title><g:message code="fedreg.view.members.organization.show.title" /></title>
+		
+		<script type="text/javascript">
+			var activeContact
+			var contactCreateEndpoint = "${createLink(controller:'organizationContact', action:'create', id:organization.id )}";
+			var contactDeleteEndpoint = "${createLink(controller:'organizationContact', action:'delete' )}";
+			var contactListEndpoint = "${createLink(controller:'organizationContact', action:'list', id:organization.id ) }";
+			var contactSearchEndpoint = "${createLink(controller:'organizationContact', action:'search')}";
+		</script>
+		
 	</head>
 	<body>
 		<section>
@@ -82,24 +91,14 @@
 				</ul>
 				
 				<div id="tab-contacts">
-					<table>
-						<thead>
-							<tr>
-								<th><g:message code="label.name" /></th>
-								<th><g:message code="label.email" /></th>
-								<th/>
-							</tr>
-						</thead>
-						<tbody>
-						<g:each in="${contacts}" var="contact" status="i">
-							<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-								<td>${contact.givenName?.encodeAsHTML()} ${contact.surname?.encodeAsHTML()}</td>
-								<td><a href="mailto:${contact.email?.uri.encodeAsHTML()}">${contact.email?.uri.encodeAsHTML()}</a></td>
-								<td></td>
-							</tr>
-						</g:each>
-						</tbody>
-					</table>
+					<g:if test="${contacts}">
+						<div id="contacts">
+							<g:render template="/templates/contacts/list_org" plugin="federationcore" model="[organization:organization, contacts:contacts]" />
+						</div>
+					</g:if>
+					<g:else>
+						<p><g:message code="fedreg.view.members.organization.no.contacts" /></p>
+					</g:else>
 				</div>
 				<div id="tab-entities">
 					<g:if test="${entities}">
