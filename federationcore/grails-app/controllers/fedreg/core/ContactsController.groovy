@@ -160,8 +160,8 @@ class ContactsController {
 				else
 					contact.secondaryEmail.uri = params.secondaryEmail
 			else 
-				if(params.secondaryEmail)
-					params.secondaryEmail.delete()
+				if(contact.secondaryEmail)
+					contact.secondaryEmail.delete()
 	
 			if(params.workPhone)
 				if(!contact.workPhone)
