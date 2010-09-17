@@ -89,7 +89,7 @@ class DescriptorAttributeController {
 			return
 		}
 		
-		render template: "/templates/attributes/list", contextPath: pluginContextPath, model:[attrs:descriptor.attributes, containerID:params.containerID]
+		render template: "/templates/attributes/list", contextPath: pluginContextPath, model:[descriptor:descriptor, attrs:descriptor.attributes, containerID:params.containerID]
 	}
 	
 	def add = {
