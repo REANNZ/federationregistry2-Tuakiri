@@ -19,6 +19,12 @@ class SPSSODescriptorService {
 			if(!contact)
 				contact = new Contact(givenName: params.contact?.givenName, surname: params.contact?.surname, email: new MailURI(uri:params.contact?.email), organization:organization)
 				contact.save()
+				if(contact.hasErrors()) {
+					contact.errors.each {
+						log.error it
+					}
+					throw new RuntimeException("Unable to create new contact when attempting to create new SPSSODescriptor")
+				}
 		}
 		def ct = params.contact?.type ?: 'administrative'
 		

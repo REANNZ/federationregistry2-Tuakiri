@@ -90,7 +90,7 @@
 						<label for="contact.givenName"><g:message code="label.givenname" /></label>
 					</td>
 					<td>
-						<g:textField name="contact.fullName"  size="50" class="required" minlength="4"/>
+						<g:textField name="contact.givenName"  size="50" class="required" minlength="4"/>
 					</td>
 				</tr>
 				<tr>
