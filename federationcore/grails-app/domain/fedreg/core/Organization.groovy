@@ -27,6 +27,8 @@ class Organization  {	// Also called a participant in AAF land
 
 	String name
 	String displayName
+	String description
+	String logoURL
 	String lang
 	String extensions
 	
@@ -56,6 +58,8 @@ class Organization  {	// Also called a participant in AAF land
 	static constraints = {
 		name(nullable: false, blank: false, unique:true)
 		displayName(nullable: false, blank: false)
+		description(nullable:true, blank: false, maxSize:2000)
+		logoURL(nullable:true)
 		lang(nullable: false, blank: false)
 		url(nullable: false, blank: false, url: true)
 		extensions(nullable: true, blank: true)
