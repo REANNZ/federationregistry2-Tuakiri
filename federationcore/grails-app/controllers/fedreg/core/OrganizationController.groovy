@@ -38,7 +38,13 @@ class OrganizationController {
 			def entities = EntityDescriptor.findAllWhere(organization:organization)
 			def contacts = Contact.findAllWhere(organization:organization)
 			def adminRole = Role.findByName("organization-${organization.id}-administrators")
-			[organization: organization, entities:entities, contacts:contacts, administrators:adminRole?.users]
+			def identityproviders = []
+			def serviceproviders = []
+			entities.each { e ->
+				e.idpDescriptors.each { idp -> identityproviders.add(idp)}
+				e.spDescriptors.each { sp -> serviceproviders.add(sp) }
+			}
+			[organization: organization, entities:entities, identityproviders:identityproviders, serviceproviders:serviceproviders, contacts:contacts, administrators:adminRole?.users]
 		}
 	}
 	

@@ -106,7 +106,7 @@
 						</table>
 					</g:if>
 					<g:else>
-						<p class="info"><g:message code="fedreg.view.members.entity.show.no.identityproviders" />
+						<p><g:message code="fedreg.view.members.entity.show.no.identityproviders" />
 					</g:else>
 				</div>
 				<div id="tab-sp" class="tabcontent">
@@ -140,7 +140,7 @@
 						</table>
 					</g:if>
 					<g:else>
-						<p class="info"><g:message code="fedreg.view.members.entity.show.no.serviceproviders" />
+						<p><g:message code="fedreg.view.members.entity.show.no.serviceproviders" /></p>
 					</g:else>
 				</div>
 				<g:if test="${entity.extensions}">

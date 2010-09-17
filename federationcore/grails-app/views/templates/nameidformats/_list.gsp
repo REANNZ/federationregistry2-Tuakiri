@@ -25,6 +25,6 @@
 </g:if>
 <g:else>
 	<div>
-		<p class="icon icon_information"><g:message code="fedreg.template.nameidformats.noresults"/></p>
+		<p class="error"><g:message code="fedreg.template.nameidformats.noresults"/></p>
 	</div>
 </g:else>

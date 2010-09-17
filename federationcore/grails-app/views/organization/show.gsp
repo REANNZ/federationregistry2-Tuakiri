@@ -102,79 +102,86 @@
 					</table>
 				</div>
 				<div id="tab-entities">
-					<table>
-						<thead>
-							<tr>
-								<th><g:message code="label.entitydescriptor" /></th>
-								<th><g:message code="label.status" /></th>
-								<th/>
-							</tr>
-						</thead>
-						<tbody>
-						<g:each in="${entities}" var="ent" status="i">
-							<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-								<td>${ent.entityID.encodeAsHTML()}</td>
-								<td>
-									<g:if test="${ent.active}">
-										<div class="icon icon_tick"><g:message code="label.active" /></div>
-									</g:if>
-									<g:else>
-										<div class="icon icon_cross"><g:message code="label.inactive" /></div>
-									</g:else>
-								</td>
-								<td><n:button href="${createLink(controller:'entityDescriptor', action:'show', id:ent.id)}" label="label.view" icon="arrowthick-1-ne" /></td>
-							</tr>
-						</g:each>
-						</tbody>
-					</table>
+					<g:if test="${entities}">
+						<table>
+							<thead>
+								<tr>
+									<th><g:message code="label.entitydescriptor" /></th>
+									<th><g:message code="label.status" /></th>
+									<th/>
+								</tr>
+							</thead>
+							<tbody>
+							<g:each in="${entities}" var="ent" status="i">
+								<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
+									<td>${ent.entityID.encodeAsHTML()}</td>
+									<td>
+										<g:if test="${ent.active}">
+											<div class="icon icon_tick"><g:message code="label.active" /></div>
+										</g:if>
+										<g:else>
+											<div class="icon icon_cross"><g:message code="label.inactive" /></div>
+										</g:else>
+									</td>
+									<td><n:button href="${createLink(controller:'entityDescriptor', action:'show', id:ent.id)}" label="label.view" icon="arrowthick-1-ne" /></td>
+								</tr>
+							</g:each>
+							</tbody>
+						</table>
+					</g:if>
+					<g:else>
+						<p><g:message code="fedreg.view.members.organization.no.entities" /></p>
+					</g:else>
 				</div>
 				<div id="tab-idp">
-					<table>
-						<thead>
-							<tr>
-								<th><g:message code="label.name" /></th>
-								<th><g:message code="label.entitydescriptor" /></th>
-								<th/>
-							</tr>
-						</thead>
-						<tbody>
-						<g:each in="${entities}" var="ent">
-							<g:if test="${ent.idpDescriptors}">
-								<g:each in="${ent.idpDescriptors}" var="idp" status="i">
+					<g:if test="${identityproviders}">
+						<table>
+							<thead>
+								<tr>
+									<th><g:message code="label.name" /></th>
+									<th><g:message code="label.entitydescriptor" /></th>
+									<th/>
+								</tr>
+							</thead>
+							<tbody>
+								<g:each in="${identityproviders}" var="idp" status ="i">
 									<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 										<td>${idp.displayName.encodeAsHTML()}</td>
-										<td>${ent.entityID.encodeAsHTML()}</td>
+										<td>${idp.entityDescriptor.entityID.encodeAsHTML()}</td>
 										<td><n:button href="${createLink(controller:'IDPSSODescriptor', action:'show', id:idp.id)}" label="label.view" icon="arrowthick-1-ne" /></td>
 									</tr>
 								</g:each>
-							</g:if>
-						</g:each>
-						</tbody>
-					</table>
+							</tbody>
+						</table>
+					</g:if>
+					<g:else>
+						<p><g:message code="fedreg.view.members.organization.no.identityproviders" /></p>
+					</g:else>
 				</div>
 				<div id="tab-sp">
-					<table>
-						<thead>
-							<tr>
-								<th><g:message code="label.name" /></th>
-								<th><g:message code="label.entitydescriptor" /></th>
-								<th/>
-							</tr>
-						</thead>
-						<tbody>
-						<g:each in="${entities}" var="ent">
-							<g:if test="${ent.spDescriptors}">
-								<g:each in="${ent.spDescriptors}" var="sp">
+					<g:if test="${serviceproviders}">
+						<table>
+							<thead>
+								<tr>
+									<th><g:message code="label.name" /></th>
+									<th><g:message code="label.entitydescriptor" /></th>
+									<th/>
+								</tr>
+							</thead>
+							<tbody>
+								<g:each in="${serviceproviders}" var="sp">
 									<tr>
 										<td>${(sp.displayName?:"N/A").encodeAsHTML()}</td>
-										<td>${ent.entityID.encodeAsHTML()}</td>
+										<td>${sp.entityDescriptor.entityID.encodeAsHTML()}</td>
 										<td><n:button href="${createLink(controller:'SPSSODescriptor', action:'show', id:sp.id)}" label="label.view" icon="arrowthick-1-ne" /></td>
 									</tr>
 								</g:each>
-							</g:if>
-						</g:each>
-						</tbody>
-					</table>
+							</tbody>
+						</table>
+					</g:if>
+					<g:else>
+						<p><g:message code="fedreg.view.members.organization.no.serviceproviders" /></p>
+					</g:else>
 				</div>
 				<div id="tab-admins">
 						<g:render template="/templates/administrators/list" plugin="federationcore" model="[administrators:administrators]" />

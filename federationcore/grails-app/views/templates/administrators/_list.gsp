@@ -25,5 +25,5 @@
 </table>
 </g:if>
 <g:else>
-	<p><g:message code="fedreg.template.administrators.noresults" /></p>
+	<p><g:message code="fedreg.templates.administrators.noresults" /></p>
 </g:else>
