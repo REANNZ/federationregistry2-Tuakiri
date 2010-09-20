@@ -3,6 +3,11 @@
 <html>
   <head>
     <title><g:message code="fedreg.title" /> | <g:layoutTitle /></title>
+
+	<!--[if lt IE 9]>
+		<script type="text/javascript" src="${resource(dir: 'js', file: '/html5.js')}"></script>
+	<![endif]-->
+	<script type="text/javascript" src="${resource(dir: 'js', file: '/modernizr-1.5.min.js')}"></script>
     
 	<link rel="stylesheet" href="${resource(dir:'css',file:'jquery-ui-1.8.2.custom.css')}" />
 	<link rel="stylesheet" href="${resource(dir:'css',file:'jquery.jqplot.min.css')}" />
@@ -10,10 +15,9 @@
 	
 	<link rel="stylesheet/less" href="${resource(dir:'css',file:'aaftheme.less')}" />
 		
-	<script type="text/javascript" src="${resource(dir: 'js', file: '/modernizr-1.5.min.js')}"></script>
 	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/jquery-1.4.2.min.js')}"></script>
 	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/jquery-ui-1.8.2.custom.min.js')}"></script>
-	<script type="text/javascript" src="${resource(dir: 'js', file: 'less-1.0.32.min.js')}"></script>
+	<script type="text/javascript" src="${resource(dir: 'js', file: 'less-1.0.35.min.js')}"></script>
 	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/jquery.jgrowl.min.js')}"></script>
 	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/jquery.validate.pack.js')}"></script>
 	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/jquery.validate.additional-methods.js')}"></script>
