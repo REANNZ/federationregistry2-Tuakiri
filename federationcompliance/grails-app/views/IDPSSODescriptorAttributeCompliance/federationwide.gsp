@@ -7,22 +7,7 @@
 	</head>
 	<body>
 		<section>
-		<h2><g:message code="fedreg.view.compliance.attribute.heading" args="${[attribute?.friendlyName]}" /></h2>
-
-				<h3><g:message code="fedreg.view.compliance.attribute.graph.heading" /></h3>
-				<div class="numeric">
-					<strong>${supportingIdentityProviderList.size().encodeAsHTML()}<span class="total"> / ${identityProviderList.size().encodeAsHTML()}</span></strong>
-				</div>
-				<div id="graphic${i}" style="width:200px;"></div>
-				<script type="text/javascript">
-					line${i} = [['supported',${supportingIdentityProviderList.size()}], ['unsupported',${(identityProviderList.size() - supportingIdentityProviderList.size())}] ];
-					plot${i} = $.jqplot('graphic${i}', [line${i}], {
-						title: '',
-						seriesColors: [ "#30A800", "#D44226" ],
-						grid: { background: '#fff', borderColor: '#fff', shadow: false },
-						seriesDefaults:{renderer:$.jqplot.PieRenderer, rendererOptions:{sliceMargin:0, diameter: 80}}
-					});
-				</script>
+			<h2><g:message code="fedreg.view.compliance.attribute.heading" args="${[attribute?.friendlyName]}" /> (${supportingIdentityProviderList.size().encodeAsHTML()}<span class="total"> / ${identityProviderList.size().encodeAsHTML()})</h2>
 
 			<table>
 				<thead>
@@ -35,13 +20,13 @@
 				<tbody>
 				<g:each in="${identityProviderList}" status="i" var="idp">
 					<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-						<td style="width:200px;">${idp?.displayName?.encodeAsHTML()}</td>
+						<td style="width:300px;">${idp?.displayName?.encodeAsHTML()}</td>
 						<td style="width:200px;">
 						<g:if test="${supportingIdentityProviderList.contains(idp)}">
-							<span class="icon icon_tick"><g:message code="label.supported"/></span>
+							<span class="success"><g:message code="label.supported"/></span>
 						</g:if>
 						<g:else>
-							<span class="icon icon_cross"><g:message code="label.notsupported"/></span>
+							<span><g:message code="label.notsupported"/></span>
 						</g:else>
 						</td>
 						<td style="width:200px;">

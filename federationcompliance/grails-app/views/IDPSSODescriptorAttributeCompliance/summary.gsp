@@ -22,15 +22,15 @@
 				<tbody>
 				<g:each in="${identityProviderList}" status="i" var="idp">
 					<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-						<td class="organizationname">${idp?.displayName?.encodeAsHTML()}</td>
+						<td class="organizationname" style="width:300px;">${idp?.displayName?.encodeAsHTML()}</td>
 							<g:findAll in="${categorySupportSummaries}" expr="it.idp == idp">
-							<td>
+							<td style="width:200px;">
 								<div class="numeric">
 									<strong>${it.supportedCount.encodeAsHTML()}<span class="total"> / ${it.totalCount.encodeAsHTML()}</span></strong>
 								</div>
 							</td>							
 						</g:findAll>
-						<td>
+						<td style="width:300px;">
 							<n:button href="${createLink(controller: 'IDPSSODescriptorAttributeCompliance', action:'comprehensive', id: idp.id)}" label="${message(code:'label.view')}" icon="arrowthick-1-ne"/>
 						</td>
 					</tr>

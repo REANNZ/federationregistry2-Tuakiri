@@ -165,6 +165,7 @@ nimble.listLogins = function(userID) {
   var dataString = 'id=' + userID;
   $.ajax({
     type: "GET",
+    cache: false,
     url: nimble.endpoints.user.logins,
     data: dataString,
     success: function(res) {
@@ -181,6 +182,7 @@ nimble.listPermissions = function(ownerID) {
   var dataString = 'id=' + ownerID;
   $.ajax({
     type: "GET",
+    cache: false,
     url: nimble.endpoints.permission.list,
     data: dataString,
     success: function(res) {
@@ -250,6 +252,7 @@ nimble.listRoles = function(ownerID) {
   var dataString = 'id=' + ownerID;
   $.ajax({
     type: "GET",
+    cache: false,
     url: nimble.endpoints.role.list,
     data: dataString,
     success: function(res) {
@@ -315,6 +318,7 @@ nimble.listGroups = function(parentID) {
   var dataString = 'id=' + parentID;
   $.ajax({
     type: "GET",
+    cache: false,
     url: nimble.endpoints.group.list,
     data: dataString,
     success: function(res) {
@@ -462,6 +466,7 @@ nimble.listMembers = function(ownerID) {
   var dataString = 'id=' + ownerID;
   $.ajax({
     type: "GET",
+    cache: false,
     url: nimble.endpoints.member.list,
     data: dataString,
     success: function(res) {

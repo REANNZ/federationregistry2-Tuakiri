@@ -69,6 +69,7 @@ fedreg.keyDescriptor_create = function() {
 fedreg.keyDescriptor_list = function() {
 	$.ajax({
 		type: "GET",
+		cache: false,
 		url: certificateListEndpoint,
 		success: function(res) {
 			$("#certificates").html(res)
@@ -135,7 +136,6 @@ fedreg.contact_confirm = function(contactID, name, email) {
 	activeContact = contactID;
 	$("#contactnameconfirmation").html(name);
 	$("#contactemailconfirmation").html(email)
-	$("#contactconfirmationdialog").dialog( "option", "hide", "drop" );
 	$("#contactconfirmationdialog").dialog('open');
 };
 
@@ -177,6 +177,7 @@ fedreg.contact_delete = function(contactID) {
 fedreg.contact_list = function() {
 	$.ajax({
 		type: "GET",
+		cache: false,
 		url: contactListEndpoint,
 		success: function(res) {
 			$("#contacts").html(res);
@@ -210,6 +211,7 @@ fedreg.endpoint_list = function(endpointType, containerID) {
 	var dataString = "endpointType=" + endpointType + "&containerID=" + containerID;
 	$.ajax({
 		type: "GET",
+		cache: false,
 		url: endpointListEndpoint,
 		data: dataString,
 		success: function(res) {
@@ -300,6 +302,7 @@ fedreg.acs_reqattribute_list = function(acsID, containerID) {
 	var dataString = "id=" + acsID + "&containerID=" + containerID;
 	$.ajax({
 		type: "GET",
+		cache: false,
 		url: acsListAttr,
 		data: dataString,
 		success: function(res) {
@@ -352,6 +355,7 @@ fedreg.acs_specattribute_list = function(id, containerID) {
 	var dataString = "id=" + id + "&containerID=" + containerID;
 	$.ajax({
 		type: "GET",
+		cache: false,
 		url: acsListSpecAttrVal,
 		data: dataString,
 		success: function(res) {
@@ -367,6 +371,7 @@ fedreg.acs_specattributes_list = function(id, containerID) {
 	var dataString = "id=" + id + "&containerID=" + containerID;
 	$.ajax({
 		type: "GET",
+		cache: false,
 		url: acsListSpecAttrsVal,
 		data: dataString,
 		success: function(res) {
@@ -400,6 +405,7 @@ fedreg.nameIDFormat_list = function(containerID) {
 	var dataString = "containerID=" + containerID
 	$.ajax({
 		type: "GET",
+		cache: false,
 		url: nameIDFormatListEndpoint,
 		data: dataString,
 		success: function(res) {
@@ -450,6 +456,7 @@ fedreg.attribute_list = function(containerID) {
 	var dataString = "containerID=" + containerID
 	$.ajax({
 		type: "GET",
+		cache: false,
 		url: attributeListEndpoint,
 		data: dataString,
 		success: function(res) {
