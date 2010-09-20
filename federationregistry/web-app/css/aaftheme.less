@@ -1,6 +1,6 @@
 @bgColor: #f2f2f2;
 @docColor: #fff;
-@headColor: #424E5A;
+@headColor: #495666;
 @headFontColor: #fff;
 @navColor: #37404B;
 @coreFonts: Helvetica, Verdana, Arial;
@@ -118,6 +118,11 @@
 	.message;
 	color: #D8000C;
 	background-color: #FFBABA;
+}
+
+/* Make HTML 5 elements display block-level for consistent styling */  
+header, nav, article, footer, address {  
+    display: block;  
 }
 
 .ui-button {
@@ -291,7 +296,7 @@ body nav {
 		}
 }
 
-body>section {
+body section {
 	.zero;
 	.rounded;
 	.clearfix;
@@ -304,7 +309,7 @@ body>section {
 	background-color: #fff;
 }
 
-body>section>section {	
+body section section {	
 	.zero;
 	padding: 24px;
 	color: #555;

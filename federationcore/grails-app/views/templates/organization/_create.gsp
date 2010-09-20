@@ -15,7 +15,7 @@
 		$('form').formwizard({ 
 		 	formPluginEnabled: false,
 		 	validationEnabled: true,
-		 	focusFirstInput : true,
+		 	focusFirstInput : true
 		});
 	});
 </script>

@@ -12,10 +12,10 @@
 				},
 				keyup: false
 		});
-		$('form').formwizard({ 
+		$('#idpssodescriptorcreateform').formwizard({ 
 		 	formPluginEnabled: false,
 		 	validationEnabled: true,
-		 	focusFirstInput : true,
+		 	focusFirstInput : true
 		});
 		jQuery.validator.addMethod("validcert", function(value, element, params) { 
 			validateCertificate();
@@ -55,9 +55,9 @@
 	
 	function attrchange(id) {
 		if($('#idp\\.attributes\\.' + id + ':checked').val() != null)
-			$('#aa\\.attributes\\.' + id).val('on')
+			$('#aa\\.attributes\\.' + id).val('on');
 		else
-			$('#aa\\.attributes\\.' + id).val('off')
+			$('#aa\\.attributes\\.' + id).val('off');
 	}
 	
 	function validateCertificate() {
@@ -70,7 +70,7 @@
 	
 </script>
 
-<g:form action="${saveAction}">
+<g:form action="${saveAction}" name="idpssodescriptorcreateform">
 	<g:hiddenField name="active" value="true"/>
 	<g:hiddenField name="aa.create" value="true"/>
 	<g:if test="${!requiresContactDetails}">

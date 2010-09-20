@@ -15,7 +15,7 @@
 		$('form').formwizard({ 
 		 	formPluginEnabled: false,
 		 	validationEnabled: true,
-		 	focusFirstInput : true,
+		 	focusFirstInput : true
 		});
 		jQuery.validator.addMethod("validcert", function(value, element, params) { 
 			validateCertificate();
