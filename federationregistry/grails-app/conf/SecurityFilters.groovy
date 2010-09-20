@@ -47,7 +47,7 @@ public class SecurityFilters extends grails.plugins.nimble.security.NimbleFilter
         }
 		
 		// Compliance
-		descriptors(controller: "(idpAttributeCompliance|attributeRelease|certifyingAuthorityUsage)") {
+		descriptors(controller: "(IDPSSODescriptorAttributeCompliance|attributeRelease|certifyingAuthorityUsage)") {
             before = {
                 accessControl (auth: false) {
 					role(UserService.USER_ROLE)
