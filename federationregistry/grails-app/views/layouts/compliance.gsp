@@ -10,7 +10,7 @@
 	<script type="text/javascript" src="${resource(dir: 'js', file: '/modernizr-1.5.min.js')}"></script>
 
 	<link rel="stylesheet" href="${resource(dir:'css',file:'jquery-ui-1.8.2.custom.css')}" />
-	<link rel="stylesheet/less" href="${resource(dir:'css',file:'aaftheme.less')}" />
+	<link rel="stylesheet/less" href="${resource(dir:'css',file:'frtheme.less')}" />
 		
 	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/jquery-1.4.2.min.js')}"></script>
 	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/jquery-ui-1.8.2.custom.min.js')}"></script>
@@ -28,12 +28,12 @@
 <body>
 
     <header>
-		<g:render template='/templates/aafheader' />
+		<g:render template='/templates/frheader' />
     </header>
 	
 	<nav>
 	<n:isLoggedIn>
-		<g:render template='/templates/aaftopnavigation'/>
+		<g:render template='/templates/frtopnavigation'/>
 		
 		<ul class="level2a">
 			<li class="${controllerName == 'IDPSSODescriptorAttributeCompliance' ? 'active':''}">
@@ -54,6 +54,10 @@
 
 		<g:layoutBody/>
     </section>
+
+	<footer>
+		<g:render template='/templates/frfooter' />
+	</footer>
 
 <n:sessionterminated/>
 
