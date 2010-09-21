@@ -24,7 +24,8 @@ import org.codehaus.groovy.grails.commons.ConfigurationHolder
  * @author Bradley Beddoes
  */
 class FederationProvider {
-
+	static auditable = true
+	
   String uid
   Details details
   boolean autoProvision

@@ -25,7 +25,8 @@ import org.codehaus.groovy.grails.commons.ConfigurationHolder
  * @author Bradley Beddoes
  */
 class ProfileBase {
-
+	static auditable = true
+	
     String fullName
     String nickName
     String email

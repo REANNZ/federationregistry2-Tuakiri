@@ -26,7 +26,7 @@ import org.codehaus.groovy.grails.commons.ConfigurationHolder
  * @author Bradley Beddoes
  */
 class Url {
-
+	
     String name
     String description
 

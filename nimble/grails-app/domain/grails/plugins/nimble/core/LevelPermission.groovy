@@ -25,7 +25,8 @@ import org.codehaus.groovy.grails.commons.ConfigurationHolder
  * @author Bradley Beddoes
  */
 class LevelPermission extends Permission {
-
+	static auditable = true
+	
     private final String tokenSep = ","
     private final String levelSep = ":"
 

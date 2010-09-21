@@ -25,7 +25,8 @@ import org.codehaus.groovy.grails.commons.ConfigurationHolder
  */
 
 class UserBase {
-
+	static auditable = true
+	
     String username
 	String realm
     String passwordHash

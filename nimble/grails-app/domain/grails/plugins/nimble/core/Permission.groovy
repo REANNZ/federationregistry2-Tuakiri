@@ -25,7 +25,8 @@ import org.codehaus.groovy.grails.commons.ConfigurationHolder
  * @author Bradley Beddoes
  */
 class Permission implements Serializable {
-
+	static auditable = true
+	
     static public final String defaultPerm = "grails.plugins.nimble.auth.WildcardPermission"
     static public final String wildcardPerm = "grails.plugins.nimble.auth.WildcardPermission"
     static public final String adminPerm = "grails.plugins.nimble.auth.AllPermission"

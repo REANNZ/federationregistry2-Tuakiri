@@ -24,7 +24,8 @@ import org.codehaus.groovy.grails.commons.ConfigurationHolder
  * @author Bradley Beddoes
  */
 class Role {
-
+	static auditable = true
+	
     String name
     String description
 	String realm
