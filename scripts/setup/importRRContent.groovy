@@ -157,11 +157,18 @@
 							println "Unable to create Contact to link with incoming user" 
 						}
 					}
-				
+					
 					user.contact = contact
 					if(!user.save()) {
 						println "Unable to create Contact link with $user" 
 					}
+					
+					contact.userLink = true
+					contact.userID = user.id
+					if(!user.save()) {
+						println "Unable to create User link with $contact" 
+					}
+					
 					
 					println "Imported user $user"
 				}
