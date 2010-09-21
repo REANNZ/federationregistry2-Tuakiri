@@ -24,6 +24,77 @@ $(function() {
 	});
 });
 
+// Organization Administrators
+fedreg.organization_fulladministrator_grant = function(userID) {
+	$("#working").trigger("fedreg.working");
+	var dataString = "userID=" + userID
+	$.ajax({
+		async: false,
+		type: "POST",
+		url: organizationFullAdministratorGrantEndpoint,
+		data: dataString,
+		success: function(res) {
+			nimble.growl('success', res);
+			fedreg.organization_fulladministrator_list();
+			fedreg.organization_fulladministrator_search();
+	    },
+	    error: function (xhr, ajaxOptions, thrownError) {
+			nimble.growl('error', xhr.responseText);
+	    }
+	});
+}
+
+fedreg.organization_fulladministrator_revoke = function(userID) {
+	$("#working").trigger("fedreg.working");
+	var dataString = "userID=" + userID
+	$.ajax({
+		async: false,
+		type: "POST",
+		url: organizationFullAdministratorRevokeEndpoint,
+		data: dataString,
+		success: function(res) {
+			nimble.growl('success', res);
+			fedreg.organization_fulladministrator_list();
+	    },
+	    error: function (xhr, ajaxOptions, thrownError) {
+			nimble.growl('error', xhr.responseText);
+	    }
+	});
+}
+
+fedreg.organization_fulladministrator_list = function() {
+	$.ajax({
+		type: "GET",
+		cache: false,
+		url: organizationFullAdministratorListEndpoint,
+		success: function(res) {
+			$("#organizationfulladministratorlist").html(res);
+	    },
+	    error: function (xhr, ajaxOptions, thrownError) {
+			nimble.growl('error', xhr.responseText);
+	    }
+	});
+};
+
+fedreg.organization_fulladministrator_search = function() {
+	$("#working").trigger("fedreg.working");
+	$("#availablefulladministrators").fadeOut().empty();
+	var dataString = "givenName=" + $('#givenName').val() + '&surname=' + $('#surname').val() + '&email=' + $('#email').val()
+	$.ajax({
+		type: "POST",
+		url: organizationFullAdministratorSearchEndpoint,
+		data: dataString,
+		success: function(res) {
+			$("#availablefulladministrators").empty();
+			$("#availablefulladministrators").append(res);
+			$("#availablefulladministrators").fadeIn();
+	    },
+	    error: function (xhr, ajaxOptions, thrownError) {
+			nimble.growl('error', xhr.responseText);
+	    }
+	});
+}
+
 // Key Descriptor
 fedreg.keyDescriptor_verify = function() {
 	$("#working").trigger("fedreg.working");
@@ -58,7 +129,7 @@ fedreg.keyDescriptor_create = function() {
 			$("#newcertificate").fadeOut();
 			$("#addcertificate").fadeIn();
 			nimble.growl('success', res);
-			fedreg.keyDescriptor_list()
+			fedreg.keyDescriptor_list();
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
 			nimble.growl('error', xhr.responseText);
@@ -72,7 +143,7 @@ fedreg.keyDescriptor_list = function() {
 		cache: false,
 		url: certificateListEndpoint,
 		success: function(res) {
-			$("#certificates").html(res)
+			$("#certificates").html(res);
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
 			nimble.growl('error', xhr.responseText);

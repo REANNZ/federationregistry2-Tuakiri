@@ -7,11 +7,10 @@
 		<title><g:message code="fedreg.view.members.organization.show.title" /></title>
 		
 		<script type="text/javascript">
-			var activeContact
-			var contactCreateEndpoint = "${createLink(controller:'organizationContact', action:'create', id:organization.id )}";
-			var contactDeleteEndpoint = "${createLink(controller:'organizationContact', action:'delete' )}";
-			var contactListEndpoint = "${createLink(controller:'organizationContact', action:'list', id:organization.id ) }";
-			var contactSearchEndpoint = "${createLink(controller:'organizationContact', action:'search')}";
+			var organizationFullAdministratorGrantEndpoint = "${createLink(controller:'organizationAdministration', action:'grantFullAdministration', id:organization.id)}";
+			var organizationFullAdministratorRevokeEndpoint = "${createLink(controller:'organizationAdministration', action:'revokeFullAdministration', id:organization.id)}";
+			var organizationFullAdministratorListEndpoint = "${createLink(controller:'organizationAdministration', action:'listFullAdministration', id:organization.id)}";
+			var organizationFullAdministratorSearchEndpoint = "${createLink(controller:'organizationAdministration', action:'searchFullAdministration', id:organization.id)}";
 		</script>
 		
 	</head>
@@ -183,7 +182,8 @@
 					</g:else>
 				</div>
 				<div id="tab-admins">
-						<g:render template="/templates/administrators/list" plugin="federationcore" model="[administrators:administrators]" />
+						<g:render template="/templates/organization/listfulladministration" plugin="federationcore" model="[organization:organization, administrators:administrators]" />
+						<g:render template="/templates/organization/searchfulladministration" plugin="federationcore" model="[organization:organization, administrators:administrators]" />
 				</div>
 				<g:if test="${organization.extensions}">
 					<div id="tab-ext">	
