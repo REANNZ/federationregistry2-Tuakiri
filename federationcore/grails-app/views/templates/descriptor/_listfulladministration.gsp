@@ -1,7 +1,6 @@
-<div id="organizationfulladministratorlist">
+<div id="descriptorfulladministratorlist">
 	<g:if test="${administrators}">
-		<h3><g:message code="fedreg.templates.organization.full.administrators" /></h3>
-		<p><g:message code="fedreg.templates.organization.full.administrators.descriptive" /></p>
+		<h3><g:message code="fedreg.templates.descriptor.full.administrators" /></h3>
 		<table>
 			<thead>
 				<tr>
@@ -21,8 +20,8 @@
 							<n:isAdministrator>
 								<n:button href="${createLink(controller:'user', action:'show', id: admin.id)}" label="${message(code:'label.view')}" icon="arrowthick-1-ne"/>
 							</n:isAdministrator>
-							<n:hasPermission target="organization:${organization.id}:manage:administrators">
-								<n:confirmaction action="fedreg.organization_fulladministrator_revoke(${admin.id});" title="${message(code: 'fedreg.templates.organization.full.administrator.revoke.confirm.title')}" msg="${message(code: 'fedreg.templates.organization.full.administrator.revoke.confirm.descriptive')}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" icon="circle-close" label="${message(code: 'label.revoke')}"/>
+							<n:hasPermission target="descriptor:${descriptor.id}:manage:administrators">
+								<n:confirmaction action="fedreg.descriptor_fulladministrator_revoke(${admin.id});" title="${message(code: 'fedreg.templates.descriptor.full.administrator.revoke.confirm.title')}" msg="${message(code: 'fedreg.templates.descriptor.full.administrator.revoke.confirm.descriptive')}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" icon="circle-close" label="${message(code: 'label.revoke')}"/>
 							</n:hasPermission>
 						</td>
 					</tr>
@@ -31,6 +30,6 @@
 		</table>
 	</g:if>
 	<g:else>
-		<p><g:message code="fedreg.templates.organization.administrator.noresults" /></p>
+		<p><g:message code="fedreg.templates.descriptor.administrator.noresults" /></p>
 	</g:else>
 </div>

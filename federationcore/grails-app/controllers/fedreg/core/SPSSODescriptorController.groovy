@@ -1,6 +1,7 @@
 package fedreg.core
 
 import org.apache.shiro.SecurityUtils
+import grails.plugins.nimble.core.Role
 
 class SPSSODescriptorController {
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
@@ -32,8 +33,9 @@ class SPSSODescriptorController {
 		
 		def attributes = AttributeBase.list()
 		def specAttr = AttributeBase.findAllWhere(specificationRequired:true)
-
-		[serviceProvider: serviceProvider, contactTypes:ContactType.list(), availableAttributes:attributes, specificationAttributes: specAttr]
+		
+		def adminRole = Role.findByName("descriptor-${serviceProvider.id}-administrators")
+		[serviceProvider: serviceProvider, contactTypes:ContactType.list(), availableAttributes:attributes, specificationAttributes: specAttr, administrators:adminRole?.users]
 	}
 	
 	def create = {

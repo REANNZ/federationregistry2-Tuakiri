@@ -31,6 +31,11 @@
 			var attributeListEndpoint = "${createLink(controller:'descriptorAttribute', action:'list', id:identityProvider.id )}";
 			var attributeAddEndpoint = "${createLink(controller:'descriptorAttribute', action:'add', id:identityProvider.id )}";
 			
+			var descriptorFullAdministratorGrantEndpoint = "${createLink(controller:'descriptorAdministration', action:'grantFullAdministration', id:identityProvider.id)}";
+			var descriptorFullAdministratorRevokeEndpoint = "${createLink(controller:'descriptorAdministration', action:'revokeFullAdministration', id:identityProvider.id)}";
+			var descriptorFullAdministratorListEndpoint = "${createLink(controller:'descriptorAdministration', action:'listFullAdministration', id:identityProvider.id)}";
+			var descriptorFullAdministratorSearchEndpoint = "${createLink(controller:'descriptorAdministration', action:'searchFullAdministration', id:identityProvider.id)}";
+			
 			$(function() {
 				$("#tabs").tabs();
 				$("#tabs2").tabs();
@@ -126,6 +131,7 @@
 					<li><a href="#tab-endpoints" class="icon icon_link"><g:message code="label.endpoints" /></a></li>
 					<li><a href="#tab-attributes" class="icon icon_vcard"><g:message code="label.supportedattributes" /></a></li>
 					<li><a href="#tab-nameidformats" class="icon icon_database_key"><g:message code="label.supportednameidformats" /></a></li>
+					<li><a href="#tab-admins" class="icon icon_database_key"><g:message code="label.administrators" /></a></li>
 				</ul>
 				
 				<div id="tab-contacts" class="tabcontent">
@@ -202,6 +208,12 @@
 					</div>
 					
 					<g:render template="/templates/nameidformats/add" plugin="federationcore" model="[descriptor:identityProvider, containerID:'nameidformats']"/>
+				</div>
+				<div id="tab-admins">
+					<g:render template="/templates/descriptor/listfulladministration" plugin="federationcore" model="[descriptor:identityProvider, administrators:administrators]" />
+					<n:hasPermission target="descriptor:${identityProvider.id}:manage:administrators">
+						<g:render template="/templates/descriptor/searchfulladministration" plugin="federationcore" model="[descriptor:identityProvider]" />
+					</n:hasPermission>
 				</div>
 			</div>
 			

@@ -38,6 +38,11 @@
 			var attributeListEndpoint = "${createLink(controller:'descriptorAttribute', action:'list', id:serviceProvider.id )}";
 			var attributeAddEndpoint = "${createLink(controller:'descriptorAttribute', action:'add', id:serviceProvider.id )}";
 			
+			var descriptorFullAdministratorGrantEndpoint = "${createLink(controller:'descriptorAdministration', action:'grantFullAdministration', id:serviceProvider.id)}";
+			var descriptorFullAdministratorRevokeEndpoint = "${createLink(controller:'descriptorAdministration', action:'revokeFullAdministration', id:serviceProvider.id)}";
+			var descriptorFullAdministratorListEndpoint = "${createLink(controller:'descriptorAdministration', action:'listFullAdministration', id:serviceProvider.id)}";
+			var descriptorFullAdministratorSearchEndpoint = "${createLink(controller:'descriptorAdministration', action:'searchFullAdministration', id:serviceProvider.id)}";
+			
 			$(function() {
 				$("#tabs").tabs();
 				$("#tabs2").tabs();
@@ -112,6 +117,7 @@
 					<li><a href="#tab-endpoints"><g:message code="label.endpoints" /></a></li>
 					<li><a href="#tab-attributes"><g:message code="label.attributeconsumingservices" /></a></li>
 					<li><a href="#tab-nameidformats"><g:message code="label.supportednameidformats" /></a></li>
+					<li><a href="#tab-admins" class="icon icon_database_key"><g:message code="label.administrators" /></a></li>
 				</ul>
 				
 				<div id="tab-details" class="tabcontent">
@@ -179,6 +185,12 @@
 					</div>
 					
 					<g:render template="/templates/nameidformats/add" plugin="federationcore" model="[descriptor:serviceProvider, containerID:'nameidformats']"/>
+				</div>
+				<div id="tab-admins">
+					<g:render template="/templates/descriptor/listfulladministration" plugin="federationcore" model="[descriptor:serviceProvider, administrators:administrators]" />
+					<n:hasPermission target="descriptor:${serviceProvider.id}:manage:administrators">
+						<g:render template="/templates/descriptor/searchfulladministration" plugin="federationcore" model="[descriptor:serviceProvider]" />
+					</n:hasPermission>
 				</div>
 			</div>
 			

@@ -1,6 +1,7 @@
 package fedreg.core
 
 import org.apache.shiro.SecurityUtils
+import grails.plugins.nimble.core.Role
 
 class IDPSSODescriptorController {
 
@@ -30,8 +31,9 @@ class IDPSSODescriptorController {
 			redirect(action: "list")
 			return
 		}
-
-		[identityProvider: identityProvider, contactTypes:ContactType.list()]
+		
+		def adminRole = Role.findByName("descriptor-${identityProvider.id}-administrators")
+		[identityProvider: identityProvider, contactTypes:ContactType.list(), administrators:adminRole?.users]
 	}
 	
 	def create = {

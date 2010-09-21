@@ -11,6 +11,11 @@
 			var contactDeleteEndpoint = "${createLink(controller:'descriptorContact', action:'delete' )}";
 			var contactListEndpoint = "${createLink(controller:'descriptorContact', action:'list', id:entity.id ) }";
 			var contactSearchEndpoint = "${createLink(controller:'descriptorContact', action:'search')}";
+			
+			var descriptorFullAdministratorGrantEndpoint = "${createLink(controller:'descriptorAdministration', action:'grantFullAdministration', id:entity.id)}";
+			var descriptorFullAdministratorRevokeEndpoint = "${createLink(controller:'descriptorAdministration', action:'revokeFullAdministration', id:entity.id)}";
+			var descriptorFullAdministratorListEndpoint = "${createLink(controller:'descriptorAdministration', action:'listFullAdministration', id:entity.id)}";
+			var descriptorFullAdministratorSearchEndpoint = "${createLink(controller:'descriptorAdministration', action:'searchFullAdministration', id:entity.id)}";
 		</script>
 		
 	</head>
@@ -62,6 +67,7 @@
 					<li><a href="#tab-contacts" class="icon icon_user_comment"><g:message code="label.contacts" /></a></li>
 					<li><a href="#tab-idp" class="icon icon_cog"><g:message code="label.identityproviders" /></a></li>
 					<li><a href="#tab-sp" class="icon icon_cog"><g:message code="label.serviceproviders" /></a></li>
+					<li><a href="#tab-admins" class="icon icon_database_key"><g:message code="label.administrators" /></a></li>
 					<g:if test="${entity.extensions}">
 					<li><a href="#tab-ext" class="icon icon_cog"><g:message code="label.extensions" /></a></li>
 					</g:if>
@@ -142,6 +148,12 @@
 					<g:else>
 						<p><g:message code="fedreg.view.members.entity.show.no.serviceproviders" /></p>
 					</g:else>
+				</div>
+				<div id="tab-admins">
+					<g:render template="/templates/descriptor/listfulladministration" plugin="federationcore" model="[descriptor:entity, administrators:administrators]" />
+					<n:hasPermission target="descriptor:${entity.id}:manage:administrators">
+						<g:render template="/templates/descriptor/searchfulladministration" plugin="federationcore" model="[descriptor:entity]" />
+					</n:hasPermission>
 				</div>
 				<g:if test="${entity.extensions}">
 				<div id="tab-ext">	

@@ -182,8 +182,10 @@
 					</g:else>
 				</div>
 				<div id="tab-admins">
-						<g:render template="/templates/organization/listfulladministration" plugin="federationcore" model="[organization:organization, administrators:administrators]" />
+					<g:render template="/templates/organization/listfulladministration" plugin="federationcore" model="[organization:organization, administrators:administrators]" />
+					<n:hasPermission target="organization:${organization.id}:manage:administrators">
 						<g:render template="/templates/organization/searchfulladministration" plugin="federationcore" model="[organization:organization, administrators:administrators]" />
+					</n:hasPermission>
 				</div>
 				<g:if test="${organization.extensions}">
 					<div id="tab-ext">	

@@ -1,6 +1,7 @@
 package fedreg.core
 
 import org.apache.shiro.SecurityUtils
+import grails.plugins.nimble.core.Role
 
 class EntityDescriptorController {
 	static defaultAction = "list"
@@ -30,7 +31,8 @@ class EntityDescriptorController {
 			return
 		}
 		
-		[entity: entity, contactTypes:ContactType.list()]
+		def adminRole = Role.findByName("descriptor-${entity.id}-administrators")
+		[entity: entity, contactTypes:ContactType.list(), administrators:adminRole?.users]
 	}
 	
 	def create = {
