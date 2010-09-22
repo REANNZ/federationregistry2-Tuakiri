@@ -25,7 +25,7 @@
 			<li class="${['metadata'].contains(controllerName) ? 'active' : ''}">
 				<g:link controller="metadata" action="view" class=""><g:message code="fedreg.navigation.metadata" /></g:link>
 			</li>
-			<li class="${['workflowInstance', 'workflowProcess', 'workflowApproval'].contains(controllerName) ? 'active' : ''}">
+			<li class="${['workflowInstance', 'workflowProcess', 'workflowScript', 'workflowApproval'].contains(controllerName) ? 'active' : ''}">
 				<g:link controller="workflowApproval" class=""><g:message code="fedreg.navigation.workflow" /></g:link>
 			</li>
 			<n:isAdministrator>
