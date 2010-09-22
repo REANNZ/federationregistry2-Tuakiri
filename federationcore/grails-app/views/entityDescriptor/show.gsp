@@ -34,10 +34,6 @@
 						<td>${fieldValue(bean: entity, field: "entityID")}</td>
 					</tr>
 					<tr>
-						<th><g:message code="label.organization"/></th>
-						<td><g:link controller="organization" action="show" id="${entity.organization.id}">${fieldValue(bean: entity, field: "organization.displayName")}</g:link></td>
-					</tr>
-					<tr>
 						<th><g:message code="label.status"/></th>
 						<td>
 							<g:if test="${entity.active}">
