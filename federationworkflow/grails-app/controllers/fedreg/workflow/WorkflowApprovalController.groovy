@@ -45,7 +45,7 @@ class WorkflowApprovalController {
 		if(!taskInstance) {
 			flash.type = "error"
 		    flash.message = message(code: 'fedreg.workflow.taskinstance.nonexistant', args: [params.id])
-			render view: "list"
+			redirect action: "list"
 			return
 		}
 		
@@ -53,7 +53,7 @@ class WorkflowApprovalController {
 			workflowTaskService.approve(taskInstance.id)
 			flash.type = "success"
 		    flash.message = message(code: 'fedreg.workflow.taskinstance.successfully.approved')
-			render view: "list"
+			redirect action: "list"
 		}
 		else {
 			log.warn("Attempt to approve $taskInstance by $authenticatedUser was denied, no permission to modify this record")
@@ -66,7 +66,7 @@ class WorkflowApprovalController {
 			log.warn "Task instance id was not present"
 			flash.type = "error"
 		    flash.message = message(code: 'fedreg.controllers.namevalue.missing')
-			redirect action:list
+			redirect action: "list"
 			return
 		}
 		
@@ -74,7 +74,7 @@ class WorkflowApprovalController {
 			log.warn "Rejection selection was not present"
 			flash.type = "error"
 		    flash.message = message(code: 'fedreg.controllers.namevalue.missing')
-			redirect action:list
+			redirect action: "list"
 			return
 		}
 		
@@ -82,14 +82,14 @@ class WorkflowApprovalController {
 		if(!taskInstance) {
 			flash.type = "error"
 		    flash.message = message(code: 'fedreg.workflow.taskinstance.nonexistant', args: [params.id])
-			render view: "list"
+			redirect action: "list"
 			return
 		}
 		
 		if(!taskInstance.task.rejections.containsKey(params.rejection)) {
 			flash.type = "error"
 		    flash.message = message(code: 'fedreg.workflow.taskinstance.no.such.rejection', args: [params.id])
-			render view: "list"
+			redirect action: "list"
 			return
 		}
 		
@@ -97,7 +97,7 @@ class WorkflowApprovalController {
 			workflowTaskService.reject(taskInstance.id, params.rejection)
 			flash.type = "success"
 		    flash.message = message(code: 'fedreg.workflow.taskinstance.successfully.rejected')
-			render view: "list"
+			redirect action: "list"
 		}
 		else {
 			log.warn("Attempt to reject $taskInstance with ${params.rejection} by $authenticatedUser was denied, no permission to modify this record")
