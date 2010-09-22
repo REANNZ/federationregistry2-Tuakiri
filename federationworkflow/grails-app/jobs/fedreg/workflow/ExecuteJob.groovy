@@ -26,11 +26,12 @@ class ExecuteJob {
 			def workflowScript = WorkflowScript.findByName(scriptID)
 			
 			if(workflowScript) {
-				Binding binding = new Binding();
-				binding.setVariable("env", env);
-				binding.setVariable("grailsApplication", grailsApplication);
-			
-				def script = new GroovyShell().parse(workflowScript.definition)
+				Binding binding = new Binding()
+				binding.setVariable("env", env)
+				binding.setVariable("grailsApplication", grailsApplication)
+				binding.setVariable("ctx", grailsApplication.mainContext)
+				
+				def script = new GroovyShell(grailsApplication.classLoader, binding).parse(workflowScript.definition)
 				script.binding = binding
 				script.run()
 			}
