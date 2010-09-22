@@ -43,7 +43,7 @@ class Group {
     ]
 
     static mapping = {
-        cache usage: 'read-write', include: 'all'
+        cache true
         table ConfigurationHolder.config.nimble.tablenames.group
 
         users cache: true
