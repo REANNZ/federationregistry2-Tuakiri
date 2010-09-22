@@ -34,7 +34,7 @@
 						</tr>
 					</tbody>
 				</table>
-				<g:textArea name="definition" value="${(script.definition ?: '// Script definition').encodeAsHTML()}" rows="5" cols="40"/>
+				<g:textArea name="definition" value="${(script.definition ?: '// Script definition')}" rows="5" cols="40"/>
 				<button type="submit" class="button icon icon_accept"/><g:message code="label.update" /></button>
 			</g:form>
 		
