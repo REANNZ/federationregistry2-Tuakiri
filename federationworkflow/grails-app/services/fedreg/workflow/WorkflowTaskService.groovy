@@ -387,7 +387,7 @@ class WorkflowTaskService {
 		if(scriptedVal =~ paramKey) {
 	        def key = scriptedVal =~ paramKey
 	        if(params.containsKey(key[0][1]))
-	            val = params.get(key[0][1])
+	            val = val.replaceAll(paramKey, params.get(key[0][1]))
 	    }
 		return val
 	}
