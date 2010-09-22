@@ -10,7 +10,7 @@
 	</thead>
 	<tbody>
 		<tr>
-			<td>${fieldValue(bean: taskInstance, field: "task.name")} (${fieldValue(bean: taskInstance, field: "id")})</td>
+			<td>${fieldValue(bean: taskInstance, field: "task.name")} (ID: ${fieldValue(bean: taskInstance, field: "id")})</td>
 			<td>${fieldValue(bean: taskInstance, field: "task.description")}</td>
 			<td>${fieldValue(bean: taskInstance, field: "processInstance.description")}</td>
 		</tr>
