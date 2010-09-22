@@ -28,15 +28,17 @@
 								<td>
 									${fieldValue(bean: instance, field: "processInstance.description")}
 									<br><br>
-									<g:if test="${instance.processInstance.params.containsKey('identityProvider')}">
-										<n:button href="${createLink(controller:'IDPSSODescriptor', action:'show', id:instance.processInstance.params.identityProvider)}" label="${message(code: 'label.view')} ${message(code: 'label.identityprovider')}" icon="arrowthick-1-ne"/>
-									</g:if>
-									<g:if test="${instance.processInstance.params.containsKey('serviceProvider')}">
-										<n:button href="${createLink(controller:'SPSSODescriptor', action:'show', id:instance.processInstance.params.serviceProvider)}" label="${message(code: 'label.view')} ${message(code: 'label.serviceprovider')}" icon="arrowthick-1-ne"/>
-									</g:if>
-									<g:if test="${instance.processInstance.params.containsKey('organization') && instance.processInstance.params.organization.isNumber()}">
-										<n:button href="${createLink(controller:'organization', action:'show', id:instance.processInstance.params.organization)}" label="${message(code: 'label.view')} ${message(code: 'label.organization')}" icon="arrowthick-1-ne"/>
-									</g:if>
+									<ul class="clean">
+										<g:if test="${instance.processInstance.params.containsKey('identityProvider')}">
+											<li><n:button href="${createLink(controller:'IDPSSODescriptor', action:'show', id:instance.processInstance.params.identityProvider)}" label="${message(code: 'label.view')} ${message(code: 'label.identityprovider')}" icon="arrowthick-1-ne"/></li>
+										</g:if>
+										<g:if test="${instance.processInstance.params.containsKey('serviceProvider')}">
+											<li><n:button href="${createLink(controller:'SPSSODescriptor', action:'show', id:instance.processInstance.params.serviceProvider)}" label="${message(code: 'label.view')} ${message(code: 'label.serviceprovider')}" icon="arrowthick-1-ne"/></li>
+										</g:if>
+										<g:if test="${instance.processInstance.params.containsKey('organization') && instance.processInstance.params.organization.isNumber()}">
+											<li><n:button href="${createLink(controller:'organization', action:'show', id:instance.processInstance.params.organization)}" label="${message(code: 'label.view')} ${message(code: 'label.organization')}" icon="arrowthick-1-ne"/></li>
+										</g:if>
+									</ul>
 								</td>
 								<td>
 									<ul class="clean">
