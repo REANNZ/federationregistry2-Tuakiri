@@ -51,8 +51,14 @@ class IDPSSODescriptorController {
 		if(SecurityUtils.subject.isPermitted("organization:${params.organization.id}:components:idpssodescriptor:create")) {
 			def (created, organization, entityDescriptor, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact) = IDPSSODescriptorService.create(params)
 		
-			if(created)
+			if(created) {
+				sendMail {
+				  to contact.email.uri
+				  subject message(code: 'fedreg.templates.mail.idpssoroledescriptor.register.subject')
+				  html g.render(template:"/templates/mail/idpssodescriptorregistered", plugin:"federationcore", model:[identityProvider:identityProvider, httpPost:httpPost, httpRedirect:httpRedirect, soapArtifact:soapArtifact])
+				}
 				redirect (action: "show", id: identityProvider.id)
+			}
 			else {
 				flash.type="error"
 				flash.message = message(code: 'fedreg.core.idpssoroledescriptor.save.validation.error')
