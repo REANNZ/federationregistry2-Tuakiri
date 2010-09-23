@@ -19,7 +19,6 @@
 				</tr>
 			</thead>
 			<tbody>
-				${users.size()}
 				<g:each in="${users}" status="i" var="user">
 					<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 						<g:if test="${user.username.length() > 50}">
@@ -50,7 +49,7 @@
 			</tbody>
 		</table>
 
-		<div class="paginatebuttons">${UserBase.count()}
+		<div class="paginatebuttons">
 			<g:paginate total="${UserBase.count()}"/>
 		</div>
 
