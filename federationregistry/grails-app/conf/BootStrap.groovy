@@ -23,6 +23,7 @@ class BootStrap {
 	def workflowProcessService
 	def sessionFactory
 	def nimbleService
+	def roleService
 
      def init = { servletContext ->
 		def applicationContext = servletContext.getAttribute(ApplicationAttributes.APPLICATION_CONTEXT) 
@@ -59,6 +60,9 @@ class BootStrap {
 				}
 			}
 		}
+		
+		// Create federation-administrators role, used in workflows etc
+		roleService.createRole("federation-administrators", "Role representing federation level administrators who can make decisions onbehalf of the entire federation, particuarly in workflows", false)
 		
 		// Populate WorkFlows on initial deployment
 		if(Process.count() == 0) {	

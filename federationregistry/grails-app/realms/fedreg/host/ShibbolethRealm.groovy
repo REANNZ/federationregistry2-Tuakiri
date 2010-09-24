@@ -107,6 +107,8 @@ class ShibbolethRealm {
 					def adminAuthority = Role.findByName(AdminsService.ADMIN_ROLE)
 					if(adminAuthority.users?.size() == 0) {
 						adminsService.add(user)
+						def federationAdminRole = Role.findByName("federation-administrators")
+						roleService.addMember(user, federationAdminRole)
 						log.info("Issued account $user with admin right as this was the first account entering the system")
 					}
 				}
