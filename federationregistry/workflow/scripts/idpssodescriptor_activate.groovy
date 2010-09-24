@@ -20,4 +20,16 @@ idp.approved = true
 idp.active = true
 idp.save()
 
+if(idp.collaborator) {
+	idp.collaborator.active = true
+	idp.collaborator.approved = true
+	idp.collaborator.save()
+}
+
+if(idp.entityDescriptor.approved == false || idp.entityDescriptor.active == false) {
+	idp.entityDescriptor.approved = true
+	idp.entityDescriptor.active = true
+	idp.entityDescriptor.save()
+}
+
 workflowTaskService.complete(env.taskInstanceID.toLong(), 'idpssodescriptoractivated')
