@@ -2,7 +2,7 @@
 <html>
 	<head></head>
 	<body>
-		<p><g:message code="fedreg.templates.mail.idpssoroledescriptor.register.description" /></p>
+		<p><g:message code="fedreg.templates.mail.workflow.idp.activated.description" /></p>
 			
 		<table>
 			<tr>
@@ -37,37 +37,12 @@
 					${fieldValue(bean: identityProvider, field: "description")}
 				</td>
 			</tr>
-
 			<tr>
 				<td>
 					<g:message code="label.entitydescriptor" />
 				</td>
 				<td>
 					${fieldValue(bean: identityProvider, field: "entityDescriptor.entityID")}
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<g:message code="label.httppostendpoint" />
-				</td>
-				<td>
-					${fieldValue(bean: httpPost, field: "location.uri")}
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<g:message code="label.httpredirectendpoint" />
-				</td>
-				<td>
-					${fieldValue(bean: httpRedirect, field: "location.uri")}
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<g:message code="label.soapartifactendpoint" />
-				</td>
-				<td>
-					${fieldValue(bean: soapArtifact, field: "location.uri")}
 				</td>
 			</tr>
 		</table>

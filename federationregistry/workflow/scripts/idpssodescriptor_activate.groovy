@@ -43,7 +43,7 @@ if(idp) {
 		to creator.email.uri
 		from ctx.grailsApplication.config.nimble.messaging.mail.from
 		subject messageSource.getMessage("fedreg.templates.mail.workflow.idp.activated.subject", args, "fedreg.templates.mail.workflow.idp.activated.subject", new Locale(env.locale))
-		body view:"/templates/mail/workflows/default/_activate_idp", model:[idp:idp]
+		body view:"/templates/mail/workflows/default/_activated_idp", model:[identityProvider:idp, locale:env.locale]
 	}
 
 	workflowTaskService.complete(env.taskInstanceID.toLong(), 'idpssodescriptoractivated')

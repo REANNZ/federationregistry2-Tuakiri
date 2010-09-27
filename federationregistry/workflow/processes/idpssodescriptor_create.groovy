@@ -1,6 +1,13 @@
 
 process(name:'idpssodescriptor_create', description: 'Workflow defining IDPSSODescription creation approval process') {
 	
+	task(name: 'sendconfirmation', description: 'Invokes a script to confirm registration of IDP') {
+		execute(script: 'idpssodescriptor_confirm')
+		outcome(name: 'confirmedidpssodescriptor', description:'User registering the IDP has been advised of creation') {
+			start ('organizationapproval')
+		}
+	}
+	
 	task(name: 'organizationapproval', description: 'Requests that a user who is an administrative/executive member of the owning organization approves creation and associated billing by introducing this Identity Provider') {
 		approver(role: 'organization-{organization}-administrators') {
 			reject(name: 'Not Associated', description:'Not an Identity Provider associated with this organization (Identity Provider details will be discarded)') {

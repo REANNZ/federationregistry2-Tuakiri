@@ -14,7 +14,7 @@ if(idp) {
 		to creator.email.uri
 		from ctx.grailsApplication.config.nimble.messaging.mail.from
 		subject messageSource.getMessage("fedreg.templates.mail.workflow.idp.rejected.subject", args, "fedreg.templates.mail.workflow.idp.rejected.subject", new Locale(env.locale))
-		body view:"/templates/mail/workflows/default/_reject_idp", model:[idp:idp]
+		body view:"/templates/mail/workflows/default/_rejected_idp", model:[identityProvider:idp, locale:env.locale]
 	}
 	
 	log.warn "Deleting $idp. Workflow indicates it is invalid and no longer needed."
