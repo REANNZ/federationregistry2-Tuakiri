@@ -18,7 +18,7 @@ process(name:'idpssodescriptor_create', description: 'Workflow defining IDPSSODe
 	task(name: 'federationapproval', description: 'Requests that a user who is an administrative/executive member of the federation approves creation and activation for this Identity Provider as a valuable addition for the federation') {
 		approver(role: 'federation-administrators') {
 			reject(name: 'Not Accepted', description:'The federation will not accept ownership for this Identity Provider (Identity Provider details will be discarded)') {
-				start ('finish')
+				start ('deleteidpssodescriptor')
 			}
 		}
 		outcome(name: 'organizationapproved', description:'The organization has accepted responsibility for this Identity Provider') {
