@@ -1,5 +1,6 @@
 package fedreg.core
 
+import org.springframework.context.i18n.LocaleContextHolder as LCH
 import fedreg.workflow.ProcessPriority
 
 class IDPSSODescriptorService {
@@ -152,7 +153,7 @@ class IDPSSODescriptorService {
 			throw new RuntimeException("Unable to save when creating ${identityProvider}")
 		}
 		
-		def workflowParams = [ creator:contact?.id?.toString(), identityProvider:identityProvider?.id?.toString(), attributeAuthority:attributeAuthority?.id?.toString(), organization:organization.id?.toString() ]
+		def workflowParams = [ creator:contact?.id?.toString(), identityProvider:identityProvider?.id?.toString(), attributeAuthority:attributeAuthority?.id?.toString(), organization:organization.id?.toString(), locale:LCH.getLocale().getLanguage() ]
 		
 		def (initiated, processInstance) = workflowProcessService.initiate( "idpssodescriptor_create", "Approval for creation of ${identityProvider}", ProcessPriority.MEDIUM, workflowParams)
 		

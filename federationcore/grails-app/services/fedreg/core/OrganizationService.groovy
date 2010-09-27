@@ -1,5 +1,6 @@
 package fedreg.core
 
+import org.springframework.context.i18n.LocaleContextHolder as LCH
 import org.springframework.transaction.interceptor.TransactionAspectSupport
 
 import fedreg.workflow.ProcessPriority
@@ -40,7 +41,7 @@ class OrganizationService {
 			throw new RuntimeException("Unable to save when creating ${contact}")
 		}
 		
-		def workflowParams = [ creator:contact?.id?.toString(), organization:organization?.id?.toString() ]
+		def workflowParams = [ creator:contact?.id?.toString(), organization:organization?.id?.toString(), locale:LCH.getLocale().getLanguage() ]
 		def (initiated, processInstance) = workflowProcessService.initiate( "organization_create", "Approval for creation of Organization ${organization.displayName}", ProcessPriority.MEDIUM, workflowParams)
 		
 		if(initiated)
