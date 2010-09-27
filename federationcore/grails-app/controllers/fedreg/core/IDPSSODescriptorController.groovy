@@ -52,11 +52,6 @@ class IDPSSODescriptorController {
 			def (created, organization, entityDescriptor, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact) = IDPSSODescriptorService.create(params)
 		
 			if(created) {
-				sendMail {
-				  to contact.email.uri
-				  subject message(code: 'fedreg.templates.mail.idpssoroledescriptor.register.subject')
-				  html g.render(template:"/templates/mail/idpssodescriptorregistered", plugin:"federationcore", model:[identityProvider:identityProvider, httpPost:httpPost, httpRedirect:httpRedirect, soapArtifact:soapArtifact])
-				}
 				redirect (action: "show", id: identityProvider.id)
 			}
 			else {
