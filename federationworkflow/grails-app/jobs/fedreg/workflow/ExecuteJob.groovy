@@ -1,5 +1,7 @@
 package fedreg.workflow
 
+import org.apache.commons.logging.LogFactory
+
 /* Used Quartz jobs here so we can take advantange of serialization and possibly even clustering in the future */
 class ExecuteJob {
     static triggers = {}
@@ -26,10 +28,13 @@ class ExecuteJob {
 			def workflowScript = WorkflowScript.findByName(scriptID)
 			
 			if(workflowScript) {
+				def _log = LogFactory.getLog("fedreg.workflow.script.$scriptID")
+				
 				Binding binding = new Binding()
 				binding.setVariable("env", env)
 				binding.setVariable("grailsApplication", grailsApplication)
 				binding.setVariable("ctx", grailsApplication.mainContext)
+				binding.setVariable("log", _log)
 				
 				def script = new GroovyShell(grailsApplication.classLoader, binding).parse(workflowScript.definition)
 				script.binding = binding
