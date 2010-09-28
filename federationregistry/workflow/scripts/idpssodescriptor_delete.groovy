@@ -35,6 +35,8 @@ if(idp) {
 			}
 		}
 	}
+	
+	workflowTaskService.complete(env.taskInstanceID.toLong(), 'idpssodescriptordeleted')
 }
 else {
 	throw new RuntimeException("Attempt to process delete in script idpssodescriptor_delete. Failed because referenced IDP does not exist")

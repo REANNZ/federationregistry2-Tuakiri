@@ -47,6 +47,8 @@
 			</tr>
 		</table>
 		
+		<g:message code="fedreg.templates.mail.workflow.idp.activated.nextsteps" args="[createLink(controller:'IDPSSODescriptor', action:'show', id:identityProvider.id, absolute:true), 'http://google.com']"/>
+		
 		<p><g:message code="fedreg.templates.mail.get.support" /></p>
 		
 	</body>
