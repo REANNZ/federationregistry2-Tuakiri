@@ -95,14 +95,6 @@ class WorkflowProcessService {
 		def processInstance = new ProcessInstance(process: process, description: instanceDescription, status: ProcessStatus.INPROGRESS, priority: priority ?:ProcessPriority.LOW, params:params)
 		process.addToInstances(processInstance)
 		
-		if(!processInstance.save()) {
-			log.error "Unable to initiate an instance of process ${processName}"
-			processInstance.errors.each {
-				log.error it
-			}
-			throw new RuntimeException("Unable to save ${processInstance} when initiating instance of ${process}")
-		}
-		
 		if(!process.save()) {
 			log.error "Unable to initiate an instance of process ${processName}"
 			process.errors.each {
@@ -110,7 +102,17 @@ class WorkflowProcessService {
 			}
 			throw new RuntimeException("Unable to save ${process} when initiating instance for ${instanceDescription}")
 		}
-        [true, processInstance]
+		
+		def processInstance_ = processInstance.save()
+		if(!processInstance_) {
+			log.error "Unable to initiate an instance of process ${processName}"
+			processInstance.errors.each {
+				log.error it
+			}
+			throw new RuntimeException("Unable to save ${processInstance} when initiating instance of ${process}")
+		}
+		
+        [true, processInstance_]
 	}
 	
 	def run(ProcessInstance processInstance) {

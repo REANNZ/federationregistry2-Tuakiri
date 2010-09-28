@@ -77,7 +77,7 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 		TaskInstance.list().get(0).status == TaskStatus.APPROVALREQUIRED
 		greenMail.getReceivedMessages().length == 1
 		def message = greenMail.getReceivedMessages()[0]
-		message.subject == 'fedreg.workflow.requestapproval.mail.subject'
+		message.subject == 'fedreg.templates.mail.workflow.requestapproval.subject'
 		
 		cleanup:
 		SpecHelpers.resetMetaClasses(savedMetaClasses)
@@ -119,10 +119,10 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 		TaskInstance.list().get(0).status == TaskStatus.APPROVALREQUIRED
 		greenMail.getReceivedMessages().length == 2
 		def message = greenMail.getReceivedMessages()[0]
-		'fedreg.workflow.requestapproval.mail.subject' == message.subject
+		'fedreg.templates.mail.workflow.requestapproval.subject' == message.subject
 		'test@testdomain.com' == GreenMailUtil.getAddressList(message.getRecipients(javax.mail.Message.RecipientType.TO))
 		def message2 = greenMail.getReceivedMessages()[1]
-		'fedreg.workflow.requestapproval.mail.subject' == message2.subject
+		'fedreg.templates.mail.workflow.requestapproval.subject' == message2.subject
 		'test2@testdomain.com' == GreenMailUtil.getAddressList(message2.getRecipients(javax.mail.Message.RecipientType.TO))
 		
 		cleanup:
@@ -165,10 +165,10 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 		TaskInstance.list().get(0).status == TaskStatus.APPROVALREQUIRED
 		greenMail.getReceivedMessages().length == 2
 		def message = greenMail.getReceivedMessages()[0]
-		'fedreg.workflow.requestapproval.mail.subject' == message.subject
+		'fedreg.templates.mail.workflow.requestapproval.subject' == message.subject
 		'test@testdomain.com' == GreenMailUtil.getAddressList(message.getRecipients(javax.mail.Message.RecipientType.TO))
 		def message2 = greenMail.getReceivedMessages()[1]
-		'fedreg.workflow.requestapproval.mail.subject' == message2.subject
+		'fedreg.templates.mail.workflow.requestapproval.subject' == message2.subject
 		'test2@testdomain.com' == GreenMailUtil.getAddressList(message2.getRecipients(javax.mail.Message.RecipientType.TO))
 		
 		cleanup:

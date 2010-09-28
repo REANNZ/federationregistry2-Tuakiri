@@ -1,6 +1,7 @@
 package fedreg.workflow
 
 import java.util.Locale
+import org.apache.commons.logging.LogFactory
 
 import org.springframework.transaction.annotation.*
 
@@ -10,10 +11,10 @@ import grails.plugins.nimble.core.Role
 import grails.plugins.nimble.core.Group
 
 /*
-This service is designed to be concurrent hence passing of ID rather then hibernate instances.
+This service is was originally designed to be concurrent hence passing of ID rather then hibernate backed object instances.
 At this time several faults are present in the hibernate/spring stack that cause violation of
-ACID when run in concurrent mode so only execute is currently multithreaded. It is expected that more 
-concurrency will be introduced back here over time as framework stability improves
+ACID when run in concurrent mode. It is expected that more concurrency could be introduced back here over time as framework stability improves,
+especially in the execute methods.
 
 @author Bradley Beddoes
 */
@@ -27,13 +28,13 @@ class WorkflowTaskService {
 	def messageSource
 	
 	def initiate (def processInstanceID, def taskID) {
-		def processInstance = ProcessInstance.lock(processInstanceID)
+		def processInstance = ProcessInstance.get(processInstanceID)
 		if(!processInstance) {
 			log.error "Initiate requested on processInstance $processInstanceID but no such instance exists"
 			return
 		}
 		
-		def task = Task.lock(taskID)
+		def task = Task.get(taskID)
 		if(!task) {
 			log.error "Initiate requested on task $taskID but no such instance exists"
 			return
@@ -75,7 +76,7 @@ class WorkflowTaskService {
 			}
 		}
 	
-		taskInstance.lock()
+		taskInstance.get()
 		if(task.hasDependencies()) {
 			log.info "Task $task has dependencies ${task.dependencies} validating each is complete"
 			def allMet = true
@@ -125,7 +126,7 @@ class WorkflowTaskService {
 	}
 	
 	def terminate(def taskInstanceID) {
-		def taskInstance = TaskInstance.lock(taskInstanceID)
+		def taskInstance = TaskInstance.get(taskInstanceID)
 		if(!taskInstance) {
 			log.error "Termination requested on taskInstanceID $taskInstanceID but no such instance exists"
 			return
@@ -140,7 +141,7 @@ class WorkflowTaskService {
 	}
 	
 	def approve(def taskInstanceID) {
-		def taskInstance = TaskInstance.lock(taskInstanceID)
+		def taskInstance = TaskInstance.get(taskInstanceID)
 		if(!taskInstance) {
 			log.error "Approval requested on taskInstanceID $taskInstanceID but no such instance exists"
 			return
@@ -162,12 +163,13 @@ class WorkflowTaskService {
 				log.debug "Triggering outcome for taskInstance ${taskInstance.id} bound to task ${taskInstance.task.name}"
 				complete(taskInstanceID, taskInstance.task.outcomes.keySet().iterator().next())	// We know from validation that if a task doesn't execute it must have 1 and only 1 outcome
 			}
-			else
+			else {
 				finalize(taskInstance.id)
+			}
 	}
 	
 	def reject(def taskInstanceID, def rejectionName) {
-		def taskInstance = TaskInstance.lock(taskInstanceID)
+		def taskInstance = TaskInstance.get(taskInstanceID)
 		if(!taskInstance) {
 			log.error "Rejection requested on taskInstanceID $taskInstanceID but no such instance exists"
 			return
@@ -192,7 +194,7 @@ class WorkflowTaskService {
 	}
 	
 	def execute(def taskInstanceID) {
-		def taskInstance = TaskInstance.lock(taskInstanceID)
+		def taskInstance = TaskInstance.get(taskInstanceID)
 		if(!taskInstance) {
 			log.error "Execute requested on taskInstanceID $taskInstanceID but no such instance exists"
 			return
@@ -209,11 +211,20 @@ class WorkflowTaskService {
 		def env = [:]
 		env.putAll(taskInstance.processInstance.params)
 		env.taskInstanceID = taskInstanceID
-		ExecuteJob.triggerNow([service:taskInstance.task.execute.get('service'), method:taskInstance.task.execute.get('method'), script:taskInstance.task.execute.get('script'), env: env])
+		
+		def serviceName = taskInstance.task.execute.get('service')
+		if(serviceName) {
+			def methodName = taskInstance.task.execute.get('method')
+			executeService(serviceName, methodName, env)
+		}
+		else {
+			def scriptName = taskInstance.task.execute.get('script')
+			executeScript(scriptName, env)
+		}
 	}
 	
 	def complete(def taskInstanceID, def outcomeName) {
-		def taskInstance = TaskInstance.lock(taskInstanceID)
+		def taskInstance = TaskInstance.get(taskInstanceID)
 		if(!taskInstance) {
 			log.error "Complete requested on taskInstanceID $taskInstanceID but no such instance exists"
 			return
@@ -237,7 +248,7 @@ class WorkflowTaskService {
 	}
 	
 	def finalize (def taskInstanceID) {
-		def taskInstance = TaskInstance.lock(taskInstanceID)
+		def taskInstance = TaskInstance.get(taskInstanceID)
 		if(!taskInstance) {
 			log.error "Finalize requested on taskInstanceID $taskInstanceID but no such instance exists"
 			return
@@ -254,7 +265,7 @@ class WorkflowTaskService {
 	
 	def requestApproval(def taskInstanceID) {
 		// This is a task defined with an approver directive which means we need to request permission from USERS || GROUPS || ROLES to proceed
-		def taskInstance = TaskInstance.lock(taskInstanceID)
+		def taskInstance = TaskInstance.get(taskInstanceID)
 		if(!taskInstance) {
 			log.error "Approval generation requested on taskInstanceID $taskInstanceID but no such instance exists"
 			return
@@ -405,6 +416,35 @@ class WorkflowTaskService {
 				}
 			}
 		}
+	}
+	
+	def executeService(def serviceName, def methodName, def env) {
+		def service = grailsApplication.mainContext.getBean(serviceName);
+		
+		if(service)
+			service."$methodName"(env)
+		else
+			log.error "Attempt to execute workflow that references service named $serviceID. Unable to locate service, no execution has taken place"
+	}
+	
+	def executeScript(def scriptName, def env) {
+		def workflowScript = WorkflowScript.findByName(scriptName)
+		
+		if(workflowScript) {
+			def _log = LogFactory.getLog("fedreg.workflow.script.$scriptName")
+			
+			Binding binding = new Binding()
+			binding.setVariable("env", env)
+			binding.setVariable("grailsApplication", grailsApplication)
+			binding.setVariable("ctx", grailsApplication.mainContext)
+			binding.setVariable("log", _log)
+			
+			def script = new GroovyShell(grailsApplication.classLoader, binding).parse(workflowScript.definition)
+			script.binding = binding
+			script.run()
+		}
+		else
+			log.error "Attempt to execute workflow that references script named $scriptID. Unable to locate script, no execution has taken place"
 	}
 
 }
