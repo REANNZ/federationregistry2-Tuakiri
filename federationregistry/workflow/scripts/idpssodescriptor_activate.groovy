@@ -1,13 +1,20 @@
+
+import grails.plugins.nimble.core.*
 import fedreg.core.*
+
 
 workflowTaskService = ctx.getBean("workflowTaskService")
 mailService = ctx.getBean("mailService")
+invitationService = ctx.getBean("invitationService")
+roleService = ctx.getBean("roleService")
+permissionService = ctx.getBean("permissionService")
 messageSource = ctx.getBean("messageSource")
 
 def idp = IDPSSODescriptor.get(env.identityProvider.toLong())
 
 if(idp) {
-	log.warn "Activating $idp. Workflow indicates it is valid and accepted for operation."
+
+	log.info "Activating $idp. Workflow indicates it is valid and accepted for operation."
 	
 	idp.approved = true
 	idp.active = true
@@ -36,14 +43,24 @@ if(idp) {
 		}
 	}
 	
+	def role = Role.findWhere(name:"descriptor-${idp.id}-administrators")
+	if(!role){	// Expected state
+		role = roleService.createRole("descriptor-${idp.id}-administrators", "Global administrators for $idp", false)
+	}
+	
+	def permission = new LevelPermission()
+	permission.populate("descriptor", "${idp.id}", "*", null, null, null)
+	permission.managed = false
+	permissionService.createPermission(permission, role)
+	
+	def invitation = invitationService.create(null, role.id, null, "IDPSSODescriptor", "show", idp.id.toString())
+	
 	def creator = Contact.get(env.creator.toLong())
-	def args = new Object[1]
-	args[0] = idp.displayName
 	mailService.sendMail {            
 		to creator.email.uri
 		from ctx.grailsApplication.config.nimble.messaging.mail.from
-		subject messageSource.getMessage("fedreg.templates.mail.workflow.idp.activated.subject", args, "fedreg.templates.mail.workflow.idp.activated.subject", new Locale(env.locale))
-		body view:"/templates/mail/workflows/default/_activated_idp", model:[identityProvider:idp, locale:env.locale]
+		subject messageSource.getMessage("fedreg.templates.mail.workflow.idp.activated.subject", null, "fedreg.templates.mail.workflow.idp.activated.subject", new Locale(env.locale))
+		body view:"/templates/mail/workflows/default/_activated_idp", model:[identityProvider:idp, locale:env.locale, invitation:invitation]
 	}
 
 	workflowTaskService.complete(env.taskInstanceID.toLong(), 'idpssodescriptoractivated')
