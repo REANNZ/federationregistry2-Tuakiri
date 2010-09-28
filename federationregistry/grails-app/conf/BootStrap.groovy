@@ -5,6 +5,7 @@ import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.commons.ApplicationAttributes
 
 import grails.util.GrailsUtil
+import grails.plugins.nimble.core.Role
 
 import org.apache.shiro.subject.Subject
 import org.apache.shiro.util.ThreadContext
@@ -54,6 +55,7 @@ class BootStrap {
 					s.errors.each {
 						log.error it
 					}
+					throw new RuntimeException("Unable to import $script")
 				}
 				else {
 					log.info "Loaded valid workflow script $script"
@@ -62,7 +64,9 @@ class BootStrap {
 		}
 		
 		// Create federation-administrators role, used in workflows etc
-		roleService.createRole("federation-administrators", "Role representing federation level administrators who can make decisions onbehalf of the entire federation, particuarly in workflows", false)
+		def fedAdminRole = Role.findWhere(name:"federation-administrators")
+		if(!fedAdminRole)
+			roleService.createRole("federation-administrators", "Role representing federation level administrators who can make decisions onbehalf of the entire federation, particuarly in workflows", false)
 		
 		// Populate WorkFlows on initial deployment
 		if(Process.count() == 0) {	

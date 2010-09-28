@@ -65,6 +65,10 @@ class UrlMappings {
 		controller = "attributeConsumingService"
 	}
 	
+	"/confirmadministrator/$action?/$id?"{
+		controller = "invitation"
+	}
+	
 	"/registration/$action?/$id?"{
 		controller = "bootstrap"
 	}
