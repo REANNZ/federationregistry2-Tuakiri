@@ -5,6 +5,8 @@ import org.codehaus.groovy.control.CompilationFailedException
 import grails.plugins.nimble.core.UserBase
 
 class WorkflowScript {
+	def grailsApplication
+	
 	String name
 	String description
 	String definition
@@ -36,7 +38,7 @@ class WorkflowScript {
 	
 	def validateScript() {
 		try {
-			new GroovyShell().parse(definition)
+			new GroovyShell(grailsApplication.classLoader).parse(definition)
 		}
 		catch(CompilationFailedException e) {
 			log.error "Compilation error when compiling workflowscript:[id:$id, name:$name, description:$description]"
