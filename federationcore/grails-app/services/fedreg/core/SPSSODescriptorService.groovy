@@ -97,7 +97,7 @@ class SPSSODescriptorService {
 		soapArtifactACS.validate()
 		
 		// Single Logout Services
-		def sloArtifact, sloRedirect, sloSOAP, sloPost, discoveryResponseService
+		def sloArtifact, sloRedirect, sloSOAP, sloPost
 		if(params.sp?.slo?.artifact?.uri){
 			def sloArtifactBinding = SamlURI.findByUri(SamlConstants.httpArtifact)
 			def sloArtifactLocation = new UrlURI(uri: params.sp?.slo?.artifact?.uri)
@@ -127,7 +127,39 @@ class SPSSODescriptorService {
 			sloPost.validate()
 		}
 		
+		// Manage NameID Services - optional
+		def mnidArtifact, mnidRedirect, mnidSOAP, mnidPost
+		if(params.sp?.mnid?.artifact?.uri){
+			def mnidArtifactBinding = SamlURI.findByUri(SamlConstants.httpArtifact)
+			def mnidArtifactLocation = new UrlURI(uri: params.sp?.mnid?.artifact?.uri)
+			mnidArtifact = new ManageNameIDService(approved: true, binding: mnidArtifactBinding, location:mnidArtifactLocation, active:params.active, isDefault:params.sp?.mnid?.artifact?.isdefault)
+			serviceProvider.addToManageNameIDServices(mnidArtifact)
+			mnidArtifact.validate()
+		}
+		if(params.sp?.mnid?.redirect?.uri){
+			def mnidRedirectBinding = SamlURI.findByUri(SamlConstants.httpRedirect)
+			def mnidRedirectLocation = new UrlURI(uri: params.sp?.mnid?.redirect?.uri)
+			mnidRedirect	= new ManageNameIDService(approved: true, binding: mnidRedirectBinding, location:mnidRedirectLocation, active:params.active, isDefault:params.sp?.mnid?.redirect?.isdefault)
+			serviceProvider.addToManageNameIDServices(mnidRedirect)
+			mnidRedirect.validate()
+		}
+		if(params.sp?.mnid?.soap?.uri){
+			def mnidSOAPBinding = SamlURI.findByUri(SamlConstants.soap)
+			def mnidSOAPLocation = new UrlURI(uri: params.sp?.mnid?.soap?.uri)
+			mnidSOAP = new ManageNameIDService(approved: true, binding: mnidSOAPBinding, location:mnidSOAPLocation, active:params.active, isDefault:params.sp?.mnid?.soap?.isdefault)
+			serviceProvider.addToManageNameIDServices(mnidSOAP)
+			mnidSOAP.validate()
+		}
+		if(params.sp?.mnid?.post?.uri){
+			def mnidPostBinding = SamlURI.findByUri(SamlConstants.httpPost)
+			def mnidPostLocation = new UrlURI(uri: params.sp?.mnid?.post?.uri)
+			mnidPost = new ManageNameIDService(approved: true, binding: mnidPostBinding, location:mnidPostLocation, active:params.active, isDefault:params.sp?.mnid?.post?.isdefault)
+			serviceProvider.addToManageNameIDServices(mnidPost)
+			mnidPost.validate()
+		}
+		
 		// Discovery Response Services - optional
+		def discoveryResponseService
 		if(params.sp?.drs?.uri){
 			def drsBinding = SamlURI.findByUri(SamlConstants.drs)
 			def drsLocation = new UrlURI(uri: params.sp?.drs?.uri)

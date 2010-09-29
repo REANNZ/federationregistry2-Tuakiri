@@ -43,6 +43,10 @@
 			$('#sp\\.slo\\.soap\\.uri').val($(this).val() + '/Shibboleth.sso/SLO/SOAP');
 			$('#sp\\.slo\\.post\\.uri').val($(this).val() + '/Shibboleth.sso/SLO/POST');
 			$('#sp\\.drs\\.uri').val($(this).val() + '/Shibboleth.sso/DS');
+			$('#sp\\.mnid\\.artifact\\.uri').val($(this).val() + '/Shibboleth.sso/NIM/Artifact');
+			$('#sp\\.mnid\\.redirect\\.uri').val($(this).val() + '/Shibboleth.sso/NIM/Redirect');
+			$('#sp\\.mnid\\.soap\\.uri').val($(this).val() + '/Shibboleth.sso/NIM/SOAP');
+			$('#sp\\.mnid\\.post\\.uri').val($(this).val() + '/Shibboleth.sso/NIM/POST');
 		});
 		
 		$("#cert").bind('paste', function() { setTimeout(function() { validateCertificate(); }, 100); });
@@ -298,10 +302,42 @@
 			</tr>
 			<tr>
 				<td>
-					<label for="sp.slo.post.uri"><g:message code="label.drsendpoint" /></label>
+					<label for="sp.drs.uri"><g:message code="label.drsendpoint" /></label>
 				</td>
 				<td>
 					<g:textField name="sp.drs.uri" size="75" class="url"/>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label for="sp.mnid.artifact.uri"><g:message code="label.mnidartifactendpoint" /></label>
+				</td>
+				<td>
+					<g:textField name="sp.mnid.artifact.uri" size="75" class="url"/>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label for="sp.mnid.redirect.uri"><g:message code="label.mnidredirectendpoint" /></label>
+				</td>
+				<td>
+					<g:textField name="sp.mnid.redirect.uri" size="75" class="url"/>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label for="sp.mnid.soap.uri"><g:message code="label.mnidsoapendpoint" /></label>
+				</td>
+				<td>
+					<g:textField name="sp.mnid.soap.uri" size="75" class="url"/>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label for="sp.mnid.post.uri"><g:message code="label.mnidpostendpoint" /></label>
+				</td>
+				<td>
+					<g:textField name="sp.mnid.post.uri" size="75" class="url"/>
 				</td>
 			</tr>
 		</table>
