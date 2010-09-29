@@ -22,9 +22,16 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class IDPSSODescriptor extends SSODescriptor  {
+	static auditable = true
+	
+	String logoURL
+	
+	AttributeAuthorityDescriptor collaborator
+		
+	boolean wantAuthnRequestsSigned = true
+	boolean autoAcceptServices = true
 
-	boolean wantAuthnRequestsSigned
-	AttributeAuthorityDescriptor collaborator	// This links the IDP with an AA that collaborates with it to provide attribute services
+	List singleSignOnServices
 
 	static belongsTo = [entityDescriptor:EntityDescriptor]
 
@@ -37,6 +44,7 @@ class IDPSSODescriptor extends SSODescriptor  {
 	]
 
  	static constraints = {
+		logoURL(nullable:true)
 		collaborator(nullable: true)
 		singleSignOnServices(minSize: 1)
 		nameIDMappingServices(nullable: true)
@@ -44,5 +52,6 @@ class IDPSSODescriptor extends SSODescriptor  {
 		attributeProfiles(nullable: true)
 		attributes(nullable: true)
 	}
-
+	
+	public String toString() {	"idpssodescriptor:[id:$id, displayName: $displayName]" }
 }

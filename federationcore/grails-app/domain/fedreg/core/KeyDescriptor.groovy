@@ -21,11 +21,14 @@ package fedreg.core
 /*
  * @author Bradley Beddoes
  */
-class KeyDescriptor  {
-
+class KeyDescriptor  {	
+	static auditable = true
+	
 	KeyInfo keyInfo
 	EncryptionMethod encryptionMethod
 	KeyTypes keyType
+	
+	boolean disabled = false
 	
 	Date dateCreated
 	Date lastUpdated
@@ -41,6 +44,8 @@ class KeyDescriptor  {
 	static mapping = {
 		sort "dateCreated"
 	}
+	
+	public String toString() {	"keydescriptor:[id:$id]" }
 
 }
 

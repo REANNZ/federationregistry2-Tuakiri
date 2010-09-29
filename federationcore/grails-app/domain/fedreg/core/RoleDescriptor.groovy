@@ -22,8 +22,11 @@ package fedreg.core
 /**
  * @author Bradley Beddoes
  */
-class RoleDescriptor  {
-
+class RoleDescriptor extends Descriptor {
+	static auditable = true
+	
+	def cryptoService
+	
 	Organization organization
 	UrlURI errorURL
 	
@@ -32,6 +35,8 @@ class RoleDescriptor  {
 	String extensions
 	
 	boolean active
+	boolean approved = false
+	boolean reporting = true
 
 	Date dateCreated
 	Date lastUpdated
@@ -44,19 +49,23 @@ class RoleDescriptor  {
 
 	static mapping = {
 		tablePerHierarchy false
+		sort "displayName"
 	}
 
 	static constraints = {
-		organization(nullable: true)
-		extensions(nullable: true)
+		displayName(nullable:false, blank:false)
+		description(nullable:false, blank: false, maxSize:2000)
+		
+		organization(nullable: false)
+		extensions(nullable: true, maxSize:2000)
 		errorURL(nullable:true)
-		protocolSupportEnumerations(nullable: true)
+		protocolSupportEnumerations(nullable: false, minSize:1)
 		contacts(nullable: true)
 		keyDescriptors(nullable: true)
 		dateCreated(nullable:true)
 		lastUpdated(nullable:true)
-		displayName(nullable:true)
-		description(nullable:true)
 	}
+	
+	public String toString() {	"roledescriptor:[id:$id, displayName: $displayName]" }
 
 }

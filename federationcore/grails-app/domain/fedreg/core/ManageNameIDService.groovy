@@ -23,7 +23,10 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class ManageNameIDService extends Endpoint  {
+	static auditable = true
 
-  static belongsTo = [descriptor: SSODescriptor]
+  	static belongsTo = [descriptor: SSODescriptor]
+
+	public String toString() { "managenameidservice:[id:$id, location: $location]" }
 
 }

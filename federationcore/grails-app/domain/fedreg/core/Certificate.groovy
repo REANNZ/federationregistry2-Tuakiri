@@ -24,6 +24,7 @@ import groovy.time.TimeCategory
  * @author Bradley Beddoes
  */
 class Certificate {
+	static auditable = true
 	
 	String data
 	
@@ -50,6 +51,8 @@ class Certificate {
 		dateCreated(nullable:true)
 		lastUpdated(nullable:true)
 	}
+	
+	public String toString() {	"certificate:[id:$id, subject: $subject, issuer:$issuer, expires: $expiryDate]" }
 	
 	boolean infoAlert() {
 		use ( TimeCategory ) {

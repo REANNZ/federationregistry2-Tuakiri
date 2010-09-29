@@ -23,6 +23,7 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class SPSSODescriptor extends SSODescriptor {
+	static auditable = true
 
  	boolean authnRequestsSigned
  	boolean wantAssertionsSigned
@@ -34,6 +35,7 @@ class SPSSODescriptor extends SSODescriptor {
 	static hasMany = [
 		assertionConsumerServices: AssertionConsumerService,
 		attributeConsumingServices: AttributeConsumingService,
+		discoveryResponseServices: DiscoveryResponseService,
 		serviceCategories: ServiceCategory
 	]
 
@@ -41,4 +43,6 @@ class SPSSODescriptor extends SSODescriptor {
 		attributeConsumingServices(nullable: true)
 		serviceDescription(nullable:false)
  	}
+
+	public String toString() {	"spssodescriptor:[id:$id, displayName: $displayName]" }
 }

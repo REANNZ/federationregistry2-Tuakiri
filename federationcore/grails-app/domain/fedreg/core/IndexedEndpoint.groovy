@@ -25,12 +25,17 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class IndexedEndpoint extends Endpoint  {
+	static auditable = true
 
-  boolean isDefault
-  int endpointIndex
+	boolean isDefault
 
-  static mapping = {
-    tablePerHierarchy false
-  }
+  	static mapping = {
+		tablePerHierarchy false
+  	}
 
+	static constraints = {
+		isDefault(nullable:false)
+	}
+
+	public String toString() { "indexedendpoint:[id:$id, location: $location]" }
 }

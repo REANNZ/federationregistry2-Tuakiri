@@ -23,6 +23,7 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class PDPDescriptor extends RoleDescriptor {
+	static auditable = true
 	
 	static belongsTo = [entityDescriptor:EntityDescriptor]
 
@@ -36,4 +37,6 @@ class PDPDescriptor extends RoleDescriptor {
 		assertionIDRequestServices(nullable: true)
 		nameIDFormats(nullable: true)
 	}
+	
+	public String toString() {	"pdpdescriptor:[id:$id, displayName: $displayName]" }
 }

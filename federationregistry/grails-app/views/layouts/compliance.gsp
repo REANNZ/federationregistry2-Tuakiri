@@ -1,74 +1,65 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
-  "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE html>
 
 <html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
     <title><g:message code="fedreg.title" /> | <g:layoutTitle /></title>
-    
-  	<nh:nimblecore/>
-    <nh:nimbleui/>
-  
-    <nh:growl/>
-    <script type="text/javascript">
-      <njs:flashgrowl/>
-    </script>
 
-	<link rel="stylesheet" href="${resource(file: '/css/icons.css')}"/>
-	<link rel="stylesheet" href="${resource(file: '/css/fedreg.css')}"/>
+	<!--[if lt IE 9]>
+		<script type="text/javascript" src="${resource(dir: 'js', file: '/html5.js')}"></script>
+	<![endif]-->
+	<script type="text/javascript" src="${resource(dir: 'js', file: '/modernizr-1.5.min.js')}"></script>
+
+	<link rel="stylesheet" href="${resource(dir:'css',file:'jquery-ui-1.8.2.custom.css')}" />
+	<link rel="stylesheet/less" href="${resource(dir:'css',file:'frtheme.less')}" />
+		
+	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/jquery-1.4.2.min.js')}"></script>
+	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/jquery-ui-1.8.2.custom.min.js')}"></script>
+	<script type="text/javascript" src="${resource(dir: 'js', file: 'less-1.0.35.min.js')}"></script>
+	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/jquery.jgrowl.min.js')}"></script>
+	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/jquery.validate.pack.js')}"></script>
+	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/jquery.validate.additional-methods.js')}"></script>
+	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/jquery.form.wizard-2.0.1-min.js')}"></script>
 	
-	
-	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/jquery.jqplot.min.js')}"></script>
-	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/plugins/jqplot.pieRenderer.min.js')}"></script>
-	<link rel="stylesheet" href="${resource(dir:'css',file:'jquery.jqplot.min.css')}" />
-	
+	<script type="text/javascript" src="${resource(dir: 'js', file: '/fedreg-members.js')}"></script>
+		
     <g:layoutHead />
 </head>
 
 <body>
 
-  <div id="doc">
-    <div id="hd">
-		<g:render template='/templates/aafheader' model="['navigation':true]"/>
-    </div>
-    <div id="bd">
-		<div class="container">
-	    	<div class="localnavigation">
-			  <h3><g:message code="fedreg.layout.compliance.navigation.title" /></h3>
-			    <ul>
-					<li>
-						<h4><g:message code="fedreg.navigation.identityprovider" /></h4>
-						<ul>
-							<li>
-								<g:link controller="idpAttributeCompliance" action="summary"><g:message code="fedreg.link.attributesummary" /></g:link>
-						 	</li>
-						</ul>
-					</li>
-					<li>
-						<h4><g:message code="fedreg.navigation.federationwide" /></h4>
-						<ul>
-							<li>
-								<g:link controller="attributeRelease" action="index"><g:message code="fedreg.link.attributerelease" /></g:link>
-						 	</li>
-							<li>
-								<g:link controller="certifyingAuthorityUsage" action="index"><g:message code="fedreg.link.cautilization" /></g:link>
-							</li>
-						</ul>
-				 	</li>
-				</ul>
-			</div>
-			<div class="content">
-	      		<g:layoutBody/>
-			</div>
-		</div>
-    </div>
-    <div id="ft">
+    <header>
+		<g:render template='/templates/frheader' />
+    </header>
 	
-    </div>
-  </div>
+	<nav>
+	<n:isLoggedIn>
+		<g:render template='/templates/frtopnavigation'/>
+		
+		<ul class="level2a">
+			<li class="${controllerName == 'IDPSSODescriptorAttributeCompliance' ? 'active':''}">
+				<g:link controller="IDPSSODescriptorAttributeCompliance" action="summary"><g:message code="label.attributesummary" /></g:link>
+		 	</li>
+			<li class="${controllerName == 'attributeRelease' ? 'active':''}">
+				<g:link controller="attributeRelease" action="index"><g:message code="label.attributerelease" /></g:link>
+		 	</li>
+			<li class="${controllerName == 'certifyingAuthorityUsage' ? 'active':''}">
+				<g:link controller="certifyingAuthorityUsage" action="index"><g:message code="label.cautilization" /></g:link>
+			</li>
+		</ul>	
+	</n:isLoggedIn>
+	</nav>
+
+	<section>
+		<div id="working"><img src="${resource(dir:'images', file:'spinner.gif')}" width="20" height="20"><br/><g:message code="label.working"/></div>
+
+		<g:layoutBody/>
+    </section>
+
+	<footer>
+		<g:render template='/templates/frfooter' />
+	</footer>
 
 <n:sessionterminated/>
-
 
 </body>
 

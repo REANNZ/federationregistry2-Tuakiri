@@ -23,6 +23,7 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class AttributeAuthorityDescriptor extends RoleDescriptor {
+	static auditable = true
 	
 	IDPSSODescriptor collaborator    // This links the AA with an IDP that collaborates with it to provide authentication assertion services
 	
@@ -31,7 +32,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor {
 	static hasMany = [
 		  attributeServices: AttributeService,
 		  assertionIDRequestServices: AssertionIDRequestService,
-		  nameIDFormats: String,
+		  nameIDFormats: SamlURI,
 		  attributeProfiles: String,
 		  attributes: Attribute
 	]
@@ -44,4 +45,5 @@ class AttributeAuthorityDescriptor extends RoleDescriptor {
 		attributes(nullable: true)
 	}
 
+	public String toString() {	"attributeauthoritydescriptor:[id:$id]" }
 }

@@ -23,9 +23,11 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class UrlURI extends AnyUri  {
+	static auditable = true
 
-  static constraints = {
-    uri(nullable: false, blank: false, url: true)
-  }
+	static constraints = {
+		uri(nullable: false, blank: false, url: true)
+	}
 
+	public String toString() {	"urluri:[id:$id, uri: $uri]" }
 }

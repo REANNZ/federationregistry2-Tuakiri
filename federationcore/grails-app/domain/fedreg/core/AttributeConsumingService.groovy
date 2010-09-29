@@ -23,9 +23,10 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class AttributeConsumingService {
+	static auditable = true
 
-	boolean isDefault
-	int index
+	boolean isDefault = false
+	boolean approved = true
 	String lang
 	
 	Date dateCreated
@@ -48,5 +49,7 @@ class AttributeConsumingService {
 	static mapping = {
 		index column: "mdindex"		// Avoid DB collisions with reserved word index
 	}
+	
+	public String toString() {	"attributeconsumingservice:[id:$id, name: $serviceNames]" }
 
 }

@@ -24,7 +24,11 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class Endpoint	{
-	boolean active
+	static auditable = true
+	
+	boolean active = false
+	boolean approved = false
+	
 	SamlURI binding
 	UrlURI location
 	UrlURI responseLocation
@@ -44,8 +48,5 @@ class Endpoint	{
 		lastUpdated(nullable:true)
 	}
 
-	public String toString() {
-		return location.uri
-	}
-
+	public String toString() {	"endpoint:[id:$id, location: $location]" }
 }

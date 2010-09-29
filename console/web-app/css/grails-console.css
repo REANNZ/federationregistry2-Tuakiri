@@ -1,0 +1,37 @@
+  body, html {
+    margin: 0;
+    padding: 0;
+    font-family: "Lucida Grande", Verdana, sans-serif;
+    background: #eee;
+  }
+
+  h1 {
+    margin: 0px;
+    padding: 4px;
+    font-size: 15px;
+    background: #333;
+    color: #fff;
+  }
+
+  #code {
+    border-bottom: 1px solid #333;
+  }
+
+  #result {
+    padding: 3px;
+  }
+
+  .console-editor {
+    border-bottom: 1px solid #333;
+    background: #fff;
+  }
+
+  .stacktrace {
+    color: red;
+    background: #ddd;
+  }
+
+  .script-result {
+    color: blue;
+    background: #ddd;
+  }

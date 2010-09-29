@@ -23,6 +23,8 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class Uri  {
+	static auditable = true
+	
 	String uri
 	String description
 
@@ -38,5 +40,7 @@ class Uri  {
 		dateCreated(nullable:true)
 		lastUpdated(nullable:true)
 	}
+	
+	public String toString() {	"uri:[id:$id, uri: $uri]" }
 
 }

@@ -23,6 +23,7 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class EncryptionMethod  {
+	static auditable = true
 
 	String algorithm
 	String keySize
@@ -34,9 +35,12 @@ class EncryptionMethod  {
 	static belongsTo = [keyDescriptor: KeyDescriptor]
 
 	static constraints = {
+		algorithm(nullable:false, blank:false)
+		keySize(nullable: true)
 		oaeParams(nullable: true)
 		dateCreated(nullable:true)
 		lastUpdated(nullable:true)
 	}
 
+	public String toString() {	"encryptionmethod:[id:$id, algorithm: $algorithm]" }
 }

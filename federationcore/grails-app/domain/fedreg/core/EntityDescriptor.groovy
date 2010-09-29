@@ -22,14 +22,17 @@ package fedreg.core
 /**
  * @author Bradley Beddoes
  */
-class EntityDescriptor {
+class EntityDescriptor extends Descriptor  {
+	static auditable = true
 
 	// Organization is the top teir in our model. All entities must belong to an organization definition
 	Organization organization
 
 	String entityID
 	String extensions
+	
 	boolean active
+	boolean approved
 	
 	Date dateCreated
 	Date lastUpdated
@@ -44,6 +47,8 @@ class EntityDescriptor {
 	]
 
 	static constraints = {
+		organization(nullable:false)
+		entityID(nullable:false, blank:false, unique:true)
 		idpDescriptors(nullable: true)
 		spDescriptors(nullable: true)
 		attributeAuthorityDescriptors(nullable: true)
@@ -58,8 +63,6 @@ class EntityDescriptor {
 		tablePerHierarchy false
 	}
 	
-	public String toString() {
-		return entityID
-	}
+	public String toString() {	"entitydescriptor:[id:$id, entityID: $entityID]" }
 
 }

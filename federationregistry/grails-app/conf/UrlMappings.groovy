@@ -1,12 +1,8 @@
 class UrlMappings {
     static mappings = {
 	
-	"/compliance/attributescope/identityprovider/$action?/$id?"{
-		controller = "attributeScope"
-	}
-	
 	"/compliance/identityprovider/attributes/$action?/$id?"{
-		controller = "idpAttributeCompliance"
+		controller = "IDPSSODescriptorAttributeCompliance"
 	}
 	
 	"/compliance/attributes/release/$action?/$id?"{
@@ -22,23 +18,35 @@ class UrlMappings {
 	}
 	
 	"/membership/entity/$action?/$id?"{
-		controller = "entity"
+		controller = "entityDescriptor"
 	}
 	
 	"/membership/identityprovider/$action?/$id?"{
-		controller = "identityProvider"
+		controller = "IDPSSODescriptor"
+	}
+	
+	"/membership/serviceprovider/$action?/$id?"{
+		controller = "SPSSODescriptor"
 	}
 	
 	"/membership/contacts/$action?/$id?"{
 		controller = "contacts"
 	}
 	
+	"/membership/backend/organizationadministration/$action?/$id?"{
+		controller = "organizationAdministration"
+	}
+	
+	"/membership/backend/descriptoradministration/$action?/$id?"{
+		controller = "descriptorAdministration"
+	}
+	
 	"/membership/backend/contact/$action?/$id?"{
 		controller = "descriptorContact"
 	}
 	
-	"/membership/backend/keydescriptor/$action?/$id?"{
-		controller = "descriptorKeyDescriptor"
+	"/membership/backend/roleDescriptorCrypto/$action?/$id?"{
+		controller = "roleDescriptorCrypto"
 	}
 	
 	"/membership/backend/endpoint/$action?/$id?"{
@@ -49,9 +57,40 @@ class UrlMappings {
 		controller = "descriptorNameIDFormat"
 	}
 	
-	"/bootstrap" {
-			controller = "dataManagement"
-			action = "bootstrap"
+	"/membership/backend/attribute/$action?/$id?"{
+		controller = "descriptorAttribute"
+	}
+	
+	"/membership/backend/attributeconumingservice/$action?/$id?"{
+		controller = "attributeConsumingService"
+	}
+	
+	"/confirmadministrator/$action?/$id?"{
+		controller = "invitation"
+	}
+	
+	"/registration/$action?/$id?"{
+		controller = "bootstrap"
+	}
+	
+	"/metadata/$action"{
+		controller = "metadata"
+	}
+	
+	"/coreutils/$action?/$id?"{
+		controller = "coreUtilities"
+	}
+	
+	"/workflow/process/$action?/$id?" {
+			controller = "workflowProcess"
+	}
+	
+	"/workflow/scripting/$action?/$id?" {
+			controller = "workflowScript"
+	}
+	
+	"/workflow/approval/$action/$id?" {
+			controller = "workflowApproval"
 	}
 	
 	"/datamanagement/$action?/$id?"{
@@ -62,6 +101,21 @@ class UrlMappings {
 		controller = "monitor"
 	}
 	
+	"/codeconsole/$action?/$id?"{
+		controller = "code"
+	}
+	
+	"/console/$action?/$id?"{
+		controller = "console"
+	}
+	
+	"/bootstrap/$action?/$id?" {
+		controller = "initialBootstrap"
+	}
+	
+	"/greenmail/$action?/$id?"{
+		controller = "greenmail"
+	}
 	
     "/"(view:"/index")
 	  "500"(view:'/error')

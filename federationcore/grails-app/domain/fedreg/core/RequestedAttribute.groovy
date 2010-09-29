@@ -22,17 +22,18 @@ package fedreg.core
 /**
  * @author Bradley Beddoes
  */
-class RequestedAttribute  {
-	boolean isRequired
-	Attribute attribute
+class RequestedAttribute extends Attribute {
+	static auditable = true
 	
-	Date dateCreated
-	Date lastUpdated
+	String reasoning
+	boolean isRequired
+	boolean approved = false
 	
 	static constraints = {
-		dateCreated(nullable:true)
-		lastUpdated(nullable:true)
+		reasoning(nullable:false, blank:false)
 	}
 
 	static belongsTo = [attributeConsumingService: AttributeConsumingService]
+	
+	public String toString() {	"requestedattribute:[id:$id, isRequired: $isRequired]" }
 }

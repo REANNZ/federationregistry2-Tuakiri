@@ -8,6 +8,118 @@ import grails.plugin.spock.IntegrationSpecification
 class CryptoServiceSpecification extends IntegrationSpecification {
 	
 	def cryptoService
+	
+	def 'validate signing certificate association with role descriptor'() {
+		setup:
+		def ca = new File('./test/integration/data/demoCA/cacertminimal.pem').text
+		def caCert = new CACertificate(data:ca)
+		def caKeyInfo = new CAKeyInfo(certificate:caCert)
+		caKeyInfo.save()
+		
+		def idp = IDPSSODescriptor.build().save()
+		def data = new File('./test/integration/data/newcertminimal.pem').text
+		
+		when:
+		def created = cryptoService.associateCertificate(idp, data, "testcert", KeyTypes.signing)
+		
+		then:
+		created
+		KeyDescriptor.count() == 1
+		idp.keyDescriptors.size() == 1
+		def kd = idp.keyDescriptors.toArray()[0]
+		kd.keyType == KeyTypes.signing
+		kd.keyInfo.keyName == "testcert" 
+		kd.keyInfo.certificate.data == data
+		!kd.disabled
+	}
+	
+	def 'validate encryption certificate association with role descriptor'() {
+		setup:
+		def ca = new File('./test/integration/data/demoCA/cacertminimal.pem').text
+		def caCert = new CACertificate(data:ca)
+		def caKeyInfo = new CAKeyInfo(certificate:caCert)
+		caKeyInfo.save()
+		
+		def idp = IDPSSODescriptor.build().save()
+		def data = new File('./test/integration/data/newcertminimal.pem').text
+		
+		when:
+		def created = cryptoService.associateCertificate(idp, data, "testcert", KeyTypes.encryption)
+		
+		then:
+		created
+		KeyDescriptor.count() == 1
+		idp.keyDescriptors.size() == 1
+		def kd = idp.keyDescriptors.toArray()[0]
+		kd.keyType == KeyTypes.encryption
+		kd.keyInfo.keyName == "testcert" 
+		kd.keyInfo.certificate.data == data
+		!kd.disabled
+	}
+	
+	def 'validate dual certificate association with role descriptor'() {
+		setup:
+		def ca = new File('./test/integration/data/demoCA/cacertminimal.pem').text
+		def caCert = new CACertificate(data:ca)
+		def caKeyInfo = new CAKeyInfo(certificate:caCert)
+		caKeyInfo.save()
+		
+		def idp = IDPSSODescriptor.build().save()
+		def data = new File('./test/integration/data/newcertminimal.pem').text
+		
+		when:
+		def created = cryptoService.associateCertificate(idp, data, "testcert", KeyTypes.signing)
+		created = cryptoService.associateCertificate(idp, data, "testcert", KeyTypes.encryption)
+		
+		then:
+		created
+		KeyDescriptor.count() == 2
+		idp.keyDescriptors.size() == 2
+	}
+	
+	def 'validate invalid certificate association with role descriptor fails'() {
+		setup:
+		def ca = new File('./test/integration/data/demoCA/cacertminimal.pem').text
+		def caCert = new CACertificate(data:ca)
+		def caKeyInfo = new CAKeyInfo(certificate:caCert)
+		caKeyInfo.save()
+		
+		def idp = IDPSSODescriptor.build().save()
+		def data = new File('./test/integration/data/managertestaaf.pem').text
+		
+		when:
+		def created = cryptoService.associateCertificate(idp, data, "testcert", KeyTypes.signing)
+		
+		then:
+		!created
+		KeyDescriptor.count() == 0
+		idp.keyDescriptors == null
+	}
+	
+	def 'validate certificate unassociation from role descriptor'() {
+		setup:
+		def ca = new File('./test/integration/data/demoCA/cacertminimal.pem').text
+		def caCert = new CACertificate(data:ca)
+		def caKeyInfo = new CAKeyInfo(certificate:caCert)
+		caKeyInfo.save()
+		
+		def idp = IDPSSODescriptor.build().save()
+		def data = new File('./test/integration/data/newcertminimal.pem').text
+		def created = cryptoService.associateCertificate(idp, data, "testcert", KeyTypes.signing)
+		
+		when:
+		cryptoService.unassociateCertificate(idp.keyDescriptors.toArray()[0])
+		
+		then:
+		created
+		KeyDescriptor.count() == 1
+		idp.keyDescriptors.size() == 1
+		def kd = idp.keyDescriptors.toArray()[0]
+		kd.keyType == KeyTypes.signing
+		kd.keyInfo.keyName == "testcert" 
+		kd.keyInfo.certificate.data == data
+		kd.disabled
+	}
   
 	def 'validate self signed cert with trusted local CA chain'() {
 		setup:
@@ -36,7 +148,7 @@ class CryptoServiceSpecification extends IntegrationSpecification {
 		
 		expect:
 		CACertificate.count() == 1
-		cryptoService.validateCertificate(testCert) == false
+		!cryptoService.validateCertificate(testCert, true)
 	}
 	
 	def 'ensure validation of multiple certs from different CA chains (Local CA and Auscert intermediate to Comondo)'() {
@@ -61,14 +173,12 @@ class CryptoServiceSpecification extends IntegrationSpecification {
 	}
 	
 	def 'ensure valid expiry date calculated'() {
-		
 		expect:
 		cryptoService.expiryDate(cert) == date
 		
 		where:
 		cert << [new Certificate(data:new File('./test/integration/data/managertestaaf.pem').text)]
 		date << [new GregorianCalendar(2011, Calendar.DECEMBER, 15, 9, 59, 59).time]
-		
 	}
 	
 	def 'ensure valid issuer'() {
@@ -78,8 +188,7 @@ class CryptoServiceSpecification extends IntegrationSpecification {
 		
 		where:
 		cert << [new Certificate(data:new File('./test/integration/data/managertestaaf.pem').text)]
-		issuer = 'CN=AusCERT Server CA,OU=Certificate Services,O=AusCERT,C=AU'
-		
+		issuer = 'CN=AusCERT Server CA,OU=Certificate Services,O=AusCERT,C=AU'	
 	}
 
 }

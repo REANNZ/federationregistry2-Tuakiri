@@ -23,6 +23,7 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class ContactPerson  {
+	static auditable = true
 
 	Contact contact
 	ContactType type
@@ -40,4 +41,6 @@ class ContactPerson  {
 		dateCreated(nullable:true)
 		lastUpdated(nullable:true)
 	}
+	
+	public String toString() {	"contactperson:[id:$id, contact: $contact, descriptor:$descriptor, entity:$entity]" }
 }

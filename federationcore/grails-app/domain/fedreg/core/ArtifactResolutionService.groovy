@@ -23,7 +23,10 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class ArtifactResolutionService extends IndexedEndpoint  {
+	static auditable = true
 
-  static belongsTo = [descriptor: SSODescriptor]
+	static belongsTo = [descriptor: SSODescriptor]
+
+	public String toString() {	"artifactresolutionservice:[id:$id, location: $location]" }
 
 }

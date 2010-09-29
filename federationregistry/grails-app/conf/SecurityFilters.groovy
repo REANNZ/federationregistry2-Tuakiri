@@ -16,6 +16,7 @@
  */
 import grails.plugins.nimble.core.AdminsService
 import grails.plugins.nimble.core.UserService
+import fedreg.core.EntityDescriptor
 
 /**
  * Filter that works with Nimble security model to protect controllers, actions, views for Federation Registry
@@ -24,10 +25,20 @@ import grails.plugins.nimble.core.UserService
  */
 public class SecurityFilters extends grails.plugins.nimble.security.NimbleFilterBase {
 
-    def filters = {
+	def grailsApplication
 
-        // Federation registry content requiring users to be authenticated
-        secure(controller: "(idpAttributeCompliance|attributeRelease|certifyingAuthorityUsage|organization|identityProvider|contacts|descriptorContacts|desccriptorKeyDescriptor|descriptorEndpoint|descriptorNameIDFormat)") {
+    def filters = {
+	
+		// Undertake bootstrap
+		all(controller: '*') {
+			before = {
+				if( !['initialBootstrap','console'].contains(controllerName) && grailsApplication.config.fedreg.bootstrap)
+					redirect (controller: "initialBootstrap")
+			}
+		}
+		
+		// Invitations
+        invitations(controller: "invitation") {
             before = {
                 accessControl (auth: false) {
 					role(UserService.USER_ROLE)
@@ -35,11 +46,38 @@ public class SecurityFilters extends grails.plugins.nimble.security.NimbleFilter
             }
         }
 
-		// Data reload functionality
-		datamgt(controller: "dataManagement", action:"(index|refreshdata)") {
+        // Members
+        descriptors(controller: "(organization|entityDescriptor|IDPSSODescriptor|SPSSODescriptor|contacts|descriptorContacts|desccriptorKeyDescriptor|descriptorEndpoint|descriptorNameIDFormat|descriptorAttribute)") {
+            before = {
+                accessControl (auth: false) {
+					role(UserService.USER_ROLE)
+				}
+            }
+        }
+		
+		// Compliance
+		descriptors(controller: "(IDPSSODescriptorAttributeCompliance|attributeRelease|certifyingAuthorityUsage)") {
+            before = {
+                accessControl (auth: false) {
+					role(UserService.USER_ROLE)
+				}
+            }
+        }
+
+		// Workflow
+		workflow(controller: "workflow*") {
             before = {
                 accessControl {
-                    role(AdminsService.ADMIN_ROLE)
+                    role(UserService.USER_ROLE)
+                }
+            }
+        }
+
+		// Metadata
+		datamgt(controller: "metadata", action:"(view|viewall)") {
+            before = {
+                accessControl {
+                    role(UserService.USER_ROLE)
                 }
             }
         }
@@ -59,6 +97,21 @@ public class SecurityFilters extends grails.plugins.nimble.security.NimbleFilter
                 accessControl {
                     role(AdminsService.ADMIN_ROLE)
                 }
+            }
+        }
+
+		// Console and initial bootstrap
+		console(controller: "(code|console|initialBootstrap)") {
+            before = {
+				if( ['initialBootstrap'].contains(controllerName) && !grailsApplication.config.fedreg.bootstrap)
+					redirect (controller: "organization")
+				else {	
+					if(!grailsApplication.config.fedreg.bootstrap) {
+		                accessControl {
+		                    role(AdminsService.ADMIN_ROLE)
+		                }
+					}
+				}
             }
         }
 
