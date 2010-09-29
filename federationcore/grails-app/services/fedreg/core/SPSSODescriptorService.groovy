@@ -97,7 +97,7 @@ class SPSSODescriptorService {
 		soapArtifactACS.validate()
 		
 		// Single Logout Services
-		def sloArtifact, sloRedirect, sloSOAP, sloPost
+		def sloArtifact, sloRedirect, sloSOAP, sloPost, discoveryResponseService
 		if(params.sp?.slo?.artifact?.uri){
 			def sloArtifactBinding = SamlURI.findByUri(SamlConstants.httpArtifact)
 			def sloArtifactLocation = new UrlURI(uri: params.sp?.slo?.artifact?.uri)
@@ -125,6 +125,15 @@ class SPSSODescriptorService {
 			sloPost = new SingleLogoutService(approved: true, binding: sloPostBinding, location:sloPostLocation, active:params.active, isDefault:params.sp?.slo?.post?.isdefault)
 			serviceProvider.addToSingleLogoutServices(sloPost)
 			sloPost.validate()
+		}
+		
+		// Discovery Response Services - optional
+		if(params.sp?.drs?.uri){
+			def drsBinding = SamlURI.findByUri(SamlConstants.drs)
+			def drsLocation = new UrlURI(uri: params.sp?.drs?.uri)
+			discoveryResponseService = new DiscoveryResponseService(approved: true, binding: drsBinding, location:drsLocation, active:params.active, isDefault:params.sp?.drs.isdefault)
+			serviceProvider.addToDiscoveryResponseServices(discoveryResponseService)
+			discoveryResponseService.validate()
 		}
 		
 		// Cryptography

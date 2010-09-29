@@ -492,6 +492,17 @@
 				else 
 					println("No SamlURI binding for uri ${it.serviceBinding} exists, not importing, not importing ManageNameIDService")
 			})
+			sql.eachRow("select * from serviceLocations where objectID=${it.resourceID} and serviceType='DiscoveryResponse'",
+			{
+				def binding = SamlURI.findByUri(SamlConstants.drs)
+				if(binding) {
+					def location = new UrlURI(uri:it.serviceLocation)
+					def drs = new DiscoveryResponseService(binding: binding, location: location, active:true, approved:true)
+					sp.addToDiscoveryResponseServices(drs)
+				}
+				else 
+					println("No SamlURI binding for uri ${it.serviceBinding} exists, not importing, not importing DiscoveryResponseService")
+			})
 			
 			if(saml2)
 				sp.addToNameIDFormats(trans)

@@ -10,7 +10,7 @@ class DescriptorEndpointController {
 	
 	// Maps allowed endpoints to internal class representation
 	def allowedEndpoints = [singleSignOnServices:"fedreg.core.SingleSignOnService", artifactResolutionServices:"fedreg.core.ArtifactResolutionService", 
-							singleLogoutServices:"fedreg.core.SingleLogoutService", assertionConsumerServices:"fedreg.core.AssertionConsumerService", attributeServices:"fedreg.core.AttributeService"]
+							singleLogoutServices:"fedreg.core.SingleLogoutService", assertionConsumerServices:"fedreg.core.AssertionConsumerService", attributeServices:"fedreg.core.AttributeService", discoveryResponseServices:"fedreg.core.DiscoveryResponseService"]
 
 	def endpointService
 

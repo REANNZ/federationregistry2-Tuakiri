@@ -42,6 +42,7 @@
 			$('#sp\\.slo\\.redirect\\.uri').val($(this).val() + '/Shibboleth.sso/SLO/Redirect');
 			$('#sp\\.slo\\.soap\\.uri').val($(this).val() + '/Shibboleth.sso/SLO/SOAP');
 			$('#sp\\.slo\\.post\\.uri').val($(this).val() + '/Shibboleth.sso/SLO/POST');
+			$('#sp\\.drs\\.uri').val($(this).val() + '/Shibboleth.sso/DS');
 		});
 		
 		$("#cert").bind('paste', function() { setTimeout(function() { validateCertificate(); }, 100); });
@@ -293,6 +294,14 @@
 				</td>
 				<td>
 					<g:textField name="sp.slo.post.uri" size="75" class="url"/>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label for="sp.slo.post.uri"><g:message code="label.drsendpoint" /></label>
+				</td>
+				<td>
+					<g:textField name="sp.drs.uri" size="75" class="url"/>
 				</td>
 			</tr>
 		</table>

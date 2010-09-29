@@ -150,6 +150,7 @@
 							<li><a href="#tab-acs"><g:message code="label.assertionconsumerservice" /></a></li>
 							<li><a href="#tab-ars"><g:message code="label.artifactresolutionservices" /></a></li>
 							<li><a href="#tab-slo"><g:message code="label.sloservices" /></a></li>
+							<li><a href="#tab-drs"><g:message code="label.drsservices" /></a></li>
 						</ul>
 						<div id="tab-acs" class="componentlist">
 							<div id="assertionconsumerendpoints">
@@ -171,6 +172,13 @@
 							</div>
 							
 							<g:render template="/templates/endpoints/create" plugin="federationcore" model="[descriptor:serviceProvider, endpointType:'singleLogoutServices', containerID:'singlelogoutendpoints']" />
+						</div>
+						<div id="tab-drs" class="componentlist">
+							<div id="discoveryresponseservices">
+								<g:render template="/templates/endpoints/list" plugin="federationcore" model="[endpoints:serviceProvider.discoveryResponseServices, allowremove:true, endpointType:'discoveryResponseServices', containerID:'discoveryresponseservices']" />
+							</div>
+							
+							<g:render template="/templates/endpoints/create" plugin="federationcore" model="[descriptor:serviceProvider, endpointType:'discoveryResponseServices', containerID:'discoveryresponseservices']" />
 						</div>
 					</div>
 				</div>

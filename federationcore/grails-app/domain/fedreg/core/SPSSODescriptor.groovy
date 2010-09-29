@@ -35,6 +35,7 @@ class SPSSODescriptor extends SSODescriptor {
 	static hasMany = [
 		assertionConsumerServices: AssertionConsumerService,
 		attributeConsumingServices: AttributeConsumingService,
+		discoveryResponseServices: DiscoveryResponseService,
 		serviceCategories: ServiceCategory
 	]
 

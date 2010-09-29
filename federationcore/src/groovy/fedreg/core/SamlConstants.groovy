@@ -37,6 +37,7 @@ class SamlConstants {
 	static def httpPost1 = 'urn:oasis:names:tc:SAML:1.0:profiles:browser-post'
 	static def httpArtifact1 = 'urn:oasis:names:tc:SAML:1.0:profiles:artifact-01'
 	static def soap1 = 'urn:oasis:names:tc:SAML:1.0:bindings:SOAP-binding'
+	static def drs = 'urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol'
 	
 	// NameIDFormats
 	static def unspec = 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified'
