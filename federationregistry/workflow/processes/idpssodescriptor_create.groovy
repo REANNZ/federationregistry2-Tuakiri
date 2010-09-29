@@ -1,5 +1,5 @@
 
-process(name:'idpssodescriptor_create', description: 'Workflow defining IDPSSODescription creation approval process') {
+process(name:'idpssodescriptor_create', description: 'Workflow defining Identity Provider creation and approval process') {
 	
 	task(name: 'Send confirmation message', description: 'Invokes a script to confirm registration of IDP.') {
 		execute(script: 'idpssodescriptor_confirm')
