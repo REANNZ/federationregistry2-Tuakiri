@@ -38,7 +38,7 @@ process(name:'idpssodescriptor_create', description: 'Workflow defining Identity
 				start ('Delete Identity Provider')
 			}
 		}
-		outcome(name: 'organizationapproved', description:'The organization has accepted responsibility for this Identity Provider') {
+		outcome(name: 'federationapproved', description:'The organization has accepted responsibility for this Identity Provider') {
 			start ('Activate Identity Provider')
 		}
 	}
@@ -52,7 +52,7 @@ process(name:'idpssodescriptor_create', description: 'Workflow defining Identity
 				start ('Delete Identity Provider')
 			}
 		}
-		outcome(name: 'organizationapproved', description:'The organization has accepted responsibility for this Identity Provider') {
+		outcome(name: 'federationapproved', description:'The organization has accepted responsibility for this Identity Provider') {
 			start ('Activate Identity Provider')
 		}
 	}

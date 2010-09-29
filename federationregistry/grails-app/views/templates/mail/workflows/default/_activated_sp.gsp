@@ -2,17 +2,9 @@
 <html>
 	<head></head>
 	<body>
-		<p><g:message code="fedreg.templates.mail.workflow.sp.registered.description" /></p>
+		<p><g:message code="fedreg.templates.mail.workflow.sp.activated.description" /></p>
 			
 		<table>
-			<tr>
-				<td>
-					<g:message code="label.organization" />
-				</td>
-				<td>
-					${fieldValue(bean: serviceProvider, field: "organization.displayName")}
-				</td>
-			</tr>
 			<tr>
 				<td>
 					<g:message code="label.internalid" />
@@ -39,13 +31,15 @@
 			</tr>
 			<tr>
 				<td>
-					<g:message code="label.entitydescriptor" />
+					<g:message code="label.organization" />
 				</td>
 				<td>
-					${fieldValue(bean: serviceProvider, field: "entityDescriptor.entityID")}
+					${fieldValue(bean: serviceProvider, field: "organization.displayName")}
 				</td>
 			</tr>
 		</table>
+		
+		<g:message code="fedreg.templates.mail.workflow.sp.activated.nextsteps" args="[createLink(controller:'invitation', action:'claim', params:[code:invitation.inviteCode], absolute:true)]"/>
 		
 		<p><g:message code="fedreg.templates.mail.get.support" /></p>
 		

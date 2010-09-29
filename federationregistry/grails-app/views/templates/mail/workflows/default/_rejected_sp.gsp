@@ -2,7 +2,7 @@
 <html>
 	<head></head>
 	<body>
-		<p><g:message code="fedreg.templates.mail.workflow.sp.registered.description" /></p>
+		<p><g:message code="fedreg.templates.mail.workflow.sp.rejected.description" /></p>
 			
 		<table>
 			<tr>
