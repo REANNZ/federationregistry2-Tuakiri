@@ -166,7 +166,7 @@ class SPSSODescriptorService {
 			throw new RuntimeException("Unable to save when creating ${serviceProvider}")
 		}
 		
-		def workflowParams = [ creator:contact?.id?.toString(), serviceProvider:serviceProvider?.id?.toString(), organization:organization.name, locale:LCH.getLocale().getLanguage() ]
+		def workflowParams = [ creator:contact?.id?.toString(), serviceProvider:serviceProvider?.id?.toString(), organization:organization.id?.toString(), locale:LCH.getLocale().getLanguage() ]
 		def (initiated, processInstance) = workflowProcessService.initiate( "spssodescriptor_create", "Approval for creation of ${serviceProvider}", ProcessPriority.MEDIUM, workflowParams)
 		
 		if(initiated)
