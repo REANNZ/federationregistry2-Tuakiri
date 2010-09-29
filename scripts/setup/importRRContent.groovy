@@ -55,7 +55,14 @@
 				def org = Organization.findByName(it.homeOrgName)
 				if(!org) {
 					def orgType = OrganizationType.findByName(it.homeOrgType)
-					org = new Organization(active:true, approved:true, name:it.homeOrgName, displayName:it.homeOrgName, lang:it.mainLanguage, url: new UrlURI(uri:it.errorURL ?:'http://aaf.edu.au/support'), primary: orgType)
+					org = new Organization(active:true, approved:true, name:it.homeOrgName, lang:it.mainLanguage, url: new UrlURI(uri:it.errorURL ?:'http://aaf.edu.au/support'), primary: orgType)
+					def homeOrgName = it.homeOrgName
+					sql.eachRow("select * from objectDescriptions where objectID=${it.homeOrgID} and objectType='homeOrg'",
+					{
+						org.displayName = it.descriptiveName?:homeOrgName
+						org.description = it.description?:"N/A"
+					})
+					
 					org.save()
 				}
 		})
