@@ -33,7 +33,7 @@ class Organization  {	// Also called a participant in AAF land
 	String extensions
 	
 	boolean active
-	boolean approved
+	boolean approved = false
 	
 	UrlURI url
 	

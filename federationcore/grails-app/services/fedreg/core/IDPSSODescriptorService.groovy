@@ -46,7 +46,7 @@ class IDPSSODescriptorService {
 		
 		// IDP
 		def samlNamespace = SamlURI.findByUri('urn:oasis:names:tc:SAML:2.0:protocol')
-		def identityProvider = new IDPSSODescriptor(active:params.active, displayName: params.idp?.displayName, description: params.idp?.description, organization: organization)
+		def identityProvider = new IDPSSODescriptor(approved:false, active:params.active, displayName: params.idp?.displayName, description: params.idp?.description, organization: organization)
 		identityProvider.addToProtocolSupportEnumerations(samlNamespace)
 		params.idp.attributes.each { a -> 
 			if(a.value == "on") {
@@ -80,7 +80,7 @@ class IDPSSODescriptorService {
 
 		def artifactBinding = SamlURI.findByUri(SamlConstants.soap)
 		def artifactLocation = new UrlURI(uri: params.idp?.artifact?.uri)
-		def soapArtifact = new ArtifactResolutionService(binding: artifactBinding, location:artifactLocation, active:params.active, approved: false, isDefault:true)
+		def soapArtifact = new ArtifactResolutionService(binding: artifactBinding, location:artifactLocation, active:params.active, isDefault:true)
 		identityProvider.addToArtifactResolutionServices(soapArtifact)
 		soapArtifact.validate()
 
@@ -106,7 +106,7 @@ class IDPSSODescriptorService {
 		// Attribute Authority
 		def attributeAuthority
 		if(params.aa?.create) {
-			attributeAuthority = new AttributeAuthorityDescriptor(active:params.active, displayName: params.aa.displayName, description: params.aa.description, collaborator: identityProvider, organization:organization)
+			attributeAuthority = new AttributeAuthorityDescriptor(approved:false, active:params.active, displayName: params.aa.displayName, description: params.aa.description, collaborator: identityProvider, organization:organization)
 			attributeAuthority.addToProtocolSupportEnumerations(samlNamespace)
 			identityProvider.collaborator = attributeAuthority
 			

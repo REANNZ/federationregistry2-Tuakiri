@@ -27,7 +27,7 @@ class EntityDescriptorService {
 		def ct = params.contact?.type ?: 'administrative'
 		
 		// Entity Descriptor
-		def entityDescriptor = new EntityDescriptor(active: params.active, entityID: params.entity?.identifier, organization: organization)
+		def entityDescriptor = new EntityDescriptor(approved:false, active: params.active, entityID: params.entity?.identifier, organization: organization)
 		def entContactPerson = new ContactPerson(contact:contact, type:ContactType.findByName(ct))
 		entityDescriptor.addToContacts(entContactPerson)
 		

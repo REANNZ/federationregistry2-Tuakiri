@@ -30,16 +30,19 @@ class SPSSODescriptorService {
 		def ct = params.contact?.type ?: 'administrative'
 		
 		// Entity Descriptor
-		def entityDescriptor = EntityDescriptor.get(params.entity.id)
+		def entityDescriptor
+		if(params.entity?.id) {		
+			entityDescriptor = EntityDescriptor.get(params.entity?.id)
+		}
+		
 		if(!entityDescriptor) {
-			entityDescriptor = new EntityDescriptor(active: params.active, entityID: params.entity?.identifier, organization: organization)
-			def entContactPerson = new ContactPerson(contact:contact, type:ContactType.findByName(ct))
-			entityDescriptor.addToContacts(entContactPerson)
+			def created
+			(created, entityDescriptor) = entityDescriptorService.create(params)	// If it doesn't create we don't really care it is caught below
 		}
 		
 		// SP
 		def samlNamespace = SamlURI.findByUri('urn:oasis:names:tc:SAML:2.0:protocol')
-		def serviceProvider = new SPSSODescriptor(active:params.active, displayName: params.sp?.displayName, description: params.sp?.description, organization: organization, authnRequestsSigned:true, wantAssertionsSigned: true)
+		def serviceProvider = new SPSSODescriptor(approved:false, active:params.active, displayName: params.sp?.displayName, description: params.sp?.description, organization: organization, authnRequestsSigned:true, wantAssertionsSigned: true)
 		serviceProvider.addToProtocolSupportEnumerations(samlNamespace)
 		
 		def acs = new AttributeConsumingService(lang:params.lang ?:'en')
