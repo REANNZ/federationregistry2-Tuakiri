@@ -216,7 +216,7 @@
 			def ed = EntityDescriptor.findWhere(entityID: it.entityID) 		// There are actually duplicate entityID's ....
 			if(ed == null){			
 				def org = Organization.findByName(it.homeOrgName)
-				def entity = new EntityDescriptor(entityID:it.entityID, organization:org, active:true, approved:it.approved)
+				def entity = new EntityDescriptor(entityID:it.entityID, organization:org, active:true, approved:true)
 				entity.save()
 				if(entity.hasErrors()) {
 					entity.errors.each {println it}
@@ -248,7 +248,7 @@
 		sql.eachRow("select * from resources",
 		{
 			def org = Organization.findByName(it.homeOrg)
-			def entity = new EntityDescriptor(entityID:it.providerID, organization:org, active:it.visible).save()
+			def entity = new EntityDescriptor(entityID:it.providerID, organization:org, active:true, approved:true).save()
 			
 			// Create ContactPerson instances and link entities to contacts
 			sql.eachRow("select email, contactType from contacts INNER JOIN resources ON contacts.objectID=resources.resourceID WHERE resources.providerID=${entity.entityID}",
