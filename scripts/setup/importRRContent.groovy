@@ -152,32 +152,39 @@
 					newUser.profile.fullName = "${it.givenName} ${it.surname}"
 					newUser.profile.email = (it.email == "") ? null : it.email
 		
-					user = userService.createUser(newUser)
-					if (user.hasErrors()) {
-						println "Error creating user account from Shibboleth credentials for ${it.uniqueID}"
-					}
+					if(newUser.validate()){
+						user = userService.createUser(newUser)
+						if (user.hasErrors()) {
+							println "Error creating user account from Shibboleth credentials for ${it.uniqueID}"
+						}
 		
-					def contact = MailURI.findByUri(newUser.profile.email)?.contact
-					if(!contact) {
-						contact = new Contact(givenName:it.givenName, surname:it.surname, email:new MailURI(uri:it.email), userLink:true, userID: user.id, organization:organization )
-						if(!contact.save()) {
-							println "Unable to create Contact to link with incoming user" 
+						def contact = MailURI.findByUri(newUser.profile.email)?.contact
+						if(!contact) {
+							contact = new Contact(givenName:it.givenName, surname:it.surname, email:new MailURI(uri:it.email), userLink:true, userID: user.id, organization:organization )
+							if(!contact.save()) {
+								println "Unable to create Contact to link with incoming user" 
+							}
+						}
+					
+						user.contact = contact
+						if(!user.save()) {
+							println "Unable to create Contact link with $user" 
+						}
+					
+						contact.userLink = true
+						contact.userID = user.id
+						if(!user.save()) {
+							println "Unable to create User link with $contact" 
+						}
+					
+					
+						println "Imported user $user"
+					} else {
+						println "Rejected user import for ${it.uniqueID}"
+						newUser.errors.each {
+							println it
 						}
 					}
-					
-					user.contact = contact
-					if(!user.save()) {
-						println "Unable to create Contact link with $user" 
-					}
-					
-					contact.userLink = true
-					contact.userID = user.id
-					if(!user.save()) {
-						println "Unable to create User link with $contact" 
-					}
-					
-					
-					println "Imported user $user"
 				}
 				else
 					println "ERROR IMPORTING USER NO ORGANIZATION ${it.homeOrgName}"
