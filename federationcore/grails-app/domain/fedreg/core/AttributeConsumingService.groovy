@@ -26,6 +26,7 @@ class AttributeConsumingService {
 	static auditable = true
 
 	boolean isDefault = false
+	boolean approved = true
 	String lang
 	
 	Date dateCreated

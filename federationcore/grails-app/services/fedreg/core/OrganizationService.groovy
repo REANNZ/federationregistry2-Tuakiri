@@ -10,7 +10,7 @@ class OrganizationService {
 	def workflowProcessService
 	
 	def create(def params) {
-		def organization = new Organization(active:params.active, name:params.organization?.name, displayName:params.organization?.displayName, lang: params.organization?.lang, url: new UrlURI(uri:params.organization?.url), primary:OrganizationType.get(params.organization?.primary))
+		def organization = new Organization(approved:false, active:params.active, name:params.organization?.name, displayName:params.organization?.displayName, lang: params.organization?.lang, url: new UrlURI(uri:params.organization?.url), primary:OrganizationType.get(params.organization?.primary))
 		
 		def contact = Contact.get(params.contact?.id)
 		if(!contact) {

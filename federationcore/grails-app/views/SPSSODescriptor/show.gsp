@@ -98,11 +98,11 @@
 				<tr>
 					<th><g:message code="label.approved"/></th>
 					<td>
-						<g:if test="${serviceProvider.active}">
+						<g:if test="${serviceProvider.approved}">
 							<g:message code="label.yes" />
 						</g:if>
 						<g:else>
-							<div class="error"><g:message code="label.no" /></div>
+							<g:message code="label.no" /> <div class="error"><g:message code="label.warningmetadata" /></div>
 						</g:else>
 					</td>
 				</tr>

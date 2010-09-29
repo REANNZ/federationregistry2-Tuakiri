@@ -68,19 +68,19 @@ class IDPSSODescriptorService {
 		// Initial endpoints
 		def postBinding = SamlURI.findByUri(SamlConstants.httpPost)
 		def postLocation = new UrlURI(uri: params.idp?.post?.uri)
-		def httpPost = new SingleSignOnService(binding: postBinding, location:postLocation, active:params.active)
+		def httpPost = new SingleSignOnService(approved: true, binding: postBinding, location:postLocation, active:params.active)
 		identityProvider.addToSingleSignOnServices(httpPost)
 		httpPost.validate()
 
 		def redirectBinding = SamlURI.findByUri(SamlConstants.httpRedirect)
 		def redirectLocation = new UrlURI(uri: params.idp?.redirect?.uri)
-		def httpRedirect = new SingleSignOnService(binding: redirectBinding, location:redirectLocation, active:params.active)
+		def httpRedirect = new SingleSignOnService(approved: true, binding: redirectBinding, location:redirectLocation, active:params.active)
 		identityProvider.addToSingleSignOnServices(httpRedirect)
 		httpRedirect.validate()
 
 		def artifactBinding = SamlURI.findByUri(SamlConstants.soap)
 		def artifactLocation = new UrlURI(uri: params.idp?.artifact?.uri)
-		def soapArtifact = new ArtifactResolutionService(binding: artifactBinding, location:artifactLocation, active:params.active, isDefault:true)
+		def soapArtifact = new ArtifactResolutionService(approved: true, binding: artifactBinding, location:artifactLocation, active:params.active, isDefault:true)
 		identityProvider.addToArtifactResolutionServices(soapArtifact)
 		soapArtifact.validate()
 
@@ -112,7 +112,7 @@ class IDPSSODescriptorService {
 			
 			def attributeServiceBinding = SamlURI.findByUri('urn:oasis:names:tc:SAML:2.0:bindings:SOAP')
 			def attributeServiceLocation = new UrlURI(uri: params.aa?.attributeservice?.uri)
-			def attributeService = new AttributeService(binding: attributeServiceBinding, location:attributeServiceLocation, active:params.active, approved:false)
+			def attributeService = new AttributeService(approved: true, binding: attributeServiceBinding, location:attributeServiceLocation, active:params.active)
 			attributeAuthority.addToAttributeServices(attributeService)
 			
 			params.aa.attributes.each { attrID -> 
