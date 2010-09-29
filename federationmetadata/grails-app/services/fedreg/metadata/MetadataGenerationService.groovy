@@ -219,6 +219,16 @@ class MetadataGenerationService {
 			
 				spSSODescriptor.assertionConsumerServices?.sort{it.location.uri}.eachWithIndex{ ars, i -> indexedEndpoint(builder, all, "AssertionConsumerService", ars, i+1) }
 				spSSODescriptor.attributeConsumingServices?.sort{it.id}.eachWithIndex{ acs, i -> attributeConsumingService(builder, all, acs, i) }
+				
+				if(spSSODescriptor.extensions || spSSODescriptor.discoveryResponseServices.size() != 0) {
+					builder.Extensions() {
+						spSSODescriptor.discoveryResponseServices.eachWithIndex { endpoint, i ->
+							builder."dsr:DiscoveryResponse"("xmlns:dsr":"urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol", Binding: endpoint.binding.uri, Location:endpoint.location.uri, index:i+1, isDefault:endpoint.isDefault)
+						}
+						if(spSSODescriptor.extensions)
+							spSSODescriptor.extensions
+					}
+				}
 			}
 		}
 	}
