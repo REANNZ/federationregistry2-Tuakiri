@@ -35,9 +35,6 @@ class Contact {
 	TelNumURI homePhone 
 	TelNumURI mobilePhone
 	
-	boolean userLink = false;
-	long userID;
-	
 	Date dateCreated
 	Date lastUpdated
 
