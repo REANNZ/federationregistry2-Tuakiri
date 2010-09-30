@@ -1,4 +1,4 @@
-
+<%@ page contentType="text/html"%>
 <html>
 	<head></head>
 	<body>
