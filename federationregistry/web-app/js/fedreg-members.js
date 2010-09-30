@@ -79,7 +79,7 @@ fedreg.organization_fulladministrator_list = function() {
 fedreg.organization_fulladministrator_search = function() {
 	$("#working").trigger("fedreg.working");
 	$("#availablefulladministrators").fadeOut().empty();
-	var dataString = "givenName=" + $('#givenName').val() + '&surname=' + $('#surname').val() + '&email=' + $('#email').val()
+	var dataString = "q=" + $('#q').val()
 	$.ajax({
 		type: "POST",
 		url: organizationFullAdministratorSearchEndpoint,
@@ -150,7 +150,7 @@ fedreg.descriptor_fulladministrator_list = function() {
 fedreg.descriptor_fulladministrator_search = function() {
 	$("#working").trigger("fedreg.working");
 	$("#availablefulladministrators").fadeOut().empty();
-	var dataString = "givenName=" + $('#dfa_givenname').val() + '&surname=' + $('#dfa_surname').val() + '&email=' + $('#dfa_email').val()
+	var dataString = "q=" + $('#q').val()
 	$.ajax({
 		type: "POST",
 		url: descriptorFullAdministratorSearchEndpoint,

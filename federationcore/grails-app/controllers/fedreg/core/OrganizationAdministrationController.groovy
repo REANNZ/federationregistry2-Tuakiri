@@ -3,6 +3,7 @@ package fedreg.core
 import org.apache.shiro.SecurityUtils
 
 import grails.plugins.nimble.core.UserBase
+import grails.plugins.nimble.core.ProfileBase
 import grails.plugins.nimble.core.Role
 
 class OrganizationAdministrationController {
@@ -31,29 +32,13 @@ class OrganizationAdministrationController {
 			return
 		}
 		
-		def users = []
-		if(!params.givenName && !params.surname && !params.email)
-			users = UserBase.list()
-		else {
-			def emails
-			if(params.email)
-				emails = MailURI.findAllByUriLike("%${params.email}%")
-			def c = Contact.createCriteria()
-			def contacts = c.list {
-				or {
-					ilike("givenName", params.givenName)
-					ilike("surname", params.surname)
-					if(emails)
-						'in'("email", emails)
-				}
-			}
-			contacts.each {
-				if(it.userLink) {
-					users.add(UserBase.get(it.userID))
-				}
-			}
-			
-		}
+		def q = "%" + params.q + "%"
+	    log.debug("Performing search for users matching $q")
+
+	    def users = UserBase.findAllByUsernameIlike(q)
+	    ProfileBase.findAllByFullNameIlikeOrEmailIlike(q, q)?.each {
+			users.add(it.owner)
+	    }
 
 		def adminRole = Role.findByName("organization-${organization.id}-administrators")
 		users.removeAll(adminRole.users)
