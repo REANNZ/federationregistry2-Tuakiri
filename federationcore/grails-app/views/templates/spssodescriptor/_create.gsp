@@ -257,6 +257,7 @@
 					<label for="sp.acs.post.uri"><g:message code="label.acspostendpoint" /></label>
 				</td>
 				<td>
+					<g:hiddenField name="sp.acs.post.isdefault" value="${true}" />
 					<g:textField name="sp.acs.post.uri" size="75" class="required url"/>
 				</td>
 			</tr>
@@ -265,6 +266,7 @@
 					<label for="sp.acs.artifact.uri"><g:message code="label.acsartifactendpoint" /></label>
 				</td>
 				<td>
+					<g:hiddenField name="sp.acs.artifact.isdefault" value="${false}" />
 					<g:textField name="sp.acs.artifact.uri" size="75" class="required url"/>
 				</td>
 			</tr>
@@ -306,6 +308,7 @@
 				</td>
 				<td>
 					<g:textField name="sp.drs.uri" size="75" class="url"/>
+					<g:hiddenField name="sp.drs.isdefault" value="${true}" />
 				</td>
 			</tr>
 			<tr>

@@ -27,7 +27,7 @@ package fedreg.core
 class IndexedEndpoint extends Endpoint  {
 	static auditable = true
 
-	boolean isDefault
+	boolean isDefault = false
 
   	static mapping = {
 		tablePerHierarchy false
