@@ -34,7 +34,7 @@ class MetadataController {
 		def certificateAuthorities = CAKeyInfo.list()
 		
 		def writer = new StringWriter()
-		def builder = new MarkupBuilder(writer)
+		def builder = new MarkupBuilder(writer, doubleQuotes:true)
 		
 		def entitiesDescriptor = new EntitiesDescriptor(name:federation)
 		entitiesDescriptor.entityDescriptors = EntityDescriptor.list()
@@ -50,7 +50,7 @@ class MetadataController {
 		def certificateAuthorities = CAKeyInfo.list()
 		
 		def writer = new StringWriter()
-		def builder = new MarkupBuilder(writer)
+		def builder = new MarkupBuilder(writer, doubleQuotes:true)
 		
 		def entitiesDescriptor = new EntitiesDescriptor(name:federation)
 		entitiesDescriptor.entityDescriptors = EntityDescriptor.list()
