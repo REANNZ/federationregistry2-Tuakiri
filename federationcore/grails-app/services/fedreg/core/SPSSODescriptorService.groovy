@@ -101,28 +101,28 @@ class SPSSODescriptorService {
 		if(params.sp?.slo?.artifact?.uri){
 			def sloArtifactBinding = SamlURI.findByUri(SamlConstants.httpArtifact)
 			def sloArtifactLocation = new UrlURI(uri: params.sp?.slo?.artifact?.uri)
-			sloArtifact = new SingleLogoutService(approved: true, binding: sloArtifactBinding, location:sloArtifactLocation, active:params.active, isDefault:params.sp?.slo?.artifact?.isdefault)
+			sloArtifact = new SingleLogoutService(approved: true, binding: sloArtifactBinding, location:sloArtifactLocation, active:params.active)
 			serviceProvider.addToSingleLogoutServices(sloArtifact)
 			sloArtifact.validate()
 		}
 		if(params.sp?.slo?.redirect?.uri){
 			def sloRedirectBinding = SamlURI.findByUri(SamlConstants.httpRedirect)
 			def sloRedirectLocation = new UrlURI(uri: params.sp?.slo?.redirect?.uri)
-			sloRedirect	= new SingleLogoutService(approved: true, binding: sloRedirectBinding, location:sloRedirectLocation, active:params.active, isDefault:params.sp?.slo?.redirect?.isdefault)
+			sloRedirect	= new SingleLogoutService(approved: true, binding: sloRedirectBinding, location:sloRedirectLocation, active:params.active)
 			serviceProvider.addToSingleLogoutServices(sloRedirect)
 			sloRedirect.validate()
 		}
 		if(params.sp?.slo?.soap?.uri){
 			def sloSOAPBinding = SamlURI.findByUri(SamlConstants.soap)
 			def sloSOAPLocation = new UrlURI(uri: params.sp?.slo?.soap?.uri)
-			sloSOAP = new SingleLogoutService(approved: true, binding: sloSOAPBinding, location:sloSOAPLocation, active:params.active, isDefault:params.sp?.slo?.soap?.isdefault)
+			sloSOAP = new SingleLogoutService(approved: true, binding: sloSOAPBinding, location:sloSOAPLocation, active:params.active)
 			serviceProvider.addToSingleLogoutServices(sloSOAP)
 			sloSOAP.validate()
 		}
 		if(params.sp?.slo?.post?.uri){
 			def sloPostBinding = SamlURI.findByUri(SamlConstants.httpPost)
 			def sloPostLocation = new UrlURI(uri: params.sp?.slo?.post?.uri)
-			sloPost = new SingleLogoutService(approved: true, binding: sloPostBinding, location:sloPostLocation, active:params.active, isDefault:params.sp?.slo?.post?.isdefault)
+			sloPost = new SingleLogoutService(approved: true, binding: sloPostBinding, location:sloPostLocation, active:params.active)
 			serviceProvider.addToSingleLogoutServices(sloPost)
 			sloPost.validate()
 		}
