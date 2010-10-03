@@ -85,10 +85,10 @@ class MetadataGenerationService {
 		}
 	}
 	
-	def entitiesDescriptor(builder, all, entitiesDescriptor, validUntil, cacheDuration, certificateAuthorities) {
-		builder.EntitiesDescriptor(validUntil:sdf.format(validUntil), cacheDuration:sdf.format(cacheDuration), Name:entitiesDescriptor.name, 
+	def entitiesDescriptor(builder, all, entitiesDescriptor, validUntil, certificateAuthorities) {
+		builder.EntitiesDescriptor(validUntil:sdf.format(validUntil), Name:entitiesDescriptor.name, 
 			"xmlns":"urn:oasis:names:tc:SAML:2.0:metadata", "xmlns:xsi":"http://www.w3.org/2001/XMLSchema-instance", 'xmlns:saml':'urn:oasis:names:tc:SAML:2.0:assertion',
-			"xsi:schemaLocation":"urn:oasis:names:tc:SAML:2.0:metadata sstc-saml-schema-metadata-2.0.xsd urn:mace:shibboleth:metadata:1.0 shibboleth-metadata-1.0.xsd http://www.w3.org/2000/09/xmldsig# xmldsig-core-schema.xsd") {
+			"xsi:schemaLocation":"urn:oasis:names:tc:SAML:2.0:metadata saml-schema-metadata-2.0.xsd urn:mace:shibboleth:metadata:1.0 shibboleth-metadata-1.0.xsd http://www.w3.org/2000/09/xmldsig# xmldsig-core-schema.xsd") {
 				
 			if(certificateAuthorities && certificateAuthorities.size() != 0) {
 				builder.Extensions() {

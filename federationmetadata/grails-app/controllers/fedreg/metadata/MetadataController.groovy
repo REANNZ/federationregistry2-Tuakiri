@@ -30,7 +30,6 @@ class MetadataController {
 	def currentPublishedMetadata() {
 		def now = new Date();
 		def validUntil = now + grailsApplication.config.fedreg.metadata.current.validForDays
-		def cacheDuration = now + grailsApplication.config.fedreg.metadata.current.cacheForDays
 		def federation = grailsApplication.config.fedreg.metadata.federation
 		def certificateAuthorities = CAKeyInfo.list()
 		
@@ -40,14 +39,13 @@ class MetadataController {
 		def entitiesDescriptor = new EntitiesDescriptor(name:federation)
 		entitiesDescriptor.entityDescriptors = EntityDescriptor.list()
 		
-		metadataGenerationService.entitiesDescriptor(builder, false, entitiesDescriptor, validUntil, cacheDuration, certificateAuthorities)
+		metadataGenerationService.entitiesDescriptor(builder, false, entitiesDescriptor, validUntil, certificateAuthorities)
 		writer.toString()
 	}
 	
 	def allMetadata() {
 		def now = new Date();
 		def validUntil = now + grailsApplication.config.fedreg.metadata.all.validForDays
-		def cacheDuration = now + grailsApplication.config.fedreg.metadata.all.cacheForDays
 		def federation = grailsApplication.config.fedreg.metadata.federation
 		def certificateAuthorities = CAKeyInfo.list()
 		
@@ -57,7 +55,7 @@ class MetadataController {
 		def entitiesDescriptor = new EntitiesDescriptor(name:federation)
 		entitiesDescriptor.entityDescriptors = EntityDescriptor.list()
 		
-		metadataGenerationService.entitiesDescriptor(builder, true, entitiesDescriptor, validUntil, cacheDuration, certificateAuthorities)
+		metadataGenerationService.entitiesDescriptor(builder, true, entitiesDescriptor, validUntil, certificateAuthorities)
 		writer.toString()
 	}
 		
