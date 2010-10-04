@@ -312,7 +312,7 @@
 			{
 				def binding = SamlURI.findByUri(it.serviceBinding)
 				if(binding) {
-					def location = new UrlURI(uri:it.serviceLocation)
+					def location = new UrlURI(uri:it.serviceLocation.trim())
 					def ssoService = new SingleSignOnService(binding: binding, location: location, active:true, approved:true)
 					idp.addToSingleSignOnServices(ssoService)
 				}
@@ -324,7 +324,7 @@
 			{
 				def binding = SamlURI.findByUri(it.serviceBinding)
 				if(binding) {
-					def location = new UrlURI(uri:it.serviceLocation)
+					def location = new UrlURI(uri:it.serviceLocation.trim())
 					def artServ = new ArtifactResolutionService(binding: binding, location: location, isDefault: it.defaultLocation, active:true, approved:true, endpointIndex:index++)
 					idp.addToArtifactResolutionServices(artServ)
 				}
@@ -375,10 +375,22 @@
 		def trans = SamlURI.findByUri('urn:oasis:names:tc:SAML:2.0:nameid-format:transient')
 		
 		sql.eachRow("select * from homeOrgs",
-		{			
+		{	
+			def idp, aa		
 			def entity = EntityDescriptor.findWhere(entityID:it.entityID)
-			def idp = entity.idpDescriptors.toList().get(0)	// We know entities in RR space are closely linked to both an IDP and AA descriptor
-			def aa = new AttributeAuthorityDescriptor(active:true, approved:true, entityDescriptor:entity, organization:entity.organization, displayName:idp.displayName, description:idp.description)
+			if(entity.idpDescriptors.size() > 0) {
+				idp = entity.idpDescriptors.toList().get(0)
+				aa = new AttributeAuthorityDescriptor(active:true, approved:true, entityDescriptor:entity, organization:entity.organization, displayName:idp.displayName, description:idp.description)
+			} else {
+				aa = new AttributeAuthorityDescriptor(active:true, approved:true, entityDescriptor:entity, organization:entity.organization)
+				
+				sql.eachRow("select * from objectDescriptions where objectID=${it.homeOrgID} and objectType='homeOrg'",
+				{
+					aa.displayName = it.descriptiveName?:"N/A"
+					aa.description = it.description?:"N/A"
+				})
+				println "Imported stand alone attribute authority"
+			}
 			aa.addToProtocolSupportEnumerations(samlNamespace)
 			aa.save()
 			if(aa.hasErrors()) {
@@ -390,7 +402,7 @@
 			{
 				def binding = SamlURI.findByUri(it.serviceBinding)
 				if(binding) {
-					def location = new UrlURI(uri:it.serviceLocation)
+					def location = new UrlURI(uri:it.serviceLocation.trim())
 					def attrService = new AttributeService(binding: binding, location: location, active:true, approved:true)
 					aa.addToAttributeServices(attrService)
 				}
@@ -408,11 +420,13 @@
 			else
 				println "Added new AttributeAuthorityDescriptor to Entity ${entity.entityID}"
 				
-			aa.collaborator = idp
-			aa.save()
+			if(idp) {
+				aa.collaborator = idp
+				aa.save()
 			
-			idp.collaborator = aa
-			idp.save()
+				idp.collaborator = aa
+				idp.save()
+			}
 			
 			sql.eachRow("select attributeOID from attributes INNER JOIN homeOrgAttributes ON attributes.attributeID=homeOrgAttributes.attributeID where homeOrgAttributes.homeOrgID=${it.homeOrgID};",
 			{
@@ -452,7 +466,7 @@
 			{
 				def binding = SamlURI.findByUri(it.serviceBinding)
 				if(binding) {
-					def location = new UrlURI(uri:it.serviceLocation)
+					def location = new UrlURI(uri:it.serviceLocation.trim())
 					def sls = new SingleLogoutService(binding: binding, location: location, active:true, approved:true)
 					sp.addToSingleLogoutServices(sls)
 					
@@ -469,7 +483,7 @@
 			{
 				def binding = SamlURI.findByUri(it.serviceBinding)
 				if(binding) {
-					def location = new UrlURI(uri:it.serviceLocation)
+					def location = new UrlURI(uri:it.serviceLocation.trim())
 					def acs = new AssertionConsumerService(binding: binding, location: location, isDefault: it.defaultLocation, active:true, approved:true, endpointIndex:index++)
 					sp.addToAssertionConsumerServices(acs)
 					
@@ -485,7 +499,7 @@
 			{
 				def binding = SamlURI.findByUri(it.serviceBinding)
 				if(binding) {
-					def location = new UrlURI(uri:it.serviceLocation)
+					def location = new UrlURI(uri:it.serviceLocation.trim())
 					def mnids = new ManageNameIDService(binding: binding, location: location, active:true, approved:true)
 					sp.addToManageNameIDServices(mnids)
 					
@@ -501,7 +515,7 @@
 			{
 				def binding = SamlURI.findByUri(SamlConstants.drs)
 				if(binding) {
-					def location = new UrlURI(uri:it.serviceLocation)
+					def location = new UrlURI(uri:it.serviceLocation.trim())
 					def drs = new DiscoveryResponseService(binding: binding, location: location, active:true, approved:true)
 					sp.addToDiscoveryResponseServices(drs)
 				}
