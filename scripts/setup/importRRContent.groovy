@@ -225,6 +225,7 @@
 				entity.save()
 				if(entity.hasErrors()) {
 					entity.errors.each {println it}
+					println "Not importing $entity it is error"
 				}
 				println "Imported entity ${entity.entityID}"
 			
@@ -298,7 +299,7 @@
 		sql.eachRow("select * from homeOrgs",
 		{			
 			def entity = EntityDescriptor.findWhere(entityID:it.entityID)
-			def idp = new IDPSSODescriptor(active:true, approved:true, entityDescriptor:entity, organization:entity.organization)
+			def idp = new IDPSSODescriptor(active:true, approved:true, entityDescriptor:entity, organization:entity.organization, wantAuthnRequestsSigned:true)
 			idp.addToNameIDFormats(trans)	// RR hard codes everything to only advertise NameIDForm of transient so we need to do the same, in FR this is modifable and DB driven
 			idp.addToProtocolSupportEnumerations(samlNamespace)
 			
@@ -453,7 +454,7 @@
 			
 			def entity = EntityDescriptor.findWhere(entityID:it.providerID)
 			def sd = new ServiceDescription()
-			def sp = new SPSSODescriptor(active:true, approved:true, entityDescriptor:entity, organization:entity.organization, visible:it.visible, serviceDescription:sd)
+			def sp = new SPSSODescriptor(active:true, approved:true, entityDescriptor:entity, organization:entity.organization, visible:it.visible, serviceDescription:sd, authnRequestsSigned:true, wantAssertionsSigned: true)
 			sp.addToProtocolSupportEnumerations(samlNamespace)
 			
 			sql.eachRow("select * from objectDescriptions where objectID=${it.resourceID} and objectType='resource'",
@@ -559,6 +560,7 @@
 			entity.addToSpDescriptors(sp)
 			entity.save()
 			if(entity.hasErrors()) {
+				println "Failed modifying ${entity.entityID}"
 				entity.errors.each {println it}
 			}
 			else {
@@ -584,35 +586,32 @@
 	}
 	
 	def importCrypto(def id, def descriptor, def enc) {
-		sql.eachRow("select * from certData where objectID=${id}",
+		sql.eachRow("select DISTINCT(certData) from certData where objectID=${id}",
 		{
 			try {
-			def data = "-----BEGIN CERTIFICATE-----\n${it.certData}\n-----END CERTIFICATE-----"
-			//println "Importing certificate data\n${data}"
-			def cert = cryptoService.createCertificate(data)	
-			def keyInfo = new KeyInfo(certificate:cert)
-			def keyDescriptor = new KeyDescriptor(keyInfo:keyInfo, keyType:KeyTypes.signing, roleDescriptor:descriptor)
-			keyDescriptor.validate()
-			if(keyDescriptor.hasErrors()){
-				println "Error import crypto for $descriptor"
-				keyDescriptor.errors.each { println it}
-			}
-			
-			
-			descriptor.addToKeyDescriptors(keyDescriptor)
-			
-			if(enc){
-				def certEnc = cryptoService.createCertificate(data)	
-				def keyInfoEnc = new KeyInfo(certificate:certEnc)
-				def keyDescriptorEnc = new KeyDescriptor(keyInfo:keyInfoEnc, keyType:KeyTypes.encryption, roleDescriptor:descriptor)
-				keyDescriptorEnc.validate()
-				if(keyDescriptorEnc.hasErrors()){
+				def data = "-----BEGIN CERTIFICATE-----\n${it.certData}\n-----END CERTIFICATE-----"
+				//println "Importing certificate data\n${data}"
+				def cert = cryptoService.createCertificate(data)	
+				def keyInfo = new KeyInfo(certificate:cert)
+				def keyDescriptor = new KeyDescriptor(keyInfo:keyInfo, keyType:KeyTypes.signing, roleDescriptor:descriptor)
+				keyDescriptor.validate()
+				if(keyDescriptor.hasErrors()){
 					println "Error import crypto for $descriptor"
-					keyDescriptorEnc.errors.each { println it}
+					keyDescriptor.errors.each { println it}
 				}
-				
-				descriptor.addToKeyDescriptors(keyDescriptorEnc)
-			}
+				descriptor.addToKeyDescriptors(keyDescriptor)
+			
+				if(enc){
+					def certEnc = cryptoService.createCertificate(data)	
+					def keyInfoEnc = new KeyInfo(certificate:certEnc)
+					def keyDescriptorEnc = new KeyDescriptor(keyInfo:keyInfoEnc, keyType:KeyTypes.encryption, roleDescriptor:descriptor)
+					keyDescriptorEnc.validate()
+					if(keyDescriptorEnc.hasErrors()){
+						println "Error import crypto for $descriptor"
+						keyDescriptorEnc.errors.each { println it}
+					}
+					descriptor.addToKeyDescriptors(keyDescriptorEnc)
+				}
 			}
 			catch(Exception e) {
 				println "Error importing crypto for descriptor ${descriptor.displayName}"
