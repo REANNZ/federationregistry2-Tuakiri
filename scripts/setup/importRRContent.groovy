@@ -108,7 +108,7 @@
 				if(it.homeOrgName)
 					organization = Organization.findByName(it.homeOrgName)
 					
-				def contact = new Contact(organization:organization, userLink:false, givenName:givenName, surname:surname, email:new MailURI(uri:it.email))
+				def contact = new Contact(organization:organization, givenName:givenName, surname:surname, email:new MailURI(uri:it.email))
 								
 				contact.save(flush:true)
 				if(contact.hasErrors()) {
@@ -160,7 +160,7 @@
 		
 						def contact = MailURI.findByUri(newUser.profile.email)?.contact
 						if(!contact) {
-							contact = new Contact(givenName:it.givenName, surname:it.surname, email:new MailURI(uri:it.email), userLink:true, userID: user.id, organization:organization )
+							contact = new Contact(givenName:it.givenName, surname:it.surname, email:new MailURI(uri:it.email), organization:organization )
 							if(!contact.save()) {
 								println "Unable to create Contact to link with incoming user" 
 							}
@@ -170,9 +170,7 @@
 						if(!user.save()) {
 							println "Unable to create Contact link with $user" 
 						}
-					
-						contact.userLink = true
-						contact.userID = user.id
+
 						if(!user.save()) {
 							println "Unable to create User link with $contact" 
 						}
