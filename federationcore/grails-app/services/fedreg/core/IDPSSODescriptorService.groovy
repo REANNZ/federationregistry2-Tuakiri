@@ -46,7 +46,7 @@ class IDPSSODescriptorService {
 		
 		// IDP
 		def samlNamespace = SamlURI.findByUri('urn:oasis:names:tc:SAML:2.0:protocol')
-		def identityProvider = new IDPSSODescriptor(approved:false, active:params.active, displayName: params.idp?.displayName, description: params.idp?.description, organization: organization)
+		def identityProvider = new IDPSSODescriptor(approved:false, active:params.active, displayName: params.idp?.displayName, description: params.idp?.description, organization: organization, wantAuthnRequestsSigned:true)
 		identityProvider.addToProtocolSupportEnumerations(samlNamespace)
 		params.idp.attributes.each { a -> 
 			if(a.value == "on") {
