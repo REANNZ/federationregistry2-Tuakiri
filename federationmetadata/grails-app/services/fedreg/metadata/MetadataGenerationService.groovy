@@ -24,7 +24,14 @@ class MetadataGenerationService {
 	}
 	
 	def contactPerson(builder, contactPerson) {
-		builder.ContactPerson(contactType:contactPerson.type.name) {
+		// If a contact is anything other then scehma valid they get set to other
+		def contactType
+		if(["technical", "support", "administrative", "billing", "other"].contains(contactPerson.type.name))
+			contactType = contactPerson.type.name
+		else
+			contactType = "other"
+			
+		builder.ContactPerson(contactType:contactType) {
 			if(contactPerson.contact.organization)
 				Company(contactPerson.contact.organization.displayName)
 			GivenName(contactPerson.contact.givenName)
@@ -86,9 +93,10 @@ class MetadataGenerationService {
 	}
 	
 	def entitiesDescriptor(builder, all, entitiesDescriptor, validUntil, certificateAuthorities) {
-		builder.EntitiesDescriptor(validUntil:sdf.format(validUntil), Name:entitiesDescriptor.name, 
-			"xmlns":"urn:oasis:names:tc:SAML:2.0:metadata", "xmlns:xsi":"http://www.w3.org/2001/XMLSchema-instance", 'xmlns:saml':'urn:oasis:names:tc:SAML:2.0:assertion',
-			"xsi:schemaLocation":"urn:oasis:names:tc:SAML:2.0:metadata saml-schema-metadata-2.0.xsd urn:mace:shibboleth:metadata:1.0 shibboleth-metadata-1.0.xsd http://www.w3.org/2000/09/xmldsig# xmldsig-core-schema.xsd") {
+		builder.EntitiesDescriptor("xmlns":"urn:oasis:names:tc:SAML:2.0:metadata", "xmlns:xsi":"http://www.w3.org/2001/XMLSchema-instance", 'xmlns:saml':'urn:oasis:names:tc:SAML:2.0:assertion', 'xmlns:shibmd':'urn:mace:shibboleth:metadata:1.0',
+			'xmlns:ds':'http://www.w3.org/2000/09/xmldsig#',
+			"xsi:schemaLocation":"urn:oasis:names:tc:SAML:2.0:metadata saml-schema-metadata-2.0.xsd urn:mace:shibboleth:metadata:1.0 shibboleth-metadata-1.0.xsd http://www.w3.org/2000/09/xmldsig# xmldsig-core-schema.xsd",
+			validUntil:sdf.format(validUntil), Name:entitiesDescriptor.name) {
 				
 			if(certificateAuthorities && certificateAuthorities.size() != 0) {
 				builder.Extensions() {
@@ -154,16 +162,15 @@ class MetadataGenerationService {
 	}
 	
 	def attribute(builder, attr) {
-		builder.'saml:Attribute'(Name: attr.base.name, NameFormat:attr.base.nameFormat?.uri, FriendlyName:attr.base.friendlyName) {
-			attr.values?.sort{it?.value}.each {
-				'saml:AttributeValue'(it.value)
+		if(attr.base.nameFormat?.uri) {
+			builder.'saml:Attribute'(Name: attr.base.name, NameFormat:attr.base.nameFormat?.uri, FriendlyName:attr.base.friendlyName) {
+				attr.values?.sort{it?.value}.each {
+					'saml:AttributeValue'(it.value)
+				}
 			}
 		}
-	}
-	
-	def requestedAttribute(builder, all, attr) {
-		if(all || attr.approved) {
-			builder.RequestedAttribute(Name: attr.base.name, NameFormat:attr.base.nameFormat?.uri, FriendlyName:attr.base.friendlyName, isRequired:attr.isRequired) {
+		else {
+			builder.'saml:Attribute'(Name: attr.base.name, FriendlyName:attr.base.friendlyName) {
 				attr.values?.sort{it?.value}.each {
 					'saml:AttributeValue'(it.value)
 				}
@@ -171,7 +178,34 @@ class MetadataGenerationService {
 		}
 	}
 	
+	def requestedAttribute(builder, all, attr) {
+		if(all || attr.approved) {
+			if(attr.base.nameFormat?.uri) {
+				builder.RequestedAttribute(Name: attr.base.name, NameFormat:attr.base.nameFormat?.uri, FriendlyName:attr.base.friendlyName, isRequired:attr.isRequired) {
+					attr.values?.sort{it?.value}.each {
+						'saml:AttributeValue'(it.value)
+					}
+				}
+			} else {
+				builder.RequestedAttribute(Name: attr.base.name, FriendlyName:attr.base.friendlyName, isRequired:attr.isRequired) {
+					attr.values?.sort{it?.value}.each {
+						'saml:AttributeValue'(it.value)
+					}
+				}
+			}
+		}
+	}
+	
 	def attributeConsumingService(builder, all, acs, index) {
+		if(acs.serviceNames?.size() == 0) {
+			log.warn "Attribute Consuming Service with no serviceName can't be populated to metadata"
+			return
+		}
+		if(acs.requestedAttributes?.size() == 0) {
+			log.warn "Attribute Consuming Service with no requested attributes can't be populated to metadata"
+			return
+		}
+		
 		builder.AttributeConsumingService(index:index, isDefault:acs.isDefault) {
 			acs.serviceNames?.sort{it}.each {
 				localizedName(builder, "ServiceName", acs.lang, it)
@@ -184,6 +218,7 @@ class MetadataGenerationService {
 	}
 	
 	def roleDescriptor(builder, roleDescriptor) {
+		"${roleDescriptor.class.name.split('\\.').last()}Extensions"(builder, roleDescriptor)
 		roleDescriptor.keyDescriptors?.sort{it.keyType}.each{keyDescriptor(builder, it)}		
 		organization(builder, roleDescriptor.organization)
 		roleDescriptor.contacts?.sort{it.contact.email.uri}.each{cp -> contactPerson(builder, cp)}
@@ -218,16 +253,11 @@ class MetadataGenerationService {
 				ssoDescriptor(builder, all, spSSODescriptor)
 			
 				spSSODescriptor.assertionConsumerServices?.sort{it.location.uri}.eachWithIndex{ ars, i -> indexedEndpoint(builder, all, "AssertionConsumerService", ars, i+1) }
-				spSSODescriptor.attributeConsumingServices?.sort{it.id}.eachWithIndex{ acs, i -> attributeConsumingService(builder, all, acs, i) }
-				
-				if(spSSODescriptor.extensions || spSSODescriptor.discoveryResponseServices.size() != 0) {
-					builder.Extensions() {
-						spSSODescriptor.discoveryResponseServices.eachWithIndex { endpoint, i ->
-							builder."dsr:DiscoveryResponse"("xmlns:dsr":"urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol", Binding: endpoint.binding.uri, Location:endpoint.location.uri, index:i+1, isDefault:endpoint.isDefault)
-						}
-						if(spSSODescriptor.extensions)
-							spSSODescriptor.extensions
-					}
+				spSSODescriptor.attributeConsumingServices?.sort{it.id}.eachWithIndex{ acs, i -> 
+					if(acs.serviceNames?.size() > 0 && acs.requestedAttributes?.size() > 0 )
+						attributeConsumingService(builder, all, acs, i+1)
+					else
+						log.warn "$acs for $spSSODescriptor will not be rendered because it either has no names defined or no attributes being requested"
 				}
 			}
 		}
@@ -259,6 +289,24 @@ class MetadataGenerationService {
 				}
 			}
 		}
+	}
+	
+	def IDPSSODescriptorExtensions(builder, roleDescriptor) {
+		log.debug "IDPSSODescriptorExtensions currently not rendered to MD"
+	}
+	
+	def SPSSODescriptorExtensions(builder, spSSODescriptor) {
+		if(spSSODescriptor.discoveryResponseServices.size() != 0) {
+			builder.Extensions() {
+				spSSODescriptor.discoveryResponseServices.eachWithIndex { endpoint, i ->
+					builder."dsr:DiscoveryResponse"("xmlns:dsr":"urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol", Binding: endpoint.binding.uri, Location:endpoint.location.uri, index:i+1, isDefault:endpoint.isDefault)
+				}
+			}
+		}
+	}
+	
+	def AttributeAuthorityDescriptorExtensions(builder, roleDescriptor) {
+		log.debug "AttributeAuthorityDescriptorExtensions currently not rendered to MD"
 	}
 	
 }
