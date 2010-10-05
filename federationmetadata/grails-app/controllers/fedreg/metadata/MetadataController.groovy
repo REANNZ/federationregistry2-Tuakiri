@@ -7,8 +7,13 @@ class MetadataController {
 	def metadataGenerationService
 	def grailsApplication
 	
+	def currentminimal = {
+		def xml = currentPublishedMetadata(true)
+		render(text:xml, contentType:"text/xml", encoding:"UTF-8")
+	}
+	
 	def current = {
-		def xml = currentPublishedMetadata()
+		def xml = currentPublishedMetadata(false)
 		render(text:xml, contentType:"text/xml", encoding:"UTF-8")
 	}
 	
@@ -18,7 +23,7 @@ class MetadataController {
 	}
 	
 	def view = {
-		def md = currentPublishedMetadata()
+		def md = currentPublishedMetadata(false)
 		[md:md]
 	}
 	
@@ -27,7 +32,7 @@ class MetadataController {
 		[md:md]
 	}
 	
-	def currentPublishedMetadata() {
+	def currentPublishedMetadata(def minimal) {
 		def now = new Date();
 		def validUntil = now + grailsApplication.config.fedreg.metadata.current.validForDays
 		def federation = grailsApplication.config.fedreg.metadata.federation
@@ -40,7 +45,7 @@ class MetadataController {
 		def entitiesDescriptor = new EntitiesDescriptor(name:federation)
 		entitiesDescriptor.entityDescriptors = EntityDescriptor.list()
 		
-		metadataGenerationService.entitiesDescriptor(builder, false, entitiesDescriptor, validUntil, certificateAuthorities)
+		metadataGenerationService.entitiesDescriptor(builder, false, minimal, entitiesDescriptor, validUntil, certificateAuthorities)
 		writer.toString()
 	}
 	
