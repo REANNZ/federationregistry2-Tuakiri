@@ -589,7 +589,7 @@
 		sql.eachRow("select DISTINCT(certData) from certData where objectID=${id}",
 		{
 			try {
-				def data = "-----BEGIN CERTIFICATE-----\n${it.certData}\n-----END CERTIFICATE-----"
+				def data = "-----BEGIN CERTIFICATE-----\n${it.certData.normalize()}\n-----END CERTIFICATE-----"
 				//println "Importing certificate data\n${data}"
 				def cert = cryptoService.createCertificate(data)	
 				def keyInfo = new KeyInfo(certificate:cert)

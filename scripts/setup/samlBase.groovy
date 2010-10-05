@@ -32,6 +32,11 @@
 	def trans = new SamlURI(type:SamlURIType.NameIdentifierFormat, uri:'urn:oasis:names:tc:SAML:2.0:nameid-format:transient', description:'Indicates that the content of the element is an identifier with transient semantics and SHOULD be treated as an opaque and temporary value by the relying party.').save()
 	def shibNameID = new SamlURI(type:SamlURIType.NameIdentifierFormat, uri:'urn:mace:shibboleth:1.0:nameIdentifier', description:'').save()
 	
+	// AttributeNameFormats
+	def attrUnspec = new SamlURI(type:SamlURIType.AttributeNameFormat, uri:'urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified', description:'').save()
+	def attrUri = new SamlURI(type:SamlURIType.AttributeNameFormat, uri:'urn:oasis:names:tc:SAML:2.0:attrname-format:uri', description:'').save()
+	def attrBasic = new SamlURI(type:SamlURIType.AttributeNameFormat, uri:'urn:oasis:names:tc:SAML:2.0:attrname-format:basic', description:'').save()
+	
 	// Contact Types
 	def tech = new ContactType(name:'technical', displayName:'Technical', description: 'Technical contacts').save()
 	def mark = new ContactType(name:'marketing', displayName:'Marketing', description: 'Marketting contacts').save()
