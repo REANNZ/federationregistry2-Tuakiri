@@ -24,7 +24,7 @@ package fedreg.core
 class IDPSSODescriptor extends SSODescriptor  {
 	static auditable = true
 	
-	String logoURL
+	String scope
 	
 	AttributeAuthorityDescriptor collaborator
 		
@@ -44,7 +44,7 @@ class IDPSSODescriptor extends SSODescriptor  {
 	]
 
  	static constraints = {
-		logoURL(nullable:true)
+		scope(nullable: false)
 		collaborator(nullable: true)
 		singleSignOnServices(minSize: 1)
 		nameIDMappingServices(nullable: true)

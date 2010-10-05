@@ -57,6 +57,10 @@
 					<td>${fieldValue(bean: identityProvider, field: "description")}</td>
 				</tr>
 				<tr>
+					<th><g:message code="label.scope"/></th>
+					<td>${fieldValue(bean: identityProvider, field: "scope")}</td>
+				</tr>
+				<tr>
 					<th><g:message code="label.organization"/></th>
 					<td><g:link controller="organization" action="show" id="${identityProvider.organization.id}">${fieldValue(bean: identityProvider, field: "organization.displayName")}</g:link></td>
 				</tr>

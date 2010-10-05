@@ -208,6 +208,23 @@
 		</table>
 	</div>
 	
+	<div class="step" id="scope">
+		<h3><g:message code="fedreg.templates.identityprovider.create.scope.heading" /></h3>
+		<p>
+			<g:message code="fedreg.templates.identityprovider.create.scope.details" />
+		</p>
+		<table id="samlbasicmode">
+			<tr>
+				<td>
+					<label for="scope"><g:message code="label.scope" /></label>
+				</td>
+				<td>
+					<g:textField name="idp.scope" size="50" class="required"/> <em> e.g example.org
+				</td>
+			</tr>
+		</table>
+	</div>
+	
 	<div class="step" id="crypto">
 		<h3><g:message code="fedreg.templates.identityprovider.create.crypto.heading" /></h3>
 		<p>

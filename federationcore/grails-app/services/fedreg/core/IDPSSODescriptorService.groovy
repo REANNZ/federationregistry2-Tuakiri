@@ -46,7 +46,7 @@ class IDPSSODescriptorService {
 		
 		// IDP
 		def samlNamespace = SamlURI.findByUri('urn:oasis:names:tc:SAML:2.0:protocol')
-		def identityProvider = new IDPSSODescriptor(approved:false, active:params.active, displayName: params.idp?.displayName, description: params.idp?.description, organization: organization, wantAuthnRequestsSigned:true)
+		def identityProvider = new IDPSSODescriptor(approved:false, active:params.active, displayName: params.idp?.displayName, description: params.idp?.description, scope: params.idp?.scope, organization: organization, wantAuthnRequestsSigned:true)
 		identityProvider.addToProtocolSupportEnumerations(samlNamespace)
 		params.idp.attributes.each { a -> 
 			if(a.value == "on") {
@@ -106,7 +106,7 @@ class IDPSSODescriptorService {
 		// Attribute Authority
 		def attributeAuthority
 		if(params.aa?.create) {
-			attributeAuthority = new AttributeAuthorityDescriptor(approved:false, active:params.active, displayName: params.aa.displayName, description: params.aa.description, collaborator: identityProvider, organization:organization)
+			attributeAuthority = new AttributeAuthorityDescriptor(approved:false, active:params.active, displayName: params.aa.displayName, description: params.aa.description, scope: params.idp?.scope, collaborator: identityProvider, organization:organization)
 			attributeAuthority.addToProtocolSupportEnumerations(samlNamespace)
 			identityProvider.collaborator = attributeAuthority
 			
@@ -172,9 +172,15 @@ class IDPSSODescriptorService {
 		
 		identityProvider.displayName = params.idp.displayName
 		identityProvider.description = params.idp.description
+		identityProvider.scope = params.idp.scope
 		identityProvider.active = params.idp.status == 'true'
 		identityProvider.wantAuthnRequestsSigned = params.idp.wantauthnrequestssigned == 'true'
 		identityProvider.autoAcceptServices = params.idp.autoacceptservices == 'true'
+		
+		// Ensure AA stays synced with scope
+		if(identityProvider.collaborator) {
+			identityProvider.collaborator.scope = params.idp.scope
+		}
 		
 		log.debug "Updating $identityProvider active: ${identityProvider.active}, requestSigned: ${identityProvider.wantAuthnRequestsSigned}"
 		
