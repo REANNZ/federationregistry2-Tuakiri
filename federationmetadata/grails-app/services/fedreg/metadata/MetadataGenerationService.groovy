@@ -184,18 +184,22 @@ class MetadataGenerationService {
 	
 	def requestedAttribute(builder, all, minimal, attr) {
 		if(all || attr.approved) {
-			if(attr.base.nameFormat?.uri) {
-				builder.RequestedAttribute(Name: attr.base.name, FriendlyName:attr.base.friendlyName, isRequired:attr.isRequired, NameFormat:attr.base.nameFormat?.uri) {
-					attr.values?.sort{it?.value}.each {
-						'saml:AttributeValue'(it.value)
+			if(!attr.base.specificationRequired || (attr.base.specificationRequired && attr.values.size() > 0)) {
+				if(attr.base.nameFormat?.uri) {
+					builder.RequestedAttribute(Name: attr.base.name, FriendlyName:attr.base.friendlyName, isRequired:attr.isRequired, NameFormat:attr.base.nameFormat?.uri) {
+						attr.values?.sort{it?.value}.each {
+							'saml:AttributeValue'(it.value)
+						}
+					}
+				} else {
+					builder.RequestedAttribute(Name: attr.base.name, FriendlyName:attr.base.friendlyName, isRequired:attr.isRequired, NameFormat: 'urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified') {
+						attr.values?.sort{it?.value}.each {
+							'saml:AttributeValue'(it.value)
+						}
 					}
 				}
 			} else {
-				builder.RequestedAttribute(Name: attr.base.name, FriendlyName:attr.base.friendlyName, isRequired:attr.isRequired, NameFormat: 'urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified') {
-					attr.values?.sort{it?.value}.each {
-						'saml:AttributeValue'(it.value)
-					}
-				}
+				log.error "Not rendering $attr representing ${attr.base} because no values have been specified"
 			}
 		}
 	}
@@ -300,7 +304,9 @@ class MetadataGenerationService {
 	}
 	
 	def IDPSSODescriptorExtensions(builder, roleDescriptor) {
-		log.debug "IDPSSODescriptorExtensions currently not rendered to MD"
+		builder.Extensions() {
+			builder."shibmd:Scope" (regexp:false, roleDescriptor.scope)
+		}
 	}
 	
 	def SPSSODescriptorExtensions(builder, spSSODescriptor) {
@@ -314,7 +320,9 @@ class MetadataGenerationService {
 	}
 	
 	def AttributeAuthorityDescriptorExtensions(builder, roleDescriptor) {
-		log.debug "AttributeAuthorityDescriptorExtensions currently not rendered to MD"
+		builder.Extensions() {
+			builder."shibmd:Scope" (regexp:false, roleDescriptor.scope)
+		}
 	}
 	
 }
