@@ -299,7 +299,7 @@
 		sql.eachRow("select * from homeOrgs",
 		{			
 			def entity = EntityDescriptor.findWhere(entityID:it.entityID)
-			def idp = new IDPSSODescriptor(active:true, approved:true, entityDescriptor:entity, organization:entity.organization, wantAuthnRequestsSigned:true)
+			def idp = new IDPSSODescriptor(active:true, approved:true, entityDescriptor:entity, organization:entity.organization, scope:it.homeOrgName, wantAuthnRequestsSigned:true)
 			idp.addToNameIDFormats(trans)	// RR hard codes everything to only advertise NameIDForm of transient so we need to do the same, in FR this is modifable and DB driven
 			idp.addToProtocolSupportEnumerations(samlNamespace)
 			
@@ -381,7 +381,7 @@
 			def entity = EntityDescriptor.findWhere(entityID:it.entityID)
 			if(entity.idpDescriptors.size() > 0) {
 				idp = entity.idpDescriptors.toList().get(0)
-				aa = new AttributeAuthorityDescriptor(active:true, approved:true, entityDescriptor:entity, organization:entity.organization, displayName:idp.displayName, description:idp.description)
+				aa = new AttributeAuthorityDescriptor(active:true, approved:true, entityDescriptor:entity, organization:entity.organization, scope:it.homeOrgName, displayName:idp.displayName, description:idp.description)
 			} else {
 				aa = new AttributeAuthorityDescriptor(active:true, approved:true, entityDescriptor:entity, organization:entity.organization)
 				
