@@ -36,31 +36,19 @@ class EntityDescriptorController {
 	}
 	
 	def create = {
-		if(SecurityUtils.subject.isPermitted("entitydescriptor:create")) {
-			def entityDescriptor = new EntityDescriptor()
-			[entity: entityDescriptor, organizationList: Organization.list()]
-		}
-		else {
-			log.warn("Attempt to create identity provider by $authenticatedUser was denied, incorrect permission set")
-			response.sendError(403)
-		}
+		def entityDescriptor = new EntityDescriptor()
+		[entity: entityDescriptor, organizationList: Organization.list()]
 	}
 	
 	def save = {
-		if(SecurityUtils.subject.isPermitted("organization:${params.organization.id}:components:entitydescriptor:create")) {
-			def (created, entityDescriptor) = entityDescriptorService.create(params)
-		
-			if(created)
-				redirect (action: "show", id: entityDescriptor.id)
-			else {
-				flash.type="error"
-				flash.message = message(code: 'fedreg.core.entitydescriptor.save.validation.error')
-				render (view:'create', model:[entity:entityDescriptor, organizationList: Organization.list()])
-			}
-		}
+		def (created, entityDescriptor) = entityDescriptorService.create(params)
+	
+		if(created)
+			redirect (action: "show", id: entityDescriptor.id)
 		else {
-			log.warn("Attempt to save entity descriptor by $authenticatedUser was denied, incorrect permission set")
-			response.sendError(403)
+			flash.type="error"
+			flash.message = message(code: 'fedreg.core.entitydescriptor.save.validation.error')
+			render (view:'create', model:[entity:entityDescriptor, organizationList: Organization.list()])
 		}
 	}
 	

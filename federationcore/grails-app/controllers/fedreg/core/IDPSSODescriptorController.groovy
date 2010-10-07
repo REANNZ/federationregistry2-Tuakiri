@@ -37,33 +37,21 @@ class IDPSSODescriptorController {
 	}
 	
 	def create = {
-		if(SecurityUtils.subject.isPermitted("idpssodescriptor:create")) {
-			def identityProvider = new IDPSSODescriptor()
-			[identityProvider: identityProvider, organizationList: Organization.findAllWhere(active:true, approved:true), attributeList: AttributeBase.list(), nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)]
-		}
-		else {
-			log.warn("Attempt to create identity provider by $authenticatedUser was denied, incorrect permission set")
-			response.sendError(403)
-		}
+		def identityProvider = new IDPSSODescriptor()
+		[identityProvider: identityProvider, organizationList: Organization.findAllWhere(active:true, approved:true), attributeList: AttributeBase.list(), nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)]
 	}
 	
 	def save = {
-		if(SecurityUtils.subject.isPermitted("organization:${params.organization.id}:components:idpssodescriptor:create")) {
-			def (created, organization, entityDescriptor, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact) = IDPSSODescriptorService.create(params)
-		
-			if(created) {
-				redirect (action: "show", id: identityProvider.id)
-			}
-			else {
-				flash.type="error"
-				flash.message = message(code: 'fedreg.core.idpssoroledescriptor.save.validation.error')
-				render (view:'create', model:[organization:organization, entityDescriptor:entityDescriptor, identityProvider:identityProvider, attributeAuthority:attributeAuthority, httpPost:httpPost, httpRedirect:httpRedirect, 
-				soapArtifact:soapArtifact, organizationList:organizationList, attributeList:attributeList, nameIDFormatList:nameIDFormatList, contact:contact])
-			}
+		def (created, organization, entityDescriptor, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact) = IDPSSODescriptorService.create(params)
+	
+		if(created) {
+			redirect (action: "show", id: identityProvider.id)
 		}
 		else {
-			log.warn("Attempt to save identity provider by $authenticatedUser was denied, incorrect permission set")
-			response.sendError(403)
+			flash.type="error"
+			flash.message = message(code: 'fedreg.core.idpssoroledescriptor.save.validation.error')
+			render (view:'create', model:[organization:organization, entityDescriptor:entityDescriptor, identityProvider:identityProvider, attributeAuthority:attributeAuthority, httpPost:httpPost, httpRedirect:httpRedirect, 
+			soapArtifact:soapArtifact, organizationList:organizationList, attributeList:attributeList, nameIDFormatList:nameIDFormatList, contact:contact])
 		}
 	}
 	
