@@ -33,6 +33,11 @@ environments {
             enabled = false
         }
     }
+	test {
+        testDataConfig {
+            enabled = true
+        }
+    }
 	dev {
         testDataConfig {
             enabled = false
