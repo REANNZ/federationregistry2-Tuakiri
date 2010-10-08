@@ -64,7 +64,5 @@
 
 </g:if>
 <g:else>
-	<div>
-		<p class="icon icon_information"><g:message code="fedreg.template.endpoints.noresults"/></p>
-	</div>
+	<p class="icon icon_information"><g:message code="fedreg.template.endpoints.noresults"/></p>
 </g:else>

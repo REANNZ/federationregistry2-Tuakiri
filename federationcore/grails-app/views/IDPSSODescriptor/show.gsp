@@ -136,6 +136,7 @@
 					<li><a href="#tab-attributes" class="icon icon_vcard"><g:message code="label.supportedattributes" /></a></li>
 					<li><a href="#tab-nameidformats" class="icon icon_database_key"><g:message code="label.supportednameidformats" /></a></li>
 					<li><a href="#tab-admins" class="icon icon_database_key"><g:message code="label.administrators" /></a></li>
+					<li><a href="#tab-monitors" class="icon icon_database_key"><g:message code="label.monitoring" /></a></li>
 				</ul>
 				
 				<div id="tab-contacts" class="tabcontent">
@@ -217,6 +218,12 @@
 					<g:render template="/templates/descriptor/listfulladministration" plugin="federationcore" model="[descriptor:identityProvider, administrators:administrators]" />
 					<n:hasPermission target="descriptor:${identityProvider.id}:manage:administrators">
 						<g:render template="/templates/descriptor/searchfulladministration" plugin="federationcore" model="[descriptor:identityProvider]" />
+					</n:hasPermission>
+				</div>
+				<div id="tab-monitors">
+					<g:render template="/templates/monitor/list" plugin="federationcore" model="[roleDescriptor:identityProvider]" />
+					<n:hasPermission target="descriptor:${identityProvider.id}:manage:monitors">
+						
 					</n:hasPermission>
 				</div>
 			</div>
