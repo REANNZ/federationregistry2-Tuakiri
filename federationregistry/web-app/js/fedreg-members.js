@@ -451,6 +451,23 @@ fedreg.endpoint_toggle = function(id, endpointType, containerID) {
 	});
 };
 
+fedreg.endpoint_makedefault = function(id, endpointType, containerID) {
+	$("#working").trigger("fedreg.working");
+	var dataString = "id=" + id + "&endpointType=" + endpointType;
+	$.ajax({
+		type: "POST",
+		url: endpointMakeDefaultEndpoint,
+		data: dataString,
+		success: function(res) {
+			nimble.growl('success', res);
+			fedreg.endpoint_list(endpointType, containerID);
+	    },
+	    error: function (xhr, ajaxOptions, thrownError) {
+			nimble.growl('error', xhr.responseText);
+	    }
+	});
+};
+
 // Attribute Consuming Services
 fedreg.acs_reqattribute_add = function(acsID, formID, containerID) {
 	$("#working").trigger("fedreg.working");

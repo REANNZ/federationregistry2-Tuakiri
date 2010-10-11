@@ -190,4 +190,48 @@ class DescriptorEndpointController {
 			response.sendError(403)
 		}
 	}
+	
+	
+	def makeDefault = {
+		if(!params.id) {
+			log.warn "Endpoint ID was not present"
+			render message(code: 'fedreg.controllers.namevalue.missing')
+			response.sendError(500)
+			return
+		}
+		
+		def endpoint = Endpoint.get(params.id)
+		if(!endpoint) {
+			log.warn "Endpoint identified by id $params.id was not located"
+			render message(code: 'fedreg.endpoint.nonexistant', args: [params.id])
+			response.setStatus(500)
+			return
+		}
+		
+		def endpointType = params.endpointType
+	
+		if(SecurityUtils.subject.isPermitted("descriptor:${endpoint.descriptor.id}:endpoint:makedefault")) {
+			def descriptor = endpoint.descriptor
+			
+			// Determine if we're actually updating the collaborator (useful for AA endpoints on IDP screen)
+			if(!descriptor.hasProperty(endpointType)) {
+				if(descriptor.collaborator.hasProperty(endpointType))
+					descriptor = descriptor.collaborator
+			}
+			
+			if(allowedEndpoints.containsKey(endpointType) && descriptor.hasProperty(endpointType)) {
+				endpointService.makeDefault(endpoint, endpointType)
+				render message(code: 'fedreg.endpoint.makedefault.success')
+			}
+			else {
+				log.warn "Endpoint ${endpointType} is invalid for ${descriptor}, unable to make default"
+				render message(code: 'fedreg.endpoint.invalid', args: [endpointType])
+				response.setStatus(500)
+			}
+		}
+		else {
+			log.warn("Attempt to make $endpoint default by $authenticatedUser was denied, incorrect permission set")
+			response.sendError(403)
+		}
+	}
 }
