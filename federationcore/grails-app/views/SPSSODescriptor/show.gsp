@@ -107,7 +107,7 @@
 							<g:message code="label.yes" />
 						</g:if>
 						<g:else>
-							<g:message code="label.no" /> <div class="error"><g:message code="label.warningmetadata" /></div>
+							<g:message code="label.no" /> <div class="warning"><g:message code="label.undergoingapproval" /></div>
 						</g:else>
 					</td>
 				</tr>
