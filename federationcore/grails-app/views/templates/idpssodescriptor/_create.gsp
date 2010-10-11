@@ -300,7 +300,7 @@
 					${fieldValue(bean: nameidformat, field: "description")}
 				</td>
 				<td>
-					<g:checkBox name="idp.nameidformats.${nameidformat.id}"/>
+					<g:checkBox name="idp.nameidformats.${nameidformat.id}" checked="${nameidformat.uri == 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient'}"/>
 				</td>
 			</tr>
 			</g:each>
