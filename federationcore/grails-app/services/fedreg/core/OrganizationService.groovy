@@ -21,6 +21,7 @@ class OrganizationService {
 		
 		if(!organization.validate()) {
 			organization?.errors.each { log.error it }
+			TransactionAspectSupport.currentTransactionInfo().setRollbackOnly() 
 			return [ false, organization, contact ]
 		}
 		

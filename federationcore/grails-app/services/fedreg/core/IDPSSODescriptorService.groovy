@@ -1,6 +1,8 @@
 package fedreg.core
 
 import org.springframework.context.i18n.LocaleContextHolder as LCH
+import org.springframework.transaction.interceptor.TransactionAspectSupport
+
 import fedreg.workflow.ProcessPriority
 
 class IDPSSODescriptorService {
@@ -10,9 +12,10 @@ class IDPSSODescriptorService {
 	def entityDescriptorService
 	
 	def create(def params) {
+			
 		/* There is a lot of moving parts when creating an IdP (+AA hybrid) so below is more complex then usual,
-			you'll note validation calls on most larger objects, this is to get finer grained object error population */
-		
+		you'll note validation calls on most larger objects, this is to get finer grained object error population */
+	
 		// Organization
 		def organization = Organization.get(params.organization?.id)
 
@@ -32,18 +35,18 @@ class IDPSSODescriptorService {
 				}
 		}
 		def ct = params.contact?.type ?: 'administrative'
-		
+	
 		// Entity Descriptor
 		def entityDescriptor
 		if(params.entity?.id) {		
 			entityDescriptor = EntityDescriptor.get(params.entity?.id)
 		}
-		
+	
 		if(!entityDescriptor) {
 			def created
 			(created, entityDescriptor) = entityDescriptorService.create(params)	// If it doesn't create we don't really care it is caught below
 		}
-		
+	
 		// IDP
 		def samlNamespace = SamlURI.findByUri('urn:oasis:names:tc:SAML:2.0:protocol')
 		def identityProvider = new IDPSSODescriptor(approved:false, active:params.active, displayName: params.idp?.displayName, description: params.idp?.description, scope: params.idp?.scope, organization: organization, wantAuthnRequestsSigned:true)
@@ -64,7 +67,7 @@ class IDPSSODescriptorService {
 		}
 		def idpContactPerson = new ContactPerson(contact:contact, type:ContactType.findByName(ct))
 		identityProvider.addToContacts(idpContactPerson)	
-		
+	
 		// Initial endpoints
 		def postBinding = SamlURI.findByUri(SamlConstants.httpPost)
 		def postLocation = new UrlURI(uri: params.idp?.post?.uri)
@@ -93,7 +96,7 @@ class IDPSSODescriptorService {
 			def keyDescriptor = new KeyDescriptor(keyInfo:keyInfo, keyType:KeyTypes.signing, roleDescriptor:identityProvider)
 			identityProvider.addToKeyDescriptors(keyDescriptor)
 		}
-		
+	
 		// Encryption
 		if(params.idp?.crypto?.enc) {
 			def certEnc = cryptoService.createCertificate(params.idp?.crypto?.encdata)
@@ -102,19 +105,19 @@ class IDPSSODescriptorService {
 			def keyDescriptorEnc = new KeyDescriptor(keyInfo:keyInfoEnc, keyType:KeyTypes.encryption, roleDescriptor:identityProvider)
 			identityProvider.addToKeyDescriptors(keyDescriptorEnc)
 		}
-		
+	
 		// Attribute Authority
 		def attributeAuthority
 		if(params.aa?.create) {
 			attributeAuthority = new AttributeAuthorityDescriptor(approved:false, active:params.active, displayName: params.aa.displayName, description: params.aa.description, scope: params.idp?.scope, collaborator: identityProvider, organization:organization)
 			attributeAuthority.addToProtocolSupportEnumerations(samlNamespace)
 			identityProvider.collaborator = attributeAuthority
-			
+		
 			def attributeServiceBinding = SamlURI.findByUri('urn:oasis:names:tc:SAML:2.0:bindings:SOAP')
 			def attributeServiceLocation = new UrlURI(uri: params.aa?.attributeservice?.uri)
 			def attributeService = new AttributeService(approved: true, binding: attributeServiceBinding, location:attributeServiceLocation, active:params.active)
 			attributeAuthority.addToAttributeServices(attributeService)
-			
+		
 			params.aa.attributes.each { attrID -> 
 				if(attrID.value == "on") {
 					def attr = AttributeBase.get(attrID.key)
@@ -123,11 +126,12 @@ class IDPSSODescriptorService {
 				}
 			}
 		}
-		
+	
 		// Submission validation
 		if(!entityDescriptor.validate()) {
 			entityDescriptor?.errors.each { log.error it }
-			return [false, organization, entityDescriptor, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, Organization.list(), AttributeBase.list(), SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding), contact]
+			TransactionAspectSupport.currentTransactionInfo().setRollbackOnly() 
+			return [false, organization, entityDescriptor, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, contact]
 		}
 		identityProvider.entityDescriptor = entityDescriptor
 		entityDescriptor.addToIdpDescriptors(identityProvider)
@@ -139,30 +143,32 @@ class IDPSSODescriptorService {
 
 		if(!identityProvider.validate()) {
 			identityProvider.errors.each { log.debug it }
-			return [false, organization, entityDescriptor, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, Organization.list(), AttributeBase.list(), SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding), contact]
+			TransactionAspectSupport.currentTransactionInfo().setRollbackOnly() 
+			return [false, organization, entityDescriptor, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, contact]
 		}
 
 		if(params.aa?.create)
 			if(!attributeAuthority.validate()) {			
 				attributeAuthority.errors.each {log.debug it}
-				return [false, organization, entityDescriptor, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, Organization.list(), AttributeBase.list(), SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding), contact]
+				TransactionAspectSupport.currentTransactionInfo().setRollbackOnly() 
+				return [false, organization, entityDescriptor, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, contact]
 			}
-		
+	
 		if(!identityProvider.save()) {			
 			identityProvider.errors.each {log.debug it}
 			throw new RuntimeException("Unable to save when creating ${identityProvider}")
 		}
-		
+	
 		def workflowParams = [ creator:contact?.id?.toString(), identityProvider:identityProvider?.id?.toString(), attributeAuthority:attributeAuthority?.id?.toString(), organization:organization.id?.toString(), locale:LCH.getLocale().getLanguage() ]
-		
+	
 		def (initiated, processInstance) = workflowProcessService.initiate( "idpssodescriptor_create", "Approval for creation of ${identityProvider}", ProcessPriority.MEDIUM, workflowParams)
-		
+	
 		if(initiated)
 			workflowProcessService.run(processInstance)
 		else
 			throw new RuntimeException("Unable to execute workflow when creating ${identityProvider}")
-		
-		return [true, organization, entityDescriptor, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, Organization.list(), AttributeBase.list(), SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding), contact]
+	
+		return [true, organization, entityDescriptor, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, contact]
 	}
 	
 	def update(def params) {

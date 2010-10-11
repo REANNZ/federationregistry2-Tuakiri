@@ -1,6 +1,8 @@
 package fedreg.core
 
 import org.springframework.context.i18n.LocaleContextHolder as LCH
+import org.springframework.transaction.interceptor.TransactionAspectSupport
+
 import fedreg.workflow.ProcessPriority
 
 class SPSSODescriptorService {
@@ -10,6 +12,7 @@ class SPSSODescriptorService {
 	def workflowProcessService
 
 	def create(def params) {
+			
 		// Organization
 		def organization = Organization.get(params.organization?.id)
 
@@ -29,37 +32,37 @@ class SPSSODescriptorService {
 				}
 		}
 		def ct = params.contact?.type ?: 'administrative'
-		
+	
 		// Entity Descriptor
 		def entityDescriptor
 		if(params.entity?.id) {		
 			entityDescriptor = EntityDescriptor.get(params.entity?.id)
 		}
-		
+	
 		if(!entityDescriptor) {
 			def created
 			(created, entityDescriptor) = entityDescriptorService.create(params)	// If it doesn't create we don't really care it is caught below
 		}
-		
+	
 		// SP
 		def samlNamespace = SamlURI.findByUri('urn:oasis:names:tc:SAML:2.0:protocol')
 		def serviceProvider = new SPSSODescriptor(approved:false, active:params.active, displayName: params.sp?.displayName, description: params.sp?.description, organization: organization, authnRequestsSigned:true, wantAssertionsSigned: true)
 		serviceProvider.addToProtocolSupportEnumerations(samlNamespace)
-		
+	
 		def acs = new AttributeConsumingService(approved:true, lang:params.lang ?:'en')
 		acs.addToServiceNames(params.sp?.displayName ?: '')
 		acs.addToServiceDescriptions(params.sp?.description ?: '')
 		params.sp.attributes.each { a -> 
 			def attrID = a.key
 			def val = a.value
-			
+		
 			if(!( val instanceof String )) {					// org.codehaus.groovy.grails.web.servlet.mvc.GrailsParameterMap oddities where vals are both in maps and individually presented as Strings
 				if(val.requested && val.requested == "on") {
 					def attr = AttributeBase.get(attrID)
 					if(attr) {
 						def ra = new RequestedAttribute(approved:true, base:attr, reasoning: val.reasoning, isRequired: (val.required == 'on') )
 						acs.addToRequestedAttributes(ra)
-						
+					
 						if(val.requestedvalues) {
 							val.requestedvalues.each {
 								if(it.value && it.value.size() > 0)
@@ -71,7 +74,7 @@ class SPSSODescriptorService {
 			}
 		}
 		serviceProvider.addToAttributeConsumingServices(acs)
-		
+	
 		params.sp.nameidformats.each { nameFormatID -> 
 			if(nameFormatID.value == "on") {
 				def nameid = SamlURI.get(nameFormatID.key)
@@ -81,7 +84,7 @@ class SPSSODescriptorService {
 		}
 		def spContactPerson = new ContactPerson(contact:contact, type:ContactType.findByName(ct))
 		serviceProvider.addToContacts(spContactPerson)
-		
+	
 		// Initial endpoints
 		// Assertion Consumer Services
 		def postBinding = SamlURI.findByUri(SamlConstants.httpPost)
@@ -95,7 +98,7 @@ class SPSSODescriptorService {
 		def soapArtifactACS = new AssertionConsumerService(approved: true, binding: artifactBinding, location:artifactLocation, active:params.active, isDefault:params.sp?.acs?.artifact?.isdefault)
 		serviceProvider.addToAssertionConsumerServices(soapArtifactACS)
 		soapArtifactACS.validate()
-		
+	
 		// Single Logout Services
 		def sloArtifact, sloRedirect, sloSOAP, sloPost
 		if(params.sp?.slo?.artifact?.uri){
@@ -126,7 +129,7 @@ class SPSSODescriptorService {
 			serviceProvider.addToSingleLogoutServices(sloPost)
 			sloPost.validate()
 		}
-		
+	
 		// Manage NameID Services - optional
 		def mnidArtifact, mnidRedirect, mnidSOAP, mnidPost
 		if(params.sp?.mnid?.artifact?.uri){
@@ -157,7 +160,7 @@ class SPSSODescriptorService {
 			serviceProvider.addToManageNameIDServices(mnidPost)
 			mnidPost.validate()
 		}
-		
+	
 		// Discovery Response Services - optional
 		def discoveryResponseService
 		if(params.sp?.drs?.uri){
@@ -167,7 +170,7 @@ class SPSSODescriptorService {
 			serviceProvider.addToDiscoveryResponseServices(discoveryResponseService)
 			discoveryResponseService.validate()
 		}
-		
+	
 		// Cryptography
 		// Signing
 		if(params.sp?.crypto?.sig) {
@@ -177,7 +180,7 @@ class SPSSODescriptorService {
 			def keyDescriptor = new KeyDescriptor(keyInfo:keyInfo, keyType:KeyTypes.signing, roleDescriptor:serviceProvider)
 			serviceProvider.addToKeyDescriptors(keyDescriptor)
 		}
-		
+	
 		// Encryption
 		if(params.sp?.crypto?.enc) {
 			def certEnc = cryptoService.createCertificate(params.sp?.crypto?.encdata)
@@ -186,39 +189,41 @@ class SPSSODescriptorService {
 			def keyDescriptorEnc = new KeyDescriptor(keyInfo:keyInfoEnc, keyType:KeyTypes.encryption, roleDescriptor:serviceProvider)
 			serviceProvider.addToKeyDescriptors(keyDescriptorEnc)
 		}
-		
+	
 		// Service Description
 		def serviceDescription = new ServiceDescription(connectURL: params.sp?.servicedescription?.connecturl, logo: params.sp?.servicedescription?.logo, furtherInfo: params.sp?.servicedescription?.furtherInfo, 
 			provides: params.sp?.servicedescription?.provides, benefits: params.sp?.servicedescription?.benefits, audience: params.sp?.servicedescription?.audience, restrictions: params.sp?.servicedescription?.restrictions, 
 			accessing: params.sp?.servicedescription?.accessing, support: params.sp?.servicedescription?.support, maintenance: params.sp?.servicedescription?.maintenance)
 		serviceProvider.serviceDescription = serviceDescription
-		
+	
 		// Submission validation
 		if(!entityDescriptor.save()) {
 			entityDescriptor?.errors.each { log.error it }
+			TransactionAspectSupport.currentTransactionInfo().setRollbackOnly() 
 			return [false, organization, entityDescriptor, serviceProvider, httpPostACS, soapArtifactACS, sloArtifact, sloRedirect, sloSOAP, sloPost, Organization.list(), AttributeBase.list(), SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding), contact]
 		}
 		serviceProvider.entityDescriptor = entityDescriptor
 		entityDescriptor.addToSpDescriptors(serviceProvider)
-		
+	
 		if(!serviceProvider.validate()) {			
 			serviceProvider.errors.each { log.warn it }
+			TransactionAspectSupport.currentTransactionInfo().setRollbackOnly() 
 			return [false, organization, entityDescriptor, serviceProvider, httpPostACS, soapArtifactACS, sloArtifact, sloRedirect, sloSOAP, sloPost, Organization.list(), AttributeBase.list(), SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding), contact]
 		}
-		
+	
 		if(!serviceProvider.save()) {			
 			serviceProvider.errors.each {log.warn it}
 			throw new RuntimeException("Unable to save when creating ${serviceProvider}")
 		}
-		
+	
 		def workflowParams = [ creator:contact?.id?.toString(), serviceProvider:serviceProvider?.id?.toString(), organization:organization.id?.toString(), locale:LCH.getLocale().getLanguage() ]
 		def (initiated, processInstance) = workflowProcessService.initiate( "spssodescriptor_create", "Approval for creation of ${serviceProvider}", ProcessPriority.MEDIUM, workflowParams)
-		
+	
 		if(initiated)
 			workflowProcessService.run(processInstance)
 		else
 			throw new RuntimeException("Unable to execute workflow when creating ${serviceProvider}")
-		
+	
 		return [true, organization, entityDescriptor, serviceProvider, httpPostACS, soapArtifactACS, sloArtifact, sloRedirect, sloSOAP, sloPost, Organization.list(), AttributeBase.list(), SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding), contact]
 	}
 	
