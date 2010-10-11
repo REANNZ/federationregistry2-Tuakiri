@@ -199,7 +199,7 @@ class SPSSODescriptorService {
 		// Submission validation
 		if(!entityDescriptor.save()) {
 			entityDescriptor?.errors.each { log.error it }
-			TransactionAspectSupport.currentTransactionInfo().setRollbackOnly() 
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly() 
 			return [false, organization, entityDescriptor, serviceProvider, httpPostACS, soapArtifactACS, sloArtifact, sloRedirect, sloSOAP, sloPost, Organization.list(), AttributeBase.list(), SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding), contact]
 		}
 		serviceProvider.entityDescriptor = entityDescriptor
@@ -207,7 +207,7 @@ class SPSSODescriptorService {
 	
 		if(!serviceProvider.validate()) {			
 			serviceProvider.errors.each { log.warn it }
-			TransactionAspectSupport.currentTransactionInfo().setRollbackOnly() 
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly() 
 			return [false, organization, entityDescriptor, serviceProvider, httpPostACS, soapArtifactACS, sloArtifact, sloRedirect, sloSOAP, sloPost, Organization.list(), AttributeBase.list(), SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding), contact]
 		}
 	

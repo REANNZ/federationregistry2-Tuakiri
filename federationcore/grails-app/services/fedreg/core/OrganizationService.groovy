@@ -21,7 +21,7 @@ class OrganizationService {
 		
 		if(!organization.validate()) {
 			organization?.errors.each { log.error it }
-			TransactionAspectSupport.currentTransactionInfo().setRollbackOnly() 
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly() 
 			return [ false, organization, contact ]
 		}
 		
@@ -32,13 +32,13 @@ class OrganizationService {
 		
 		if(!contact.validate()) {
 			contact?.errors.each { log.error it }
-			TransactionAspectSupport.currentTransactionInfo().setRollbackOnly() 
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly() 
 			return [ false, organization, contact ]
 		}
 		
 		if(!contact.save()) {
 			contact?.errors.each { log.error it }
-			TransactionAspectSupport.currentTransactionInfo().setRollbackOnly() 
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly() 
 			throw new RuntimeException("Unable to save when creating ${contact}")
 		}
 		

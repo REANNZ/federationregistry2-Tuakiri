@@ -130,7 +130,7 @@ class IDPSSODescriptorService {
 		// Submission validation
 		if(!entityDescriptor.validate()) {
 			entityDescriptor?.errors.each { log.error it }
-			TransactionAspectSupport.currentTransactionInfo().setRollbackOnly() 
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly() 
 			return [false, organization, entityDescriptor, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, contact]
 		}
 		identityProvider.entityDescriptor = entityDescriptor
@@ -143,14 +143,14 @@ class IDPSSODescriptorService {
 
 		if(!identityProvider.validate()) {
 			identityProvider.errors.each { log.debug it }
-			TransactionAspectSupport.currentTransactionInfo().setRollbackOnly() 
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly() 
 			return [false, organization, entityDescriptor, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, contact]
 		}
 
 		if(params.aa?.create)
 			if(!attributeAuthority.validate()) {			
 				attributeAuthority.errors.each {log.debug it}
-				TransactionAspectSupport.currentTransactionInfo().setRollbackOnly() 
+				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly() 
 				return [false, organization, entityDescriptor, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, contact]
 			}
 	

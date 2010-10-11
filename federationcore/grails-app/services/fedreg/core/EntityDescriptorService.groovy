@@ -34,7 +34,7 @@ class EntityDescriptorService {
 		
 			if(!entityDescriptor.validate()) {			
 				entityDescriptor.errors.each {log.warn it}
-				TransactionAspectSupport.currentTransactionInfo().setRollbackOnly() 
+				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly() 
 				return [false, entityDescriptor]
 			}
 		
