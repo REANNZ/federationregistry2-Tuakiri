@@ -45,7 +45,7 @@ class RoleDescriptor extends Descriptor {
 		contacts: ContactPerson,
 		protocolSupportEnumerations: SamlURI,
 		keyDescriptors: KeyDescriptor,
-		monitors: Monitor
+		monitors: ServiceMonitor
 	]
 
 	static mapping = {

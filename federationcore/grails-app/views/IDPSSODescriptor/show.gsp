@@ -36,6 +36,10 @@
 			var descriptorFullAdministratorListEndpoint = "${createLink(controller:'descriptorAdministration', action:'listFullAdministration', id:identityProvider.id)}";
 			var descriptorFullAdministratorSearchEndpoint = "${createLink(controller:'descriptorAdministration', action:'searchFullAdministration', id:identityProvider.id)}";
 			
+			var monitorDeleteEndpoint = "${createLink(controller:'roleDescriptorMonitor', action:'delete')}";
+			var monitorListEndpoint = "${createLink(controller:'roleDescriptorMonitor', action:'list', id:identityProvider.id )}";
+			var monitorCreateEndpoint = "${createLink(controller:'roleDescriptorMonitor', action:'create', id:identityProvider.id )}";
+			
 			$(function() {
 				$("#tabs").tabs();
 				$("#tabs2").tabs();
@@ -221,9 +225,11 @@
 					</n:hasPermission>
 				</div>
 				<div id="tab-monitors">
-					<g:render template="/templates/monitor/list" plugin="federationcore" model="[roleDescriptor:identityProvider]" />
+					<div id="monitors">
+						<g:render template="/templates/monitor/list" plugin="federationcore" model="[roleDescriptor:identityProvider]" />
+					</div>
 					<n:hasPermission target="descriptor:${identityProvider.id}:manage:monitors">
-						
+						<g:render template="/templates/monitor/create" plugin="federationcore" model="[descriptor:identityProvider]" />
 					</n:hasPermission>
 				</div>
 			</div>

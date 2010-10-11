@@ -239,6 +239,55 @@ fedreg.keyDescriptor_delete = function(id) {
 	});
 };
 
+// Monitors
+fedreg.monitor_create = function() {
+	$("#working").trigger("fedreg.working");
+	var dataString = $("#newmonitordata").serialize();
+	$.ajax({
+		type: "POST",
+		url: monitorCreateEndpoint,
+		data: dataString,
+		success: function(res) {
+			fedreg.monitor_list();
+			nimble.growl('success', res);
+	    },
+	    error: function (xhr, ajaxOptions, thrownError) {
+			nimble.growl('error', xhr.responseText);
+	    }
+	});
+};
+
+fedreg.monitor_delete = function(monitorID) {
+	$("#working").trigger("fedreg.working");
+	var dataString = "id=" + monitorID;
+	$.ajax({
+		type: "POST",
+		url: monitorDeleteEndpoint,
+		data: dataString,
+		success: function(res) {
+			fedreg.monitor_list();
+			nimble.growl('success', res);
+	    },
+	    error: function (xhr, ajaxOptions, thrownError) {
+			nimble.growl('error', xhr.responseText);
+	    }
+	});
+};
+
+fedreg.monitor_list = function(containerID) {
+	$.ajax({
+		type: "GET",
+		cache: false,
+		url: monitorListEndpoint,
+		success: function(res) {
+			$("#monitors").html(res);
+	    },
+	    error: function (xhr, ajaxOptions, thrownError) {
+			nimble.growl('error', xhr.responseText);
+	    }
+	});
+};
+
 
 // Contacts
 fedreg.contact_dialogInit = function() {

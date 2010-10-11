@@ -22,19 +22,20 @@ package fedreg.core
 /**
  * @author Bradley Beddoes
  */
-class Monitor  {
+class ServiceMonitor  {
 	static auditable = true
 	
 	MonitorType type
 	String url
-	long interval
+	boolean enabled = true
+	int checkPeriod = 0
 
 	static constraints = {
-		type(nullable: false)
+		monitorType(nullable: false)
 		url(nullable: false, blank: false)
 	}
 	
 	static belongsTo = [roleDescriptor:RoleDescriptor]
 
-	public String toString() {	"monitor:[id:$id, url: $url, type:$type]" }
+	public String toString() {	"servicemonitor:[id:$id, url: $url, type:$type]" }
 }

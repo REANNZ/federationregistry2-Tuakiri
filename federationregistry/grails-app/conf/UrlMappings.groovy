@@ -65,6 +65,10 @@ class UrlMappings {
 		controller = "attributeConsumingService"
 	}
 	
+	"/membership/backend/monitors/$action?/$id?"{
+		controller = "roleDescriptorMonitor"
+	}
+	
 	"/confirmadministrator/$action?/$id?"{
 		controller = "invitation"
 	}
