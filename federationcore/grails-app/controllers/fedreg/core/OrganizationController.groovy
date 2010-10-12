@@ -59,7 +59,7 @@ class OrganizationController {
 		if(created)
 			redirect (action: "show", id: organization.id)
 		else
-			render (view:'create', model:[organization:organization, contact:contact])
+			render (view:'create', model:[organization:organization, contact:contact, organizationTypes: OrganizationType.list()])
 	}
 	
 	def edit = {

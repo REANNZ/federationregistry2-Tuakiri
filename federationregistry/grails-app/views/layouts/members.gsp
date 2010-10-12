@@ -68,7 +68,7 @@
 			<g:if test="${controllerName == 'organization'}">
 				<ul class="level3a">
 					<li class="${actionName == 'list' ? 'active':''}"><g:link controller="organization" action="list"><g:message code="label.list"/></g:link></li>
-						<li class="${actionName == 'create' ? 'active':''}"><g:link controller="organization" action="create"><g:message code="label.create"/></g:link></li>
+						<li class="${actionName in ['create', 'save'] ? 'active':''}"><g:link controller="organization" action="create"><g:message code="label.create"/></g:link></li>
 					<g:if test="${actionName in ['show', 'edit']}">
 					<li> | </li>
 					<li><g:message code="fedreg.view.members.organization.show.heading" args="[organization.displayName]"/>: </li>
@@ -83,7 +83,7 @@
 			<g:if test="${controllerName == 'entityDescriptor'}">
 				<ul class="level3a">
 					<li class="${actionName == 'list' ? 'active':''}"><g:link controller="entityDescriptor" action="list"><g:message code="label.list"/></g:link></li>
-						<li class="${actionName == 'create' ? 'active':''}"><g:link controller="entityDescriptor" action="create"><g:message code="label.create"/></g:link></li>
+						<li class="${actionName in ['create', 'save'] ? 'active':''}"><g:link controller="entityDescriptor" action="create"><g:message code="label.create"/></g:link></li>
 					<g:if test="${actionName in ['show', 'edit']}">
 					<li> | </li>
 					<li><g:message code="fedreg.view.members.entity.show.heading" args="[entity.entityID]"/>: </li>
@@ -113,7 +113,7 @@
 			<g:if test="${controllerName == 'SPSSODescriptor'}">
 				<ul class="level3a">
 					<li class="${actionName == 'list' ? 'active':''}"><g:link controller="SPSSODescriptor" action="list"><g:message code="label.list"/></g:link></li>
-						<li class="${actionName == 'create' ? 'active':''}"><g:link controller="SPSSODescriptor" action="create"><g:message code="label.create"/></g:link></li>
+						<li class="${actionName in ['create', 'save'] ? 'active':''}"><g:link controller="SPSSODescriptor" action="create"><g:message code="label.create"/></g:link></li>
 					<g:if test="${actionName in ['show', 'edit']}">
 						<li> | </li>
 						<li><g:message code="fedreg.view.members.serviceprovider.show.heading" args="[serviceProvider.displayName]"/>: </li>

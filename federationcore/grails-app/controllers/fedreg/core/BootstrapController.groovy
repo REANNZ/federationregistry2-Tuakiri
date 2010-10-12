@@ -102,7 +102,7 @@ class BootstrapController {
 		}
 		else {
 			flash.message = message(code: 'fedreg.core.organization.register.validation.error')
-			render (view:'organization', model:[organization:organization, contact:contact])
+			render (view:'organization', model:[organization:organization, contact:contact, organizationTypes: OrganizationType.list()])
 		}
 	}
 	

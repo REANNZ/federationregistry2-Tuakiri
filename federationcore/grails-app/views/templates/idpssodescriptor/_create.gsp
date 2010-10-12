@@ -80,7 +80,7 @@
 				<g:message code="fedreg.templates.identityprovider.create.contact.details" />
 			</p>
 			<g:hasErrors bean="${contact}">
-				<div class="error"><g:renderErrors bean="${attributeAuthority}"as="list"/></div>
+				<div class="error"><g:renderErrors bean="${contact}"as="list"/></div>
 			</g:hasErrors>
 			<table>
 				<tr>
