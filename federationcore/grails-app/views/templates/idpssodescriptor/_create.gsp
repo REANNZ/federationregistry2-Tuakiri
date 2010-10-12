@@ -29,19 +29,6 @@
 		
 		$('#samladvancedmode').hide();
 		
-		// We want IDP creation to be simple for users but we're actually creating both
-		// an IDPSSODescriptor and an AttributeDescriptor. Backend expects data for both so we do a little bit of
-		// cunning background copying ;).
-		$('#idp\\.displayName').bind('blur', function() {
-		    $('#aa\\.displayName').val($(this).val());
-		});
-		$('#idp\\.description').bind('blur', function() {
-		    $('#aa\\.description').val($(this).val());
-		});
-		$('#cert').change( function() {
-			$('#idp\\.crypto\\.encdata').val($(this).val());
-			$('#idp\\.crypto\\.sigdata').val($(this).val());
-		});
 		$('#hostname').bind('blur',  function() {
 			$('#entity\\.identifier').val($(this).val() + '/idp/shibboleth');
 			$('#idp\\.post\\.uri').val($(this).val() + '/idp/profile/SAML2/POST/SSO');
@@ -70,6 +57,12 @@
 	
 </script>
 
+<g:hasErrors>
+    <div class="error">
+       <g:message code="fedreg.templates.identityprovider.create.errors" />
+    </div>
+</g:hasErrors>
+
 <g:form action="${saveAction}" name="idpssodescriptorcreateform">
 	<g:hiddenField name="active" value="true"/>
 	<g:hiddenField name="aa.create" value="true"/>
@@ -90,7 +83,7 @@
 						<label for="contact.givenName"><g:message code="label.givenname" /></label>
 					</td>
 					<td>
-						<g:textField name="contact.givenName"  size="50" class="required" minlength="4"/>
+						<g:textField name="contact.givenName"  size="50" class="required" minlength="4" value="${contact?.givenName}"/>
 					</td>
 				</tr>
 				<tr>
@@ -98,7 +91,7 @@
 						<label for="contact.surname"><g:message code="label.surname" /></label>
 					</td>
 					<td>
-						<g:textField name="contact.surname"  size="50" class="required" minlength="4"/>
+						<g:textField name="contact.surname"  size="50" class="required" minlength="4" value="${contact?.surname}"/>
 					</td>
 				</tr>
 				<tr>
@@ -106,7 +99,7 @@
 						<label for="contact.email"><g:message code="label.email" /></label>
 					</td>
 					<td>
-						<g:textField name="contact.email"  size="50" class="required email" minlength="4"/>
+						<g:textField name="contact.email"  size="50" class="required email" minlength="4" value="${contact?.email?.uri}"/>
 					</td>
 				</tr>
 			</table>
@@ -124,7 +117,7 @@
 					<label for="organization.id"><g:message code="label.organization" /></label>
 				</td>
 				<td>
-					<g:select name="organization.id" from="${organizationList}" optionKey="id" optionValue="displayName" />
+					<g:select name="organization.id" from="${organizationList}" optionKey="id" optionValue="displayName" value="${organization?.id}"/>
 				</td>
 			</tr>
 			<tr>
@@ -133,7 +126,7 @@
 				</td>
 				<td>
 					<g:hiddenField name="aa.displayName" value=""/>
-					<g:textField name="idp.displayName"  size="50" class="required" minlength="4"/>
+					<g:textField name="idp.displayName"  size="50" class="required" minlength="4" value="${identityProvider?.displayName}"/>
 				</td>
 			</tr>
 			<tr>
@@ -142,7 +135,7 @@
 				</td>
 				<td>
 					<g:hiddenField name="aa.description" />
-					<g:textArea name="idp.description"  class="required" minlength="4" rows="8" cols="36"/>
+					<g:textArea name="idp.description"  class="required" minlength="4" rows="8" cols="36" value="${identityProvider?.description}"/>
 				</td>
 			</tr>
 		</table>
@@ -153,59 +146,95 @@
 		<p>
 			<g:message code="fedreg.templates.identityprovider.create.saml.details" />
 		</p>
-		<a href="#" onClick="$('#samladvancedmode').hide(); $('#samlbasicmode').show();">Shibboleth IDP</a> | <a href="#" onClick="$('#samlbasicmode').hide(); $('#samladvancedmode').show();">Other SAML 2.x</a>
-		<table id="samlbasicmode">
-			<tr>
-				<td>
-					<label for="hostname"><g:message code="label.url" /></label>
-				</td>
-				<td>
-					<g:textField name="hostname" size="50" class="required url"/> <em> e.g https://idp.example.org
-				</td>
-			</tr>
-		</table>
-		<table id="samladvancedmode">
-			<tr>
-				<td>
-					<label for="entity.identifier"><g:message code="label.entitydescriptor" /></label>
-				</td>
-				<td>
-					<g:textField name="entity.identifier" size="75" class="required url"/>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<label for="idp.post.uri"><g:message code="label.httppostendpoint" /></label>
-				</td>
-				<td>
-					<g:textField name="idp.post.uri" size="75" class="required url"/>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<label for="idp.redirect.uri"><g:message code="label.httpredirectendpoint" /></label>
-				</td>
-				<td>
-					<g:textField name="idp.redirect.uri" size="75" class="required url"/>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<label for="idp.artifact.uri"><g:message code="label.soapartifactendpoint" /></label>
-				</td>
-				<td>
-					<g:textField name="idp.artifact.uri" size="75" class="required url"/>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<label for="soapatrributequery"><g:message code="label.soapatrributequeryendpoint" /></label>
-				</td>
-				<td>
-					<g:textField name="aa.attributeservice.uri" size="75" class="required url"/>
-				</td>
-			</tr>
-		</table>
+
+		<div id="samlbasicmode">
+			<h4><g:message code="fedreg.templates.identityprovider.create.saml.shibboleth.heading" /></h4>
+			<p><g:message code="fedreg.templates.identityprovider.create.saml.shibboleth.descriptive" /></p>
+			<table>
+				<tr>
+					<td/>
+					<td><a href="#" onClick="$('#samlbasicmode').hide(); $('#samladvancedmode').fadeIn();"><g:message code="fedreg.templates.identityprovider.create.saml.shibboleth.switch.advanced" /></a></td>
+				</tr>
+				<tr>
+					<td>
+						<label for="hostname"><g:message code="label.host" /></label>
+					</td>
+					<td>
+						<g:hasErrors bean="${entityDescriptor}">
+							<div class="error"><g:renderErrors bean="${entityDescriptor}" as="list" class="error"/></div>
+						</g:hasErrors>
+						<g:textField name="hostname" size="50" class="required url" value="${hostname}"/> <em> e.g https://idp.example.org </em>
+					</td>
+				</tr>
+			</table>
+			
+		</div>
+		
+		<div id="samladvancedmode">
+			<h4><g:message code="fedreg.templates.identityprovider.create.saml.advanced.heading" /></h4>
+			<p><g:message code="fedreg.templates.identityprovider.create.saml.advanced.descriptive" /></p>
+			<table id="samladvancedmode">
+				<tr>
+					<td/>
+					<td><a href="#" onClick="$('#samladvancedmode').hide(); $('#samlbasicmode').fadeIn();"><g:message code="fedreg.templates.identityprovider.create.saml.advanced.switch.shibboleth" /></a></td>
+				</tr>
+				<tr>
+					<td>
+						<label for="entity.identifier"><g:message code="label.entitydescriptor" /></label>
+					</td>
+					<td>
+						<g:hasErrors bean="${entityDescriptor}">
+							<div class="error"><g:renderErrors bean="${entityDescriptor}" as="list" class="error"/></div>
+						</g:hasErrors>
+						<g:textField name="entity.identifier" size="75" class="required url" value="${entityDescriptor?.entityID}"/>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label for="idp.post.uri"><g:message code="label.httppostendpoint" /></label>
+					</td>
+					<td>
+						<g:hasErrors bean="${httpPost}">
+							<div class="error"><g:renderErrors bean="${httpPost}" as="list" class="error"/></div>
+						</g:hasErrors>
+						<g:textField name="idp.post.uri" size="75" class="required url" value="${httpPost?.location?.uri}"/>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label for="idp.redirect.uri"><g:message code="label.httpredirectendpoint" /></label>
+					</td>
+					<td>
+						<g:hasErrors bean="${httpRedirect}">
+							<div class="error"><g:renderErrors bean="${httpRedirect}" as="list" class="error"/></div>
+						</g:hasErrors>
+						<g:textField name="idp.redirect.uri" size="75" class="required url" value="${httpRedirect?.location?.uri}"/>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label for="idp.artifact.uri"><g:message code="label.soapartifactendpoint" /></label>
+					</td>
+					<td>
+						<g:hasErrors bean="${soapArtifact}">
+							<div class="error"><g:renderErrors bean="${soapArtifact}" as="list" class="error"/></div>
+						</g:hasErrors>
+						<g:textField name="idp.artifact.uri" size="75" class="required url" value="${soapArtifact?.location?.uri}"/>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label for="aa.attributeservice.uri"><g:message code="label.soapatrributequeryendpoint" /></label>
+					</td>
+					<td>
+						<g:hasErrors bean="${attributeAuthority}">
+							<div class="error"><g:renderErrors bean="${attributeAuthority}" as="list" class="error"/></div>
+						</g:hasErrors>
+						<g:textField name="aa.attributeservice.uri" size="75" class="required url" value="${attributeAuthority?.attributeServices?.get(0)?.location?.uri}"}/>
+					</td>
+				</tr>
+			</table>
+		</div>
 	</div>
 	
 	<div class="step" id="scope">
@@ -219,7 +248,7 @@
 					<label for="scope"><g:message code="label.scope" /></label>
 				</td>
 				<td>
-					<g:textField name="idp.scope" size="50" class="required"/> <em> e.g example.org
+					<g:textField name="idp.scope" size="50" class="required" value="${scope}"/> <em> e.g example.org </em>
 				</td>
 			</tr>
 		</table>
@@ -242,7 +271,7 @@
 					<g:hiddenField name="idp.crypto.sig" value="${true}" />
 					<g:hiddenField name="idp.crypto.encdata" />
 					<g:hiddenField name="idp.crypto.enc" value="${true}" />
-					<g:textArea name="cert" id="cert" rows="25" cols="60" />
+					<g:textArea name="cert" id="cert" rows="25" cols="60" value="${certificate}"/>
 				</td>
 			</tr>
 		</table>
@@ -273,7 +302,7 @@
 				</td>
 				<td>
 					<g:hiddenField name="aa.attributes.${attr.id}" />
-					<g:checkBox name="idp.attributes.${attr.id}" onchange="attrchange(${attr.id})"/>
+					<g:checkBox name="idp.attributes.${attr.id}" onchange="attrchange(${attr.id})" checked="${supportedAttributes?.contains(attr)}"/>
 				</td>
 			</tr>
 			</g:each>
@@ -300,7 +329,7 @@
 					${fieldValue(bean: nameidformat, field: "description")}
 				</td>
 				<td>
-					<g:checkBox name="idp.nameidformats.${nameidformat.id}" checked="${nameidformat.uri == 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient'}"/>
+					<g:checkBox name="idp.nameidformats.${nameidformat.id}" checked="${nameidformat.uri == 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient' || supportedNameIDFormats?.contains(nameidformat)}"/>
 				</td>
 			</tr>
 			</g:each>

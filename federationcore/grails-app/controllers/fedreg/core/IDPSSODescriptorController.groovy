@@ -42,16 +42,15 @@ class IDPSSODescriptorController {
 	}
 	
 	def save = {
-		def (created, organization, entityDescriptor, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact) = IDPSSODescriptorService.create(params)
+		def (created, ret) = IDPSSODescriptorService.create(params)
 	
 		if(created) {
-			redirect (action: "show", id: identityProvider.id)
+			redirect (action: "show", id: ret.identityProvider.id)
 		}
 		else {
 			flash.type="error"
 			flash.message = message(code: 'fedreg.core.idpssoroledescriptor.save.validation.error')
-			render (view:'create', model:[organization:organization, entityDescriptor:entityDescriptor, identityProvider:identityProvider, attributeAuthority:attributeAuthority, httpPost:httpPost, httpRedirect:httpRedirect, 
-			soapArtifact:soapArtifact, organizationList:organizationList, attributeList:attributeList, nameIDFormatList:nameIDFormatList, contact:contact])
+			render (view:'create', model:ret + [organizationList: Organization.findAllWhere(active:true, approved:true), attributeList: AttributeBase.list(), nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)])
 		}
 	}
 	

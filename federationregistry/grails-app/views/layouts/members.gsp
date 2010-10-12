@@ -98,7 +98,7 @@
 			<g:if test="${controllerName == 'IDPSSODescriptor'}">
 				<ul class="level3a">
 					<li class="${actionName == 'list' ? 'active':''}"><g:link controller="IDPSSODescriptor" action="list"><g:message code="label.list"/></g:link></li>
-						<li class="${actionName == 'create' ? 'active':''}"><g:link controller="IDPSSODescriptor" action="create"><g:message code="label.create"/></g:link></li>
+						<li class="${actionName in ['create', 'save'] ? 'active':''}"><g:link controller="IDPSSODescriptor" action="create"><g:message code="label.create"/></g:link></li>
 					<g:if test="${actionName in ['show', 'edit']}">
 					<li> | </li>
 					<li><g:message code="fedreg.view.members.identityprovider.show.heading" args="[identityProvider.displayName]"/>: </li>
