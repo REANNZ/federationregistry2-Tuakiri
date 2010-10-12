@@ -41,7 +41,7 @@ class SPSSODescriptorService {
 	
 		if(!entityDescriptor) {
 			def created
-			(created, entityDescriptor) = entityDescriptorService.create(params)	// If it doesn't create we don't really care it is caught below
+			(created, entityDescriptor) = entityDescriptorService.create(params)	// Odd issues with transactions cross services not rolling back so we save locally
 		}
 	
 		// SP
@@ -95,13 +95,13 @@ class SPSSODescriptorService {
 		// Assertion Consumer Services
 		def postBinding = SamlURI.findByUri(SamlConstants.httpPost)
 		def postLocation = new UrlURI(uri: params.sp?.acs?.post?.uri)
-		def httpPostACS = new AssertionConsumerService(approved: true, binding: postBinding, location:postLocation, active:params.active, isDefault:params.sp?.acs?.post?.isdefault)
+		def httpPostACS = new AssertionConsumerService(approved: true, binding: postBinding, location:postLocation, active:params.active, isDefault:(params.sp?.acs?.post?.isdefault == 'true') ? true:false)
 		serviceProvider.addToAssertionConsumerServices(httpPostACS)
 		httpPostACS.validate()
 
 		def artifactBinding = SamlURI.findByUri(SamlConstants.soap)
 		def artifactLocation = new UrlURI(uri: params.sp?.acs?.artifact?.uri)
-		def soapArtifactACS = new AssertionConsumerService(approved: true, binding: artifactBinding, location:artifactLocation, active:params.active, isDefault:params.sp?.acs?.artifact?.isdefault)
+		def soapArtifactACS = new AssertionConsumerService(approved: true, binding: artifactBinding, location:artifactLocation, active:params.active, isDefault:(params.sp?.acs?.artifact?.isdefault == 'true') ? true:false)
 		serviceProvider.addToAssertionConsumerServices(soapArtifactACS)
 		soapArtifactACS.validate()
 	
@@ -172,7 +172,7 @@ class SPSSODescriptorService {
 		if(params.sp?.drs?.uri){
 			def drsBinding = SamlURI.findByUri(SamlConstants.drs)
 			def drsLocation = new UrlURI(uri: params.sp?.drs?.uri)
-			discoveryResponseService = new DiscoveryResponseService(approved: true, binding: drsBinding, location:drsLocation, active:params.active, isDefault:params.sp?.drs?.isdefault)
+			discoveryResponseService = new DiscoveryResponseService(approved: true, binding: drsBinding, location:drsLocation, active:params.active, isDefault:true)
 			serviceProvider.addToDiscoveryResponseServices(discoveryResponseService)
 			discoveryResponseService.validate()
 		}

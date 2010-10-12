@@ -5,13 +5,13 @@
 			<li class="${controllerName == 'auth' ? 'directactive':''}">
 				<g:link controller="auth"><g:message code="fedreg.navigation.login" /></g:link>
 			</li>
-			<li class="${controllerName == 'bootstrap' && ['organization','organizationregistered'].contains(actionName) ? 'directactive':''}">
+			<li class="${controllerName == 'bootstrap' && ['organization', 'saveorganization','organizationregistered'].contains(actionName) ? 'directactive':''}">
 				<g:link controller="bootstrap" action="organization" class=""><g:message code="fedreg.navigation.registerorganization" /></g:link>
 			</li>
-			<li class="${controllerName == 'bootstrap' && ['idp','idpregistered'].contains(actionName) ? 'directactive':''}">
+			<li class="${controllerName == 'bootstrap' && ['idp', 'saveidp','idpregistered'].contains(actionName) ? 'directactive':''}">
 				<g:link controller="bootstrap" action="idp" class=""><g:message code="fedreg.navigation.registeridentityprovider" /></g:link>
 			</li>
-			<li class="${controllerName == 'bootstrap' && ['sp','spregistered'].contains(actionName) ? 'directactive':''}">
+			<li class="${controllerName == 'bootstrap' && ['sp', 'savesp','spregistered'].contains(actionName) ? 'directactive':''}">
 				<g:link controller="bootstrap" action="sp" class=""><g:message code="fedreg.navigation.registerserviceprovider" /></g:link>
 			</li>
 		</n:isNotLoggedIn>

@@ -292,7 +292,7 @@
 						<g:hasErrors bean="${httpPostACS}">
 							<div class="error"><g:renderErrors bean="${httpPostACS}"as="list"/></div>
 						</g:hasErrors>
-						<g:hiddenField name="sp.acs.post.isdefault" value="${true}" />
+						<g:hiddenField name="sp.acs.post.isdefault" value="true" />
 						<g:textField name="sp.acs.post.uri" size="75" class="required url"  value="${httpPostACS?.location?.uri}"/>
 					</td>
 				</tr>
@@ -304,7 +304,7 @@
 						<g:hasErrors bean="${soapArtifactACS}">
 							<div class="error"><g:renderErrors bean="${soapArtifactACS}"as="list"/></div>
 						</g:hasErrors>
-						<g:hiddenField name="sp.acs.artifact.isdefault" value="${false}" />
+						<g:hiddenField name="sp.acs.artifact.isdefault" value="false" />
 						<g:textField name="sp.acs.artifact.uri" size="75" class="required url" value="${soapArtifactACS?.location?.uri}"/>
 					</td>
 				</tr>
@@ -361,7 +361,7 @@
 							<div class="error"><g:renderErrors bean="${discoveryResponseService}"as="list"/></div>
 						</g:hasErrors>
 						<g:textField name="sp.drs.uri" size="75" class="url" value="${discoveryResponseService?.location?.uri}"/>
-						<g:hiddenField name="sp.drs.isdefault" value="${true}" />
+						<g:hiddenField name="sp.drs.isdefault" value="true" />
 					</td>
 				</tr>
 				<tr>

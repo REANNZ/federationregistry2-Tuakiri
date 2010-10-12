@@ -517,7 +517,7 @@
 				def binding = SamlURI.findByUri(SamlConstants.drs)
 				if(binding) {
 					def location = new UrlURI(uri:it.serviceLocation.trim())
-					def drs = new DiscoveryResponseService(binding: binding, location: location, active:true, approved:true)
+					def drs = new DiscoveryResponseService(binding: binding, location: location, active:true, approved:true, isDefault:true)
 					sp.addToDiscoveryResponseServices(drs)
 				}
 				else 

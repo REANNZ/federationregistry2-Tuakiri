@@ -17,16 +17,15 @@ class BootstrapController {
 	}
 	
 	def saveidp = {
-		def (created, organization, entityDescriptor, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact) = IDPSSODescriptorService.create(params)
+		def (created, ret) = IDPSSODescriptorService.create(params)
 		
 		if(created) {			
-			redirect (action: "idpregistered", id: identityProvider.id)
+			redirect (action: "idpregistered", id: ret.identityProvider.id)
 		}
 		else {
 			flash.type="error"
 			flash.message = message(code: 'fedreg.core.idpssoroledescriptor.register.validation.error')
-			render (view:'idp', model:[organization:organization, entityDescriptor:entityDescriptor, identityProvider:identityProvider, attributeAuthority:attributeAuthority, httpPost:httpPost, httpRedirect:httpRedirect, 
-			soapArtifact:soapArtifact, organizationList:organizationList, attributeList:attributeList, nameIDFormatList:nameIDFormatList, contact:contact])
+			render (view:'idp', model:ret + [organizationList: Organization.findAllWhere(active:true, approved:true), attributeList: AttributeBase.list(), nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)])
 		}
 	}
 	
@@ -56,16 +55,15 @@ class BootstrapController {
 	}
 	
 	def savesp = {
-		def (created, organization, entityDescriptor, serviceProvider, httpPostACS, soapArtifactACS, sloArtifact, sloRedirect, sloSOAP, sloPost, organizationList, attributeList, nameIDFormatList, contact) = SPSSODescriptorService.create(params)
+		def (created, ret) = SPSSODescriptorService.create(params)
 		
 		if(created) {
-			redirect (action: "spregistered", id: serviceProvider.id)
+			redirect (action: "spregistered", id: ret.serviceProvider.id)
 		}
 		else {
 			flash.type="error"
 			flash.message = message(code: 'fedreg.core.spssoroledescriptor.save.validation.error')
-			render (view:'sp', model:[organization:organization, entityDescriptor:entityDescriptor, serviceProvider:serviceProvider, httpPostACS:httpPostACS, soapArtifactACS:soapArtifactACS, contact:contact,
-										sloArtifact:sloArtifact, sloRedirect:sloRedirect, sloSOAP:sloSOAP, sloPost:sloPost, organizationList:organizationList, attributeList:attributeList, nameIDFormatList:nameIDFormatList])
+			render (view:'sp', model:ret + [organizationList: Organization.findAllWhere(active:true, approved:true), attributeList: AttributeBase.list(), nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)])
 		}
 	}
 	

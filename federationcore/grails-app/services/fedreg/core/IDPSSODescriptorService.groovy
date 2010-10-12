@@ -44,7 +44,7 @@ class IDPSSODescriptorService {
 	
 		if(!entityDescriptor) {
 			def created
-			(created, entityDescriptor) = entityDescriptorService.createNoSave(params)	// Odd issues with transactions cross services not rolling back so we save here
+			(created, entityDescriptor) = entityDescriptorService.createNoSave(params)	// Odd issues with transactions cross services not rolling back so we save locally
 		}
 	
 		// IDP
