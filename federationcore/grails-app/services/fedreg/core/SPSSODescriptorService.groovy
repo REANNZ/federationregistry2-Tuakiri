@@ -52,6 +52,8 @@ class SPSSODescriptorService {
 		def acs = new AttributeConsumingService(approved:true, lang:params.lang ?:'en')
 		acs.addToServiceNames(params.sp?.displayName ?: '')
 		acs.addToServiceDescriptions(params.sp?.description ?: '')
+		
+		def supportedAttributes = []
 		params.sp.attributes.each { a -> 
 			def attrID = a.key
 			def val = a.value
@@ -61,6 +63,7 @@ class SPSSODescriptorService {
 					def attr = AttributeBase.get(attrID)
 					if(attr) {
 						def ra = new RequestedAttribute(approved:true, base:attr, reasoning: val.reasoning, isRequired: (val.required == 'on') )
+						supportedAttributes.add(ra)
 						acs.addToRequestedAttributes(ra)
 					
 						if(val.requestedvalues) {
@@ -75,11 +78,14 @@ class SPSSODescriptorService {
 		}
 		serviceProvider.addToAttributeConsumingServices(acs)
 	
+		def supportedNameIDFormats = []
 		params.sp.nameidformats.each { nameFormatID -> 
 			if(nameFormatID.value == "on") {
 				def nameid = SamlURI.get(nameFormatID.key)
-				if(nameid)
+				if(nameid) {
+					supportedNameIDFormats.add(nameid)
 					serviceProvider.addToNameIDFormats(nameid)
+				}
 			}
 		}
 		def spContactPerson = new ContactPerson(contact:contact, type:ContactType.findByName(ct))
@@ -174,7 +180,7 @@ class SPSSODescriptorService {
 		// Cryptography
 		// Signing
 		if(params.sp?.crypto?.sig) {
-			def cert = cryptoService.createCertificate(params.sp?.crypto?.sigdata)
+			def cert = cryptoService.createCertificate(params.cert)
 			cryptoService.validateCertificate(cert)
 			def keyInfo = new KeyInfo(certificate: cert)
 			def keyDescriptor = new KeyDescriptor(keyInfo:keyInfo, keyType:KeyTypes.signing, roleDescriptor:serviceProvider)
@@ -183,7 +189,7 @@ class SPSSODescriptorService {
 	
 		// Encryption
 		if(params.sp?.crypto?.enc) {
-			def certEnc = cryptoService.createCertificate(params.sp?.crypto?.encdata)
+			def certEnc = cryptoService.createCertificate(params.cert)
 			cryptoService.validateCertificate(certEnc)
 			def keyInfoEnc = new KeyInfo(certificate:certEnc)
 			def keyDescriptorEnc = new KeyDescriptor(keyInfo:keyInfoEnc, keyType:KeyTypes.encryption, roleDescriptor:serviceProvider)
@@ -195,12 +201,35 @@ class SPSSODescriptorService {
 			provides: params.sp?.servicedescription?.provides, benefits: params.sp?.servicedescription?.benefits, audience: params.sp?.servicedescription?.audience, restrictions: params.sp?.servicedescription?.restrictions, 
 			accessing: params.sp?.servicedescription?.accessing, support: params.sp?.servicedescription?.support, maintenance: params.sp?.servicedescription?.maintenance)
 		serviceProvider.serviceDescription = serviceDescription
+		
+		// Generate return map
+		def ret = [:]
+		ret.organization = organization
+		ret.entityDescriptor = entityDescriptor
+		ret.serviceProvider = serviceProvider
+		ret.hostname = params.hostname
+		ret.httpPostACS = httpPostACS
+		ret.soapArtifactACS = soapArtifactACS
+		ret.sloArtifact = sloArtifact
+		ret.sloRedirect = sloRedirect
+		ret.sloSOAP = sloSOAP
+		ret.sloPost = sloPost
+		ret.mnidArtifact = mnidArtifact
+		ret.mnidRedirect = mnidRedirect
+		ret.mnidSOAP = mnidSOAP
+		ret.mnidPost = mnidPost
+		ret.discoveryResponseService = discoveryResponseService
+		ret.contact = contact
+		ret.certificate = params.cert
+		ret.supportedNameIDFormats = supportedNameIDFormats
+		ret.supportedAttributes = supportedAttributes
+		ret.servicedescription = params.sp?.servicedescription
 	
 		// Submission validation
 		if(!entityDescriptor.save()) {
 			entityDescriptor?.errors.each { log.error it }
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly() 
-			return [false, organization, entityDescriptor, serviceProvider, httpPostACS, soapArtifactACS, sloArtifact, sloRedirect, sloSOAP, sloPost, Organization.list(), AttributeBase.list(), SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding), contact]
+			return [false, ret]
 		}
 		serviceProvider.entityDescriptor = entityDescriptor
 		entityDescriptor.addToSpDescriptors(serviceProvider)
@@ -208,7 +237,7 @@ class SPSSODescriptorService {
 		if(!serviceProvider.validate()) {			
 			serviceProvider.errors.each { log.warn it }
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly() 
-			return [false, organization, entityDescriptor, serviceProvider, httpPostACS, soapArtifactACS, sloArtifact, sloRedirect, sloSOAP, sloPost, Organization.list(), AttributeBase.list(), SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding), contact]
+			return [false, ret]
 		}
 	
 		if(!serviceProvider.save()) {			
@@ -224,7 +253,7 @@ class SPSSODescriptorService {
 		else
 			throw new RuntimeException("Unable to execute workflow when creating ${serviceProvider}")
 	
-		return [true, organization, entityDescriptor, serviceProvider, httpPostACS, soapArtifactACS, sloArtifact, sloRedirect, sloSOAP, sloPost, Organization.list(), AttributeBase.list(), SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding), contact]
+		return [true, ret]
 	}
 	
 	

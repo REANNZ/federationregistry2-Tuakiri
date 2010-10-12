@@ -30,11 +30,13 @@
 		$('#samladvancedmode').hide();
 		
 		$('#hostname').bind('blur',  function() {
-			$('#entity\\.identifier').val($(this).val() + '/idp/shibboleth');
-			$('#idp\\.post\\.uri').val($(this).val() + '/idp/profile/SAML2/POST/SSO');
-			$('#idp\\.redirect\\.uri').val($(this).val() + '/idp/profile/SAML2/Redirect/SSO');
-			$('#idp\\.artifact\\.uri').val($(this).val() + '/idp/profile/SAML2/SOAP/ArtifactResolution');
-			$('#aa\\.attributeservice\\.uri').val($(this).val() + '/idp/profile/SAML2/SOAP/AttributeQuery');
+			if($(this).val().length > 0) {
+				$('#entity\\.identifier').val($(this).val() + '/idp/shibboleth');
+				$('#idp\\.post\\.uri').val($(this).val() + '/idp/profile/SAML2/POST/SSO');
+				$('#idp\\.redirect\\.uri').val($(this).val() + '/idp/profile/SAML2/Redirect/SSO');
+				$('#idp\\.artifact\\.uri').val($(this).val() + '/idp/profile/SAML2/SOAP/ArtifactResolution');
+				$('#aa\\.attributeservice\\.uri').val($(this).val() + '/idp/profile/SAML2/SOAP/AttributeQuery');
+			}
 		});
 		
 		$("#cert").bind('paste', function() { setTimeout(function() { validateCertificate(); }, 100); });
@@ -58,7 +60,7 @@
 </script>
 
 <g:hasErrors>
-    <div class="error">
+    <div class="warning">
        <g:message code="fedreg.templates.identityprovider.create.errors" />
     </div>
 </g:hasErrors>
@@ -77,6 +79,9 @@
 			<p>
 				<g:message code="fedreg.templates.identityprovider.create.contact.details" />
 			</p>
+			<g:hasErrors bean="${contact}">
+				<div class="error"><g:renderErrors bean="${attributeAuthority}"as="list"/></div>
+			</g:hasErrors>
 			<table>
 				<tr>
 					<td>
@@ -161,7 +166,7 @@
 					</td>
 					<td>
 						<g:hasErrors bean="${entityDescriptor}">
-							<div class="error"><g:renderErrors bean="${entityDescriptor}" as="list" class="error"/></div>
+							<div class="error"><g:renderErrors bean="${entityDescriptor}"as="list"/></div>
 						</g:hasErrors>
 						<g:textField name="hostname" size="50" class="required url" value="${hostname}"/> <em> e.g https://idp.example.org </em>
 					</td>
@@ -173,7 +178,7 @@
 		<div id="samladvancedmode">
 			<h4><g:message code="fedreg.templates.identityprovider.create.saml.advanced.heading" /></h4>
 			<p><g:message code="fedreg.templates.identityprovider.create.saml.advanced.descriptive" /></p>
-			<table id="samladvancedmode">
+			<table>
 				<tr>
 					<td/>
 					<td><a href="#" onClick="$('#samladvancedmode').hide(); $('#samlbasicmode').fadeIn();"><g:message code="fedreg.templates.identityprovider.create.saml.advanced.switch.shibboleth" /></a></td>
@@ -184,7 +189,7 @@
 					</td>
 					<td>
 						<g:hasErrors bean="${entityDescriptor}">
-							<div class="error"><g:renderErrors bean="${entityDescriptor}" as="list" class="error"/></div>
+							<div class="error"><g:renderErrors bean="${entityDescriptor}"as="list"/></div>
 						</g:hasErrors>
 						<g:textField name="entity.identifier" size="75" class="required url" value="${entityDescriptor?.entityID}"/>
 					</td>
@@ -195,7 +200,7 @@
 					</td>
 					<td>
 						<g:hasErrors bean="${httpPost}">
-							<div class="error"><g:renderErrors bean="${httpPost}" as="list" class="error"/></div>
+							<div class="error"><g:renderErrors bean="${httpPost}"as="list"/></div>
 						</g:hasErrors>
 						<g:textField name="idp.post.uri" size="75" class="required url" value="${httpPost?.location?.uri}"/>
 					</td>
@@ -206,7 +211,7 @@
 					</td>
 					<td>
 						<g:hasErrors bean="${httpRedirect}">
-							<div class="error"><g:renderErrors bean="${httpRedirect}" as="list" class="error"/></div>
+							<div class="error"><g:renderErrors bean="${httpRedirect}"as="list"/></div>
 						</g:hasErrors>
 						<g:textField name="idp.redirect.uri" size="75" class="required url" value="${httpRedirect?.location?.uri}"/>
 					</td>
@@ -217,7 +222,7 @@
 					</td>
 					<td>
 						<g:hasErrors bean="${soapArtifact}">
-							<div class="error"><g:renderErrors bean="${soapArtifact}" as="list" class="error"/></div>
+							<div class="error"><g:renderErrors bean="${soapArtifact}"as="list"/></div>
 						</g:hasErrors>
 						<g:textField name="idp.artifact.uri" size="75" class="required url" value="${soapArtifact?.location?.uri}"/>
 					</td>
@@ -228,7 +233,7 @@
 					</td>
 					<td>
 						<g:hasErrors bean="${attributeAuthority}">
-							<div class="error"><g:renderErrors bean="${attributeAuthority}" as="list" class="error"/></div>
+							<div class="error"><g:renderErrors bean="${attributeAuthority}"as="list"/></div>
 						</g:hasErrors>
 						<g:textField name="aa.attributeservice.uri" size="75" class="required url" value="${attributeAuthority?.attributeServices?.get(0)?.location?.uri}"}/>
 					</td>
