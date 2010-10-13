@@ -1,17 +1,20 @@
 <%@ page contentType="text/html"%>
-<html>
-	<head></head>
-	<body>
-		<g:message code="fedreg.templates.mail.workflow.requestapproval.descriptive" />
 
-		<g:link controller="workflowApproval" action="list" absolute="true"><g:message code="fedreg.templates.mail.workflow.requestapproval.access" /></g:link>
+<g:applyLayout name="email">
+	<html>
+		<head></head>
+		<body>
+			<g:message code="fedreg.templates.mail.workflow.requestapproval.descriptive" />
 
-		<p><strong><g:message code="label.name" /></strong>: ${fieldValue(bean: taskInstance, field: "task.name")} (ID: ${fieldValue(bean: taskInstance, field: "id")})</p>
+			<g:link controller="workflowApproval" action="list" absolute="true"><g:message code="fedreg.templates.mail.workflow.requestapproval.access" /></g:link>
 
-		<p><strong><g:message code="label.description" /></strong>: ${fieldValue(bean: taskInstance, field: "task.description")}</p>
+			<p><strong><g:message code="label.name" /></strong>: ${fieldValue(bean: taskInstance, field: "task.name")} (ID: ${fieldValue(bean: taskInstance, field: "id")})</p>
 
-		<p><strong><g:message code="label.processinstance" /></strong>: ${fieldValue(bean: taskInstance, field: "processInstance.description")}</p>
+			<p><strong><g:message code="label.description" /></strong>: ${fieldValue(bean: taskInstance, field: "task.description")}</p>
 
-		<p><g:message code="fedreg.templates.mail.get.support" /></p>
-	</body>
-</html>
+			<p><strong><g:message code="label.processinstance" /></strong>: ${fieldValue(bean: taskInstance, field: "processInstance.description")}</p>
+
+			<p><g:message code="fedreg.templates.mail.get.support" /></p>
+		</body>
+	</html>
+</g:applyLayout>
