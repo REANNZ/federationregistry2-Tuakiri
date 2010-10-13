@@ -8,6 +8,9 @@
 	<g:if test="${valid}">
 		<div class="success">
 	</g:if>
+	<g:else>
+		<div class="warning">
+	</g:else>
 	
 	<table>
 		<tbody>
@@ -41,13 +44,14 @@
 	<g:else>
 			</tbody>
 		</table>
+		</div>
 		<div class="error">
 			<span><strong><g:message code="fedreg.template.certificates.validation.errors"/></strong></span>
-			<p>
-			<g:each in="${certerrors}" status="i" var="e">
-				${i+1}). <g:message code="${e}" />
-			</g:each>
-			<p>
+				<ol>
+				<g:each in="${certerrors}" var="e">
+					<li><g:message code="${e}" /></li>
+				</g:each>
+				</ol>
 		</div>
 	</g:else>
 </g:else>

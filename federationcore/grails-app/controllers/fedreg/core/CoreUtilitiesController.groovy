@@ -35,14 +35,20 @@ class CoreUtilitiesController {
 				log.warn "Certificate contains wildcard"
 			}
 
-/*
 			// CN has hostname as value
-			if(!params.entity.contains(subject)) {
-				valid = false
-				certerrors.add("fedreg.templates.certificates.validation.subject.doesnot.contain.host")
-				log.warn "Certificate CN does not contain hostname"
+			def matcher =  subject =~ /^(?:.*,)*[cC][nN]=([^,]+)(?:,.*)*$/
+			if(matcher.matches()) {
+				def cn = matcher[0][1]
+				log.debug "Certificate CN is $cn and entity is ${params.entity}"
+				if(!params.entity.contains(cn)) {
+					valid = false
+					certerrors.add("fedreg.templates.certificates.validation.subject.doesnot.contain.host")
+					log.warn "Certificate CN does not contain hostname"
+				}
+			} else {
+				certerrors.add("fedreg.templates.certificates.validation.subject.doesnot.contain.cn")
+				log.warn "Certificate CN does not exist"
 			}
-*/
 			
 			// Max validity matches configured allowable value
 			def today = new Date()
@@ -63,7 +69,6 @@ class CoreUtilitiesController {
 				log.warn "Certificate requires CA and can't be verified"
 			}
 			
-			log.debug "Validated certificate against"
 			render template:"/templates/certificates/validation",  contextPath: pluginContextPath, model:[corrupt: false, subject:subject, issuer:issuer, expires:expires, valid:valid, certerrors:certerrors]
 			if(!valid)
 				response.setStatus(500)	

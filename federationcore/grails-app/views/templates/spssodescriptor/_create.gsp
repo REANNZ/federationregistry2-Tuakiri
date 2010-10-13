@@ -56,7 +56,7 @@
 	
 	function validateCertificate() {
 		$('#newcertificatedata').removeClass('error');
-		fedreg.keyDescriptor_verify($('#entity.identifier').serialize());
+		fedreg.keyDescriptor_verify($('#entity\\.identifier').val());
 		if(!newCertificateValid) {
 			$('#newcertificatedata').addClass('error');
 		}
@@ -143,7 +143,7 @@
 					<label for="sp.description"><g:message code="label.description" /></label>
 				</td>
 				<td>
-					<g:textArea name="sp.description"  class="required" minlength="4" rows="8" cols="36" value="${serviceProvider.description}"/>
+					<g:textArea name="sp.description"  class="required" minlength="4" rows="8" cols="36" value="${serviceProvider?.description}"/>
 				</td>
 			</tr>
 			<tr>
