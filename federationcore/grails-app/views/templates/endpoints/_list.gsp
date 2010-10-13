@@ -21,10 +21,10 @@
 			<th><g:message code="label.approved" /></th>
 			<td>
 				<g:if test="${ep.approved}">
-					<div class="icon icon_tick"><g:message code="label.yes" /></div>
+					<g:message code="label.yes" />
 				</g:if>
 				<g:else>
-					<div class="icon icon_cross"><g:message code="label.no" /></div>
+					<g:message code="label.no" />
 				</g:else>
 			</td>
 		</tr>
@@ -41,7 +41,14 @@
 		<g:if test="${ep.instanceOf(fedreg.core.IndexedEndpoint)}">
 			<tr>
 				<th><g:message code="label.isdefault" /></th>
-				<td colspan="2">${(ep.isDefault).encodeAsHTML()}</td>
+				<td>
+					<g:if test="${ep.isDefault}">
+						<g:message code="label.yes" />
+					</g:if>
+					<g:else>
+						<g:message code="label.no" />
+					</g:else>
+				</td>
 			</tr>
 		</g:if>
 		<tr>

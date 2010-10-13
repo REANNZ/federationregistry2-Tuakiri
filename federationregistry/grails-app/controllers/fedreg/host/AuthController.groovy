@@ -93,9 +93,12 @@ class AuthController {
 				SecurityUtils.subject.login(authToken)
 		        this.userService.createLoginRecord(request)
 		
-				def targetUri = session.getAttribute(AuthController.TARGET) ?: "/"
+				def targetUri = session.getAttribute(AuthController.TARGET)
 	            session.removeAttribute(AuthController.TARGET)
-	            redirect(uri: targetUri)
+				if(targetUri)
+	            	redirect(uri: targetUri)
+				else
+					redirect(controller: "organization", action:"list")
 				return
 			}
 	        catch (IncorrectCredentialsException e) {
@@ -132,9 +135,12 @@ class AuthController {
 		def authToken = new ShibbolethToken(principal:params.uniqueID, givenName:params.givenName, surname:params.surname, email:params.email, entityID:params.entityID, homeOrganization:params.homeOrganization, homeOrganizationType:params.homeOrganizationType)
 		SecurityUtils.subject.login(authToken)
         this.userService.createLoginRecord(request)
-        def targetUri = session.getAttribute(AuthController.TARGET) ?: "/"
+        def targetUri = session.getAttribute(AuthController.TARGET)
         session.removeAttribute(AuthController.TARGET)
-        redirect(uri: targetUri)
+        if(targetUri)
+        	redirect(uri: targetUri)
+		else
+			redirect(controller: "organization", action:"list")
 	}
 
 }
