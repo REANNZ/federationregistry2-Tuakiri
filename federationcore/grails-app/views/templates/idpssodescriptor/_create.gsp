@@ -22,6 +22,7 @@
 			return newCertificateValid == true; 
 		}, jQuery.format("PEM data invalid"));
 		
+		
 		$('#cert').rules("add", {
 		     required: true,
 		     validcert: true
@@ -51,7 +52,7 @@
 	
 	function validateCertificate() {
 		$('#newcertificatedata').removeClass('error');
-		fedreg.keyDescriptor_verify();
+		fedreg.keyDescriptor_verify($('#entity.identifier').serialize());
 		if(!newCertificateValid) {
 			$('#newcertificatedata').addClass('error');
 		}

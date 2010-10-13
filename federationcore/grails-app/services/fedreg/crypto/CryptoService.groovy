@@ -83,7 +83,8 @@ class CryptoService {
 		}
 		catch(Exception e) {
 			log.warn "Unable to validate certificate against current trust anchors"
-			log.debug e.getLocalizedMessage()
+			log.warn "Localized Message: " + e.getLocalizedMessage()
+			e.printStackTrace()
 			certificate.errors.rejectValue("data", "fedreg.core.certificate.data.invalid")
 		 	false
 		}

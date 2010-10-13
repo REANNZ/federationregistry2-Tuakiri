@@ -167,9 +167,9 @@ fedreg.descriptor_fulladministrator_search = function() {
 }
 
 // Key Descriptor
-fedreg.keyDescriptor_verify = function() {
+fedreg.keyDescriptor_verify = function(entity) {
 	$("#working").trigger("fedreg.working");
-	var dataString = "cert=" + $("#cert").val();
+	var dataString = $("#cert").serialize() + "&entity=" + entity;
 	newCertificateValid = false;
 	$.ajax({
 		async: false,

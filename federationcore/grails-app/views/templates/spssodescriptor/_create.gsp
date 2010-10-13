@@ -56,7 +56,7 @@
 	
 	function validateCertificate() {
 		$('#newcertificatedata').removeClass('error');
-		fedreg.keyDescriptor_verify();
+		fedreg.keyDescriptor_verify($('#entity.identifier').serialize());
 		if(!newCertificateValid) {
 			$('#newcertificatedata').addClass('error');
 		}

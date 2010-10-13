@@ -4,6 +4,7 @@ import fedreg.workflow.ProcessPriority
 
 class CoreUtilitiesController {
 	
+	def grailsApplication
 	def cryptoService
 	
 	static allowedMethods = [validate: "POST"]
@@ -18,27 +19,39 @@ class CoreUtilitiesController {
 		
 		log.debug "About to validate new certificate:\n${params.cert}"
 		try {
-			def certificate = cryptoService.createCertificate(params.cert)
+			def certificate = cryptoService.createCertificate(params.cert.trim().normalize())
 			def subject = cryptoService.subject(certificate);
 			def issuer = cryptoService.issuer(certificate);
 			def expires = cryptoService.expiryDate(certificate);
 			
-			// TODO extend additional validation checks over time so we don't get stupid
-			// certs being entered.
+			// TODO extend additional validation checks over time so we don't get stupid certs being entered.
 			def valid = true
 			def certerrors = []
 		
 			// Wilcard certificate
 			if(subject.contains('*')) {
 				valid = false
-				certerrors.add("fedreg.template.certificates.validation.wildcard")
+				certerrors.add("fedreg.templates.certificates.validation.wildcard")
+				log.warn "Certificate contains wildcard"
 			}
-			
-			// Min size check of 2048 bits
-			
+
+/*
 			// CN has hostname as value
+			if(!params.entity.contains(subject)) {
+				valid = false
+				certerrors.add("fedreg.templates.certificates.validation.subject.doesnot.contain.host")
+				log.warn "Certificate CN does not contain hostname"
+			}
+*/
 			
-			// Max validity period of 3 years
+			// Max validity matches configured allowable value
+			def today = new Date()
+			def maxValidDate = today + grailsApplication.config.fedreg.certificates.maxlifeindays
+			if(expires.after(maxValidDate)) {
+				valid = false
+				certerrors.add("fedreg.templates.certificates.validation.expiry.tolong")
+				log.warn "Certificate exceeds max time period for validity"
+			}
 		
 			// Valid certifying authority
 			def validca = false
@@ -46,11 +59,14 @@ class CoreUtilitiesController {
 		
 			if(!validca) {
 				valid = false
-				certerrors.add("fedreg.template.certificates.validation.invalidca")
+				certerrors.add("fedreg.templates.certificates.validation.invalidca")
+				log.warn "Certificate requires CA and can't be verified"
 			}
 			
 			log.debug "Validated certificate against"
 			render template:"/templates/certificates/validation",  contextPath: pluginContextPath, model:[corrupt: false, subject:subject, issuer:issuer, expires:expires, valid:valid, certerrors:certerrors]
+			if(!valid)
+				response.setStatus(500)	
 		}
 		catch(Exception e) {
 			log.warn "Certificate data is invalid"

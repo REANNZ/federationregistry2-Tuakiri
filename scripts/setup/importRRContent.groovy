@@ -590,27 +590,28 @@
 		{
 			try {
 				def data = "-----BEGIN CERTIFICATE-----\n${it.certData.normalize()}\n-----END CERTIFICATE-----"
-				//println "Importing certificate data\n${data}"
 				def cert = cryptoService.createCertificate(data)	
-				def keyInfo = new KeyInfo(certificate:cert)
-				def keyDescriptor = new KeyDescriptor(keyInfo:keyInfo, keyType:KeyTypes.signing, roleDescriptor:descriptor)
-				keyDescriptor.validate()
-				if(keyDescriptor.hasErrors()){
-					println "Error import crypto for $descriptor"
-					keyDescriptor.errors.each { println it}
-				}
-				descriptor.addToKeyDescriptors(keyDescriptor)
-			
-				if(enc){
-					def certEnc = cryptoService.createCertificate(data)	
-					def keyInfoEnc = new KeyInfo(certificate:certEnc)
-					def keyDescriptorEnc = new KeyDescriptor(keyInfo:keyInfoEnc, keyType:KeyTypes.encryption, roleDescriptor:descriptor)
-					keyDescriptorEnc.validate()
-					if(keyDescriptorEnc.hasErrors()){
-						println "Error import crypto for $descriptor"
-						keyDescriptorEnc.errors.each { println it}
+				if(cryptoService.validateCertificate(cert)) {
+					def keyInfo = new KeyInfo(certificate:cert)
+					def keyDescriptor = new KeyDescriptor(keyInfo:keyInfo, keyType:KeyTypes.signing, roleDescriptor:descriptor)
+					keyDescriptor.validate()
+					if(keyDescriptor.hasErrors()){
+						println "Error import crypto for $descriptor and ${it.certData}"
+						keyDescriptor.errors.each { println it}
 					}
-					descriptor.addToKeyDescriptors(keyDescriptorEnc)
+					descriptor.addToKeyDescriptors(keyDescriptor)
+			
+					if(enc){
+						def certEnc = cryptoService.createCertificate(data)	
+						def keyInfoEnc = new KeyInfo(certificate:certEnc)
+						def keyDescriptorEnc = new KeyDescriptor(keyInfo:keyInfoEnc, keyType:KeyTypes.encryption, roleDescriptor:descriptor)
+						keyDescriptorEnc.validate()
+						if(keyDescriptorEnc.hasErrors()){
+							println "Error import crypto for $descriptor"
+							keyDescriptorEnc.errors.each { println it}
+						}
+						descriptor.addToKeyDescriptors(keyDescriptorEnc)
+					}
 				}
 			}
 			catch(Exception e) {
