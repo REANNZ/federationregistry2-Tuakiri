@@ -74,6 +74,7 @@ class CoreUtilitiesController {
 				response.setStatus(500)	
 		}
 		catch(Exception e) {
+			log.debug e
 			log.warn "Certificate data is invalid"
 			render template:"/templates/certificates/validation", contextPath: pluginContextPath, model:[corrupt:true]
 			response.setStatus(500)
