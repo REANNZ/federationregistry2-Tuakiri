@@ -267,7 +267,12 @@ class SPSSODescriptorService {
 			it.removeFromServiceDescriptions(serviceProvider.description)
 			
 			it.addToServiceNames(params.sp?.displayName)
-			it.addToServiceDescriptions(params.sp?.description)
+			
+			def description = params.sp?.description
+			if(description)
+				if(description.size() > 255)
+					description = description.substring(0, 254)
+			it.addToServiceDescriptions(description)
 		}
 		
 		serviceProvider.displayName = params.sp.displayName
