@@ -261,6 +261,19 @@ class SPSSODescriptorService {
 		def serviceProvider = SPSSODescriptor.get(params.id)
 		if(!serviceProvider)
 			return [false, null]
+			
+		serviceProvider.attributeConsumingServices.each {
+			it.removeFromServiceNames(serviceProvider.displayName)
+			it.removeFromServiceDescriptions(serviceProvider.description)
+			
+			it.addToServiceNames(params.sp?.displayName)
+			
+			def description = params.sp?.description
+			if(description)
+				if(description.size() > 255)
+					description = description.substring(0, 254)
+			it.addToServiceDescriptions(description)
+		}
 		
 		serviceProvider.displayName = params.sp.displayName
 		serviceProvider.description = params.sp.description
