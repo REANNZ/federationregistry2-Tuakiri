@@ -10,7 +10,6 @@
 	<script type="text/javascript" src="${resource(dir: 'js', file: '/modernizr-1.5.min.js')}"></script>
     
 	<link rel="stylesheet" href="${resource(dir:'css',file:'jquery-ui-1.8.2.custom.css')}" />
-	<link rel="stylesheet" href="${resource(dir:'css',file:'jquery.jqplot.min.css')}" />
 	<link rel="stylesheet" href="${resource(dir:'css',file:'jquery.jgrowl.css')}" />
 	
 	<link rel="stylesheet/less" href="${resource(dir:'css',file:'frtheme.less')}" />
