@@ -123,7 +123,7 @@ class NimbleTagLib {
 			cssclass = "class=\'${attrs.class}\'"
 		
 		if(attrs.plain) {
-			out << "<a $href $onclick $id class='$cssclass'>${attrs.label}</a"
+			out << "<a $href $onclick $id class='$cssclass'>${attrs.label}</a>"
 		}
 		else {
 			out << "<a $href $onclick $id class='ui-button $type ui-widget ui-state-default ui-corner-all $cssclass'>"
