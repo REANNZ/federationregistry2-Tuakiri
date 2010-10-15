@@ -6,6 +6,8 @@ import fedreg.core.*
 
 class MetadataGenerationService {
 	
+	static transactional = false
+	
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
 	
 	def localizedName(builder, type, lang, content) {
@@ -243,7 +245,7 @@ class MetadataGenerationService {
 	
 	def idpSSODescriptor(builder, all, minimal, idpSSODescriptor) {
 		if(all || (idpSSODescriptor.approved && idpSSODescriptor.active)) {
-			builder.IDPSSODescriptor(protocolSupportEnumeration: idpSSODescriptor.protocolSupportEnumerations.sort{it.uri}.collect({it.uri}).join(' '), WantAuthnRequestsSigned:idpSSODescriptor.wantAuthnRequestsSigned) {
+			builder.IDPSSODescriptor(protocolSupportEnumeration: idpSSODescriptor.protocolSupportEnumerations.sort{it.uri}.collect({it.uri}).join(' ')) {
 				roleDescriptor(builder, minimal, idpSSODescriptor)
 				ssoDescriptor(builder, all, minimal, idpSSODescriptor)
 			
@@ -259,7 +261,7 @@ class MetadataGenerationService {
 	
 	def spSSODescriptor(builder, all, minimal, spSSODescriptor) {
 		if(all || (spSSODescriptor.active && spSSODescriptor.approved)) {
-			builder.SPSSODescriptor(protocolSupportEnumeration: spSSODescriptor.protocolSupportEnumerations.sort{it.uri}.collect({it.uri}).join(' '), AuthnRequestsSigned:spSSODescriptor.authnRequestsSigned, WantAssertionsSigned:spSSODescriptor.wantAssertionsSigned) {
+			builder.SPSSODescriptor(protocolSupportEnumeration: spSSODescriptor.protocolSupportEnumerations.sort{it.uri}.collect({it.uri}).join(' ')) {
 				roleDescriptor(builder, minimal, spSSODescriptor)
 				ssoDescriptor(builder, all, minimal, spSSODescriptor)
 			

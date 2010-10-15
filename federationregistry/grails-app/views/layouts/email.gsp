@@ -8,7 +8,8 @@
 
 	<body style="padding:0; margin:0; font-family: Helvetica, Arial, sans-serif; font-size: 0.9em;">
 		<div style="padding: 6px; height: 70px; background-color: #495666; color: #ffffff">
-			<g:render template='/templates/frheader' />
+			<img style="float:left; padding-right: 6px;" src="${resource(absolute: true, dir:'images', file:'logo.jpg')}" alt="${message(code:'fedreg.title')}" border="0" />
+			<h1 style="font-size: 1.2em;"><g:message code="fedreg.title" /></h1>
 		</div>
 
 		<div style="padding: 12px;">
