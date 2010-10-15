@@ -46,6 +46,21 @@ class ShibbolethRealm {
 			throw new UnknownAccountException("Authentication attempt for Shibboleth provider, denying attempt as no homeOrganization (ShibbolethToken.homeOrganization) was provided")
 		}
 		
+		if (!authToken.givenName) {
+			log.error("Authentication attempt for Shibboleth provider, denying attempt as no givenName (ShibbolethToken.givenName) was provided")
+			throw new UnknownAccountException("Authentication attempt for Shibboleth provider, denying attempt as no givenName (ShibbolethToken.givenName) was provided")
+		}
+		
+		if (!authToken.surname) {
+			log.error("Authentication attempt for Shibboleth provider, denying attempt as no surname (ShibbolethToken.surname) was provided")
+			throw new UnknownAccountException("Authentication attempt for Shibboleth provider, denying attempt as no surname (ShibbolethToken.surname) was provided")
+		}
+		
+		if (!authToken.email) {
+			log.error("Authentication attempt for Shibboleth provider, denying attempt as no email (ShibbolethToken.email) was provided")
+			throw new UnknownAccountException("Authentication attempt for Shibboleth provider, denying attempt as no email (ShibbolethToken.email) was provided")
+		}
+		
 		def entityDescriptor = EntityDescriptor.findWhere(entityID:authToken.entityID)
 		if(!entityDescriptor) {
 			log.error("Authentication attempt for Shibboleth provider, denying attempt as no Entity matching (ShibbolethToken.entityID) is available. Has bootstrap occured?")
