@@ -79,7 +79,7 @@ fedreg.organization_fulladministrator_list = function() {
 fedreg.organization_fulladministrator_search = function() {
 	$("#working").trigger("fedreg.working");
 	$("#availablefulladministrators").fadeOut().empty();
-	var dataString = "givenName=" + $('#givenName').val() + '&surname=' + $('#surname').val() + '&email=' + $('#email').val()
+	var dataString = "q=" + $('#q').val()
 	$.ajax({
 		type: "POST",
 		url: organizationFullAdministratorSearchEndpoint,
@@ -150,7 +150,7 @@ fedreg.descriptor_fulladministrator_list = function() {
 fedreg.descriptor_fulladministrator_search = function() {
 	$("#working").trigger("fedreg.working");
 	$("#availablefulladministrators").fadeOut().empty();
-	var dataString = "givenName=" + $('#dfa_givenname').val() + '&surname=' + $('#dfa_surname').val() + '&email=' + $('#dfa_email').val()
+	var dataString = "q=" + $('#q').val()
 	$.ajax({
 		type: "POST",
 		url: descriptorFullAdministratorSearchEndpoint,
@@ -167,9 +167,9 @@ fedreg.descriptor_fulladministrator_search = function() {
 }
 
 // Key Descriptor
-fedreg.keyDescriptor_verify = function() {
+fedreg.keyDescriptor_verify = function(entity) {
 	$("#working").trigger("fedreg.working");
-	var dataString = "cert=" + $("#cert").val();
+	var dataString = $("#cert").serialize() + "&entity=" + entity;
 	newCertificateValid = false;
 	$.ajax({
 		async: false,
@@ -232,6 +232,55 @@ fedreg.keyDescriptor_delete = function(id) {
 		success: function(res) {
 			nimble.growl('success', res);
 			fedreg.keyDescriptor_list()
+	    },
+	    error: function (xhr, ajaxOptions, thrownError) {
+			nimble.growl('error', xhr.responseText);
+	    }
+	});
+};
+
+// Monitors
+fedreg.monitor_create = function() {
+	$("#working").trigger("fedreg.working");
+	var dataString = $("#newmonitordata").serialize();
+	$.ajax({
+		type: "POST",
+		url: monitorCreateEndpoint,
+		data: dataString,
+		success: function(res) {
+			fedreg.monitor_list();
+			nimble.growl('success', res);
+	    },
+	    error: function (xhr, ajaxOptions, thrownError) {
+			nimble.growl('error', xhr.responseText);
+	    }
+	});
+};
+
+fedreg.monitor_delete = function(monitorID) {
+	$("#working").trigger("fedreg.working");
+	var dataString = "id=" + monitorID;
+	$.ajax({
+		type: "POST",
+		url: monitorDeleteEndpoint,
+		data: dataString,
+		success: function(res) {
+			fedreg.monitor_list();
+			nimble.growl('success', res);
+	    },
+	    error: function (xhr, ajaxOptions, thrownError) {
+			nimble.growl('error', xhr.responseText);
+	    }
+	});
+};
+
+fedreg.monitor_list = function(containerID) {
+	$.ajax({
+		type: "GET",
+		cache: false,
+		url: monitorListEndpoint,
+		success: function(res) {
+			$("#monitors").html(res);
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
 			nimble.growl('error', xhr.responseText);
@@ -391,6 +440,23 @@ fedreg.endpoint_toggle = function(id, endpointType, containerID) {
 	$.ajax({
 		type: "POST",
 		url: endpointToggleStateEndpoint,
+		data: dataString,
+		success: function(res) {
+			nimble.growl('success', res);
+			fedreg.endpoint_list(endpointType, containerID);
+	    },
+	    error: function (xhr, ajaxOptions, thrownError) {
+			nimble.growl('error', xhr.responseText);
+	    }
+	});
+};
+
+fedreg.endpoint_makedefault = function(id, endpointType, containerID) {
+	$("#working").trigger("fedreg.working");
+	var dataString = "id=" + id + "&endpointType=" + endpointType;
+	$.ajax({
+		type: "POST",
+		url: endpointMakeDefaultEndpoint,
 		data: dataString,
 		success: function(res) {
 			nimble.growl('success', res);

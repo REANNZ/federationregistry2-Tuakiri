@@ -42,5 +42,24 @@ class Uri  {
 	}
 	
 	public String toString() {	"uri:[id:$id, uri: $uri]" }
+	
+	public boolean equals(Object o) {
+		if (o == null || !(o instanceof Uri))
+			return false
 
+		Uri u = (Uri)o
+
+		// if we have an id we can utilize that
+		if (id != null) return id.equals(u.id)
+
+		// equivalence by uri for non persisted objects
+		return uri.equals(u.uri)
+	}
+
+	public int hashCode() {
+		if (id != null) 
+			return id.hashCode()
+		else
+			return super.hashCode()
+	}
 }

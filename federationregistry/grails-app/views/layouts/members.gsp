@@ -51,9 +51,11 @@
 				<li class="${controllerName == 'organization' ? 'active':''}">
 					<g:link controller="organization" action="list"><g:message code="label.organizations" /></g:link>
 				</li>
-				<li class="${controllerName == 'entityDescriptor' ? 'active':''}">
-					<g:link controller="entityDescriptor" action="list"><g:message code="label.entitydescriptors" /></g:link>
-				</li>
+				<n:hasPermission target="saml:advanced">
+					<li class="${controllerName == 'entityDescriptor' ? 'active':''}">
+						<g:link controller="entityDescriptor" action="list"><g:message code="label.entitydescriptors" /></g:link>
+					</li>
+				</n:hasPermission>
 				<li class="${controllerName == 'IDPSSODescriptor' ? 'active':''}">
 					<g:link controller="IDPSSODescriptor" action="list" ><g:message code="label.identityproviders" /></g:link>
 				</li>
@@ -68,9 +70,7 @@
 			<g:if test="${controllerName == 'organization'}">
 				<ul class="level3a">
 					<li class="${actionName == 'list' ? 'active':''}"><g:link controller="organization" action="list"><g:message code="label.list"/></g:link></li>
-					<n:hasPermission target="organization:create">
-						<li class="${actionName == 'create' ? 'active':''}"><g:link controller="organization" action="create"><g:message code="label.create"/></g:link></li>
-					</n:hasPermission>
+						<li class="${actionName in ['create', 'save'] ? 'active':''}"><g:link controller="organization" action="create"><g:message code="label.create"/></g:link></li>
 					<g:if test="${actionName in ['show', 'edit']}">
 					<li> | </li>
 					<li><g:message code="fedreg.view.members.organization.show.heading" args="[organization.displayName]"/>: </li>
@@ -82,29 +82,27 @@
 				</ul>
 			</g:if>
 			
-			<g:if test="${controllerName == 'entityDescriptor'}">
-				<ul class="level3a">
-					<li class="${actionName == 'list' ? 'active':''}"><g:link controller="entityDescriptor" action="list"><g:message code="label.list"/></g:link></li>
-					<n:hasPermission target="entitydescriptor:create">
-						<li class="${actionName == 'create' ? 'active':''}"><g:link controller="entityDescriptor" action="create"><g:message code="label.create"/></g:link></li>
-					</n:hasPermission>
-					<g:if test="${actionName in ['show', 'edit']}">
-					<li> | </li>
-					<li><g:message code="fedreg.view.members.entity.show.heading" args="[entity.entityID]"/>: </li>
-					<li class="${actionName == 'show' ? 'active':''}"><g:link controller="entityDescriptor" action="show" id="${entity.id}"><g:message code="label.view"/></g:link></li>
-					<n:hasPermission target="descriptor:${entity.id}:update">
-						<li class="${actionName == 'edit' ? 'active':''}"><g:link controller="entityDescriptor" action="edit" id="${entity.id}" class="${actionName == 'edit' ? 'active':''}"><g:message code="label.edit"/></g:link></li>
-					</n:hasPermission>
-					</g:if>
-				</ul>
-			</g:if>
+			<n:hasPermission target="saml:advanced">
+				<g:if test="${controllerName == 'entityDescriptor'}">
+					<ul class="level3a">
+						<li class="${actionName == 'list' ? 'active':''}"><g:link controller="entityDescriptor" action="list"><g:message code="label.list"/></g:link></li>
+							<li class="${actionName in ['create', 'save'] ? 'active':''}"><g:link controller="entityDescriptor" action="create"><g:message code="label.create"/></g:link></li>
+						<g:if test="${actionName in ['show', 'edit']}">
+						<li> | </li>
+						<li><g:message code="fedreg.view.members.entity.show.heading" args="[entity.entityID]"/>: </li>
+						<li class="${actionName == 'show' ? 'active':''}"><g:link controller="entityDescriptor" action="show" id="${entity.id}"><g:message code="label.view"/></g:link></li>
+						<n:hasPermission target="descriptor:${entity.id}:update">
+							<li class="${actionName == 'edit' ? 'active':''}"><g:link controller="entityDescriptor" action="edit" id="${entity.id}" class="${actionName == 'edit' ? 'active':''}"><g:message code="label.edit"/></g:link></li>
+						</n:hasPermission>
+						</g:if>
+					</ul>
+				</g:if>
+			</n:hasPermission>
 			
 			<g:if test="${controllerName == 'IDPSSODescriptor'}">
 				<ul class="level3a">
 					<li class="${actionName == 'list' ? 'active':''}"><g:link controller="IDPSSODescriptor" action="list"><g:message code="label.list"/></g:link></li>
-					<n:hasPermission target="idpssodescriptor:create">
-						<li class="${actionName == 'create' ? 'active':''}"><g:link controller="IDPSSODescriptor" action="create"><g:message code="label.create"/></g:link></li>
-					</n:hasPermission>
+						<li class="${actionName in ['create', 'save'] ? 'active':''}"><g:link controller="IDPSSODescriptor" action="create"><g:message code="label.create"/></g:link></li>
 					<g:if test="${actionName in ['show', 'edit']}">
 					<li> | </li>
 					<li><g:message code="fedreg.view.members.identityprovider.show.heading" args="[identityProvider.displayName]"/>: </li>
@@ -119,9 +117,7 @@
 			<g:if test="${controllerName == 'SPSSODescriptor'}">
 				<ul class="level3a">
 					<li class="${actionName == 'list' ? 'active':''}"><g:link controller="SPSSODescriptor" action="list"><g:message code="label.list"/></g:link></li>
-					<n:hasPermission target="spssodescriptor:create">
-						<li class="${actionName == 'create' ? 'active':''}"><g:link controller="SPSSODescriptor" action="create"><g:message code="label.create"/></g:link></li>
-					</n:hasPermission>
+						<li class="${actionName in ['create', 'save'] ? 'active':''}"><g:link controller="SPSSODescriptor" action="create"><g:message code="label.create"/></g:link></li>
 					<g:if test="${actionName in ['show', 'edit']}">
 						<li> | </li>
 						<li><g:message code="fedreg.view.members.serviceprovider.show.heading" args="[serviceProvider.displayName]"/>: </li>

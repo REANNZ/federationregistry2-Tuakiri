@@ -1,8 +1,12 @@
 package fedreg.core
 
 import org.apache.shiro.SecurityUtils
+import org.springframework.context.i18n.LocaleContextHolder as LCH
+
+import fedreg.workflow.ProcessPriority
 
 class AttributeConsumingServiceController {
+	def workflowProcessService
 	
 	static allowedMethods = [remove: "POST"]
 	
@@ -227,17 +231,25 @@ class AttributeConsumingServiceController {
 				}
 			}
 		
-			def reqAttr = new RequestedAttribute(reasoning:params.reasoning, base: attr, isRequired: params.isrequired, approved: false)
+			def reqAttr = new RequestedAttribute(reasoning:params.reasoning, base: attr, isRequired: params.isrequired ? true:false, approved: false, attributeConsumingService:acs)
 			acs.addToRequestedAttributes(reqAttr)
-			acs.save(flush:true)
-			if(acs.hasErrors()) {
-				acs.errors.each {
+
+			if(!reqAttr.save()) {
+				reqAttr.errors.each {
 					log.warn it
 				}
 				render message(code: 'fedreg.attributeconsumingservice.requestedattribute.add.failed')
 				response.setStatus(500)
 				return
 			}
+			
+			def workflowParams = [ creator:authenticatedUser?.contact?.id?.toString(), requestedAttribute:reqAttr?.id?.toString(), locale:LCH.getLocale().getLanguage() ]
+			def (initiated, processInstance) = workflowProcessService.initiate( "requestedattribute_create", "Approval for creation of ${reqAttr}", ProcessPriority.MEDIUM, workflowParams)
+
+			if(initiated)
+				workflowProcessService.run(processInstance)
+			else
+				throw new RuntimeException("Unable to execute workflow when creating ${identityProvider}")
 		
 			log.debug "Added ${reqAttr} referencing ${attr} to ${acs} and ${acs.descriptor}"
 			render message(code: 'fedreg.attributeconsumingservice.requestedattribute.add.success')

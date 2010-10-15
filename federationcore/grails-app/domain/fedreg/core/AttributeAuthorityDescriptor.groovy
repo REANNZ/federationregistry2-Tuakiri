@@ -26,6 +26,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor {
 	static auditable = true
 	
 	IDPSSODescriptor collaborator    // This links the AA with an IDP that collaborates with it to provide authentication assertion services
+	String scope
 	
 	static belongsTo = [entityDescriptor:EntityDescriptor]
 
@@ -38,6 +39,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor {
 	]
 
 	static constraints = {
+		scope(nullable:false)
 		collaborator(nullable:true)
 		assertionIDRequestServices(nullable: true)
 		nameIDFormats(nullable: true)

@@ -53,6 +53,14 @@
 						</tr>
 						<tr>
 							<th>
+								<label for="idp.scope"><g:message code="label.scope" /></label>
+							</th>
+							<td>
+								<g:textField name="idp.scope"  value="${identityProvider.scope}" class="required" size="50" class="required" minlength="4" maxlength="255"/>
+							</td>
+						</tr>
+						<tr>
+							<th>
 								<label for="idp.status"><g:message code="label.status" /></label>
 							</th>
 							<td>

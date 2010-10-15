@@ -5,7 +5,7 @@
 		$(function() {
 			$("#newcertificate").hide();
 			$("#addnewcertificatelink").hide();
-			$("#cert").bind('paste', function() { setTimeout(function() {fedreg.keyDescriptor_verify(); 		if(newCertificateValid) $("#addnewcertificatelink").fadeIn(); else $("#addnewcertificatelink").fadeOut(); }, 100); });
+			$("#cert").bind('paste', function() { setTimeout(function() {fedreg.keyDescriptor_verify('${descriptor.entityDescriptor.entityID}'); 		if(newCertificateValid) $("#addnewcertificatelink").fadeIn(); else 	$("#addnewcertificatelink").fadeOut(); }, 100); });
 		});
 	</script>
 	<hr>

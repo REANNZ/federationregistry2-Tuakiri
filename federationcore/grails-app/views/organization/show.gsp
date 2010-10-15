@@ -54,7 +54,7 @@
 								<g:message code="label.yes" />
 							</g:if>
 							<g:else>
-								<g:message code="label.no" /> <div class="error"><g:message code="label.warningmetadata" /></div>
+								<g:message code="label.no" /><div class="warning"><g:message code="label.undergoingapproval" /></div>
 							</g:else>
 						</td>
 					</tr>
@@ -80,7 +80,9 @@
 			<div id="tabs">
 				<ul>
 					<li><a href="#tab-contacts"><g:message code="label.contacts" /></a></li>
-					<li><a href="#tab-entities"><g:message code="label.entities" /></a></li>
+					<n:hasPermission target="saml:advanced">
+						<li><a href="#tab-entities"><g:message code="label.entities" /></a></li>
+					</n:hasPermission>
 					<li><a href="#tab-idp"><g:message code="label.identityproviders" /></a></li>
 					<li><a href="#tab-sp"><g:message code="label.serviceproviders" /></a></li>
 					<li><a href="#tab-admins"><g:message code="label.administrators" /></a></li>
@@ -99,38 +101,40 @@
 						<p><g:message code="fedreg.view.members.organization.no.contacts" /></p>
 					</g:else>
 				</div>
-				<div id="tab-entities">
-					<g:if test="${entities}">
-						<table>
-							<thead>
-								<tr>
-									<th><g:message code="label.entitydescriptor" /></th>
-									<th><g:message code="label.status" /></th>
-									<th/>
-								</tr>
-							</thead>
-							<tbody>
-							<g:each in="${entities}" var="ent" status="i">
-								<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-									<td>${ent.entityID.encodeAsHTML()}</td>
-									<td>
-										<g:if test="${ent.active}">
-											<div class="icon icon_tick"><g:message code="label.active" /></div>
-										</g:if>
-										<g:else>
-											<div class="icon icon_cross"><g:message code="label.inactive" /></div>
-										</g:else>
-									</td>
-									<td><n:button href="${createLink(controller:'entityDescriptor', action:'show', id:ent.id)}" label="label.view" icon="arrowthick-1-ne" /></td>
-								</tr>
-							</g:each>
-							</tbody>
-						</table>
-					</g:if>
-					<g:else>
-						<p><g:message code="fedreg.view.members.organization.no.entities" /></p>
-					</g:else>
-				</div>
+				<n:hasPermission target="saml:advanced">
+					<div id="tab-entities">
+						<g:if test="${entities}">
+							<table>
+								<thead>
+									<tr>
+										<th><g:message code="label.entitydescriptor" /></th>
+										<th><g:message code="label.status" /></th>
+										<th/>
+									</tr>
+								</thead>
+								<tbody>
+								<g:each in="${entities}" var="ent" status="i">
+									<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
+										<td>${ent.entityID.encodeAsHTML()}</td>
+										<td>
+											<g:if test="${ent.active}">
+												<div><g:message code="label.active" /></div>
+											</g:if>
+											<g:else>
+												<div><g:message code="label.inactive" /></div>
+											</g:else>
+										</td>
+										<td><n:button href="${createLink(controller:'entityDescriptor', action:'show', id:ent.id)}" label="label.view" icon="arrowthick-1-ne" /></td>
+									</tr>
+								</g:each>
+								</tbody>
+							</table>
+						</g:if>
+						<g:else>
+							<p><g:message code="fedreg.view.members.organization.no.entities" /></p>
+						</g:else>
+					</div>
+				</n:hasPermission>
 				<div id="tab-idp">
 					<g:if test="${identityproviders}">
 						<table>

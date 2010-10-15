@@ -28,7 +28,7 @@
 							<g:message code="label.yes" />
 						</g:if>
 						<g:else>
-							<g:message code="label.no" />
+							<span class="error"><g:message code="label.no" /></span>
 						</g:else>
 					</td>
 					<n:hasPermission target="descriptor:${ra.attributeConsumingService.descriptor.id}:attribute:remove">

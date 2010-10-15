@@ -8,9 +8,7 @@ import org.apache.shiro.authc.IncorrectCredentialsException
 import grails.plugins.nimble.InstanceGenerator
 import grails.plugins.nimble.core.*
 
-import fedreg.core.EntityDescriptor
-import fedreg.core.Contact
-import fedreg.core.MailURI
+import fedreg.core.*
 
 /**
  * Integrates with Shiro to establish a session for users accessing the system based
@@ -87,7 +85,7 @@ class ShibbolethRealm {
 					// Attempt to link to local contact instance
 					def contact = MailURI.findByUri(newUser.profile.email)?.contact
 					if(!contact) {
-						contact = new Contact(givenName:authToken.givenName, surname:authToken.surname, email:new MailURI(uri:authToken.email), userLink:true, userID: user.id, organization: entityDescriptor.organization)
+						contact = new Contact(givenName:authToken.givenName, surname:authToken.surname, email:new MailURI(uri:authToken.email), organization: entityDescriptor.organization)
 						if(!contact.save()) {
 							log.error "Unable to create Contact to link with incoming user" 
 							contact.errors.each { log.error it }
@@ -119,31 +117,65 @@ class ShibbolethRealm {
 				boolean change = false
 				def fullName = "${authToken.givenName} ${authToken.surname}"
 				def email = (authToken.email == "") ? null : authToken.email 
-				def contact = MailURI.findByUri(user.profile.email).contact
 			
-				if(user.profile.fullName != fullName) {
+				if(user.profile.email != email) {
+					
+					if(MailURI.findByUri(email)) {
+						def contact_ = Contact.findWhere(email:MailURI.findByUri(email))
+					
+						if(contact_) {
+							change = true
+							def oldContact = user.contact
+							// We need to update this user to point to the existing contact for the same email address, 
+							// update all the referencing ContactPerson objects and then delete the now unused Contact
+							def contactPersons = ContactPerson.findAllWhere(contact:oldContact)
+							contactPersons.each {
+								it.contact = contact_
+								it.save()
+							}
+							user.contact = contact_
+							user.profile.email = email
+							user = userService.updateUser(user)
+						
+							oldContact.delete()
+							oldContact.email?.delete()
+							oldContact.secondaryEmail?.delete()
+
+							oldContact.workPhone?.delete()
+							oldContact.homePhone?.delete()
+							oldContact.mobilePhone?.delete()	
+						}
+						else {
+							user.contact.email.uri = email
+							user.profile.email = email
+						}
+					}
+					else {
+						user.contact.email.uri = email
+						user.profile.email = email
+					}
+				}
+				if(user.profile.fullName != fullName || user.contact.givenName != authToken.givenName || user.contact.surname != authToken.surname) {
 					change = true
-					contact.givenName = authToken.givenName
-					contact.surname = authToken.surname
+					user.contact.givenName = authToken.givenName
+					user.contact.surname = authToken.surname
 					user.profile.fullName = fullName
 				}	
-				if(user.profile.email != email) {
-					change = true
-					contact.email.uri = email
-					user.profile.email = email
-				}
 				if(user.entityDescriptor != entityDescriptor) {
 					change = true
 					user.entityDescriptor = entityDescriptor
 				}
 				if(change) {
 					userService.updateUser(user)
-					if(!contact.save()) {
+					if(!user.contact.save()) {
 						log.error "Unable to update Contact to link new details of incoming user" 
+						user.contact.errors.each {
+							log.error it
+						}
 						throw new UnknownAccountException("Unable to update Contact to link new details of incoming user")
 					}
 				
-					log.info("Updated account ${authToken.principal} and associated ${contact} with new IDP supplied values for fullname $fullName and email $email")
+					log.info("Updated account ${authToken.principal} and associated ${user.contact} with new IDP supplied values for fullname $fullName and email $email")
 				}
 			}
 		

@@ -25,6 +25,22 @@ class EndpointService {
 		}
 	}
 	
+	def makeDefault(def endpoint, def endpointType) {
+		def descriptor = endpoint.descriptor
+		descriptor."$endpointType".each {
+			if(it.isDefault) {
+				it.isDefault = false
+				it.save()
+				if(it.hasErrors()) {
+					it.errors.each {log.error}
+					throw new RuntimeException("Unable to save when setting default for ${endpoint} for ${descriptor}")
+				}
+			}
+		}
+		endpoint.isDefault = true
+		endpoint.save()
+	}
+	
 	def toggle(def endpoint) {
 		log.info "Toggling state of ${endpoint}"
 		

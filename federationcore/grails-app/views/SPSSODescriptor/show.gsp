@@ -29,6 +29,7 @@
 			var endpointListEndpoint = "${createLink(controller:'descriptorEndpoint', action:'list', id:serviceProvider.id)}";
 			var endpointCreationEndpoint = "${createLink(controller:'descriptorEndpoint', action:'create', id:serviceProvider.id)}";
 			var endpointToggleStateEndpoint = "${createLink(controller:'descriptorEndpoint', action:'toggle')}";
+			var endpointMakeDefaultEndpoint = "${createLink(controller:'descriptorEndpoint', action:'makeDefault')}";
 			
 			var nameIDFormatRemoveEndpoint = "${createLink(controller:'descriptorNameIDFormat', action:'remove', id:serviceProvider.id )}";
 			var nameIDFormatListEndpoint = "${createLink(controller:'descriptorNameIDFormat', action:'list', id:serviceProvider.id )}";
@@ -42,6 +43,10 @@
 			var descriptorFullAdministratorRevokeEndpoint = "${createLink(controller:'descriptorAdministration', action:'revokeFullAdministration', id:serviceProvider.id)}";
 			var descriptorFullAdministratorListEndpoint = "${createLink(controller:'descriptorAdministration', action:'listFullAdministration', id:serviceProvider.id)}";
 			var descriptorFullAdministratorSearchEndpoint = "${createLink(controller:'descriptorAdministration', action:'searchFullAdministration', id:serviceProvider.id)}";
+			
+			var monitorDeleteEndpoint = "${createLink(controller:'roleDescriptorMonitor', action:'delete')}";
+			var monitorListEndpoint = "${createLink(controller:'roleDescriptorMonitor', action:'list', id:serviceProvider.id )}";
+			var monitorCreateEndpoint = "${createLink(controller:'roleDescriptorMonitor', action:'create', id:serviceProvider.id )}";
 			
 			$(function() {
 				$("#tabs").tabs();
@@ -67,10 +72,18 @@
 					<th><g:message code="label.organization"/></th>
 					<td><g:link controller="organization" action="show" id="${serviceProvider.organization.id}">${fieldValue(bean: serviceProvider, field: "organization.displayName")}</g:link></td>
 				</tr>
-				<tr>
-					<th><g:message code="label.entitydescriptor"/></th>
-					<td><g:link controller="entityDescriptor" action="show" id="${serviceProvider.entityDescriptor.id}">${fieldValue(bean: serviceProvider, field: "entityDescriptor.entityID")}</g:link></td>
-				</tr>
+				<n:hasPermission target="saml:advanced">
+					<tr>
+						<th><g:message code="label.entitydescriptor"/></th>
+						<td><g:link controller="entityDescriptor" action="show" id="${serviceProvider.entityDescriptor.id}">${fieldValue(bean: serviceProvider, field: "entityDescriptor.entityID")}</g:link></td>
+					</tr>
+				</n:hasPermission>
+				<n:lacksPermission target="saml:advanced">
+					<tr>
+						<th><g:message code="label.entitydescriptor"/></th>
+						<td>${fieldValue(bean: serviceProvider, field: "entityDescriptor.entityID")}</td>
+					</tr>
+				</n:lacksPermission>
 				<tr>
 					<th><g:message code="label.protocolsupport"/></th>
 					<td>
@@ -102,7 +115,7 @@
 							<g:message code="label.yes" />
 						</g:if>
 						<g:else>
-							<g:message code="label.no" /> <div class="error"><g:message code="label.warningmetadata" /></div>
+							<g:message code="label.no" /> <div class="warning"><g:message code="label.undergoingapproval" /></div>
 						</g:else>
 					</td>
 				</tr>
@@ -118,6 +131,7 @@
 					<li><a href="#tab-attributes"><g:message code="label.attributeconsumingservices" /></a></li>
 					<li><a href="#tab-nameidformats"><g:message code="label.supportednameidformats" /></a></li>
 					<li><a href="#tab-admins" class="icon icon_database_key"><g:message code="label.administrators" /></a></li>
+					<li><a href="#tab-monitors" class="icon icon_database_key"><g:message code="label.monitoring" /></a></li>
 				</ul>
 				
 				<div id="tab-details" class="tabcontent">
@@ -206,6 +220,14 @@
 					<g:render template="/templates/descriptor/listfulladministration" plugin="federationcore" model="[descriptor:serviceProvider, administrators:administrators]" />
 					<n:hasPermission target="descriptor:${serviceProvider.id}:manage:administrators">
 						<g:render template="/templates/descriptor/searchfulladministration" plugin="federationcore" model="[descriptor:serviceProvider]" />
+					</n:hasPermission>
+				</div>
+				<div id="tab-monitors">
+					<div id="monitors">
+						<g:render template="/templates/monitor/list" plugin="federationcore" model="[roleDescriptor:serviceProvider]" />
+					</div>
+					<n:hasPermission target="descriptor:${serviceProvider.id}:manage:monitors">
+						<g:render template="/templates/monitor/create" plugin="federationcore" model="[descriptor:serviceProvider]" />
 					</n:hasPermission>
 				</div>
 			</div>

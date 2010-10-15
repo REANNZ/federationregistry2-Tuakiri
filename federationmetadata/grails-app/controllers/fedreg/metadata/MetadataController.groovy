@@ -7,57 +7,62 @@ class MetadataController {
 	def metadataGenerationService
 	def grailsApplication
 	
+	def currentminimal = {
+		def xml = currentPublishedMetadata(true)
+		render(text:xml, contentType:"text/xml", encoding:"UTF-8")
+	}
+	
 	def current = {
-		def xml = currentPublishedMetadata()
+		def xml = currentPublishedMetadata(false)
 		render(text:xml, contentType:"text/xml", encoding:"UTF-8")
 	}
 	
 	def all = {
-		def xml = allMetadata()
+		def xml = allMetadata(false)
 		render(text:xml, contentType:"text/xml", encoding:"UTF-8")
 	}
 	
 	def view = {
-		def md = currentPublishedMetadata()
+		def md = currentPublishedMetadata(false)
 		[md:md]
 	}
 	
 	def viewall = {
-		def md = allMetadata()
+		def md = allMetadata(false)
 		[md:md]
 	}
 	
-	def currentPublishedMetadata() {
+	def currentPublishedMetadata(def minimal) {
 		def now = new Date();
 		def validUntil = now + grailsApplication.config.fedreg.metadata.current.validForDays
-		def cacheDuration = now + grailsApplication.config.fedreg.metadata.current.cacheForDays
 		def federation = grailsApplication.config.fedreg.metadata.federation
 		def certificateAuthorities = CAKeyInfo.list()
 		
 		def writer = new StringWriter()
 		def builder = new MarkupBuilder(writer)
+		builder.doubleQuotes = true
 		
 		def entitiesDescriptor = new EntitiesDescriptor(name:federation)
 		entitiesDescriptor.entityDescriptors = EntityDescriptor.list()
 		
-		metadataGenerationService.entitiesDescriptor(builder, false, entitiesDescriptor, validUntil, cacheDuration, certificateAuthorities)
+		metadataGenerationService.entitiesDescriptor(builder, false, minimal, entitiesDescriptor, validUntil, certificateAuthorities)
 		writer.toString()
 	}
 	
-	def allMetadata() {
+	def allMetadata(def minimal) {
 		def now = new Date();
 		def validUntil = now + grailsApplication.config.fedreg.metadata.all.validForDays
-		def cacheDuration = now + grailsApplication.config.fedreg.metadata.all.cacheForDays
 		def federation = grailsApplication.config.fedreg.metadata.federation
 		def certificateAuthorities = CAKeyInfo.list()
 		
 		def writer = new StringWriter()
 		def builder = new MarkupBuilder(writer)
+		builder.doubleQuotes = true
 		
 		def entitiesDescriptor = new EntitiesDescriptor(name:federation)
 		entitiesDescriptor.entityDescriptors = EntityDescriptor.list()
 		
-		metadataGenerationService.entitiesDescriptor(builder, true, entitiesDescriptor, validUntil, cacheDuration, certificateAuthorities)
+		metadataGenerationService.entitiesDescriptor(builder, true, minimal, entitiesDescriptor, validUntil, certificateAuthorities)
 		writer.toString()
 	}
 		

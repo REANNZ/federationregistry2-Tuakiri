@@ -1,5 +1,6 @@
 package fedreg.crypto
 
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import java.security.*
 import java.security.cert.*
 
@@ -44,7 +45,7 @@ class CryptoService {
 	}
 	
 	def fedreg.core.Certificate createCertificate(String data) {
-		def cert = new fedreg.core.Certificate(data: data)	
+		def cert = new fedreg.core.Certificate(data: data.trim().normalize())	
 		cert.expiryDate = expiryDate(cert)
 		cert.issuer = issuer(cert)
 		cert.subject = subject(cert)
@@ -61,9 +62,10 @@ class CryptoService {
 			log.debug "requireChain is false and cert is self signed, valid."
 			return true
 		}
-			
-		CertificateFactory cf = CertificateFactory.getInstance("X.509")
-		CertPathValidator cpv = CertPathValidator.getInstance("PKIX")
+		
+		Security.addProvider(new BouncyCastleProvider());	
+		CertificateFactory cf = CertificateFactory.getInstance("X.509", "BC")
+		CertPathValidator cpv = CertPathValidator.getInstance("PKIX", "BC")
 	
 		def trustAnchors = [] as Set
 	
@@ -74,6 +76,7 @@ class CryptoService {
 				trustAnchors.add(ta)
 			}
 			PKIXParameters p = new PKIXParameters(trustAnchors)
+			p.setSigProvider("BC")
 			p.setRevocationEnabled(false);
 	
 			def certList = [cf.generateCertificate(new ByteArrayInputStream(certificate.data.getBytes("ASCII")))] as List
@@ -83,7 +86,8 @@ class CryptoService {
 		}
 		catch(Exception e) {
 			log.warn "Unable to validate certificate against current trust anchors"
-			log.debug e.getLocalizedMessage()
+			log.warn "Localized Message: " + e.getLocalizedMessage()
+			e.printStackTrace()
 			certificate.errors.rejectValue("data", "fedreg.core.certificate.data.invalid")
 		 	false
 		}

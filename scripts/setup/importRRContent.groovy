@@ -108,7 +108,7 @@
 				if(it.homeOrgName)
 					organization = Organization.findByName(it.homeOrgName)
 					
-				def contact = new Contact(organization:organization, userLink:false, givenName:givenName, surname:surname, email:new MailURI(uri:it.email))
+				def contact = new Contact(organization:organization, givenName:givenName, surname:surname, email:new MailURI(uri:it.email))
 								
 				contact.save(flush:true)
 				if(contact.hasErrors()) {
@@ -160,7 +160,7 @@
 		
 						def contact = MailURI.findByUri(newUser.profile.email)?.contact
 						if(!contact) {
-							contact = new Contact(givenName:it.givenName, surname:it.surname, email:new MailURI(uri:it.email), userLink:true, userID: user.id, organization:organization )
+							contact = new Contact(givenName:it.givenName, surname:it.surname, email:new MailURI(uri:it.email), organization:organization )
 							if(!contact.save()) {
 								println "Unable to create Contact to link with incoming user" 
 							}
@@ -170,9 +170,7 @@
 						if(!user.save()) {
 							println "Unable to create Contact link with $user" 
 						}
-					
-						contact.userLink = true
-						contact.userID = user.id
+
 						if(!user.save()) {
 							println "Unable to create User link with $contact" 
 						}
@@ -227,6 +225,7 @@
 				entity.save()
 				if(entity.hasErrors()) {
 					entity.errors.each {println it}
+					println "Not importing $entity it is error"
 				}
 				println "Imported entity ${entity.entityID}"
 			
@@ -300,7 +299,7 @@
 		sql.eachRow("select * from homeOrgs",
 		{			
 			def entity = EntityDescriptor.findWhere(entityID:it.entityID)
-			def idp = new IDPSSODescriptor(active:true, approved:true, entityDescriptor:entity, organization:entity.organization)
+			def idp = new IDPSSODescriptor(active:true, approved:true, entityDescriptor:entity, organization:entity.organization, scope:it.homeOrgName, wantAuthnRequestsSigned:true)
 			idp.addToNameIDFormats(trans)	// RR hard codes everything to only advertise NameIDForm of transient so we need to do the same, in FR this is modifable and DB driven
 			idp.addToProtocolSupportEnumerations(samlNamespace)
 			
@@ -314,7 +313,7 @@
 			{
 				def binding = SamlURI.findByUri(it.serviceBinding)
 				if(binding) {
-					def location = new UrlURI(uri:it.serviceLocation)
+					def location = new UrlURI(uri:it.serviceLocation.trim())
 					def ssoService = new SingleSignOnService(binding: binding, location: location, active:true, approved:true)
 					idp.addToSingleSignOnServices(ssoService)
 				}
@@ -326,7 +325,7 @@
 			{
 				def binding = SamlURI.findByUri(it.serviceBinding)
 				if(binding) {
-					def location = new UrlURI(uri:it.serviceLocation)
+					def location = new UrlURI(uri:it.serviceLocation.trim())
 					def artServ = new ArtifactResolutionService(binding: binding, location: location, isDefault: it.defaultLocation, active:true, approved:true, endpointIndex:index++)
 					idp.addToArtifactResolutionServices(artServ)
 				}
@@ -377,10 +376,22 @@
 		def trans = SamlURI.findByUri('urn:oasis:names:tc:SAML:2.0:nameid-format:transient')
 		
 		sql.eachRow("select * from homeOrgs",
-		{			
+		{	
+			def idp, aa		
 			def entity = EntityDescriptor.findWhere(entityID:it.entityID)
-			def idp = entity.idpDescriptors.toList().get(0)	// We know entities in RR space are closely linked to both an IDP and AA descriptor
-			def aa = new AttributeAuthorityDescriptor(active:true, approved:true, entityDescriptor:entity, organization:entity.organization, displayName:idp.displayName, description:idp.description)
+			if(entity.idpDescriptors.size() > 0) {
+				idp = entity.idpDescriptors.toList().get(0)
+				aa = new AttributeAuthorityDescriptor(active:true, approved:true, entityDescriptor:entity, organization:entity.organization, scope:it.homeOrgName, displayName:idp.displayName, description:idp.description)
+			} else {
+				aa = new AttributeAuthorityDescriptor(active:true, approved:true, entityDescriptor:entity, organization:entity.organization)
+				
+				sql.eachRow("select * from objectDescriptions where objectID=${it.homeOrgID} and objectType='homeOrg'",
+				{
+					aa.displayName = it.descriptiveName?:"N/A"
+					aa.description = it.description?:"N/A"
+				})
+				println "Imported stand alone attribute authority"
+			}
 			aa.addToProtocolSupportEnumerations(samlNamespace)
 			aa.save()
 			if(aa.hasErrors()) {
@@ -392,7 +403,7 @@
 			{
 				def binding = SamlURI.findByUri(it.serviceBinding)
 				if(binding) {
-					def location = new UrlURI(uri:it.serviceLocation)
+					def location = new UrlURI(uri:it.serviceLocation.trim())
 					def attrService = new AttributeService(binding: binding, location: location, active:true, approved:true)
 					aa.addToAttributeServices(attrService)
 				}
@@ -410,11 +421,13 @@
 			else
 				println "Added new AttributeAuthorityDescriptor to Entity ${entity.entityID}"
 				
-			aa.collaborator = idp
-			aa.save()
+			if(idp) {
+				aa.collaborator = idp
+				aa.save()
 			
-			idp.collaborator = aa
-			idp.save()
+				idp.collaborator = aa
+				idp.save()
+			}
 			
 			sql.eachRow("select attributeOID from attributes INNER JOIN homeOrgAttributes ON attributes.attributeID=homeOrgAttributes.attributeID where homeOrgAttributes.homeOrgID=${it.homeOrgID};",
 			{
@@ -441,7 +454,7 @@
 			
 			def entity = EntityDescriptor.findWhere(entityID:it.providerID)
 			def sd = new ServiceDescription()
-			def sp = new SPSSODescriptor(active:true, approved:true, entityDescriptor:entity, organization:entity.organization, visible:it.visible, serviceDescription:sd)
+			def sp = new SPSSODescriptor(active:true, approved:true, entityDescriptor:entity, organization:entity.organization, visible:it.visible, serviceDescription:sd, authnRequestsSigned:true, wantAssertionsSigned: true)
 			sp.addToProtocolSupportEnumerations(samlNamespace)
 			
 			sql.eachRow("select * from objectDescriptions where objectID=${it.resourceID} and objectType='resource'",
@@ -454,7 +467,7 @@
 			{
 				def binding = SamlURI.findByUri(it.serviceBinding)
 				if(binding) {
-					def location = new UrlURI(uri:it.serviceLocation)
+					def location = new UrlURI(uri:it.serviceLocation.trim())
 					def sls = new SingleLogoutService(binding: binding, location: location, active:true, approved:true)
 					sp.addToSingleLogoutServices(sls)
 					
@@ -471,7 +484,7 @@
 			{
 				def binding = SamlURI.findByUri(it.serviceBinding)
 				if(binding) {
-					def location = new UrlURI(uri:it.serviceLocation)
+					def location = new UrlURI(uri:it.serviceLocation.trim())
 					def acs = new AssertionConsumerService(binding: binding, location: location, isDefault: it.defaultLocation, active:true, approved:true, endpointIndex:index++)
 					sp.addToAssertionConsumerServices(acs)
 					
@@ -487,7 +500,7 @@
 			{
 				def binding = SamlURI.findByUri(it.serviceBinding)
 				if(binding) {
-					def location = new UrlURI(uri:it.serviceLocation)
+					def location = new UrlURI(uri:it.serviceLocation.trim())
 					def mnids = new ManageNameIDService(binding: binding, location: location, active:true, approved:true)
 					sp.addToManageNameIDServices(mnids)
 					
@@ -503,8 +516,8 @@
 			{
 				def binding = SamlURI.findByUri(SamlConstants.drs)
 				if(binding) {
-					def location = new UrlURI(uri:it.serviceLocation)
-					def drs = new DiscoveryResponseService(binding: binding, location: location, active:true, approved:true)
+					def location = new UrlURI(uri:it.serviceLocation.trim())
+					def drs = new DiscoveryResponseService(binding: binding, location: location, active:true, approved:true, isDefault:true)
 					sp.addToDiscoveryResponseServices(drs)
 				}
 				else 
@@ -547,6 +560,7 @@
 			entity.addToSpDescriptors(sp)
 			entity.save()
 			if(entity.hasErrors()) {
+				println "Failed modifying ${entity.entityID}"
 				entity.errors.each {println it}
 			}
 			else {
@@ -572,35 +586,33 @@
 	}
 	
 	def importCrypto(def id, def descriptor, def enc) {
-		sql.eachRow("select * from certData where objectID=${id}",
+		sql.eachRow("select DISTINCT(certData) from certData where objectID=${id}",
 		{
 			try {
-			def data = "-----BEGIN CERTIFICATE-----\n${it.certData}\n-----END CERTIFICATE-----"
-			//println "Importing certificate data\n${data}"
-			def cert = cryptoService.createCertificate(data)	
-			def keyInfo = new KeyInfo(certificate:cert)
-			def keyDescriptor = new KeyDescriptor(keyInfo:keyInfo, keyType:KeyTypes.signing, roleDescriptor:descriptor)
-			keyDescriptor.validate()
-			if(keyDescriptor.hasErrors()){
-				println "Error import crypto for $descriptor"
-				keyDescriptor.errors.each { println it}
-			}
+				def data = "-----BEGIN CERTIFICATE-----\n${it.certData.normalize()}\n-----END CERTIFICATE-----"
+				def cert = cryptoService.createCertificate(data)	
+				if(cryptoService.validateCertificate(cert)) {
+					def keyInfo = new KeyInfo(certificate:cert)
+					def keyDescriptor = new KeyDescriptor(keyInfo:keyInfo, keyType:KeyTypes.signing, roleDescriptor:descriptor)
+					keyDescriptor.validate()
+					if(keyDescriptor.hasErrors()){
+						println "Error import crypto for $descriptor and ${it.certData}"
+						keyDescriptor.errors.each { println it}
+					}
+					descriptor.addToKeyDescriptors(keyDescriptor)
 			
-			
-			descriptor.addToKeyDescriptors(keyDescriptor)
-			
-			if(enc){
-				def certEnc = cryptoService.createCertificate(data)	
-				def keyInfoEnc = new KeyInfo(certificate:certEnc)
-				def keyDescriptorEnc = new KeyDescriptor(keyInfo:keyInfoEnc, keyType:KeyTypes.encryption, roleDescriptor:descriptor)
-				keyDescriptorEnc.validate()
-				if(keyDescriptorEnc.hasErrors()){
-					println "Error import crypto for $descriptor"
-					keyDescriptorEnc.errors.each { println it}
+					if(enc){
+						def certEnc = cryptoService.createCertificate(data)	
+						def keyInfoEnc = new KeyInfo(certificate:certEnc)
+						def keyDescriptorEnc = new KeyDescriptor(keyInfo:keyInfoEnc, keyType:KeyTypes.encryption, roleDescriptor:descriptor)
+						keyDescriptorEnc.validate()
+						if(keyDescriptorEnc.hasErrors()){
+							println "Error import crypto for $descriptor"
+							keyDescriptorEnc.errors.each { println it}
+						}
+						descriptor.addToKeyDescriptors(keyDescriptorEnc)
+					}
 				}
-				
-				descriptor.addToKeyDescriptors(keyDescriptorEnc)
-			}
 			}
 			catch(Exception e) {
 				println "Error importing crypto for descriptor ${descriptor.displayName}"

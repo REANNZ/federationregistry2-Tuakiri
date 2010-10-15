@@ -44,7 +44,8 @@ class RoleDescriptor extends Descriptor {
 	static hasMany = [
 		contacts: ContactPerson,
 		protocolSupportEnumerations: SamlURI,
-		keyDescriptors: KeyDescriptor
+		keyDescriptors: KeyDescriptor,
+		monitors: ServiceMonitor
 	]
 
 	static mapping = {

@@ -39,32 +39,19 @@ class SPSSODescriptorController {
 	}
 	
 	def create = {
-		if(SecurityUtils.subject.isPermitted("spssodescriptor:create")) {
-			def serviceProvider = new SPSSODescriptor()
-			[serviceProvider: serviceProvider, organizationList: Organization.findAllWhere(active:true, approved:true), attributeList: AttributeBase.list(), nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)]
-		}
-		else {
-			log.warn("Attempt to create service provider by $authenticatedUser was denied, incorrect permission set")
-			response.sendError(403)
-		}
+		def serviceProvider = new SPSSODescriptor()
+		[organizationList: Organization.findAllWhere(active:true, approved:true), attributeList: AttributeBase.list(), nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)]
 	}
 	
 	def save = {
-		if(SecurityUtils.subject.isPermitted("organization:${params.organization.id}:components:spssodescriptor:create")) {
-			def (created, organization, entityDescriptor, serviceProvider, httpPostACS, soapArtifactACS, sloArtifact, sloRedirect, sloSOAP, sloPost, organizationList, attributeList, nameIDFormatList, contact) = SPSSODescriptorService.create(params)
-		
-			if(created)
-				redirect (action: "show", id: serviceProvider.id)
-			else {
-				flash.type="error"
-				flash.message = message(code: 'fedreg.core.spssoroledescriptor.save.validation.error')
-				render (view:'create', model:[organization:organization, entityDescriptor:entityDescriptor, serviceProvider:serviceProvider, httpPostACS:httpPostACS, soapArtifactACS:soapArtifactACS, contact:contact,
-											sloArtifact:sloArtifact, sloRedirect:sloRedirect, sloSOAP:sloSOAP, sloPost:sloPost, organizationList:organizationList, attributeList:attributeList, nameIDFormatList:nameIDFormatList])
-			}
-		}
+		def (created, ret) = SPSSODescriptorService.create(params)
+	
+		if(created)
+			redirect (action: "show", id: ret.serviceProvider.id)
 		else {
-			log.warn("Attempt to save service provider by $authenticatedUser was denied, incorrect permission set")
-			response.sendError(403)
+			flash.type="error"
+			flash.message = message(code: 'fedreg.core.spssoroledescriptor.save.validation.error')
+			render (view:'create', model: ret + [organizationList: Organization.findAllWhere(active:true, approved:true), attributeList: AttributeBase.list(), nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)])
 		}
 	}
 	
