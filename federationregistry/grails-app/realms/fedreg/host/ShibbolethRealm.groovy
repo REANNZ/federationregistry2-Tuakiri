@@ -133,7 +133,7 @@ class ShibbolethRealm {
 				def fullName = "${authToken.givenName} ${authToken.surname}"
 				def email = (authToken.email == "") ? null : authToken.email 
 			
-				if(user.profile.email != email) {
+				if(user.profile.email.toLowerCase() != email.toLowerCase()) {
 					
 					if(MailURI.findByUri(email)) {
 						def contact_ = Contact.findWhere(email:MailURI.findByUri(email))
