@@ -536,7 +536,11 @@
 			{
 				acs.lang = it.language
 				acs.addToServiceNames(it.descriptiveName)
-				acs.addToServiceDescriptions(it.description)
+				if(it.description)
+					if(it.description.size() < 254)
+						acs.addToServiceDescriptions(it.description)
+					else
+						acs.addToServiceDescriptions(it.description.substring(0,254))
 			})
 			
 			sql.eachRow("select attributeUse.attributeUseType, attributes.attributeURN from attributeUse INNER JOIN attributes ON attributes.attributeID=attributeUse.attributeID where attributeUse.resourceID=${it.resourceID}",
