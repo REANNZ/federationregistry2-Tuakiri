@@ -10,7 +10,7 @@ class EndpointService {
 		log.info "Creating endpoint for ${descriptor} of type ${endpointType} at location ${loc}"
 		
 		def location = new UrlURI(uri:loc)
-		def endpoint = grailsApplication.classLoader.loadClass(endpointClass).newInstance(descriptor:descriptor, binding: binding, location: location, active:true)
+		def endpoint = grailsApplication.classLoader.loadClass(endpointClass).newInstance(descriptor:descriptor, binding: binding, location: location, active:true, approved:true)
 		descriptor."addTo${capitalize(endpointType)}"(endpoint)
 
 		descriptor.save()
