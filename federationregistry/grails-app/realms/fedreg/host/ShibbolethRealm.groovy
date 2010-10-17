@@ -86,7 +86,7 @@ class ShibbolethRealm {
 					newUser.profile = InstanceGenerator.profile()
 					newUser.profile.owner = newUser
 					newUser.profile.fullName = "${authToken.givenName} ${authToken.surname}"
-					newUser.profile.email = (authToken.email == "") ? null : authToken.email
+					newUser.profile.email = (authToken.email == "") ? null : authToken.email.toLowerCase()
 					
 					user = userService.createUser(newUser)
 					if (user.hasErrors()) {
@@ -100,7 +100,7 @@ class ShibbolethRealm {
 					// Attempt to link to local contact instance
 					def contact = MailURI.findByUri(newUser.profile.email)?.contact
 					if(!contact) {
-						contact = new Contact(givenName:authToken.givenName, surname:authToken.surname, email:new MailURI(uri:authToken.email), organization: entityDescriptor.organization)
+						contact = new Contact(givenName:authToken.givenName, surname:authToken.surname, email:new MailURI(uri:authToken.email?.toLowerCase()), organization: entityDescriptor.organization)
 						if(!contact.save()) {
 							log.error "Unable to create Contact to link with incoming user" 
 							contact.errors.each { log.error it }
@@ -131,7 +131,7 @@ class ShibbolethRealm {
 				// Update name and email to what IDP has supplied - this could be extended to role membership etc in the future
 				boolean change = false
 				def fullName = "${authToken.givenName} ${authToken.surname}"
-				def email = (authToken.email == "") ? null : authToken.email 
+				def email = (authToken.email == "") ? null : authToken.email?.toLowerCase() 
 			
 				if(user.profile.email.toLowerCase() != email.toLowerCase()) {
 					
