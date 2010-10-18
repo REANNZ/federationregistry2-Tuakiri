@@ -23,11 +23,10 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class SingleSignOnService extends Endpoint {
+	static auditable = true
 
-  static belongsTo = [descriptor: IDPSSODescriptor]
+	static belongsTo = [descriptor: IDPSSODescriptor]
 
-  public String toString() {
-	return "${binding.type} - ${location.uri}"
-  }
+	public String toString() {	"singlesignonservice:[id:$id, location: $location]" }
 
 }

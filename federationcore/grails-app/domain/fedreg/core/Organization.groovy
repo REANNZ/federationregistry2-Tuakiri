@@ -23,13 +23,17 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class Organization  {	// Also called a participant in AAF land
+	static auditable = true
 
 	String name
 	String displayName
+	String description
+	String logoURL
 	String lang
 	String extensions
 	
-	boolean active = false
+	boolean active
+	boolean approved = false
 	
 	UrlURI url
 	
@@ -42,25 +46,28 @@ class Organization  {	// Also called a participant in AAF land
 		types : OrganizationType,
 		suspensions: OrganizationType,	// Won't render in DS/WAYF listing
 		sponsors: Organization,
-		affiliates: Organization
+		affiliates: Organization,
+		entityDescriptors: EntityDescriptor
 	]
 
 	static mapping = {
 		autoImport false
+		sort "name"
 	}
 
 	static constraints = {
-		name(nullable: false, blank: false)
+		name(nullable: false, blank: false, unique:true)
 		displayName(nullable: false, blank: false)
+		description(nullable:true, blank: false, maxSize:2000)
+		logoURL(nullable:true)
 		lang(nullable: false, blank: false)
 		url(nullable: false, blank: false, url: true)
 		extensions(nullable: true, blank: true)
 		types(nullable:true)
 		dateCreated(nullable:true)
 		lastUpdated(nullable:true)
+		entityDescriptors(nullable:true)
 	}
 	
-	public String toString() {
-		return displayName
-	}
+	public String toString() {	"organization:[id:$id, name: $name, displayName: $displayName]" }
 }

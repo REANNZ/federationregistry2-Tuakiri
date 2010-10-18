@@ -19,6 +19,7 @@
 package fedreg.core
 
 class AttributeCategory {
+	static auditable = true
 	
 	String name
 	
@@ -31,7 +32,5 @@ class AttributeCategory {
 		lastUpdated(nullable:true)
 	}
 
-	public String toString() {
-		return name
-	}
+	public String toString() {	"attributecategory:[id:$id, name: $name]" }
 }

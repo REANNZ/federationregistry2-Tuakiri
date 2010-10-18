@@ -23,6 +23,8 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class Uri  {
+	static auditable = true
+	
 	String uri
 	String description
 
@@ -38,5 +40,26 @@ class Uri  {
 		dateCreated(nullable:true)
 		lastUpdated(nullable:true)
 	}
+	
+	public String toString() {	"uri:[id:$id, uri: $uri]" }
+	
+	public boolean equals(Object o) {
+		if (o == null || !(o instanceof Uri))
+			return false
 
+		Uri u = (Uri)o
+
+		// if we have an id we can utilize that
+		if (id != null) return id.equals(u.id)
+
+		// equivalence by uri for non persisted objects
+		return uri.equals(u.uri)
+	}
+
+	public int hashCode() {
+		if (id != null) 
+			return id.hashCode()
+		else
+			return super.hashCode()
+	}
 }

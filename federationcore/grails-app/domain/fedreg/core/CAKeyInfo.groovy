@@ -22,6 +22,7 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class CAKeyInfo  {
+	static auditable = true
 
 	String keyName
 	Date expiryDate
@@ -37,4 +38,5 @@ class CAKeyInfo  {
 		lastUpdated(nullable:true)
 	}
 	
+	public String toString() {	"cakeyinfo:[id:$id, keyname: $keyName]" }
 }

@@ -1,12 +1,13 @@
 
 // Import externalized configuration for the Federation Registry application
-def fedregConf = System.getenv("FEDREG_CONFIG")
-if(fedregConf) {
-	println( "Including configuration file: ${fedregConf}" )
-	grails.config.locations = ["file:${fedregConf}"]
+def externalConf = System.getenv("FEDREG_CONFIG")
+if(externalConf) {
+	println( "Including configuration file: ${externalConf}" )
+	grails.config.locations = ["file:${externalConf}/FedRegConfig.groovy",
+							   "file:${externalConf}/NimbleConfig.groovy"]
 } else {
-	println "No external configuration file defined for environment variable FEDREG_CONFIG, terminating startup"
-	throw new RuntimeException("No external configuration file defined for environment variable FEDREG_CONFIG, terminating startup")
+	println "No external configuration location specified as environment variable FEDREG_CONFIG, terminating startup"
+	throw new RuntimeException("No external configuration location specified as environment variable FEDREG_CONFIG, terminating startup")
 }
 
 // Standard Grails configuration
@@ -14,6 +15,8 @@ if(fedregConf) {
 grails.gorm.default.mapping = {
 
 }
+
+grails.converters.xml.pretty.print = true
 
 grails.mime.file.extensions = true
 grails.mime.use.accept.header = false
@@ -37,6 +40,12 @@ grails.converters.encoding = "UTF-8"
 grails.enable.native2ascii = true
 grails.views.gsp.sitemesh.preprocess = true
 
+auditLog {
+  actorClosure = { request, session ->
+     org.apache.shiro.SecurityUtils.getSubject()?.getPrincipal()
+  }
+}
+
 // Environmental configuration
 environments {
     test {
@@ -44,6 +53,27 @@ environments {
 		testDataConfig {
         	enabled = true
       	}
+		
+		log4j = {
+			debug	'fedreg.workflow',
+					'grails.app.controller',
+					'grails.app.service',
+					'grails.app.domain'
+
+			appenders {
+				console name:'stdout', layout:pattern(conversionPattern: '%d %-5p: %m%n')
+			}
+		}
+		
+		nimble {
+			messaging {
+				mail {
+					host = 'localhost'
+					port = com.icegreen.greenmail.util.ServerSetupTest.SMTP.port
+				}
+			}
+		}
+		
     }
     development {
 		grails.gsp.enable.reload = true
@@ -51,10 +81,27 @@ environments {
 		testDataConfig {
         	enabled = false
       	}
+
+		log4j = {
+			debug	'fedreg.workflow',
+					'fedreg.core',
+					'fedreg.host',
+					'grails.app.controller',
+					'grails.app.service',
+					'grails.app.domain'
+
+			appenders {
+				console name:'stdout', layout:pattern(conversionPattern: '%d %-5p: %m%n')
+			}
+		}
+		
+		nimble {
+			messaging {
+				mail {
+					host = 'localhost'
+					port = com.icegreen.greenmail.util.ServerSetupTest.SMTP.port
+				}
+			}
+		}
     }
 }
-
-
-
-
-     

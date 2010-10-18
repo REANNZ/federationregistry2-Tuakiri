@@ -22,9 +22,11 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class TelNumURI extends AnyUri  {
+	static auditable = true
 
-  static constraints = {
-    uri(nullable: false, blank: false)
-  }
+	static constraints = {
+		uri(nullable: false, blank: false)
+	}
 
+	public String toString() {	"telnumuri:[id:$id, uri: $uri]" }
 }

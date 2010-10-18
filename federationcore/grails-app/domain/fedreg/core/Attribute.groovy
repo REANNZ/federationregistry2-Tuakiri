@@ -23,48 +23,23 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class Attribute  {
-
-	String name
-	SamlURI nameFormat
-	String friendlyName
+	static auditable = true
 	
-	String oid
-	String headerName
-	String alias
-	String description
-	
-	AttributeScope scope
-	AttributeCategory category
-	
+	AttributeBase base
 	Date dateCreated
 	Date lastUpdated
-
-	static mapping = {
-		autoImport false
-	}
-
+	
+	static hasMany = [
+		values: AttributeValue
+	]
+	
+	static belongsTo = [idpSSODescriptor: IDPSSODescriptor, attributeAuthorityDescriptor:AttributeAuthorityDescriptor]
+	
 	static constraints = {
-		name(nullable: false, blank: false, unique: true)
-		nameFormat(nullable: true)
-		friendlyName(nullable: false, blank: false)
-		oid (blank:false)
-		headerName (blank:false)
-		alias (blank:false)
-		description (blank:false)
-		dateCreated(nullable:true)
-		lastUpdated(nullable:true)
+		idpSSODescriptor(nullable:true)
+		attributeAuthorityDescriptor(nullable:true)
+		base(nullable:false)
 	}
 	
-	public String toString() {
-		return friendlyName
-	}
-	
-	public boolean equals(Object obj) {
-		if ( !(obj instanceof Attribute) ) return false
-		
-		Attribute attr = (Attribute) obj
-		if(attr.name.equals(name)) return true
-		
-		return false
-	}
+	public String toString() {	"attribute:[id:$id]" }
 }

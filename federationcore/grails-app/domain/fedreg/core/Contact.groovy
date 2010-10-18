@@ -20,6 +20,7 @@
 package fedreg.core
 
 class Contact {
+	static auditable = true
 	
 	String givenName
 	String surname
@@ -34,8 +35,6 @@ class Contact {
 	TelNumURI homePhone 
 	TelNumURI mobilePhone
 	
-	boolean userLink = false;
-	
 	Date dateCreated
 	Date lastUpdated
 
@@ -44,10 +43,11 @@ class Contact {
 	]
 
 	static constraints = {
-		description(nullable: true, blank:true)
-		organization(nullable: true)
-		givenName(blank: false)
-		surname(blank: false)
+		givenName(nullable:false, blank: false)
+		surname(nullable:false, blank: false)
+		description(nullable:true, blank:true)
+		organization(nullable:true)
+		email(nullable:false)
 		secondaryEmail(nullable:true)
 		workPhone(nullable:true)
 		homePhone(nullable:true)
@@ -61,4 +61,5 @@ class Contact {
 		sort "surname"
 	}
 	
+	public String toString() {	"contact:[id:$id, givenName: $givenName, surname: $surname, email: $email]" }
 }

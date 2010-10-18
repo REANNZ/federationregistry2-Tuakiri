@@ -22,6 +22,7 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class CACertificate {
+	static auditable = true
 	
 	String data
 	
@@ -39,4 +40,5 @@ class CACertificate {
 	    data(type: 'text') 
 	}
 	
+	public String toString() {	"cacertificate:[id:$id]" }
 }

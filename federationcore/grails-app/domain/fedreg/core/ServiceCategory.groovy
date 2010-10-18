@@ -23,6 +23,8 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class ServiceCategory {
+	static auditable = true
+	
 	String name
 	String description
 	
@@ -30,4 +32,6 @@ class ServiceCategory {
 		name(nullable: false)
 		description(nullable: false)
  	}
+
+	public String toString() {	"servicecategory:[id:$id, name: $name]" }
 }

@@ -16,13 +16,13 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
 package fedreg.core
 
 /**
  * @author Bradley Beddoes
  */
 class KeyInfo  {
+	static auditable = true
 
 	String keyName
 	Certificate certificate
@@ -41,5 +41,7 @@ class KeyInfo  {
 	static mapping = {
 		sort "dateCreated"
 	}
+	
+	public String toString() {	"keyinfo:[id:$id, keyName: $keyName]" }
 	
 }

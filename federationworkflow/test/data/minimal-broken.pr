@@ -1,0 +1,69 @@
+
+process(name:'Minimal Test Process', description: 'Minimal test process description') {
+	
+	task(description: 'Description of task1') {
+		approver(role: '{TEST_VAR}', groups:['{TEST_VAR2}'], user:'test@testdomain.com') {
+			reject(name: 'rejection1', description:'rejection overview') {
+				start ('task6')
+			}
+		}
+		execute(script: 'TestScript')
+		outcome(name: 'testoutcome1', description:'testoutcome1 description') {
+			start ('task2')
+		}
+    }
+
+	task(name: 'task2', description: 'Description of task2') {
+		approver(roles: ['{TEST_VAR2}', '{TEST_VAR3}', 'TEST_ROLE'], user:'test@testdomain.com') {
+			reject(name: 'rejection2', description:'rejection overview') {
+				start (['task6'])
+			}
+			reject(name: 'rejection3', description:'rejection overview') {
+				start (['task1'])
+			}
+		}
+		execute(service: 'testService', method: 'testmethod')
+		outcome(name: 'testoutcome2', description:'testoutcome2 description') {
+			start (['task3', 'task4'])
+		}
+		outcome(name: 'testoutcome3', description:'testoutcome3 description') {
+			start ('task6')
+		}
+    }
+
+	task(name: 'task3', description: 'Description of task3') {
+		approver(roles: ['{TEST_VAR4}', '{TEST_VAR5}'], user:'test@testdomain.com') {
+			reject(name: 'rejection3', description:'rejection overview') {
+				start ('task6')
+				terminate ('task4')
+			}
+		}
+		outcome(name: 'testoutcome3', description:'testoutcome3 description') {
+			start ('task5')
+		}
+    }
+
+	task(name: 'task4', description: 'Description of task4') {
+		execute(service: 'testService', method: 'testmethod2')
+		outcome(name: 'testoutcome4', description:'testoutcome4 description') {
+			start ('task6')
+			terminate ('task3')
+		}
+		outcome(name: 'testoutcome5', description:'testoutcome5 description') {
+			start ('task5')
+		}
+    }
+
+	task(name: 'task5', description: 'Description of task5') {
+		dependencies(['task3', 'task4'])
+		execute(service: 'testService', method: 'testmethod3')
+		outcome(name: 'testoutcome6', description:'testoutcome6 description') {
+			start ('task6')
+		}
+	}
+	
+	task(name: 'task6', description: 'Description of task6') {
+		finish()
+	}
+	
+}

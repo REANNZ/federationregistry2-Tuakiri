@@ -6,7 +6,7 @@ import fedreg.core.SPSSODescriptor
 class AttributeReleaseController {
 	
 	def index = {	
-		[activeIDP:IDPSSODescriptor.findAllWhere(active:true), activeSP:SPSSODescriptor.findAllWhere(active:true)]
+		[activeIdentityProviderList:IDPSSODescriptor.findAllWhere(active:true), activeServiceProviderList:SPSSODescriptor.findAllWhere(active:true)]
 	}
 	
 	def compare = {
@@ -17,16 +17,16 @@ class AttributeReleaseController {
 			return	
 		}
 		
-		def idp = IDPSSODescriptor.get(params.idp)
-		if(!idp) {
+		def identityProvider = IDPSSODescriptor.get(params.idp)
+		if(!identityProvider) {
 			log.debug("No IDP matching ID ${params.idp} exists")
 			render message(code: 'fedreg.compliance.attributerelease.noidp', args: [params.idp])
 			response.sendError(500)
 			return	
 		}
 		
-		def sp = SPSSODescriptor.get(params.sp)
-		if(!sp) {
+		def serviceProvider = SPSSODescriptor.get(params.sp)
+		if(!serviceProvider) {
 			log.debug("No SP matching ID ${params.sp} exists")
 			render message(code: 'fedreg.compliance.attributerelease.nosp', args: [params.sp])
 			response.sendError(500)
@@ -35,25 +35,32 @@ class AttributeReleaseController {
 		
 		def requiredAttributes = [] as List
 		def optionalAttributes = [] as List
+		def suppliedRequiredAttributes = [] as List
+		def suppliedOptionalAttributes = [] as List
 		boolean minimumRequirements = true
 		
 		// Collate all required attributes across ACS instances defined for this SP
-		sp.attributeConsumingServices.each { acs ->
+		serviceProvider.attributeConsumingServices.each { acs ->
 			acs.requestedAttributes.each { attr ->
 				if(attr.isRequired) {
-					if(!requiredAttributes.contains(attr)) {
-						requiredAttributes.add(attr)
-						if(!idp.attributes.contains(attr.attribute))
+					if(!requiredAttributes.contains(attr.base)) {
+						requiredAttributes.add(attr.base)
+						if( !identityProvider.attributes.find {it.base == attr.base} )
 							minimumRequirements = false
+						else
+							suppliedRequiredAttributes.add(attr.base)
 					}
 				} else {
-					if(!optionalAttributes.contains(attr))
-						optionalAttributes.add(attr)
+					if(!optionalAttributes.contains(attr.base)) {
+						optionalAttributes.add(attr.base)
+						if( identityProvider.attributes.find {it.base == attr.base} )
+							suppliedOptionalAttributes.add(attr.base)
+					}
 				}
 			}
 		}
 		
-		[requiredAttributes:requiredAttributes, optionalAttributes:optionalAttributes, idp:idp, minimumRequirements:minimumRequirements]
+		[requiredAttributes:requiredAttributes, optionalAttributes:optionalAttributes, suppliedRequiredAttributes:suppliedRequiredAttributes, suppliedOptionalAttributes:suppliedOptionalAttributes, identityProvider:identityProvider, minimumRequirements:minimumRequirements]
 		
 	}
 	

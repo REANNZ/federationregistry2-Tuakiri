@@ -2,17 +2,17 @@
 <table>
 	<tbody>
 		<tr>
-			<th><g:message code="nimble.label.provider" /></th>
+			<th><g:message code="label.provider" /></th>
 			<td valign="top">
 			<a href="${user.federationProvider.details?.url?.location}" alt="${user.federationProvider.details?.url?.altText}"><g:message code="${user?.federationProvider?.details?.displayName}"/></a>
 		</td>
 		</tr>
 		<tr>
-			<th><g:message code="nimble.label.description" /></th>
+			<th><g:message code="label.description" /></th>
 			<td><g:message code="${user?.federationProvider?.details?.description}"/></td>
 		</tr>
 		<tr>
-			<th><g:message code="fedreg.label.providingentity" /></th>
+			<th><g:message code="label.providingentity" /></th>
 			<td>${user?.entityDescriptor?.entityID.encodeAsHTML()}</td>
 		</tr>
   </tbody>

@@ -6,6 +6,13 @@
 	</td>
 </tr>	
 </g:if>
+<g:else>
+<tr class="dynamicrow">
+	<td colspan="3" class="success">
+		<g:message code="fedreg.view.compliance.attributerelease.compare.valid" />
+	</td>
+</tr>
+</g:else>
 
 <tr class="dynamicrow">
 	<td colspan="3">
@@ -14,18 +21,18 @@
 </tr>
 
 <g:if test="${requiredAttributes.size() > 0}">
-	<g:each in="${requiredAttributes}" status="i" var="requestedAttribute">
+	<g:each in="${requiredAttributes.sort{it.friendlyName}}" status="i" var="requiredAttribute">
 		<tr class="dynamicrow">
 			<td>
-				${requestedAttribute.attribute.friendlyName}
+				${fieldValue(bean: requiredAttribute, field: "friendlyName")}
 			</td>
 			<td />
 			<td>
-				<g:if test="${idp.attributes.contains(requestedAttribute.attribute)}">
-					<span class="icon icon_tick"><g:message code="fedreg.label.supported"/></span>
+				<g:if test="${suppliedRequiredAttributes.contains(requiredAttribute)}">
+					<g:message code="label.supported"/>
 				</g:if>
 				<g:else>
-					<span class="icon icon_cross"><g:message code="fedreg.label.notsupported"/></span>
+					<g:message code="label.notsupported"/>
 				</g:else>
 			</td>
 		</tr>
@@ -46,18 +53,18 @@
 </tr>
 
 <g:if test="${optionalAttributes.size() > 0}">
-	<g:each in="${optionalAttributes}" status="i" var="requestedAttribute">
+	<g:each in="${optionalAttributes.sort{it.friendlyName}}" status="i" var="optionalAttribute">
 		<tr class="dynamicrow">
 			<td>
-				${requestedAttribute.attribute.friendlyName}
+				${fieldValue(bean: optionalAttribute, field: "friendlyName")}
 			</td>
 			<td />
 			<td>
-				<g:if test="${idp.attributes.contains(requestedAttribute.attribute)}">
-					<span class="icon icon_tick"><g:message code="fedreg.label.supported"/></span>
+				<g:if test="${suppliedOptionalAttributes.contains(requiredAttribute)}">
+					<g:message code="label.supported"/>
 				</g:if>
 				<g:else>
-					<span class="icon icon_cross"><g:message code="fedreg.label.notsupported"/></span>
+					<g:message code="label.notsupported"/>
 				</g:else>
 			</td>
 		</tr>

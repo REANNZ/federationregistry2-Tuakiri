@@ -23,15 +23,18 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class MailURI extends AnyUri  {
+	static auditable = true
 
 	static constraints = {
 		uri(nullable: false, blank: false, email: true, unique:true)
 	}
+	
+	public String toString() {	"mailuri:[id:$id, uri: $uri]" }
 
 	public boolean equals(Object obj) {
 		if ( !(obj instanceof MailURI) ) return false
 		
-		MailURI uri = (MailURI) obj
+		MailURI mailURI = (MailURI) obj
 		if(mailURI.uri.equals(uri)) return true
 		
 		return false

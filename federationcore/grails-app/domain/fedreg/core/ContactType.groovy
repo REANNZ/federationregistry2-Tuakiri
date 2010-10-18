@@ -23,6 +23,7 @@ package fedreg.core
  * @author Bradley Beddoes
  */
 class ContactType  {
+	static auditable = true
 
 	String name
 	String displayName
@@ -39,5 +40,5 @@ class ContactType  {
 		lastUpdated(nullable:true)
 	}
 	
-
+	public String toString() {	"contactType:[id:$id, name: $name]" }
 }
