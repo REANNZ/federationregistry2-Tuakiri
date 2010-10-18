@@ -6,7 +6,9 @@
 	*/
 
 	// Overall SAML2 protocol support, all SAML 2.0 compliant RoleDescriptors need this.
-	def samlNamespace = new SamlURI(type:SamlURIType.ProtocolSupport, uri:'urn:oasis:names:tc:SAML:2.0:protocol').save()
+	def saml2Namespace = new SamlURI(type:SamlURIType.ProtocolSupport, uri:'urn:oasis:names:tc:SAML:2.0:protocol').save()
+	def saml1Namespace = new SamlURI(type:SamlURIType.ProtocolSupport, uri:'urn:oasis:names:tc:SAML:1.1:protocol').save()
+	def shibboleth1Namespace = new SamlURI(type:SamlURIType.ProtocolSupport, uri:'urn:mace:shibboleth:1.0').save()
 	
 	// Bindings
 	def httpRedirect = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect', description:'').save()
