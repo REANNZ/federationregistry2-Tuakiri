@@ -292,6 +292,7 @@
 			<tr>
 				<th><g:message code="label.name" /></th>
 				<th><g:message code="label.category" /></th>
+				<th><g:message code="label.oid" /></th>
 				<th><g:message code="label.description" /></th>
 				<th><g:message code="label.supported" /></th>
 			</tr>
@@ -302,6 +303,9 @@
 				</td>
 				<td>
 					${fieldValue(bean: attr, field: "category.name")}
+				</td>
+				<td>
+					${fieldValue(bean: attr, field: "oid")}
 				</td>
 				<td>
 					${fieldValue(bean: attr, field: "description")}
