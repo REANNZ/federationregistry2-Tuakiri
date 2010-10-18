@@ -48,9 +48,9 @@ class IDPSSODescriptorService {
 		}
 	
 		// IDP
-		def samlNamespace = SamlURI.findByUri('urn:oasis:names:tc:SAML:2.0:protocol')
+		def saml2Namespace = SamlURI.findByUri('urn:oasis:names:tc:SAML:2.0:protocol')
 		def identityProvider = new IDPSSODescriptor(approved:false, active:params.active, displayName: params.idp?.displayName, description: params.idp?.description, scope: params.idp?.scope, organization: organization, wantAuthnRequestsSigned:true)
-		identityProvider.addToProtocolSupportEnumerations(samlNamespace)
+		identityProvider.addToProtocolSupportEnumerations(saml2Namespace)
 		
 		def supportedAttributes = []
 		params.idp.attributes.each { a -> 
@@ -118,7 +118,7 @@ class IDPSSODescriptorService {
 		def attributeAuthority, soapAttributeService
 		if(params.aa?.create) {
 			attributeAuthority = new AttributeAuthorityDescriptor(approved:false, active:params.active, displayName: params.idp?.displayName, description: params.idp?.description, scope: params.idp?.scope, collaborator: identityProvider, organization:organization)
-			attributeAuthority.addToProtocolSupportEnumerations(samlNamespace)
+			attributeAuthority.addToProtocolSupportEnumerations(saml2Namespace)
 			identityProvider.collaborator = attributeAuthority
 		
 			def attributeServiceBinding = SamlURI.findByUri('urn:oasis:names:tc:SAML:2.0:bindings:SOAP')
