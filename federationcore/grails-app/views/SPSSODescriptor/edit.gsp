@@ -36,33 +36,43 @@
 					</p>
 					<table>
 						<tr>
-							<td>
+							<th>
 								<label for="sp.displayName"><g:message code="label.displayname" /></label>
-							</td>
+							</th>
 							<td>
 								<g:textField name="sp.displayName"  value="${serviceProvider.displayName}" size="50" class="required" minlength="4" maxlength="255" />
 							</td>
 						</tr>
 						<tr>
-							<td>
+							<th>
 								<label for="sp.description"><g:message code="label.description" /></label>
-							</td>
+							</th>
 							<td>
 								<g:textArea name="sp.description"  value="${serviceProvider.description}" class="required" minlength="4" rows="8" cols="36" maxlength="2000"/>
 							</td>
 						</tr>
 						<tr>
+							<th>
+								<label for="sp.status"><g:message code="label.status" /></label>
+							</th>
 							<td>
-								<label for="sp.servicedescription.connecturl"><g:message code="label.serviceurl" /></label>
+								<g:radioGroup name="sp.status" values="['true', 'false']" labels="['label.active', 'label.inactive']" value="${serviceProvider.active}" >
+									 ${it.radio} <g:message code="${it.label}" /> <br>
+								</g:radioGroup>
 							</td>
+						</tr>
+						<tr>
+							<th>
+								<label for="sp.servicedescription.connecturl"><g:message code="label.serviceurl" /></label>
+							</th>
 							<td>
 								<g:textField name="sp.servicedescription.connecturl" value="${serviceProvider.serviceDescription.connectURL}" size="50" class="required url" maxlength="255"/>
 							</td>
 						</tr>
 						<tr>
-							<td>
+							<th>
 								<label for="sp.servicedescription.logourl"><g:message code="label.servicelogourl" /></label>
-							</td>
+							</th>
 							<td>
 								<g:textField name="sp.servicedescription.logourl" value="${serviceProvider.serviceDescription.logoURL}" size="50" class="url" maxlength="255"/>
 							</td>

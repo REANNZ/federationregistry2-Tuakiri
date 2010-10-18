@@ -214,7 +214,19 @@ class IDPSSODescriptorService {
 		identityProvider.displayName = params.idp.displayName
 		identityProvider.description = params.idp.description
 		identityProvider.scope = params.idp.scope
-		identityProvider.active = params.idp.status == 'true'
+		if(params.idp.status == 'true') {
+			identityProvider.active = true
+			identityProvider.collaborator?.active = true
+			identityProvider.entityDescriptor.active = true
+		}
+		else {
+			identityProvider.active = false
+			identityProvider.collaborator?.active = false
+			def entityDescriptor = identityProvider.entityDescriptor
+			if(entityDescriptor.idpDescriptors?.size() == 1 && entityDescriptor.attributeAuthorityDescriptors.size() == 1 && entityDescriptor.spDescriptors.size() == 0 && entityDescriptor.pdpDescriptors.size() == 0) {
+				entityDescriptor.active = false
+			}
+		}
 		identityProvider.wantAuthnRequestsSigned = params.idp.wantauthnrequestssigned == 'true'
 		identityProvider.autoAcceptServices = params.idp.autoacceptservices == 'true'
 		
@@ -225,13 +237,13 @@ class IDPSSODescriptorService {
 		
 		log.debug "Updating $identityProvider active: ${identityProvider.active}, requestSigned: ${identityProvider.wantAuthnRequestsSigned}"
 		
-		if(!identityProvider.validate()) {			
-			identityProvider.errors.each {log.warn it}
+		if(!identityProvider.entityDescriptor.validate()) {			
+			identityProvider.entityDescriptor.errors.each {log.warn it}
 			return [false, identityProvider]
 		}
 		
-		if(!identityProvider.save()) {			
-			identityProvider.errors.each {log.warn it}
+		if(!identityProvider.entityDescriptor.save()) {			
+			identityProvider.entityDescriptor.errors.each {log.warn it}
 			throw new RuntimeException("Unable to save when updating ${identityProvider}")
 		}
 		

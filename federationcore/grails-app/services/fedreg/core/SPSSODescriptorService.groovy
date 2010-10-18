@@ -278,6 +278,18 @@ class SPSSODescriptorService {
 		serviceProvider.displayName = params.sp.displayName
 		serviceProvider.description = params.sp.description
 		
+		if(params.sp.status == 'true') {
+			serviceProvider.active = true
+			serviceProvider.entityDescriptor.active = true
+		}
+		else {
+			serviceProvider.active = false
+			def entityDescriptor = serviceProvider.entityDescriptor
+			if(entityDescriptor.spDescriptors.size() == 1 && entityDescriptor.idpDescriptors?.size() == 0 && entityDescriptor.attributeAuthorityDescriptors.size() == 0 && entityDescriptor.pdpDescriptors.size() == 0) {
+				entityDescriptor.active = false
+			}
+		}
+		
 		serviceProvider.serviceDescription.connectURL = params.sp?.servicedescription?.connecturl
 		serviceProvider.serviceDescription.logoURL = params.sp?.servicedescription?.logo
 		serviceProvider.serviceDescription.furtherInfo = params.sp?.servicedescription?.furtherinfo
@@ -289,12 +301,12 @@ class SPSSODescriptorService {
 		serviceProvider.serviceDescription.support = params.sp?.servicedescription?.support
 		serviceProvider.serviceDescription.maintenance = params.sp?.servicedescription?.maintenance
 		
-		if(!serviceProvider.validate()) {			
-			serviceProvider.errors.each {log.warn it}
+		if(!serviceProvider.entityDescriptor.validate()) {			
+			serviceProvider.entityDescriptor.errors.each {log.warn it}
 			return [false, serviceProvider]
 		}
 		
-		if(!serviceProvider.save()) {			
+		if(!serviceProvider.entityDescriptor.save()) {			
 			serviceProvider.errors.each {log.warn it}
 			throw new RuntimeException("Unable to save when updating ${serviceProvider}")
 		}
