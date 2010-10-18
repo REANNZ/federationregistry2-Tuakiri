@@ -227,7 +227,7 @@ class IDPSSODescriptorService {
 				entityDescriptor.active = false
 			}
 		}
-		identityProvider.wantAuthnRequestsSigned = params.idp.wantauthnrequestssigned == 'true'
+		identityProvider.wantAuthnRequestsSigned = false
 		identityProvider.autoAcceptServices = params.idp.autoacceptservices == 'true'
 		
 		// Ensure AA stays synced with scope

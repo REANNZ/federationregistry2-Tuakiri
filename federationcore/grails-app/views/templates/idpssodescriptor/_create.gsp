@@ -68,6 +68,7 @@
 
 <g:form action="${saveAction}" name="idpssodescriptorcreateform">
 	<g:hiddenField name="active" value="true"/>
+	<g:hiddenField name="idp.autoacceptservices" value="true"/>
 	<g:hiddenField name="aa.create" value="true"/>
 	<g:if test="${!requiresContactDetails}">
 		<g:hiddenField name="contact.id" value="${fr.contactID()}"/>

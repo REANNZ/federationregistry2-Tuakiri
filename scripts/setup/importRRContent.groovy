@@ -324,7 +324,7 @@
 		sql.eachRow("select * from homeOrgs",
 		{			
 			def entity = EntityDescriptor.findWhere(entityID:it.entityID)
-			def idp = new IDPSSODescriptor(active:true, approved:true, entityDescriptor:entity, organization:entity.organization, scope:it.homeOrgName, wantAuthnRequestsSigned:true)
+			def idp = new IDPSSODescriptor(active:true, approved:true, entityDescriptor:entity, organization:entity.organization, scope:it.homeOrgName, wantAuthnRequestsSigned:false)
 			
 			sql.eachRow("select * from objectDescriptions where objectID=${it.homeOrgID} and objectType='homeOrg'",
 			{
@@ -470,7 +470,7 @@
 			
 			def entity = EntityDescriptor.findWhere(entityID:it.providerID)
 			def sd = new ServiceDescription()
-			def sp = new SPSSODescriptor(active:true, approved:true, entityDescriptor:entity, organization:entity.organization, visible:it.visible, serviceDescription:sd, authnRequestsSigned:true, wantAssertionsSigned: true)
+			def sp = new SPSSODescriptor(active:true, approved:true, entityDescriptor:entity, organization:entity.organization, visible:it.visible, serviceDescription:sd, authnRequestsSigned:false, wantAssertionsSigned:false)
 			
 			sql.eachRow("select * from objectDescriptions where objectID=${it.resourceID} and objectType='resource'",
 			{

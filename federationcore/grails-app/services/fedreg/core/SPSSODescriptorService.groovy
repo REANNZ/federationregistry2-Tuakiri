@@ -46,7 +46,7 @@ class SPSSODescriptorService {
 	
 		// SP
 		def saml2Namespace = SamlURI.findByUri('urn:oasis:names:tc:SAML:2.0:protocol')
-		def serviceProvider = new SPSSODescriptor(approved:false, active:params.active, displayName: params.sp?.displayName, description: params.sp?.description, organization: organization, authnRequestsSigned:true, wantAssertionsSigned: true)
+		def serviceProvider = new SPSSODescriptor(approved:false, active:params.active, displayName: params.sp?.displayName, description: params.sp?.description, organization: organization, authnRequestsSigned:false, wantAssertionsSigned:false)
 		serviceProvider.addToProtocolSupportEnumerations(saml2Namespace)
 	
 		def acs = new AttributeConsumingService(approved:true, lang:params.lang ?:'en')
