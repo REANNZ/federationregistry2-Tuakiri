@@ -4,6 +4,7 @@ import org.springframework.context.i18n.LocaleContextHolder as LCH
 import org.springframework.transaction.interceptor.TransactionAspectSupport
 
 import fedreg.workflow.ProcessPriority
+import fedreg.host.User
 
 class IDPSSODescriptorService {
 	
@@ -223,7 +224,7 @@ class IDPSSODescriptorService {
 			identityProvider.active = false
 			identityProvider.collaborator?.active = false
 			def entityDescriptor = identityProvider.entityDescriptor
-			if(entityDescriptor.idpDescriptors?.size() == 1 && entityDescriptor.attributeAuthorityDescriptors.size() == 1 && entityDescriptor.spDescriptors.size() == 0 && entityDescriptor.pdpDescriptors.size() == 0) {
+			if(entityDescriptor.holdsIDPOnly()) {
 				entityDescriptor.active = false
 			}
 		}
@@ -248,6 +249,64 @@ class IDPSSODescriptorService {
 		}
 		
 		return [true, identityProvider]
+	}
+	
+	def delete(long id) {
+		def idp = IDPSSODescriptor.get(id)
+		if(!idp)
+			throw new RuntimeException("Unable to delete identity provider, no such instance")
+			
+		log.info "Deleting $idp on request of $authenticatedUser"
+
+		def entityDescriptor = idp.entityDescriptor
+		def aa = idp.collaborator
+
+		idp.singleSignOnServices?.each { it.delete() }
+		idp.artifactResolutionServices?.each { it.delete() }
+		idp.nameIDMappingServices?.each { it.delete() }
+		idp.assertionIDRequestServices?.each { it.delete() }
+		idp.attributeProfiles?.each { it.delete() }
+		idp.attributes?.each { it.delete() }
+		idp.artifactResolutionServices?.each { it.delete() }
+		idp.singleLogoutServices?.each { it.delete() }
+		idp.manageNameIDServices?.each { it.delete() }
+		idp.contacts?.each { it.delete() }
+		idp.keyDescriptors?.each { it.delete() }
+		idp.monitors?.each { it.delete() }
+
+		if(aa) {
+			aa.attributeServices?.each { it.delete() }
+			aa.assertionIDRequestServices?.each { it.delete() }
+			aa.attributes?.each { it.delete() }
+			aa.contacts?.each { it.delete() }
+			aa.keyDescriptors?.each { it.delete() }
+			aa.monitors?.each { it.delete() }
+		}
+		
+		if(entityDescriptor.holdsIDPOnly()) {
+			aa.collaborator = null
+			idp.collaborator = null
+			
+			entityDescriptor.idpDescriptors.remove(idp)
+			entityDescriptor.attributeAuthorityDescriptors.remove(aa)
+			idp.delete()
+			aa.delete()
+			entityDescriptor.delete()
+			
+			def users = User.findAllWhere(entityDescriptor:entityDescriptor)
+			users.each {
+				it.entityDescriptor = null
+				it.save()
+			}
+		} else {
+			aa.collaborator = null
+			idp.collaborator = null
+			
+			entityDescriptor.idpDescriptors.remove(idp)
+			entityDescriptor.attributeAuthorityDescriptors.remove(aa)
+			idp.delete()
+			aa.delete()
+		}
 	}
 	
 }

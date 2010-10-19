@@ -285,7 +285,7 @@ class SPSSODescriptorService {
 		else {
 			serviceProvider.active = false
 			def entityDescriptor = serviceProvider.entityDescriptor
-			if(entityDescriptor.spDescriptors.size() == 1 && entityDescriptor.idpDescriptors?.size() == 0 && entityDescriptor.attributeAuthorityDescriptors.size() == 0 && entityDescriptor.pdpDescriptors.size() == 0) {
+			if(entityDescriptor.holdsSPOnly()) {
 				entityDescriptor.active = false
 			}
 		}
@@ -313,5 +313,32 @@ class SPSSODescriptorService {
 		
 		return [true, serviceProvider]
 	}
+	
+	def delete(long id) {
+		def sp = SPSSODescriptor.get(id)
+		if(!sp)
+			throw new RuntimeException("Unable to delete service provider, no such instance")
+			
+		log.info "Deleting $sp on request of $authenticatedUser"
+		def entityDescriptor = sp.entityDescriptor
 
+		sp.assertionConsumerServices?.each { it.delete() }
+		sp.attributeConsumingServices?.each { it.delete() }
+		sp.discoveryResponseServices?.each { it.delete() }
+		sp.artifactResolutionServices?.each { it.delete() }
+		sp.singleLogoutServices?.each { it.delete() }
+		sp.manageNameIDServices?.each { it.delete() }
+		sp.contacts?.each { it.delete() }
+		sp.keyDescriptors?.each { it.delete() }
+		sp.monitors?.each { it.delete() }
+
+		if(entityDescriptor.holdsSPOnly()) {
+			entityDescriptor.spDescriptors.remove(sp)
+			sp.delete()
+			entityDescriptor.delete()
+		} else {
+			entityDescriptor.spDescriptors.remove(sp)
+			sp.delete()
+		}
+	}
 }
