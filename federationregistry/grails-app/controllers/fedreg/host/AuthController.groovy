@@ -10,6 +10,7 @@ import org.apache.shiro.authc.IncorrectCredentialsException
 import org.apache.shiro.authc.DisabledAccountException
 
 import fedreg.auth.ShibbolethToken
+import fedreg.core.EntityDescriptor
 
 /**
  * Overrides Nimble AuthController so as to only support Shibboleth based authentication
@@ -84,6 +85,56 @@ class AuthController {
 			def homeOrganization = request.getHeader(grailsApplication.config.fedreg.shibboleth.headers.homeOrganization)
 			def homeOrganizationType = request.getHeader(grailsApplication.config.fedreg.shibboleth.headers.homeOrganizationType)
 			
+			def incomplete = false
+			def errors = []
+			
+			if (!uniqueID) {
+				incomplete = true
+				errors.add('fedreg.controller.auth.incomplete.uniqueID')
+			}
+
+			if (!homeOrganization) {
+				incomplete = true
+				errors.add('fedreg.controller.auth.incomplete.homeorganization')
+			}
+			
+			if (!homeOrganizationType) {
+				incomplete = true
+				errors.add('fedreg.controller.auth.incomplete.homeorganizationtype')
+			}
+
+			if (!givenName) {
+				incomplete = true
+				errors.add('fedreg.controller.auth.incomplete.givenname')
+			}
+
+			if (!surname) {
+				incomplete = true
+				errors.add('fedreg.controller.auth.incomplete.surname')
+			}
+
+			if (!email) {
+				incomplete = true
+				errors.add('fedreg.controller.auth.incomplete.email')
+			}
+			
+			if(entityID) {
+				def entityDescriptor = EntityDescriptor.findWhere(entityID:entityID)
+				if(!entityDescriptor) {
+					incomplete = true
+					errors.add('fedreg.controller.auth.incomplete.entityunknown')
+				}
+			} else {
+				incomplete = true
+				errors.add('fedreg.controller.auth.incomplete.entitynotprovided')	
+			}
+			
+			if(incomplete) {
+				render (view:"shibincomplete", model:[errors:errors])
+				return
+			}
+			
+			
 			log.debug "Attempting shibboleth based authentication with the following details: $uniqueID, $givenName, $surname, $email, $entityID, $homeOrganization, $homeOrganizationType"
 			
 			try {
@@ -123,6 +174,10 @@ class AuthController {
 	}
 	
 	def shiberror = {
+		
+	}
+	
+	def shibincomplete = {
 		
 	}
 	
