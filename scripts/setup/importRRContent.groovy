@@ -46,7 +46,7 @@
 	def importOrganizations() {
 		sql.eachRow("select * from homeOrgTypes",
 		{
-			def orgType = new OrganizationType(name:it.homeOrgType, displayName:it.homeOrgType, description:it.descriptiveName)
+			def orgType = new OrganizationType(name:it.homeOrgType, displayName:it.homeOrgType, description:it.descriptiveName, discoveryServiceCategory:true)
 			orgType.save()
 		})
 		
