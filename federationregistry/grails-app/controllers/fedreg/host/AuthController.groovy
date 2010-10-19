@@ -130,6 +130,7 @@ class AuthController {
 			}
 			
 			if(incomplete) {
+				log.info "Incomplete shibboleth based authentication attempt with the following details: $uniqueID, $givenName, $surname, $email, $entityID, $homeOrganization, $homeOrganizationType was aborted"
 				render (view:"shibincomplete", model:[errors:errors])
 				return
 			}
