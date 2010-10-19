@@ -440,6 +440,7 @@
 			<tbody>
 				<tr>
 					<th><g:message code="label.name" /></th>
+					<th><g:message code="label.oid" /></th>
 					<th><g:message code="label.description" /></th>
 					<th><g:message code="label.requested" /></th>
 					<th><g:message code="label.required" /></th>
@@ -451,6 +452,9 @@
 						<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 							<td>
 								${fieldValue(bean: attr, field: "friendlyName")}
+							</td>
+							<td>
+								${fieldValue(bean: attr, field: "oid")}
 							</td>
 							<td>
 								${fieldValue(bean: attr, field: "description")}

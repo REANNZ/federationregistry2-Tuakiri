@@ -290,18 +290,41 @@
 			ent.addToContacts(contactPerson)
 		}
 	}
+	
+	def determineProtocolSupport(binding, descriptor) {
+		def saml2Namespace = SamlURI.findWhere(uri:'urn:oasis:names:tc:SAML:2.0:protocol')
+		def saml1Namespace = SamlURI.findWhere(uri:'urn:oasis:names:tc:SAML:1.1:protocol')
+		def shibboleth1Namespace = SamlURI.findWhere(uri:'urn:mace:shibboleth:1.0')
 
-	def importIDPSSODescriptors() {
-		def samlNamespace = SamlURI.findByUri('urn:oasis:names:tc:SAML:2.0:protocol')
 		def shibNameID = SamlURI.findByUri('urn:mace:shibboleth:1.0:nameIdentifier')
 		def trans = SamlURI.findByUri('urn:oasis:names:tc:SAML:2.0:nameid-format:transient')
 		
+		if(binding.uri.contains('urn:oasis:names:tc:SAML:2.0') && !descriptor.protocolSupportEnumerations?.contains(saml2Namespace)) {
+			descriptor.addToProtocolSupportEnumerations(saml2Namespace)
+			if(!descriptor.nameIDFormats?.contains(trans))
+				descriptor.addToNameIDFormats(trans)
+		}
+
+		if(binding.uri.contains('urn:oasis:names:tc:SAML:1.0') && !descriptor.protocolSupportEnumerations?.contains(saml1Namespace)) {
+			descriptor.addToProtocolSupportEnumerations(saml1Namespace)
+			if(!descriptor.nameIDFormats?.contains(shibNameID))
+				descriptor.addToNameIDFormats(shibNameID)
+		}
+
+		if(binding.uri.contains('urn:mace:shibboleth:1.0') && !descriptor.protocolSupportEnumerations?.contains(shibboleth1Namespace)) {
+			descriptor.addToProtocolSupportEnumerations(shibboleth1Namespace)
+			if(!descriptor.protocolSupportEnumerations.contains(saml1Namespace))
+				descriptor.addToProtocolSupportEnumerations(saml1Namespace)
+			if(!descriptor.nameIDFormats?.contains(shibNameID))
+				descriptor.addToNameIDFormats(shibNameID)
+		}
+	}
+
+	def importIDPSSODescriptors() {
 		sql.eachRow("select * from homeOrgs",
 		{			
 			def entity = EntityDescriptor.findWhere(entityID:it.entityID)
-			def idp = new IDPSSODescriptor(active:true, approved:true, entityDescriptor:entity, organization:entity.organization, scope:it.homeOrgName, wantAuthnRequestsSigned:true)
-			idp.addToNameIDFormats(trans)	// RR hard codes everything to only advertise NameIDForm of transient so we need to do the same, in FR this is modifable and DB driven
-			idp.addToProtocolSupportEnumerations(samlNamespace)
+			def idp = new IDPSSODescriptor(active:true, approved:true, entityDescriptor:entity, organization:entity.organization, scope:it.homeOrgName, wantAuthnRequestsSigned:false)
 			
 			sql.eachRow("select * from objectDescriptions where objectID=${it.homeOrgID} and objectType='homeOrg'",
 			{
@@ -316,6 +339,8 @@
 					def location = new UrlURI(uri:it.serviceLocation.trim())
 					def ssoService = new SingleSignOnService(binding: binding, location: location, active:true, approved:true)
 					idp.addToSingleSignOnServices(ssoService)
+					
+					determineProtocolSupport(binding, idp)
 				}
 				else 
 					println("No SamlURI binding for uri ${it.serviceBinding} exists, not importing, not importing SingleSignOnService")
@@ -328,6 +353,8 @@
 					def location = new UrlURI(uri:it.serviceLocation.trim())
 					def artServ = new ArtifactResolutionService(binding: binding, location: location, isDefault: it.defaultLocation, active:true, approved:true, endpointIndex:index++)
 					idp.addToArtifactResolutionServices(artServ)
+					
+					determineProtocolSupport(binding, idp)
 				}
 				else
 					println("No SamlURI binding for uri ${it.serviceBinding} exists, not importing ArtifactResolutionService")
@@ -370,11 +397,7 @@
 		})	
 	}
 	
-	def importAttributeAuthorityDescriptors() {
-		def samlNamespace = SamlURI.findByUri('urn:oasis:names:tc:SAML:2.0:protocol')
-		def shibNameID = SamlURI.findByUri('urn:mace:shibboleth:1.0:nameIdentifier')
-		def trans = SamlURI.findByUri('urn:oasis:names:tc:SAML:2.0:nameid-format:transient')
-		
+	def importAttributeAuthorityDescriptors() {		
 		sql.eachRow("select * from homeOrgs",
 		{	
 			def idp, aa		
@@ -392,12 +415,6 @@
 				})
 				println "Imported stand alone attribute authority"
 			}
-			aa.addToProtocolSupportEnumerations(samlNamespace)
-			aa.save()
-			if(aa.hasErrors()) {
-				aa.errors.each {println it}
-			}
-			aa.addToProtocolSupportEnumerations(samlNamespace)
 			
 			sql.eachRow("select * from serviceLocations where objectID=${it.homeOrgID} and serviceType='AttributeService'",
 			{
@@ -406,6 +423,8 @@
 					def location = new UrlURI(uri:it.serviceLocation.trim())
 					def attrService = new AttributeService(binding: binding, location: location, active:true, approved:true)
 					aa.addToAttributeServices(attrService)
+					
+					determineProtocolSupport(binding, aa)
 				}
 				else 
 					println("No SamlURI binding for uri ${it.serviceBinding} exists, not importing, not importing AttributeService")
@@ -442,9 +461,6 @@
 	}
 
 	def importSPSSODescriptors() {
-		def samlNamespace = SamlURI.findByUri('urn:oasis:names:tc:SAML:2.0:protocol')
-		def shibNameID = SamlURI.findByUri('urn:mace:shibboleth:1.0:nameIdentifier')
-		def trans = SamlURI.findByUri('urn:oasis:names:tc:SAML:2.0:nameid-format:transient')
 		
 		sql.eachRow("select * from resources",
 		{
@@ -454,8 +470,7 @@
 			
 			def entity = EntityDescriptor.findWhere(entityID:it.providerID)
 			def sd = new ServiceDescription()
-			def sp = new SPSSODescriptor(active:true, approved:true, entityDescriptor:entity, organization:entity.organization, visible:it.visible, serviceDescription:sd, authnRequestsSigned:true, wantAssertionsSigned: true)
-			sp.addToProtocolSupportEnumerations(samlNamespace)
+			def sp = new SPSSODescriptor(active:true, approved:true, entityDescriptor:entity, organization:entity.organization, visible:it.visible, serviceDescription:sd, authnRequestsSigned:false, wantAssertionsSigned:false)
 			
 			sql.eachRow("select * from objectDescriptions where objectID=${it.resourceID} and objectType='resource'",
 			{
@@ -471,10 +486,7 @@
 					def sls = new SingleLogoutService(binding: binding, location: location, active:true, approved:true)
 					sp.addToSingleLogoutServices(sls)
 					
-					if(it.serviceBinding.contains('SAML:2.0'))
-						saml2 = true
-					if(it.serviceBinding.contains('SAML:1.0'))
-						saml1 = true
+					determineProtocolSupport(binding, sp)
 				}
 				else 
 					println("No SamlURI binding for uri ${it.serviceBinding} exists, not importing, not importing SingleLogoutService")
@@ -488,10 +500,7 @@
 					def acs = new AssertionConsumerService(binding: binding, location: location, isDefault: it.defaultLocation, active:true, approved:true, endpointIndex:index++)
 					sp.addToAssertionConsumerServices(acs)
 					
-					if(it.serviceBinding.contains('SAML:2.0'))
-						saml2 = true
-					if(it.serviceBinding.contains('SAML:1.0'))
-						saml1 = true
+					determineProtocolSupport(binding, sp)
 				}
 				else 
 					println("No SamlURI binding for uri ${it.serviceBinding} exists, not importing, not importing AssertionConsumerService")
@@ -504,10 +513,7 @@
 					def mnids = new ManageNameIDService(binding: binding, location: location, active:true, approved:true)
 					sp.addToManageNameIDServices(mnids)
 					
-					if(it.serviceBinding.contains('SAML:2.0'))
-						saml2 = true
-					if(it.serviceBinding.contains('SAML:1.0'))
-						saml1 = true
+					determineProtocolSupport(binding, sp)
 				}
 				else 
 					println("No SamlURI binding for uri ${it.serviceBinding} exists, not importing, not importing ManageNameIDService")
@@ -523,11 +529,6 @@
 				else 
 					println("No SamlURI binding for uri ${it.serviceBinding} exists, not importing, not importing DiscoveryResponseService")
 			})
-			
-			if(saml2)
-				sp.addToNameIDFormats(trans)
-			if(saml1)
-				sp.addToNameIDFormats(shibNameID)
 			
 			// RR has no real concept of multiple AttributeConsumingServices so everything is just index 0 and true for isDefault...
 			// Additionally current metadata just grabs data from objectDescription for serviceName and serviceDescription ... fun.
