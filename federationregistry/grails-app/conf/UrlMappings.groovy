@@ -81,6 +81,10 @@ class UrlMappings {
 		controller = "metadata"
 	}
 	
+	"/wayf/$action"{
+		controller = "wayf"
+	}
+	
 	"/coreutils/$action?/$id?"{
 		controller = "coreUtilities"
 	}
