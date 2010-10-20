@@ -10,8 +10,25 @@ class EndpointService {
 		log.info "Creating endpoint for ${descriptor} of type ${endpointType} at location ${loc}"
 		
 		def location = new UrlURI(uri:loc)
-		def endpoint = grailsApplication.classLoader.loadClass(endpointClass).newInstance(descriptor:descriptor, binding: binding, location: location, active:true)
+		def endpoint = grailsApplication.classLoader.loadClass(endpointClass).newInstance(descriptor:descriptor, binding: binding, location: location, active:true, approved:true)
 		descriptor."addTo${capitalize(endpointType)}"(endpoint)
+		
+		def saml2Namespace = SamlURI.findWhere(uri:'urn:oasis:names:tc:SAML:2.0:protocol')
+		def saml1Namespace = SamlURI.findWhere(uri:'urn:oasis:names:tc:SAML:1.1:protocol')
+		def shibboleth1Namespace = SamlURI.findWhere(uri:'urn:mace:shibboleth:1.0')
+		
+		if(binding.uri.contains('urn:oasis:names:tc:SAML:2.0') && !descriptor.protocolSupportEnumerations.contains(saml2Namespace))
+			descriptor.addToProtocolSupportEnumerations(saml2Namespace)
+			
+		if(binding.uri.contains('urn:oasis:names:tc:SAML:1.0') && !descriptor.protocolSupportEnumerations.contains(saml1Namespace)) {
+			descriptor.addToProtocolSupportEnumerations(saml1Namespace)
+		}
+			
+		if(binding.uri.contains('urn:mace:shibboleth:1.0') && !descriptor.protocolSupportEnumerations.contains(shibboleth1Namespace)) {
+			descriptor.addToProtocolSupportEnumerations(shibboleth1Namespace)
+			if(!descriptor.protocolSupportEnumerations.contains(saml1Namespace))
+				descriptor.addToProtocolSupportEnumerations(saml1Namespace)
+		}
 
 		descriptor.save()
 		if(descriptor.hasErrors() || endpoint.hasErrors()) {

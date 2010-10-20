@@ -5,6 +5,13 @@
 	$(function() {	
 
 		$('form').validate({
+				rules: {
+					'hostname': {
+						required: function() {
+							return ($("#entity\\.identifier").val() == "");
+						}
+					}
+				},
 				success: function(label) {
 					if($(label).next())
 						$(label).next().remove()	// fix annoying bug where success labels are left laying about if duplicate validations
@@ -68,6 +75,7 @@
 
 <g:form action="${saveAction}" name="idpssodescriptorcreateform">
 	<g:hiddenField name="active" value="true"/>
+	<g:hiddenField name="idp.autoacceptservices" value="true"/>
 	<g:hiddenField name="aa.create" value="true"/>
 	<g:if test="${!requiresContactDetails}">
 		<g:hiddenField name="contact.id" value="${fr.contactID()}"/>
@@ -153,13 +161,13 @@
 			<g:message code="fedreg.templates.identityprovider.create.saml.details" />
 		</p>
 
-		<div id="samlbasicmode">
+		<span id="samlbasicmode">
 			<h4><g:message code="fedreg.templates.identityprovider.create.saml.shibboleth.heading" /></h4>
 			<p><g:message code="fedreg.templates.identityprovider.create.saml.shibboleth.descriptive" /></p>
 			<table>
 				<tr>
 					<td/>
-					<td><a href="#" onClick="$('#samlbasicmode').hide(); $('#samladvancedmode').fadeIn();"><g:message code="fedreg.templates.identityprovider.create.saml.shibboleth.switch.advanced" /></a></td>
+					<td><a href="#" onClick="$('#samlbasicmode').hide(); $('#samladvancedmode').fadeIn(); return false;"><g:message code="fedreg.templates.identityprovider.create.saml.shibboleth.switch.advanced" /></a></td>
 				</tr>
 				<tr>
 					<td>
@@ -169,20 +177,20 @@
 						<g:hasErrors bean="${entityDescriptor}">
 							<div class="error"><g:renderErrors bean="${entityDescriptor}"as="list"/></div>
 						</g:hasErrors>
-						<g:textField name="hostname" size="50" class="required url" value="${hostname}"/> <em> e.g https://idp.example.org </em>
+						<g:textField name="hostname" size="50" class="url" value="${hostname}"/> <em> e.g https://idp.example.org </em>
 					</td>
 				</tr>
 			</table>
 			
-		</div>
+		</span>
 		
-		<div id="samladvancedmode">
+		<span id="samladvancedmode">
 			<h4><g:message code="fedreg.templates.identityprovider.create.saml.advanced.heading" /></h4>
 			<p><g:message code="fedreg.templates.identityprovider.create.saml.advanced.descriptive" /></p>
 			<table>
 				<tr>
 					<td/>
-					<td><a href="#" onClick="$('#samladvancedmode').hide(); $('#samlbasicmode').fadeIn();"><g:message code="fedreg.templates.identityprovider.create.saml.advanced.switch.shibboleth" /></a></td>
+					<td><a href="#" onClick="$('#samladvancedmode').hide(); $('#samlbasicmode').fadeIn(); return false;"><g:message code="fedreg.templates.identityprovider.create.saml.advanced.switch.shibboleth" /></a></td>
 				</tr>
 				<tr>
 					<td>
@@ -240,7 +248,7 @@
 					</td>
 				</tr>
 			</table>
-		</div>
+		</span>
 	</div>
 	
 	<div class="step" id="scope">
@@ -292,6 +300,7 @@
 			<tr>
 				<th><g:message code="label.name" /></th>
 				<th><g:message code="label.category" /></th>
+				<th><g:message code="label.oid" /></th>
 				<th><g:message code="label.description" /></th>
 				<th><g:message code="label.supported" /></th>
 			</tr>
@@ -302,6 +311,9 @@
 				</td>
 				<td>
 					${fieldValue(bean: attr, field: "category.name")}
+				</td>
+				<td>
+					${fieldValue(bean: attr, field: "oid")}
 				</td>
 				<td>
 					${fieldValue(bean: attr, field: "description")}

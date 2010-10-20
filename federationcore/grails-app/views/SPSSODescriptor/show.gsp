@@ -104,7 +104,7 @@
 							<g:message code="label.active" />
 						</g:if>
 						<g:else>
-							<g:message code="label.inactive" />
+							<g:message code="label.inactive" /> <div class="error"><g:message code="label.warningmetadata" /></div>
 						</g:else>
 					</td>
 				</tr>

@@ -5,6 +5,13 @@
 	$(function() {			
 		$('form').validate({
 				ignore: ":disabled",
+				rules: {
+					'hostname': {
+						required: function() {
+							return ($("#entity\\.identifier").val() == "");
+						}
+					}
+				},
 				success: function(label) {
 					if($(label).next())
 						$(label).next().remove()	// fix annoying bug where success labels are left laying about if duplicate validations
@@ -259,7 +266,7 @@
 						<g:hasErrors bean="${entityDescriptor}">
 							<div class="error"><g:renderErrors bean="${entityDescriptor}"as="list"/></div>
 						</g:hasErrors>
-						<g:textField name="hostname" size="50" class="required url"  value="${hostname}"/> <em> e.g https://sp.example.org </em>
+						<g:textField name="hostname" size="50" class="url"  value="${hostname}"/> <em> e.g https://sp.example.org </em>
 					</td>
 				</tr>
 			</table>
@@ -440,6 +447,7 @@
 			<tbody>
 				<tr>
 					<th><g:message code="label.name" /></th>
+					<th><g:message code="label.oid" /></th>
 					<th><g:message code="label.description" /></th>
 					<th><g:message code="label.requested" /></th>
 					<th><g:message code="label.required" /></th>
@@ -451,6 +459,9 @@
 						<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 							<td>
 								${fieldValue(bean: attr, field: "friendlyName")}
+							</td>
+							<td>
+								${fieldValue(bean: attr, field: "oid")}
 							</td>
 							<td>
 								${fieldValue(bean: attr, field: "description")}
