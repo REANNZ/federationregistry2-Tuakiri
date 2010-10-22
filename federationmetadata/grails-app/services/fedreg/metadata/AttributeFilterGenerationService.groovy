@@ -59,8 +59,20 @@ class AttributeFilterGenerationService {
 			serviceProvider.attributeConsumingServices.each { acs ->
 				acs.requestedAttributes.sort{it.base.alias}.each { ra ->
 					if(identityProvider.attributes.findAll{it.base == ra.base}.size() == 1) {
-						AttributeRule(attributeID:ra.base.alias){
-							PermitValueRule("xsi:type":"basic:ANY")
+						if(!ra.base.specificationRequired) {
+							AttributeRule(attributeID:ra.base.alias){
+								PermitValueRule("xsi:type":"basic:ANY")
+							}
+						} else {
+							if(ra.values?.size() > 0) {
+								AttributeRule(attributeID:ra.base.alias){
+									PermitValueRule("xsi:type":"basic:OR") {
+										ra.values.sort{it.value}.each { v ->
+											"basic:Rule" ("xsi:type":"basic:AttributeValueString", value:v.value, ignoreCase:"true")
+										}
+									}
+								}
+							}
 						}
 					}
 					else{

@@ -309,6 +309,60 @@ class AttributeFilterGenerationServiceSpec extends IntegrationSpec {
 		xml == expected
 	}
 	
+	def 'Test generation with single SP requesting attributes that IDP fully supports, additionally SP requests eduPersonEntitlement which requires specification'() {
+		setup:
+		setupSAML()
+		def expected = loadResult("testsinglespusingentitlement")
+		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
+		def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.example.com/myuniqueID1", active:true, approved:true)
+		def idp = IDPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true).save()
+
+		if(!idp)
+			throw new Exception("IDP save failed")
+		
+		def sp = baseSP("1").save()
+		if(!sp) {
+			sp.errors.each {println it}
+			throw new Exception("SP save failed")
+		}
+		
+		def ba1 =  new AttributeBase(oid:'2.5.4.3', nameFormat: attrUri, name:'urn:mace:dir:attribute-def:cn', friendlyName:'cn', alias:'cn', description:'An individuals common name, typically their full name. This attribute should not be used in transactions where it is desirable to maintain user anonymity.', category:coreCategory, specificationRequired:false).save()
+		def ba2 =  new AttributeBase(oid:'2.5.4.4', nameFormat: attrUri, name:'urn:mace:dir:attribute-def:sn', friendlyName:'Surname', alias:'surname', description:'Surname or family name', category:optionalCategory, specificationRequired:false).save()
+		def ba3 =  new AttributeBase(oid:'2.5.4.42', nameFormat: attrUri, name:'urn:mace:dir:attribute-def:givenName', friendlyName:'Given name', alias:'givenName', description:'Given name of a person', category:optionalCategory, specificationRequired:false).save()
+		def ba4 =  new AttributeBase(oid:'1.3.6.1.4.1.5923.1.1.1.7', nameFormat: attrUri, name:'urn:mace:dir:attribute-def:eduPersonEntitlement', friendlyName:'Entitlement', alias:'entitlement', description:'Member of: URI (either URL or URN) that indicates a set of rights to specific resources based on an agreement across the releavant community', category:coreCategory, specificationRequired:true).save()
+		
+		def a1 = new Attribute(base:ba1).save()
+		def a2 = new Attribute(base:ba2).save()
+		def a3 = new Attribute(base:ba3).save()
+		def a4 = new Attribute(base:ba4).save()
+		idp.addToAttributes(a1).save()
+		idp.addToAttributes(a2).save()
+		idp.addToAttributes(a3).save()
+		idp.addToAttributes(a4).save()
+		
+		def ra1 = new RequestedAttribute(base:ba1, isRequired:true, approved:true, reasoning:"valid test case")
+		def ra2 = new RequestedAttribute(base:ba2, isRequired:false, approved:true, reasoning:"valid test case")
+		def ra3 = new RequestedAttribute(base:ba3, isRequired:false, approved:false, reasoning:"valid test case")
+		
+		def ra4 = new RequestedAttribute(base:ba4, isRequired:false, approved:false, reasoning:"valid test case")
+		ra4.addToValues(new AttributeValue(value:'urn:mace:test:attr:value:1'))
+		ra4.addToValues(new AttributeValue(value:'urn:mace:test:attr:value:2'))
+		ra4.addToValues(new AttributeValue(value:'urn:mace:test:attr:value:3'))
+		
+		def attrService = sp.attributeConsumingServices.toList().get(0)
+		attrService.addToRequestedAttributes(ra1)
+		attrService.addToRequestedAttributes(ra2)
+		attrService.addToRequestedAttributes(ra3)
+		attrService.addToRequestedAttributes(ra4)
+		
+		when:
+		attributeFilterGenerationService.generate(builder, "Test Filter Policy", "test.aaf.edu.au", idp.id)
+		def xml = writer.toString()
+		
+		then:
+		xml == expected
+	}
+	
 	def baseSP(unique) {
 		def protocolSupportEnumerations = [saml1Prot, saml2Prot]
 		
