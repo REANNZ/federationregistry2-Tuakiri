@@ -206,6 +206,7 @@
 				<tr>
 					<td>
 						<label for="idp.post.uri"><g:message code="label.httppostendpoint" /></label>
+						<pre><g:message code="label.binding" />: SAML:2.0:bindings:HTTP-POST</pre>
 					</td>
 					<td>
 						<g:hasErrors bean="${httpPost}">
@@ -217,6 +218,7 @@
 				<tr>
 					<td>
 						<label for="idp.redirect.uri"><g:message code="label.httpredirectendpoint" /></label>
+						<pre><g:message code="label.binding" />: SAML:2.0:bindings:HTTP-Redirect</pre>
 					</td>
 					<td>
 						<g:hasErrors bean="${httpRedirect}">
@@ -228,6 +230,7 @@
 				<tr>
 					<td>
 						<label for="idp.artifact.uri"><g:message code="label.soapartifactendpoint" /></label>
+						<pre><g:message code="label.binding" />: SAML:2.0:bindings:HTTP-Artifact</pre>
 					</td>
 					<td>
 						<g:hasErrors bean="${soapArtifact}">
@@ -239,6 +242,7 @@
 				<tr>
 					<td>
 						<label for="aa.attributeservice.uri"><g:message code="label.soapatrributequeryendpoint" /></label>
+						<pre><g:message code="label.binding" />: SAML:2.0:bindings:SOAP</pre>
 					</td>
 					<td>
 						<g:hasErrors bean="${attributeAuthority}">

@@ -294,6 +294,7 @@
 				<tr>
 					<td>
 						<label for="sp.acs.post.uri"><g:message code="label.acspostendpoint" /></label>
+						<pre><g:message code="label.binding" />: SAML:2.0:bindings:HTTP-POST</pre>
 					</td>
 					<td>
 						<g:hasErrors bean="${httpPostACS}">
@@ -306,6 +307,7 @@
 				<tr>
 					<td>
 						<label for="sp.acs.artifact.uri"><g:message code="label.acsartifactendpoint" /></label>
+						<pre><g:message code="label.binding" />: SAML:2.0:bindings:HTTP-Artifact</pre>
 					</td>
 					<td>
 						<g:hasErrors bean="${soapArtifactACS}">
@@ -318,6 +320,7 @@
 				<tr>
 					<td>
 						<label for="sp.slo.artifact.uri"><g:message code="label.sloartifactendpoint" /></label>
+						<pre><g:message code="label.binding" />: SAML:2.0:bindings:HTTP-Artifact</pre>
 					</td>
 					<td>
 						<g:hasErrors bean="${sloArtifact}">
@@ -329,6 +332,7 @@
 				<tr>
 					<td>
 						<label for="sp.slo.redirect.uri"><g:message code="label.sloredirectendpoint" /></label>
+						<pre><g:message code="label.binding" />: SAML:2.0:bindings:HTTP-Redirect</pre>
 					</td>
 					<td>
 						<g:hasErrors bean="${sloRedirect}">
@@ -340,6 +344,7 @@
 				<tr>
 					<td>
 						<label for="sp.slo.soap.uri"><g:message code="label.slosoapendpoint" /></label>
+						<pre><g:message code="label.binding" />: SAML:2.0:bindings:SOAP</pre>
 					</td>
 					<td>
 						<g:hasErrors bean="${sloSOAP}">
@@ -351,6 +356,7 @@
 				<tr>
 					<td>
 						<label for="sp.slo.post.uri"><g:message code="label.slopostendpoint" /></label>
+						<pre><g:message code="label.binding" />: SAML:2.0:bindings:HTTP-POST</pre>
 					</td>
 					<td>
 						<g:hasErrors bean="${sloPost}">
@@ -362,6 +368,7 @@
 				<tr>
 					<td>
 						<label for="sp.drs.uri"><g:message code="label.drsendpoint" /></label>
+						<pre><g:message code="label.binding" />: SAML:profiles:SSO:idp-discovery-protocol</pre>
 					</td>
 					<td>
 						<g:hasErrors bean="${discoveryResponseService}">
@@ -374,6 +381,7 @@
 				<tr>
 					<td>
 						<label for="sp.mnid.artifact.uri"><g:message code="label.mnidartifactendpoint" /></label>
+						<pre><g:message code="label.binding" />: SAML:2.0:bindings:HTTP-Artifact</pre>
 					</td>
 					<td>
 						<g:hasErrors bean="${mnidArtifact}">
@@ -385,6 +393,7 @@
 				<tr>
 					<td>
 						<label for="sp.mnid.redirect.uri"><g:message code="label.mnidredirectendpoint" /></label>
+						<pre><g:message code="label.binding" />: SAML:2.0:bindings:HTTP-Redirect</pre>
 					</td>
 					<td>
 						<g:hasErrors bean="${mnidRedirect}">
@@ -396,6 +405,7 @@
 				<tr>
 					<td>
 						<label for="sp.mnid.soap.uri"><g:message code="label.mnidsoapendpoint" /></label>
+						<pre><g:message code="label.binding" />: SAML:2.0:bindings:SOAP</pre>
 					</td>
 					<td>
 						<g:hasErrors bean="${mnidSOAP}">
@@ -407,6 +417,7 @@
 				<tr>
 					<td>
 						<label for="sp.mnid.post.uri"><g:message code="label.mnidpostendpoint" /></label>
+						<pre><g:message code="label.binding" />: SAML:2.0:bindings:HTTP-POST</pre>
 					</td>
 					<td>
 						<g:hasErrors bean="${mnidPost}">
