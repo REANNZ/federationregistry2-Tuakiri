@@ -160,11 +160,13 @@ class AttributeFilterGenerationServiceSpec extends IntegrationSpec {
 		
 		def ra1 = new RequestedAttribute(base:ba1, isRequired:true, approved:true, reasoning:"valid test case")
 		def ra2 = new RequestedAttribute(base:ba2, isRequired:false, approved:true, reasoning:"valid test case")
-		def ra3 = new RequestedAttribute(base:ba3, isRequired:false, approved:false, reasoning:"valid test case")
+		def ra3 = new RequestedAttribute(base:ba3, isRequired:false, approved:true, reasoning:"valid test case")
+		def ra4 = new RequestedAttribute(base:ba3, isRequired:false, approved:false, reasoning:"valid test case")
 		def attrService = sp.attributeConsumingServices.toList().get(0)
 		attrService.addToRequestedAttributes(ra1)
 		attrService.addToRequestedAttributes(ra2)
 		attrService.addToRequestedAttributes(ra3)
+		attrService.addToRequestedAttributes(ra4)
 		
 		when:
 		attributeFilterGenerationService.generate(builder, "Test Filter Policy", "test.aaf.edu.au", idp.id)
@@ -205,14 +207,16 @@ class AttributeFilterGenerationServiceSpec extends IntegrationSpec {
 			}
 			
 			def ra1 = new RequestedAttribute(base:ba1, isRequired:true, approved:true, reasoning:"valid test case")
-			def ra2 = new RequestedAttribute(base:ba2, isRequired:false, approved:true, reasoning:"valid test case")
-			def ra3 = new RequestedAttribute(base:ba3, isRequired:false, approved:false, reasoning:"valid test case")
+			def ra2 = new RequestedAttribute(base:ba2, isRequired:true, approved:true, reasoning:"valid test case")
+			def ra3 = new RequestedAttribute(base:ba3, isRequired:true, approved:true, reasoning:"valid test case")
+			def ra4 = new RequestedAttribute(base:ba3, isRequired:false, approved:false, reasoning:"valid test case")
 			def attrService = sp.attributeConsumingServices.toList().get(0)
 			attrService.addToRequestedAttributes(ra1)
 			if(i == 1 || i == 2 || i == 4)
 				attrService.addToRequestedAttributes(ra2)
 			if(i == 1 || i == 3 || i == 5)
-			attrService.addToRequestedAttributes(ra3)
+				attrService.addToRequestedAttributes(ra3)
+			attrService.addToRequestedAttributes(ra4)
 		}
 		
 		when:
@@ -250,7 +254,7 @@ class AttributeFilterGenerationServiceSpec extends IntegrationSpec {
 		
 		def ra1 = new RequestedAttribute(base:ba1, isRequired:true, approved:true, reasoning:"valid test case")
 		def ra2 = new RequestedAttribute(base:ba2, isRequired:false, approved:true, reasoning:"valid test case")
-		def ra3 = new RequestedAttribute(base:ba3, isRequired:false, approved:false, reasoning:"valid test case")
+		def ra3 = new RequestedAttribute(base:ba3, isRequired:false, approved:true, reasoning:"valid test case")
 		def attrService = sp.attributeConsumingServices.toList().get(0)
 		attrService.addToRequestedAttributes(ra1)
 		attrService.addToRequestedAttributes(ra2)
@@ -292,7 +296,7 @@ class AttributeFilterGenerationServiceSpec extends IntegrationSpec {
 			
 			def ra1 = new RequestedAttribute(base:ba1, isRequired:true, approved:true, reasoning:"valid test case")
 			def ra2 = new RequestedAttribute(base:ba2, isRequired:false, approved:true, reasoning:"valid test case")
-			def ra3 = new RequestedAttribute(base:ba3, isRequired:false, approved:false, reasoning:"valid test case")
+			def ra3 = new RequestedAttribute(base:ba3, isRequired:false, approved:true, reasoning:"valid test case")
 			def attrService = sp.attributeConsumingServices.toList().get(0)
 			attrService.addToRequestedAttributes(ra1)
 			if(i == 1 || i == 2 || i == 4)
@@ -342,9 +346,9 @@ class AttributeFilterGenerationServiceSpec extends IntegrationSpec {
 		
 		def ra1 = new RequestedAttribute(base:ba1, isRequired:true, approved:true, reasoning:"valid test case")
 		def ra2 = new RequestedAttribute(base:ba2, isRequired:false, approved:true, reasoning:"valid test case")
-		def ra3 = new RequestedAttribute(base:ba3, isRequired:false, approved:false, reasoning:"valid test case")
+		def ra3 = new RequestedAttribute(base:ba3, isRequired:false, approved:true, reasoning:"valid test case")
 		
-		def ra4 = new RequestedAttribute(base:ba4, isRequired:false, approved:false, reasoning:"valid test case")
+		def ra4 = new RequestedAttribute(base:ba4, isRequired:false, approved:true, reasoning:"valid test case")
 		ra4.addToValues(new AttributeValue(value:'urn:mace:test:attr:value:1'))
 		ra4.addToValues(new AttributeValue(value:'urn:mace:test:attr:value:2'))
 		ra4.addToValues(new AttributeValue(value:'urn:mace:test:attr:value:3'))
