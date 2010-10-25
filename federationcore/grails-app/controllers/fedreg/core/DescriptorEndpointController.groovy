@@ -37,8 +37,11 @@ class DescriptorEndpointController {
 			return
 		}
 		
+		def descriptor = endpoint.descriptor
+		
 		if(SecurityUtils.subject.isPermitted("descriptor:${endpoint.descriptor.id}:endpoint:remove")) {
 			endpointService.delete(endpoint, params.endpointType)
+			endpointService.determineDescriptorProtocolSupport(descriptor)
 			render message(code: 'fedreg.endpoint.delete.success')
 		}
 		else {
@@ -151,6 +154,7 @@ class DescriptorEndpointController {
 		
 			if(allowedEndpoints.containsKey(endpointType) && descriptor.hasProperty(endpointType)) {
 				endpointService.create(descriptor, allowedEndpoints.get(endpointType), endpointType, binding, params.location)
+				endpointService.determineDescriptorProtocolSupport(descriptor)
 				render message(code: 'fedreg.endpoint.create.success')
 			}
 			else {
