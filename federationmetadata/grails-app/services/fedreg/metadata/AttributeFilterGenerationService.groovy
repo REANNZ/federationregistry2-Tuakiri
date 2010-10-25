@@ -58,27 +58,29 @@ class AttributeFilterGenerationService {
 			}
 			serviceProvider.attributeConsumingServices.each { acs ->
 				acs.requestedAttributes.sort{it.base.alias}.each { ra ->
-					if(identityProvider.attributes.findAll{it.base == ra.base}.size() == 1) {
-						if(!ra.base.specificationRequired) {
-							AttributeRule(attributeID:ra.base.alias){
-								PermitValueRule("xsi:type":"basic:ANY")
-							}
-						} else {
-							if(ra.values?.size() > 0) {
+					if(ra.approved) {
+						if(identityProvider.attributes.findAll{it.base == ra.base}.size() == 1) {
+							if(!ra.base.specificationRequired) {
 								AttributeRule(attributeID:ra.base.alias){
-									PermitValueRule("xsi:type":"basic:OR") {
-										ra.values.sort{it.value}.each { v ->
-											"basic:Rule" ("xsi:type":"basic:AttributeValueString", value:v.value, ignoreCase:"true")
+									PermitValueRule("xsi:type":"basic:ANY")
+								}
+							} else {
+								if(ra.values?.size() > 0) {
+									AttributeRule(attributeID:ra.base.alias){
+										PermitValueRule("xsi:type":"basic:OR") {
+											ra.values.sort{it.value}.each { v ->
+												"basic:Rule" ("xsi:type":"basic:AttributeValueString", value:v.value, ignoreCase:"true")
+											}
 										}
 									}
 								}
 							}
 						}
-					}
-					else{
-						comment builder, "Attribute ${ra.base.alias} is not supported by this Identity Provider. Please configure your Attribute Resolver accordingly and indicate your support using Federation Registry"
-						if(ra.isRequired)
-							comment builder, "Additionally the attribute ${ra.base.alias} is required by this service provider. User access to this service will fail."
+						else{
+							comment builder, "Attribute ${ra.base.alias} is not supported by this Identity Provider. Please configure your Attribute Resolver accordingly and indicate your support using Federation Registry"
+							if(ra.isRequired)
+								comment builder, "Additionally the attribute ${ra.base.alias} is required by this service provider. User access to this service will fail."
+						}
 					}
 				}
 			}
