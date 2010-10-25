@@ -89,7 +89,11 @@ class DescriptorEndpointController {
 		
 		if(allowedEndpoints.containsKey(endpointType) && descriptor.hasProperty(endpointType)) {
 			log.debug "Listing endpoints for descriptor ID ${params.id} of type ${endpointType}"
-			render template:"/templates/endpoints/list", contextPath: pluginContextPath, model:[endpoints:descriptor."${endpointType}", allowremove:true, endpointType:endpointType, containerID:params.containerID]
+			
+			def minSizeConstraint = descriptor.constraints."$endpointType"?.getAppliedConstraint('minSize')
+			def minEndpoints = minSizeConstraint ? minSizeConstraint.getMinSize():0
+			
+			render template:"/templates/endpoints/list", contextPath: pluginContextPath, model:[endpoints:descriptor."${endpointType}", allowremove:true, endpointType:endpointType, containerID:params.containerID, minEndpoints:minEndpoints]
 		}
 		else {
 			log.warn "Endpoint ${endpointType} is invalid for Descriptor with id ${params.id}"
