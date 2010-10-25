@@ -33,7 +33,8 @@ class IDPSSODescriptorController {
 		}
 		
 		def adminRole = Role.findByName("descriptor-${identityProvider.id}-administrators")
-		[identityProvider: identityProvider, contactTypes:ContactType.list(), administrators:adminRole?.users]
+		def attributeFilter = g.include(controller:"attributeFilter", action:"generate", id:identityProvider.id)
+		[identityProvider: identityProvider, attributeFilter:attributeFilter, contactTypes:ContactType.list(), administrators:adminRole?.users]
 	}
 	
 	def create = {

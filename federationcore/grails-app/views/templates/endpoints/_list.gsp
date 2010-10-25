@@ -1,5 +1,10 @@
 
 <g:if test="${endpoints}">
+
+<g:if test="${!minEndpoints}">
+	<g:set var="minEndpoints" value="${0}" />
+</g:if>
+
 <table>
 	<tbody>
 	<g:each in="${endpoints.sort { it.binding.uri }}" status="i" var="ep">
@@ -67,7 +72,9 @@
 					</n:hasPermission>
 				</g:if>
 				<n:hasPermission target="descriptor:${ep.descriptor.id}:endpoint:remove">
-					<n:confirmaction action="fedreg.endpoint_delete(${ep.id}, '${endpointType}', '${containerID}' );" title="${message(code: 'fedreg.template.endpoints.remove.confirm.title')}" msg="${message(code: 'fedreg.template.endpoints.remove.confirm.descriptive')}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" icon="trash" label="${message(code: 'label.delete')}"/>
+					<g:if test="${endpoints.size() > minEndpoints}">
+						<n:confirmaction action="fedreg.endpoint_delete(${ep.id}, '${endpointType}', '${containerID}' );" title="${message(code: 'fedreg.template.endpoints.remove.confirm.title')}" msg="${message(code: 'fedreg.template.endpoints.remove.confirm.descriptive')}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" icon="trash" label="${message(code: 'label.delete')}"/>
+					</g:if>
 				</n:hasPermission>
 			</td>
 		</tr>

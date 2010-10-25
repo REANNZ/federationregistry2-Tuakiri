@@ -81,6 +81,10 @@ class UrlMappings {
 		controller = "metadata"
 	}
 	
+	"/attributefilter/$action?/$id?"{
+		controller = "attributeFilter"
+	}
+	
 	"/wayf/$action"{
 		controller = "wayf"
 	}

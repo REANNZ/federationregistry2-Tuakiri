@@ -4,7 +4,7 @@ import org.springframework.context.i18n.LocaleContextHolder as LCH
 import org.springframework.transaction.interceptor.TransactionAspectSupport
 
 import fedreg.workflow.ProcessPriority
-import fedreg.host.User
+import grails.plugins.nimble.core.UserBase
 
 class IDPSSODescriptorService {
 	
@@ -293,7 +293,7 @@ class IDPSSODescriptorService {
 			aa.delete()
 			entityDescriptor.delete()
 			
-			def users = User.findAllWhere(entityDescriptor:entityDescriptor)
+			def users = UserBase.findAllWhere(entityDescriptor:entityDescriptor)
 			users.each {
 				it.entityDescriptor = null
 				it.save()
