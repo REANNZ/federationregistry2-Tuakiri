@@ -123,7 +123,7 @@ class NimbleTagLib {
 			cssclass = "class=\'${attrs.class}\'"
 		
 		if(attrs.plain) {
-			out << "<a $href $onclick $id class='$cssclass'>${attrs.label}</a>"
+			out << "<a $href $onclick $id class='$cssclass'>${attrs.label.encodeAsHTML()}</a>"
 		}
 		else {
 			out << "<a $href $onclick $id class='ui-button $type ui-widget ui-state-default ui-corner-all $cssclass'>"
@@ -142,7 +142,7 @@ class NimbleTagLib {
 		def btnAttrs = [:]
 		btnAttrs.id = attrs.id
 		btnAttrs.class = attrs.class
-		btnAttrs.onclick = "confirmAction = function() { ${attrs.action} }; nimble.wasConfirmed('${attrs.title}', '${attrs.msg}', '${attrs.accept}', '${attrs.cancel}'); return false;"
+		btnAttrs.onclick = "confirmAction = function() { ${attrs.action} }; nimble.wasConfirmed('${attrs.title.encodeAsHTML()}', '${attrs.msg.encodeAsHTML()}', '${attrs.accept.encodeAsHTML()}', '${attrs.cancel.encodeAsHTML()}');"
 		btnAttrs.label = attrs.label
 		btnAttrs.icon = attrs.icon
 		btnAttrs.plain = attrs.plain
