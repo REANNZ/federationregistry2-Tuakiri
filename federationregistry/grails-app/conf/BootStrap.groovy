@@ -11,6 +11,8 @@ import org.apache.shiro.subject.Subject
 import org.apache.shiro.util.ThreadContext
 import org.apache.shiro.SecurityUtils
 
+import fedreg.core.Organization
+
 import fedreg.workflow.Process
 import fedreg.workflow.WorkflowScript
 
@@ -79,18 +81,20 @@ class BootStrap {
 		SecurityUtils.metaClass = null
 		
 		if(GrailsUtil.environment == "development") {
-			def base = new File("../scripts/setup/samlBase.groovy")
-			def attrBase = new File("../scripts/setup/aafAttributePopulation.groovy")
-			def rrData = new File("../scripts/setup/importRRContent.groovy")
+			if(Organization.count() == 0) {
+				def base = new File("../scripts/setup/samlBase.groovy")
+				def attrBase = new File("../scripts/setup/aafAttributePopulation.groovy")
+				def rrData = new File("../scripts/setup/importRRContent.groovy")
 			
-			def shell = new GroovyShell(grailsApplication.classLoader, new Binding(
-			            'application': grailsApplication,
-			            'context': applicationContext, 'ctx': applicationContext))
-			shell.'shell' = shell
+				def shell = new GroovyShell(grailsApplication.classLoader, new Binding(
+				            'application': grailsApplication,
+				            'context': applicationContext, 'ctx': applicationContext))
+				shell.'shell' = shell
 			
-			shell.evaluate(base.text)
-			shell.evaluate(attrBase.text)
-			shell.evaluate(rrData.text)
+				shell.evaluate(base.text)
+				shell.evaluate(attrBase.text)
+				shell.evaluate(rrData.text)
+			}
 		}
      }
 
