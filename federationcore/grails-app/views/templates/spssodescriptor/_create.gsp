@@ -5,6 +5,13 @@
 	$(function() {			
 		$('form').validate({
 				ignore: ":disabled",
+				rules: {
+					'hostname': {
+						required: function() {
+							return ($("#entity\\.identifier").val() == "");
+						}
+					}
+				},
 				success: function(label) {
 					if($(label).next())
 						$(label).next().remove()	// fix annoying bug where success labels are left laying about if duplicate validations
@@ -259,7 +266,7 @@
 						<g:hasErrors bean="${entityDescriptor}">
 							<div class="error"><g:renderErrors bean="${entityDescriptor}"as="list"/></div>
 						</g:hasErrors>
-						<g:textField name="hostname" size="50" class="required url"  value="${hostname}"/> <em> e.g https://sp.example.org </em>
+						<g:textField name="hostname" size="50" class="url"  value="${hostname}"/> <em> e.g https://sp.example.org </em>
 					</td>
 				</tr>
 			</table>
@@ -287,6 +294,7 @@
 				<tr>
 					<td>
 						<label for="sp.acs.post.uri"><g:message code="label.acspostendpoint" /></label>
+						<pre><g:message code="label.binding" />: SAML:2.0:bindings:HTTP-POST</pre>
 					</td>
 					<td>
 						<g:hasErrors bean="${httpPostACS}">
@@ -299,6 +307,7 @@
 				<tr>
 					<td>
 						<label for="sp.acs.artifact.uri"><g:message code="label.acsartifactendpoint" /></label>
+						<pre><g:message code="label.binding" />: SAML:2.0:bindings:HTTP-Artifact</pre>
 					</td>
 					<td>
 						<g:hasErrors bean="${soapArtifactACS}">
@@ -311,6 +320,7 @@
 				<tr>
 					<td>
 						<label for="sp.slo.artifact.uri"><g:message code="label.sloartifactendpoint" /></label>
+						<pre><g:message code="label.binding" />: SAML:2.0:bindings:HTTP-Artifact</pre>
 					</td>
 					<td>
 						<g:hasErrors bean="${sloArtifact}">
@@ -322,6 +332,7 @@
 				<tr>
 					<td>
 						<label for="sp.slo.redirect.uri"><g:message code="label.sloredirectendpoint" /></label>
+						<pre><g:message code="label.binding" />: SAML:2.0:bindings:HTTP-Redirect</pre>
 					</td>
 					<td>
 						<g:hasErrors bean="${sloRedirect}">
@@ -333,6 +344,7 @@
 				<tr>
 					<td>
 						<label for="sp.slo.soap.uri"><g:message code="label.slosoapendpoint" /></label>
+						<pre><g:message code="label.binding" />: SAML:2.0:bindings:SOAP</pre>
 					</td>
 					<td>
 						<g:hasErrors bean="${sloSOAP}">
@@ -344,6 +356,7 @@
 				<tr>
 					<td>
 						<label for="sp.slo.post.uri"><g:message code="label.slopostendpoint" /></label>
+						<pre><g:message code="label.binding" />: SAML:2.0:bindings:HTTP-POST</pre>
 					</td>
 					<td>
 						<g:hasErrors bean="${sloPost}">
@@ -355,6 +368,7 @@
 				<tr>
 					<td>
 						<label for="sp.drs.uri"><g:message code="label.drsendpoint" /></label>
+						<pre><g:message code="label.binding" />: SAML:profiles:SSO:idp-discovery-protocol</pre>
 					</td>
 					<td>
 						<g:hasErrors bean="${discoveryResponseService}">
@@ -367,6 +381,7 @@
 				<tr>
 					<td>
 						<label for="sp.mnid.artifact.uri"><g:message code="label.mnidartifactendpoint" /></label>
+						<pre><g:message code="label.binding" />: SAML:2.0:bindings:HTTP-Artifact</pre>
 					</td>
 					<td>
 						<g:hasErrors bean="${mnidArtifact}">
@@ -378,6 +393,7 @@
 				<tr>
 					<td>
 						<label for="sp.mnid.redirect.uri"><g:message code="label.mnidredirectendpoint" /></label>
+						<pre><g:message code="label.binding" />: SAML:2.0:bindings:HTTP-Redirect</pre>
 					</td>
 					<td>
 						<g:hasErrors bean="${mnidRedirect}">
@@ -389,6 +405,7 @@
 				<tr>
 					<td>
 						<label for="sp.mnid.soap.uri"><g:message code="label.mnidsoapendpoint" /></label>
+						<pre><g:message code="label.binding" />: SAML:2.0:bindings:SOAP</pre>
 					</td>
 					<td>
 						<g:hasErrors bean="${mnidSOAP}">
@@ -400,6 +417,7 @@
 				<tr>
 					<td>
 						<label for="sp.mnid.post.uri"><g:message code="label.mnidpostendpoint" /></label>
+						<pre><g:message code="label.binding" />: SAML:2.0:bindings:HTTP-POST</pre>
 					</td>
 					<td>
 						<g:hasErrors bean="${mnidPost}">
@@ -440,6 +458,7 @@
 			<tbody>
 				<tr>
 					<th><g:message code="label.name" /></th>
+					<th><g:message code="label.oid" /></th>
 					<th><g:message code="label.description" /></th>
 					<th><g:message code="label.requested" /></th>
 					<th><g:message code="label.required" /></th>
@@ -451,6 +470,9 @@
 						<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 							<td>
 								${fieldValue(bean: attr, field: "friendlyName")}
+							</td>
+							<td>
+								${fieldValue(bean: attr, field: "oid")}
 							</td>
 							<td>
 								${fieldValue(bean: attr, field: "description")}

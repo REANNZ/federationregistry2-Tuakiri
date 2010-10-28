@@ -45,9 +45,9 @@ class SPSSODescriptorService {
 		}
 	
 		// SP
-		def samlNamespace = SamlURI.findByUri('urn:oasis:names:tc:SAML:2.0:protocol')
-		def serviceProvider = new SPSSODescriptor(approved:false, active:params.active, displayName: params.sp?.displayName, description: params.sp?.description, organization: organization, authnRequestsSigned:true, wantAssertionsSigned: true)
-		serviceProvider.addToProtocolSupportEnumerations(samlNamespace)
+		def saml2Namespace = SamlURI.findByUri('urn:oasis:names:tc:SAML:2.0:protocol')
+		def serviceProvider = new SPSSODescriptor(approved:false, active:params.active, displayName: params.sp?.displayName, description: params.sp?.description, organization: organization, authnRequestsSigned:false, wantAssertionsSigned:false)
+		serviceProvider.addToProtocolSupportEnumerations(saml2Namespace)
 	
 		def acs = new AttributeConsumingService(approved:true, lang:params.lang ?:'en')
 		acs.addToServiceNames(params.sp?.displayName ?: '')
@@ -278,6 +278,18 @@ class SPSSODescriptorService {
 		serviceProvider.displayName = params.sp.displayName
 		serviceProvider.description = params.sp.description
 		
+		if(params.sp.status == 'true') {
+			serviceProvider.active = true
+			serviceProvider.entityDescriptor.active = true
+		}
+		else {
+			serviceProvider.active = false
+			def entityDescriptor = serviceProvider.entityDescriptor
+			if(entityDescriptor.holdsSPOnly()) {
+				entityDescriptor.active = false
+			}
+		}
+		
 		serviceProvider.serviceDescription.connectURL = params.sp?.servicedescription?.connecturl
 		serviceProvider.serviceDescription.logoURL = params.sp?.servicedescription?.logo
 		serviceProvider.serviceDescription.furtherInfo = params.sp?.servicedescription?.furtherinfo
@@ -289,17 +301,44 @@ class SPSSODescriptorService {
 		serviceProvider.serviceDescription.support = params.sp?.servicedescription?.support
 		serviceProvider.serviceDescription.maintenance = params.sp?.servicedescription?.maintenance
 		
-		if(!serviceProvider.validate()) {			
-			serviceProvider.errors.each {log.warn it}
+		if(!serviceProvider.entityDescriptor.validate()) {			
+			serviceProvider.entityDescriptor.errors.each {log.warn it}
 			return [false, serviceProvider]
 		}
 		
-		if(!serviceProvider.save()) {			
+		if(!serviceProvider.entityDescriptor.save()) {			
 			serviceProvider.errors.each {log.warn it}
 			throw new RuntimeException("Unable to save when updating ${serviceProvider}")
 		}
 		
 		return [true, serviceProvider]
 	}
+	
+	def delete(long id) {
+		def sp = SPSSODescriptor.get(id)
+		if(!sp)
+			throw new RuntimeException("Unable to delete service provider, no such instance")
+			
+		log.info "Deleting $sp on request of $authenticatedUser"
+		def entityDescriptor = sp.entityDescriptor
 
+		sp.assertionConsumerServices?.each { it.delete() }
+		sp.attributeConsumingServices?.each { it.delete() }
+		sp.discoveryResponseServices?.each { it.delete() }
+		sp.artifactResolutionServices?.each { it.delete() }
+		sp.singleLogoutServices?.each { it.delete() }
+		sp.manageNameIDServices?.each { it.delete() }
+		sp.contacts?.each { it.delete() }
+		sp.keyDescriptors?.each { it.delete() }
+		sp.monitors?.each { it.delete() }
+
+		if(entityDescriptor.holdsSPOnly()) {
+			entityDescriptor.spDescriptors.remove(sp)
+			sp.delete()
+			entityDescriptor.delete()
+		} else {
+			entityDescriptor.spDescriptors.remove(sp)
+			sp.delete()
+		}
+	}
 }

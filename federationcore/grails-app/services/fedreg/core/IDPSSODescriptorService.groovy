@@ -4,6 +4,7 @@ import org.springframework.context.i18n.LocaleContextHolder as LCH
 import org.springframework.transaction.interceptor.TransactionAspectSupport
 
 import fedreg.workflow.ProcessPriority
+import grails.plugins.nimble.core.UserBase
 
 class IDPSSODescriptorService {
 	
@@ -48,9 +49,9 @@ class IDPSSODescriptorService {
 		}
 	
 		// IDP
-		def samlNamespace = SamlURI.findByUri('urn:oasis:names:tc:SAML:2.0:protocol')
+		def saml2Namespace = SamlURI.findByUri('urn:oasis:names:tc:SAML:2.0:protocol')
 		def identityProvider = new IDPSSODescriptor(approved:false, active:params.active, displayName: params.idp?.displayName, description: params.idp?.description, scope: params.idp?.scope, organization: organization, wantAuthnRequestsSigned:true)
-		identityProvider.addToProtocolSupportEnumerations(samlNamespace)
+		identityProvider.addToProtocolSupportEnumerations(saml2Namespace)
 		
 		def supportedAttributes = []
 		params.idp.attributes.each { a -> 
@@ -118,7 +119,7 @@ class IDPSSODescriptorService {
 		def attributeAuthority, soapAttributeService
 		if(params.aa?.create) {
 			attributeAuthority = new AttributeAuthorityDescriptor(approved:false, active:params.active, displayName: params.idp?.displayName, description: params.idp?.description, scope: params.idp?.scope, collaborator: identityProvider, organization:organization)
-			attributeAuthority.addToProtocolSupportEnumerations(samlNamespace)
+			attributeAuthority.addToProtocolSupportEnumerations(saml2Namespace)
 			identityProvider.collaborator = attributeAuthority
 		
 			def attributeServiceBinding = SamlURI.findByUri('urn:oasis:names:tc:SAML:2.0:bindings:SOAP')
@@ -214,8 +215,20 @@ class IDPSSODescriptorService {
 		identityProvider.displayName = params.idp.displayName
 		identityProvider.description = params.idp.description
 		identityProvider.scope = params.idp.scope
-		identityProvider.active = params.idp.status == 'true'
-		identityProvider.wantAuthnRequestsSigned = params.idp.wantauthnrequestssigned == 'true'
+		if(params.idp.status == 'true') {
+			identityProvider.active = true
+			identityProvider.collaborator?.active = true
+			identityProvider.entityDescriptor.active = true
+		}
+		else {
+			identityProvider.active = false
+			identityProvider.collaborator?.active = false
+			def entityDescriptor = identityProvider.entityDescriptor
+			if(entityDescriptor.holdsIDPOnly()) {
+				entityDescriptor.active = false
+			}
+		}
+		identityProvider.wantAuthnRequestsSigned = false
 		identityProvider.autoAcceptServices = params.idp.autoacceptservices == 'true'
 		
 		// Ensure AA stays synced with scope
@@ -225,17 +238,75 @@ class IDPSSODescriptorService {
 		
 		log.debug "Updating $identityProvider active: ${identityProvider.active}, requestSigned: ${identityProvider.wantAuthnRequestsSigned}"
 		
-		if(!identityProvider.validate()) {			
-			identityProvider.errors.each {log.warn it}
+		if(!identityProvider.entityDescriptor.validate()) {			
+			identityProvider.entityDescriptor.errors.each {log.warn it}
 			return [false, identityProvider]
 		}
 		
-		if(!identityProvider.save()) {			
-			identityProvider.errors.each {log.warn it}
+		if(!identityProvider.entityDescriptor.save()) {			
+			identityProvider.entityDescriptor.errors.each {log.warn it}
 			throw new RuntimeException("Unable to save when updating ${identityProvider}")
 		}
 		
 		return [true, identityProvider]
+	}
+	
+	def delete(long id) {
+		def idp = IDPSSODescriptor.get(id)
+		if(!idp)
+			throw new RuntimeException("Unable to delete identity provider, no such instance")
+			
+		log.info "Deleting $idp on request of $authenticatedUser"
+
+		def entityDescriptor = idp.entityDescriptor
+		def aa = idp.collaborator
+
+		idp.singleSignOnServices?.each { it.delete() }
+		idp.artifactResolutionServices?.each { it.delete() }
+		idp.nameIDMappingServices?.each { it.delete() }
+		idp.assertionIDRequestServices?.each { it.delete() }
+		idp.attributeProfiles?.each { it.delete() }
+		idp.attributes?.each { it.delete() }
+		idp.artifactResolutionServices?.each { it.delete() }
+		idp.singleLogoutServices?.each { it.delete() }
+		idp.manageNameIDServices?.each { it.delete() }
+		idp.contacts?.each { it.delete() }
+		idp.keyDescriptors?.each { it.delete() }
+		idp.monitors?.each { it.delete() }
+
+		if(aa) {
+			aa.attributeServices?.each { it.delete() }
+			aa.assertionIDRequestServices?.each { it.delete() }
+			aa.attributes?.each { it.delete() }
+			aa.contacts?.each { it.delete() }
+			aa.keyDescriptors?.each { it.delete() }
+			aa.monitors?.each { it.delete() }
+		}
+		
+		if(entityDescriptor.holdsIDPOnly()) {
+			aa.collaborator = null
+			idp.collaborator = null
+			
+			entityDescriptor.idpDescriptors.remove(idp)
+			entityDescriptor.attributeAuthorityDescriptors.remove(aa)
+			idp.delete()
+			aa.delete()
+			entityDescriptor.delete()
+			
+			def users = UserBase.findAllWhere(entityDescriptor:entityDescriptor)
+			users.each {
+				it.entityDescriptor = null
+				it.save()
+			}
+		} else {
+			aa.collaborator = null
+			idp.collaborator = null
+			
+			entityDescriptor.idpDescriptors.remove(idp)
+			entityDescriptor.attributeAuthorityDescriptors.remove(aa)
+			idp.delete()
+			aa.delete()
+		}
 	}
 	
 }

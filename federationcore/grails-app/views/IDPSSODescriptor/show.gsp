@@ -46,6 +46,8 @@
 				$("#tabs2").tabs();
 			});
 		</script>
+		
+		<script src="${request.contextPath}/js/codemirror/js/codemirror.js" type="text/javascript" charset="utf-8"></script>
 	</head>
 	<body>
 		<section>
@@ -143,13 +145,14 @@
 			
 			<div id="tabs">
 				<ul>
-					<li><a href="#tab-contacts" class="icon icon_user_comment"><g:message code="label.contacts" /></a></li>
-					<li><a href="#tab-crypto" class="icon icon_lock"><g:message code="label.crypto" /></a></li>
-					<li><a href="#tab-endpoints" class="icon icon_link"><g:message code="label.endpoints" /></a></li>
-					<li><a href="#tab-attributes" class="icon icon_vcard"><g:message code="label.supportedattributes" /></a></li>
-					<li><a href="#tab-nameidformats" class="icon icon_database_key"><g:message code="label.supportednameidformats" /></a></li>
-					<li><a href="#tab-admins" class="icon icon_database_key"><g:message code="label.administrators" /></a></li>
-					<li><a href="#tab-monitors" class="icon icon_database_key"><g:message code="label.monitoring" /></a></li>
+					<li><a href="#tab-contacts" ><g:message code="label.contacts" /></a></li>
+					<li><a href="#tab-crypto" ><g:message code="label.crypto" /></a></li>
+					<li><a href="#tab-endpoints" ><g:message code="label.endpoints" /></a></li>
+					<li><a href="#tab-attributes" ><g:message code="label.supportedattributes" /></a></li>
+					<li><a href="#tab-nameidformats" ><g:message code="label.supportednameidformats" /></a></li>
+					<li><a href="#tab-attrfilpol" ><g:message code="label.attributefilter" /></a></li>
+					<li><a href="#tab-admins" ><g:message code="label.administrators" /></a></li>
+					<li><a href="#tab-monitors" ><g:message code="label.monitoring" /></a></li>
 				</ul>
 				
 				<div id="tab-contacts" class="tabcontent">
@@ -171,17 +174,17 @@
 					<h3><g:message code="label.supportedendpoints" /></h3>
 					<div id="tabs2">
 						<ul>
-							<li><a href="#tab-sso" class="icon icon_cog"><g:message code="label.ssoservices" /></a></li>
-							<li><a href="#tab-ars" class="icon icon_cog"><g:message code="label.artifactresolutionservices" /></a></li>
+							<li><a href="#tab-sso" ><g:message code="label.ssoservices" /></a></li>
+							<li><a href="#tab-ars" ><g:message code="label.artifactresolutionservices" /></a></li>
 							<g:if test="${identityProvider.collaborator}">
-								<li><a href="#tab-attrs" class="icon icon_cog"><g:message code="label.attributeservices" /></a></li>
+								<li><a href="#tab-attrs" ><g:message code="label.attributeservices" /></a></li>
 							</g:if>
-							<li><a href="#tab-slo" class="icon icon_cog"><g:message code="label.sloservices" /></a></li>
+							<li><a href="#tab-slo" ><g:message code="label.sloservices" /></a></li>
 						</ul>
 						
 						<div id="tab-sso" class="componentlist">
 							<div id="ssoendpoints">
-								<g:render template="/templates/endpoints/list" plugin="federationcore" model="[endpoints:identityProvider.singleSignOnServices, allowremove:true, endpointType:'singleSignOnServices', containerID:'ssoendpoints']" />
+								<g:render template="/templates/endpoints/list" plugin="federationcore" model="[endpoints:identityProvider.singleSignOnServices, allowremove:true, endpointType:'singleSignOnServices', containerID:'ssoendpoints', minEndpoints:1]" />
 							</div>
 							
 							<g:render template="/templates/endpoints/create" plugin="federationcore" model="[descriptor:identityProvider, endpointType:'singleSignOnServices', containerID:'ssoendpoints']" />
@@ -226,6 +229,27 @@
 					</div>
 					
 					<g:render template="/templates/nameidformats/add" plugin="federationcore" model="[descriptor:identityProvider, containerID:'nameidformats']"/>
+				</div>
+				<div id="tab-attrfilpol">
+					<h3><g:message code="label.attributefilter"/></h3>
+					<p><g:message code="fedreg.view.members.identityprovider.show.attributefilter.description" /></p>
+					<p><g:message code="fedreg.view.members.identityprovider.show.attributefilter.configuration" /></p>
+					<p><g:message code="fedreg.view.members.identityprovider.show.attributefilter.configurationurl" /> <strong><g:link controller="attributeFilter" action="generate" id="${identityProvider.id}">${createLink(controller:'attributeFilter', action:'generate', id:identityProvider.id, absolute:true)}</g:link></strong></p>
+					<g:textArea id="attrfilter" name="attrfilter" value="${attributeFilter}" rows="25" cols="40"/>
+					<script type="text/javascript">
+						 var textarea = $("#attrfilter");
+						  var editor = CodeMirror.fromTextArea('attrfilter',  {
+					        height: "600px",
+					        content: textarea.value,
+					        parserfile: ["tokenizegroovy.js", "parsegroovy.js"],
+					        stylesheet: "${request.contextPath}/js/codemirror/css/groovycolors.css",
+					        path: "${request.contextPath}/js/codemirror/js/",
+					        autoMatchParens: true,
+					        disableSpellcheck: true,
+					        lineNumbers: true,
+					        tabMode: 'shift'
+					     });
+					</script>
 				</div>
 				<div id="tab-admins">
 					<g:render template="/templates/descriptor/listfulladministration" plugin="federationcore" model="[descriptor:identityProvider, administrators:administrators]" />

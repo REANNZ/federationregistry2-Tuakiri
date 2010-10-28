@@ -1,7 +1,7 @@
 <html>
     <head>
         
-        <meta name="layout" content="login" />
+        <meta name="layout" content="public" />
         <title><g:message code="fedreg.view.login.shiberror.title"/></title>
     </head>
     <body>

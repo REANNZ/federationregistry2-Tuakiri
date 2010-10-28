@@ -37,8 +37,11 @@ class DescriptorEndpointController {
 			return
 		}
 		
+		def descriptor = endpoint.descriptor
+		
 		if(SecurityUtils.subject.isPermitted("descriptor:${endpoint.descriptor.id}:endpoint:remove")) {
 			endpointService.delete(endpoint, params.endpointType)
+			endpointService.determineDescriptorProtocolSupport(descriptor)
 			render message(code: 'fedreg.endpoint.delete.success')
 		}
 		else {
@@ -86,7 +89,11 @@ class DescriptorEndpointController {
 		
 		if(allowedEndpoints.containsKey(endpointType) && descriptor.hasProperty(endpointType)) {
 			log.debug "Listing endpoints for descriptor ID ${params.id} of type ${endpointType}"
-			render template:"/templates/endpoints/list", contextPath: pluginContextPath, model:[endpoints:descriptor."${endpointType}", allowremove:true, endpointType:endpointType, containerID:params.containerID]
+			
+			def minSizeConstraint = descriptor.constraints."$endpointType"?.getAppliedConstraint('minSize')
+			def minEndpoints = minSizeConstraint ? minSizeConstraint.getMinSize():0
+			
+			render template:"/templates/endpoints/list", contextPath: pluginContextPath, model:[endpoints:descriptor."${endpointType}", allowremove:true, endpointType:endpointType, containerID:params.containerID, minEndpoints:minEndpoints]
 		}
 		else {
 			log.warn "Endpoint ${endpointType} is invalid for Descriptor with id ${params.id}"
@@ -151,6 +158,7 @@ class DescriptorEndpointController {
 		
 			if(allowedEndpoints.containsKey(endpointType) && descriptor.hasProperty(endpointType)) {
 				endpointService.create(descriptor, allowedEndpoints.get(endpointType), endpointType, binding, params.location)
+				endpointService.determineDescriptorProtocolSupport(descriptor)
 				render message(code: 'fedreg.endpoint.create.success')
 			}
 			else {
