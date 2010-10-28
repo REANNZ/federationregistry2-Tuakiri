@@ -18,6 +18,8 @@
 import grails.plugins.nimble.core.*
 import grails.util.GrailsUtil
 
+import org.apache.commons.lang.StringEscapeUtils
+
 /**
  * Provides generic, mostly UI related tags to the Nimble application
  *
@@ -130,7 +132,7 @@ class NimbleTagLib {
 			if(type.contains('icon'))
 				out << "<span class='ui-button-icon-primary ui-icon ui-icon-${attrs.icon}'></span>"
 			if(type.contains('text'))
-				out << "<span class='ui-button-text'>${message(code:attrs.label)}</span>"
+				out << "<span class='ui-button-text'>${message(code:attrs.label).encodeAsHTML()}</span>"
 			out << "</a>"
 		}
 	}
@@ -142,7 +144,7 @@ class NimbleTagLib {
 		def btnAttrs = [:]
 		btnAttrs.id = attrs.id
 		btnAttrs.class = attrs.class
-		btnAttrs.onclick = "confirmAction = function() { ${attrs.action} }; nimble.wasConfirmed('${attrs.title.encodeAsHTML()}', '${attrs.msg.encodeAsHTML()}', '${attrs.accept.encodeAsHTML()}', '${attrs.cancel.encodeAsHTML()}');"
+		btnAttrs.onclick = "confirmAction = function() { ${attrs.action} }; nimble.wasConfirmed('${StringEscapeUtils.escapeJavaScript(attrs.title.encodeAsHTML())}', '${StringEscapeUtils.escapeJavaScript(attrs.msg.encodeAsHTML())}', '${StringEscapeUtils.escapeJavaScript(attrs.accept.encodeAsHTML())}', '${StringEscapeUtils.escapeJavaScript(attrs.cancel.encodeAsHTML())}');"
 		btnAttrs.label = attrs.label
 		btnAttrs.icon = attrs.icon
 		btnAttrs.plain = attrs.plain
