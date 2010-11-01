@@ -443,6 +443,7 @@
 				<td>
 					<div id="newcertificatedetails">
 					</div>
+					<g:hiddenField name="sp.crypto.sig" value="${true}" />
 					<g:textArea name="cert" id="cert" rows="25" cols="60" value="${certificate}"/>
 				</td>
 			</tr>
