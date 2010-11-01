@@ -230,10 +230,8 @@ class MetadataGenerationService {
 	def roleDescriptor(builder, minimal, roleDescriptor) {
 		"${roleDescriptor.class.name.split('\\.').last()}Extensions"(builder, roleDescriptor)
 		roleDescriptor.keyDescriptors?.sort{it.keyType}.each{keyDescriptor(builder, it)}		
-		if(!minimal) {
-			organization(builder, roleDescriptor.organization)
-			roleDescriptor.contacts?.sort{it.contact.email.uri}.each{cp -> contactPerson(builder, cp)}
-		}
+		organization(builder, roleDescriptor.organization)
+		roleDescriptor.contacts?.sort{it.contact.email.uri}.each{cp -> contactPerson(builder, cp)}
 	}
 	
 	def ssoDescriptor(builder, all, minimal, ssoDescriptor) {
