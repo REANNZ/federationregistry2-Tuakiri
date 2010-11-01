@@ -3,12 +3,25 @@
 	<head>
 		<meta name="layout" content="members" />
 		<title><g:message code="fedreg.view.members.serviceprovider.list.title" /></title>
+		<script type="text/javascript">
+			$(function() {
+				$('#spssodescriptorlist').dataTable( {
+						"sPaginationType": "full_numbers",
+						"bLengthChange": false,
+						"iDisplayLength": 10,
+						"aaSorting": [[0, "asc"]],
+						"oLanguage": {
+							"sSearch": "${g.message(code:'label.filter')}"
+						}
+					} );
+			});
+		</script>
 	</head>
 	<body>
 
 		<section>
 			<h2><g:message code="fedreg.view.members.serviceprovider.list.heading" /></h2>
-			<table>
+			<table id="spssodescriptorlist">
 				<thead>
 					<tr>
 						<g:sortableColumn property="displayName" title="${message(code: 'label.serviceprovider')}" />
@@ -33,9 +46,6 @@
 				</tbody>
 			</table>
 
-			<div class="paginatebuttons">
-				<g:paginate total="${serviceProviderTotal}" />
-			</div>
 		</section>
 
 	</body>

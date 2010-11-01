@@ -11,7 +11,6 @@ class IDPSSODescriptorController {
 	def defaultAction = "list"
 
 	def list = {
-		params.max = Math.min(params.max ? params.max.toInteger() : 20, 100)
 		[identityProviderList: IDPSSODescriptor.list(params), identityProviderTotal: IDPSSODescriptor.count()]
 	}
 
