@@ -25,8 +25,8 @@
 			<table id="idpssodescriptorlist">
 				<thead>
 					<tr>
-						<g:sortableColumn property="displayName" title="${message(code: 'label.identityprovider')}" />
-						<g:sortableColumn property="organization" title="${message(code: 'label.organization')}" />
+						<th><g:message code="label.identityprovider" /></th>
+						<th><g:message code="label.organization" /></th>
 						<th><g:message code="label.active" /></th>
 						<th><g:message code="label.approved" /></th>
 						<th/>

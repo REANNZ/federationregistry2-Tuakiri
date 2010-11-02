@@ -24,8 +24,8 @@
 			<table id="spssodescriptorlist">
 				<thead>
 					<tr>
-						<g:sortableColumn property="displayName" title="${message(code: 'label.serviceprovider')}" />
-						<g:sortableColumn property="organization" title="${message(code: 'label.organization')}" />
+						<th><g:message code="label.serviceprovider" /></th>
+						<th><g:message code="label.organization" /></th>
 						<th><g:message code="label.active" /></th>
 						<th><g:message code="label.approved" /></th>
 						<th/>
