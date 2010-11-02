@@ -285,10 +285,7 @@
 				<td>
 					<div id="newcertificatedetails">
 					</div>
-					<g:hiddenField name="idp.crypto.sigdata" />
 					<g:hiddenField name="idp.crypto.sig" value="${true}" />
-					<g:hiddenField name="idp.crypto.encdata" />
-					<g:hiddenField name="idp.crypto.enc" value="${true}" />
 					<g:textArea name="cert" id="cert" rows="25" cols="60" value="${certificate}"/>
 				</td>
 			</tr>

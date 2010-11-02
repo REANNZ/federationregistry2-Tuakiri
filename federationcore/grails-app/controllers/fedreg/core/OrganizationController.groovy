@@ -15,7 +15,6 @@ class OrganizationController {
 	}
 
 	def list = {
-		params.max = Math.min(params.max ? params.max.toInteger() : 20, 100)
 		[organizationList: Organization.list(params), organizationTotal: Organization.count()]
 	}
 

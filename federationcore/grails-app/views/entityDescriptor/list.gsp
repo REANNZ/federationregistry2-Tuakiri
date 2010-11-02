@@ -4,12 +4,25 @@
 		
 		<meta name="layout" content="members" />
 		<title><g:message code="fedreg.view.members.entity.list.title" /></title>
+		<script type="text/javascript">
+			$(function() {
+				$('#entitydescriptorlist').dataTable( {
+						"sPaginationType": "full_numbers",
+						"bLengthChange": false,
+						"iDisplayLength": 10,
+						"aaSorting": [[0, "asc"]],
+						"oLanguage": {
+							"sSearch": "${g.message(code:'label.filter')}"
+						}
+					} );
+			});
+		</script>
 	</head>
 	<body>
 		<section>
 			<h2><g:message code="fedreg.view.members.entity.list.heading" /></h2>
 
-			<table class="enhancedtabledata">
+			<table id="entitydescriptorlist">
 				<thead>
 					<tr>
 					
@@ -32,9 +45,6 @@
 				</tbody>
 			</table>
 
-			<div class="paginatebuttons">
-				<g:paginate total="${entityTotal}" />
-			</div>
 		</section>
 	</body>
 </html>

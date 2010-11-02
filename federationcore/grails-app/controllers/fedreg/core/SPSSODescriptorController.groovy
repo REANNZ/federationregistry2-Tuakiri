@@ -10,7 +10,6 @@ class SPSSODescriptorController {
 	def SPSSODescriptorService
 	
 	def list = {
-		params.max = Math.min(params.max ? params.max.toInteger() : 20, 100)
 		[serviceProviderList: SPSSODescriptor.list(params), serviceProviderTotal: SPSSODescriptor.count()]
 	}
 	

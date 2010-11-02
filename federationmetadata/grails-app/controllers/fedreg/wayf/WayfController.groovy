@@ -28,14 +28,14 @@ class WayfController {
 		identityProviders.each { idp ->
 			def ssoEndpoint = false
 			idp.singleSignOnServices.each { ep ->
-				if (ep.binding.uri == 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST') {
+				if (ep.binding.uri == 'urn:mace:shibboleth:1.0:profiles:AuthnRequest') {
 					ssoPostEndpoints.put(idp.id,  ep.location.uri)
 					ssoEndpoint = true
 				}
 			}
 			if(!ssoEndpoint) {
 				idp.singleSignOnServices.each { ep ->
-					if (ep.binding.uri == 'urn:mace:shibboleth:1.0:profiles:AuthnRequest')
+					if (ep.binding.uri == 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST')
 						ssoPostEndpoints.put(idp.id,  ep.location.uri)
 				}
 			}

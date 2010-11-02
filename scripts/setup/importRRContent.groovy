@@ -560,8 +560,7 @@
 			})
 			sp.addToAttributeConsumingServices(acs)
 			
-			// RR doesn't store any flag to indicate that SP publishes encyption type in MD but it does for every SP.....
-			importCrypto(it.resourceID, sp, true)
+			importCrypto(it.resourceID, sp, false)
 			
 			entity.addToSpDescriptors(sp)
 			entity.save()
