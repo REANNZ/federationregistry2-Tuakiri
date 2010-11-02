@@ -3,17 +3,30 @@
 	<head>
 		<meta name="layout" content="members" />
 		<title><g:message code="fedreg.view.members.contacts.list.title" /></title>
+		<script type="text/javascript">
+			$(function() {
+				$('#contactlist').dataTable( {
+						"sPaginationType": "full_numbers",
+						"bLengthChange": false,
+						"iDisplayLength": 10,
+						"aaSorting": [[0, "asc"]],
+						"oLanguage": {
+							"sSearch": "${g.message(code:'label.filter')}"
+						}
+					} );
+			});
+		</script>
 	</head>
 	<body>
 
 		<section>
 			<h2><g:message code="fedreg.view.members.contacts.list.heading" /></h2>
 
-			<table>
+			<table id="contactlist">
 				<thead>
 					<tr>
-						<g:sortableColumn property="givenName" title="${message(code: 'label.givenname')}" />
-						<g:sortableColumn property="surname" title="${message(code: 'label.surname')}" />
+						<th><g:message code='label.givenname' /></th>
+						<th><g:message code='label.surname' /></th>
 						<th><g:message code='label.organization' /></th>
 						<th/>
 					</tr>
@@ -29,9 +42,6 @@
 				</g:each>
 				</tbody>
 			</table>
-			<div class="paginatebuttons">
-				<g:paginate total="${contactTotal}" />
-			</div>
 			
 		</section>
 	</body>
