@@ -137,10 +137,9 @@ class MetadataGenerationService {
 				entityDescriptor.idpDescriptors.each { idp -> idpSSODescriptor(builder, all, minimal, idp) }
 				entityDescriptor.spDescriptors.each { sp -> spSSODescriptor(builder, all, minimal, sp) }
 				entityDescriptor.attributeAuthorityDescriptors.each { aa -> attributeAuthorityDescriptor(builder, all, minimal, aa)}
-				if(!minimal) {
-					organization(builder, entityDescriptor.organization)
-					entityDescriptor.contacts?.sort{it.contact.email.uri}.each{cp -> contactPerson(builder, cp)}
-				}
+
+				organization(builder, entityDescriptor.organization)
+				entityDescriptor.contacts?.sort{it.contact.email.uri}.each{cp -> contactPerson(builder, cp)}
 			}
 		}
 	}
@@ -230,8 +229,10 @@ class MetadataGenerationService {
 	def roleDescriptor(builder, minimal, roleDescriptor) {
 		"${roleDescriptor.class.name.split('\\.').last()}Extensions"(builder, roleDescriptor)
 		roleDescriptor.keyDescriptors?.sort{it.keyType}.each{keyDescriptor(builder, it)}		
-		organization(builder, roleDescriptor.organization)
-		roleDescriptor.contacts?.sort{it.contact.email.uri}.each{cp -> contactPerson(builder, cp)}
+		if(!minimal) {
+			organization(builder, roleDescriptor.organization)
+			roleDescriptor.contacts?.sort{it.contact.email.uri}.each{cp -> contactPerson(builder, cp)}
+		}
 	}
 	
 	def ssoDescriptor(builder, all, minimal, ssoDescriptor) {
