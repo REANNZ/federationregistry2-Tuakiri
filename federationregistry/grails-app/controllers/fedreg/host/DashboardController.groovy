@@ -26,7 +26,8 @@ class DashboardController {
 		def orgs = Organization.list()
 		orgs.each {
 			if(SecurityUtils.subject.hasRole("organization-${it.id}-administrators"))
-				organizations.add(it)
+				if(it.id != authenticatedUser.entityDescriptor.organization.id)
+					organizations.add(it)
 		}
 		
 		def idps = IDPSSODescriptor.list()
