@@ -150,7 +150,7 @@ class AuthController {
 				if(targetUri)
 	            	redirect(uri: targetUri)
 				else
-					redirect(controller: "organization", action:"list")
+					redirect(controller: "dashboard", action:"index")
 				return
 			}
 	        catch (IncorrectCredentialsException e) {
@@ -196,7 +196,7 @@ class AuthController {
         if(targetUri)
         	redirect(uri: targetUri)
 		else
-			redirect(controller: "organization", action:"list")
+			redirect(controller: "dashboard", action:"index")
 	}
 
 }

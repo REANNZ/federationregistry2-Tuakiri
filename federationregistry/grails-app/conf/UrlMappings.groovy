@@ -1,6 +1,10 @@
 class UrlMappings {
     static mappings = {
 	
+	"/dashboard/$action?/$id?"{
+		controller = "dashboard"
+	}
+	
 	"/compliance/identityprovider/attributes/$action?/$id?"{
 		controller = "IDPSSODescriptorAttributeCompliance"
 	}
