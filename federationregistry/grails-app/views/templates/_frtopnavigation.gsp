@@ -16,6 +16,9 @@
 			</li>
 		</n:isNotLoggedIn>
 		<n:isLoggedIn>
+			<li class="${controllerName == 'dashboard' ? 'directactive':''}">
+				<g:link controller="dashboard"><g:message code="label.dashboard" /></g:link>
+			</li>
 			<li class="${['organization', 'entity', 'IDPSSODescriptor', 'SPSSODescriptor', 'contacts'].contains(controllerName) ? 'active' : ''}">
 				<g:link controller="organization" action="list" class=""><g:message code="fedreg.navigation.membership" /></g:link>
 			</li>

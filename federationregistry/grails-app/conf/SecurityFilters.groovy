@@ -46,6 +46,15 @@ public class SecurityFilters extends grails.plugins.nimble.security.NimbleFilter
             }
         }
 
+		// Dashboard
+		dashboard(controller: "dashboard") {
+            before = {
+                accessControl (auth: false) {
+					role(UserService.USER_ROLE)
+				}
+            }
+        }
+
         // Members
         descriptors(controller: "(organization|entityDescriptor|IDPSSODescriptor|SPSSODescriptor|contacts|descriptorContacts|desccriptorKeyDescriptor|descriptorEndpoint|descriptorNameIDFormat|descriptorAttribute|roleDescriptorMonitor)") {
             before = {
