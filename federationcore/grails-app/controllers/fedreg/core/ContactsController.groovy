@@ -8,7 +8,6 @@ class ContactsController {
 	}
 
 	def list = {
-		params.max = Math.min(params.max ? params.max.toInteger() : 20, 100)
 		[contactList: Contact.list(params), contactTotal: Contact.count()]
 	}
 

@@ -9,6 +9,8 @@
 @maxContentWidth: 96%;
 
 .rounded-top(@radius: 5px) {
+	border-top-left-radius: @radius;
+	border-top-right-radius: @radius;
 	-webkit-border-top-left-radius: @radius;
 	-webkit-border-top-right-radius: @radius;
 	-moz-border-radius-topleft: @radius;
@@ -16,10 +18,12 @@
 }
 
 .rounded-bottom(@radius: 5px) {
-   -webkit-border-bottom-left-radius: @radius;
-	   -webkit-border-bottom-right-radius: @radius;
-   -moz-border-radius-bottomleft: @radius;
-	   -moz-border-radius-bottomright: @radius;
+	border-bottom-left-radius: @radius;
+	border-bottom-right-radius: @radius;
+	-webkit-border-bottom-left-radius: @radius;
+	-webkit-border-bottom-right-radius: @radius;
+   	-moz-border-radius-bottomleft: @radius;
+	-moz-border-radius-bottomright: @radius;
 }
 
 .rounded(@radius: 5px) {
@@ -87,6 +91,43 @@
 		padding-right: 9px;
 		border: 1px solid #e2e2e2;
 	}
+}
+
+.dataTables_filter {
+	margin-left: 9px;
+	font-size: 0.8em;
+	font-weight: bold;
+	
+	input {
+		padding: 1px;
+	}
+}
+
+.dataTables_info {
+	margin-top: 24px;
+	margin-left: 3px;
+}
+
+.dataTables_paginate {
+	margin-top: 12px;
+}
+
+.paginate_button {
+	margin-top: 24px;
+	padding: 6px;
+	padding-left: 9px;
+	padding-right: 9px;
+	border: 1px solid #e2e2e2;
+	cursor: pointer;
+}
+
+.paginate_active {
+	margin-top: 24px;
+	padding: 6px;
+	padding-left: 9px;
+	padding-right: 9px;
+	border: 1px solid #0071FB;
+	color: #0071FB;
 }
 
 .message {
@@ -366,4 +407,80 @@ form nav {
 td pre {
 	margin-top: 3px;
 	margin-left: 6px;
+}
+
+
+#dashboardcontent {
+	.automargin;
+	
+	color: #555;
+	margin-top: 6px;
+	margin-bottom: 6px;
+
+	width: 800px;
+	
+	a { .zero; color: #0071FB; text-decoration: none; img {border: 0px;}}
+	a:hover { text-decoration: underline; }
+}
+
+.dashrow {
+	.clearfix;
+	font-size: 0.9em;
+	width: 800px;
+	margin-bottom: 24px;
+}
+
+.dashrowinternal {
+	padding-bottom: 24px;
+	border-bottom: #e2e2e2 1px solid;
+}
+
+.dashcol2 {
+	.left;
+	width: 388px;
+	display: block;
+	padding: 6px;
+}
+
+.dashcol3 {
+	.left;
+	width: 254px;
+	display: block;
+	padding: 6px;
+	
+	h3 { text-align: center; }
+	p { padding-left: 9px;}
+	img {vertical-align:middle;}
+}
+
+.dashlist {
+	margin-left: 0px;
+	padding-left: 9px;
+	list-style-type: none;
+	li { margin-top: 1px;}
+}
+
+.dashstats {
+	h3 {margin-top: 0px;}
+	strong { font-size: 1.5em;}
+}
+
+.user {
+	
+}
+
+.userlogo {
+	.left;
+	text-align: center;
+	margin-right: 6px;
+	font-size: 0.7em;
+	a { color: #b2b2b2; }
+}
+
+.userdetails {
+	.left;
+	width: 175px;
+	word-wrap: break-word;
+	h3 { text-align: left; margin: 0;}
+	h4 { margin: 0; margin-top: 12px;}
 }

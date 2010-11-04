@@ -4,16 +4,29 @@
 		
 		<meta name="layout" content="members" />
 		<title><g:message code="fedreg.view.members.identityprovider.list.title" /></title>
+		<script type="text/javascript">
+			$(function() {
+				$('#idpssodescriptorlist').dataTable( {
+						"sPaginationType": "full_numbers",
+						"bLengthChange": false,
+						"iDisplayLength": 10,
+						"aaSorting": [[0, "asc"]],
+						"oLanguage": {
+							"sSearch": "${g.message(code:'label.filter')}"
+						}
+					} );
+			});
+		</script>
 	</head>
 	<body>
 
 		<section>
 			<h2><g:message code="fedreg.view.members.identityprovider.list.heading" /></h2>
-			<table>
+			<table id="idpssodescriptorlist">
 				<thead>
 					<tr>
-						<g:sortableColumn property="displayName" title="${message(code: 'label.identityprovider')}" />
-						<g:sortableColumn property="organization" title="${message(code: 'label.organization')}" />
+						<th><g:message code="label.identityprovider" /></th>
+						<th><g:message code="label.organization" /></th>
 						<th><g:message code="label.active" /></th>
 						<th><g:message code="label.approved" /></th>
 						<th/>
@@ -34,9 +47,6 @@
 				</tbody>
 			</table>
 
-			<div class="paginatebuttons">
-				<g:paginate total="${identityProviderTotal}" />
-			</div>
 		</section>
 
 	</body>

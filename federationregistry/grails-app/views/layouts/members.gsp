@@ -21,6 +21,7 @@
 	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/jquery.validate.pack.js')}"></script>
 	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/jquery.validate.additional-methods.js')}"></script>
 	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/jquery.form.wizard-2.0.1-min.js')}"></script>
+	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/jquery.datatables.min.js')}"></script>
 			
 	<script type="text/javascript" src="${resource(dir: 'js', file: '/fedreg-members.js')}"></script>
 	<nh:nimbleui/>

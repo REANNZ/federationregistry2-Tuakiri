@@ -4,16 +4,31 @@
 		
 		<meta name="layout" content="members" />
 		<title><g:message code="fedreg.view.members.organization.list.title" /></title>
+		
+		<script type="text/javascript">
+			$(function() {
+				$('#organizationlist').dataTable( {
+						"sPaginationType": "full_numbers",
+						"bLengthChange": false,
+						"iDisplayLength": 10,
+						"aaSorting": [[0, "asc"]],
+						"oLanguage": {
+							"sSearch": "${g.message(code:'label.filter')}"
+						}
+					} );
+			});
+		</script>
 	</head>
 	<body>
 		<section>
 			<h2><g:message code="fedreg.view.members.organization.list.heading" /></h2>
 
-			<table class="enhancedtabledata">
+			<table id="organizationlist">
 				<thead>
 					<tr>
 					
 						<th>${message(code: 'label.organization')}</th>
+						<th>${message(code: 'label.url')}</th>
 						<th>${message(code: 'label.primarytype')}</th>
 						<th />
 					
@@ -23,6 +38,7 @@
 				<g:each in="${organizationList.sort{it.name}}" status="i" var="organization">
 					<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 						<td>${fieldValue(bean: organization, field: "displayName")}</td>
+						<td>${fieldValue(bean: organization, field: "url.uri")}</td>
 						<td>${fieldValue(bean: organization, field: "primary.displayName")}</td>
 						<td><n:button href="${createLink(controller:'organization', action:'show', id:organization.id)}" label="label.view" icon="arrowthick-1-ne" /></td>
 					</tr>
@@ -30,9 +46,6 @@
 				</tbody>
 			</table>
 
-			<div class="paginatebuttons">
-				<g:paginate total="${organizationTotal}" />
-			</div>
 		</section>
 	</body>
 </html>
