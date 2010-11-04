@@ -139,7 +139,7 @@ class MetadataGenerationService {
 				entityDescriptor.attributeAuthorityDescriptors?.sort{it.id}?.each { aa -> attributeAuthorityDescriptor(builder, all, minimal, roleExtensions, aa)}
 
 				organization(builder, entityDescriptor.organization)
-				entityDescriptor.contacts?.sort{it.contact.email.uri}.each{cp -> contactPerson(builder, cp)}
+				entityDescriptor.contacts?.sort{it.id}.each{cp -> contactPerson(builder, cp)}
 			}
 		}
 	}
@@ -232,14 +232,14 @@ class MetadataGenerationService {
 		roleDescriptor.keyDescriptors?.sort{it.id}.each{keyDescriptor(builder, it)}		
 		if(!minimal) {
 			organization(builder, roleDescriptor.organization)
-			roleDescriptor.contacts?.sort{it.contact.email.uri}.each{cp -> contactPerson(builder, cp)}
+			roleDescriptor.contacts?.sort{it.id}.each{cp -> contactPerson(builder, cp)}
 		}
 	}
 	
 	def ssoDescriptor(builder, all, minimal, ssoDescriptor) {
-		ssoDescriptor.artifactResolutionServices?.sort{it.location.uri}.eachWithIndex{ars, i -> indexedEndpoint(builder, all, minimal, "ArtifactResolutionService", ars, i+1)}
-		ssoDescriptor.singleLogoutServices?.sort{it.location.uri}.each{sls -> endpoint(builder, all, minimal, "SingleLogoutService", sls)}
-		ssoDescriptor.manageNameIDServices?.sort{it.location.uri}.each{mnids -> endpoint(builder, all, minimal, "ManageNameIDService", mnids)}
+		ssoDescriptor.artifactResolutionServices?.sort{it.id}.eachWithIndex{ars, i -> indexedEndpoint(builder, all, minimal, "ArtifactResolutionService", ars, i+1)}
+		ssoDescriptor.singleLogoutServices?.sort{it.id}.each{sls -> endpoint(builder, all, minimal, "SingleLogoutService", sls)}
+		ssoDescriptor.manageNameIDServices?.sort{it.id}.each{mnids -> endpoint(builder, all, minimal, "ManageNameIDService", mnids)}
 		ssoDescriptor.nameIDFormats?.sort{it.uri}.each{nidf -> samlURI(builder, "NameIDFormat", nidf)}
 	}
 	
@@ -249,10 +249,10 @@ class MetadataGenerationService {
 				roleDescriptor(builder, minimal, roleExtensions, idpSSODescriptor)
 				ssoDescriptor(builder, all, minimal, idpSSODescriptor)
 			
-				idpSSODescriptor.singleSignOnServices?.sort{it.location.uri}.each{ sso -> endpoint(builder, all, minimal, "SingleSignOnService", sso) }
-				idpSSODescriptor.nameIDMappingServices?.sort{it.location.uri}.each{ nidms -> endpoint(builder, all, minimal, "NameIDMappingService", nidms) }
-				idpSSODescriptor.assertionIDRequestServices?.sort{it.location.uri}.each{ aidrs -> endpoint(builder, all, minimal, "AssertionIDRequestService", aidrs) }
-				idpSSODescriptor.attributeProfiles?.sort{it.location.uri}.each{ ap -> samlURI(builder, "AttributeProfile", ap) }
+				idpSSODescriptor.singleSignOnServices?.sort{it.id}.each{ sso -> endpoint(builder, all, minimal, "SingleSignOnService", sso) }
+				idpSSODescriptor.nameIDMappingServices?.sort{it.id}.each{ nidms -> endpoint(builder, all, minimal, "NameIDMappingService", nidms) }
+				idpSSODescriptor.assertionIDRequestServices?.sort{it.id}.each{ aidrs -> endpoint(builder, all, minimal, "AssertionIDRequestService", aidrs) }
+				idpSSODescriptor.attributeProfiles?.sort{it.id}.each{ ap -> samlURI(builder, "AttributeProfile", ap) }
 				if(!minimal)
 					idpSSODescriptor.attributes?.sort{it.base.name}.each{ attr -> attribute(builder, attr)}
 			}
@@ -265,7 +265,7 @@ class MetadataGenerationService {
 				roleDescriptor(builder, minimal, roleExtensions, spSSODescriptor)
 				ssoDescriptor(builder, all, minimal, spSSODescriptor)
 			
-				spSSODescriptor.assertionConsumerServices?.sort{it.location.uri}.eachWithIndex{ ars, i -> indexedEndpoint(builder, all, minimal, "AssertionConsumerService", ars, i+1) }
+				spSSODescriptor.assertionConsumerServices?.sort{it.id}.eachWithIndex{ ars, i -> indexedEndpoint(builder, all, minimal, "AssertionConsumerService", ars, i+1) }
 				spSSODescriptor.attributeConsumingServices?.sort{it.id}.eachWithIndex{ acs, i -> 
 					if(acs.serviceNames?.size() > 0 && acs.requestedAttributes?.size() > 0 )
 						attributeConsumingService(builder, all, minimal, acs, i+1)
@@ -285,19 +285,19 @@ class MetadataGenerationService {
 						// So where a collaborative relationship exists we use all common data from the IDP to render the AA
 						// If it isn't collaborative we'll assume manual DB intervention and render direct ;-).
 						roleDescriptor(builder, minimal, roleExtensions, aaDescriptor.collaborator)	
-						aaDescriptor.attributeServices?.sort{it.location.uri}.each{ attrserv -> endpoint(builder, all, minimal, "AttributeService", attrserv) }
-						aaDescriptor.collaborator.assertionIDRequestServices?.sort{it.location.uri}.each{ aidrs -> endpoint(builder, all, minimal, "AssertionIDRequestService", aidrs) }
+						aaDescriptor.attributeServices?.sort{it.id}.each{ attrserv -> endpoint(builder, all, minimal, "AttributeService", attrserv) }
+						aaDescriptor.collaborator.assertionIDRequestServices?.sort{it.id}.each{ aidrs -> endpoint(builder, all, minimal, "AssertionIDRequestService", aidrs) }
 						aaDescriptor.collaborator.nameIDFormats?.sort{it.uri}.each{ nidf -> samlURI(builder, "NameIDFormat", nidf) }
-						aaDescriptor.collaborator.attributeProfiles?.sort{it.location.uri}.each{ ap -> samlURI(builder, "AttributeProfile", ap) }
+						aaDescriptor.collaborator.attributeProfiles?.sort{it.id}.each{ ap -> samlURI(builder, "AttributeProfile", ap) }
 						if(!minimal)
 							aaDescriptor.collaborator.attributes?.sort{it.base.name}.each{ attr -> attribute(builder, attr) }
 					}
 				}
 				else {
 					roleDescriptor(builder, minimal, roleExtensions, aaDescriptor)	
-					aaDescriptor.attributeServices?.sort{it.location.uri}.each{ attrserv -> endpoint(builder, all, minimal, "AttributeService", attrserv) }
-					aaDescriptor.assertionIDRequestServices?.sort{it.location.uri}.each{ aidrs -> endpoint(builder, all, minimal, "AssertionIDRequestService", aidrs) }
-					aaDescriptor.nameIDFormats?.sort{it.location.uri}.each{ nidf -> samlURI(builder, "NameIDFormat", nidf) }
+					aaDescriptor.attributeServices?.sort{it.id}.each{ attrserv -> endpoint(builder, all, minimal, "AttributeService", attrserv) }
+					aaDescriptor.assertionIDRequestServices?.sort{it.id}.each{ aidrs -> endpoint(builder, all, minimal, "AssertionIDRequestService", aidrs) }
+					aaDescriptor.nameIDFormats?.sort{it.id}.each{ nidf -> samlURI(builder, "NameIDFormat", nidf) }
 					aaDescriptor.attributeProfiles?.sort{it.uri}.each{ ap -> samlURI(builder, "AttributeProfile", ap) }
 					aaDescriptor.attributes?.sort{it.base.name}.each{ attr -> attribute(builder, attr) }
 				}
