@@ -23,7 +23,7 @@
 				</td>
 				<td>
 					<n:hasPermission target="descriptor:${roleDescriptor.id}:monitor:delete">
-						<n:confirmaction action="fedreg.monitor_delete(${m.id});" title="${message(code: 'fedreg.template.monitor.delete.confirm.title')}" msg="${message(code: 'fedreg.template.monitor.delete.confirm.descriptive')}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" icon="trash" label="${message(code: 'label.delete')}" />
+						<n:confirmaction action="fedreg.monitor_delete(${m.id});" title="${message(code: 'fedreg.templates.monitor.delete.confirm.title')}" msg="${message(code: 'fedreg.templates.monitor.delete.confirm.descriptive')}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" icon="trash" label="${message(code: 'label.delete')}" />
 					</n:hasPermission>
 				</td>
 			</tr>
@@ -32,5 +32,5 @@
 	</table>
 </g:if>
 <g:else>
-	<p><g:message code="fedreg.template.monitor.none"/></p>
+	<p><g:message code="fedreg.templates.monitor.none"/></p>
 </g:else>

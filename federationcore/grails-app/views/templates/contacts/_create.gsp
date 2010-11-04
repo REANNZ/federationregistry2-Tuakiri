@@ -48,8 +48,8 @@
 
 	<div id="contactconfirmationdialog" title="Add Contact">
 		<div class="popup">
-			<p><g:message code="fedreg.template.contacts.confirmaddition"/></p>
-			<p><g:message code="fedreg.template.contacts.selecttype"/></p>
+			<p><g:message code="fedreg.templates.contacts.confirmaddition"/></p>
+			<p><g:message code="fedreg.templates.contacts.selecttype"/></p>
 			<g:select id="contactselectedtype" name="contactType" from="${contactTypes}" optionKey="name" optionValue="displayName"/>
 			<div class="buttons">
 				<n:button href="#" onclick="fedreg.contact_create();" label="${message(code:'label.accept')}" icon="check" class="modal_close"/>

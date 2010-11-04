@@ -15,7 +15,7 @@
 			<td>${nidf.description?.encodeAsHTML()}</td>
 			<td>
 				<n:hasPermission target="descriptor:${descriptor.id}:nameidformat:remove">
-					<n:confirmaction action="fedreg.nameIDFormat_remove(${nidf.id}, '${containerID}' );" title="${message(code: 'fedreg.template.nameidformats.remove.confirm.title')}" msg="${message(code: 'fedreg.template.nameidformats.remove.confirm.descriptive', args:[nidf.uri.encodeAsHTML()])}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" icon="trash" label="${message(code: 'label.remove')}" />
+					<n:confirmaction action="fedreg.nameIDFormat_remove(${nidf.id}, '${containerID}' );" title="${message(code: 'fedreg.templates.nameidformats.remove.confirm.title')}" msg="${message(code: 'fedreg.templates.nameidformats.remove.confirm.descriptive', args:[nidf.uri.encodeAsHTML()])}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" icon="trash" label="${message(code: 'label.remove')}" />
 				</n:hasPermission>
 			</td>
 		</tr>
@@ -25,6 +25,6 @@
 </g:if>
 <g:else>
 	<div>
-		<p class="error"><g:message code="fedreg.template.nameidformats.noresults"/></p>
+		<p class="error"><g:message code="fedreg.templates.nameidformats.noresults"/></p>
 	</div>
 </g:else>

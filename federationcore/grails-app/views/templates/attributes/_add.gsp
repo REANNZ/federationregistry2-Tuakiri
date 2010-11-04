@@ -14,9 +14,9 @@
 	</div>
 	
 	<div id="newattribute"  class="searcharea">
-		<h3><g:message code="fedreg.template.attributes.add.heading"/></h3>
+		<h3><g:message code="fedreg.templates.attributes.add.heading"/></h3>
 		<p>
-			<g:message code="fedreg.template.attributes.add.${type}.details"/>
+			<g:message code="fedreg.templates.attributes.add.${type}.details"/>
 		</p>
 		<form id="newattributedata">
 		<table>
