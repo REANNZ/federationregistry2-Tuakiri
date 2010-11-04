@@ -105,13 +105,13 @@ class MetadataGenerationService {
 			if(certificateAuthorities && certificateAuthorities.size() != 0) {
 				builder.Extensions() {
 					builder."shibmd:KeyAuthority"("xmlns:shibmd":"urn:mace:shibboleth:metadata:1.0", VerifyDepth: 5) {
-						certificateAuthorities.each { ca ->
+						certificateAuthorities?.sort{it.id}.each { ca ->
 							caKeyInfo(builder, ca)
 						}
 					}
 				}
 			}
-			entitiesDescriptor.entitiesDescriptors.each { eds ->
+			entitiesDescriptor.entitiesDescriptors?.sort{it.id}?.each { eds ->
 				this.entitiesDescriptor(builder, all, minimal, roleExtensions, eds)
 			}
 			entitiesDescriptor.entityDescriptors?.sort{it.entityID}.each { ed ->
@@ -122,7 +122,7 @@ class MetadataGenerationService {
 	
 	def entitiesDescriptor(builder, all, minimal, roleExtensions, entitiesDescriptor) {
 		builder.EntitiesDescriptor() {
-			entitiesDescriptor.entitiesDescriptors.each { eds ->
+			entitiesDescriptor.entitiesDescriptors?.sort{it.id}?.each { eds ->
 				this.entitiesDescriptor(builder, all, minimal, roleExtensions, eds)
 			}
 			entitiesDescriptor.entityDescriptors?.sort{it.entityID}.each { ed ->
@@ -134,9 +134,9 @@ class MetadataGenerationService {
 	def entityDescriptor(builder, all, minimal, roleExtensions, entityDescriptor) {
 		if(all || (entityDescriptor.approved && entityDescriptor.active && entityDescriptor.organization.approved && entityDescriptor.organization.active)) {
 			builder.EntityDescriptor(entityID:entityDescriptor.entityID) {
-				entityDescriptor.idpDescriptors.each { idp -> idpSSODescriptor(builder, all, minimal, roleExtensions, idp) }
-				entityDescriptor.spDescriptors.each { sp -> spSSODescriptor(builder, all, minimal, roleExtensions, sp) }
-				entityDescriptor.attributeAuthorityDescriptors.each { aa -> attributeAuthorityDescriptor(builder, all, minimal, roleExtensions, aa)}
+				entityDescriptor.idpDescriptors?.sort{it.id}?.each { idp -> idpSSODescriptor(builder, all, minimal, roleExtensions, idp) }
+				entityDescriptor.spDescriptors?.sort{it.id}?.each { sp -> spSSODescriptor(builder, all, minimal, roleExtensions, sp) }
+				entityDescriptor.attributeAuthorityDescriptors?.sort{it.id}?.each { aa -> attributeAuthorityDescriptor(builder, all, minimal, roleExtensions, aa)}
 
 				organization(builder, entityDescriptor.organization)
 				entityDescriptor.contacts?.sort{it.contact.email.uri}.each{cp -> contactPerson(builder, cp)}
@@ -229,7 +229,7 @@ class MetadataGenerationService {
 	def roleDescriptor(builder, minimal, roleExtensions, roleDescriptor) {
 		if(roleExtensions)
 			"${roleDescriptor.class.name.split('\\.').last()}Extensions"(builder, roleDescriptor)
-		roleDescriptor.keyDescriptors?.sort{it.keyType}.each{keyDescriptor(builder, it)}		
+		roleDescriptor.keyDescriptors?.sort{it.id}.each{keyDescriptor(builder, it)}		
 		if(!minimal) {
 			organization(builder, roleDescriptor.organization)
 			roleDescriptor.contacts?.sort{it.contact.email.uri}.each{cp -> contactPerson(builder, cp)}
