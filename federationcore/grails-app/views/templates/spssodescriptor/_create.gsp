@@ -100,7 +100,7 @@
 						<label for="contact.givenName"><g:message code="label.givenname" /></label>
 					</td>
 					<td>
-						<g:textField name="contact.givenName"  size="50" class="required" minlength="4" value="${contact?.givenName}"/>
+						<g:textField name="contact.givenName"  size="50" class="required" value="${contact?.givenName}"/>
 					</td>
 				</tr>
 				<tr>
@@ -108,7 +108,7 @@
 						<label for="contact.surname"><g:message code="label.surname" /></label>
 					</td>
 					<td>
-						<g:textField name="contact.surname"  size="50" class="required" minlength="4" value="${contact?.surname}"/>
+						<g:textField name="contact.surname"  size="50" class="required" value="${contact?.surname}"/>
 					</td>
 				</tr>
 				<tr>
@@ -116,7 +116,7 @@
 						<label for="contact.email"><g:message code="label.email" /></label>
 					</td>
 					<td>
-						<g:textField name="contact.email"  size="50" class="required email" minlength="4" value="${contact?.email?.uri}"/>
+						<g:textField name="contact.email"  size="50" class="required email" value="${contact?.email?.uri}"/>
 					</td>
 				</tr>
 			</table>
@@ -142,7 +142,7 @@
 					<label for="sp.displayName"><g:message code="label.displayname" /></label>
 				</td>
 				<td>
-					<g:textField name="sp.displayName"  size="50" class="required" minlength="4" value="${serviceProvider?.displayName}"/>
+					<g:textField name="sp.displayName"  size="50" class="required" value="${serviceProvider?.displayName}"/>
 				</td>
 			</tr>
 			<tr>
@@ -150,7 +150,7 @@
 					<label for="sp.description"><g:message code="label.description" /></label>
 				</td>
 				<td>
-					<g:textArea name="sp.description"  class="required" minlength="4" rows="8" cols="36" value="${serviceProvider?.description}"/>
+					<g:textArea name="sp.description"  class="required" rows="8" cols="36" value="${serviceProvider?.description}"/>
 				</td>
 			</tr>
 			<tr>
