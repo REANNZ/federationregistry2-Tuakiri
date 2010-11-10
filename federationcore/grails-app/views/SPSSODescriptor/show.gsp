@@ -119,6 +119,10 @@
 						</g:else>
 					</td>
 				</tr>
+				<tr>
+					<th><g:message code="label.datecreated" /></th>
+					<td>${fieldValue(bean: serviceProvider, field: "dateCreated")}</td>
+				</tr>
 			</tbody>
 		</table>
 			
