@@ -20,6 +20,7 @@ plugin.xml
 
 src/docs
 
+grails-app/i18n/messages-deployment*
 grails-app/i18n/shiro.properties
 grails-app/i18n/messages.properties
 

@@ -1,3 +1,5 @@
+import org.apache.commons.io.FileUtils
+
 includeTargets << grailsScript("Init")
 includeTargets << grailsScript("_GrailsArgParsing")
 
@@ -12,10 +14,10 @@ target(main: "This script imports custom themes for FR deployment from the direc
     
 	def source = parseArgs()
 
-	// Add files here to extend theme import. Files will be copied from source at this location and installed in Federation Registry at the same location
+	// Add directories and files here to extend theme import. Files will be copied from source at this location and installed in Federation Registry at the same location
 	// All files listed here must appear in .gitignore to ensure they aren't commited to revision control (they should be controlled in their own external project)
-	def files = [	"grails-app/i18n/messages-deployment.properties",
-					"grails-app/views/layouts/access.gsp",
+	def dirs = [	"grails-app/i18n"	]
+	def files = [	"grails-app/views/layouts/access.gsp",
 					"grails-app/views/layouts/bootstrap.gsp",
 					"grails-app/views/layouts/compliance.gsp",
 					"grails-app/views/layouts/dashboard.gsp",
@@ -40,11 +42,23 @@ target(main: "This script imports custom themes for FR deployment from the direc
 					"web-app/css/frtheme.less",
 					"web-app/images/logo.jpg"	]
 				
-	println source.path
-	files.each {
-		( new AntBuilder ( ) ).copy ( file : "${source.path}${File.separator}$it" , tofile : "${basedir}${File.separator}$it" )
-	}
+	def ant = new AntBuilder()
 
+	dirs.each { dir ->
+		def dst = new File("${basedir}/$dir")
+		def src = new File("${source}/$dir")
+		
+		FileUtils.copyDirectory(src, dst)
+	}
+	
+	files.each { file ->
+		def dst = new File("${basedir}/$file")
+		def src = new File("${source}/$file")
+		
+		FileUtils.copyFile(src, dst)
+	}
+	
+	println "Completed theme import"
 }
 
 def parseArgs() {
@@ -67,7 +81,7 @@ def parseArgs() {
 				
 			}
 			
-			return source
+			return args[0]
 			break
 		default:
 			usage()
