@@ -560,7 +560,7 @@
 			})
 			sp.addToAttributeConsumingServices(acs)
 			
-			importCrypto(it.resourceID, sp, false)
+			importCrypto(it.resourceID, sp, true)
 			
 			entity.addToSpDescriptors(sp)
 			entity.save()
