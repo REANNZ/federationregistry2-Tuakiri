@@ -1,12 +1,11 @@
 package fedreg.metadata
 
+import org.springframework.transaction.annotation.*
 import groovy.xml.MarkupBuilder
 import java.text.SimpleDateFormat
 import fedreg.core.*
 
 class MetadataGenerationService {
-	
-	static transactional = false
 	
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
 	
@@ -96,6 +95,7 @@ class MetadataGenerationService {
 		}
 	}
 	
+	@Transactional(readOnly = true)
 	def entitiesDescriptor(builder, all, minimal, roleExtensions, entitiesDescriptor, validUntil, certificateAuthorities) {
 		builder.EntitiesDescriptor("xmlns":"urn:oasis:names:tc:SAML:2.0:metadata", "xmlns:xsi":"http://www.w3.org/2001/XMLSchema-instance", 'xmlns:saml':'urn:oasis:names:tc:SAML:2.0:assertion', 'xmlns:shibmd':'urn:mace:shibboleth:metadata:1.0',
 			'xmlns:ds':'http://www.w3.org/2000/09/xmldsig#',
@@ -120,6 +120,7 @@ class MetadataGenerationService {
 		}
 	}
 	
+	@Transactional(readOnly = true)
 	def entitiesDescriptor(builder, all, minimal, roleExtensions, entitiesDescriptor) {
 		builder.EntitiesDescriptor() {
 			entitiesDescriptor.entitiesDescriptors?.sort{it.id}?.each { eds ->
@@ -131,6 +132,7 @@ class MetadataGenerationService {
 		}
 	}
 	
+	@Transactional(readOnly = true)
 	def entityDescriptor(builder, all, minimal, roleExtensions, entityDescriptor) {
 		if(all || (entityDescriptor.approved && entityDescriptor.active && entityDescriptor.organization.approved && entityDescriptor.organization.active)) {
 			builder.EntityDescriptor(entityID:entityDescriptor.entityID) {
