@@ -4,17 +4,7 @@
 		<meta name="layout" content="members" />
 		<title><g:message code="fedreg.view.members.serviceprovider.list.title" /></title>
 		<script type="text/javascript">
-			$(function() {
-				$('#spssodescriptorlist').dataTable( {
-						"sPaginationType": "full_numbers",
-						"bLengthChange": false,
-						"iDisplayLength": 10,
-						"aaSorting": [[0, "asc"]],
-						"oLanguage": {
-							"sSearch": "${g.message(code:'label.filter')}"
-						}
-					} );
-			});
+			<njs:datatable tableID="spssodescriptorlist" sortColumn="0" />
 		</script>
 	</head>
 	<body>
