@@ -47,7 +47,7 @@ class MetadataController {
 		def builder = new MarkupBuilder(writer)
 		builder.doubleQuotes = true
 		
-		def entitiesDescriptor = new EntitiesDescriptor(name:federation)
+		def entitiesDescriptor = EntitiesDescriptor.findWhere(name:federation)
 		entitiesDescriptor.entityDescriptors = EntityDescriptor.list()
 		
 		metadataGenerationService.entitiesDescriptor(builder, false, minimal, ext, entitiesDescriptor, validUntil, certificateAuthorities)
@@ -64,7 +64,7 @@ class MetadataController {
 		def builder = new MarkupBuilder(writer)
 		builder.doubleQuotes = true
 		
-		def entitiesDescriptor = new EntitiesDescriptor(name:federation)
+		def entitiesDescriptor = EntitiesDescriptor.findWhere(name:federation)
 		entitiesDescriptor.entityDescriptors = EntityDescriptor.list()
 		
 		metadataGenerationService.entitiesDescriptor(builder, true, minimal, true, entitiesDescriptor, validUntil, certificateAuthorities)

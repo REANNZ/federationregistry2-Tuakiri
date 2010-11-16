@@ -17,6 +17,7 @@
 	userService = ctx.getBean("userService")
 	roleService = ctx.getBean("roleService")
 	permissionService = ctx.getBean("permissionService")
+	grailsApplication = ctx.getBean('grailsApplication')
 	
     sql = Sql.newInstance("jdbc:mysql://localhost:3306/resourceregistry", "rr", "password", "com.mysql.jdbc.Driver")
 
@@ -215,6 +216,12 @@
 	}
 
 	def importEntities() {
+		println "Creating core EntitiesDescriptor ${grailsApplication.config.fedreg.metadata.federation}" 
+		def ed = new EntitiesDescriptor(name: grailsApplication.config.fedreg.metadata.federation)
+		if(!ed.save()) {
+		  ed.errors.each {println it}
+		}
+		
 		println "Importing entities from upstream resource registry"
 		sql.eachRow("select * from homeOrgs",
 		{
