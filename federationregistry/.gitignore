@@ -22,7 +22,6 @@ src/docs
 
 grails-app/i18n/messages-deployment*
 grails-app/i18n/shiro.properties
-grails-app/i18n/messages.properties
 
 web-app/plugins/*
 web-app/images/skin/*
