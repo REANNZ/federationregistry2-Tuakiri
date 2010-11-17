@@ -1,5 +1,6 @@
 import fedreg.core.*
 
+organizationService = ctx.getBean("organizationService")
 workflowTaskService = ctx.getBean("workflowTaskService")
 mailService = ctx.getBean("mailService")
 messageSource = ctx.getBean("messageSource")
@@ -19,7 +20,7 @@ if(org) {
 	
 	log.warn "Deleting $org. Workflow indicates it is invalid and no longer needed."
 	
-	org.delete()
+	organizationService.delete(org.id)
 	workflowTaskService.complete(env.taskInstanceID.toLong(), 'organizationdeleted')
 }
 else {
