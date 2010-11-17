@@ -6,6 +6,7 @@ import fedreg.workflow.ProcessPriority
 
 class EntityDescriptorService {
 
+	def grailsApplication
 	def workflowProcessService
 	
 	def createNoSave(def params) {
@@ -72,6 +73,27 @@ class EntityDescriptorService {
 		}
 		
 		return [true, entityDescriptor]
+	}
+	
+	def delete (def id) {
+		def ed = EntityDescriptor.get(id)
+		if(!ed)
+			throw new RuntimeException("Unable to find EntityDescriptor with id $id")
+			
+		def idpService = grailsApplication.mainContext.IDPSSODescriptorService
+		def spService = grailsApplication.mainContext.SPSSODescriptorService
+		def aaService = grailsApplication.mainContext.attributeAuthorityDescriptorService
+			
+		if(ed.holdsIDPOnly())
+			ed.idpDescriptors.each { idpService.delete(it.id) }	
+		else
+			if(ed.holdsSPOnly())
+				ed.spDescriptors.each { spService.delete(it.id) }
+			else
+				throw new RuntimeException("EntityDescriptor $ed holds unique combination of IDP/SP/AA/PDP that is not supported by this delete method, manual intervention will be required")
+		
+		ed.contacts.each { it.delete() }
+		ed.delete()
 	}
 
 }

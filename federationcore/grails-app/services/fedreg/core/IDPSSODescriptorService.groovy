@@ -11,6 +11,7 @@ class IDPSSODescriptorService {
 	def cryptoService
 	def workflowProcessService
 	def entityDescriptorService
+	def attributeAuthorityDescriptorService
 	
 	def create(def params) {
 			
@@ -261,52 +262,31 @@ class IDPSSODescriptorService {
 		def entityDescriptor = idp.entityDescriptor
 		def aa = idp.collaborator
 
-		idp.singleSignOnServices?.each { it.delete() }
-		idp.artifactResolutionServices?.each { it.delete() }
-		idp.nameIDMappingServices?.each { it.delete() }
-		idp.assertionIDRequestServices?.each { it.delete() }
 		idp.attributeProfiles?.each { it.delete() }
 		idp.attributes?.each { it.delete() }
-		idp.artifactResolutionServices?.each { it.delete() }
-		idp.singleLogoutServices?.each { it.delete() }
-		idp.manageNameIDServices?.each { it.delete() }
 		idp.contacts?.each { it.delete() }
 		idp.keyDescriptors?.each { it.delete() }
 		idp.monitors?.each { it.delete() }
 
-		if(aa) {
-			aa.attributeServices?.each { it.delete() }
-			aa.assertionIDRequestServices?.each { it.delete() }
-			aa.attributes?.each { it.delete() }
-			aa.contacts?.each { it.delete() }
-			aa.keyDescriptors?.each { it.delete() }
-			aa.monitors?.each { it.delete() }
+		if(aa) {	// Untangle this linkage - horrible but necessay GORM delete sucks.
+			idp.collaborator = null
+			if(!idp.save()) {
+				idp.errors.each { log.error it }
+				throw new RuntimeException("Unable to remove collaborating IDP")
+			}
+			
+			aa.collaborator = null
+			if(!aa.save()) {
+				aa.errors.each { log.error it }
+				throw new RuntimeException("Unable to remove collaborating AA")
+			}
+			
+			attributeAuthorityDescriptorService.delete(aa.id)
 		}
 		
-		if(entityDescriptor.holdsIDPOnly()) {
-			aa.collaborator = null
-			idp.collaborator = null
 			
-			entityDescriptor.idpDescriptors.remove(idp)
-			entityDescriptor.attributeAuthorityDescriptors.remove(aa)
-			idp.delete()
-			aa.delete()
-			entityDescriptor.delete()
-			
-			def users = UserBase.findAllWhere(entityDescriptor:entityDescriptor)
-			users.each {
-				it.entityDescriptor = null
-				it.save()
-			}
-		} else {
-			aa.collaborator = null
-			idp.collaborator = null
-			
-			entityDescriptor.idpDescriptors.remove(idp)
-			entityDescriptor.attributeAuthorityDescriptors.remove(aa)
-			idp.delete()
-			aa.delete()
-		}
+		entityDescriptor.idpDescriptors.remove(idp)
+		idp.delete()
 	}
 	
 }
