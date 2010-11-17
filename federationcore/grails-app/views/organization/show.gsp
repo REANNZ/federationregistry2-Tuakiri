@@ -73,7 +73,11 @@
 							</ul>
 						</td>
 					</tr>
-					</g:if>				
+					</g:if>	
+					<tr>
+						<th><g:message code="label.datecreated" /></th>
+						<td>${fieldValue(bean: organization, field: "dateCreated")}</td>
+					</tr>			
 				</tbody>
 			</table>
 		

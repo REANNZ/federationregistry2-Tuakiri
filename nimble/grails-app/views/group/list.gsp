@@ -4,6 +4,10 @@
 	<head>
 		<meta name="layout" content="${grailsApplication.config.nimble.layout.administration}"/>
 		<title><g:message code="nimble.view.group.list.title" /></title>
+		
+		<script type="text/javascript">
+			<njs:datatable tableID="grouplist" sortColumn="0" />
+		</script>
 	</head>
 	
 	<body>
@@ -14,12 +18,12 @@
 			<g:message code="nimble.view.group.edit.descriptive" />
 		</p>
 
-		<table>
+		<table id="grouplist">
 			<thead>
 				<tr>
-					<g:sortableColumn property="name" titleKey="label.name" class="first icon icon_arrow_refresh"/>
-					<th class=""><g:message code="label.description" /></th>
-					<th class="last"/>
+					<th><g:message code="label.name" /></th>
+					<th><g:message code="label.description" /></th>
+					<th class="last">&nbsp;</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -34,10 +38,6 @@
 				</g:each>
 			</tbody>
 		</table>
-
-		<div class="paginatebuttons">
-			<g:paginate total="${Group.count().encodeAsHTML()}"/>
-		</div>
 		
 	</body>
 </html>

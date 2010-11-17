@@ -139,20 +139,15 @@ class NimbleGrailsPlugin {
         	def subject = SecurityUtils.getSubject()
         }
         clazz.metaClass.getAuthenticatedUser = {
-        	def principal = SecurityUtils.getSubject()?.getPrincipal()		
-			def authUser
-			
-            if(config.nimble?.implementation?.user)
-    			authUser = classLoader.loadClass(config.nimble.implementation.user).get(principal)
-    		else
-    			authUser = UserBase.get(principal)
-
-            if (!authUser) {
-                log.error("Authenticated user was not able to be obtained from metaclass")
-                return null
-            }
-
-            return authUser
+			def authUser = null
+        	def principal = SecurityUtils.getSubject()?.getPrincipal()
+			if(principal) {	
+	            if(config.nimble?.implementation?.user)
+	    			authUser = classLoader.loadClass(config.nimble.implementation.user).get(principal)
+	    		else
+	    			authUser = UserBase.get(principal)
+			}
+            authUser
         }
 	}
 

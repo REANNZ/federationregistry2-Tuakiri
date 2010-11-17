@@ -4,10 +4,12 @@ import org.springframework.context.i18n.LocaleContextHolder as LCH
 import org.springframework.transaction.interceptor.TransactionAspectSupport
 
 import fedreg.workflow.ProcessPriority
+import grails.plugins.nimble.core.UserBase
 
 class OrganizationService {
 
 	def workflowProcessService
+	def entityDescriptorService
 	
 	def create(def params) {
 		def organization = new Organization(approved:false, active:params.active, name:params.organization?.name, displayName:params.organization?.displayName, lang: params.organization?.lang, url: new UrlURI(uri:params.organization?.url), primary:OrganizationType.get(params.organization?.primary))
@@ -82,5 +84,32 @@ class OrganizationService {
 		}
 		
 		return [true, organization]
+	}
+	
+	def delete(def id) {
+		def org = Organization.get(id)
+		if(!org)
+			throw new RuntimeException("Unable to find Organization with id $id")
+			
+		def entityDescriptors = EntityDescriptor.findAllWhere(organization:org)
+		entityDescriptors.each { println "Removing $it"; entityDescriptorService.delete(it.id) }
+				
+		def contacts = Contact.findAllWhere(organization:org)
+		contacts.each { contact ->
+			def contactPersons = ContactPerson.findAllWhere(contact:contact)
+			contactPersons.each { cp -> cp.delete() }
+			
+			def users = UserBase.findAllWhere(contact:contact)
+			users.each { user ->
+				user.contact = null
+				if(!user.save())
+					throw new RuntimeException("Unable to update $user with nil contact detail when removing organization $org")
+			}
+			
+			contact.delete()
+		}
+		
+
+		org.delete()
 	}
 }

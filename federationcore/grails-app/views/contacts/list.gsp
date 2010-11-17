@@ -4,17 +4,7 @@
 		<meta name="layout" content="members" />
 		<title><g:message code="fedreg.view.members.contacts.list.title" /></title>
 		<script type="text/javascript">
-			$(function() {
-				$('#contactlist').dataTable( {
-						"sPaginationType": "full_numbers",
-						"bLengthChange": false,
-						"iDisplayLength": 10,
-						"aaSorting": [[0, "asc"]],
-						"oLanguage": {
-							"sSearch": "${g.message(code:'label.filter')}"
-						}
-					} );
-			});
+			<njs:datatable tableID="contactlist" sortColumn="0" />
 		</script>
 	</head>
 	<body>

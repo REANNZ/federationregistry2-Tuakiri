@@ -322,23 +322,12 @@ class SPSSODescriptorService {
 		log.info "Deleting $sp on request of $authenticatedUser"
 		def entityDescriptor = sp.entityDescriptor
 
-		sp.assertionConsumerServices?.each { it.delete() }
-		sp.attributeConsumingServices?.each { it.delete() }
 		sp.discoveryResponseServices?.each { it.delete() }
-		sp.artifactResolutionServices?.each { it.delete() }
-		sp.singleLogoutServices?.each { it.delete() }
-		sp.manageNameIDServices?.each { it.delete() }
 		sp.contacts?.each { it.delete() }
 		sp.keyDescriptors?.each { it.delete() }
 		sp.monitors?.each { it.delete() }
 
-		if(entityDescriptor.holdsSPOnly()) {
-			entityDescriptor.spDescriptors.remove(sp)
-			sp.delete()
-			entityDescriptor.delete()
-		} else {
-			entityDescriptor.spDescriptors.remove(sp)
-			sp.delete()
-		}
+		entityDescriptor.spDescriptors.remove(sp)
+		sp.delete()
 	}
 }

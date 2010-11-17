@@ -71,5 +71,12 @@ class NimbleInlineJSTagLib {
 
 		 out << render(template: "/templates/inlinejs/" + grailsApplication.config.nimble.resources.jslibrary + "/member", contextPath: pluginContextPath, model:[nimblePath:pluginContextPath, parent:attrs.parent])
 	}
+	
+	def datatable = {attrs ->
+		if(!attrs.tableID || !attrs.sortColumn)
+        	throwTagError("Datatable requires table ID and column to sort on")
+
+		 out << render(template: "/templates/tags/datatable", contextPath: pluginContextPath, model:[nimblePath:pluginContextPath, tableID:attrs.tableID, sortColumn:attrs.sortColumn])
+	}
 
 }

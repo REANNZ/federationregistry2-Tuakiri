@@ -3,9 +3,11 @@ package fedreg.core
 import org.springframework.transaction.interceptor.TransactionAspectSupport
 
 import fedreg.workflow.ProcessPriority
+import grails.plugins.nimble.core.UserBase
 
 class EntityDescriptorService {
 
+	def grailsApplication
 	def workflowProcessService
 	
 	def createNoSave(def params) {
@@ -72,6 +74,36 @@ class EntityDescriptorService {
 		}
 		
 		return [true, entityDescriptor]
+	}
+	
+	def delete (def id) {
+		def ed = EntityDescriptor.get(id)
+		if(!ed)
+			throw new RuntimeException("Unable to find EntityDescriptor with id $id")
+			
+		def idpService = grailsApplication.mainContext.IDPSSODescriptorService
+		def spService = grailsApplication.mainContext.SPSSODescriptorService
+		
+		def org = ed.organization
+		org.removeFromEntityDescriptors(ed)
+			
+		// We need to do this for GORM stupidity. If you delete an IDP (and hence collaborator) then try to process any remaining AA associted with the ED collaborators are still present
+		// in the list (regardless of refresh type calls). So for now at least an AA only ED is not processed - more thought needed.
+		if(ed.attributeAuthorityDescriptors?.size() > ed.idpDescriptors?.size() || ed.pdpDescriptors?.size() != 0)
+			throw new RuntimeException("EntityDescriptor $ed holds unique combination of IDP/SP/AA/PDP that is not supported by this delete method, manual intervention will be required")
+			
+		ed.idpDescriptors.each { idpService.delete(it.id) }
+		ed.spDescriptors.each { spService.delete(it.id)}
+		
+		ed.contacts.each { it.delete() }
+		
+		ed.delete()
+		def users = UserBase.findAllWhere(entityDescriptor:ed)
+		users.each { user ->
+			user.entityDescriptor = null
+			if(!user.save())
+				throw new RuntimeException("Unable to update $user with nil entitydescriptor detail when removing $ed")
+		}
 	}
 
 }

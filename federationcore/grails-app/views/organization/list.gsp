@@ -6,17 +6,7 @@
 		<title><g:message code="fedreg.view.members.organization.list.title" /></title>
 		
 		<script type="text/javascript">
-			$(function() {
-				$('#organizationlist').dataTable( {
-						"sPaginationType": "full_numbers",
-						"bLengthChange": false,
-						"iDisplayLength": 10,
-						"aaSorting": [[0, "asc"]],
-						"oLanguage": {
-							"sSearch": "${g.message(code:'label.filter')}"
-						}
-					} );
-			});
+			<njs:datatable tableID="organizationlist" sortColumn="0" />
 		</script>
 	</head>
 	<body>
