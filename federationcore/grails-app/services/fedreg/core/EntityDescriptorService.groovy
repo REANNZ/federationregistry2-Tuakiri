@@ -87,6 +87,8 @@ class EntityDescriptorService {
 		def org = ed.organization
 		org.removeFromEntityDescriptors(ed)
 			
+		// We need to do this for GORM stupidity. If you delete an IDP (and hence collaborator) then try to process any remaining AA associted with the ED collaborators are still present
+		// in the list (regardless of refresh type calls). So for now at least an AA only ED is not processed - more thought needed.
 		if(ed.attributeAuthorityDescriptors?.size() > ed.idpDescriptors?.size() || ed.pdpDescriptors?.size() != 0)
 			throw new RuntimeException("EntityDescriptor $ed holds unique combination of IDP/SP/AA/PDP that is not supported by this delete method, manual intervention will be required")
 			
