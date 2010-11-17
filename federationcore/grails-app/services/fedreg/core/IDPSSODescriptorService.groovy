@@ -283,7 +283,6 @@ class IDPSSODescriptorService {
 			
 			attributeAuthorityDescriptorService.delete(aa.id)
 		}
-		
 			
 		entityDescriptor.idpDescriptors.remove(idp)
 		idp.delete()

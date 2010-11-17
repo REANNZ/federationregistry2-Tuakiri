@@ -217,9 +217,9 @@
 
 	def importEntities() {
 		println "Creating core EntitiesDescriptor ${grailsApplication.config.fedreg.metadata.federation}" 
-		def ed = new EntitiesDescriptor(name: grailsApplication.config.fedreg.metadata.federation)
-		if(!ed.save()) {
-		  ed.errors.each {println it}
+		def eds = new EntitiesDescriptor(name: grailsApplication.config.fedreg.metadata.federation)
+		if(!eds.save()) {
+		  eds.errors.each {println it}
 		}
 		
 		println "Importing entities from upstream resource registry"

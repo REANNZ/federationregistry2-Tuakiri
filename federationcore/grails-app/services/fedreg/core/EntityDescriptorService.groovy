@@ -3,6 +3,7 @@ package fedreg.core
 import org.springframework.transaction.interceptor.TransactionAspectSupport
 
 import fedreg.workflow.ProcessPriority
+import grails.plugins.nimble.core.UserBase
 
 class EntityDescriptorService {
 
@@ -82,18 +83,25 @@ class EntityDescriptorService {
 			
 		def idpService = grailsApplication.mainContext.IDPSSODescriptorService
 		def spService = grailsApplication.mainContext.SPSSODescriptorService
-		def aaService = grailsApplication.mainContext.attributeAuthorityDescriptorService
+		
+		def org = ed.organization
+		org.removeFromEntityDescriptors(ed)
 			
-		if(ed.holdsIDPOnly())
-			ed.idpDescriptors.each { idpService.delete(it.id) }	
-		else
-			if(ed.holdsSPOnly())
-				ed.spDescriptors.each { spService.delete(it.id) }
-			else
-				throw new RuntimeException("EntityDescriptor $ed holds unique combination of IDP/SP/AA/PDP that is not supported by this delete method, manual intervention will be required")
+		if(ed.attributeAuthorityDescriptors?.size() > ed.idpDescriptors?.size() || ed.pdpDescriptors?.size() != 0)
+			throw new RuntimeException("EntityDescriptor $ed holds unique combination of IDP/SP/AA/PDP that is not supported by this delete method, manual intervention will be required")
+			
+		ed.idpDescriptors.each { idpService.delete(it.id) }
+		ed.spDescriptors.each { spService.delete(it.id)}
 		
 		ed.contacts.each { it.delete() }
+		
 		ed.delete()
+		def users = UserBase.findAllWhere(entityDescriptor:ed)
+		users.each { user ->
+			user.entityDescriptor = null
+			if(!user.save())
+				throw new RuntimeException("Unable to update $user with nil entitydescriptor detail when removing $ed")
+		}
 	}
 
 }
