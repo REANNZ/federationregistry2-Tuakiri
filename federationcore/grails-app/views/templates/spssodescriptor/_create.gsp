@@ -36,10 +36,6 @@
 		
 		$('#samladvancedmode').hide();
 		
-		$('#cert').change( function() {
-			$('#sp\\.crypto\\.encdata').val($(this).val());
-			$('#sp\\.crypto\\.sigdata').val($(this).val());
-		});
 		$('#hostname').bind('blur',  function() {
 			if($(this).val().length > 0) {
 				$('#entity\\.identifier').val($(this).val() + '/shibboleth');
@@ -57,8 +53,6 @@
 				$('#sp\\.mnid\\.post\\.uri').val($(this).val() + '/Shibboleth.sso/NIM/POST');
 			}
 		});
-		
-		$("#cert").bind('paste', function() { setTimeout(function() { validateCertificate(); }, 100); });
 	});
 	
 	function validateCertificate() {

@@ -46,8 +46,6 @@
 				$('#aa\\.attributeservice\\.uri').val($(this).val() + '/idp/profile/SAML2/SOAP/AttributeQuery');
 			}
 		});
-		
-		$("#cert").bind('paste', function() { setTimeout(function() { validateCertificate(); }, 100); });
 	});
 	
 	function attrchange(id) {
