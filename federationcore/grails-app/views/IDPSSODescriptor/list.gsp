@@ -17,6 +17,7 @@
 					<tr>
 						<th><g:message code="label.identityprovider" /></th>
 						<th><g:message code="label.organization" /></th>
+						<th><g:message code="label.entitydescriptor" /></th>
 						<th><g:message code="label.active" /></th>
 						<th><g:message code="label.approved" /></th>
 						<th/>
@@ -27,6 +28,7 @@
 					<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 						<td>${fieldValue(bean: identityProvider, field: "displayName")}</td>
 						<td>${fieldValue(bean: identityProvider, field: "organization.name")}</td>
+						<td>${fieldValue(bean: identityProvider, field: "entityDescriptor.entityID")}</td>
 						<td>${fieldValue(bean: identityProvider, field: "active")}</td>
 						<td>${fieldValue(bean: identityProvider, field: "approved")}</td>
 						<td>
