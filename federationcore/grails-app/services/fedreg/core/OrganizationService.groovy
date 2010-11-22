@@ -18,7 +18,7 @@ class OrganizationService {
 		if(!contact) {
 			contact = MailURI.findByUri(params.contact?.email)?.contact		// We may already have them referenced by email address and user doesn't realize
 			if(!contact)
-				contact = new Contact(givenName: params.contact?.givenName, surname: params.contact?.surname, email: new MailURI(uri:params.contact?.email), organization:organization)
+				contact = new Contact(givenName: params.contact?.givenName, surname: params.contact?.surname, email: new MailURI(uri:params.contact?.email))
 		}
 		
 		if(!organization.validate()) {
@@ -27,13 +27,16 @@ class OrganizationService {
 			return [ false, organization, contact ]
 		}
 		
-		if(!organization.save()) {
+		def savedOrg = organization.save()
+		if(!savedOrg) {
 			organization?.errors.each { log.error it }
 			throw new RuntimeException("Unable to save when creating ${organization}")
 		}
 		
+		contact.organization = savedOrg
 		if(!contact.validate()) {
 			contact?.errors.each { log.error it }
+			savedOrg.discard()
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly() 
 			return [ false, organization, contact ]
 		}

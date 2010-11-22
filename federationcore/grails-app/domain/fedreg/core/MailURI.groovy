@@ -27,6 +27,7 @@ class MailURI extends AnyUri  {
 
 	static constraints = {
 		uri(nullable: false, blank: false, email: true, unique:true)
+		contact(nullable: false)
 	}
 	
 	public String toString() {	"mailuri:[id:$id, uri: $uri]" }
