@@ -41,7 +41,7 @@
 				<g:message code="fedreg.templates.organization.create.contact.details" />
 			</p>
 			<g:hasErrors bean="${contact}">
-				<div class="error"><g:renderErrors bean="${contact}"as="list"/></div>
+				<div class="error"><g:renderErrors bean="${contact}" as="list"/></div>
 			</g:hasErrors>
 			<table>
 				<tr>
@@ -78,7 +78,7 @@
 			<g:message code="fedreg.templates.organization.create.basicinformation.details" />
 		</p>
 		<g:hasErrors bean="${organization}">
-			<div class="error"><g:renderErrors bean="${organization}"as="list"/></div>
+			<div class="error"><g:renderErrors bean="${organization}" as="list"/></div>
 		</g:hasErrors>
 		<table>
 			<tr>

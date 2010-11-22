@@ -23,6 +23,8 @@
 			var endpointCreationEndpoint = "${createLink(controller:'descriptorEndpoint', action:'create', id:identityProvider.id)}";
 			var endpointToggleStateEndpoint = "${createLink(controller:'descriptorEndpoint', action:'toggle')}";
 			var endpointMakeDefaultEndpoint = "${createLink(controller:'descriptorEndpoint', action:'makeDefault')}";
+			var endpointEditEndpoint = "${createLink(controller:'descriptorEndpoint', action:'edit')}";
+			var endpointUpdateEndpoint = "${createLink(controller:'descriptorEndpoint', action:'update')}";
 			
 			var nameIDFormatRemoveEndpoint = "${createLink(controller:'descriptorNameIDFormat', action:'remove', id:identityProvider.id )}";
 			var nameIDFormatListEndpoint = "${createLink(controller:'descriptorNameIDFormat', action:'list', id:identityProvider.id )}";
@@ -44,7 +46,11 @@
 			$(function() {
 				$("#tabs").tabs();
 				$("#tabs2").tabs();
+				
+				$(".endpointedit").colorbox();
 			});
+			
+			
 		</script>
 		
 		<script src="${request.contextPath}/js/codemirror/js/codemirror.js" type="text/javascript" charset="utf-8"></script>

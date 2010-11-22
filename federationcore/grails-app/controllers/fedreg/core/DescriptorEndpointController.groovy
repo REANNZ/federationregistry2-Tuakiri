@@ -6,13 +6,75 @@ import org.apache.shiro.SecurityUtils
 
 class DescriptorEndpointController {
 
-	static allowedMethods = [delete: "POST", create: "POST", toggle:"POST", listEndpoints:"GET"]
+	static allowedMethods = [delete: "POST", create: "POST", toggle:"POST"]
 	
 	// Maps allowed endpoints to internal class representation
 	def allowedEndpoints = [singleSignOnServices:"fedreg.core.SingleSignOnService", artifactResolutionServices:"fedreg.core.ArtifactResolutionService", manageNameIDServices:"fedreg.core.ManageNameIDService",
 							singleLogoutServices:"fedreg.core.SingleLogoutService", assertionConsumerServices:"fedreg.core.AssertionConsumerService", attributeServices:"fedreg.core.AttributeService", discoveryResponseServices:"fedreg.core.DiscoveryResponseService"]
 
 	def endpointService
+	
+	def edit = {
+		if(!params.id) {
+			log.warn "Endpoint ID was not present"
+			render message(code: 'fedreg.controllers.namevalue.missing')
+			response.setStatus(500)
+			return
+		}
+		
+		def endpoint = Endpoint.get(params.id)
+		if(!endpoint) {
+			log.warn "Endpoint identified by id $params.id was not located"
+			render message(code: 'fedreg.endpoint.nonexistant', args: [params.id])
+			response.setStatus(500)
+			return
+		}
+		
+		render template:"/templates/endpoints/edit", contextPath: pluginContextPath, model:[endpoint:endpoint, endpointType:params.endpointType, containerID:params.containerID]
+	}
+	
+	def update = {
+		if(!params.id) {
+			log.warn "Endpoint ID was not present"
+			render message(code: 'fedreg.controllers.namevalue.missing')
+			response.setStatus(500)
+			return
+		}
+		
+		if(!params.binding) {
+			log.warn "Binding ID was not present"
+			render message(code: 'fedreg.controllers.namevalue.missing')
+			response.setStatus(500)
+			return
+		}
+		
+		if(!params.location) {
+			log.warn "Location URI was not present"
+			render message(code: 'fedreg.controllers.namevalue.missing')
+			response.setStatus(500)
+			return
+		}
+		
+		def binding = SamlURI.get(params.binding)
+		if (!binding) {
+			log.warn "SamURI (binding) was not found for id ${params.binding}"
+			render message(code: 'fedreg.samluri.nonexistant', args: [params.binding])
+			response.setStatus(500)
+			return
+		}
+		
+		def endpoint = Endpoint.get(params.id)
+		if(!endpoint) {
+			log.warn "Endpoint identified by id $params.id was not located"
+			render message(code: 'fedreg.endpoint.nonexistant', args: [params.id])
+			response.setStatus(500)
+			return
+		}
+		
+		endpointService.update(endpoint, binding, params.location)
+		
+		render message(code: 'fedreg.endpoint.update.success')
+	}
 
 	def delete = {
 		if(!params.id) {
