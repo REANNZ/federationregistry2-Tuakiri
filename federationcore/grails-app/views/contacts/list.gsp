@@ -17,6 +17,7 @@
 					<tr>
 						<th><g:message code='label.givenname' /></th>
 						<th><g:message code='label.surname' /></th>
+						<th><g:message code='label.email' /></th>
 						<th><g:message code='label.organization' /></th>
 						<th/>
 					</tr>
@@ -26,6 +27,7 @@
 					<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 						<td>${fieldValue(bean: contact, field: "givenName")}</td>
 						<td>${fieldValue(bean: contact, field: "surname")}</td>
+						<td><a href="mailto:${fieldValue(bean: contact, field: "email.uri")}">${fieldValue(bean: contact, field: "email.uri")}</a></td>
 						<td>${fieldValue(bean: contact, field: "organization.displayName")}</td>
 						<td><n:button href="${createLink(action:'show', id:contact.id)}" label="label.view"  icon="arrowthick-1-ne"/></td>
 					</tr>
