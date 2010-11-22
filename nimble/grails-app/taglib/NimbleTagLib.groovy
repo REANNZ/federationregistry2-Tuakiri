@@ -122,7 +122,7 @@ class NimbleTagLib {
 		
 		def cssclass = ""
 		if(attrs.class)
-			cssclass = "class=\'${attrs.class}\'"
+			cssclass = attrs.class
 		
 		if(attrs.plain) {
 			out << "<a $href $onclick $id class='$cssclass'>${attrs.label.encodeAsHTML()}</a>"
