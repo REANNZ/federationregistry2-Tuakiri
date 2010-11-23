@@ -2,8 +2,11 @@
 	var certificateValidationEndpoint = "${createLink(controller:'coreUtilities', action:'validateCertificate')}";
 	var newCertificateValid = false;
 	
-	$(function() {	
-
+	$(function() {
+		
+		$('#hostname').alphanumeric({nocaps:true, ichars:';'});
+		$('#idp\\.scope').alphanumeric({nocaps:true, allow:'.'});
+		
 		$('form').validate({
 				rules: {
 					'hostname': {
@@ -175,7 +178,7 @@
 						<g:hasErrors bean="${entityDescriptor}">
 							<div class="error"><g:renderErrors bean="${entityDescriptor}"as="list"/></div>
 						</g:hasErrors>
-						<g:textField name="hostname" size="50" class="url" value="${hostname}"/> <em> e.g https://idp.example.org </em>
+						<g:textField name="hostname" size="50" class="url" value="${hostname}"/>
 					</td>
 				</tr>
 			</table>
@@ -258,13 +261,16 @@
 		<p>
 			<g:message code="fedreg.templates.identityprovider.create.scope.details" />
 		</p>
+		<p>
+			<g:message code="fedreg.templates.identityprovider.create.scope.example" />
+		</p>
 		<table id="samlbasicmode">
 			<tr>
 				<td>
 					<label for="scope"><g:message code="label.scope" /></label>
 				</td>
 				<td>
-					<g:textField name="idp.scope" size="50" class="required" value="${scope}"/> <em> e.g example.org </em>
+					<g:textField name="idp.scope" size="50" class="required" value="${scope}"/>
 				</td>
 			</tr>
 		</table>

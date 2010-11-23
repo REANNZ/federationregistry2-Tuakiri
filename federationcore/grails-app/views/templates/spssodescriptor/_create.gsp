@@ -2,7 +2,9 @@
 	var certificateValidationEndpoint = "${createLink(controller:'coreUtilities', action:'validateCertificate')}";
 	var newCertificateValid = false;
 	
-	$(function() {			
+	$(function() {
+		$('#hostname').alphanumeric({nocaps:true, ichars:';'});
+		
 		$('form').validate({
 				ignore: ":disabled",
 				rules: {
@@ -38,6 +40,8 @@
 		
 		$('#hostname').bind('blur',  function() {
 			if($(this).val().length > 0) {
+				$(this).val($(this).val().toLowerCase());
+				
 				$('#entity\\.identifier').val($(this).val() + '/shibboleth');
 				$('#sp\\.acs\\.post\\.uri').val($(this).val() + '/Shibboleth.sso/SAML2/POST');
 				$('#sp\\.acs\\.artifact\\.uri').val($(this).val() + '/Shibboleth.sso/SAML2/Artifact');
@@ -260,7 +264,7 @@
 						<g:hasErrors bean="${entityDescriptor}">
 							<div class="error"><g:renderErrors bean="${entityDescriptor}"as="list"/></div>
 						</g:hasErrors>
-						<g:textField name="hostname" size="50" class="url"  value="${hostname}"/> <em> e.g https://sp.example.org </em>
+						<g:textField name="hostname" size="50" class="url"  value="${hostname}"/>
 					</td>
 				</tr>
 			</table>
