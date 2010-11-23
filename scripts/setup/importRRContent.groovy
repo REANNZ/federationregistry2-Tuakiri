@@ -436,8 +436,6 @@
 				else 
 					println("No SamlURI binding for uri ${it.serviceBinding} exists, not importing, not importing AttributeService")
 			})
-			// RR doesn't store any flag to indicate that AA publishes encyption type in MD so we won't create an enc key.....
-			importCrypto(it.homeOrgID, aa, false)
 			
 			entity.addToAttributeAuthorityDescriptors(aa)
 			entity.save()
@@ -453,6 +451,10 @@
 			
 				idp.collaborator = aa
 				idp.save()
+			} else {
+				// For collaborating AA we render IDP crypto. For stand alone AA we need to render/manage its own crypto
+				importCrypto(it.homeOrgID, aa, false)
+				aa.save()
 			}
 			
 			sql.eachRow("select attributeOID from attributes INNER JOIN homeOrgAttributes ON attributes.attributeID=homeOrgAttributes.attributeID where homeOrgAttributes.homeOrgID=${it.homeOrgID};",
