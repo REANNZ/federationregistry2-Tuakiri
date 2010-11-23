@@ -106,7 +106,7 @@ class EndpointService {
 	
 	def determineSPSSODescriptorProtocolSupport(sp) {
 		sp.singleLogoutServices?.each {
-		d	etermineProtocolSupport(it.binding, sp)
+			determineProtocolSupport(it.binding, sp)
 		}
 		sp.assertionConsumerServices?.each {
 			determineProtocolSupport(it.binding, sp)
