@@ -46,8 +46,6 @@
 			$(function() {
 				$("#tabs").tabs();
 				$("#tabs2").tabs();
-				
-				$(".endpointedit").colorbox();
 			});
 			
 			
