@@ -19,7 +19,8 @@ class BootstrapController {
 	def saveidp = {
 		def (created, ret) = IDPSSODescriptorService.create(params)
 		
-		if(created) {			
+		if(created) {	
+			log.info "Sucessfully registered ${ret.identityProvider} from public source"
 			redirect (action: "idpregistered", id: ret.identityProvider.id)
 		}
 		else {
@@ -58,6 +59,7 @@ class BootstrapController {
 		def (created, ret) = SPSSODescriptorService.create(params)
 		
 		if(created) {
+			log.info "Sucessfully registered ${ret.serviceProvider} from public source"
 			redirect (action: "spregistered", id: ret.serviceProvider.id)
 		}
 		else {
@@ -96,6 +98,7 @@ class BootstrapController {
 		def (created, organization, contact) = organizationService.create(params)
 		
 		if(created) {
+			log.info "Sucessfully registered $organization from public source"
 			redirect (action: "organizationregistered", id: organization.id)
 		}
 		else {

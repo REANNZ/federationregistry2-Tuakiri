@@ -8,8 +8,6 @@ import fedreg.workflow.ProcessPriority
 class AttributeConsumingServiceController {
 	def workflowProcessService
 	
-	static allowedMethods = [remove: "POST"]
-	
 	def listRequestedAttributes = {
 		if(!params.id) {
 			log.warn "Attribute Consuming Service ID was not present"
@@ -118,7 +116,7 @@ class AttributeConsumingServiceController {
 				return
 			}
 		
-			log.debug "Added value ${params.value} to ${reqAttr} referencing ${reqAttr.base}"
+			log.info "$authenticatedUser added value ${params.value} to ${reqAttr} referencing ${reqAttr.base}"
 			render message(code: 'fedreg.attributeconsumingservice.requestedattribute.specifiedvalue.add.success')
 		} else {
 			log.warn("Attempt to add a specifed attribute value by $authenticatedUser was denied, incorrect permission set")
@@ -175,7 +173,7 @@ class AttributeConsumingServiceController {
 				return
 			}
 		
-			log.debug "Removed ${val} from ${reqAttr} referencing ${reqAttr.base}"
+			log.info "$authenticatedUser removed ${val} from ${reqAttr} referencing ${reqAttr.base}"
 			render message(code: 'fedreg.attributeconsumingservice.requestedattribute.specifiedvalue.remove.success')
 		} else {
 			log.warn("Attempt to remove a specifed attribute value by $authenticatedUser was denied, incorrect permission set")
@@ -251,7 +249,7 @@ class AttributeConsumingServiceController {
 			else
 				throw new RuntimeException("Unable to execute workflow when creating ${identityProvider}")
 		
-			log.debug "Added ${reqAttr} referencing ${attr} to ${acs} and ${acs.descriptor}"
+			log.info "$authenticatedUser submitted added ${reqAttr} referencing ${attr} to ${acs} and ${acs.descriptor} to workflow"
 			render message(code: 'fedreg.attributeconsumingservice.requestedattribute.add.success')
 		} else {
 			log.warn("Attempt to add a requested attribute by $authenticatedUser was denied, incorrect permission set")
@@ -289,7 +287,7 @@ class AttributeConsumingServiceController {
 			}
 			requestedAttribute.delete()
 		
-			log.debug "Removed ${requestedAttribute} referencing ${requestedAttribute.base} from ${acs}"
+			log.info "$authenticatedUser removed ${requestedAttribute} referencing ${requestedAttribute.base} from ${acs}"
 			render message(code: 'fedreg.attributeconsumingservice.requestedattribute.remove.success')
 		} else {
 			log.warn("Attempt to remove a requested attribute by $authenticatedUser was denied, incorrect permission set")
