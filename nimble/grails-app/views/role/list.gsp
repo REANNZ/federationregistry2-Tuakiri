@@ -4,17 +4,21 @@
 	<head>
 		<meta name="layout" content="${grailsApplication.config.nimble.layout.administration}"/>
 		<title><g:message code="nimble.view.role.list.title" /></title>
+		
+		<script type="text/javascript">
+			<njs:datatable tableID="rolelist" sortColumn="0" />
+		</script>
 	</head>
 
 	<body>
 
 		<h2><g:message code="nimble.view.role.list.heading" /></h2>
 
-		<table>
+		<table id="rolelist">
 			<thead>
 				<tr>
-					<g:sortableColumn property="name" titleKey="label.name" class="first icon icon_arrow_refresh"/>
 					<th><g:message code="label.name" /></th>
+					<th><g:message code="label.description" /></th>
 					<th class="last">&nbsp;</th>
 				</tr>
 			</thead>
@@ -30,10 +34,6 @@
 				</g:each>
 			</tbody>
 		</table>
-
-		<div class="paginatebuttons">
-			<g:paginate total="${Role.count()}"/>
-		</div>
 
 	</body>
 </html>

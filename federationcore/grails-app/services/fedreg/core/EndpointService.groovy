@@ -29,6 +29,19 @@ class EndpointService {
 		}
 	}
 	
+	def update(def endpoint, def binding, def location) {
+		endpoint.binding = binding
+		endpoint.location.uri = location
+		
+		endpoint.save()
+		if(endpoint.hasErrors()) {
+			endpoint.errors.each {
+				log.error it
+			}
+			throw new RuntimeException("Unable to save when updating ${endpoint}")
+		}
+	}
+	
 	def makeDefault(def endpoint, def endpointType) {
 		def descriptor = endpoint.descriptor
 		descriptor."$endpointType".each {
@@ -93,7 +106,7 @@ class EndpointService {
 	
 	def determineSPSSODescriptorProtocolSupport(sp) {
 		sp.singleLogoutServices?.each {
-		d	etermineProtocolSupport(it.binding, sp)
+			determineProtocolSupport(it.binding, sp)
 		}
 		sp.assertionConsumerServices?.each {
 			determineProtocolSupport(it.binding, sp)

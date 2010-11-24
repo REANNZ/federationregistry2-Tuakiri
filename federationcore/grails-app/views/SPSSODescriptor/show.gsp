@@ -30,6 +30,8 @@
 			var endpointCreationEndpoint = "${createLink(controller:'descriptorEndpoint', action:'create', id:serviceProvider.id)}";
 			var endpointToggleStateEndpoint = "${createLink(controller:'descriptorEndpoint', action:'toggle')}";
 			var endpointMakeDefaultEndpoint = "${createLink(controller:'descriptorEndpoint', action:'makeDefault')}";
+			var endpointEditEndpoint = "${createLink(controller:'descriptorEndpoint', action:'edit')}";
+			var endpointUpdateEndpoint = "${createLink(controller:'descriptorEndpoint', action:'update')}";
 			
 			var nameIDFormatRemoveEndpoint = "${createLink(controller:'descriptorNameIDFormat', action:'remove', id:serviceProvider.id )}";
 			var nameIDFormatListEndpoint = "${createLink(controller:'descriptorNameIDFormat', action:'list', id:serviceProvider.id )}";
@@ -118,6 +120,10 @@
 							<g:message code="label.no" /> <div class="warning"><g:message code="label.undergoingapproval" /></div>
 						</g:else>
 					</td>
+				</tr>
+				<tr>
+					<th><g:message code="label.datecreated" /></th>
+					<td>${fieldValue(bean: serviceProvider, field: "dateCreated")}</td>
 				</tr>
 			</tbody>
 		</table>

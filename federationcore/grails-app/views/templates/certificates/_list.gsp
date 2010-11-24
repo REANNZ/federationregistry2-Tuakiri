@@ -10,7 +10,7 @@
 						<td>${kd.keyType.encodeAsHTML()}</td>
 						<td>
 							<n:hasPermission target="descriptor:${descriptor.id}:crypto:delete">
-								<n:confirmaction action="fedreg.keyDescriptor_delete(${kd.id});" title="${message(code: 'fedreg.template.certificates.remove.confirm.title')}" msg="${message(code: 'fedreg.template.certificates.remove.confirm.descriptive')}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" label="${message(code: 'label.delete')}" icon="trash" />
+								<n:confirmaction action="fedreg.keyDescriptor_delete(${kd.id});" title="${message(code: 'fedreg.templates.certificates.remove.confirm.title')}" msg="${message(code: 'fedreg.templates.certificates.remove.confirm.descriptive')}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" label="${message(code: 'label.delete')}" icon="trash" />
 							</n:hasPermission>
 						</td>
 					</tr>
@@ -68,6 +68,6 @@
 		</table>
 	</g:if>
 	<g:else>
-		<p class="error"><g:message code="fedreg.template.certificates.none" /></p>
+		<p class="error"><g:message code="fedreg.templates.certificates.none" /></p>
 	</g:else>
 </div>

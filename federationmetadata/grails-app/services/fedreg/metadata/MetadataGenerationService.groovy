@@ -1,12 +1,11 @@
 package fedreg.metadata
 
+import org.springframework.transaction.annotation.*
 import groovy.xml.MarkupBuilder
 import java.text.SimpleDateFormat
 import fedreg.core.*
 
 class MetadataGenerationService {
-	
-	static transactional = false
 	
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
 	
@@ -81,8 +80,8 @@ class MetadataGenerationService {
 	}
 	
 	def keyDescriptor(builder, keyDescriptor) {
-		builder.KeyDescriptor(use: keyDescriptor.keyType) {
-			if(!keyDescriptor.disabled) {
+		if(!keyDescriptor.disabled) {
+			builder.KeyDescriptor(use: keyDescriptor.keyType) {
 				keyInfo(builder, keyDescriptor.keyInfo)
 				if(keyDescriptor.encryptionMethod) {
 					EncryptionMethod(Algorithm:keyDescriptor.encryptionMethod.algorithm) {
@@ -96,6 +95,7 @@ class MetadataGenerationService {
 		}
 	}
 	
+	@Transactional(readOnly = true)
 	def entitiesDescriptor(builder, all, minimal, roleExtensions, entitiesDescriptor, validUntil, certificateAuthorities) {
 		builder.EntitiesDescriptor("xmlns":"urn:oasis:names:tc:SAML:2.0:metadata", "xmlns:xsi":"http://www.w3.org/2001/XMLSchema-instance", 'xmlns:saml':'urn:oasis:names:tc:SAML:2.0:assertion', 'xmlns:shibmd':'urn:mace:shibboleth:metadata:1.0',
 			'xmlns:ds':'http://www.w3.org/2000/09/xmldsig#',
@@ -120,6 +120,7 @@ class MetadataGenerationService {
 		}
 	}
 	
+	@Transactional(readOnly = true)
 	def entitiesDescriptor(builder, all, minimal, roleExtensions, entitiesDescriptor) {
 		builder.EntitiesDescriptor() {
 			entitiesDescriptor.entitiesDescriptors?.sort{it.id}?.each { eds ->
@@ -131,6 +132,7 @@ class MetadataGenerationService {
 		}
 	}
 	
+	@Transactional(readOnly = true)
 	def entityDescriptor(builder, all, minimal, roleExtensions, entityDescriptor) {
 		if(all || (entityDescriptor.approved && entityDescriptor.active && entityDescriptor.organization.approved && entityDescriptor.organization.active)) {
 			builder.EntityDescriptor(entityID:entityDescriptor.entityID) {
@@ -277,10 +279,10 @@ class MetadataGenerationService {
 	}
 	
 	def attributeAuthorityDescriptor(builder, all, minimal, roleExtensions, aaDescriptor) {
-		if(all || (aaDescriptor.approved && aaDescriptor.active)) {
-			builder.AttributeAuthorityDescriptor(protocolSupportEnumeration: aaDescriptor.protocolSupportEnumerations.sort{it.uri}.collect({it.uri}).join(' ')) {
-				if(aaDescriptor.collaborator) {
-					if(all || (aaDescriptor.collaborator.approved && aaDescriptor.collaborator.active)) {
+		if(all || (aaDescriptor.approved && aaDescriptor.active)) {		
+			if(aaDescriptor.collaborator) {
+				if(all || (aaDescriptor.collaborator.approved && aaDescriptor.collaborator.active)) {
+					builder.AttributeAuthorityDescriptor(protocolSupportEnumeration: aaDescriptor.protocolSupportEnumerations.sort{it.uri}.collect({it.uri}).join(' ')) {
 						// We don't currently provide direct AA manipulation to reduce general end user complexity.
 						// So where a collaborative relationship exists we use all common data from the IDP to render the AA
 						// If it isn't collaborative we'll assume manual DB intervention and render direct ;-).
@@ -293,7 +295,9 @@ class MetadataGenerationService {
 							aaDescriptor.collaborator.attributes?.sort{it.base.name}.each{ attr -> attribute(builder, attr) }
 					}
 				}
-				else {
+			}
+			else {
+				builder.AttributeAuthorityDescriptor(protocolSupportEnumeration: aaDescriptor.protocolSupportEnumerations.sort{it.uri}.collect({it.uri}).join(' ')) {
 					roleDescriptor(builder, minimal, roleExtensions, aaDescriptor)	
 					aaDescriptor.attributeServices?.sort{it.id}.each{ attrserv -> endpoint(builder, all, minimal, "AttributeService", attrserv) }
 					aaDescriptor.assertionIDRequestServices?.sort{it.id}.each{ aidrs -> endpoint(builder, all, minimal, "AssertionIDRequestService", aidrs) }

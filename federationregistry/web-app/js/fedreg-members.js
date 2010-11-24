@@ -381,6 +381,40 @@ fedreg.contact_list = function() {
 
 
 // Endpoint
+fedreg.endpoint_edit = function(id, endpointType, containerID) {
+	$("#working").trigger("fedreg.working");
+	$("#endpoint-"+id).fadeOut();
+	var dataString = "id=" + id + "&endpointType=" + endpointType + "&containerID=" + containerID;
+	$.ajax({
+		type: "GET",
+		url: endpointEditEndpoint,
+		data: dataString,
+		success: function(res) {
+			$("#endpoint-"+id).html(res).fadeIn();
+	    },
+	    error: function (xhr, ajaxOptions, thrownError) {
+			nimble.growl('error', xhr.responseText);
+	    }
+	});
+}
+
+fedreg.endpoint_update = function(id, endpointType, containerID) {
+	$("#working").trigger("fedreg.working");
+	var dataString =  $("#endpoint-edit-" + id).serialize();
+	$.ajax({
+		type: "POST",
+		url: endpointUpdateEndpoint,
+		data: dataString,
+		success: function(res) {
+			nimble.growl('success', res);
+			fedreg.endpoint_list(endpointType, containerID);
+	    },
+	    error: function (xhr, ajaxOptions, thrownError) {
+			nimble.growl('error', xhr.responseText);
+	    }
+	});
+}
+
 fedreg.endpoint_delete = function(id, endpointType, containerID) {
 	$("#working").trigger("fedreg.working");
 	var dataString = "id=" + id + "&endpointType=" + endpointType;

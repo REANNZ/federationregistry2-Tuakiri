@@ -1,5 +1,7 @@
 import fedreg.core.*
 
+entityDescriptorService = ctx.getBean("entityDescriptorService")
+spSSODescriptorService = ctx.getBean("SPSSODescriptorService")
 workflowTaskService = ctx.getBean("workflowTaskService")
 mailService = ctx.getBean("mailService")
 messageSource = ctx.getBean("messageSource")
@@ -21,15 +23,10 @@ if(sp) {
 	
 	def entityDescriptor = sp.entityDescriptor
 	
-	sp.delete()
-	
-	// Delete Entity? Determine if associated with any other child descriptors first
-	if(entityDescriptor.idpDescriptors.size() == 0 && entityDescriptor.attributeAuthorityDescriptors.size() == 0 && entityDescriptor.pdpDescriptors.size() == 0 && entityDescriptor.additionalMetadataLocations.size() == 0) {
-		// Ensure there are no other SP associated with this Entity
-		if(entityDescriptor.spDescriptors.size() == 1) {
-				entityDescriptor.delete()
-		}
-	}
+	if(entityDescriptor.holdsSPOnly())
+		entityDescriptorService.delete(entityDescriptor.id)
+	else
+		spSSODescriptorService.delete(sp.id)
 	
 	workflowTaskService.complete(env.taskInstanceID.toLong(), 'spssodescriptordeleted')
 }

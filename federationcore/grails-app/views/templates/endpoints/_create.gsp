@@ -17,7 +17,7 @@
 	</div>
 	
 	<div id="new${endpointType}" class="searcharea">
-		<h3><g:message code="fedreg.template.endpoints.add.heading"/></h3>
+		<h3><g:message code="fedreg.templates.endpoints.add.heading"/></h3>
 		<form id="new${endpointType}data">
 		<table>
 			<tbody>

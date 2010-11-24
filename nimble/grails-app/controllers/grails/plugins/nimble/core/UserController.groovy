@@ -40,10 +40,6 @@ class UserController {
   }
 
   def list = {
-    if (!params.max) {
-      params.max = 20
-    }
-    log.debug("Listing users")
     [users: UserBase.list(params)]
   }
 

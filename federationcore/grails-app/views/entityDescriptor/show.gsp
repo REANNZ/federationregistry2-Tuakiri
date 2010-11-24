@@ -54,7 +54,11 @@
 								<g:message code="label.no" /> <div class="error"><g:message code="label.warningmetadata" /></div>
 							</g:else>
 						</td>
-					</tr>		
+					</tr>	
+					<tr>
+						<th><g:message code="label.datecreated" /></th>
+						<td>${fieldValue(bean: entity, field: "dateCreated")}</td>
+					</tr>	
 				</tbody>
 			</table>
 		
