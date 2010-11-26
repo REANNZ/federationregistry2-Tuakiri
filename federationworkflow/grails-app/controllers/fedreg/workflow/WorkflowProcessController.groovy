@@ -60,6 +60,7 @@ class WorkflowProcessController {
 				return
 			}
 		
+			log.info "$authenticatedUser created $process"
 			redirect action: "show", id: process.id
 		}
 		else {
@@ -136,6 +137,7 @@ class WorkflowProcessController {
 		if(SecurityUtils.subject.isPermitted("workflow:process:${process.id}:update")) {
 			def updated, process_
 			try {
+				log.info "$authenticatedUser is updating $process"
 				(updated, process_) = workflowProcessService.update(process.name, params.code)
 			}
 			catch(Exception e) {
@@ -155,6 +157,7 @@ class WorkflowProcessController {
 				return
 			}
 		
+			log.info "$authenticatedUser updated $process_"
 			redirect action: "show", id: process_.id
 		}
 		else {

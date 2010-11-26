@@ -10,6 +10,8 @@ class EntityDescriptorService {
 	def grailsApplication
 	def workflowProcessService
 	
+	// This is primarily to avoid an issue where cross service calls with a save
+	// would not rollback if the calling service laters throws an exception.... weird.
 	def createNoSave(def params) {
 		// Organization
 		def organization = Organization.get(params.organization?.id)
@@ -39,6 +41,7 @@ class EntityDescriptorService {
 			return [false, entityDescriptor]
 		}
 		
+		log.info "$authenticatedUser created $entityDescriptor (not yet persisted)"
 		return [true, entityDescriptor]
 	}
 	
@@ -53,6 +56,7 @@ class EntityDescriptorService {
 			throw new RuntimeException("Unable to save when creating ${entityDescriptor}")
 		}
 	
+		log.info "$authenticatedUser created $entityDescriptor"
 		return [true, entityDescriptor]
 	}
 	
@@ -73,6 +77,7 @@ class EntityDescriptorService {
 			throw new RuntimeException("Unable to save when updating ${entityDescriptor}")
 		}
 		
+		log.info "$authenticatedUser updated $entityDescriptor"
 		return [true, entityDescriptor]
 	}
 	
@@ -104,6 +109,8 @@ class EntityDescriptorService {
 			if(!user.save())
 				throw new RuntimeException("Unable to update $user with nil entitydescriptor detail when removing $ed")
 		}
+		
+		log.info "$authenticatedUser deleted $entityDescriptor"
 	}
 
 }

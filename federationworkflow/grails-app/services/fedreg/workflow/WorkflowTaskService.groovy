@@ -11,11 +11,6 @@ import grails.plugins.nimble.core.Role
 import grails.plugins.nimble.core.Group
 
 /*
-This service is was originally designed to be concurrent hence passing of ID rather then hibernate backed object instances.
-At this time several faults are present in the hibernate/spring stack that cause violation of
-ACID when run in concurrent mode. It is expected that more concurrency could be introduced back here over time as framework stability improves,
-especially in the execute methods.
-
 @author Bradley Beddoes
 */
 class WorkflowTaskService {

@@ -67,6 +67,7 @@ class OrganizationAdministrationController {
 			def adminRole = Role.findByName("organization-${organization.id}-administrators")
 			roleService.addMember(user, adminRole)
 			
+			log.info "$authenticatedUser granted $adminRole to $user"
 			render message(code: 'fedreg.organization.administration.grant.success')
 		}
 		else {
@@ -96,6 +97,7 @@ class OrganizationAdministrationController {
 			def adminRole = Role.findByName("organization-${organization.id}-administrators")
 			roleService.deleteMember(user, adminRole)
 			
+			log.info "$authenticatedUser revoked $adminRole from $user"
 			render message(code: 'fedreg.organization.administration.revoke.success')
 		}
 		else {

@@ -45,11 +45,15 @@ class SPSSODescriptorController {
 	def save = {
 		def (created, ret) = SPSSODescriptorService.create(params)
 	
-		if(created)
+		if(created) {
+			log.info "$authenticatedUser created ${ret.serviceProvider}"
 			redirect (action: "show", id: ret.serviceProvider.id)
+		}
 		else {
 			flash.type="error"
 			flash.message = message(code: 'fedreg.core.spssoroledescriptor.save.validation.error')
+			
+			log.info "$authenticatedUser failed attempting to create ${ret.serviceProvider}"
 			render (view:'create', model: ret + [organizationList: Organization.findAllWhere(active:true, approved:true), attributeList: AttributeBase.list(), nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)])
 		}
 	}
@@ -98,11 +102,14 @@ class SPSSODescriptorController {
 		}
 		if(SecurityUtils.subject.isPermitted("descriptor:${serviceProvider_.id}:update")) {
 			def (updated, serviceProvider) = SPSSODescriptorService.update(params)
-			if(updated)
+			if(updated) {
+				log.info "$authenticatedUser updated $serviceProvider"
 				redirect (action: "show", id: serviceProvider.id)
-			else {
+			} else {
 				flash.type="error"
 				flash.message = message(code: 'fedreg.core.spssoroledescriptor.update.validation.error')
+				
+				log.info "$authenticatedUser failed when attempting update on $serviceProvider"
 				render (view:'edit', model:[serviceProvider:serviceProvider])
 			}
 		}

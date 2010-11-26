@@ -157,6 +157,7 @@ class IDPSSODescriptorService {
 	
 		// Submission validation
 		if(!entityDescriptor.validate()) {
+			log.info "$authenticatedUser attempted to create $identityProvider but failed EntityDescriptor validation"
 			entityDescriptor?.errors.each { log.error it }
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly() 
 			return [false, ret]
@@ -171,6 +172,7 @@ class IDPSSODescriptorService {
 		}
 
 		if(!identityProvider.validate()) {
+			log.info "$authenticatedUser attempted to create $identityProvider but failed IDPSSODescriptor validation"
 			identityProvider.errors.each { log.debug it }
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly()
 			entityDescriptor.delete()
@@ -205,6 +207,7 @@ class IDPSSODescriptorService {
 		else
 			throw new RuntimeException("Unable to execute workflow when creating ${identityProvider}")
 
+		log.info "$authenticatedUser created $identityProvider"
 		return [true, ret]
 	}
 	
@@ -239,7 +242,8 @@ class IDPSSODescriptorService {
 		
 		log.debug "Updating $identityProvider active: ${identityProvider.active}, requestSigned: ${identityProvider.wantAuthnRequestsSigned}"
 		
-		if(!identityProvider.entityDescriptor.validate()) {			
+		if(!identityProvider.entityDescriptor.validate()) {
+			log.info "$authenticatedUser attempted to update $identityProvider but failed IDPSSODescriptor validation"
 			identityProvider.entityDescriptor.errors.each {log.warn it}
 			return [false, identityProvider]
 		}
@@ -249,12 +253,13 @@ class IDPSSODescriptorService {
 			throw new RuntimeException("Unable to save when updating ${identityProvider}")
 		}
 		
+		log.info "$authenticatedUser updated $identityProvider"
 		return [true, identityProvider]
 	}
 	
 	def delete(long id) {
-		def idp = IDPSSODescriptor.get(id)
-		if(!idp)
+		def identityProvider = IDPSSODescriptor.get(id)
+		if(!identityProvider)
 			throw new RuntimeException("Unable to delete identity provider, no such instance")
 			
 		log.info "Deleting $idp on request of $authenticatedUser"
@@ -262,16 +267,16 @@ class IDPSSODescriptorService {
 		def entityDescriptor = idp.entityDescriptor
 		def aa = idp.collaborator
 
-		idp.attributeProfiles?.each { it.delete() }
-		idp.attributes?.each { it.delete() }
-		idp.contacts?.each { it.delete() }
-		idp.keyDescriptors?.each { it.delete() }
-		idp.monitors?.each { it.delete() }
+		identityProvider.attributeProfiles?.each { it.delete() }
+		identityProvider.attributes?.each { it.delete() }
+		identityProvider.contacts?.each { it.delete() }
+		identityProvider.keyDescriptors?.each { it.delete() }
+		identityProvider.monitors?.each { it.delete() }
 
 		if(aa) {	// Untangle this linkage - horrible but necessay GORM delete sucks.
-			idp.collaborator = null
-			if(!idp.save()) {
-				idp.errors.each { log.error it }
+			identityProvider.collaborator = null
+			if(!identityProvider.save()) {
+				identityProvider.errors.each { log.error it }
 				throw new RuntimeException("Unable to remove collaborating IDP")
 			}
 			
@@ -284,8 +289,10 @@ class IDPSSODescriptorService {
 			attributeAuthorityDescriptorService.delete(aa.id)
 		}
 			
-		entityDescriptor.idpDescriptors.remove(idp)
-		idp.delete()
+		entityDescriptor.idpDescriptors.remove(identityProvider)
+		identityProvider.delete()
+		
+		log.info "$authenticatedUser deleted $identityProvider"
 	}
 	
 }

@@ -24,7 +24,6 @@ class CoreUtilitiesController {
 			def issuer = cryptoService.issuer(certificate);
 			def expires = cryptoService.expiryDate(certificate);
 			
-			// TODO extend additional validation checks over time so we don't get stupid certs being entered.
 			def valid = true
 			def certerrors = []
 		
@@ -70,8 +69,10 @@ class CoreUtilitiesController {
 			}
 			
 			render template:"/templates/certificates/validation",  contextPath: pluginContextPath, model:[corrupt: false, subject:subject, issuer:issuer, expires:expires, valid:valid, certerrors:certerrors]
-			if(!valid)
+			if(!valid) {
+				log.warn "Certificate being marked as invalid, progression will be halted"
 				response.setStatus(500)	
+			}
 		}
 		catch(Exception e) {
 			log.debug e

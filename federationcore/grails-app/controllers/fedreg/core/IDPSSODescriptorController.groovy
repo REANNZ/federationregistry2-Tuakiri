@@ -45,6 +45,7 @@ class IDPSSODescriptorController {
 		def (created, ret) = IDPSSODescriptorService.create(params)
 	
 		if(created) {
+			log.info "$authenticatedUser created ${ret.identityProvider}"
 			redirect (action: "show", id: ret.identityProvider.id)
 		}
 		else {
@@ -98,9 +99,11 @@ class IDPSSODescriptorController {
 		}
 		if(SecurityUtils.subject.isPermitted("descriptor:${identityProvider_.id}:update")) {
 			def (updated, identityProvider) = IDPSSODescriptorService.update(params)
-			if(updated)
+			if(updated) {
+				log.info "$authenticatedUser updated $identityProvider"
 				redirect (action: "show", id: identityProvider.id)
-			else {
+			} else {
+				log.info "$authenticatedUser failed to update $identityProvider"
 				flash.type="error"
 				flash.message = message(code: 'fedreg.core.idpssoroledescriptor.update.validation.error')
 				render (view:'edit', model:[identityProvider:identityProvider])

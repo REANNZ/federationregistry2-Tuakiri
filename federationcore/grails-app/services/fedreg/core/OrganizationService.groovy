@@ -22,6 +22,7 @@ class OrganizationService {
 		}
 		
 		if(!organization.validate()) {
+			log.info "$authenticatedUser attempted to create $organization but failed Organization validation"
 			organization?.errors.each { log.error it }
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly() 
 			return [ false, organization, contact ]
@@ -35,6 +36,7 @@ class OrganizationService {
 		
 		contact.organization = savedOrg
 		if(!contact.validate()) {
+			log.info "$authenticatedUser attempted to create $organization but failed Contact validation"
 			contact?.errors.each { log.error it }
 			savedOrg.discard()
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly() 
@@ -55,6 +57,7 @@ class OrganizationService {
 		else
 			throw new RuntimeException("Unable to execute workflow when creating ${organization}")
 		
+		log.info "$authenticatedUser created $organization"
 		return [ true, organization, contact ]
 	}
 	
@@ -77,6 +80,7 @@ class OrganizationService {
 		}
 		
 		if(!organization.validate()) {
+			log.info "$authenticatedUser attempted to update $organization but failed Organization validation"
 			organization?.errors.each { log.error it }
 			return [ false, organization ]
 		}
@@ -86,6 +90,7 @@ class OrganizationService {
 			throw new RuntimeException("Unable to save when updating ${organization}")
 		}
 		
+		log.info "$authenticatedUser updated $organization"
 		return [true, organization]
 	}
 	
@@ -112,7 +117,7 @@ class OrganizationService {
 			contact.delete()
 		}
 		
-
 		org.delete()
+		log.info "$authenticatedUser deleted $organization"
 	}
 }

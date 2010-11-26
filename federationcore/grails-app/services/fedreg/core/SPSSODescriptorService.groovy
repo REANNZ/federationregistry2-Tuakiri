@@ -234,7 +234,8 @@ class SPSSODescriptorService {
 		serviceProvider.entityDescriptor = entityDescriptor
 		entityDescriptor.addToSpDescriptors(serviceProvider)
 	
-		if(!serviceProvider.validate()) {			
+		if(!serviceProvider.validate()) {
+			log.info "$authenticatedUser attempted to create $serviceProvider but failed SPSSODescriptor validation"
 			serviceProvider.errors.each { log.warn it }
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly() 
 			return [false, ret]
@@ -253,6 +254,7 @@ class SPSSODescriptorService {
 		else
 			throw new RuntimeException("Unable to execute workflow when creating ${serviceProvider}")
 	
+		log.info "$authenticatedUser created $serviceProvider"
 		return [true, ret]
 	}
 	
@@ -301,33 +303,37 @@ class SPSSODescriptorService {
 		serviceProvider.serviceDescription.support = params.sp?.servicedescription?.support
 		serviceProvider.serviceDescription.maintenance = params.sp?.servicedescription?.maintenance
 		
-		if(!serviceProvider.entityDescriptor.validate()) {			
+		if(!serviceProvider.entityDescriptor.validate()) {
+			log.info "$authenticatedUser attempted to update $serviceProvider but failed EntityDescriptor validation"
 			serviceProvider.entityDescriptor.errors.each {log.warn it}
 			return [false, serviceProvider]
 		}
 		
-		if(!serviceProvider.entityDescriptor.save()) {			
+		if(!serviceProvider.entityDescriptor.save()) {
 			serviceProvider.errors.each {log.warn it}
 			throw new RuntimeException("Unable to save when updating ${serviceProvider}")
 		}
 		
+		log.info "$authenticatedUser updated $serviceProvider"
 		return [true, serviceProvider]
 	}
 	
 	def delete(long id) {
-		def sp = SPSSODescriptor.get(id)
-		if(!sp)
+		def serviceProvider = SPSSODescriptor.get(id)
+		if(!serviceProvider)
 			throw new RuntimeException("Unable to delete service provider, no such instance")
 			
 		log.info "Deleting $sp on request of $authenticatedUser"
-		def entityDescriptor = sp.entityDescriptor
+		def entityDescriptor = serviceProvider.entityDescriptor
 
-		sp.discoveryResponseServices?.each { it.delete() }
-		sp.contacts?.each { it.delete() }
-		sp.keyDescriptors?.each { it.delete() }
-		sp.monitors?.each { it.delete() }
+		serviceProvider.discoveryResponseServices?.each { it.delete() }
+		serviceProvider.contacts?.each { it.delete() }
+		serviceProvider.keyDescriptors?.each { it.delete() }
+		serviceProvider.monitors?.each { it.delete() }
 
-		entityDescriptor.spDescriptors.remove(sp)
-		sp.delete()
+		entityDescriptor.spDescriptors.remove(serviceProvider)
+		serviceProvider.delete()
+		
+		log.info "$authenticatedUser deleted $serviceProvider"
 	}
 }

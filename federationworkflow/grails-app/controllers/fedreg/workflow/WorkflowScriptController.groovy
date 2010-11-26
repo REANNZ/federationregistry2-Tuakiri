@@ -46,6 +46,7 @@ class WorkflowScriptController {
 				return
 			}
 		
+			log.info "$authenticatedUser created $script"
 			redirect action: "show", id: script.id
 		}
 		else {
@@ -130,6 +131,7 @@ class WorkflowScriptController {
 				return
 			}
 		
+			log.info "$authenticatedUser updated $script"
 			redirect action: "show", id: script.id
 		}
 		else {

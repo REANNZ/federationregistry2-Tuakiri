@@ -35,7 +35,7 @@ class OrganizationController {
 		}
 		else {
 			def entities = EntityDescriptor.findAllWhere(organization:organization)
-			def contacts = Contact.findAllWhere(organization:organization)
+			`def contacts = Contact.findAllWhere(organization:organization)
 			def adminRole = Role.findByName("organization-${organization.id}-administrators")
 			def identityproviders = []
 			def serviceproviders = []
@@ -55,10 +55,16 @@ class OrganizationController {
 	def save = {
 		def (created, organization, contact) = organizationService.create(params)
 	
-		if(created)
+		if(created) {
+			log.info "$authenticatedUser created $organization"
 			redirect (action: "show", id: organization.id)
-		else
+		} else {
+			log.info "$authenticatedUser failed to create $organization"
+			
+			flash.type="error"
+			flash.message = message(code: 'fedreg.core.organization.nonexistant')
 			render (view:'create', model:[organization:organization, contact:contact, organizationTypes: OrganizationType.list()])
+		}
 	}
 	
 	def edit = {
@@ -106,9 +112,13 @@ class OrganizationController {
 		
 		if(SecurityUtils.subject.isPermitted("organization:${organization_.id}:update")) {
 			def (updated, organization) = organizationService.update(params)
-			if(updated)
+			if(updated) {
+				log.info "$authenticatedUser updated $organization"
 				redirect (action: "show", id: organization.id)
+			}
 			else {
+				log.info "$authenticatedUser failed to update $organization"
+				
 				flash.type="error"
 				flash.message = message(code: 'fedreg.core.organization.update.validation.error')
 				render (view:'edit', model:[organization:organization, organizationTypes: OrganizationType.list()])

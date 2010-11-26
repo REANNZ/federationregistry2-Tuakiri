@@ -67,6 +67,7 @@ class DescriptorAdministrationController {
 			def adminRole = Role.findByName("descriptor-${descriptor.id}-administrators")
 			roleService.addMember(user, adminRole)
 			
+			log.info "$authenticatedUser successfully added $user to $adminRole"
 			render message(code: 'fedreg.descriptor.administration.grant.success')
 		}
 		else {
@@ -96,6 +97,7 @@ class DescriptorAdministrationController {
 			def adminRole = Role.findByName("descriptor-${descriptor.id}-administrators")
 			roleService.deleteMember(user, adminRole)
 			
+			log.info "$authenticatedUser successfully removed $user from $adminRole"
 			render message(code: 'fedreg.descriptor.administration.revoke.success')
 		}
 		else {

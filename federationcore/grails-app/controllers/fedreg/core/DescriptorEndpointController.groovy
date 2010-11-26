@@ -10,7 +10,8 @@ class DescriptorEndpointController {
 	
 	// Maps allowed endpoints to internal class representation
 	def allowedEndpoints = [singleSignOnServices:"fedreg.core.SingleSignOnService", artifactResolutionServices:"fedreg.core.ArtifactResolutionService", manageNameIDServices:"fedreg.core.ManageNameIDService",
-							singleLogoutServices:"fedreg.core.SingleLogoutService", assertionConsumerServices:"fedreg.core.AssertionConsumerService", attributeServices:"fedreg.core.AttributeService", discoveryResponseServices:"fedreg.core.DiscoveryResponseService"]
+							singleLogoutServices:"fedreg.core.SingleLogoutService", assertionConsumerServices:"fedreg.core.AssertionConsumerService", attributeServices:"fedreg.core.AttributeService", 
+							discoveryResponseServices:"fedreg.core.DiscoveryResponseService"]
 
 	def endpointService
 	
@@ -73,6 +74,7 @@ class DescriptorEndpointController {
 		
 		endpointService.update(endpoint, binding, params.location)
 		
+		log.info "$authenticatedUser updated $endpoint for ${endpoint.descriptor}"
 		render message(code: 'fedreg.endpoint.update.success')
 	}
 
@@ -221,10 +223,12 @@ class DescriptorEndpointController {
 			if(allowedEndpoints.containsKey(endpointType) && descriptor.hasProperty(endpointType)) {
 				endpointService.create(descriptor, allowedEndpoints.get(endpointType), endpointType, binding, params.location)
 				endpointService.determineDescriptorProtocolSupport(descriptor)
+				
+				log.info "$authenticatedUser created new endpoint location ${params.location}, $binding for $descriptor"
 				render message(code: 'fedreg.endpoint.create.success')
 			}
 			else {
-				log.warn "Endpoint ${endpointType} is invalid for ${descriptor}, unable to create"
+				log.warn "$authenticatedUser unable to create endpoint as ${endpointType} is invalid for ${descriptor}"
 				render message(code: 'fedreg.endpoint.invalid', args: [endpointType])
 				response.setStatus(500)
 			}
@@ -253,6 +257,8 @@ class DescriptorEndpointController {
 	
 		if(SecurityUtils.subject.isPermitted("descriptor:${endpoint.descriptor.id}:endpoint:toggle")) {
 			endpointService.toggle(endpoint)
+			
+			log.info "$authenticatedUser toggled state of $endpoint"
 			render message(code: 'fedreg.endpoint.toggle.success')
 		}
 		else {
@@ -291,6 +297,8 @@ class DescriptorEndpointController {
 			
 			if(allowedEndpoints.containsKey(endpointType) && descriptor.hasProperty(endpointType)) {
 				endpointService.makeDefault(endpoint, endpointType)
+				
+				log.info "$authenticatedUser made $endpoint default for $descriptor"
 				render message(code: 'fedreg.endpoint.makedefault.success')
 			}
 			else {

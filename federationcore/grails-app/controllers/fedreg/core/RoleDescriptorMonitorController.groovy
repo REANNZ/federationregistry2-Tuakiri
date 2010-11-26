@@ -37,14 +37,17 @@ class RoleDescriptorMonitorController {
 			def serviceMonitor = new ServiceMonitor(type:monitorType, url:params.url, interval:params.interval)
 			roleDescriptor.addToMonitors(serviceMonitor)
 			if(!roleDescriptor.save()) {
+				log.info "$authenticatedUser was unable to add $serviceMonitor to $descriptor"
 				roleDescriptor.errors.each {
 					log.error it
 				}
+
 				render message(code: 'fedreg.core.monitor.create.error')
 				response.setStatus(500)
 				return
 			}
-	
+			
+			log.info "$authenticatedUser added $serviceMonitor to $descriptor"
 			render message(code: 'fedreg.core.monitor.create.success')
 		} else {
 			log.warn("Attempt to add monitor to $roleDescriptor by $authenticatedUser was denied, incorrect permission set")
@@ -62,6 +65,7 @@ class RoleDescriptorMonitorController {
 		}
 		if(SecurityUtils.subject.isPermitted("descriptor:${serviceMonitor.roleDescriptor.id}:monitor:delete")) {
 			serviceMonitor.delete()
+			log.info "$authenticatedUser delete $serviceMonitor from $descriptor"
 			render message(code: 'fedreg.core.monitor.delete.success')
 		} else {
 			log.warn("Attempt to delete monitor from ${serviceMonitor.roleDescriptor} by $authenticatedUser was denied, incorrect permission set")

@@ -61,7 +61,7 @@ class DescriptorContactController {
 				return
 			}
 		
-			log.debug "Creating contactType ${params.contactType} linked to ${contact} for ${descriptor}"
+			
 		
 			def contactPerson
 		
@@ -72,6 +72,7 @@ class DescriptorContactController {
 			
 			contactPerson.save()
 			if(contactPerson.hasErrors()) {
+				log.debug "$authenticatedUser failed to create $contactPerson linked to $contact for $descriptor"
 				contactPerson.errors.each {
 					log.error it
 				}
@@ -79,7 +80,8 @@ class DescriptorContactController {
 				response.setStatus(500)
 				return
 			}
-		
+			
+			log.debug "$authenticatedUser created $contactPerson linked to $contact for $descriptor"
 			render message(code: 'fedreg.contactperson.create.success')
 		}
 		else {
@@ -104,14 +106,16 @@ class DescriptorContactController {
 			return
 		}
 		
-		def id 
+		def descriptor 
 		if(contactPerson.descriptor)
-			id = contactPerson.descriptor.id
+			descriptor = contactPerson.descriptor
 		else
-			id = contactPerson.entity.id
+			descriptor = contactPerson.entity
 		
-		if(SecurityUtils.subject.isPermitted("descriptor:$id:contact:remove")) {
+		if(SecurityUtils.subject.isPermitted("descriptor:${descriptor.id}:contact:remove")) {
 			contactPerson.delete();
+			
+			log.debug "$authenticatedUser deleted $contactPerson linked to $contact for $descriptor"
 			render message(code: 'fedreg.contactperson.delete.success')
 		}
 		else {

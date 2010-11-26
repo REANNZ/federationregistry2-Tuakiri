@@ -9,18 +9,19 @@ class AttributeAuthorityDescriptorService {
 		
 		def idp = aa.collaborator
 		def entityDescriptor = aa.entityDescriptor	
-		log.info "Deleting $aa on request of $authenticatedUser" 
 		
 		if(idp){ // Untangle this linkage - horrible but necessay GORM delete sucks.
 			idp.collaborator = null
 			if(!idp.save()) {
 				idp.errors.each { log.error it }
+				log.info "$authenticatedUser falied to delete $aa" 
 				throw new RuntimeException("Unable to remove collaborating IDP")
 			}
 		
 			aa.collaborator = null
 			if(!aa.save()) {
 				aa.errors.each { log.error it }
+				log.info "$authenticatedUser falied to delete $aa" 
 				throw new RuntimeException("Unable to remove collaborating AA")
 			}
 		}
@@ -33,6 +34,8 @@ class AttributeAuthorityDescriptorService {
 		aa.monitors?.each { it.delete() }
 		
 		entityDescriptor.attributeAuthorityDescriptors.remove(aa)
+		
+		log.info "$authenticatedUser deleted $aa" 
 		aa.delete()
 	}
 
