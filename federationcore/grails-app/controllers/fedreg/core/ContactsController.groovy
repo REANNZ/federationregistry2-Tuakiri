@@ -3,9 +3,8 @@ package fedreg.core
 import org.apache.shiro.SecurityUtils
 
 class ContactsController {
-	def index = {
-		redirect(action: "list", params: params)
-	}
+	
+	static defaultAction = "index"
 
 	def list = {
 		[contactList: Contact.list(params), contactTotal: Contact.count()]

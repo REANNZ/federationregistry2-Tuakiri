@@ -4,12 +4,11 @@ import org.apache.shiro.SecurityUtils
 import grails.plugins.nimble.core.Role
 
 class IDPSSODescriptorController {
+	def defaultAction = "list"
+	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
 	def IDPSSODescriptorService
-
-	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
-	def defaultAction = "list"
-
+	
 	def list = {
 		[identityProviderList: IDPSSODescriptor.list(params), identityProviderTotal: IDPSSODescriptor.count()]
 	}

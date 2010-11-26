@@ -5,14 +5,10 @@ import org.apache.shiro.SecurityUtils
 import grails.plugins.nimble.core.Role
 
 class OrganizationController {
-
-	def organizationService
-
+	static defaultAction = "index"
 	static allowedMethods = [save: "POST", update: "POST"]
-
-	def index = {
-		redirect(action: "list", params: params)
-	}
+		
+	def organizationService
 
 	def list = {
 		[organizationList: Organization.list(params), organizationTotal: Organization.count()]

@@ -4,8 +4,8 @@ import org.apache.shiro.SecurityUtils
 import grails.plugins.nimble.core.Role
 
 class SPSSODescriptorController {
-	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 	static defaultAction = "list"
+	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 	
 	def SPSSODescriptorService
 	

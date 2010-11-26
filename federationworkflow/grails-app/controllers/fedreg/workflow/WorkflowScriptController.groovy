@@ -3,7 +3,6 @@ package fedreg.workflow
 import org.apache.shiro.SecurityUtils
 
 class WorkflowScriptController {
-	
 	def defaultAction = "list"
 
 	def list = {

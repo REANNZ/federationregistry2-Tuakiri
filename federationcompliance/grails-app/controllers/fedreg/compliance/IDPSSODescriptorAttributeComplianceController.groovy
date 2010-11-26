@@ -6,7 +6,8 @@ import fedreg.core.IDPSSODescriptor
 import fedreg.compliance.CategorySupportStatus
 
 class IDPSSODescriptorAttributeComplianceController {
-	def defaultAction = "summary"
+	
+	static defaultAction = "summary"
 	
 	def summary = {
 		def identityProviderList = IDPSSODescriptor.list()

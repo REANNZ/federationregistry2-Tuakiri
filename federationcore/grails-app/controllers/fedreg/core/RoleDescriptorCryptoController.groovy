@@ -3,7 +3,6 @@ package fedreg.core
 import org.apache.shiro.SecurityUtils
 
 class RoleDescriptorCryptoController {
-
 	static allowedMethods = [delete: "POST", create:"POST"]
 	
 	def cryptoService

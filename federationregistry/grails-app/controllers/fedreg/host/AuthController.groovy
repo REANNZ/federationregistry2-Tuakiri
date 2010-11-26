@@ -20,15 +20,13 @@ import fedreg.core.EntityDescriptor
 class AuthController {
 	private static String TARGET = 'fedreg.controllers.AuthController.TARGET'
 	
+	static defaultAction "login"
+	
 	def grailsApplication
 	def userService
 	def dataImporterService
 	
 	static Map allowedMethods = [ devauth: 'POST' ]
-	
-	def index = {
-		redirect (action:login)
-	}
 	
 	def login = {
 		if(params.targetUri)
