@@ -3,7 +3,7 @@ package fedreg.core
 import org.apache.shiro.SecurityUtils
 
 class RoleDescriptorCryptoController {
-	static allowedMethods = [delete: "POST", create:"POST"]
+	def allowedMethods = [create:'POST', delete: 'DELETE']
 	
 	def cryptoService
 	
@@ -42,7 +42,8 @@ class RoleDescriptorCryptoController {
 			return
 		}
 		
-		if(SecurityUtils.subject.isPermitted("descriptor:${keyDescriptor.roleDescriptor.id}:crypto:delete")) {
+		def descriptor = keyDescriptor.roleDescriptor
+		if(SecurityUtils.subject.isPermitted("descriptor:${descriptor.id}:crypto:delete")) {
 			log.info "Deleting KeyDescriptor"
 			cryptoService.unassociateCertificate(keyDescriptor)
 			

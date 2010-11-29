@@ -5,8 +5,7 @@ import static org.apache.commons.lang.StringUtils.*
 import org.apache.shiro.SecurityUtils
 
 class DescriptorEndpointController {
-
-	static allowedMethods = [delete: "POST", create: "POST", toggle:"POST"]
+	def allowedMethods = [create:'POST', update:'PUT', toggle:'PUT', makeDefault:'PUT', delete:'DELETE']
 	
 	// Maps allowed endpoints to internal class representation
 	def allowedEndpoints = [singleSignOnServices:"fedreg.core.SingleSignOnService", artifactResolutionServices:"fedreg.core.ArtifactResolutionService", manageNameIDServices:"fedreg.core.ManageNameIDService",
@@ -266,8 +265,7 @@ class DescriptorEndpointController {
 			response.sendError(403)
 		}
 	}
-	
-	
+		
 	def makeDefault = {
 		if(!params.id) {
 			log.warn "Endpoint ID was not present"

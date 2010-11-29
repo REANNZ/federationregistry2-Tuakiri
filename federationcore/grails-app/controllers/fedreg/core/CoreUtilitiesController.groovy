@@ -3,11 +3,10 @@ package fedreg.core
 import fedreg.workflow.ProcessPriority
 
 class CoreUtilitiesController {
+	def allowedMethods = [validateCertificate: 'POST']
 	
 	def grailsApplication
 	def cryptoService
-	
-	static allowedMethods = [validate: "POST"]
 	
 	def validateCertificate = {
 		if(!params.cert || params.cert.length() == 0) {

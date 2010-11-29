@@ -3,7 +3,8 @@ package fedreg.core
 import org.apache.shiro.SecurityUtils
 
 class RoleDescriptorMonitorController {
-
+	def allowedMethods = [create:'POST', delete:'DELETE']
+	
 	def list = {
 		def roleDescriptor = RoleDescriptor.get(params.id)
 		if (!roleDescriptor) {

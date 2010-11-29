@@ -3,8 +3,7 @@ package fedreg.core
 import org.apache.shiro.SecurityUtils
 
 class DescriptorNameIDFormatController {
-
-	static allowedMethods = [remove: "POST"]
+	def allowedMethods = [add:'POST', remove: 'DELETE']
 	
 	def remove = {
 		if(!params.id) {

@@ -5,7 +5,7 @@ import grails.plugins.nimble.core.Role
 
 class EntityDescriptorController {
 	static defaultAction = "list"
-	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+	def allowedMethods = [save: 'POST', update: 'PUT', delete: 'DELETE']
 		
 	def entityDescriptorService
 	

@@ -3,8 +3,7 @@ package fedreg.core
 import org.apache.shiro.SecurityUtils
 
 class DescriptorContactController {
-
-	static allowedMethods = []
+	def allowedMethods = [create:'POST', delete:'DELETE']
 	
 	def search = {
 		def contacts, email
@@ -61,10 +60,7 @@ class DescriptorContactController {
 				return
 			}
 		
-			
-		
 			def contactPerson
-		
 			if(descriptor instanceof RoleDescriptor)
 				contactPerson = new ContactPerson(contact:contact, type:contactType, descriptor: descriptor)
 			else
@@ -115,7 +111,7 @@ class DescriptorContactController {
 		if(SecurityUtils.subject.isPermitted("descriptor:${descriptor.id}:contact:remove")) {
 			contactPerson.delete();
 			
-			log.debug "$authenticatedUser deleted $contactPerson linked to $contact for $descriptor"
+			log.debug "$authenticatedUser deleted $contactPerson from $descriptor"
 			render message(code: 'fedreg.contactperson.delete.success')
 		}
 		else {

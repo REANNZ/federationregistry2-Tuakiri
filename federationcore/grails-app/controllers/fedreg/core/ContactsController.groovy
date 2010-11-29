@@ -3,9 +3,9 @@ package fedreg.core
 import org.apache.shiro.SecurityUtils
 
 class ContactsController {
-	
 	static defaultAction = "index"
-
+	def allowedMethods = [save: 'POST', update: 'PUT']
+	
 	def list = {
 		[contactList: Contact.list(params), contactTotal: Contact.count()]
 	}

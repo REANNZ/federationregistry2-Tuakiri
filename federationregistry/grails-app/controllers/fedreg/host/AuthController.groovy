@@ -20,7 +20,7 @@ import fedreg.core.EntityDescriptor
 class AuthController {
 	private static String TARGET = 'fedreg.controllers.AuthController.TARGET'
 	
-	static defaultAction "login"
+	static defaultAction = "login"
 	
 	def grailsApplication
 	def userService

@@ -6,7 +6,7 @@ import grails.plugins.nimble.core.Role
 
 class OrganizationController {
 	static defaultAction = "index"
-	static allowedMethods = [save: "POST", update: "POST"]
+	def allowedMethods = [save: 'POST', update: 'PUT']
 		
 	def organizationService
 
@@ -31,7 +31,7 @@ class OrganizationController {
 		}
 		else {
 			def entities = EntityDescriptor.findAllWhere(organization:organization)
-			`def contacts = Contact.findAllWhere(organization:organization)
+			def contacts = Contact.findAllWhere(organization:organization)
 			def adminRole = Role.findByName("organization-${organization.id}-administrators")
 			def identityproviders = []
 			def serviceproviders = []

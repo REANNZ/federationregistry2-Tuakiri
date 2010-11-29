@@ -7,7 +7,8 @@ import grails.plugins.nimble.core.ProfileBase
 import grails.plugins.nimble.core.Role
 
 class DescriptorAdministrationController {
-
+	def allowedMethods = [grantFullAdministration: 'POST', revokeFullAdministration: 'DELETE']
+	
 	def roleService
 	
 	def listFullAdministration = {
