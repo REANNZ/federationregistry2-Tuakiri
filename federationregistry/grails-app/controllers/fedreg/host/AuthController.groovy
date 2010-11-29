@@ -5,7 +5,6 @@ import org.codehaus.groovy.grails.commons.GrailsApplication
 
 import org.apache.shiro.SecurityUtils
 import org.apache.shiro.authc.AuthenticationException
-import org.apache.shiro.authc.UsernamePasswordToken
 import org.apache.shiro.authc.IncorrectCredentialsException
 import org.apache.shiro.authc.DisabledAccountException
 
@@ -18,19 +17,18 @@ import fedreg.core.EntityDescriptor
  * @author Bradley Beddoes
  */
 class AuthController {
-	private static String TARGET = 'fedreg.controllers.AuthController.TARGET'
-	
 	static defaultAction = "login"
+	static Map allowedMethods = [ devauth: 'POST' ]
 	
 	def grailsApplication
 	def userService
 	def dataImporterService
 	
-	static Map allowedMethods = [ devauth: 'POST' ]
+	final def TARGET = 'fedreg.controllers.AuthController.TARGET'
 	
 	def login = {
 		if(params.targetUri)
-        	session.setAttribute(AuthController.TARGET, params.targetUri)
+        	session.setAttribute(TARGET, params.targetUri)
 
 		// Integrates with Shibboleth NativeSPSessionCreationParameters as per https://spaces.internet2.edu/display/SHIB2/NativeSPSessionCreationParameters
 		// This allows us to mix and match publicly available and private content within Federation Registry by making use of Nimble provided
@@ -72,7 +70,6 @@ class AuthController {
 	}
 	
 	def shibauth = {
-		def attr = [:]
 		if (grailsApplication.config.fedreg.shibboleth.federationprovider.spactive) {	
 
 			def uniqueID = request.getHeader(grailsApplication.config.fedreg.shibboleth.headers.uniqueID)
@@ -143,8 +140,8 @@ class AuthController {
 				SecurityUtils.subject.login(authToken)
 		        this.userService.createLoginRecord(request)
 		
-				def targetUri = session.getAttribute(AuthController.TARGET)
-	            session.removeAttribute(AuthController.TARGET)
+				def targetUri = session.getAttribute(TARGET)
+	            session.removeAttribute(TARGET)
 				if(targetUri)
 	            	redirect(uri: targetUri)
 				else
@@ -189,8 +186,8 @@ class AuthController {
 		def authToken = new ShibbolethToken(principal:params.uniqueID, givenName:params.givenName, surname:params.surname, email:params.email, entityID:params.entityID, homeOrganization:params.homeOrganization, homeOrganizationType:params.homeOrganizationType)
 		SecurityUtils.subject.login(authToken)
         this.userService.createLoginRecord(request)
-        def targetUri = session.getAttribute(AuthController.TARGET)
-        session.removeAttribute(AuthController.TARGET)
+        def targetUri = session.getAttribute(TARGET)
+        session.removeAttribute(TARGET)
         if(targetUri)
         	redirect(uri: targetUri)
 		else
