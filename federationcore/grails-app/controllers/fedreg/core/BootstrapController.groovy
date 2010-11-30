@@ -1,7 +1,5 @@
 package fedreg.core
 
-import fedreg.workflow.ProcessPriority
-
 class BootstrapController {
 	def allowedMethods = [saveidp: 'POST', savesp: 'POST', saveorganization: 'POST']
 	

@@ -31,7 +31,7 @@ class OrganizationService {
 		def savedOrg = organization.save()
 		if(!savedOrg) {
 			organization?.errors.each { log.error it }
-			throw new RuntimeException("Unable to save when creating ${organization}")
+			throw new ErronousStateException("Unable to save when creating ${organization}")
 		}
 		
 		contact.organization = savedOrg
@@ -46,7 +46,7 @@ class OrganizationService {
 		if(!contact.save()) {
 			contact?.errors.each { log.error it }
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly() 
-			throw new RuntimeException("Unable to save when creating ${contact}")
+			throw new ErronousStateException("Unable to save when creating ${contact}")
 		}
 		
 		def workflowParams = [ creator:contact?.id?.toString(), organization:organization?.id?.toString(), locale:LCH.getLocale().getLanguage() ]
@@ -55,7 +55,7 @@ class OrganizationService {
 		if(initiated)
 			workflowProcessService.run(processInstance)
 		else
-			throw new RuntimeException("Unable to execute workflow when creating ${organization}")
+			throw new ErronousStateException("Unable to execute workflow when creating ${organization}")
 		
 		log.info "$authenticatedUser created $organization"
 		return [ true, organization, contact ]
@@ -87,7 +87,7 @@ class OrganizationService {
 		
 		if(!organization.save()) {
 			organization?.errors.each { log.error it }
-			throw new RuntimeException("Unable to save when updating ${organization}")
+			throw new ErronousStateException("Unable to save when updating ${organization}")
 		}
 		
 		log.info "$authenticatedUser updated $organization"
@@ -97,7 +97,7 @@ class OrganizationService {
 	def delete(def id) {
 		def org = Organization.get(id)
 		if(!org)
-			throw new RuntimeException("Unable to find Organization with id $id")
+			throw new ErronousStateException("Unable to find Organization with id $id")
 			
 		def entityDescriptors = EntityDescriptor.findAllWhere(organization:org)
 		entityDescriptors.each { println "Removing $it"; entityDescriptorService.delete(it.id) }
@@ -111,7 +111,7 @@ class OrganizationService {
 			users.each { user ->
 				user.contact = null
 				if(!user.save())
-					throw new RuntimeException("Unable to update $user with nil contact detail when removing organization $org")
+					throw new ErronousStateException("Unable to update $user with nil contact detail when removing organization $org")
 			}
 			
 			contact.delete()

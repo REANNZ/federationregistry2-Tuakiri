@@ -4,7 +4,6 @@ import org.springframework.context.i18n.LocaleContextHolder as LCH
 import org.springframework.transaction.interceptor.TransactionAspectSupport
 
 import fedreg.workflow.ProcessPriority
-import grails.plugins.nimble.core.UserBase
 
 class IDPSSODescriptorService {
 	
@@ -33,7 +32,7 @@ class IDPSSODescriptorService {
 					contact.errors.each {
 						log.error it
 					}
-					throw new RuntimeException("Unable to create new contact when attempting to create new IDPSSODescriptor")
+					throw new ErronousStateException("Unable to create new contact when attempting to create new IDPSSODescriptor")
 				}
 		}
 		def ct = params.contact?.type ?: 'administrative'
@@ -190,12 +189,12 @@ class IDPSSODescriptorService {
 			
 		if(!entityDescriptor.save()) {
 			entityDescriptor.errors.each {log.debug it}
-			throw new RuntimeException("Unable to save when creating ${identityProvider}")
+			throw new ErronousStateException("Unable to save when creating ${identityProvider}")
 		}
 		
 		if(!identityProvider.save()) {
 			identityProvider.errors.each {log.debug it}
-			throw new RuntimeException("Unable to save when creating ${identityProvider}")
+			throw new ErronousStateException("Unable to save when creating ${identityProvider}")
 		}
 
 		def workflowParams = [ creator:contact?.id?.toString(), identityProvider:identityProvider?.id?.toString(), attributeAuthority:attributeAuthority?.id?.toString(), organization:organization.id?.toString(), locale:LCH.getLocale().getLanguage() ]
@@ -205,7 +204,7 @@ class IDPSSODescriptorService {
 		if(initiated)
 			workflowProcessService.run(processInstance)
 		else
-			throw new RuntimeException("Unable to execute workflow when creating ${identityProvider}")
+			throw new ErronousStateException("Unable to execute workflow when creating ${identityProvider}")
 
 		log.info "$authenticatedUser created $identityProvider"
 		return [true, ret]
@@ -250,7 +249,7 @@ class IDPSSODescriptorService {
 		
 		if(!identityProvider.entityDescriptor.save()) {			
 			identityProvider.entityDescriptor.errors.each {log.warn it}
-			throw new RuntimeException("Unable to save when updating ${identityProvider}")
+			throw new ErronousStateException("Unable to save when updating ${identityProvider}")
 		}
 		
 		log.info "$authenticatedUser updated $identityProvider"
@@ -260,7 +259,7 @@ class IDPSSODescriptorService {
 	def delete(long id) {
 		def identityProvider = IDPSSODescriptor.get(id)
 		if(!identityProvider)
-			throw new RuntimeException("Unable to delete identity provider, no such instance")
+			throw new ErronousStateException("Unable to delete identity provider, no such instance")
 			
 		log.info "Deleting $idp on request of $authenticatedUser"
 
@@ -277,13 +276,13 @@ class IDPSSODescriptorService {
 			identityProvider.collaborator = null
 			if(!identityProvider.save()) {
 				identityProvider.errors.each { log.error it }
-				throw new RuntimeException("Unable to remove collaborating IDP")
+				throw new ErronousStateException("Unable to remove collaborating IDP")
 			}
 			
 			aa.collaborator = null
 			if(!aa.save()) {
 				aa.errors.each { log.error it }
-				throw new RuntimeException("Unable to remove collaborating AA")
+				throw new ErronousStateException("Unable to remove collaborating AA")
 			}
 			
 			attributeAuthorityDescriptorService.delete(aa.id)

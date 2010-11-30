@@ -19,6 +19,9 @@
 
 package fedreg.core
 
+import org.apache.commons.lang.builder.EqualsBuilder
+import org.apache.commons.lang.builder.HashCodeBuilder
+
 class OrganizationType {
 	static auditable = true
 
@@ -41,11 +44,21 @@ class OrganizationType {
 	public String toString() {	"organizationtype:[id:$id, name:$name, displayName: $displayName]" }
 
 	public boolean equals(Object obj) {
-		if ( !(obj instanceof OrganizationType) ) return false
+		if (obj == null) { return false }
+		if (obj == this) { return true }
+		if (obj.getClass() != getClass()) { return false }
 		
-		OrganizationType ot = (OrganizationType) obj
-		if(ot.name.equals(name)) return true
-		
-		return false
+		OrganizationType rhs = (OrganizationType) obj;
+		return new EqualsBuilder()
+			.appendSuper(super == obj)
+			.append(name, rhs.name)
+			.isEquals()
+	}
+
+	public int hashCode() {
+		// hard-coded, randomly chosen, non-zero, odd number different for each class
+		return new HashCodeBuilder(17, 187).
+		append(name).
+		toHashCode()
 	}
 }

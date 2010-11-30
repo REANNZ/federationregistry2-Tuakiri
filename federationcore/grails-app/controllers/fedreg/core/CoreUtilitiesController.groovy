@@ -1,7 +1,5 @@
 package fedreg.core
 
-import fedreg.workflow.ProcessPriority
-
 class CoreUtilitiesController {
 	def allowedMethods = [validateCertificate: 'POST']
 	
@@ -78,8 +76,6 @@ class CoreUtilitiesController {
 			log.warn "Certificate data is invalid"
 			render template:"/templates/certificates/validation", contextPath: pluginContextPath, model:[corrupt:true]
 			response.setStatus(500)
-			return
 		}
 	}
-	
 }

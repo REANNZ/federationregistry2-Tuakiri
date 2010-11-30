@@ -11,10 +11,6 @@ class EndpointService {
 		def endpoint = grailsApplication.classLoader.loadClass(endpointClass).newInstance(descriptor:descriptor, binding: binding, location: location, active:true, approved:true)
 		descriptor."addTo${capitalize(endpointType)}"(endpoint)
 		
-		def saml2Namespace = SamlURI.findWhere(uri:'urn:oasis:names:tc:SAML:2.0:protocol')
-		def saml1Namespace = SamlURI.findWhere(uri:'urn:oasis:names:tc:SAML:1.1:protocol')
-		def shibboleth1Namespace = SamlURI.findWhere(uri:'urn:mace:shibboleth:1.0')
-		
 		descriptor.save()
 		if(descriptor.hasErrors() || endpoint.hasErrors()) {
 			descriptor.errors?.each {
@@ -23,7 +19,7 @@ class EndpointService {
 			endpoint.errors?.each {
 				log.error it
 			}
-			throw new RuntimeException("Unable to save when creating ${endpoint} for ${descriptor}")
+			throw new ErronousStateException("Unable to save when creating ${endpoint} for ${descriptor}")
 		}
 		
 		log.info "$authenticatedUser created $endpoint for $descriptor of type $endpointType at $loc"
@@ -38,7 +34,7 @@ class EndpointService {
 			endpoint.errors.each {
 				log.error it
 			}
-			throw new RuntimeException("Unable to save when updating ${endpoint}")
+			throw new ErronousStateException("Unable to save when updating ${endpoint}")
 		}
 		
 		log.info "$authenticatedUser updated $endpoint"
@@ -52,7 +48,7 @@ class EndpointService {
 				it.save()
 				if(it.hasErrors()) {
 					it.errors.each {log.error}
-					throw new RuntimeException("Unable to save when setting default for ${endpoint} for ${descriptor}")
+					throw new ErronousStateException("Unable to save when setting default for ${endpoint} for ${descriptor}")
 				}
 			}
 		}
@@ -71,7 +67,7 @@ class EndpointService {
 			endpoint.errors.each {
 				log.error it
 			}
-			throw new RuntimeException("Unable to save when toggling active state for ${endpoint}")
+			throw new ErronousStateException("Unable to save when toggling active state for ${endpoint}")
 		}
 		
 		log.info "$authenticatedUser toggled $endpoint state"
@@ -88,7 +84,7 @@ class EndpointService {
 			descriptor.errors.each {
 				log.error it
 			}
-			throw new RuntimeException("Unable to save descriptor when deleting ${endpoint}")
+			throw new ErronousStateException("Unable to save descriptor when deleting ${endpoint}")
 		}
 		
 		log.info "$authenticatedUser deleted $endpoint from $descriptor"
@@ -108,7 +104,7 @@ class EndpointService {
 			descriptor.errors.each {
 				log.error it
 			}
-			throw new RuntimeException("Unable to save $descriptor when determining endpoint protocol support")
+			throw new ErronousStateException("Unable to save $descriptor when determining endpoint protocol support")
 		}
 	}
 	

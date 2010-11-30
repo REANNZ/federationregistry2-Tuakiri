@@ -5,7 +5,7 @@ class AttributeAuthorityDescriptorService {
 	def delete(def id) {
 		def aa = AttributeAuthorityDescriptor.get(id)
 		if(!aa)
-			throw new RuntimeException("Unable to delete attribute authority, no such instance")
+			throw new ErronousStateException("Unable to delete attribute authority, no such instance")
 		
 		def idp = aa.collaborator
 		def entityDescriptor = aa.entityDescriptor	
@@ -15,14 +15,14 @@ class AttributeAuthorityDescriptorService {
 			if(!idp.save()) {
 				idp.errors.each { log.error it }
 				log.info "$authenticatedUser falied to delete $aa" 
-				throw new RuntimeException("Unable to remove collaborating IDP")
+				throw new ErronousStateException("Unable to remove collaborating IDP")
 			}
 		
 			aa.collaborator = null
 			if(!aa.save()) {
 				aa.errors.each { log.error it }
 				log.info "$authenticatedUser falied to delete $aa" 
-				throw new RuntimeException("Unable to remove collaborating AA")
+				throw new ErronousStateException("Unable to remove collaborating AA")
 			}
 		}
 		

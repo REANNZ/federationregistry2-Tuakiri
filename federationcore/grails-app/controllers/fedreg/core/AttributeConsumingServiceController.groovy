@@ -249,7 +249,7 @@ class AttributeConsumingServiceController {
 			if(initiated)
 				workflowProcessService.run(processInstance)
 			else
-				throw new RuntimeException("Unable to execute workflow when creating ${identityProvider}")
+				throw new ErronousStateException("Unable to execute workflow when creating ${identityProvider}")
 		
 			log.info "$authenticatedUser added ${reqAttr} referencing ${attr} to ${acs} and ${acs.descriptor}"
 			render message(code: 'fedreg.attributeconsumingservice.requestedattribute.add.success')

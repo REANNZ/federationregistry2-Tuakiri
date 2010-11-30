@@ -28,7 +28,7 @@ class SPSSODescriptorService {
 					contact.errors.each {
 						log.error it
 					}
-					throw new RuntimeException("Unable to create new contact when attempting to create new SPSSODescriptor")
+					throw new ErronousStateException("Unable to create new contact when attempting to create new SPSSODescriptor")
 				}
 		}
 		def ct = params.contact?.type ?: 'administrative'
@@ -243,7 +243,7 @@ class SPSSODescriptorService {
 	
 		if(!serviceProvider.save()) {			
 			serviceProvider.errors.each {log.warn it}
-			throw new RuntimeException("Unable to save when creating ${serviceProvider}")
+			throw new ErronousStateException("Unable to save when creating ${serviceProvider}")
 		}
 	
 		def workflowParams = [ creator:contact?.id?.toString(), serviceProvider:serviceProvider?.id?.toString(), organization:organization.id?.toString(), locale:LCH.getLocale().getLanguage() ]
@@ -252,7 +252,7 @@ class SPSSODescriptorService {
 		if(initiated)
 			workflowProcessService.run(processInstance)
 		else
-			throw new RuntimeException("Unable to execute workflow when creating ${serviceProvider}")
+			throw new ErronousStateException("Unable to execute workflow when creating ${serviceProvider}")
 	
 		log.info "$authenticatedUser created $serviceProvider"
 		return [true, ret]
@@ -311,7 +311,7 @@ class SPSSODescriptorService {
 		
 		if(!serviceProvider.entityDescriptor.save()) {
 			serviceProvider.errors.each {log.warn it}
-			throw new RuntimeException("Unable to save when updating ${serviceProvider}")
+			throw new ErronousStateException("Unable to save when updating ${serviceProvider}")
 		}
 		
 		log.info "$authenticatedUser updated $serviceProvider"
@@ -321,7 +321,7 @@ class SPSSODescriptorService {
 	def delete(long id) {
 		def serviceProvider = SPSSODescriptor.get(id)
 		if(!serviceProvider)
-			throw new RuntimeException("Unable to delete service provider, no such instance")
+			throw new ErronousStateException("Unable to delete service provider, no such instance")
 			
 		log.info "Deleting $sp on request of $authenticatedUser"
 		def entityDescriptor = serviceProvider.entityDescriptor

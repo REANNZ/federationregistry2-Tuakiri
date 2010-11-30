@@ -2,7 +2,6 @@ package fedreg.core
 
 import org.springframework.transaction.interceptor.TransactionAspectSupport
 
-import fedreg.workflow.ProcessPriority
 import grails.plugins.nimble.core.UserBase
 
 class EntityDescriptorService {
@@ -53,7 +52,7 @@ class EntityDescriptorService {
 	
 		if(!entityDescriptor.save()) {			
 			entityDescriptor.errors.each {log.warn it}
-			throw new RuntimeException("Unable to save when creating ${entityDescriptor}")
+			throw new ErronousStateException("Unable to save when creating ${entityDescriptor}")
 		}
 	
 		log.info "$authenticatedUser created $entityDescriptor"
@@ -74,7 +73,7 @@ class EntityDescriptorService {
 		
 		if(!entityDescriptor.save()) {			
 			entityDescriptor.errors.each {log.warn it}
-			throw new RuntimeException("Unable to save when updating ${entityDescriptor}")
+			throw new ErronousStateException("Unable to save when updating ${entityDescriptor}")
 		}
 		
 		log.info "$authenticatedUser updated $entityDescriptor"
@@ -84,7 +83,7 @@ class EntityDescriptorService {
 	def delete (def id) {
 		def ed = EntityDescriptor.get(id)
 		if(!ed)
-			throw new RuntimeException("Unable to find EntityDescriptor with id $id")
+			throw new ErronousStateException("Unable to find EntityDescriptor with id $id")
 			
 		def idpService = grailsApplication.mainContext.IDPSSODescriptorService
 		def spService = grailsApplication.mainContext.SPSSODescriptorService
@@ -95,7 +94,7 @@ class EntityDescriptorService {
 		// We need to do this for GORM stupidity. If you delete an IDP (and hence collaborator) then try to process any remaining AA associted with the ED collaborators are still present
 		// in the list (regardless of refresh type calls). So for now at least an AA only ED is not processed - more thought needed.
 		if(ed.attributeAuthorityDescriptors?.size() > ed.idpDescriptors?.size() || ed.pdpDescriptors?.size() != 0)
-			throw new RuntimeException("EntityDescriptor $ed holds unique combination of IDP/SP/AA/PDP that is not supported by this delete method, manual intervention will be required")
+			throw new ErronousStateException("EntityDescriptor $ed holds unique combination of IDP/SP/AA/PDP that is not supported by this delete method, manual intervention will be required")
 			
 		ed.idpDescriptors.each { idpService.delete(it.id) }
 		ed.spDescriptors.each { spService.delete(it.id)}
@@ -107,7 +106,7 @@ class EntityDescriptorService {
 		users.each { user ->
 			user.entityDescriptor = null
 			if(!user.save())
-				throw new RuntimeException("Unable to update $user with nil entitydescriptor detail when removing $ed")
+				throw new ErronousStateException("Unable to update $user with nil entitydescriptor detail when removing $ed")
 		}
 		
 		log.info "$authenticatedUser deleted $entityDescriptor"

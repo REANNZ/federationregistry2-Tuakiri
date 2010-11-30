@@ -24,12 +24,7 @@ class OrganizationController {
 		}
 		
 		def organization = Organization.get(params.id)
-		if (!organization) {
-			flash.type="error"
-			flash.message = message(code: 'fedreg.core.organization.nonexistant')
-			redirect(action: "list")
-		}
-		else {
+		if (organization) {
 			def entities = EntityDescriptor.findAllWhere(organization:organization)
 			def contacts = Contact.findAllWhere(organization:organization)
 			def adminRole = Role.findByName("organization-${organization.id}-administrators")
@@ -40,6 +35,11 @@ class OrganizationController {
 				e.spDescriptors.each { sp -> serviceproviders.add(sp) }
 			}
 			[organization: organization, entities:entities, identityproviders:identityproviders, serviceproviders:serviceproviders, contacts:contacts, administrators:adminRole?.users]
+		}
+		else {
+			flash.type="error"
+			flash.message = message(code: 'fedreg.core.organization.nonexistant')
+			redirect(action: "list")
 		}
 	}
 	

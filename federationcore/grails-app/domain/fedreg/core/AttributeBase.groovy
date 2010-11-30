@@ -19,6 +19,9 @@
 
 package fedreg.core
 
+import org.apache.commons.lang.builder.EqualsBuilder
+import org.apache.commons.lang.builder.HashCodeBuilder
+
 /**
  * @author Bradley Beddoes
  */
@@ -62,11 +65,23 @@ class AttributeBase  {
 	public String toString() {	"attributebase:[id:$id, name: $name, friendlyName: $friendlyName]" }
 	
 	public boolean equals(Object obj) {
-		if ( !(obj instanceof AttributeBase) ) return false
+		if (obj == null) { return false }
+		if (obj == this) { return true }
+		if (obj.getClass() != getClass()) { return false }
 		
-		AttributeBase attr = (AttributeBase) obj
-		if(attr.name.equals(name)) return true
-		
-		return false
+		AttributeBase rhs = (AttributeBase) obj;
+		return new EqualsBuilder()
+			.appendSuper(super == obj)
+			.append(name, rhs.name)
+			.append(oid, rhs.oid)
+			.isEquals()
+	}
+
+	public int hashCode() {
+		// hard-coded, randomly chosen, non-zero, odd number different for each class
+		return new HashCodeBuilder(17, 187).
+		append(name).
+		append(oid).
+		toHashCode()
 	}
 }

@@ -6,7 +6,7 @@ class DescriptorContactController {
 	def allowedMethods = [create:'POST', delete:'DELETE']
 	
 	def search = {
-		def contacts, email
+		def contacts
 			
 		if(!params.givenName && !params.surname && !params.email)
 			contacts = Contact.list()
