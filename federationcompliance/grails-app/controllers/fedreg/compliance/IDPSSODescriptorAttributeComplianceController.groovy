@@ -3,7 +3,6 @@ package fedreg.compliance
 import fedreg.core.AttributeBase
 import fedreg.core.AttributeCategory
 import fedreg.core.IDPSSODescriptor
-import fedreg.compliance.CategorySupportStatus
 
 class IDPSSODescriptorAttributeComplianceController {
 	
