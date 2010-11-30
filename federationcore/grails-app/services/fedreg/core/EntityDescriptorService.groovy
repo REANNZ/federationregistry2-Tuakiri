@@ -49,8 +49,12 @@ class EntityDescriptorService {
 		
 		if(!created)
 			return [false, entityDescriptor]
+			
+		// We approved directly created entity descriptors as only folks with higher privs should be allowed to do this
+		entityDescriptor.approved = true
+		entityDescriptor.active = true
 	
-		if(!entityDescriptor.save()) {			
+		if(!entityDescriptor.save()) {
 			entityDescriptor.errors.each {log.warn it}
 			throw new ErronousStateException("Unable to save when creating ${entityDescriptor}")
 		}
