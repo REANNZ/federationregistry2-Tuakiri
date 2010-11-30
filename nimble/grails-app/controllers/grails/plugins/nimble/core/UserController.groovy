@@ -281,7 +281,7 @@ class UserController {
 	    def c = LoginRecord.createCriteria()
 	    def logins = c.list {
 	      	eq("owner", user)
-		    order("dateCreated")
+		    order("dateCreated", "desc")
 		    maxResults(20)
 	    }
 	    render(template: '/templates/admin/logins_list', contextPath: pluginContextPath, model: [logins: logins, ownerID: user.id])
