@@ -1,7 +1,6 @@
 package fedreg.wayf
 
 import fedreg.core.*
-import org.codehaus.groovy.grails.commons.ApplicationHolder
 
 /*
  Integrates with Switch based WAYF by providing configuration for selectable categories etc

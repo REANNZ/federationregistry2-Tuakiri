@@ -1,7 +1,5 @@
 package fedreg.metadata
 
-import groovy.xml.MarkupBuilder
-import java.text.SimpleDateFormat
 import fedreg.core.*
 
 class AttributeFilterGenerationService {
@@ -23,7 +21,7 @@ class AttributeFilterGenerationService {
 				// Process all our services
 				def identityProvider = IDPSSODescriptor.get(idp)
 				if(!identityProvider)
-					throw new RuntimeException("Identity Provider specifed ($idp) for Attribute Filter creation does not exist.")
+					throw new ErronousStateException("Identity Provider specifed ($idp) for Attribute Filter creation does not exist.")
 					
 				def serviceProviders = SPSSODescriptor.findAllWhere(active:true, approved:true)
 				serviceProviders?.each { serviceProvider ->
@@ -60,11 +58,7 @@ class AttributeFilterGenerationService {
 				acs.requestedAttributes.sort{it.base.alias}.each { ra ->
 					if(ra.approved) {
 						if(identityProvider.attributes.findAll{it.base == ra.base}.size() == 1) {
-							if(!ra.base.specificationRequired) {
-								AttributeRule(attributeID:ra.base.alias){
-									PermitValueRule("xsi:type":"basic:ANY")
-								}
-							} else {
+							if(ra.base.specificationRequired) {
 								if(ra.values?.size() > 0) {
 									AttributeRule(attributeID:ra.base.alias){
 										PermitValueRule("xsi:type":"basic:OR") {
@@ -73,6 +67,10 @@ class AttributeFilterGenerationService {
 											}
 										}
 									}
+								}
+							} else {
+								AttributeRule(attributeID:ra.base.alias){
+									PermitValueRule("xsi:type":"basic:ANY")
 								}
 							}
 						}

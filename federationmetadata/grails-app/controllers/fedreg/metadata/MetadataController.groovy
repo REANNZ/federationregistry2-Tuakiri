@@ -37,7 +37,7 @@ class MetadataController {
 		[md:md]
 	}
 	
-	def currentPublishedMetadata(def minimal, def ext) {
+	private def currentPublishedMetadata(def minimal, def ext) {
 		def now = new Date();
 		def validUntil = now + grailsApplication.config.fedreg.metadata.current.validForDays
 		def federation = grailsApplication.config.fedreg.metadata.federation
@@ -54,7 +54,7 @@ class MetadataController {
 		writer.toString()
 	}
 	
-	def allMetadata(def minimal) {
+	private def allMetadata(def minimal) {
 		def now = new Date();
 		def validUntil = now + grailsApplication.config.fedreg.metadata.all.validForDays
 		def federation = grailsApplication.config.fedreg.metadata.federation
