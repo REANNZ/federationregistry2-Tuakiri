@@ -23,7 +23,7 @@
 					</td>
 					<td>
 						<g:if test="${!perm.managed}">
-							<n:confirmaction action="nimble.removePermission('${parent.id.encodeAsHTML()}', '${g.fieldValue(bean:perm, field:'id')}');" title="nimble.permission.remove.confirm.title" msg="nimble.permission.remove.confirm.descriptive" accept="label.accept" cancel="label.cancel" label="label.delete" icon="minus" />
+							<n:confirmaction action="nimble.removePermission('${parent.id.encodeAsHTML()}', '${g.fieldValue(bean:perm, field:'id')}');" title="nimble.permission.remove.confirm.title" msg="nimble.permission.remove.confirm.descriptive" accept="${message(code:'label.accept')}" cancel="${message(code:'label.cancel')}" label="${message(code:'label.delete')}" icon="minus" />
 						</g:if>
 						<g:else>&nbsp;</g:else>
 					</td>
