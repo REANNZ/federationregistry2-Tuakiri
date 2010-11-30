@@ -1,7 +1,5 @@
 package fedreg.workflow
 
-import grails.plugins.nimble.core.UserBase
-
 class ProcessInstance {
 
 	String description

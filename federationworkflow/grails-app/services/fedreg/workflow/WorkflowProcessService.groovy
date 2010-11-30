@@ -1,7 +1,5 @@
 package fedreg.workflow
 
-import org.apache.shiro.SecurityUtils
-
 class WorkflowProcessService {
 	
 	def workflowTaskService
@@ -42,7 +40,7 @@ class WorkflowProcessService {
 			process.errors.each {
 				log.error it
 			}
-			throw new RuntimeException("Unable to save when applying update to ${process}")
+			throw new ErronousWorkflowStateException("Unable to save when applying update to ${process}")
 		}
 		
 		[created, newProcess]
@@ -70,14 +68,14 @@ class WorkflowProcessService {
 			process.errors.each {
 				log.error it
 			}
-			throw new RuntimeException("Unable to save when interpreting ${process}")
+			throw new ErronousWorkflowStateException("Unable to save when interpreting ${process}")
 		}
 		
 		processes.each {
 			if(it.active) {
 				it.active = false;
 				if(!it.save())
-					throw new RuntimeException("Unable to save when deactivating ${process}")
+					throw new ErronousWorkflowStateException("Unable to save when deactivating ${process}")
 			}
 		}
 		
@@ -100,7 +98,7 @@ class WorkflowProcessService {
 			process.errors.each {
 				log.error it
 			}
-			throw new RuntimeException("Unable to save ${process} when initiating instance for ${instanceDescription}")
+			throw new ErronousWorkflowStateException("Unable to save ${process} when initiating instance for ${instanceDescription}")
 		}
 		
 		def processInstance_ = processInstance.save()
@@ -109,7 +107,7 @@ class WorkflowProcessService {
 			processInstance.errors.each {
 				log.error it
 			}
-			throw new RuntimeException("Unable to save ${processInstance} when initiating instance of ${process}")
+			throw new ErronousWorkflowStateException("Unable to save ${processInstance} when initiating instance of ${process}")
 		}
 		
         [true, processInstance_]
