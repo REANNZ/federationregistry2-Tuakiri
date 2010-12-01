@@ -48,10 +48,18 @@ if(idp) {
 		role = roleService.createRole("descriptor-${idp.id}-administrators", "Global administrators for $idp", false)
 	}
 	
+	// In our model the IDP role has permissions to edit the IDP and the AA
+	// Manage IDP
 	def permission = new LevelPermission()
 	permission.populate("descriptor", "${idp.id}", "*", null, null, null)
 	permission.managed = false
 	permissionService.createPermission(permission, role)
+	
+	// Manage collaborating AA
+	def aaPermission = new LevelPermission()       
+    aaPermission.populate("descriptor", "${idp.collaborator.id}", "*", null, null, null)
+    aaPermission.managed = false
+    permissionService.createPermission(aaPermission, role)
 	
 	def invitation = invitationService.create(null, role.id, null, "IDPSSODescriptor", "show", idp.id.toString())
 	
