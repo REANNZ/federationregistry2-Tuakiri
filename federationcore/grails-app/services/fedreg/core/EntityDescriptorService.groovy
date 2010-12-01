@@ -3,11 +3,15 @@ package fedreg.core
 import org.springframework.transaction.interceptor.TransactionAspectSupport
 
 import grails.plugins.nimble.core.UserBase
+import grails.plugins.nimble.core.Role
+import grails.plugins.nimble.core.LevelPermission
 
 class EntityDescriptorService {
 
 	def grailsApplication
 	def workflowProcessService
+	def roleService
+	def permissionService
 	
 	// This is primarily to avoid an issue where cross service calls with a save
 	// would not rollback if the calling service laters throws an exception.... weird.
@@ -54,10 +58,19 @@ class EntityDescriptorService {
 		entityDescriptor.approved = true
 		entityDescriptor.active = true
 	
-		if(!entityDescriptor.save()) {
+		def savedEntityDescriptor = entityDescriptor.save()
+		if(!savedEntityDescriptor) {
 			entityDescriptor.errors.each {log.warn it}
 			throw new ErronousStateException("Unable to save when creating ${entityDescriptor}")
 		}
+		
+		def adminRole = roleService.createRole("descriptor-${savedEntityDescriptor.id}-administrators", "Global administrators for the entity ${savedEntityDescriptor.entityID}", false)
+		LevelPermission permission = new LevelPermission()
+	    permission.populate("descriptor", "${savedEntityDescriptor.id}", "*", null, null, null)
+	    permission.managed = false
+		permissionService.createPermission(permission, adminRole)
+		
+		roleService.addMember(authenticatedUser, adminRole)
 	
 		log.info "$authenticatedUser created $entityDescriptor"
 		return [true, entityDescriptor]
