@@ -447,14 +447,28 @@
 				
 			if(idp) {
 				aa.collaborator = idp
-				aa.save()
+				def savedAA = aa.save()
 			
 				idp.collaborator = aa
 				idp.save()
+				
+				// Created above in IDP import - provide admin access over AA
+				def adminRole = Role.findWhere(name:"descriptor-${idp.id}-administrators")
+				LevelPermission permission = new LevelPermission()
+			    permission.populate("descriptor", "${savedAA.id}", "*", null, null, null)
+			    permission.managed = false
+				permissionService.createPermission(permission, adminRole)
+				
 			} else {
 				// For collaborating AA we render IDP crypto. For stand alone AA we need to render/manage its own crypto
 				importCrypto(it.homeOrgID, aa, false)
-				aa.save()
+				def savedAA = aa.save()
+				
+				def adminRole = roleService.createRole("descriptor-${savedAA.id}-administrators", "Global administrators for ${aa}", false)
+				LevelPermission permission = new LevelPermission()
+			    permission.populate("descriptor", "${savedAA.id}", "*", null, null, null)
+			    permission.managed = false
+				permissionService.createPermission(permission, adminRole)
 			}
 			
 			sql.eachRow("select attributeOID from attributes INNER JOIN homeOrgAttributes ON attributes.attributeID=homeOrgAttributes.attributeID where homeOrgAttributes.homeOrgID=${it.homeOrgID};",
