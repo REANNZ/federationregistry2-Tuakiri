@@ -71,10 +71,15 @@ class DescriptorEndpointController {
 			return
 		}
 		
-		endpointService.update(endpoint, binding, params.location)
+		if(SecurityUtils.subject.isPermitted("descriptor:${endpoint.descriptor.id}:endpoint:update")) {
+			endpointService.update(endpoint, binding, params.location)
 		
-		log.info "$authenticatedUser updated $endpoint for ${endpoint.descriptor}"
-		render message(code: 'fedreg.endpoint.update.success')
+			log.info "$authenticatedUser updated $endpoint for ${endpoint.descriptor}"
+			render message(code: 'fedreg.endpoint.update.success')
+		} else {
+			log.warn("Attempt to update $endpoint by $authenticatedUser was denied, incorrect permission set")
+			response.sendError(403)
+		}
 	}
 
 	def delete = {
