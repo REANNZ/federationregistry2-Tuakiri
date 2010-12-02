@@ -261,32 +261,34 @@ class IDPSSODescriptorService {
 		if(!identityProvider)
 			throw new ErronousStateException("Unable to delete identity provider, no such instance")
 			
-		log.info "Deleting $idp on request of $authenticatedUser"
+		log.info "Deleting $identityProvider on request of $authenticatedUser"
 
-		def entityDescriptor = idp.entityDescriptor
-		def aa = idp.collaborator
+		def entityDescriptor = identityProvider.entityDescriptor
+		def aa = identityProvider.collaborator
 
+		if(aa) {	// Untangle this linkage - horrible but necessay GORM delete sucks.
+			identityProvider.collaborator = null
+			aa.collaborator = null
+			
+			aa.attributeServices?.each { it.delete() }
+			aa.assertionIDRequestServices?.each { it.delete() }
+			aa.attributes?.each { it.delete() }
+			aa.contacts?.each { it.delete() }
+			aa.keyDescriptors?.each { it.delete() }
+			aa.monitors?.each { it.delete() }
+
+			entityDescriptor.attributeAuthorityDescriptors.remove(aa)
+
+			log.info "$authenticatedUser deleted $aa" 
+
+			aa.delete()
+		}
+		
 		identityProvider.attributeProfiles?.each { it.delete() }
 		identityProvider.attributes?.each { it.delete() }
 		identityProvider.contacts?.each { it.delete() }
 		identityProvider.keyDescriptors?.each { it.delete() }
 		identityProvider.monitors?.each { it.delete() }
-
-		if(aa) {	// Untangle this linkage - horrible but necessay GORM delete sucks.
-			identityProvider.collaborator = null
-			if(!identityProvider.save()) {
-				identityProvider.errors.each { log.error it }
-				throw new ErronousStateException("Unable to remove collaborating IDP")
-			}
-			
-			aa.collaborator = null
-			if(!aa.save()) {
-				aa.errors.each { log.error it }
-				throw new ErronousStateException("Unable to remove collaborating AA")
-			}
-			
-			attributeAuthorityDescriptorService.delete(aa.id)
-		}
 			
 		entityDescriptor.idpDescriptors.remove(identityProvider)
 		identityProvider.delete()
