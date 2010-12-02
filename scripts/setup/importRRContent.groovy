@@ -447,7 +447,7 @@
 				
 			if(idp) {
 				aa.collaborator = idp
-				def savedAA = aa.save()
+				aa.save()
 			
 				idp.collaborator = aa
 				idp.save()
@@ -455,7 +455,7 @@
 				// Created above in IDP import - provide admin access over AA
 				def adminRole = Role.findWhere(name:"descriptor-${idp.id}-administrators")
 				LevelPermission permission = new LevelPermission()
-			    permission.populate("descriptor", "${savedAA.id}", "*", null, null, null)
+			    permission.populate("descriptor", "${aa.id}", "*", null, null, null)
 			    permission.managed = false
 				permissionService.createPermission(permission, adminRole)
 				
