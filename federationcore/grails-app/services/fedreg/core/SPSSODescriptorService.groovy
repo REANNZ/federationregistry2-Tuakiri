@@ -41,7 +41,7 @@ class SPSSODescriptorService {
 	
 		if(!entityDescriptor) {
 			def created
-			(created, entityDescriptor) = entityDescriptorService.create(params)	// Odd issues with transactions cross services not rolling back so we save locally
+			(created, entityDescriptor) = entityDescriptorService.createNoSave(params)	// Odd issues with transactions cross services not rolling back so we save locally
 		}
 	
 		// SP
@@ -323,7 +323,7 @@ class SPSSODescriptorService {
 		if(!serviceProvider)
 			throw new ErronousStateException("Unable to delete service provider, no such instance")
 			
-		log.info "Deleting $sp on request of $authenticatedUser"
+		log.info "Deleting $serviceProvider on request of $authenticatedUser"
 		def entityDescriptor = serviceProvider.entityDescriptor
 
 		serviceProvider.discoveryResponseServices?.each { it.delete() }
