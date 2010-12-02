@@ -118,6 +118,6 @@ class OrganizationService {
 		}
 		
 		org.delete()
-		log.info "$authenticatedUser deleted $organization"
+		log.info "$authenticatedUser deleted $org"
 	}
 }
