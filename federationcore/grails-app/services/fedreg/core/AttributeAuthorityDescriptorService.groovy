@@ -7,24 +7,8 @@ class AttributeAuthorityDescriptorService {
 		if(!aa)
 			throw new ErronousStateException("Unable to delete attribute authority, no such instance")
 		
-		def idp = aa.collaborator
-		def entityDescriptor = aa.entityDescriptor	
-		
-		if(idp){ // Untangle this linkage - horrible but necessay GORM delete sucks.
-			idp.collaborator = null
-			if(!idp.save()) {
-				idp.errors.each { log.error it }
-				log.info "$authenticatedUser falied to delete $aa" 
-				throw new ErronousStateException("Unable to remove collaborating IDP")
-			}
-		
-			aa.collaborator = null
-			if(!aa.save()) {
-				aa.errors.each { log.error it }
-				log.info "$authenticatedUser falied to delete $aa" 
-				throw new ErronousStateException("Unable to remove collaborating AA")
-			}
-		}
+		if(aa.collaborator)
+			throw new ErronousStateException("Unable to delete attribute authority linked to collaborator. Delete collaborator ${aa.collaborator} instead or manually remove linkage first")
 		
 		aa.attributeServices?.each { it.delete() }
 		aa.assertionIDRequestServices?.each { it.delete() }
@@ -36,6 +20,7 @@ class AttributeAuthorityDescriptorService {
 		entityDescriptor.attributeAuthorityDescriptors.remove(aa)
 		
 		log.info "$authenticatedUser deleted $aa" 
+		
 		aa.delete()
 	}
 
