@@ -104,9 +104,6 @@ class EntityDescriptorService {
 			
 		def idpService = grailsApplication.mainContext.IDPSSODescriptorService
 		def spService = grailsApplication.mainContext.SPSSODescriptorService
-		
-		def org = ed.organization
-		org.removeFromEntityDescriptors(ed)
 			
 		// We need to do this for GORM stupidity. If you delete an IDP (and hence collaborator) then try to process any remaining AA associted with the ED collaborators are still present
 		// in the list (regardless of refresh type calls). So for now at least an AA only ED is not processed - more thought needed.
@@ -115,7 +112,6 @@ class EntityDescriptorService {
 			
 		ed.idpDescriptors.each { idpService.delete(it.id) }
 		ed.spDescriptors.each { spService.delete(it.id)}
-		
 		ed.contacts.each { it.delete() }
 		
 		ed.delete()
@@ -126,7 +122,7 @@ class EntityDescriptorService {
 				throw new ErronousStateException("Unable to update $user with nil entitydescriptor detail when removing $ed")
 		}
 		
-		log.info "$authenticatedUser deleted $entityDescriptor"
+		log.info "$authenticatedUser deleted $ed"
 	}
 
 }
