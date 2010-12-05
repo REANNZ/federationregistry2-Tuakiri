@@ -5,10 +5,10 @@ workflowTaskService = ctx.getBean("workflowTaskService")
 mailService = ctx.getBean("mailService")
 messageSource = ctx.getBean("messageSource")
 
-def org = Organization.get(env.organization.toLong())
+def org = Organization.read(env.organization.toLong())
 if(org) {
 	
-	def creator = Contact.get(env.creator.toLong())
+	def creator = Contact.read(env.creator.toLong())
 	def args = new Object[1]
 	args[0] = org.displayName
 	mailService.sendMail {            
