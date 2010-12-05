@@ -33,18 +33,31 @@ class BootStrap {
 		
 		nimbleService.init()
 		
+		// Provide security manager as none yet exists
+		def suMetaClass = new ExpandoMetaClass(SecurityUtils)
+		suMetaClass.'static'.getSubject = {[getPrincipal:{User.findByUsername('internaladministrator').id}] as Subject}
+		suMetaClass.initialize()
+		SecurityUtils.metaClass = suMetaClass
+		
+		// Create federation-administrators role, used in workflows etc
+		def fedAdminRole = Role.findWhere(name:"federation-administrators")
+		if(!fedAdminRole)
+			roleService.createRole("federation-administrators", "Role representing federation level administrators who can make decisions onbehalf of the entire federation, particuarly in workflows", false)
+		
 		// Populate default administrative account if required
 		if(User.count() == 0) {
 			def profile = new Profile(email:'internaladministrator@not.valid')
 			def user = new User(username:'internaladministrator', enabled: false, external:false, federated: false, profile: profile)
 			user.save(flush: true)
 		}
-		
-		// Provide security manager as none yet exists
-		def suMetaClass = new ExpandoMetaClass(SecurityUtils)
-		suMetaClass.'static'.getSubject = {[getPrincipal:{User.findByUsername('internaladministrator').id}] as Subject}
-		suMetaClass.initialize()
-		SecurityUtils.metaClass = suMetaClass
+			
+		// Populate WorkFlows on initial deployment
+		if(Process.count() == 0) {	
+			def processes = new File("${System.getenv('FEDREG_CONFIG')}/workflow/processes")
+			processes.eachFile { process ->
+				workflowProcessService.create(process.getText())
+			}
+		}
 		
 		// Populate Workflow Scripts on initial deployment name is set as filename <name>.groovy
 		if(WorkflowScript.count() == 0) {	
@@ -62,19 +75,6 @@ class BootStrap {
 				else {
 					log.info "Loaded valid workflow script $script"
 				}
-			}
-		}
-		
-		// Create federation-administrators role, used in workflows etc
-		def fedAdminRole = Role.findWhere(name:"federation-administrators")
-		if(!fedAdminRole)
-			roleService.createRole("federation-administrators", "Role representing federation level administrators who can make decisions onbehalf of the entire federation, particuarly in workflows", false)
-		
-		// Populate WorkFlows on initial deployment
-		if(Process.count() == 0) {	
-			def processes = new File("${System.getenv('FEDREG_CONFIG')}/workflow/processes")
-			processes.eachFile { process ->
-				workflowProcessService.create(process.getText())
 			}
 		}
 		
