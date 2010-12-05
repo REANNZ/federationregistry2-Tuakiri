@@ -107,14 +107,8 @@ class OrganizationService {
 			def contactPersons = ContactPerson.findAllWhere(contact:contact)
 			contactPersons.each { cp -> cp.delete() }
 			
-			def users = UserBase.findAllWhere(contact:contact)
-			users.each { user ->
-				user.contact = null
-				if(!user.save())
-					throw new ErronousStateException("Unable to update $user with nil contact detail when removing organization $org")
-			}
-			
-			contact.delete()
+			contact.organization = null
+			contact.save()
 		}
 		
 		org.delete()
