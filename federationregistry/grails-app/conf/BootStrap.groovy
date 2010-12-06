@@ -50,14 +50,6 @@ class BootStrap {
 			def user = new User(username:'internaladministrator', enabled: false, external:false, federated: false, profile: profile)
 			user.save(flush: true)
 		}
-			
-		// Populate WorkFlows on initial deployment
-		if(Process.count() == 0) {	
-			def processes = new File("${System.getenv('FEDREG_CONFIG')}/workflow/processes")
-			processes.eachFile { process ->
-				workflowProcessService.create(process.getText())
-			}
-		}
 		
 		// Populate Workflow Scripts on initial deployment name is set as filename <name>.groovy
 		if(WorkflowScript.count() == 0) {	
@@ -75,6 +67,14 @@ class BootStrap {
 				else {
 					log.info "Loaded valid workflow script $script"
 				}
+			}
+		}	
+		
+		// Populate WorkFlows on initial deployment
+		if(Process.count() == 0) {	
+			def processes = new File("${System.getenv('FEDREG_CONFIG')}/workflow/processes")
+			processes.eachFile { process ->
+				workflowProcessService.create(process.getText())
 			}
 		}
 		
