@@ -34,7 +34,9 @@ class OrganizationService {
 			throw new ErronousStateException("Unable to save when creating ${organization}")
 		}
 		
-		contact.organization = savedOrg
+		if(contact.organization == null)
+			contact.organization = savedOrg
+			
 		if(!contact.validate()) {
 			log.info "$authenticatedUser attempted to create $organization but failed Contact validation"
 			contact?.errors.each { log.error it }
@@ -98,15 +100,20 @@ class OrganizationService {
 		def org = Organization.get(id)
 		if(!org)
 			throw new ErronousStateException("Unable to find Organization with id $id")
-			
+
 		def entityDescriptors = EntityDescriptor.findAllWhere(organization:org)
 		entityDescriptors.each { println "Removing $it"; entityDescriptorService.delete(it.id) }
-				
+
 		def contacts = Contact.findAllWhere(organization:org)
 		contacts.each { contact ->
+			// This gets around a stupid hibernate cascade bug primarily but is also useful as a second level check to prevent accidents
+			if(contact.id == authenticatedUser.contact.id)
+				throw new RuntimeException("Authenticated user is a contact for this organization. Users are unable to remove their own organization.")
+			
 			def contactPersons = ContactPerson.findAllWhere(contact:contact)
 			contactPersons.each { cp -> cp.delete() }
 			
+			log.debug "Removing $org from $contact"
 			contact.organization = null
 			contact.save()
 		}
