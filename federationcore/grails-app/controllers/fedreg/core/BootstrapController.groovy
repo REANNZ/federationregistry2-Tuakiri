@@ -1,15 +1,12 @@
 package fedreg.core
 
-import fedreg.workflow.ProcessPriority
-
 class BootstrapController {
+	def allowedMethods = [saveidp: 'POST', savesp: 'POST', saveorganization: 'POST']
 	
 	def IDPSSODescriptorService
 	def SPSSODescriptorService
 	def organizationService
 	def grailsApplication
-	
-	static allowedMethods = [saveidp: "POST", savesp: "POST", saveorganization: "POST"]
 	
 	def idp = {
 		def identityProvider = new IDPSSODescriptor()
@@ -19,7 +16,8 @@ class BootstrapController {
 	def saveidp = {
 		def (created, ret) = IDPSSODescriptorService.create(params)
 		
-		if(created) {			
+		if(created) {	
+			log.info "Sucessfully registered ${ret.identityProvider} from public source"
 			redirect (action: "idpregistered", id: ret.identityProvider.id)
 		}
 		else {
@@ -58,6 +56,7 @@ class BootstrapController {
 		def (created, ret) = SPSSODescriptorService.create(params)
 		
 		if(created) {
+			log.info "Sucessfully registered ${ret.serviceProvider} from public source"
 			redirect (action: "spregistered", id: ret.serviceProvider.id)
 		}
 		else {
@@ -96,6 +95,7 @@ class BootstrapController {
 		def (created, organization, contact) = organizationService.create(params)
 		
 		if(created) {
+			log.info "Sucessfully registered $organization from public source"
 			redirect (action: "organizationregistered", id: organization.id)
 		}
 		else {

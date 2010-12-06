@@ -59,7 +59,7 @@ class Process {
 		for(v in tasks) {
 			// Ensure all dependencies reference valid tasks
 			for(dep in v.dependencies) {
-				def task = tasks.find { t -> t.name.equals(dep) }
+				def task = tasks.find { t -> t.name == dep }
 				if(!task) {
 					return ['process.validation.tasks.dependencies.invalid.reference', name, dep]
 				}
@@ -68,13 +68,13 @@ class Process {
 			// Ensure all outcome start+terminate reference valid tasks
 			for(out in v.outcomes.values()) {
 				for (s in out.start) {
-					def task = tasks.find { t -> t.name.equals(s) }
+					def task = tasks.find { t -> t.name == s }
 					if(!task) {
 						return ['process.validation.tasks.outcomes.invalid.start.reference', name, s]
 					}
 				}
 				for (s in out.terminate) {
-					def task = tasks.find { t -> t.name.equals(s) }
+					def task = tasks.find { t -> t.name == s }
 					if(!task) {
 						return ['process.validation.tasks.outcomes.invalid.terminate.reference', name, s]
 					}
@@ -84,13 +84,13 @@ class Process {
 			// Ensure all rejections start+terminate reference valid tasks
 			for(rej in v.rejections.values()) {
 				for (s in rej.start) {
-					def task = tasks.find { t -> t.name.equals(s) }
+					def task = tasks.find { t -> t.name == s }
 					if(!task) {
 						return ['process.validation.tasks.rejections.invalid.start.reference', name, s]
 					}
 				}
 				for (s in rej.terminate) {
-					def task = tasks.find { t -> t.name.equals(s) }
+					def task = tasks.find { t -> t.name == s }
 					if(!task) {
 						return ['process.validation.tasks.rejections.invalid.terminate.reference', name, s]
 					}

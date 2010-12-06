@@ -28,4 +28,8 @@ environments {
 grails.views.default.codec="none" // none, html, base64
 grails.views.gsp.encoding="UTF-8"
 
+// Codenarc
+codenarc.processTestUnit=false
+codenarc.processTestIntegration=false
+
 

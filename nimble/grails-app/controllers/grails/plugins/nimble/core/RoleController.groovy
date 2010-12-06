@@ -34,9 +34,6 @@ class RoleController {
   }
 
   def list = {
-    if (!params.max) {
-      params.max = 10
-    }
     return [roles: Role.list(params)]
   }
 

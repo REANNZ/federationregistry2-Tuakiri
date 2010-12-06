@@ -13,4 +13,6 @@ class User extends grails.plugins.nimble.core.UserBase {
 		contact(nullable: true)
 	}
 	
+	public String toString() {	"user:[id:$id, username: $username, name:${profile?.fullName}]" }
+	
 }

@@ -25,7 +25,7 @@ class CryptoService {
 				keyDescriptor.errors?.each {
 					log.warn it
 				}
-				throw new RuntimeException("Unable to associate ${keyDescriptor} with ${descriptor}")
+				throw new ErronousStateException("Unable to associate ${keyDescriptor} with ${descriptor}")
 			}
 			return true
 		}
@@ -39,7 +39,7 @@ class CryptoService {
 			key.errors.each {
 				log.warn it
 			}
-			throw new RuntimeException("Unable to unassociate ${key}")
+			throw new ErronousStateException("Unable to unassociate ${key}")
 		}
 		true
 	}
@@ -58,7 +58,7 @@ class CryptoService {
 	
 	def boolean validateCertificate(fedreg.core.Certificate certificate, boolean requireChain) {
 		log.debug "Validating certificate ${certificate.subject} with issuer ${certificate.issuer}"	
-		if(!requireChain && certificate.subject.equals(certificate.issuer)) {
+		if(!requireChain && certificate.subject == certificate.issuer) {
 			log.debug "requireChain is false and cert is self signed, valid."
 			return true
 		}
@@ -87,7 +87,7 @@ class CryptoService {
 		catch(Exception e) {
 			log.warn "Unable to validate certificate against current trust anchors"
 			log.warn "Localized Message: " + e.getLocalizedMessage()
-			e.printStackTrace()
+			log.debug "Exception was: ", e
 			certificate.errors.rejectValue("data", "fedreg.core.certificate.data.invalid")
 		 	false
 		}

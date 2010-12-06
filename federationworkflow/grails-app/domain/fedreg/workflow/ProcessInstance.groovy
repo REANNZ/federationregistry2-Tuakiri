@@ -1,7 +1,5 @@
 package fedreg.workflow
 
-import grails.plugins.nimble.core.UserBase
-
 class ProcessInstance {
 
 	String description
@@ -25,6 +23,6 @@ class ProcessInstance {
 	}
 	
 	public String toString() {
-		"processinstance:[id:$id] of $process"
+		"processinstance:[id:$id, description:$description] of $process"
 	}
 }

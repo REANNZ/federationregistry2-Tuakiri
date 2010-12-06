@@ -28,7 +28,7 @@
 		<section>
 			<h2><g:message code="fedreg.view.members.serviceprovider.edit.heading" args="[serviceProvider.displayName]"/></h2>
 			
-			<g:form action="update" id="${serviceProvider.id}">			
+			<g:form action="update" id="${serviceProvider.id}" method="PUT">
 				<div class="step" id="basic">
 					<h3><g:message code="fedreg.view.members.serviceprovider.edit.basicinformation.heading" /></h3>
 					<p>

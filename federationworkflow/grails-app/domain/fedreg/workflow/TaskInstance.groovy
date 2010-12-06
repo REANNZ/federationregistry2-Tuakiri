@@ -1,7 +1,5 @@
 package fedreg.workflow
 
-import fedreg.workflow.TaskStatus
-
 import grails.plugins.nimble.core.UserBase
 
 class TaskInstance {

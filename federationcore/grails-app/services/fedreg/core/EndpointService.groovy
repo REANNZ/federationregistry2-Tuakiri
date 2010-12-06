@@ -6,16 +6,10 @@ class EndpointService {
 	
 	def grailsApplication
 
-	def create(def descriptor, def endpointClass, def endpointType, def binding, def loc) {
-		log.info "Creating endpoint for ${descriptor} of type ${endpointType} at location ${loc}"
-		
+	def create(def descriptor, def endpointClass, def endpointType, def binding, def loc) {		
 		def location = new UrlURI(uri:loc)
 		def endpoint = grailsApplication.classLoader.loadClass(endpointClass).newInstance(descriptor:descriptor, binding: binding, location: location, active:true, approved:true)
 		descriptor."addTo${capitalize(endpointType)}"(endpoint)
-		
-		def saml2Namespace = SamlURI.findWhere(uri:'urn:oasis:names:tc:SAML:2.0:protocol')
-		def saml1Namespace = SamlURI.findWhere(uri:'urn:oasis:names:tc:SAML:1.1:protocol')
-		def shibboleth1Namespace = SamlURI.findWhere(uri:'urn:mace:shibboleth:1.0')
 		
 		descriptor.save()
 		if(descriptor.hasErrors() || endpoint.hasErrors()) {
@@ -25,8 +19,25 @@ class EndpointService {
 			endpoint.errors?.each {
 				log.error it
 			}
-			throw new RuntimeException("Unable to save when creating ${endpoint} for ${descriptor}")
+			throw new ErronousStateException("Unable to save when creating ${endpoint} for ${descriptor}")
 		}
+		
+		log.info "$authenticatedUser created $endpoint for $descriptor of type $endpointType at $loc"
+	}
+	
+	def update(def endpoint, def binding, def location) {
+		endpoint.binding = binding
+		endpoint.location.uri = location
+		
+		endpoint.save()
+		if(endpoint.hasErrors()) {
+			endpoint.errors.each {
+				log.error it
+			}
+			throw new ErronousStateException("Unable to save when updating ${endpoint}")
+		}
+		
+		log.info "$authenticatedUser updated $endpoint"
 	}
 	
 	def makeDefault(def endpoint, def endpointType) {
@@ -37,12 +48,14 @@ class EndpointService {
 				it.save()
 				if(it.hasErrors()) {
 					it.errors.each {log.error}
-					throw new RuntimeException("Unable to save when setting default for ${endpoint} for ${descriptor}")
+					throw new ErronousStateException("Unable to save when setting default for ${endpoint} for ${descriptor}")
 				}
 			}
 		}
 		endpoint.isDefault = true
 		endpoint.save()
+		
+		log.info "$authenticatedUser set $endpoint as default"
 	}
 	
 	def toggle(def endpoint) {
@@ -54,8 +67,10 @@ class EndpointService {
 			endpoint.errors.each {
 				log.error it
 			}
-			throw new RuntimeException("Unable to save when toggling active state for ${endpoint}")
+			throw new ErronousStateException("Unable to save when toggling active state for ${endpoint}")
 		}
+		
+		log.info "$authenticatedUser toggled $endpoint state"
 	}
 	
 	def delete(def endpoint, def endpointType) {
@@ -69,8 +84,10 @@ class EndpointService {
 			descriptor.errors.each {
 				log.error it
 			}
-			throw new RuntimeException("Unable to save descriptor when deleting ${endpoint}")
+			throw new ErronousStateException("Unable to save descriptor when deleting ${endpoint}")
 		}
+		
+		log.info "$authenticatedUser deleted $endpoint from $descriptor"
 	}
 	
 	def determineDescriptorProtocolSupport(descriptor) {
@@ -87,13 +104,13 @@ class EndpointService {
 			descriptor.errors.each {
 				log.error it
 			}
-			throw new RuntimeException("Unable to save $descriptor when determining endpoint protocol support")
+			throw new ErronousStateException("Unable to save $descriptor when determining endpoint protocol support")
 		}
 	}
 	
 	def determineSPSSODescriptorProtocolSupport(sp) {
 		sp.singleLogoutServices?.each {
-		d	etermineProtocolSupport(it.binding, sp)
+			determineProtocolSupport(it.binding, sp)
 		}
 		sp.assertionConsumerServices?.each {
 			determineProtocolSupport(it.binding, sp)

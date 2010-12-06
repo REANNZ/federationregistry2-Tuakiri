@@ -28,7 +28,7 @@ class SPSSODescriptorService {
 					contact.errors.each {
 						log.error it
 					}
-					throw new RuntimeException("Unable to create new contact when attempting to create new SPSSODescriptor")
+					throw new ErronousStateException("Unable to create new contact when attempting to create new SPSSODescriptor")
 				}
 		}
 		def ct = params.contact?.type ?: 'administrative'
@@ -41,7 +41,7 @@ class SPSSODescriptorService {
 	
 		if(!entityDescriptor) {
 			def created
-			(created, entityDescriptor) = entityDescriptorService.create(params)	// Odd issues with transactions cross services not rolling back so we save locally
+			(created, entityDescriptor) = entityDescriptorService.createNoSave(params)	// Odd issues with transactions cross services not rolling back so we save locally
 		}
 	
 		// SP
@@ -234,7 +234,8 @@ class SPSSODescriptorService {
 		serviceProvider.entityDescriptor = entityDescriptor
 		entityDescriptor.addToSpDescriptors(serviceProvider)
 	
-		if(!serviceProvider.validate()) {			
+		if(!serviceProvider.validate()) {
+			log.info "$authenticatedUser attempted to create $serviceProvider but failed SPSSODescriptor validation"
 			serviceProvider.errors.each { log.warn it }
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly() 
 			return [false, ret]
@@ -242,7 +243,7 @@ class SPSSODescriptorService {
 	
 		if(!serviceProvider.save()) {			
 			serviceProvider.errors.each {log.warn it}
-			throw new RuntimeException("Unable to save when creating ${serviceProvider}")
+			throw new ErronousStateException("Unable to save when creating ${serviceProvider}")
 		}
 	
 		def workflowParams = [ creator:contact?.id?.toString(), serviceProvider:serviceProvider?.id?.toString(), organization:organization.id?.toString(), locale:LCH.getLocale().getLanguage() ]
@@ -251,8 +252,9 @@ class SPSSODescriptorService {
 		if(initiated)
 			workflowProcessService.run(processInstance)
 		else
-			throw new RuntimeException("Unable to execute workflow when creating ${serviceProvider}")
+			throw new ErronousStateException("Unable to execute workflow when creating ${serviceProvider}")
 	
+		log.info "$authenticatedUser created $serviceProvider"
 		return [true, ret]
 	}
 	
@@ -301,44 +303,37 @@ class SPSSODescriptorService {
 		serviceProvider.serviceDescription.support = params.sp?.servicedescription?.support
 		serviceProvider.serviceDescription.maintenance = params.sp?.servicedescription?.maintenance
 		
-		if(!serviceProvider.entityDescriptor.validate()) {			
+		if(!serviceProvider.entityDescriptor.validate()) {
+			log.info "$authenticatedUser attempted to update $serviceProvider but failed EntityDescriptor validation"
 			serviceProvider.entityDescriptor.errors.each {log.warn it}
 			return [false, serviceProvider]
 		}
 		
-		if(!serviceProvider.entityDescriptor.save()) {			
+		if(!serviceProvider.entityDescriptor.save()) {
 			serviceProvider.errors.each {log.warn it}
-			throw new RuntimeException("Unable to save when updating ${serviceProvider}")
+			throw new ErronousStateException("Unable to save when updating ${serviceProvider}")
 		}
 		
+		log.info "$authenticatedUser updated $serviceProvider"
 		return [true, serviceProvider]
 	}
 	
 	def delete(long id) {
-		def sp = SPSSODescriptor.get(id)
-		if(!sp)
-			throw new RuntimeException("Unable to delete service provider, no such instance")
+		def serviceProvider = SPSSODescriptor.get(id)
+		if(!serviceProvider)
+			throw new ErronousStateException("Unable to delete service provider, no such instance")
 			
-		log.info "Deleting $sp on request of $authenticatedUser"
-		def entityDescriptor = sp.entityDescriptor
+		log.info "Deleting $serviceProvider on request of $authenticatedUser"
+		def entityDescriptor = serviceProvider.entityDescriptor
 
-		sp.assertionConsumerServices?.each { it.delete() }
-		sp.attributeConsumingServices?.each { it.delete() }
-		sp.discoveryResponseServices?.each { it.delete() }
-		sp.artifactResolutionServices?.each { it.delete() }
-		sp.singleLogoutServices?.each { it.delete() }
-		sp.manageNameIDServices?.each { it.delete() }
-		sp.contacts?.each { it.delete() }
-		sp.keyDescriptors?.each { it.delete() }
-		sp.monitors?.each { it.delete() }
+		serviceProvider.discoveryResponseServices?.each { it.delete() }
+		serviceProvider.contacts?.each { it.delete() }
+		serviceProvider.keyDescriptors?.each { it.delete() }
+		serviceProvider.monitors?.each { it.delete() }
 
-		if(entityDescriptor.holdsSPOnly()) {
-			entityDescriptor.spDescriptors.remove(sp)
-			sp.delete()
-			entityDescriptor.delete()
-		} else {
-			entityDescriptor.spDescriptors.remove(sp)
-			sp.delete()
-		}
+		entityDescriptor.spDescriptors.remove(serviceProvider)
+		serviceProvider.delete()
+		
+		log.info "$authenticatedUser deleted $serviceProvider"
 	}
 }

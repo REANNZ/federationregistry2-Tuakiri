@@ -3,19 +3,23 @@
 	<head>
 		<meta name="layout" content="${grailsApplication.config.nimble.layout.administration}"/>
 		<title><g:message code="nimble.view.user.list.title" /></title>
+		
+		<script type="text/javascript">
+			<njs:datatable tableID="userlist" sortColumn="1" />
+		</script>
 	</head>
 
 	<body>
 
 		<h2><g:message code="nimble.view.user.list.heading" /></h2>
 
-		<table class="userlist">
+		<table id="userlist">
 			<thead>
 				<tr>
-					<g:sortableColumn property="username" titleKey="label.username" />
+					<th><g:message code="label.username" /></th>
 					<th><g:message code="label.fullname" /></th>
-					<g:sortableColumn property="enabled" titleKey="label.state" />
-					<th>&nbsp;</th>
+					<th><g:message code="label.state" /></th>
+					<th/>
 				</tr>
 			</thead>
 			<tbody>
@@ -48,10 +52,6 @@
 				</g:each>
 			</tbody>
 		</table>
-
-		<div class="paginatebuttons">
-			<g:paginate total="${UserBase.count()}"/>
-		</div>
 
 	</body>
 </html>

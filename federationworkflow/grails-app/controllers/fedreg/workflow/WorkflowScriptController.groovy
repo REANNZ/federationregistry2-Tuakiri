@@ -3,7 +3,6 @@ package fedreg.workflow
 import org.apache.shiro.SecurityUtils
 
 class WorkflowScriptController {
-	
 	def defaultAction = "list"
 
 	def list = {
@@ -46,6 +45,7 @@ class WorkflowScriptController {
 				return
 			}
 		
+			log.info "$authenticatedUser created $script"
 			redirect action: "show", id: script.id
 		}
 		else {
@@ -130,6 +130,7 @@ class WorkflowScriptController {
 				return
 			}
 		
+			log.info "$authenticatedUser updated $script"
 			redirect action: "show", id: script.id
 		}
 		else {

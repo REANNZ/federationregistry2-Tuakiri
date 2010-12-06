@@ -37,7 +37,7 @@ class MetadataController {
 		[md:md]
 	}
 	
-	def currentPublishedMetadata(def minimal, def ext) {
+	private def currentPublishedMetadata(def minimal, def ext) {
 		def now = new Date();
 		def validUntil = now + grailsApplication.config.fedreg.metadata.current.validForDays
 		def federation = grailsApplication.config.fedreg.metadata.federation
@@ -47,14 +47,14 @@ class MetadataController {
 		def builder = new MarkupBuilder(writer)
 		builder.doubleQuotes = true
 		
-		def entitiesDescriptor = new EntitiesDescriptor(name:federation)
+		def entitiesDescriptor = EntitiesDescriptor.findWhere(name:federation)
 		entitiesDescriptor.entityDescriptors = EntityDescriptor.list()
 		
 		metadataGenerationService.entitiesDescriptor(builder, false, minimal, ext, entitiesDescriptor, validUntil, certificateAuthorities)
 		writer.toString()
 	}
 	
-	def allMetadata(def minimal) {
+	private def allMetadata(def minimal) {
 		def now = new Date();
 		def validUntil = now + grailsApplication.config.fedreg.metadata.all.validForDays
 		def federation = grailsApplication.config.fedreg.metadata.federation
@@ -64,7 +64,7 @@ class MetadataController {
 		def builder = new MarkupBuilder(writer)
 		builder.doubleQuotes = true
 		
-		def entitiesDescriptor = new EntitiesDescriptor(name:federation)
+		def entitiesDescriptor = EntitiesDescriptor.findWhere(name:federation)
 		entitiesDescriptor.entityDescriptors = EntityDescriptor.list()
 		
 		metadataGenerationService.entitiesDescriptor(builder, true, minimal, true, entitiesDescriptor, validUntil, certificateAuthorities)

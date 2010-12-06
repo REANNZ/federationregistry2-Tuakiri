@@ -5,17 +5,7 @@
 		<meta name="layout" content="members" />
 		<title><g:message code="fedreg.view.members.identityprovider.list.title" /></title>
 		<script type="text/javascript">
-			$(function() {
-				$('#idpssodescriptorlist').dataTable( {
-						"sPaginationType": "full_numbers",
-						"bLengthChange": false,
-						"iDisplayLength": 10,
-						"aaSorting": [[0, "asc"]],
-						"oLanguage": {
-							"sSearch": "${g.message(code:'label.filter')}"
-						}
-					} );
-			});
+			<njs:datatable tableID="idpssodescriptorlist" sortColumn="0" />
 		</script>
 	</head>
 	<body>
@@ -27,6 +17,7 @@
 					<tr>
 						<th><g:message code="label.identityprovider" /></th>
 						<th><g:message code="label.organization" /></th>
+						<th><g:message code="label.entitydescriptor" /></th>
 						<th><g:message code="label.active" /></th>
 						<th><g:message code="label.approved" /></th>
 						<th/>
@@ -37,6 +28,7 @@
 					<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 						<td>${fieldValue(bean: identityProvider, field: "displayName")}</td>
 						<td>${fieldValue(bean: identityProvider, field: "organization.name")}</td>
+						<td>${fieldValue(bean: identityProvider, field: "entityDescriptor.entityID")}</td>
 						<td>${fieldValue(bean: identityProvider, field: "active")}</td>
 						<td>${fieldValue(bean: identityProvider, field: "approved")}</td>
 						<td>

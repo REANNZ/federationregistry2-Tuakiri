@@ -1,13 +1,15 @@
 import fedreg.core.*
 
+entityDescriptorService = ctx.getBean("entityDescriptorService")
+idpSSODescriptorService = ctx.getBean("IDPSSODescriptorService")
 workflowTaskService = ctx.getBean("workflowTaskService")
 mailService = ctx.getBean("mailService")
 messageSource = ctx.getBean("messageSource")
 
-def idp = IDPSSODescriptor.get(env.identityProvider.toLong())
+def idp = IDPSSODescriptor.read(env.identityProvider.toLong())
 if(idp) {
 	
-	def creator = Contact.get(env.creator.toLong())
+	def creator = Contact.read(env.creator.toLong())
 	def args = new Object[1]
 	args[0] = idp.displayName
 	mailService.sendMail {            
@@ -19,22 +21,11 @@ if(idp) {
 	
 	log.warn "Deleting $idp. Workflow indicates it is invalid and no longer needed."
 	
-	def attributeAuthority = idp.collaborator
 	def entityDescriptor = idp.entityDescriptor
-	
-	idp.delete()
-	attributeAuthority.delete()
-	
-	// Delete Entity? Determine if associated with any other child descriptors first
-	if(entityDescriptor.spDescriptors.size() == 0 && entityDescriptor.pdpDescriptors.size() == 0 && entityDescriptor.additionalMetadataLocations.size() == 0) {
-		// Ensure there are no other IDP associated with this Entity
-		if(entityDescriptor.idpDescriptors.size() == 1) {
-			// Ensure only our collaborating AA is tied to the Entity
-			if(idp.collaborator && entityDescriptor.attributeAuthorityDescriptors.size() == 1) {
-				entityDescriptor.delete()
-			}
-		}
-	}
+	if(entityDescriptor.holdsIDPOnly())
+		entityDescriptorService.delete(entityDescriptor.id)
+	else
+		idpSSODescriptorService.delete(idp.id)
 	
 	workflowTaskService.complete(env.taskInstanceID.toLong(), 'idpssodescriptordeleted')
 }

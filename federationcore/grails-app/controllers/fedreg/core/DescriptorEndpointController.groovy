@@ -5,14 +5,82 @@ import static org.apache.commons.lang.StringUtils.*
 import org.apache.shiro.SecurityUtils
 
 class DescriptorEndpointController {
-
-	static allowedMethods = [delete: "POST", create: "POST", toggle:"POST", listEndpoints:"GET"]
+	def allowedMethods = [create:'POST', update:'PUT', toggle:'PUT', makeDefault:'PUT', delete:'DELETE']
 	
 	// Maps allowed endpoints to internal class representation
 	def allowedEndpoints = [singleSignOnServices:"fedreg.core.SingleSignOnService", artifactResolutionServices:"fedreg.core.ArtifactResolutionService", manageNameIDServices:"fedreg.core.ManageNameIDService",
-							singleLogoutServices:"fedreg.core.SingleLogoutService", assertionConsumerServices:"fedreg.core.AssertionConsumerService", attributeServices:"fedreg.core.AttributeService", discoveryResponseServices:"fedreg.core.DiscoveryResponseService"]
+							singleLogoutServices:"fedreg.core.SingleLogoutService", assertionConsumerServices:"fedreg.core.AssertionConsumerService", attributeServices:"fedreg.core.AttributeService", 
+							discoveryResponseServices:"fedreg.core.DiscoveryResponseService"]
 
 	def endpointService
+	
+	def edit = {
+		if(!params.id) {
+			log.warn "Endpoint ID was not present"
+			render message(code: 'fedreg.controllers.namevalue.missing')
+			response.setStatus(500)
+			return
+		}
+		
+		def endpoint = Endpoint.get(params.id)
+		if(!endpoint) {
+			log.warn "Endpoint identified by id $params.id was not located"
+			render message(code: 'fedreg.endpoint.nonexistant', args: [params.id])
+			response.setStatus(500)
+			return
+		}
+		
+		render template:"/templates/endpoints/edit", contextPath: pluginContextPath, model:[endpoint:endpoint, endpointType:params.endpointType, containerID:params.containerID]
+	}
+	
+	def update = {
+		if(!params.id) {
+			log.warn "Endpoint ID was not present"
+			render message(code: 'fedreg.controllers.namevalue.missing')
+			response.setStatus(500)
+			return
+		}
+		
+		if(!params.binding) {
+			log.warn "Binding ID was not present"
+			render message(code: 'fedreg.controllers.namevalue.missing')
+			response.setStatus(500)
+			return
+		}
+		
+		if(!params.location) {
+			log.warn "Location URI was not present"
+			render message(code: 'fedreg.controllers.namevalue.missing')
+			response.setStatus(500)
+			return
+		}
+		
+		def binding = SamlURI.get(params.binding)
+		if (!binding) {
+			log.warn "SamURI (binding) was not found for id ${params.binding}"
+			render message(code: 'fedreg.samluri.nonexistant', args: [params.binding])
+			response.setStatus(500)
+			return
+		}
+		
+		def endpoint = Endpoint.get(params.id)
+		if(!endpoint) {
+			log.warn "Endpoint identified by id $params.id was not located"
+			render message(code: 'fedreg.endpoint.nonexistant', args: [params.id])
+			response.setStatus(500)
+			return
+		}
+		
+		if(SecurityUtils.subject.isPermitted("descriptor:${endpoint.descriptor.id}:endpoint:update")) {
+			endpointService.update(endpoint, binding, params.location)
+		
+			log.info "$authenticatedUser updated $endpoint for ${endpoint.descriptor}"
+			render message(code: 'fedreg.endpoint.update.success')
+		} else {
+			log.warn("Attempt to update $endpoint by $authenticatedUser was denied, incorrect permission set")
+			response.sendError(403)
+		}
+	}
 
 	def delete = {
 		if(!params.id) {
@@ -159,10 +227,12 @@ class DescriptorEndpointController {
 			if(allowedEndpoints.containsKey(endpointType) && descriptor.hasProperty(endpointType)) {
 				endpointService.create(descriptor, allowedEndpoints.get(endpointType), endpointType, binding, params.location)
 				endpointService.determineDescriptorProtocolSupport(descriptor)
+				
+				log.info "$authenticatedUser created new endpoint location ${params.location}, $binding for $descriptor"
 				render message(code: 'fedreg.endpoint.create.success')
 			}
 			else {
-				log.warn "Endpoint ${endpointType} is invalid for ${descriptor}, unable to create"
+				log.warn "$authenticatedUser unable to create endpoint as ${endpointType} is invalid for ${descriptor}"
 				render message(code: 'fedreg.endpoint.invalid', args: [endpointType])
 				response.setStatus(500)
 			}
@@ -191,6 +261,8 @@ class DescriptorEndpointController {
 	
 		if(SecurityUtils.subject.isPermitted("descriptor:${endpoint.descriptor.id}:endpoint:toggle")) {
 			endpointService.toggle(endpoint)
+			
+			log.info "$authenticatedUser toggled state of $endpoint"
 			render message(code: 'fedreg.endpoint.toggle.success')
 		}
 		else {
@@ -198,8 +270,7 @@ class DescriptorEndpointController {
 			response.sendError(403)
 		}
 	}
-	
-	
+		
 	def makeDefault = {
 		if(!params.id) {
 			log.warn "Endpoint ID was not present"
@@ -229,6 +300,8 @@ class DescriptorEndpointController {
 			
 			if(allowedEndpoints.containsKey(endpointType) && descriptor.hasProperty(endpointType)) {
 				endpointService.makeDefault(endpoint, endpointType)
+				
+				log.info "$authenticatedUser made $endpoint default for $descriptor"
 				render message(code: 'fedreg.endpoint.makedefault.success')
 			}
 			else {

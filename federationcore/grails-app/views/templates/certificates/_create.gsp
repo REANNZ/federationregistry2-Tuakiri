@@ -14,9 +14,9 @@
 	</div>
 	
 	<div id="newcertificate">
-		<h3><g:message code="fedreg.template.certificates.certificatemanagement.addnew.heading"/></h3>
+		<h3><g:message code="fedreg.templates.certificates.certificatemanagement.addnew.heading"/></h3>
 		<p>
-			<g:message code="fedreg.template.certificates.certificatemanagement.addnew.requestformat" />
+			<g:message code="fedreg.templates.certificates.certificatemanagement.addnew.requestformat" />
 		</p>
 		<form id="newcryptoform">
 			<div id="newcertificatedetails">

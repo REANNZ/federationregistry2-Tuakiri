@@ -5,11 +5,16 @@
 		<meta name="layout" content="compliance" />
 		<g:set var="entityName" value="${message(code: 'identityProviderAttributeCompliance.label')}" />
 		<title><g:message code="fedreg.view.compliance.summary.title"/></title>
+		
+		<script type="text/javascript">
+			<njs:datatable tableID="summarylist" sortColumn="0" />
+		</script>
+		
 	</head>
 	<body>
 		<section>
 			<h2><g:message code="fedreg.view.compliance.summary.heading"/></h2>		
-			<table class="enhancedtabledata">
+			<table id="summarylist">
 				<thead>
 					<tr>						  
 						<th><g:message code="label.identityprovider" /></th>

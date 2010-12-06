@@ -43,15 +43,35 @@ if(idp) {
 		}
 	}
 	
+	// Create ED access control role
+	def edRole = Role.findWhere(name:"descriptor-${idp.entityDescriptor.id}-administrators")
+	if(!edRole){	// Generally expected state
+		edRole = roleService.createRole("descriptor-${idp.entityDescriptor.id}-administrators", "Global administrators for ${idp.entityDescriptor}", false)
+	
+		LevelPermission permission = new LevelPermission()
+	    permission.populate("descriptor", "${idp.entityDescriptor.id}", "*", null, null, null)
+	    permission.managed = false
+		permissionService.createPermission(permission, edRole)
+	}
+	
+	// Create IDP access control role
 	def role = Role.findWhere(name:"descriptor-${idp.id}-administrators")
 	if(!role){	// Expected state
 		role = roleService.createRole("descriptor-${idp.id}-administrators", "Global administrators for $idp", false)
 	}
 	
+	// In our model the IDP role has permissions to edit the IDP and the AA
+	// Manage IDP
 	def permission = new LevelPermission()
 	permission.populate("descriptor", "${idp.id}", "*", null, null, null)
 	permission.managed = false
 	permissionService.createPermission(permission, role)
+	
+	// Manage collaborating AA
+	def aaPermission = new LevelPermission()       
+    aaPermission.populate("descriptor", "${idp.collaborator.id}", "*", null, null, null)
+    aaPermission.managed = false
+    permissionService.createPermission(aaPermission, role)
 	
 	def invitation = invitationService.create(null, role.id, null, "IDPSSODescriptor", "show", idp.id.toString())
 	

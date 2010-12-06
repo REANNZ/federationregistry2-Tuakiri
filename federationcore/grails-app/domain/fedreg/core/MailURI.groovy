@@ -27,17 +27,8 @@ class MailURI extends AnyUri  {
 
 	static constraints = {
 		uri(nullable: false, blank: false, email: true, unique:true)
+		contact(nullable: false)
 	}
 	
 	public String toString() {	"mailuri:[id:$id, uri: $uri]" }
-
-	public boolean equals(Object obj) {
-		if ( !(obj instanceof MailURI) ) return false
-		
-		MailURI mailURI = (MailURI) obj
-		if(mailURI.uri.equals(uri)) return true
-		
-		return false
-	}
-
 }

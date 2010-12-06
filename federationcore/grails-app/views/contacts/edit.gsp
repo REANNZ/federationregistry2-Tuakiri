@@ -9,7 +9,7 @@
 			
 			<n:errors bean="${contact}"/>
 			
-			<g:form action="update" id="${contact.id}">
+			<g:form action="update" id="${contact.id}" method="PUT">
 				<table>
 					<tbody>	
 						<tr>

@@ -6,9 +6,9 @@ import org.springframework.context.i18n.LocaleContextHolder as LCH
 import fedreg.workflow.ProcessPriority
 
 class AttributeConsumingServiceController {
+	def allowedMethods = [addSpecifiedAttributeValue:'POST', addRequestedAttribute:'POST', removeSpecifiedAttributeValue:'DELETE', ]
+		
 	def workflowProcessService
-	
-	static allowedMethods = [remove: "POST"]
 	
 	def listRequestedAttributes = {
 		if(!params.id) {
@@ -118,7 +118,7 @@ class AttributeConsumingServiceController {
 				return
 			}
 		
-			log.debug "Added value ${params.value} to ${reqAttr} referencing ${reqAttr.base}"
+			log.info "$authenticatedUser added value ${params.value} to ${reqAttr} referencing ${reqAttr.base} for ${reqAttr.attributeConsumingService} belonging to ${reqAttr.attributeConsumingService.descriptor}"
 			render message(code: 'fedreg.attributeconsumingservice.requestedattribute.specifiedvalue.add.success')
 		} else {
 			log.warn("Attempt to add a specifed attribute value by $authenticatedUser was denied, incorrect permission set")
@@ -175,7 +175,7 @@ class AttributeConsumingServiceController {
 				return
 			}
 		
-			log.debug "Removed ${val} from ${reqAttr} referencing ${reqAttr.base}"
+			log.info "$authenticatedUser removed ${val} from ${reqAttr} referencing ${reqAttr.base} for ${reqAttr.attributeConsumingService} belonging to ${reqAttr.attributeConsumingService.descriptor}"
 			render message(code: 'fedreg.attributeconsumingservice.requestedattribute.specifiedvalue.remove.success')
 		} else {
 			log.warn("Attempt to remove a specifed attribute value by $authenticatedUser was denied, incorrect permission set")
@@ -249,9 +249,9 @@ class AttributeConsumingServiceController {
 			if(initiated)
 				workflowProcessService.run(processInstance)
 			else
-				throw new RuntimeException("Unable to execute workflow when creating ${identityProvider}")
+				throw new ErronousStateException("Unable to execute workflow when creating ${identityProvider}")
 		
-			log.debug "Added ${reqAttr} referencing ${attr} to ${acs} and ${acs.descriptor}"
+			log.info "$authenticatedUser added ${reqAttr} referencing ${attr} to ${acs} and ${acs.descriptor}"
 			render message(code: 'fedreg.attributeconsumingservice.requestedattribute.add.success')
 		} else {
 			log.warn("Attempt to add a requested attribute by $authenticatedUser was denied, incorrect permission set")
@@ -289,7 +289,7 @@ class AttributeConsumingServiceController {
 			}
 			requestedAttribute.delete()
 		
-			log.debug "Removed ${requestedAttribute} referencing ${requestedAttribute.base} from ${acs}"
+			log.info "$authenticatedUser removed ${requestedAttribute} referencing ${requestedAttribute.base} from ${acs} and ${acs.descriptor}"
 			render message(code: 'fedreg.attributeconsumingservice.requestedattribute.remove.success')
 		} else {
 			log.warn("Attempt to remove a requested attribute by $authenticatedUser was denied, incorrect permission set")

@@ -4,7 +4,6 @@ import java.security.MessageDigest
 import grails.plugins.nimble.core.*
 
 class InvitationService {
-	
 	def roleService
 	def groupService
 
@@ -32,7 +31,10 @@ class InvitationService {
 	def claim(inviteCode) {
 		def invite = Invitation.findWhere(inviteCode:inviteCode)
 		if(invite) {
-			if(!invite.utilized) {
+			if(invite.utilized) {
+				log.warn "Attempt by $authenticatedUser to re-use invitation code $inviteCode"
+				null
+			} else {
 				invite.utilized = true
 				invite.utilizedBy = authenticatedUser
 				
@@ -59,9 +61,6 @@ class InvitationService {
 					throw new RuntimeException ("Error when attempting to utilize invitation, unable to save state")
 				}
 				invite
-			} else {
-				log.warn "Attempt by $authenticatedUser to re-use invitation code $inviteCode"
-				null
 			}
 		}
 		else {

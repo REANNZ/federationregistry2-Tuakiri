@@ -41,26 +41,25 @@ class WorkflowProcessController {
 			def created, process
 			try {
 				(created, process) = workflowProcessService.create(params.code)
+				if(!created) {
+					process.errors.each {
+						log.debug it
+					}
+					flash.type = "error"
+				    flash.message = message(code: 'fedreg.workflow.process.create.error')
+					render view: "create", model: [process: process]
+					return
+				}
+		
+				log.info "$authenticatedUser created $process"
+				redirect action: "show", id: process.id
 			}
 			catch(Exception e) {
 				process = new Process(definition: params.code)
 				flash.type = "error"
 			    flash.message = message(code: 'fedreg.workflow.process.create.totalfailure')
 				render view: "create", model: [process: process]
-				return
 			}
-		
-			if(!created) {
-				process.errors.each {
-					log.debug it
-				}
-				flash.type = "error"
-			    flash.message = message(code: 'fedreg.workflow.process.create.error')
-				render view: "create", model: [process: process]
-				return
-			}
-		
-			redirect action: "show", id: process.id
 		}
 		else {
 			log.warn("Attempt to save workflow process by $authenticatedUser was denied, incorrect permission set")
@@ -136,26 +135,28 @@ class WorkflowProcessController {
 		if(SecurityUtils.subject.isPermitted("workflow:process:${process.id}:update")) {
 			def updated, process_
 			try {
+				log.info "$authenticatedUser is updating $process"
 				(updated, process_) = workflowProcessService.update(process.name, params.code)
+		
+				if(!updated) {
+					process_.errors.each {
+						log.debug it
+					}
+					flash.type = "error"
+				    flash.message = message(code: 'fedreg.workflow.process.update.error')
+					render view: "edit", model: [process: process_]
+					return
+				}
+		
+				log.info "$authenticatedUser updated $process_"
+				redirect action: "show", id: process_.id
+			
 			}
 			catch(Exception e) {
 				flash.type = "error"
 			    flash.message = message(code: 'fedreg.workflow.process.update.totalfailure')
 				render view: "edit", model: [process: process]
-				return
 			}
-		
-			if(!updated) {
-				process_.errors.each {
-					log.debug it
-				}
-				flash.type = "error"
-			    flash.message = message(code: 'fedreg.workflow.process.update.error')
-				render view: "edit", model: [process: process_]
-				return
-			}
-		
-			redirect action: "show", id: process_.id
 		}
 		else {
 			log.warn("Attempt to update $process by $authenticatedUser was denied, incorrect permission set")

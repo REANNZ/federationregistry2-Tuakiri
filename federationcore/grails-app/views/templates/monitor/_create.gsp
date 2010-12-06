@@ -16,7 +16,7 @@
 	</div>
 	
 	<div id="newmonitor" class="searcharea">
-		<h3><g:message code="fedreg.template.monitor.add.heading"/></h3>
+		<h3><g:message code="fedreg.templates.monitor.add.heading"/></h3>
 		<form id="newmonitordata">
 			<g:hiddenField name="interval" value="0" />
 		<table>

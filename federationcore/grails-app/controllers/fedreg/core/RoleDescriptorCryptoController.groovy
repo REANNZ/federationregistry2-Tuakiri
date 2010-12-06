@@ -3,8 +3,7 @@ package fedreg.core
 import org.apache.shiro.SecurityUtils
 
 class RoleDescriptorCryptoController {
-
-	static allowedMethods = [delete: "POST", create:"POST"]
+	def allowedMethods = [create:'POST', delete: 'DELETE']
 	
 	def cryptoService
 	
@@ -43,9 +42,12 @@ class RoleDescriptorCryptoController {
 			return
 		}
 		
-		if(SecurityUtils.subject.isPermitted("descriptor:${keyDescriptor.roleDescriptor.id}:crypto:delete")) {
+		def descriptor = keyDescriptor.roleDescriptor
+		if(SecurityUtils.subject.isPermitted("descriptor:${descriptor.id}:crypto:delete")) {
 			log.info "Deleting KeyDescriptor"
 			cryptoService.unassociateCertificate(keyDescriptor)
+			
+			log.info "$authenticatedUser soft deleted $keyDescriptor from $descriptor"
 			render message(code: 'fedreg.keydescriptor.delete.success')
 		}
 		else {
@@ -87,6 +89,8 @@ class RoleDescriptorCryptoController {
 					response.setStatus(500)
 					return
 				}
+				
+				log.info "$authenticatedUser created signing keyDescriptor for $descriptor"
 			}
 			
 			if(params.encryption == "on") {
@@ -97,8 +101,10 @@ class RoleDescriptorCryptoController {
 					response.setStatus(500)
 					return
 				}
+				
+				log.info "$authenticatedUser created encryption keyDescriptor for $descriptor"
 			}
-		
+			
 			render message(code: 'fedreg.keydescriptor.create.success')
 		}
 		else {

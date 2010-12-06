@@ -1,7 +1,7 @@
 
 <g:if test="${corrupt}">
 	<div class="error">
-		<p><g:message code="fedreg.template.certificates.validation.corrupt" /></p>
+		<p><g:message code="fedreg.templates.certificates.validation.corrupt" /></p>
 	</div>
 </g:if>
 <g:else>
@@ -46,7 +46,7 @@
 		</table>
 		</div>
 		<div class="error">
-			<span><strong><g:message code="fedreg.template.certificates.validation.errors"/></strong></span>
+			<span><strong><g:message code="fedreg.templates.certificates.validation.errors"/></strong></span>
 				<ol>
 				<g:each in="${certerrors}" var="e">
 					<li><g:message code="${e}" /></li>

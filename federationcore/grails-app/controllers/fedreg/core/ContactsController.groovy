@@ -3,10 +3,9 @@ package fedreg.core
 import org.apache.shiro.SecurityUtils
 
 class ContactsController {
-	def index = {
-		redirect(action: "list", params: params)
-	}
-
+	static defaultAction = "index"
+	def allowedMethods = [save: 'POST', update: 'PUT']
+	
 	def list = {
 		[contactList: Contact.list(params), contactTotal: Contact.count()]
 	}
@@ -88,6 +87,7 @@ class ContactsController {
 	
 			flash.type = "success"
 		    flash.message = message(code: 'fedreg.contact.create.success')
+			log.info "$authenticatedUser created $contact"
 			redirect action: "show", id: contact.id
 		} else {
 			log.warn("Attempt to create new contact by $authenticatedUser was denied, incorrect permission set")
@@ -209,6 +209,7 @@ class ContactsController {
 	
 			flash.type = "success"
 		    flash.message = message(code: 'fedreg.contact.update.success')
+			log.info "$authenticatedUser updated $contact"
 			redirect action: "show", id: contact.id
 		} else {
 			log.warn("Attempt to update ${contact} by $authenticatedUser was denied, incorrect permission set")

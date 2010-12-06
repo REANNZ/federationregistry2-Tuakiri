@@ -5,7 +5,7 @@ import grails.plugins.nimble.core.Role
 
 class EntityDescriptorController {
 	static defaultAction = "list"
-	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+	def allowedMethods = [save: 'POST', update: 'PUT', delete: 'DELETE']
 		
 	def entityDescriptorService
 	
@@ -42,11 +42,14 @@ class EntityDescriptorController {
 	def save = {
 		def (created, entityDescriptor) = entityDescriptorService.create(params)
 	
-		if(created)
+		if(created) {
+			log.info "$authenticatedUser created $entityDescriptor"
 			redirect (action: "show", id: entityDescriptor.id)
-		else {
+		} else {
 			flash.type="error"
 			flash.message = message(code: 'fedreg.core.entitydescriptor.save.validation.error')
+			
+			log.info "$authenticatedUser failed attempting to create $entityDescriptor"
 			render (view:'create', model:[entity:entityDescriptor, organizationList: Organization.list()])
 		}
 	}
@@ -96,11 +99,13 @@ class EntityDescriptorController {
 		
 		if(SecurityUtils.subject.isPermitted("descriptor:${entityDescriptor_.id}:update")) {
 			def (updated, entityDescriptor) = entityDescriptorService.update(params)
-			if(updated)
+			if(updated) {
+				log.info "$authenticatedUser updated $entityDescriptor"
 				redirect (action: "show", id: entityDescriptor.id)
-			else {
+			} else {
 				flash.type="error"
 				flash.message = message(code: 'fedreg.core.entitydescriptor.update.validation.error')
+				log.info "$authenticatedUser failed attempt to update $entityDescriptor"
 				render (view:'edit', model:[entity:entityDescriptor])
 			}
 		}

@@ -37,9 +37,6 @@ class GroupController {
   }
 
   def list = {
-    if (!params.max) {
-      params.max = 10
-    }
     [groups: Group.list(params)]
   }
 

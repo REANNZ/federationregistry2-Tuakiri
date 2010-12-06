@@ -4,13 +4,13 @@ import org.springframework.context.i18n.LocaleContextHolder as LCH
 import org.springframework.transaction.interceptor.TransactionAspectSupport
 
 import fedreg.workflow.ProcessPriority
-import grails.plugins.nimble.core.UserBase
 
 class IDPSSODescriptorService {
 	
 	def cryptoService
 	def workflowProcessService
 	def entityDescriptorService
+	def attributeAuthorityDescriptorService
 	
 	def create(def params) {
 			
@@ -32,7 +32,7 @@ class IDPSSODescriptorService {
 					contact.errors.each {
 						log.error it
 					}
-					throw new RuntimeException("Unable to create new contact when attempting to create new IDPSSODescriptor")
+					throw new ErronousStateException("Unable to create new contact when attempting to create new IDPSSODescriptor")
 				}
 		}
 		def ct = params.contact?.type ?: 'administrative'
@@ -156,6 +156,7 @@ class IDPSSODescriptorService {
 	
 		// Submission validation
 		if(!entityDescriptor.validate()) {
+			log.info "$authenticatedUser attempted to create $identityProvider but failed EntityDescriptor validation"
 			entityDescriptor?.errors.each { log.error it }
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly() 
 			return [false, ret]
@@ -170,6 +171,7 @@ class IDPSSODescriptorService {
 		}
 
 		if(!identityProvider.validate()) {
+			log.info "$authenticatedUser attempted to create $identityProvider but failed IDPSSODescriptor validation"
 			identityProvider.errors.each { log.debug it }
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly()
 			entityDescriptor.delete()
@@ -187,12 +189,12 @@ class IDPSSODescriptorService {
 			
 		if(!entityDescriptor.save()) {
 			entityDescriptor.errors.each {log.debug it}
-			throw new RuntimeException("Unable to save when creating ${identityProvider}")
+			throw new ErronousStateException("Unable to save when creating ${identityProvider}")
 		}
 		
 		if(!identityProvider.save()) {
 			identityProvider.errors.each {log.debug it}
-			throw new RuntimeException("Unable to save when creating ${identityProvider}")
+			throw new ErronousStateException("Unable to save when creating ${identityProvider}")
 		}
 
 		def workflowParams = [ creator:contact?.id?.toString(), identityProvider:identityProvider?.id?.toString(), attributeAuthority:attributeAuthority?.id?.toString(), organization:organization.id?.toString(), locale:LCH.getLocale().getLanguage() ]
@@ -202,8 +204,9 @@ class IDPSSODescriptorService {
 		if(initiated)
 			workflowProcessService.run(processInstance)
 		else
-			throw new RuntimeException("Unable to execute workflow when creating ${identityProvider}")
+			throw new ErronousStateException("Unable to execute workflow when creating ${identityProvider}")
 
+		log.info "$authenticatedUser created $identityProvider"
 		return [true, ret]
 	}
 	
@@ -238,75 +241,59 @@ class IDPSSODescriptorService {
 		
 		log.debug "Updating $identityProvider active: ${identityProvider.active}, requestSigned: ${identityProvider.wantAuthnRequestsSigned}"
 		
-		if(!identityProvider.entityDescriptor.validate()) {			
+		if(!identityProvider.entityDescriptor.validate()) {
+			log.info "$authenticatedUser attempted to update $identityProvider but failed IDPSSODescriptor validation"
 			identityProvider.entityDescriptor.errors.each {log.warn it}
 			return [false, identityProvider]
 		}
 		
 		if(!identityProvider.entityDescriptor.save()) {			
 			identityProvider.entityDescriptor.errors.each {log.warn it}
-			throw new RuntimeException("Unable to save when updating ${identityProvider}")
+			throw new ErronousStateException("Unable to save when updating ${identityProvider}")
 		}
 		
+		log.info "$authenticatedUser updated $identityProvider"
 		return [true, identityProvider]
 	}
 	
 	def delete(long id) {
-		def idp = IDPSSODescriptor.get(id)
-		if(!idp)
-			throw new RuntimeException("Unable to delete identity provider, no such instance")
+		def identityProvider = IDPSSODescriptor.get(id)
+		if(!identityProvider)
+			throw new ErronousStateException("Unable to delete identity provider, no such instance")
 			
-		log.info "Deleting $idp on request of $authenticatedUser"
+		log.info "Deleting $identityProvider on request of $authenticatedUser"
 
-		def entityDescriptor = idp.entityDescriptor
-		def aa = idp.collaborator
+		def entityDescriptor = identityProvider.entityDescriptor
+		def aa = identityProvider.collaborator
 
-		idp.singleSignOnServices?.each { it.delete() }
-		idp.artifactResolutionServices?.each { it.delete() }
-		idp.nameIDMappingServices?.each { it.delete() }
-		idp.assertionIDRequestServices?.each { it.delete() }
-		idp.attributeProfiles?.each { it.delete() }
-		idp.attributes?.each { it.delete() }
-		idp.artifactResolutionServices?.each { it.delete() }
-		idp.singleLogoutServices?.each { it.delete() }
-		idp.manageNameIDServices?.each { it.delete() }
-		idp.contacts?.each { it.delete() }
-		idp.keyDescriptors?.each { it.delete() }
-		idp.monitors?.each { it.delete() }
-
-		if(aa) {
+		if(aa) {	// Untangle this linkage - horrible but necessay GORM delete sucks.
+			identityProvider.collaborator = null
+			aa.collaborator = null
+			
 			aa.attributeServices?.each { it.delete() }
 			aa.assertionIDRequestServices?.each { it.delete() }
 			aa.attributes?.each { it.delete() }
 			aa.contacts?.each { it.delete() }
 			aa.keyDescriptors?.each { it.delete() }
 			aa.monitors?.each { it.delete() }
+
+			entityDescriptor.attributeAuthorityDescriptors.remove(aa)
+
+			log.info "$authenticatedUser deleted $aa" 
+
+			aa.delete()
 		}
 		
-		if(entityDescriptor.holdsIDPOnly()) {
-			aa.collaborator = null
-			idp.collaborator = null
+		identityProvider.attributeProfiles?.each { it.delete() }
+		identityProvider.attributes?.each { it.delete() }
+		identityProvider.contacts?.each { it.delete() }
+		identityProvider.keyDescriptors?.each { it.delete() }
+		identityProvider.monitors?.each { it.delete() }
 			
-			entityDescriptor.idpDescriptors.remove(idp)
-			entityDescriptor.attributeAuthorityDescriptors.remove(aa)
-			idp.delete()
-			aa.delete()
-			entityDescriptor.delete()
-			
-			def users = UserBase.findAllWhere(entityDescriptor:entityDescriptor)
-			users.each {
-				it.entityDescriptor = null
-				it.save()
-			}
-		} else {
-			aa.collaborator = null
-			idp.collaborator = null
-			
-			entityDescriptor.idpDescriptors.remove(idp)
-			entityDescriptor.attributeAuthorityDescriptors.remove(aa)
-			idp.delete()
-			aa.delete()
-		}
+		entityDescriptor.idpDescriptors.remove(identityProvider)
+		identityProvider.delete()
+		
+		log.info "$authenticatedUser deleted $identityProvider"
 	}
 	
 }

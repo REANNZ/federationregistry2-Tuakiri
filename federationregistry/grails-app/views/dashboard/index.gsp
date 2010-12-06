@@ -54,9 +54,9 @@
 			<div class="dashrow">
 				<div class="dashcol3 dashstats">
 					<h3><g:message code="fedreg.view.dashboard.federation.statistics"/></h3>
-					<p><strong>${orgCount}</strong> <g:message code="label.organizations"/> - <g:link controller="organization" action="list" class="">view all</g:link></p>
-					<p><strong>${idpCount}</strong> <g:message code="label.identityproviders"/> - <g:link controller="IDPSSODescriptor" action="list" class="">view all</g:link></p>
-					<p><strong>${spCount}</strong> <g:message code="label.serviceproviders"/> - <g:link controller="SPSSODescriptor" action="list" class="">view all</g:link></p>
+					<p><strong>${orgCount}</strong> <g:message code="label.organizations"/> - <g:link controller="organization" action="list" class=""><g:message code="label.viewall"/></g:link></p>
+					<p><strong>${idpCount}</strong> <g:message code="label.identityproviders"/> - <g:link controller="IDPSSODescriptor" action="list" class=""><g:message code="label.viewall"/></g:link></p>
+					<p><strong>${spCount}</strong> <g:message code="label.serviceproviders"/> - <g:link controller="SPSSODescriptor" action="list" class=""><g:message code="label.viewall"/>l</g:link></p>
 					<p><strong>${endpointCount}</strong> <g:message code="label.activeendpoints"/></p>
 					<p><strong>${certCounts}</strong> <g:message code="label.activecertificates"/></p>
 				</div>
@@ -66,7 +66,7 @@
 						<div class="userlogo">
 							<a href="http://gravatar.com"><avatar:gravatar email="${authenticatedUser.profile.email}" size="50" defaultGravatarUrl="${resource(absolute: true, dir:'images', file:'avatar.png')}" /></a>
 							<br>
-							<a href="http://gravatar.com">change</a>
+							<a href="http://gravatar.com"><g:message code="label.change"/></a>
 						</div>
 						<div class="userdetails">
 							<h3><n:principalName /></h3>

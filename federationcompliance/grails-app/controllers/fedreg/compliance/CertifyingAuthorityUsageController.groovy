@@ -16,19 +16,21 @@ class CertifyingAuthorityUsageController {
 		Certificate.list().each { cert ->
 			def subject = cryptoService.subject(cert)
 			def issuer = cryptoService.issuer(cert)
-			if(!issuer.equals(subject)){		// External CA
+			
+			// External CA only
+			if(issuer != subject){
 				def members = ca.get(issuer)
-				if(!members) {
-					ca.put(issuer,[cert.keyInfo.keyDescriptor.roleDescriptor.entityDescriptor])
-				}
-				else {
+				if(members) {
 					if(!members.contains(cert.keyInfo.keyDescriptor.roleDescriptor.entityDescriptor))
 						members.add(cert.keyInfo.keyDescriptor.roleDescriptor.entityDescriptor)
+				}
+				else {
+					ca.put(issuer,[cert.keyInfo.keyDescriptor.roleDescriptor.entityDescriptor])
 				}
 			}
 		}
 
-		[causage:ca.sort{-it.value.size()}]				// cheeky reverse sort ;)
+		[causage:ca.sort{-it.value.size()}]
 	}
 	
 }
