@@ -243,7 +243,7 @@ class AttributeConsumingServiceController {
 				return
 			}
 			
-			def workflowParams = [ creator:authenticatedUser?.contact?.id?.toString(), requestedAttribute:reqAttr?.id?.toString(), locale:LCH.getLocale().getLanguage() ]
+			def workflowParams = [ creator:authenticatedUser?.contact?.id?.toString(), requestedAttribute:reqAttr?.id?.toString(), serviceProvider:acs?.descriptor?.id?.toString(), locale:LCH.getLocale().getLanguage() ]
 			def (initiated, processInstance) = workflowProcessService.initiate( "requestedattribute_create", "Approval for creation of ${reqAttr}", ProcessPriority.MEDIUM, workflowParams)
 
 			if(initiated)
