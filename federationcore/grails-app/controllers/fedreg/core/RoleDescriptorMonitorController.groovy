@@ -48,7 +48,7 @@ class RoleDescriptorMonitorController {
 				return
 			}
 			
-			log.info "$authenticatedUser added $serviceMonitor to $descriptor"
+			log.info "$authenticatedUser added $monitorType at ${params.url} to $descriptor"
 			render message(code: 'fedreg.core.monitor.create.success')
 		} else {
 			log.warn("Attempt to add monitor to $roleDescriptor by $authenticatedUser was denied, incorrect permission set")

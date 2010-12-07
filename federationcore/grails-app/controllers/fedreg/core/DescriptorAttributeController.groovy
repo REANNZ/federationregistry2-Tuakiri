@@ -144,7 +144,7 @@ class DescriptorAttributeController {
 				response.setStatus(500)
 				return
 			} else {
-				log.warn "$authenticatedUser added $attribute to descriptor ${params.id}"
+				log.info "$authenticatedUser added $base to $descriptor"
 				render message(code: 'fedreg.attribute.add.success', args:[base.friendlyName])
 			}
 		}
