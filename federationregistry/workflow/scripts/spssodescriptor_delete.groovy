@@ -6,10 +6,10 @@ workflowTaskService = ctx.getBean("workflowTaskService")
 mailService = ctx.getBean("mailService")
 messageSource = ctx.getBean("messageSource")
 
-def sp = SPSSODescriptor.get(env.serviceProvider.toLong())
+def sp = SPSSODescriptor.read(env.serviceProvider.toLong())
 if(sp) {
 	
-	def creator = Contact.get(env.creator.toLong())
+	def creator = Contact.read(env.creator.toLong())
 	def args = new Object[1]
 	args[0] = sp.displayName
 	mailService.sendMail {            

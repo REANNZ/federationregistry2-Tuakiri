@@ -26,8 +26,8 @@ import grails.plugins.nimble.InstanceGenerator
 class UserController {
 
   static Map allowedMethods = [	save: 'POST', update: 'POST', enable: 'POST', disable: 'POST', enableapi: 'POST', disableapi: 'POST',
-          						savepassword: 'POST', validusername: 'POST', searchgroups: 'POST', grantgroup: 'POST', removegroup: 'POST',
- 								createpermission: 'POST', removepermisson: 'POST', searchroles: 'POST', grantrole: 'POST', removerole: 'POST']
+								savepassword: 'POST', validusername: 'POST', searchgroups: 'POST', grantgroup: 'POST', removegroup: 'POST',
+								createpermission: 'POST', removepermisson: 'POST', searchroles: 'POST', grantrole: 'POST', removerole: 'POST']
 
   def userService
   def groupService
@@ -281,7 +281,7 @@ class UserController {
 	    def c = LoginRecord.createCriteria()
 	    def logins = c.list {
 	      	eq("owner", user)
-		    order("dateCreated")
+		    order("dateCreated", "desc")
 		    maxResults(20)
 	    }
 	    render(template: '/templates/admin/logins_list', contextPath: pluginContextPath, model: [logins: logins, ownerID: user.id])

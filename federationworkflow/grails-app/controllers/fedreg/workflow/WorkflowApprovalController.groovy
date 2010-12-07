@@ -50,9 +50,12 @@ class WorkflowApprovalController {
 		}
 		
 		if(taskInstance.potentialApprovers.contains(authenticatedUser) || SecurityUtils.subject.hasRole(AdminsService.ADMIN_ROLE)) {
+			log.info "$authenticatedUser is approving $taskInstance"
 			workflowTaskService.approve(taskInstance.id)
 			flash.type = "success"
 		    flash.message = message(code: 'fedreg.workflow.taskinstance.successfully.approved')
+		
+			log.info "$authenticatedUser approval of $taskInstance completed"
 			redirect action: "list"
 		}
 		else {
@@ -94,9 +97,12 @@ class WorkflowApprovalController {
 		}
 		
 		if(taskInstance.potentialApprovers.contains(authenticatedUser) || SecurityUtils.subject.hasRole(AdminsService.ADMIN_ROLE)) {
+			log.info "$authenticatedUser is rejecting $taskInstance"
 			workflowTaskService.reject(taskInstance.id, params.rejection)
 			flash.type = "success"
 		    flash.message = message(code: 'fedreg.workflow.taskinstance.successfully.rejected')
+		
+			log.info "$authenticatedUser rejection of $taskInstance completed"
 			redirect action: "list"
 		}
 		else {

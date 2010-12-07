@@ -28,7 +28,7 @@
 		<section>
 			<h2><g:message code="fedreg.view.members.organization.edit.heading" args="[organization.displayName]"/></h2>
 			
-			<g:form action="update" id="${organization.id}">
+			<g:form action="update" id="${organization.id}" method="PUT">
 				<g:hiddenField name="organization.lang" value="en" />
 				
 				<div class="step" id="basic">
@@ -103,7 +103,7 @@
 					</p>
 				</div>
 
-				<nav> 							
+				<nav>
 					<input class="navigation_button" id="back" value="Back" type="reset" />
 					<input class="navigation_button" id="next" value="Next" type="submit" />
 				</nav>

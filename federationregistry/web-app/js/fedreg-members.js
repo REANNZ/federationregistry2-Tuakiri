@@ -51,7 +51,7 @@ fedreg.organization_fulladministrator_revoke = function(userID) {
 		async: false,
 		type: "POST",
 		url: organizationFullAdministratorRevokeEndpoint,
-		data: dataString,
+		data: dataString  + "&_method=delete",
 		success: function(res) {
 			nimble.growl('success', res);
 			fedreg.organization_fulladministrator_list();
@@ -81,7 +81,7 @@ fedreg.organization_fulladministrator_search = function() {
 	$("#availablefulladministrators").fadeOut().empty();
 	var dataString = "q=" + $('#q').val()
 	$.ajax({
-		type: "POST",
+		type: "GET",
 		url: organizationFullAdministratorSearchEndpoint,
 		data: dataString,
 		success: function(res) {
@@ -122,7 +122,7 @@ fedreg.descriptor_fulladministrator_revoke = function(userID) {
 		async: false,
 		type: "POST",
 		url: descriptorFullAdministratorRevokeEndpoint,
-		data: dataString,
+		data: dataString + "&_method=delete",
 		success: function(res) {
 			nimble.growl('success', res);
 			fedreg.descriptor_fulladministrator_list();
@@ -152,7 +152,7 @@ fedreg.descriptor_fulladministrator_search = function() {
 	$("#availablefulladministrators").fadeOut().empty();
 	var dataString = "q=" + $('#q').val()
 	$.ajax({
-		type: "POST",
+		type: "GET",
 		url: descriptorFullAdministratorSearchEndpoint,
 		data: dataString,
 		success: function(res) {
@@ -228,7 +228,7 @@ fedreg.keyDescriptor_delete = function(id) {
 	$.ajax({
 		type: "POST",
 		url: certificateDeleteEndpoint,
-		data: dataString,
+		data: dataString + "&_method=delete",
 		success: function(res) {
 			nimble.growl('success', res);
 			fedreg.keyDescriptor_list()
@@ -263,7 +263,7 @@ fedreg.monitor_delete = function(monitorID) {
 	$.ajax({
 		type: "POST",
 		url: monitorDeleteEndpoint,
-		data: dataString,
+		data: dataString + "&_method=delete",
 		success: function(res) {
 			fedreg.monitor_list();
 			nimble.growl('success', res);
@@ -309,7 +309,7 @@ fedreg.contact_search = function(id) {
 	$("#availablecontacts").fadeOut().html('');
 	var dataString = "givenName=" + $('#givenName').val() + '&surname=' + $('#surname').val() + '&email=' + $('#email').val()
 	$.ajax({
-		type: "POST",
+		type: "GET",
 		url: contactSearchEndpoint,
 		data: dataString,
 		success: function(res) {
@@ -354,7 +354,7 @@ fedreg.contact_delete = function(contactID) {
 	$.ajax({
 		type: "POST",
 		url: contactDeleteEndpoint,
-		data: dataString,
+		data: dataString + "&_method=delete",
 		success: function(res) {
 			fedreg.contact_list();
 			nimble.growl('success', res);
@@ -404,7 +404,7 @@ fedreg.endpoint_update = function(id, endpointType, containerID) {
 	$.ajax({
 		type: "POST",
 		url: endpointUpdateEndpoint,
-		data: dataString,
+		data: dataString + "&_method=put",
 		success: function(res) {
 			nimble.growl('success', res);
 			fedreg.endpoint_list(endpointType, containerID);
@@ -421,7 +421,7 @@ fedreg.endpoint_delete = function(id, endpointType, containerID) {
 	$.ajax({
 		type: "POST",
 		url: endpointDeleteEndpoint,
-		data: dataString,
+		data: dataString + "&_method=delete",
 		success: function(res) {
 			nimble.growl('success', res);
 			fedreg.endpoint_list(endpointType, containerID);
@@ -474,7 +474,7 @@ fedreg.endpoint_toggle = function(id, endpointType, containerID) {
 	$.ajax({
 		type: "POST",
 		url: endpointToggleStateEndpoint,
-		data: dataString,
+		data: dataString + "&_method=put",
 		success: function(res) {
 			nimble.growl('success', res);
 			fedreg.endpoint_list(endpointType, containerID);
@@ -491,7 +491,7 @@ fedreg.endpoint_makedefault = function(id, endpointType, containerID) {
 	$.ajax({
 		type: "POST",
 		url: endpointMakeDefaultEndpoint,
-		data: dataString,
+		data: dataString + "&_method=put",
 		success: function(res) {
 			nimble.growl('success', res);
 			fedreg.endpoint_list(endpointType, containerID);
@@ -528,7 +528,7 @@ fedreg.acs_reqattribute_remove = function(raID, acsID, containerID) {
 	$.ajax({
 		type: "POST",
 		url: acsRemoveAttr,
-		data: dataString,
+		data: dataString + "&_method=delete",
 		success: function(res) {
 			nimble.growl('success', res);
 			fedreg.acs_reqattribute_list(acsID, containerID);
@@ -582,7 +582,7 @@ fedreg.acs_specattribute_remove = function(id, valueID, containerID) {
 	$.ajax({
 		type: "POST",
 		url: acsRemoveSpecAttrVal,
-		data: dataString,
+		data: dataString + "&_method=delete",
 		success: function(res) {
 			nimble.growl('success', res);
 			fedreg.acs_specattribute_list(id, containerID)
@@ -632,7 +632,7 @@ fedreg.nameIDFormat_remove = function(formatID, containerID) {
 	$.ajax({
 		type: "POST",
 		url: nameIDFormatRemoveEndpoint,
-		data: dataString,
+		data: dataString + "&_method=delete",
 		success: function(res) {
 			nimble.growl('success', res);
 			fedreg.nameIDFormat_list(containerID);
@@ -683,7 +683,7 @@ fedreg.attribute_remove = function(attributeID, containerID) {
 	$.ajax({
 		type: "POST",
 		url: attributeRemoveEndpoint,
-		data: dataString,
+		data: dataString + "&_method=delete",
 		success: function(res) {
 			nimble.growl('success', res);
 			fedreg.attribute_list(containerID);

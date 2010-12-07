@@ -31,14 +31,4 @@ class MailURI extends AnyUri  {
 	}
 	
 	public String toString() {	"mailuri:[id:$id, uri: $uri]" }
-
-	public boolean equals(Object obj) {
-		if ( !(obj instanceof MailURI) ) return false
-		
-		MailURI mailURI = (MailURI) obj
-		if(mailURI.uri.equals(uri)) return true
-		
-		return false
-	}
-
 }

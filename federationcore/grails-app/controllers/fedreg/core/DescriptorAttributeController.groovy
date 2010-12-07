@@ -3,8 +3,7 @@ package fedreg.core
 import org.apache.shiro.SecurityUtils
 
 class DescriptorAttributeController {
-
-	static allowedMethods = [remove: "POST"]
+	def allowedMethods = [add: 'POST', remove: 'DELETE']
 	
 	def remove = {
 		if(!params.id) {
@@ -45,11 +44,10 @@ class DescriptorAttributeController {
 				return
 			}
 		
-			log.info "Removing ${attribute} from descriptor ${params.id}"
 			descriptor.removeFromAttributes(attribute)
 			descriptor.save()
 			if(descriptor.hasErrors()) {
-				log.warn "Removing ${attribute} from descriptor ${params.id} failed"
+				log.warn "$authenticatedUser removing $attribute from descriptor ${params.id} failed"
 				descriptor.errors.each {
 					log.debug it
 				}
@@ -57,6 +55,7 @@ class DescriptorAttributeController {
 				response.setStatus(500)
 				return
 			}else {
+				log.info "$authenticatedUser removed $attribute from descriptor ${params.id}"
 				render message(code: 'fedreg.attribute.remove.success', args:[attribute.base.friendlyName])
 			}
 		}
@@ -133,17 +132,19 @@ class DescriptorAttributeController {
 				}
 			}
 		
-			descriptor.addToAttributes(new Attribute(base:base))
+			def attribute = new Attribute(base:base)
+			descriptor.addToAttributes(attribute)
 			descriptor.save()
 			if(descriptor.hasErrors()) {
-				log.warn "Adding ${attribute} to descriptor ${params.id} failed"
+				log.warn "$authenticatedUser adding $attribute to descriptor ${params.id} failed"
 				descriptor.errors.each {
 					log.debug it
 				}
 				render message(code: 'fedreg.attribute.add.failed', args:[base.friendlyName])
 				response.setStatus(500)
 				return
-			}else {
+			} else {
+				log.warn "$authenticatedUser added $attribute to descriptor ${params.id}"
 				render message(code: 'fedreg.attribute.add.success', args:[base.friendlyName])
 			}
 		}

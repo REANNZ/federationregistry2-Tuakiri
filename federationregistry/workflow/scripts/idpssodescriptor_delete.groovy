@@ -6,10 +6,10 @@ workflowTaskService = ctx.getBean("workflowTaskService")
 mailService = ctx.getBean("mailService")
 messageSource = ctx.getBean("messageSource")
 
-def idp = IDPSSODescriptor.get(env.identityProvider.toLong())
+def idp = IDPSSODescriptor.read(env.identityProvider.toLong())
 if(idp) {
 	
-	def creator = Contact.get(env.creator.toLong())
+	def creator = Contact.read(env.creator.toLong())
 	def args = new Object[1]
 	args[0] = idp.displayName
 	mailService.sendMail {            

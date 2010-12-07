@@ -22,6 +22,7 @@ class OrganizationService {
 		}
 		
 		if(!organization.validate()) {
+			log.info "$authenticatedUser attempted to create $organization but failed Organization validation"
 			organization?.errors.each { log.error it }
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly() 
 			return [ false, organization, contact ]
@@ -30,11 +31,14 @@ class OrganizationService {
 		def savedOrg = organization.save()
 		if(!savedOrg) {
 			organization?.errors.each { log.error it }
-			throw new RuntimeException("Unable to save when creating ${organization}")
+			throw new ErronousStateException("Unable to save when creating ${organization}")
 		}
 		
-		contact.organization = savedOrg
+		if(contact.organization == null)
+			contact.organization = savedOrg
+			
 		if(!contact.validate()) {
+			log.info "$authenticatedUser attempted to create $organization but failed Contact validation"
 			contact?.errors.each { log.error it }
 			savedOrg.discard()
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly() 
@@ -44,7 +48,7 @@ class OrganizationService {
 		if(!contact.save()) {
 			contact?.errors.each { log.error it }
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly() 
-			throw new RuntimeException("Unable to save when creating ${contact}")
+			throw new ErronousStateException("Unable to save when creating ${contact}")
 		}
 		
 		def workflowParams = [ creator:contact?.id?.toString(), organization:organization?.id?.toString(), locale:LCH.getLocale().getLanguage() ]
@@ -53,8 +57,9 @@ class OrganizationService {
 		if(initiated)
 			workflowProcessService.run(processInstance)
 		else
-			throw new RuntimeException("Unable to execute workflow when creating ${organization}")
+			throw new ErronousStateException("Unable to execute workflow when creating ${organization}")
 		
+		log.info "$authenticatedUser created $organization"
 		return [ true, organization, contact ]
 	}
 	
@@ -77,42 +82,43 @@ class OrganizationService {
 		}
 		
 		if(!organization.validate()) {
+			log.info "$authenticatedUser attempted to update $organization but failed Organization validation"
 			organization?.errors.each { log.error it }
 			return [ false, organization ]
 		}
 		
 		if(!organization.save()) {
 			organization?.errors.each { log.error it }
-			throw new RuntimeException("Unable to save when updating ${organization}")
+			throw new ErronousStateException("Unable to save when updating ${organization}")
 		}
 		
+		log.info "$authenticatedUser updated $organization"
 		return [true, organization]
 	}
 	
 	def delete(def id) {
 		def org = Organization.get(id)
 		if(!org)
-			throw new RuntimeException("Unable to find Organization with id $id")
-			
+			throw new ErronousStateException("Unable to find Organization with id $id")
+
 		def entityDescriptors = EntityDescriptor.findAllWhere(organization:org)
 		entityDescriptors.each { println "Removing $it"; entityDescriptorService.delete(it.id) }
-				
+
 		def contacts = Contact.findAllWhere(organization:org)
 		contacts.each { contact ->
+			// This gets around a stupid hibernate cascade bug primarily but is also useful as a second level check to prevent accidents
+			if(contact.id == authenticatedUser.contact.id)
+				throw new RuntimeException("Authenticated user is a contact for this organization. Users are unable to remove their own organization.")
+			
 			def contactPersons = ContactPerson.findAllWhere(contact:contact)
 			contactPersons.each { cp -> cp.delete() }
 			
-			def users = UserBase.findAllWhere(contact:contact)
-			users.each { user ->
-				user.contact = null
-				if(!user.save())
-					throw new RuntimeException("Unable to update $user with nil contact detail when removing organization $org")
-			}
-			
-			contact.delete()
+			log.debug "Removing $org from $contact"
+			contact.organization = null
+			contact.save()
 		}
 		
-
 		org.delete()
+		log.info "$authenticatedUser deleted $org"
 	}
 }

@@ -1,13 +1,10 @@
 package fedreg.metadata
 
-import org.springframework.transaction.annotation.*
-import groovy.xml.MarkupBuilder
 import java.text.SimpleDateFormat
+import org.springframework.transaction.annotation.*
 import fedreg.core.*
 
 class MetadataGenerationService {
-	
-	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
 	
 	def localizedName(builder, type, lang, content) {
 		builder."$type"('xml:lang':lang, content)
@@ -97,6 +94,9 @@ class MetadataGenerationService {
 	
 	@Transactional(readOnly = true)
 	def entitiesDescriptor(builder, all, minimal, roleExtensions, entitiesDescriptor, validUntil, certificateAuthorities) {
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+		
 		builder.EntitiesDescriptor("xmlns":"urn:oasis:names:tc:SAML:2.0:metadata", "xmlns:xsi":"http://www.w3.org/2001/XMLSchema-instance", 'xmlns:saml':'urn:oasis:names:tc:SAML:2.0:assertion', 'xmlns:shibmd':'urn:mace:shibboleth:metadata:1.0',
 			'xmlns:ds':'http://www.w3.org/2000/09/xmldsig#',
 			"xsi:schemaLocation":"urn:oasis:names:tc:SAML:2.0:metadata saml-schema-metadata-2.0.xsd urn:mace:shibboleth:metadata:1.0 shibboleth-metadata-1.0.xsd http://www.w3.org/2000/09/xmldsig# xmldsig-core-schema.xsd",

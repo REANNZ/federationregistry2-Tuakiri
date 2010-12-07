@@ -118,21 +118,21 @@ class NimbleTagLib {
 		
 		def href = "href='#'"
 		if(attrs.href)
-			href = "href=\'${attrs.href}\'"
+			href = "href=${attrs.href}"
 		
 		def cssclass = ""
 		if(attrs.class)
 			cssclass = attrs.class
 		
 		if(attrs.plain) {
-			out << "<a $href $onclick $id class='$cssclass'>${attrs.label.encodeAsHTML()}</a>"
+			out << "<a $href $onclick $id class='$cssclass'>${message(code:attrs.label)}</a>"
 		}
 		else {
 			out << "<a $href $onclick $id class='ui-button $type ui-widget ui-state-default ui-corner-all $cssclass'>"
 			if(type.contains('icon'))
 				out << "<span class='ui-button-icon-primary ui-icon ui-icon-${attrs.icon}'></span>"
 			if(type.contains('text'))
-				out << "<span class='ui-button-text'>${message(code:attrs.label).encodeAsHTML()}</span>"
+				out << "<span class='ui-button-text'>${message(code:attrs.label)}</span>"
 			out << "</a>"
 		}
 	}
@@ -144,7 +144,7 @@ class NimbleTagLib {
 		def btnAttrs = [:]
 		btnAttrs.id = attrs.id
 		btnAttrs.class = attrs.class
-		btnAttrs.onclick = "confirmAction = function() { ${attrs.action} }; nimble.wasConfirmed('${StringEscapeUtils.escapeJavaScript(attrs.title.encodeAsHTML())}', '${StringEscapeUtils.escapeJavaScript(attrs.msg.encodeAsHTML())}', '${StringEscapeUtils.escapeJavaScript(attrs.accept.encodeAsHTML())}', '${StringEscapeUtils.escapeJavaScript(attrs.cancel.encodeAsHTML())}');"
+		btnAttrs.onclick = "confirmAction = function() { ${attrs.action} }; nimble.wasConfirmed('${StringEscapeUtils.escapeJavaScript(message(code:attrs.title))}', '${StringEscapeUtils.escapeJavaScript(message(code:attrs.msg))}', '${StringEscapeUtils.escapeJavaScript(message(code:attrs.accept))}', '${StringEscapeUtils.escapeJavaScript(message(code:attrs.cancel))}');"
 		btnAttrs.label = attrs.label
 		btnAttrs.icon = attrs.icon
 		btnAttrs.plain = attrs.plain

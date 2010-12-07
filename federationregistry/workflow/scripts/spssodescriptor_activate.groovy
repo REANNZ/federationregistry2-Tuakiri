@@ -33,6 +33,18 @@ if(sp) {
 		}
 	}
 	
+	// Create ED access control role
+	def edRole = Role.findWhere(name:"descriptor-${sp.entityDescriptor.id}-administrators")
+	if(!edRole){	// Generally expected state
+		edRole = roleService.createRole("descriptor-${sp.entityDescriptor.id}-administrators", "Global administrators for ${sp.entityDescriptor}", false)
+	
+		LevelPermission permission = new LevelPermission()
+	    permission.populate("descriptor", "${sp.entityDescriptor.id}", "*", null, null, null)
+	    permission.managed = false
+		permissionService.createPermission(permission, edRole)
+	}
+	
+	// Create SP access control role
 	def role = Role.findWhere(name:"descriptor-${sp.id}-administrators")
 	if(!role){	// Expected state
 		role = roleService.createRole("descriptor-${sp.id}-administrators", "Global administrators for $sp", false)

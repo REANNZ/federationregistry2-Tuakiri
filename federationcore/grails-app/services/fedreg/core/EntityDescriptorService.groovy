@@ -2,14 +2,19 @@ package fedreg.core
 
 import org.springframework.transaction.interceptor.TransactionAspectSupport
 
-import fedreg.workflow.ProcessPriority
 import grails.plugins.nimble.core.UserBase
+import grails.plugins.nimble.core.Role
+import grails.plugins.nimble.core.LevelPermission
 
 class EntityDescriptorService {
 
 	def grailsApplication
 	def workflowProcessService
+	def roleService
+	def permissionService
 	
+	// This is primarily to avoid an issue where cross service calls with a save
+	// would not rollback if the calling service laters throws an exception.... weird.
 	def createNoSave(def params) {
 		// Organization
 		def organization = Organization.get(params.organization?.id)
@@ -39,6 +44,7 @@ class EntityDescriptorService {
 			return [false, entityDescriptor]
 		}
 		
+		log.info "$authenticatedUser created $entityDescriptor (not yet persisted)"
 		return [true, entityDescriptor]
 	}
 	
@@ -47,12 +53,26 @@ class EntityDescriptorService {
 		
 		if(!created)
 			return [false, entityDescriptor]
+			
+		// We approved directly created entity descriptors as only folks with higher privs should be allowed to do this
+		entityDescriptor.approved = true
+		entityDescriptor.active = true
 	
-		if(!entityDescriptor.save()) {			
+		def savedEntityDescriptor = entityDescriptor.save()
+		if(!savedEntityDescriptor) {
 			entityDescriptor.errors.each {log.warn it}
-			throw new RuntimeException("Unable to save when creating ${entityDescriptor}")
+			throw new ErronousStateException("Unable to save when creating ${entityDescriptor}")
 		}
+		
+		def adminRole = roleService.createRole("descriptor-${savedEntityDescriptor.id}-administrators", "Global administrators for the entity ${savedEntityDescriptor.entityID}", false)
+		LevelPermission permission = new LevelPermission()
+	    permission.populate("descriptor", "${savedEntityDescriptor.id}", "*", null, null, null)
+	    permission.managed = false
+		permissionService.createPermission(permission, adminRole)
+		
+		roleService.addMember(authenticatedUser, adminRole)
 	
+		log.info "$authenticatedUser created $entityDescriptor"
 		return [true, entityDescriptor]
 	}
 	
@@ -70,31 +90,28 @@ class EntityDescriptorService {
 		
 		if(!entityDescriptor.save()) {			
 			entityDescriptor.errors.each {log.warn it}
-			throw new RuntimeException("Unable to save when updating ${entityDescriptor}")
+			throw new ErronousStateException("Unable to save when updating ${entityDescriptor}")
 		}
 		
+		log.info "$authenticatedUser updated $entityDescriptor"
 		return [true, entityDescriptor]
 	}
 	
 	def delete (def id) {
 		def ed = EntityDescriptor.get(id)
 		if(!ed)
-			throw new RuntimeException("Unable to find EntityDescriptor with id $id")
+			throw new ErronousStateException("Unable to find EntityDescriptor with id $id")
 			
 		def idpService = grailsApplication.mainContext.IDPSSODescriptorService
 		def spService = grailsApplication.mainContext.SPSSODescriptorService
-		
-		def org = ed.organization
-		org.removeFromEntityDescriptors(ed)
 			
 		// We need to do this for GORM stupidity. If you delete an IDP (and hence collaborator) then try to process any remaining AA associted with the ED collaborators are still present
 		// in the list (regardless of refresh type calls). So for now at least an AA only ED is not processed - more thought needed.
 		if(ed.attributeAuthorityDescriptors?.size() > ed.idpDescriptors?.size() || ed.pdpDescriptors?.size() != 0)
-			throw new RuntimeException("EntityDescriptor $ed holds unique combination of IDP/SP/AA/PDP that is not supported by this delete method, manual intervention will be required")
+			throw new ErronousStateException("EntityDescriptor $ed holds unique combination of IDP/SP/AA/PDP that is not supported by this delete method, manual intervention will be required")
 			
 		ed.idpDescriptors.each { idpService.delete(it.id) }
 		ed.spDescriptors.each { spService.delete(it.id)}
-		
 		ed.contacts.each { it.delete() }
 		
 		ed.delete()
@@ -102,8 +119,10 @@ class EntityDescriptorService {
 		users.each { user ->
 			user.entityDescriptor = null
 			if(!user.save())
-				throw new RuntimeException("Unable to update $user with nil entitydescriptor detail when removing $ed")
+				throw new ErronousStateException("Unable to update $user with nil entitydescriptor detail when removing $ed")
 		}
+		
+		log.info "$authenticatedUser deleted $ed"
 	}
 
 }

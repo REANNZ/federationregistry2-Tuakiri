@@ -3,8 +3,7 @@ package fedreg.core
 import org.apache.shiro.SecurityUtils
 
 class DescriptorNameIDFormatController {
-
-	static allowedMethods = [remove: "POST"]
+	def allowedMethods = [add:'POST', remove: 'DELETE']
 	
 	def remove = {
 		if(!params.id) {
@@ -43,19 +42,19 @@ class DescriptorNameIDFormatController {
 				render message(code: 'fedreg.nameidformat.remove.notsupported', args:[nameIDFormat.uri])
 				return
 			}
-		
-			log.info "Removing nameIDFormat (${params.formatID})${nameIDFormat.uri} from descriptor ${params.id}"
+			
 			descriptor.removeFromNameIDFormats(nameIDFormat)
 			descriptor.save()
 			if(descriptor.hasErrors()) {
-				log.warn "Removing nameIDFormat (${params.formatID})${nameIDFormat.uri} from descriptor ${params.id} failed"
+				log.warn "$authenticatedUser removing $nameIDFormat from $descriptor failed"
 				descriptor.errors.each {
 					log.debug it
 				}
 				render message(code: 'fedreg.nameidformat.remove.failed', args:[nameIDFormat.uri])
 				response.setStatus(500)
 				return
-			}else {
+			} else {
+				log.info "$authenticatedUser removed $nameIDFormat from $descriptor"
 				render message(code: 'fedreg.nameidformat.remove.success', args:[nameIDFormat.uri])
 			}
 		}
@@ -133,14 +132,15 @@ class DescriptorNameIDFormatController {
 			descriptor.addToNameIDFormats(nameIDFormat)
 			descriptor.save()
 			if(descriptor.hasErrors()) {
-				log.warn "Adding nameIDFormat (${params.formatID})${nameIDFormat.uri} to descriptor ${params.id} failed"
+				log.warn "Adding nameIDFormat $nameIDFormat to $descriptor failed"
 				descriptor.errors.each {
 					log.debug it
 				}
 				render message(code: 'fedreg.nameidformat.add.failed', args:[nameIDFormat.uri])
 				response.setStatus(500)
 				return
-			}else {
+			} else {
+				log.warn "Added nameIDFormat $nameIDFormat to $descriptor"
 				render message(code: 'fedreg.nameidformat.add.success', args:[nameIDFormat.uri])
 			}
 		}
