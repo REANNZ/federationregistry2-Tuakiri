@@ -7,7 +7,6 @@ messageSource = ctx.getBean("messageSource")
 
 def org = Organization.read(env.organization.toLong())
 if(org) {
-	
 	def creator = Contact.read(env.creator.toLong())
 	def args = new Object[1]
 	args[0] = org.displayName
