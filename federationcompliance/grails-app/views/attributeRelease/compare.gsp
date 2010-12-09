@@ -60,7 +60,7 @@
 			</td>
 			<td />
 			<td>
-				<g:if test="${suppliedOptionalAttributes.contains(requiredAttribute)}">
+				<g:if test="${suppliedOptionalAttributes.contains(optionalAttribute)}">
 					<g:message code="label.supported"/>
 				</g:if>
 				<g:else>
