@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head class="html5reset-bare-bones">
+
+	<meta charset="utf-8">
+
+	<!--[if IE]><![endif]-->
+	
+	<title>{{ page.title }}</title>
+	
+	<meta name="description" content="{{ page.description }}">
+
+	<link rel="stylesheet" href="css/main.css">
+	<link rel="stylesheet" href="css/print/main.css" media="print">
+	
+	<!--[if IE]>
+	<link rel="stylesheet" href="css/patches/win-ie-all.css">
+	<![endif]-->
+	<!--[if IE 7]>
+	<link rel="stylesheet" href="css/patches/win-ie7.css">
+	<![endif]-->
+	<!--[if lt IE 7]>
+	<link rel="stylesheet" href="css/patches/win-ie-old.css">
+	<![endif]-->
+	
+	<link rel="stylesheet" href="css/nivo-slider.css">
+	
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.4.4.min.js"></script>
+	<script type="text/javascript" src="js/jquery.nivo.slider.pack.js"></script>
+	
+	<script type="text/javascript">
+		$(window).load(function() {
+	    	$('#slider').nivoSlider();
+		});
+	</script>
+</head>
+
+<body>
+
+	<div>
+
+		<header>
+	
+		</header>
+	
+		{{ content }}
+	
+		<footer></footer>
+
+	</div>
+
+</body>
+</html>
