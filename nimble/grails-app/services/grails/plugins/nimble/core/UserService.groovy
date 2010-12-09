@@ -260,7 +260,7 @@ class UserService {
 
         def updatedUser = user.save()
         if (updatedUser) {
-            log.error("Updated user [$user.id]$user.username")
+            log.debug("Updated user [$user.id]$user.username")
             return updatedUser
         }
 
