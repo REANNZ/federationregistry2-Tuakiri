@@ -50,7 +50,7 @@ class IDPSSODescriptorService {
 	
 		// IDP
 		def saml2Namespace = SamlURI.findByUri('urn:oasis:names:tc:SAML:2.0:protocol')
-		def identityProvider = new IDPSSODescriptor(approved:false, active:params.active, displayName: params.idp?.displayName, description: params.idp?.description, scope: params.idp?.scope, organization: organization, wantAuthnRequestsSigned:true)
+		def identityProvider = new IDPSSODescriptor(approved:false, active:params.active, displayName: params.idp?.displayName, description: params.idp?.description, scope: params.idp?.scope, organization: organization)
 		identityProvider.addToProtocolSupportEnumerations(saml2Namespace)
 		
 		def supportedAttributes = []
@@ -231,7 +231,6 @@ class IDPSSODescriptorService {
 				entityDescriptor.active = false
 			}
 		}
-		identityProvider.wantAuthnRequestsSigned = false
 		identityProvider.autoAcceptServices = params.idp.autoacceptservices == 'true'
 		
 		// Ensure AA stays synced with scope
