@@ -71,16 +71,6 @@
 						</tr>
 						<tr>
 							<th>
-								<label for="idp.wantauthnrequestssigned"><g:message code="label.requiresignedauthn" /></label>
-							</th>
-							<td>
-								<g:radioGroup name="idp.wantauthnrequestssigned" values="['true', 'false']" labels="['label.true', 'label.false']" value="${identityProvider.wantAuthnRequestsSigned}" >
-									 ${it.radio} <g:message code="${it.label}" /> <br>
-								</g:radioGroup>
-							</td>
-						</tr>
-						<tr>
-							<th>
 								<label for="idp.autoacceptservices"><g:message code="label.autoacceptservices" /></label>
 							</th>
 							<td>
