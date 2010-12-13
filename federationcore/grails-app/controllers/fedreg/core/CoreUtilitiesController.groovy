@@ -23,6 +23,8 @@ class CoreUtilitiesController {
 			
 			def valid = true
 			def certerrors = []
+			
+			log.info "Attempting to validate certificate data:\n$certificate"
 		
 			// Wilcard certificate
 			if(subject.contains('*')) {
@@ -35,7 +37,7 @@ class CoreUtilitiesController {
 			def matcher =  subject =~ /^(?:.*,)*[cC][nN]=([^,]+)(?:,.*)*$/
 			if(matcher.matches()) {
 				def cn = matcher[0][1]
-				log.debug "Certificate CN is $cn and entity is ${params.entity}"
+				log.info "Certificate CN is $cn and entity is ${params.entity}"
 				if(!params.entity.contains(cn)) {
 					valid = false
 					certerrors.add("fedreg.templates.certificates.validation.subject.doesnot.contain.host")
