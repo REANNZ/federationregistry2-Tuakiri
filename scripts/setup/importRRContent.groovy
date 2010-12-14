@@ -218,6 +218,11 @@ def assignOrganizationAdministrators() {
 }
 
 def importEntities() {
+	
+  // Default monitor creation
+  def mt = new MonitorType(name:'ping', description:'Ping check of associated endpoint to ensure availability')
+  mt.save()​​​​​​​​​​​​​​​​​​​​​​​​​​​​
+	
   println "Creating core EntitiesDescriptor ${grailsApplication.config.fedreg.metadata.federation}" 
   def eds = new EntitiesDescriptor(name: grailsApplication.config.fedreg.metadata.federation)
   if(!eds.save()) {
