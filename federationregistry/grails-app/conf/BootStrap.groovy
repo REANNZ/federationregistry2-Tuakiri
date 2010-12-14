@@ -70,7 +70,7 @@ class BootStrap {
 			}
 		}	
 		
-		// Populate WorkFlows on initial deployment
+		// Populate WorkFlows on initial deployment. Scripts first, workflows that references scripts second.
 		if(Process.count() == 0) {	
 			def processes = new File("${System.getenv('FEDREG_CONFIG')}/workflow/processes")
 			processes.eachFile { process ->
@@ -79,23 +79,6 @@ class BootStrap {
 		}
 		
 		SecurityUtils.metaClass = null
-		
-		if(GrailsUtil.environment == "development") {
-			if(Organization.count() == 0) {
-				def base = new File("../scripts/setup/samlBase.groovy")
-				def attrBase = new File("../scripts/setup/aafAttributePopulation.groovy")
-				def rrData = new File("../scripts/setup/importRRContent.groovy")
-			
-				def shell = new GroovyShell(grailsApplication.classLoader, new Binding(
-				            'application': grailsApplication,
-				            'context': applicationContext, 'ctx': applicationContext))
-				shell.'shell' = shell
-			
-				shell.evaluate(base.text)
-				shell.evaluate(attrBase.text)
-				shell.evaluate(rrData.text)
-			}
-		}
      }
 
      def destroy = {
