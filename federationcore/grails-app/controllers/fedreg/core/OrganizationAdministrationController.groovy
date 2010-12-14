@@ -38,7 +38,8 @@ class OrganizationAdministrationController {
 
 	    def users = UserBase.findAllByUsernameIlike(q)
 	    ProfileBase.findAllByFullNameIlikeOrEmailIlike(q, q)?.each {
-			users.add(it.owner)
+			if(!users.contains(it.owner))
+				users.add(it.owner)
 	    }
 
 		def adminRole = Role.findByName("organization-${organization.id}-administrators")

@@ -38,7 +38,8 @@ class DescriptorAdministrationController {
 
 	    def users = UserBase.findAllByUsernameIlike(q)
 	    ProfileBase.findAllByFullNameIlikeOrEmailIlike(q, q)?.each {
-			users.add(it.owner)
+			if(!users.contains(it.owner))
+				users.add(it.owner)
 	    }
 
 		def adminRole = Role.findByName("descriptor-${descriptor.id}-administrators")
