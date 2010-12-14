@@ -113,7 +113,7 @@ public class SecurityFilters extends grails.plugins.nimble.security.NimbleFilter
 		console(controller: "(code|console|initialBootstrap)") {
             before = {
 				if( ['initialBootstrap'].contains(controllerName) && !grailsApplication.config.fedreg.bootstrap)
-					redirect (controller: "organization")
+					redirect (controller: "dashboard")
 				else {	
 					if(!grailsApplication.config.fedreg.bootstrap) {
 		                accessControl {
