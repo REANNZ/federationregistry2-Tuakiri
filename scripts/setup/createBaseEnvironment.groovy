@@ -28,7 +28,7 @@ def lang = 'en'
 
 def federationName = 'aaf.edu.au'
 
-def otName = "AU University"
+def otName = "university"
 def otDisplayName = "Australian Universities"
 def otDescription = "Organization Type that is associated with all Australian Universities"
 
