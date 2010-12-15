@@ -48,4 +48,11 @@ class AttributeAuthorityDescriptor extends RoleDescriptor {
 	}
 
 	public String toString() {	"attributeauthoritydescriptor:[id:$id]" }
+	
+	public boolean functioning() {
+		if(collaborator)
+			( active && approved && collaborator.functioning() && entityDescriptor.functioning() )
+		else
+			( active && approved && entityDescriptor.functioning() )
+	}
 }

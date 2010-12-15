@@ -28,5 +28,9 @@ class AssertionIDRequestService extends Endpoint  {
 	static belongsTo = [descriptor:RoleDescriptor]
 	
 	public String toString() {	"assertionidrequestservice:[id:$id, location: $location]" }
+	
+	public boolean functioning() {
+		( active && approved && descriptor.functioning() )
+	}
 
 }

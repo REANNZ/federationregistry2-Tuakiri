@@ -27,4 +27,8 @@ class NameIDMappingService extends Endpoint  {
 
 	static belongsTo = [descriptor: IDPSSODescriptor]
 	public String toString() {	"nameidmappingservice:[id:$id, location: $location]" }
+	
+	public boolean functioning() {
+		( active && approved && descriptor.functioning() )
+	}
 }

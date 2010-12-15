@@ -45,4 +45,8 @@ class SPSSODescriptor extends SSODescriptor {
  	}
 
 	public String toString() {	"spssodescriptor:[id:$id, displayName: $displayName]" }
+	
+	public boolean functioning() {
+		( active && approved && entityDescriptor.functioning() )
+	}
 }

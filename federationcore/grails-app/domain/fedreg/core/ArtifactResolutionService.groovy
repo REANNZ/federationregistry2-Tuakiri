@@ -28,5 +28,9 @@ class ArtifactResolutionService extends IndexedEndpoint  {
 	static belongsTo = [descriptor: SSODescriptor]
 
 	public String toString() {	"artifactresolutionservice:[id:$id, location: $location]" }
+	
+	public boolean functioning() {
+		( active && approved && descriptor.functioning() )
+	}
 
 }

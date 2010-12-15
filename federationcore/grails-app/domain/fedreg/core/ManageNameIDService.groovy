@@ -28,5 +28,9 @@ class ManageNameIDService extends Endpoint  {
   	static belongsTo = [descriptor: SSODescriptor]
 
 	public String toString() { "managenameidservice:[id:$id, location: $location]" }
+	
+	public boolean functioning() {
+		( active && approved && descriptor.functioning() )
+	}
 
 }

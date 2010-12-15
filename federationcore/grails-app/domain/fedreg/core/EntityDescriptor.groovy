@@ -66,17 +66,15 @@ class EntityDescriptor extends Descriptor  {
 	public String toString() {	"entitydescriptor:[id:$id, entityID: $entityID]" }
 	
 	public boolean holdsIDPOnly() {
-		if(idpDescriptors?.size() == 1 && (attributeAuthorityDescriptors?.size() == 0 || attributeAuthorityDescriptors?.size() == 1) && spDescriptors?.size() == 0 && pdpDescriptors?.size() == 0)
-			true
-		else
-			false
+		( idpDescriptors?.size() == 1 && (attributeAuthorityDescriptors?.size() == 0 || attributeAuthorityDescriptors?.size() == 1) && spDescriptors?.size() == 0 && pdpDescriptors?.size() == 0 )
 	}
 	
 	public boolean holdsSPOnly() {
-		if(spDescriptors?.size() == 1 && idpDescriptors?.size() == 0 && attributeAuthorityDescriptors?.size() == 0 && pdpDescriptors?.size() == 0)
-			true
-		else
-			false
+		( spDescriptors?.size() == 1 && idpDescriptors?.size() == 0 && attributeAuthorityDescriptors?.size() == 0 && pdpDescriptors?.size() == 0 )
+	}
+	
+	public boolean functioning() {
+		( active && approved && organization.functioning() )
 	}
 
 }

@@ -20,6 +20,8 @@
 package fedreg.core
 
 /**
+ * While not marked explicitly due to GORM issues RoleDescriptor is considered 'Abstract'
+ *
  * @author Bradley Beddoes
  */
 class RoleDescriptor extends Descriptor {
@@ -67,6 +69,11 @@ class RoleDescriptor extends Descriptor {
 		lastUpdated(nullable:true)
 	}
 	
-	public String toString() {	"roledescriptor:[id:$id, displayName: $displayName]" }
-
+	public String toString() { "roledescriptor:[id:$id, displayName: $displayName]" }
+	
+	// RoleDescriptor is considered abstract but can't be marked as such due to GORM issues
+	// This method should be overlaoded by all subclasses
+	public boolean functioning() {
+		false
+	}
 }

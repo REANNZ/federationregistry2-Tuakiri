@@ -54,4 +54,8 @@ class IDPSSODescriptor extends SSODescriptor  {
 	}
 	
 	public String toString() {	"idpssodescriptor:[id:$id, displayName: $displayName]" }
+	
+	public boolean functioning() {
+		( active && approved && entityDescriptor.functioning() )
+	}
 }

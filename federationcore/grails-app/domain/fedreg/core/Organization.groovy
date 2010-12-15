@@ -70,4 +70,8 @@ class Organization  {	// Also called a participant in AAF land
 	}
 	
 	public String toString() {	"organization:[id:$id, name: $name, displayName: $displayName]" }
+	
+	public boolean functioning() {
+		( active && approved )
+	}
 }

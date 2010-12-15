@@ -28,5 +28,9 @@ class SingleLogoutService extends Endpoint  {
 	static belongsTo = [descriptor: SSODescriptor]
 	
 	public String toString() {	"singlelogoutservice:[id:$id, location: $location]" }
+	
+	public boolean functioning() {
+		( active && approved && descriptor.functioning() )
+	}
 
 }

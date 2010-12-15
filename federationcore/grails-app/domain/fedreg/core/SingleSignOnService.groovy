@@ -28,5 +28,9 @@ class SingleSignOnService extends Endpoint {
 	static belongsTo = [descriptor: IDPSSODescriptor]
 
 	public String toString() {	"singlesignonservice:[id:$id, location: $location]" }
+	
+	public boolean functioning() {
+		( active && approved && descriptor.functioning() )
+	}
 
 }

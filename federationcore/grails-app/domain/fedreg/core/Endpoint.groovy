@@ -39,6 +39,8 @@ class Endpoint	{
 	static mapping = {
 		tablePerHierarchy false
 	}
+	
+	static belongsTo = [descriptor: RoleDescriptor]
 
 	static constraints = {
 		binding(nullable: false)
@@ -49,4 +51,10 @@ class Endpoint	{
 	}
 
 	public String toString() {	"endpoint:[id:$id, location: $location]" }
+	
+	// Endpoint is considered abstract but can't be marked as such due to GORM issues
+	// This method should be overlaoded by all subclasses
+	public boolean functioning() {
+		false
+	}
 }
