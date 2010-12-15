@@ -62,7 +62,7 @@ if(!savedEDS) {
 }
 
 // Organization Type
-def ot = new OrganizationType(name:otName, displayName:otDisplayName, description:otDescription)
+def ot = new OrganizationType(name:otName, displayName:otDisplayName, description:otDescription, discoveryServiceCategory:true)
 def savedOT = ot.save()
 if(!savedOT) {
 	ot.errors.each { println it }
