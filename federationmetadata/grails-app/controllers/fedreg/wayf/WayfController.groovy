@@ -11,9 +11,9 @@ class WayfController {
 	def grailsApplication
 
 	def generateconfiguration = {
-		def organizationTypes = [] as List
-		def identityProviders = IDPSSODescriptor.findAllWhere(active:true, approved:true) as List
-		identityProviders.sort { it.displayName }
+		def organizationTypes = [] as List		
+		def identityProviders = IDPSSODescriptor.list().findAll { idp -> idp.functioning() }.sort { idp -> idp.displayName }
+		
 		def ssoPostEndpoints = [:]
 		
 		def types = grailsApplication.config.fedreg.metadata.wayf.generateconfig.orgtypes
@@ -40,7 +40,7 @@ class WayfController {
 			}
 		}
 		
-		render view: "generateconfiguration", model:[organizationTypes:organizationTypes, identityProviders: IDPSSODescriptor.list(), ssoPostEndpoints:ssoPostEndpoints], contentType:"text/plain", encoding:"UTF-8"
+		render view: "generateconfiguration", model:[organizationTypes:organizationTypes, identityProviders: identityProviders, ssoPostEndpoints:ssoPostEndpoints], contentType:"text/plain", encoding:"UTF-8"
 	}
 
 }
