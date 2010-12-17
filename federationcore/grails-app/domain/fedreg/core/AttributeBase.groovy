@@ -65,7 +65,9 @@ class AttributeBase  {
 	public String toString() {	"attributebase:[id:$id, name: $name, friendlyName: $friendlyName]" }
 	
 	public boolean equals(Object obj) {
-		if (obj == null) { return false }
+		if( this.is(obj) ) return true
+		if ( obj == null ) return false
+		if ( !obj.instanceOf(AttributeBase) ) return false
 		
 		AttributeBase rhs = (AttributeBase) obj;
 		return new EqualsBuilder()
