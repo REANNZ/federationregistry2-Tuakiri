@@ -1,3 +1,5 @@
+import fedreg.core.*
+
 testDataConfig {
 	sampleData {
 		'fedreg.core.OrganizationType' {
@@ -7,6 +9,7 @@ testDataConfig {
 		'fedreg.core.Organization' {
 			def i = 1
 			name = {-> "name${i++}" } 
+			url = { -> new UrlURI(uri:"http://www.name${i++}.com")}
 		}
 		'fedreg.core.AttributeBase' {
 			def i = 1
