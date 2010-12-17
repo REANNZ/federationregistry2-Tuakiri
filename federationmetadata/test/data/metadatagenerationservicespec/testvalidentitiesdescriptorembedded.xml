@@ -1,4 +1,4 @@
-<EntitiesDescriptor validUntil='2009-07-22T00:00:00Z' cacheDuration='2009-07-06T00:00:00Z' Name='some.test.name' xmlns='urn:oasis:names:tc:SAML:2.0:metadata' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:saml='urn:oasis:names:tc:SAML:2.0:assertion' xsi:schemaLocation='urn:oasis:names:tc:SAML:2.0:metadata sstc-saml-schema-metadata-2.0.xsd urn:mace:shibboleth:metadata:1.0 shibboleth-metadata-1.0.xsd http://www.w3.org/2000/09/xmldsig# xmldsig-core-schema.xsd'>
+<EntitiesDescriptor xmlns='urn:oasis:names:tc:SAML:2.0:metadata' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:saml='urn:oasis:names:tc:SAML:2.0:assertion' xmlns:shibmd='urn:mace:shibboleth:metadata:1.0' xmlns:ds='http://www.w3.org/2000/09/xmldsig#' xsi:schemaLocation='urn:oasis:names:tc:SAML:2.0:metadata saml-schema-metadata-2.0.xsd urn:mace:shibboleth:metadata:1.0 shibboleth-metadata-1.0.xsd http://www.w3.org/2000/09/xmldsig# xmldsig-core-schema.xsd' validUntil='2009-07-22T00:00:00Z' Name='some.test.name'>
   <Extensions>
     <shibmd:KeyAuthority xmlns:shibmd='urn:mace:shibboleth:metadata:1.0' VerifyDepth='5'>
       <ds:KeyInfo xmlns:ds='http://www.w3.org/2000/09/xmldsig#'>
@@ -51,26 +51,16 @@ wU7I1/N110XAqdxIAZo7giAij4IKE122u7bPYs8YlQ8JoMb4hPJY5g==
   </Extensions>
   <EntitiesDescriptor>
     <EntityDescriptor entityID='https://test.example.com/myuniqueID1'>
-      <IDPSSODescriptor protocolSupportEnumeration='uri' WantAuthnRequestsSigned='true'>
-        <Organization>
-          <OrganizationName xml:lang='en'>Test Organization</OrganizationName>
-          <OrganizationDisplayName xml:lang='en'>Test Organization Display</OrganizationDisplayName>
-          <OrganizationURL xml:lang='en'>http://example.com</OrganizationURL>
-        </Organization>
+      <IDPSSODescriptor protocolSupportEnumeration='uri'>
+        <Extensions>
+          <shibmd:Scope regexp='false'>scope</shibmd:Scope>
+        </Extensions>
       </IDPSSODescriptor>
-      <SPSSODescriptor protocolSupportEnumeration='uri' AuthnRequestsSigned='false' WantAssertionsSigned='false'>
-        <Organization>
-          <OrganizationName xml:lang='en'>Test Organization</OrganizationName>
-          <OrganizationDisplayName xml:lang='en'>Test Organization Display</OrganizationDisplayName>
-          <OrganizationURL xml:lang='en'>http://example.com</OrganizationURL>
-        </Organization>
-      </SPSSODescriptor>
+      <SPSSODescriptor protocolSupportEnumeration='uri' />
       <AttributeAuthorityDescriptor protocolSupportEnumeration='uri'>
-        <Organization>
-          <OrganizationName xml:lang='en'>Test Organization</OrganizationName>
-          <OrganizationDisplayName xml:lang='en'>Test Organization Display</OrganizationDisplayName>
-          <OrganizationURL xml:lang='en'>http://example.com</OrganizationURL>
-        </Organization>
+        <Extensions>
+          <shibmd:Scope regexp='false'>scope</shibmd:Scope>
+        </Extensions>
       </AttributeAuthorityDescriptor>
       <Organization>
         <OrganizationName xml:lang='en'>Test Organization</OrganizationName>
@@ -87,26 +77,16 @@ wU7I1/N110XAqdxIAZo7giAij4IKE122u7bPYs8YlQ8JoMb4hPJY5g==
       </ContactPerson>
     </EntityDescriptor>
     <EntityDescriptor entityID='https://test.example.com/myuniqueID2'>
-      <IDPSSODescriptor protocolSupportEnumeration='uri' WantAuthnRequestsSigned='true'>
-        <Organization>
-          <OrganizationName xml:lang='en'>Test Organization</OrganizationName>
-          <OrganizationDisplayName xml:lang='en'>Test Organization Display</OrganizationDisplayName>
-          <OrganizationURL xml:lang='en'>http://example.com</OrganizationURL>
-        </Organization>
+      <IDPSSODescriptor protocolSupportEnumeration='uri'>
+        <Extensions>
+          <shibmd:Scope regexp='false'>scope</shibmd:Scope>
+        </Extensions>
       </IDPSSODescriptor>
-      <SPSSODescriptor protocolSupportEnumeration='uri' AuthnRequestsSigned='false' WantAssertionsSigned='false'>
-        <Organization>
-          <OrganizationName xml:lang='en'>Test Organization</OrganizationName>
-          <OrganizationDisplayName xml:lang='en'>Test Organization Display</OrganizationDisplayName>
-          <OrganizationURL xml:lang='en'>http://example.com</OrganizationURL>
-        </Organization>
-      </SPSSODescriptor>
+      <SPSSODescriptor protocolSupportEnumeration='uri' />
       <AttributeAuthorityDescriptor protocolSupportEnumeration='uri'>
-        <Organization>
-          <OrganizationName xml:lang='en'>Test Organization</OrganizationName>
-          <OrganizationDisplayName xml:lang='en'>Test Organization Display</OrganizationDisplayName>
-          <OrganizationURL xml:lang='en'>http://example.com</OrganizationURL>
-        </Organization>
+        <Extensions>
+          <shibmd:Scope regexp='false'>scope</shibmd:Scope>
+        </Extensions>
       </AttributeAuthorityDescriptor>
       <Organization>
         <OrganizationName xml:lang='en'>Test Organization</OrganizationName>

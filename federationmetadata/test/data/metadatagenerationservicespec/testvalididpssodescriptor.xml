@@ -1,4 +1,7 @@
-<IDPSSODescriptor protocolSupportEnumeration='urn:oasis:names:tc:SAML:1.1:protocol urn:mace:shibboleth:1.0 urn:oasis:names:tc:SAML:2.0:protocol' WantAuthnRequestsSigned='true'>
+<IDPSSODescriptor protocolSupportEnumeration='urn:oasis:names:tc:SAML:1.1:protocol urn:mace:shibboleth:1.0 urn:oasis:names:tc:SAML:2.0:protocol'>
+  <Extensions>
+    <shibmd:Scope regexp='false'>scope</shibmd:Scope>
+  </Extensions>
   <KeyDescriptor use='encryption'>
     <ds:KeyInfo xmlns:ds='http://www.w3.org/2000/09/xmldsig#'>
       <ds:KeyName>key1</ds:KeyName>
@@ -73,10 +76,10 @@ wU7I1/N110XAqdxIAZo7giAij4IKE122u7bPYs8YlQ8JoMb4hPJY5g==
   <SingleSignOnService Binding='urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST' Location='https://test.example.com/sso/POST' />
   <NameIDMappingService Binding='urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect' Location='https://test.example.com/nameidmappingserivce/REDIRECT' />
   <AssertionIDRequestService Binding='urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect' Location='https://test.example.com/assertionidrequestservice/REDIRECT' />
-  <saml:Attribute Name='test attr' NameFormat='test:attr:format' FriendlyName='test attr friendly'>
+  <saml:Attribute Name='test attr' FriendlyName='test attr friendly' NameFormat='test:attr:format'>
     <saml:AttributeValue>val1</saml:AttributeValue>
     <saml:AttributeValue>val2</saml:AttributeValue>
   </saml:Attribute>
-  <saml:Attribute Name='test attr2' NameFormat='' FriendlyName='test attr friendly 2' />
-  <saml:Attribute Name='test attr3' NameFormat='test:attr:format' FriendlyName='' />
+  <saml:Attribute Name='test attr2' FriendlyName='test attr friendly 2' NameFormat='urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified' />
+  <saml:Attribute Name='test attr3' FriendlyName='' NameFormat='test:attr:format' />
 </IDPSSODescriptor>

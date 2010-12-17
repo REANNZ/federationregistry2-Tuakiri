@@ -1,33 +1,39 @@
 <EntityDescriptor entityID='https://test.example.com/myuniqueID'>
-  <IDPSSODescriptor protocolSupportEnumeration='uri' WantAuthnRequestsSigned='true'>
+  <IDPSSODescriptor protocolSupportEnumeration='uri'>
+    <Extensions>
+      <shibmd:Scope regexp='false'>scope</shibmd:Scope>
+    </Extensions>
     <Organization>
       <OrganizationName xml:lang='en'>Test Organization</OrganizationName>
       <OrganizationDisplayName xml:lang='en'>Test Organization Display</OrganizationDisplayName>
       <OrganizationURL xml:lang='en'>http://example.com</OrganizationURL>
     </Organization>
   </IDPSSODescriptor>
-  <IDPSSODescriptor protocolSupportEnumeration='uri' WantAuthnRequestsSigned='true'>
+  <IDPSSODescriptor protocolSupportEnumeration='uri'>
+    <Extensions>
+      <shibmd:Scope regexp='false'>scope</shibmd:Scope>
+    </Extensions>
     <Organization>
       <OrganizationName xml:lang='en'>Test Organization</OrganizationName>
       <OrganizationDisplayName xml:lang='en'>Test Organization Display</OrganizationDisplayName>
       <OrganizationURL xml:lang='en'>http://example.com</OrganizationURL>
     </Organization>
   </IDPSSODescriptor>
-  <SPSSODescriptor protocolSupportEnumeration='uri' AuthnRequestsSigned='false' WantAssertionsSigned='false'>
+  <SPSSODescriptor protocolSupportEnumeration='uri'>
     <Organization>
       <OrganizationName xml:lang='en'>Test Organization</OrganizationName>
       <OrganizationDisplayName xml:lang='en'>Test Organization Display</OrganizationDisplayName>
       <OrganizationURL xml:lang='en'>http://example.com</OrganizationURL>
     </Organization>
   </SPSSODescriptor>
-  <SPSSODescriptor protocolSupportEnumeration='uri' AuthnRequestsSigned='false' WantAssertionsSigned='false'>
+  <SPSSODescriptor protocolSupportEnumeration='uri'>
     <Organization>
       <OrganizationName xml:lang='en'>Test Organization</OrganizationName>
       <OrganizationDisplayName xml:lang='en'>Test Organization Display</OrganizationDisplayName>
       <OrganizationURL xml:lang='en'>http://example.com</OrganizationURL>
     </Organization>
   </SPSSODescriptor>
-  <SPSSODescriptor protocolSupportEnumeration='uri' AuthnRequestsSigned='false' WantAssertionsSigned='false'>
+  <SPSSODescriptor protocolSupportEnumeration='uri'>
     <Organization>
       <OrganizationName xml:lang='en'>Test Organization</OrganizationName>
       <OrganizationDisplayName xml:lang='en'>Test Organization Display</OrganizationDisplayName>
@@ -35,6 +41,9 @@
     </Organization>
   </SPSSODescriptor>
   <AttributeAuthorityDescriptor protocolSupportEnumeration='uri'>
+    <Extensions>
+      <shibmd:Scope regexp='false'>scope</shibmd:Scope>
+    </Extensions>
     <Organization>
       <OrganizationName xml:lang='en'>Test Organization</OrganizationName>
       <OrganizationDisplayName xml:lang='en'>Test Organization Display</OrganizationDisplayName>
