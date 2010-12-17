@@ -44,7 +44,9 @@ class OrganizationType {
 	public String toString() {	"organizationtype:[id:$id, name:$name, displayName: $displayName]" }
 
 	public boolean equals(Object obj) {
-		if (obj == null) { return false }
+		if( this.is(obj) ) return true
+		if ( obj == null ) return false
+		if ( !obj.instanceOf(OrganizationType) ) return false
 		
 		OrganizationType rhs = (OrganizationType) obj;
 		return new EqualsBuilder()
