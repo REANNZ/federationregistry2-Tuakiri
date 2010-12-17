@@ -76,5 +76,9 @@ class EntityDescriptor extends Descriptor  {
 	public boolean functioning() {
 		( active && approved && organization.functioning() )
 	}
+	
+	public boolean empty() {
+		( !idpDescriptors && !attributeAuthorityDescriptors && !spDescriptors && !pdpDescriptors )
+	}
 
 }

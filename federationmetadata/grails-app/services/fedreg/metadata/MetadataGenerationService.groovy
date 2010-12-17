@@ -135,19 +135,23 @@ class MetadataGenerationService {
 	@Transactional(readOnly = true)
 	def entityDescriptor(builder, all, minimal, roleExtensions, entityDescriptor) {
 		if(all || entityDescriptor.functioning() ) {
-			builder.EntityDescriptor(entityID:entityDescriptor.entityID) {
-				entityDescriptor.idpDescriptors?.sort{it.id}?.each { idp -> idpSSODescriptor(builder, all, minimal, roleExtensions, idp) }
-				entityDescriptor.spDescriptors?.sort{it.id}?.each { sp -> spSSODescriptor(builder, all, minimal, roleExtensions, sp) }
-				entityDescriptor.attributeAuthorityDescriptors?.sort{it.id}?.each { aa -> attributeAuthorityDescriptor(builder, all, minimal, roleExtensions, aa)}
+			if(entityDescriptor.empty()) {
+				log.warn "Not rendering $entityDescriptor no children nodes detected"
+			}
+			else {
+				builder.EntityDescriptor(entityID:entityDescriptor.entityID) {
+					entityDescriptor.idpDescriptors?.sort{it.id}?.each { idp -> idpSSODescriptor(builder, all, minimal, roleExtensions, idp) }
+					entityDescriptor.spDescriptors?.sort{it.id}?.each { sp -> spSSODescriptor(builder, all, minimal, roleExtensions, sp) }
+					entityDescriptor.attributeAuthorityDescriptors?.sort{it.id}?.each { aa -> attributeAuthorityDescriptor(builder, all, minimal, roleExtensions, aa)}
 
-				organization(builder, entityDescriptor.organization)
-				entityDescriptor.contacts?.sort{it.id}.each{cp -> contactPerson(builder, cp)}
+					organization(builder, entityDescriptor.organization)
+					entityDescriptor.contacts?.sort{it.id}.each{cp -> contactPerson(builder, cp)}
+				}
 			}
 		}
 	}
 		
 	def endpoint(builder, all, minimal, type, endpoint) {
-		println "EP: $endpoint ${endpoint.functioning()}"
 		if(all || endpoint.functioning() ) {
 			if(!endpoint.responseLocation)
 				builder."$type"(Binding: endpoint.binding.uri, Location:endpoint.location.uri)
@@ -247,9 +251,7 @@ class MetadataGenerationService {
 	}
 	
 	def idpSSODescriptor(builder, all, minimal, roleExtensions, idpSSODescriptor) {
-		println "IDPF: ${idpSSODescriptor.functioning()} ${idpSSODescriptor.entityDescriptor?.functioning()} ${idpSSODescriptor.entityDescriptor?.organization?.functioning()} "
 		if(all || idpSSODescriptor.functioning() ) {
-			println "RAR"
 			builder.IDPSSODescriptor(protocolSupportEnumeration: idpSSODescriptor.protocolSupportEnumerations.sort{it.uri}.collect({it.uri}).join(' ')) {
 			roleDescriptor(builder, minimal, roleExtensions, idpSSODescriptor)
 			ssoDescriptor(builder, all, minimal, idpSSODescriptor)

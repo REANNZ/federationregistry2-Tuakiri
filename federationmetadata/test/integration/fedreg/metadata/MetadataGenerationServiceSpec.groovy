@@ -343,7 +343,8 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 	
 	def "Test inactive EntityDescriptor generation"() {
 		setup:
-		def ed = EntityDescriptor.build(active:false)
+		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
+		def ed = EntityDescriptor.build(organization:organization, active:false, approved:true)
 		
 		when:
 		metadataGenerationService.entityDescriptor(builder, false, false, true, ed)
@@ -355,7 +356,21 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 	
 	def "Test not approved EntityDescriptor generation"() {
 		setup:
-		def ed = EntityDescriptor.build(approved:false)
+		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
+		def ed = EntityDescriptor.build(organization:organization, active:true, approved:false)
+		
+		when:
+		metadataGenerationService.entityDescriptor(builder, false, false, true, ed)
+		
+		then:
+		def xml = writer.toString()
+		xml == ""
+	}
+	
+	def "Test empty EntityDescriptor generation"() {
+		setup:
+		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
+		def ed = EntityDescriptor.build(organization:organization, active:true, approved:true)
 		
 		when:
 		metadataGenerationService.entityDescriptor(builder, false, false, true, ed)
@@ -491,7 +506,6 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		
 		then:
 		def xml = writer.toString()
-		println xml
 		xml == result
 	}
 
