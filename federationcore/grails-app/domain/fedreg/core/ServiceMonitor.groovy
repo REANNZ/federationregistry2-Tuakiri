@@ -31,7 +31,7 @@ class ServiceMonitor  {
 	int checkPeriod = 0
 
 	static constraints = {
-		monitorType(nullable: false)
+		type(nullable: false)
 		url(nullable: false, blank: false)
 	}
 	
