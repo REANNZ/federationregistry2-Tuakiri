@@ -46,8 +46,11 @@ class Uri  {
 	
 	public String toString() {	"uri:[id:$id, uri: $uri]" }
 	
+	
 	public boolean equals(Object obj) {
-		if (obj == null) { return false }
+		if( this.is(obj) ) return true
+		if ( obj == null ) return false
+		if ( !obj.instanceOf(Uri) ) return false
 		
 		Uri rhs = (Uri) obj
 		return new EqualsBuilder()
@@ -61,4 +64,5 @@ class Uri  {
 		append(uri).
 		toHashCode();
 	}
+
 }
