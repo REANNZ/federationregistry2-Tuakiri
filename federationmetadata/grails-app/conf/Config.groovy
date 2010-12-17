@@ -13,11 +13,11 @@ log4j = {
 
     error   'org.mortbay.log'
 
-		debug 'grails.app.service.grails.buildtestdata.BuildTestDataService'
-	    debug 'grails.buildtestdata.DomainInstanceBuilder'
-	    debug 'grails.buildtestdata.handler'
+		warn 'grails.app.service.grails.buildtestdata.BuildTestDataService'
+	    warn 'grails.buildtestdata.DomainInstanceBuilder'
+	    warn 'grails.buildtestdata.handler'
 	
-		info	'fedreg.metadata',
+		debug	'fedreg.metadata',
 				'grails.app.controller',
 				'grails.app.service',
 				'grails.app.domain'

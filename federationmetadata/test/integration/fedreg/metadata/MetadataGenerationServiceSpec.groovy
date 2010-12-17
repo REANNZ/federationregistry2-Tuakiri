@@ -17,6 +17,10 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 	def httpPost
 	def httpArtifact
 	
+	def saml2Prot
+	def saml1Prot
+	def protocolSupportEnumerations
+	
 	def cleanup() {
 	}
 	
@@ -30,6 +34,10 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		httpRedirect = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect', description:'')
 		httpPost = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST', description:'')
 		httpArtifact = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact', description:'')
+		
+		saml2Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:2.0:protocol')
+		saml1Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:1.1:protocol urn:mace:shibboleth:1.0')
+		protocolSupportEnumerations = [saml1Prot, saml2Prot]
 	}
 	
 	def loadResult(file) {
@@ -43,8 +51,13 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 	def "Test valid endpoint generation"() {
 		setup:
 		setupBindings()
+		
+		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))		
+		def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.example.com/myuniqueID", active:true, approved:true)
+		def idp = IDPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, organization:organization, entityDescriptor:entityDescriptor, approved:true, active:true)
+		
 		def location = new UrlURI(uri:"https://test.example.com/SSO")
-		def sso = SingleSignOnService.build(active:true, approved:true, binding:httpPost, location:location)
+		def sso = SingleSignOnService.build(descriptor: idp, active:true, approved:true, binding:httpPost, location:location)
 		def result = loadResult('testvalidendpointgeneration')
 		
 		when:
@@ -58,9 +71,14 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 	def "Test valid endpoint generation with response"() {
 		setup:
 		setupBindings()
+		
+		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))		
+		def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.example.com/myuniqueID", active:true, approved:true)
+		def idp = IDPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, organization:organization, entityDescriptor:entityDescriptor, approved:true, active:true)
+		
 		def location = new UrlURI(uri:"https://test.example.com/SSO")
 		def responseLocation = new UrlURI(uri:"https://test.example.com/response")
-		def sso = SingleSignOnService.build(active:true, approved:true, binding:httpPost, location:location, responseLocation:responseLocation)
+		def sso = SingleSignOnService.build(descriptor:idp, active:true, approved:true, binding:httpPost, location:location, responseLocation:responseLocation)
 		def result = loadResult('testvalidendpointgenerationresponse')
 		
 		when:
@@ -74,8 +92,13 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 	def "Test endpoint generation when endpoint inactive"() {
 		setup:
 		setupBindings()
+		
+		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))		
+		def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.example.com/myuniqueID", active:true, approved:true)
+		def idp = IDPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, organization:organization, entityDescriptor:entityDescriptor, approved:true, active:true)
+		
 		def location = new UrlURI(uri:"https://test.example.com/SSO")
-		def sso = SingleSignOnService.build(active:false, approved:true, binding:httpPost, location:location)
+		def sso = SingleSignOnService.build(descriptor:idp, active:false, approved:true, binding:httpPost, location:location)
 		
 		when:
 		metadataGenerationService.endpoint(builder, false, false, "SingleSignOnService", sso)
@@ -88,8 +111,13 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 	def "Test endpoint generation when endpoint not approved"() {
 		setup:
 		setupBindings()
+		
+		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))		
+		def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.example.com/myuniqueID", active:true, approved:true)
+		def idp = IDPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, organization:organization, entityDescriptor:entityDescriptor, approved:true, active:true)
+		
 		def location = new UrlURI(uri:"https://test.example.com/SSO")
-		def sso = SingleSignOnService.build(active:true, approved:false, binding:httpPost, location:location)
+		def sso = SingleSignOnService.build(descriptor:idp, active:true, approved:false, binding:httpPost, location:location)
 		
 		when:
 		metadataGenerationService.endpoint(builder, false, false, "SingleSignOnService", sso)
@@ -102,8 +130,13 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 	def "Test valid indexed endpoint generation"() {
 		setup:
 		setupBindings()
+		
+		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))		
+		def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.example.com/myuniqueID", active:true, approved:true)
+		def idp = IDPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, organization:organization, entityDescriptor:entityDescriptor, approved:true, active:true)
+		
 		def location = new UrlURI(uri:"https://test.example.com/artifact")
-		def ars = ArtifactResolutionService.build(active:true, approved:true, binding:httpPost, location:location)
+		def ars = ArtifactResolutionService.build(descriptor: idp, active:true, approved:true, binding:httpPost, location:location)
 		def result = loadResult('testvalidindexedendpointgeneration')
 		
 		when:
@@ -117,9 +150,14 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 	def "Test valid indexed endpoint generation with response"() {
 		setup:
 		setupBindings()
+		
+		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))		
+		def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.example.com/myuniqueID", active:true, approved:true)
+		def idp = IDPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, organization:organization, entityDescriptor:entityDescriptor, approved:true, active:true)
+		
 		def location = new UrlURI(uri:"https://test.example.com/artifact")
 		def responseLocation = new UrlURI(uri:"https://test.example.com/response")
-		def ars = ArtifactResolutionService.build(active:true, approved:true, binding:httpPost, location:location, responseLocation:responseLocation)
+		def ars = ArtifactResolutionService.build(descriptor:idp, active:true, approved:true, binding:httpPost, location:location, responseLocation:responseLocation)
 		def result = loadResult('testvalidindexedendpointgenerationresponse')
 		
 		when:
@@ -133,8 +171,13 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 	def "Test indexed endpoint generation when not active"() {
 		setup:
 		setupBindings()
+		
+		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))		
+		def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.example.com/myuniqueID", active:true, approved:true)
+		def idp = IDPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, organization:organization, entityDescriptor:entityDescriptor, approved:true, active:true)
+		
 		def location = new UrlURI(uri:"https://test.example.com/artifact")
-		def ars = ArtifactResolutionService.build(active:false, approved:true, binding:httpPost, location:location)
+		def ars = ArtifactResolutionService.build(descriptor:idp, active:false, approved:true, binding:httpPost, location:location)
 		
 		when:
 		metadataGenerationService.indexedEndpoint(builder, false, false, "ArtifactResolutionService", ars, 1)
@@ -147,8 +190,13 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 	def "Test indexed endpoint generation when not approved"() {
 		setup:
 		setupBindings()
+		
+		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))		
+		def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.example.com/myuniqueID", active:true, approved:true)
+		def idp = IDPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, organization:organization, entityDescriptor:entityDescriptor, approved:true, active:true)
+		
 		def location = new UrlURI(uri:"https://test.example.com/artifact")
-		def ars = ArtifactResolutionService.build(active:true, approved:false, binding:httpPost, location:location)
+		def ars = ArtifactResolutionService.build(descriptor:idp, active:true, approved:false, binding:httpPost, location:location)
 		
 		when:
 		metadataGenerationService.indexedEndpoint(builder, false, false, "ArtifactResolutionService", ars, 1)
@@ -374,11 +422,10 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 	def "Test valid IDPSSODescriptor generation"() {
 		setup:
 		setupBindings()
-		def saml2Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:2.0:protocol')
-		def saml1Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:1.1:protocol urn:mace:shibboleth:1.0')
-		def protocolSupportEnumerations = [saml1Prot, saml2Prot]
 		
-		def organization = Organization.build(name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
+		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
+		def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.example.com/myuniqueID", active:true, approved:true)
+		
 		def email = MailURI.build(uri:"test@example.com")
 		def home = TelNumURI.build(uri:"(07) 1111 1111")
 		def work = TelNumURI.build(uri:"(567) 222 22222")
@@ -387,7 +434,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def admin = ContactType.build(name:"administrative")
 		def contactPerson = ContactPerson.build(contact:contact, type:admin)
 		
-		def idp = IDPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, organization:organization, approved:true, active:true)
+		def idp = IDPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, organization:organization, entityDescriptor:entityDescriptor, approved:true, active:true)
 		
 		def certificate = Certificate.build(data:loadPK())
 		def keyInfo = KeyInfo.build(keyName:"key1", certificate:certificate)
@@ -413,12 +460,12 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def base2 = new AttributeBase(name:'test attr2', friendlyName:'test attr friendly 2')
 		def base3 = new AttributeBase(name:'test attr3', nameFormat:new SamlURI(uri:'test:attr:format'))
 		
-		def attr1 = new Attribute(base:base1)
+		def attr1 = new Attribute(idpSSODescriptor:idp, base:base1)
 		attr1.addToValues(new AttributeValue(value:'val1'))
 		attr1.addToValues(new AttributeValue(value:'val2'))
 		
-		def attr2 = new Attribute(base:base2)
-		def attr3 = new Attribute(base:base3)
+		def attr2 = new Attribute(idpSSODescriptor:idp, base:base2)
+		def attr3 = new Attribute(idpSSODescriptor:idp, base:base3)
 		
 		idp.addToKeyDescriptors(keyDescriptor)
 		idp.addToKeyDescriptors(keyDescriptor2)
@@ -444,9 +491,10 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		
 		then:
 		def xml = writer.toString()
+		println xml
 		xml == result
 	}
-	
+
 	def "Test inactive SPSSODescriptor generation"() {
 		setup:
 		def sp = SPSSODescriptor.build(active:false)
@@ -478,7 +526,9 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def saml1Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:1.1:protocol urn:mace:shibboleth:1.0')
 		def protocolSupportEnumerations = [saml1Prot, saml2Prot]
 		
-		def organization = Organization.build(name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
+		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
+		def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.example.com/myuniqueID", active:true, approved:true)
+		
 		def email = MailURI.build(uri:"test@example.com")
 		def home = TelNumURI.build(uri:"(07) 1111 1111")
 		def work = TelNumURI.build(uri:"(567) 222 22222")
@@ -528,7 +578,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		attrService.addToRequestedAttributes(attr3)
 		attrService.addToRequestedAttributes(attr4)
 		
-		def sp = SPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, organization:organization, approved:true, active:true)
+		def sp = SPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, organization:organization, entityDescriptor:entityDescriptor, approved:true, active:true)
 		sp.addToKeyDescriptors(keyDescriptor)
 		sp.addToKeyDescriptors(keyDescriptor2)
 		sp.addToContacts(contactPerson)
@@ -549,7 +599,6 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		
 		then:
 		def xml = writer.toString()
-		println xml
 		xml == result
 	}
 	
@@ -584,7 +633,9 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def saml1Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:1.1:protocol urn:mace:shibboleth:1.0')
 		def protocolSupportEnumerations = [saml1Prot, saml2Prot]
 
-		def organization = Organization.build(name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
+		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
+		def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.com", active:true, approved:true)
+		
 		def email = MailURI.build(uri:"test@example.com")
 		def home = TelNumURI.build(uri:"(07) 1111 1111")
 		def work = TelNumURI.build(uri:"(567) 222 22222")
@@ -616,9 +667,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def attr2 = new Attribute(base:base2)
 		def attr3 = new Attribute(base:base3)
 		
-		def ed = EntityDescriptor.build(entityID:"https://test.com", organization:organization)
-		
-		def idp = IDPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, entityDescriptor:ed, organization:organization, approved:true, active:true)
+		def idp = IDPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, entityDescriptor:entityDescriptor, organization:organization, approved:true, active:true)
 		idp.addToKeyDescriptors(keyDescriptor)
 		idp.addToKeyDescriptors(keyDescriptor2)
 		idp.addToContacts(contactPerson)
@@ -630,7 +679,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		idp.addToAttributes(attr2)
 		idp.addToAttributes(attr3)
 		
-		def aa = AttributeAuthorityDescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, entityDescriptor:ed, organization:organization, approved:true, active:true)
+		def aa = AttributeAuthorityDescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, entityDescriptor:entityDescriptor, organization:organization, approved:true, active:true)
 		aa.collaborator = idp
 		aa
 		
@@ -654,7 +703,9 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def saml1Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:1.1:protocol urn:mace:shibboleth:1.0')
 		def protocolSupportEnumerations = [saml1Prot, saml2Prot]
 
-		def organization = Organization.build(name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
+		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
+		def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.com", active:true, approved:true)
+		
 		def email = MailURI.build(uri:"test@example.com")
 		def home = TelNumURI.build(uri:"(07) 1111 1111")
 		def work = TelNumURI.build(uri:"(567) 222 22222")
@@ -663,7 +714,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def admin = ContactType.build(name:"administrative")
 		def contactPerson = ContactPerson.build(contact:contact, type:admin)
 		
-		def aa = AttributeAuthorityDescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, organization:organization, approved:true, active:true)
+		def aa = AttributeAuthorityDescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, entityDescriptor:entityDescriptor, organization:organization, approved:true, active:true)
 
 		def certificate = Certificate.build(data:loadPK())
 		def keyInfo = KeyInfo.build(keyName:"key1", certificate:certificate)
@@ -709,5 +760,5 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def xml = writer.toString()
 		xml == result
 	}
-	
+
 }
