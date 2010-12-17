@@ -39,8 +39,6 @@ class Endpoint	{
 	static mapping = {
 		tablePerHierarchy false
 	}
-	
-	static belongsTo = [descriptor: RoleDescriptor]
 
 	static constraints = {
 		binding(nullable: false)
