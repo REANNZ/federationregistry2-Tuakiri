@@ -370,7 +370,7 @@ class AttributeFilterGenerationServiceSpec extends IntegrationSpec {
 	def baseSP(unique) {
 		def protocolSupportEnumerations = [saml1Prot, saml2Prot]
 		
-		def organization = Organization.build(name:"Test Organization - $unique", displayName:"Test Organization Display - $unique", lang:"en", url: new UrlURI(uri:"http://example.com"))
+		def organization = Organization.build(name:"Test Organization - $unique", displayName:"Test Organization Display - $unique", lang:"en", url: new UrlURI(uri:"http://example.com"), active:true, approved:true)
 		def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://server${unique}.test.example.com/saml", active:true, approved:true)
 		
 		def attrService = new AttributeConsumingService(lang:'en')

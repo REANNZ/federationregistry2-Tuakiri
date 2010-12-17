@@ -23,7 +23,7 @@ class AttributeFilterGenerationService {
 				if(!identityProvider)
 					throw new ErronousStateException("Identity Provider specifed ($idp) for Attribute Filter creation does not exist.")
 					
-				def serviceProviders = SPSSODescriptor.findAllWhere(active:true, approved:true)
+				def serviceProviders = SPSSODescriptor.list().findAll { sp -> sp.functioning() }
 				serviceProviders?.each { serviceProvider ->
 					servicePolicy(builder, identityProvider, serviceProvider, groupID)
 				}
