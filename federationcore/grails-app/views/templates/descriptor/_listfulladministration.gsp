@@ -6,6 +6,7 @@
 				<tr>
 					<th><g:message code="label.name" /></th>
 					<th><g:message code="label.email" /></th>
+					<th><g:message code="label.organization" /></th>
 					<th/>
 				</tr>
 			</thead>
@@ -14,6 +15,7 @@
 					<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 						<td>${admin.profile.fullName?.encodeAsHTML()}</td>
 						<td><a href="mailto:${admin.profile.email?.encodeAsHTML()}">${admin.profile.email?.encodeAsHTML()}</a></td>
+						<td><g:link controller='organization' action='show' id="${admin.contact?.organization?.id}">${admin.contact?.organization?.displayName?.encodeAsHTML()}</g:link></td>
 						<td>
 							<n:isAdministrator>
 								<n:button href="${createLink(controller:'user', action:'show', id: admin.id)}" label="${message(code:'label.view')}" icon="arrowthick-1-ne"/>
