@@ -141,6 +141,7 @@
 				</td>
 				<td>
 					<g:textField name="sp.displayName"  size="50" class="required" value="${serviceProvider?.displayName}"/>
+					<fr:tooltip code='fedreg.help.serviceprovider.displayname' />
 				</td>
 			</tr>
 			<tr>
@@ -149,6 +150,7 @@
 				</td>
 				<td>
 					<g:textArea name="sp.description"  class="required" rows="8" cols="36" value="${serviceProvider?.description}"/>
+					<fr:tooltip code='fedreg.help.serviceprovider.description' />
 				</td>
 			</tr>
 			<tr>
@@ -157,6 +159,7 @@
 				</td>
 				<td>
 					<g:textField name="sp.servicedescription.connecturl" size="50" class="required url" value="${servicedescription?.connecturl}"/>
+					<fr:tooltip code='fedreg.help.serviceprovider.connecturl' />
 				</td>
 			</tr>
 			<tr>
@@ -164,85 +167,13 @@
 					<label for="sp.servicedescription.logourl"><g:message code="label.servicelogourl" /></label>
 				</td>
 				<td>
-					<g:textField name="sp.servicedescription.logourl" size="50" class="url" value="${servicedescription?.logourl}"/> (100x100px should be publicly accessible)
+					<g:textField name="sp.servicedescription.logourl" size="50" class="url" value="${servicedescription?.logourl}"/>
+					<fr:tooltip code='fedreg.help.serviceprovider.logourl' />
 				</td>
 			</tr>
 		</table>
 	</div>
-	
-	<div class="step" id="servicedescription">
-		<h3><g:message code="fedreg.templates.serviceprovider.create.servicedescription.heading" /></h3>
-		<p>
-			<g:message code="fedreg.templates.serviceprovider.create.servicedescription.details" />
-		</p>
-		<table>
-			<tr>
-				<td>
-					<label for="sp.servicedescription.furtherInfo"><g:message code="label.furtherinfo" /></label>
-				</td>
-				<td>
-					<g:textArea name="sp.servicedescription.furtherinfo" rows="8" cols="48"  value="${servicedescription?.furtherinfo}"/>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<label for="sp.servicedescription.provides"><g:message code="label.provides" /></label>
-				</td>
-				<td>
-					<g:textArea name="sp.servicedescription.provides" rows="8" cols="48"  value="${servicedescription?.provides}"/>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<label for="sp.servicedescription.benefits"><g:message code="label.benefits" /></label>
-				</td>
-				<td>
-					<g:textArea name="sp.servicedescription.benefits" rows="8" cols="48"  value="${servicedescription?.benefits}"/>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<label for="sp.servicedescription.audience"><g:message code="label.audience" /></label>
-				</td>
-				<td>
-					<g:textArea name="sp.servicedescription.audience" rows="8" cols="48"  value="${servicedescription?.audience}"/>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<label for="sp.servicedescription.restrictions"><g:message code="label.restrictions" /></label>
-				</td>
-				<td>
-					<g:textArea name="sp.servicedescription.restrictions" rows="8" cols="48"  value="${servicedescription?.restrictions}"/>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<label for="sp.servicedescription.accessing"><g:message code="label.accessing" /></label>
-				</td>
-				<td>
-					<g:textArea name="sp.servicedescription.accessing" rows="8" cols="48"  value="${servicedescription?.accessing}"/>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<label for="sp.servicedescription.support"><g:message code="label.support" /></label>
-				</td>
-				<td>
-					<g:textArea name="sp.servicedescription.support" rows="8" cols="48"  value="${servicedescription?.support}"/>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<label for="sp.servicedescription.maintenance"><g:message code="label.maintenance" /></label>
-				</td>
-				<td>
-					<g:textArea name="sp.servicedescription.maintenance" rows="8" cols="48"  value="${servicedescription?.maintenance}"/>
-				</td>
-			</tr>
-		</table>
-	</div>
-	
+
 	<div class="step" id="saml">
 		<h3><g:message code="fedreg.templates.serviceprovider.create.saml.heading" /></h3>
 		<p>
@@ -265,6 +196,7 @@
 							<div class="error"><g:renderErrors bean="${entityDescriptor}"as="list"/></div>
 						</g:hasErrors>
 						<g:textField name="hostname" size="50" class="url"  value="${hostname}"/>
+						<fr:tooltip code='fedreg.help.serviceprovider.hostname' />
 					</td>
 				</tr>
 			</table>
@@ -287,6 +219,7 @@
 							<div class="error"><g:renderErrors bean="${entityDescriptor}"as="list"/></div>
 						</g:hasErrors>
 						<g:textField name="entity.identifier" size="75" class="required url"  value="${entityDescriptor?.entityID}"/>
+						<fr:tooltip code='fedreg.help.serviceprovider.entitydescriptor' />
 					</td>
 				</tr>
 				<tr>
@@ -300,6 +233,7 @@
 						</g:hasErrors>
 						<g:hiddenField name="sp.acs.post.isdefault" value="true" />
 						<g:textField name="sp.acs.post.uri" size="75" class="required url"  value="${httpPostACS?.location?.uri}"/>
+						<fr:tooltip code='fedreg.help.serviceprovider.acspost' />
 					</td>
 				</tr>
 				<tr>
@@ -313,6 +247,7 @@
 						</g:hasErrors>
 						<g:hiddenField name="sp.acs.artifact.isdefault" value="false" />
 						<g:textField name="sp.acs.artifact.uri" size="75" class="required url" value="${soapArtifactACS?.location?.uri}"/>
+						<fr:tooltip code='fedreg.help.serviceprovider.acsartifcate' />
 					</td>
 				</tr>
 				<tr>
@@ -325,6 +260,7 @@
 							<div class="error"><g:renderErrors bean="${sloArtifact}"as="list"/></div>
 						</g:hasErrors>
 						<g:textField name="sp.slo.artifact.uri" size="75" class="url" value="${sloArtifact?.location?.uri}"/>
+						<fr:tooltip code='fedreg.help.serviceprovider.sloartifact' />
 					</td>
 				</tr>
 				<tr>
@@ -337,6 +273,7 @@
 							<div class="error"><g:renderErrors bean="${sloRedirect}"as="list"/></div>
 						</g:hasErrors>
 						<g:textField name="sp.slo.redirect.uri" size="75" class="url" value="${sloRedirect?.location?.uri}"/>
+						<fr:tooltip code='fedreg.help.serviceprovider.sloredriect' />
 					</td>
 				</tr>
 				<tr>
@@ -349,6 +286,7 @@
 							<div class="error"><g:renderErrors bean="${sloSOAP}"as="list"/></div>
 						</g:hasErrors>
 						<g:textField name="sp.slo.soap.uri" size="75" class="url" value="${sloSOAP?.location?.uri}"/>
+						<fr:tooltip code='fedreg.help.serviceprovider.slosoap' />
 					</td>
 				</tr>
 				<tr>
@@ -361,6 +299,7 @@
 							<div class="error"><g:renderErrors bean="${sloPost}"as="list"/></div>
 						</g:hasErrors>
 						<g:textField name="sp.slo.post.uri" size="75" class="url"  value="${sloPost?.location?.uri}"/>
+						<fr:tooltip code='fedreg.help.serviceprovider.slopost' />
 					</td>
 				</tr>
 				<tr>
@@ -374,6 +313,7 @@
 						</g:hasErrors>
 						<g:textField name="sp.drs.uri" size="75" class="url" value="${discoveryResponseService?.location?.uri}"/>
 						<g:hiddenField name="sp.drs.isdefault" value="true" />
+						<fr:tooltip code='fedreg.help.serviceprovider.disco' />
 					</td>
 				</tr>
 				<tr>
@@ -386,6 +326,7 @@
 							<div class="error"><g:renderErrors bean="${mnidArtifact}"as="list"/></div>
 						</g:hasErrors>
 						<g:textField name="sp.mnid.artifact.uri" size="75" class="url" value="${mnidArtifact?.location?.uri}"/>
+						<fr:tooltip code='fedreg.help.serviceprovider.mnidaritfact' />
 					</td>
 				</tr>
 				<tr>
@@ -398,6 +339,7 @@
 							<div class="error"><g:renderErrors bean="${mnidRedirect}"as="list"/></div>
 						</g:hasErrors>
 						<g:textField name="sp.mnid.redirect.uri" size="75" class="url" value="${mnidRedirect?.location?.uri}"/>
+						<fr:tooltip code='fedreg.help.serviceprovider.mnidredirect' />
 					</td>
 				</tr>
 				<tr>
@@ -410,6 +352,7 @@
 							<div class="error"><g:renderErrors bean="${mnidSOAP}"as="list"/></div>
 						</g:hasErrors>
 						<g:textField name="sp.mnid.soap.uri" size="75" class="url" value="${mnidSOAP?.location?.uri}"/>
+						<fr:tooltip code='fedreg.help.serviceprovider.mnidsoap' />
 					</td>
 				</tr>
 				<tr>
@@ -422,6 +365,7 @@
 							<div class="error"><g:renderErrors bean="${mnidPost}"as="list"/></div>
 						</g:hasErrors>
 						<g:textField name="sp.mnid.post.uri" size="75" class="url" value="${mnidPost?.location?.uri}"/>
+						<fr:tooltip code='fedreg.help.serviceprovider.mnidpost' />
 					</td>
 				</tr>
 			</table>
@@ -444,6 +388,7 @@
 					<g:hiddenField name="sp.crypto.sig" value="${true}" />
 					<g:hiddenField name="sp.crypto.enc" value="${true}" />
 					<g:textArea name="cert" id="cert" rows="25" cols="60" value="${certificate}"/>
+					<fr:tooltip code='fedreg.help.serviceprovider.certificate' />
 				</td>
 			</tr>
 		</table>
@@ -458,23 +403,24 @@
 			<tbody>
 				<tr>
 					<th><g:message code="label.name" /></th>
-					<th><g:message code="label.oid" /></th>
+					<th><g:message code="label.category" /></th>
 					<th><g:message code="label.description" /></th>
 					<th><g:message code="label.requested" /></th>
 					<th><g:message code="label.required" /></th>
 					<th><g:message code="label.reasonrequested" /></th>
 				</tr>
-				<g:each in="${attributeList.sort{it.category.name}}" var="attr" status="i">
+				<g:each in="${attributeList}" var="attr" status="i">
 					<g:if test="${!attr.specificationRequired}">
 						<g:set var="ra" value="${supportedAttributes.find {it.base == attr}}" />
 						<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 							<td>
-								${fieldValue(bean: attr, field: "friendlyName")}
+								${fieldValue(bean: attr, field: "friendlyName")}<br>
+								<pre>OID: ${fieldValue(bean: attr, field: "oid")}</pre>
 							</td>
 							<td>
-								${fieldValue(bean: attr, field: "oid")}
+								${fieldValue(bean: attr, field: "category.name")}
 							</td>
-							<td>
+							<td style="width: 300px;">
 								${fieldValue(bean: attr, field: "description")}
 							</td>
 							<td>
@@ -484,7 +430,8 @@
 								<g:checkBox name="sp.attributes.${attr.id}.required" checked="${ra?.isRequired}"/>
 							</td>
 							<td>
-								<input name="sp.attributes.${attr.id}.reasoning" id="spattributes${attr.id}reasoning" size="40" value="${ra?.reasoning}"/>
+								<input name="sp.attributes.${attr.id}.reasoning" id="spattributes${attr.id}reasoning" size="40" value="${ra?.reasoning}" class="tip" title="${g.message(code:'fedreg.help.serviceprovider.attribute.reason')}"/>
+								<fr:tooltip code='fedreg.help.serviceprovider.attribute.reason' />
 							</td>
 						</tr>
 					</g:if>
@@ -507,14 +454,15 @@
 						<th><g:message code="label.required" /></th>
 						<th><g:message code="label.reasonrequested" /></th>
 					</tr>
-					<g:each in="${attributeList.sort{it.category.name}}" var="attr" status="i">
+					<g:each in="${attributeList.sort{it.friendlyName}}" var="attr" status="i">
 						<g:if test="${attr.specificationRequired}">
 							<g:set var="ra" value="${supportedAttributes.find {it.base == attr}}" />
 							<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 								<td>
-									${fieldValue(bean: attr, field: "friendlyName")}
+									${fieldValue(bean: attr, field: "friendlyName")}<br>
+									<pre>OID: ${fieldValue(bean: attr, field: "oid")}</pre>
 								</td>
-								<td>
+								<td  style="width: 300px;">
 									${fieldValue(bean: attr, field: "description")}
 								</td>
 								<td>
@@ -524,7 +472,8 @@
 									<g:checkBox name="sp.attributes.${attr.id}.required" checked="${ra?.isRequired}"/>
 								</td>
 								<td>
-									<g:textField name="sp.attributes.${attr.id}.reasoning" id="spattributes${attr.id}reasoning" size="40" value="${ra?.reasoning}"/>
+									<g:textField name="sp.attributes.${attr.id}.reasoning" id="spattributes${attr.id}reasoning" size="40" value="${ra?.reasoning}" class="tip" title="${g.message(code:'fedreg.help.serviceprovider.attribute.reason')}"/>
+									<fr:tooltip code='fedreg.help.serviceprovider.attribute.reason' />
 								</td>
 							</tr>
 							<tr>
@@ -538,7 +487,8 @@
 												</th>
 												<td colspan="4">
 													<g:each in="${1..10}" var="v">
-														<g:textField name="sp.attributes.${attr.id}.requestedvalues.${v}" id="spattributes${attr.id}requestedvalues${v}" size="40" /><br>
+														<g:textField name="sp.attributes.${attr.id}.requestedvalues.${v}" id="spattributes${attr.id}requestedvalues${v}" size="40" />
+														<fr:tooltip code='fedreg.help.serviceprovider.attribute.specvalue' /><br>
 													</g:each>
 												</td>
 											</tr>
@@ -555,6 +505,9 @@
 		<h3><g:message code="fedreg.templates.serviceprovider.create.nameidformatsupport.heading" /></h3>
 		<p>
 			<g:message code="fedreg.templates.serviceprovider.create.nameidformatsupport.details" />
+		</p>
+		<p>
+			<strong><g:message code="fedreg.templates.serviceprovider.create.nameidformatsupport.details.highlight" /></strong>
 		</p>
 		<table>
 			<tr>
@@ -585,7 +538,7 @@
 		</p>
 	</div>
 
-	<nav> 							
+	<nav>
 		<input class="navigation_button" id="back" value="Back" type="reset" />
 		<input class="navigation_button" id="next" value="Next" type="submit" />
 	</nav>

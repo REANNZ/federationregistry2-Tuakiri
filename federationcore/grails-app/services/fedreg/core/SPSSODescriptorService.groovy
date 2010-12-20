@@ -197,9 +197,7 @@ class SPSSODescriptorService {
 		}
 	
 		// Service Description
-		def serviceDescription = new ServiceDescription(connectURL: params.sp?.servicedescription?.connecturl, logo: params.sp?.servicedescription?.logo, furtherInfo: params.sp?.servicedescription?.furtherInfo, 
-			provides: params.sp?.servicedescription?.provides, benefits: params.sp?.servicedescription?.benefits, audience: params.sp?.servicedescription?.audience, restrictions: params.sp?.servicedescription?.restrictions, 
-			accessing: params.sp?.servicedescription?.accessing, support: params.sp?.servicedescription?.support, maintenance: params.sp?.servicedescription?.maintenance)
+		def serviceDescription = new ServiceDescription(connectURL: params.sp?.servicedescription?.connecturl, logo: params.sp?.servicedescription?.logourl)
 		serviceProvider.serviceDescription = serviceDescription
 		
 		// Generate return map
@@ -223,7 +221,6 @@ class SPSSODescriptorService {
 		ret.certificate = params.cert
 		ret.supportedNameIDFormats = supportedNameIDFormats
 		ret.supportedAttributes = supportedAttributes
-		ret.servicedescription = params.sp?.servicedescription
 	
 		// Submission validation
 		if(!entityDescriptor.save()) {

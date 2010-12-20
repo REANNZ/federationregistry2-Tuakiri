@@ -39,7 +39,12 @@ class SPSSODescriptorController {
 	
 	def create = {
 		def serviceProvider = new SPSSODescriptor()
-		[serviceProvider:serviceProvider, organizationList: Organization.findAllWhere(active:true, approved:true), attributeList: AttributeBase.list(), nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)]
+		def c = AttributeBase.createCriteria()
+		def attributeList = c.list {
+			order("category", "asc")
+			order("friendlyName", "asc")
+		}
+		[serviceProvider:serviceProvider, organizationList: Organization.findAllWhere(active:true, approved:true), attributeList: attributeList, nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)]
 	}
 	
 	def save = {
