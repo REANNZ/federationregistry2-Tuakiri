@@ -23,9 +23,13 @@ class FedRegTagLib {
 
     static namespace = "fr"
 
-	/**
-	 * Provides markup that renders the contact ID of the logged in user
-	 */
+	def tooltip = { attrs ->
+		def msg = g.message(code:attrs.code)
+		def src = g.resource(dir:'images', file:'help.png', plugin:'federationregistry')
+		out << "<img src='$src' class='tip' title='$msg'>"
+    }
+
+	// Renders the contact ID of the logged in user
 	def contactID = {
 	    Long id = SecurityUtils.getSubject()?.getPrincipal()
 
