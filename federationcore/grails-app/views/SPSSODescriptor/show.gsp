@@ -67,10 +67,6 @@
 					<td>${fieldValue(bean: serviceProvider, field: "displayName")}</td>
 				</tr>
 				<tr>
-					<th><g:message code="label.description"/></th>
-					<td>${fieldValue(bean: serviceProvider, field: "description")}</td>
-				</tr>
-				<tr>
 					<th><g:message code="label.organization"/></th>
 					<td><g:link controller="organization" action="show" id="${serviceProvider.organization.id}">${fieldValue(bean: serviceProvider, field: "organization.displayName")}</g:link></td>
 				</tr>

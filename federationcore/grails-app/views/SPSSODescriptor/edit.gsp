@@ -15,7 +15,7 @@
 						},
 						keyup: false
 				});
-				$('form').formwizard({ 
+				$('formz').formwizard({ 
 				 	formPluginEnabled: false,
 				 	validationEnabled: true,
 				 	focusFirstInput : true
@@ -79,79 +79,6 @@
 						</tr>
 					</table>
 				</div>
-
-				<div class="step" id="servicedescription">
-					<h3><g:message code="fedreg.view.members.serviceprovider.edit.servicedescription.heading" /></h3>
-					<p>
-						<g:message code="fedreg.view.members.serviceprovider.edit.servicedescription.details" />
-					</p>
-					<table>
-						<tr>
-							<th>
-								<label for="sp.servicedescription.furtherInfo"><g:message code="label.furtherinfo" /></label>
-							</th>
-							<td>
-								<g:textArea name="sp.servicedescription.furtherinfo" value="${serviceProvider.serviceDescription.furtherInfo}" rows="8" cols="48" maxlength="2000"/>
-							</td>
-						</tr>
-						<tr>
-							<th>
-								<label for="sp.servicedescription.provides"><g:message code="label.provides" /></label>
-							</th>
-							<td>
-								<g:textArea name="sp.servicedescription.provides" value="${serviceProvider.serviceDescription.provides}" rows="8" cols="48" maxlength="2000"/>
-							</td>
-						</tr>
-						<tr>
-							<th>
-								<label for="sp.servicedescription.benefits"><g:message code="label.benefits" /></label>
-							</th>
-							<td>
-								<g:textArea name="sp.servicedescription.benefits" value="${serviceProvider.serviceDescription.benefits}" rows="8" cols="48" maxlength="2000"/>
-							</td>
-						</tr>
-						<tr>
-							<th>
-								<label for="sp.servicedescription.audience"><g:message code="label.audience" /></label>
-							</th>
-							<td>
-								<g:textArea name="sp.servicedescription.audience" value="${serviceProvider.serviceDescription.audience}" rows="8" cols="48" maxlength="2000"/>
-							</td>
-						</tr>
-						<tr>
-							<th>
-								<label for="sp.servicedescription.restrictions"><g:message code="label.restrictions" /></label>
-							</th>
-							<td>
-								<g:textArea name="sp.servicedescription.restrictions" value="${serviceProvider.serviceDescription.restrictions}" rows="8" cols="48" maxlength="2000"/>
-							</td>
-						</tr>
-						<tr>
-							<th>
-								<label for="sp.servicedescription.accessing"><g:message code="label.accessing" /></label>
-							</th>
-							<td>
-								<g:textArea name="sp.servicedescription.accessing" value="${serviceProvider.serviceDescription.accessing}" rows="8" cols="48" maxlength="2000"/>
-							</td>
-						</tr>
-						<tr>
-							<th>
-								<label for="sp.servicedescription.support"><g:message code="label.support" /></label>
-							</th>
-							<td>
-								<g:textArea name="sp.servicedescription.support" value="${serviceProvider.serviceDescription.support}" rows="8" cols="48" maxlength="2000"/>
-							</td>
-						</tr>
-						<tr>
-							<th>
-								<label for="sp.servicedescription.maintenance"><g:message code="label.maintenance" /></label>
-							</th>
-							<td>
-								<g:textArea name="sp.servicedescription.maintenance" value="${serviceProvider.serviceDescription.maintenance}" rows="8" cols="48" maxlength="2000"/>
-							</td>
-						</tr>
-					</table>
-				</div>
 				
 				<div class="step submit_step" id="creationsummary">
 					<h3><g:message code="fedreg.view.members.serviceprovider.edit.summary.heading" /></h3>
@@ -160,7 +87,7 @@
 					</p>
 				</div>
 
-				<nav> 							
+				<nav>
 					<input class="navigation_button" id="back" value="Back" type="reset" />
 					<input class="navigation_button" id="next" value="Next" type="submit" />
 				</nav>
