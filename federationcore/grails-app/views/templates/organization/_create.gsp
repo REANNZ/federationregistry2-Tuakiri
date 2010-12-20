@@ -87,6 +87,7 @@
 				</td>
 				<td>
 					<g:textField name="organization.name"  size="50" class="required" value="${organization?.name}"/>
+					<fr:tooltip code='fedreg.help.organization.name' />
 				</td>
 			</tr>
 			<tr>
@@ -95,6 +96,7 @@
 				</td>
 				<td>
 					<g:textField name="organization.displayName"  size="50" class="required" value="${organization?.displayName}"/>
+					<fr:tooltip code='fedreg.help.organization.displayName' />
 				</td>
 			</tr>
 			<tr>
@@ -103,6 +105,7 @@
 				</td>
 				<td>
 					<g:textField name="organization.url"  size="50" class="required url"  value="${organization?.url?.uri}"/>
+					<fr:tooltip code='fedreg.help.organization.url' />
 				</td>
 			</tr>
 			<tr>
@@ -111,6 +114,7 @@
 				</td>
 				<td>
 					<g:select name="organization.primary" from="${organizationTypes}" optionKey="id" optionValue="displayName"  value="${organization?.primary?.id}"/>
+					<fr:tooltip code='fedreg.help.organization.type' />
 				</td>
 			</tr>
 		</table>
