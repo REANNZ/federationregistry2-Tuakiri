@@ -142,6 +142,7 @@
 				<td>
 					<g:hiddenField name="aa.displayName" value=""/>
 					<g:textField name="idp.displayName"  size="50" class="required" value="${identityProvider?.displayName}"/>
+					<fr:tooltip code='fedreg.help.identityprovider.displayname' />
 				</td>
 			</tr>
 			<tr>
@@ -151,6 +152,7 @@
 				<td>
 					<g:hiddenField name="aa.description" />
 					<g:textArea name="idp.description"  class="required" rows="8" cols="36" value="${identityProvider?.description}"/>
+					<fr:tooltip code='fedreg.help.identityprovider.description' />
 				</td>
 			</tr>
 		</table>
@@ -179,6 +181,7 @@
 							<div class="error"><g:renderErrors bean="${entityDescriptor}"as="list"/></div>
 						</g:hasErrors>
 						<g:textField name="hostname" size="50" class="url" value="${hostname}"/>
+						<fr:tooltip code='fedreg.help.identityprovider.hostname' />
 					</td>
 				</tr>
 			</table>
@@ -202,6 +205,7 @@
 							<div class="error"><g:renderErrors bean="${entityDescriptor}"as="list"/></div>
 						</g:hasErrors>
 						<g:textField name="entity.identifier" size="75" class="required url" value="${entityDescriptor?.entityID}"/>
+						<fr:tooltip code='fedreg.help.identityprovider.entitydescriptor' />
 					</td>
 				</tr>
 				<tr>
@@ -214,6 +218,7 @@
 							<div class="error"><g:renderErrors bean="${httpPost}"as="list"/></div>
 						</g:hasErrors>
 						<g:textField name="idp.post.uri" size="75" class="required url" value="${httpPost?.location?.uri}"/>
+						<fr:tooltip code='fedreg.help.identityprovider.authpost' />
 					</td>
 				</tr>
 				<tr>
@@ -226,6 +231,7 @@
 							<div class="error"><g:renderErrors bean="${httpRedirect}"as="list"/></div>
 						</g:hasErrors>
 						<g:textField name="idp.redirect.uri" size="75" class="required url" value="${httpRedirect?.location?.uri}"/>
+						<fr:tooltip code='fedreg.help.identityprovider.authredirect' />
 					</td>
 				</tr>
 				<tr>
@@ -238,6 +244,7 @@
 							<div class="error"><g:renderErrors bean="${soapArtifact}"as="list"/></div>
 						</g:hasErrors>
 						<g:textField name="idp.artifact.uri" size="75" class="required url" value="${soapArtifact?.location?.uri}"/>
+						<fr:tooltip code='fedreg.help.identityprovider.authartifact' />
 					</td>
 				</tr>
 				<tr>
@@ -250,6 +257,7 @@
 							<div class="error"><g:renderErrors bean="${attributeAuthority}"as="list"/></div>
 						</g:hasErrors>
 						<g:textField name="aa.attributeservice.uri" size="75" class="required url" value="${attributeAuthority?.attributeServices?.get(0)?.location?.uri}"}/>
+						<fr:tooltip code='fedreg.help.identityprovider.aasoap' />
 					</td>
 				</tr>
 			</table>
@@ -271,6 +279,7 @@
 				</td>
 				<td>
 					<g:textField name="idp.scope" size="50" class="required" value="${scope}"/>
+					<fr:tooltip code='fedreg.help.identityprovider.scope' />
 				</td>
 			</tr>
 		</table>
@@ -291,6 +300,7 @@
 					</div>
 					<g:hiddenField name="idp.crypto.sig" value="${true}" />
 					<g:textArea name="cert" id="cert" rows="25" cols="60" value="${certificate}"/>
+					<fr:tooltip code='fedreg.help.serviceprovider.certificate' />
 				</td>
 			</tr>
 		</table>
@@ -305,22 +315,19 @@
 			<tr>
 				<th><g:message code="label.name" /></th>
 				<th><g:message code="label.category" /></th>
-				<th><g:message code="label.oid" /></th>
 				<th><g:message code="label.description" /></th>
 				<th><g:message code="label.supported" /></th>
 			</tr>
 			<g:each in="${attributeList.sort{it.category.name}}" var="attr" status="i">
 			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 				<td>
-					${fieldValue(bean: attr, field: "friendlyName")}
+					${fieldValue(bean: attr, field: "friendlyName")}<br>
+					<pre>OID: ${fieldValue(bean: attr, field: "oid")}</pre>
 				</td>
 				<td>
 					${fieldValue(bean: attr, field: "category.name")}
 				</td>
-				<td>
-					${fieldValue(bean: attr, field: "oid")}
-				</td>
-				<td>
+				<td style="width:400px;">
 					${fieldValue(bean: attr, field: "description")}
 				</td>
 				<td>
@@ -336,6 +343,9 @@
 		<h3><g:message code="fedreg.templates.identityprovider.create.nameidformatsupport.heading" /></h3>
 		<p>
 			<g:message code="fedreg.templates.identityprovider.create.nameidformatsupport.details" />
+		</p>
+		<p>
+			<strong><g:message code="fedreg.templates.identityprovider.create.nameidformatsupport.details.highlight" /></strong>
 		</p>
 		<table>
 			<tr>
@@ -366,7 +376,7 @@
 		</p>
 	</div>
 
-	<nav> 							
+	<nav>
 		<input class="navigation_button" id="back" value="Back" type="reset" />
 		<input class="navigation_button" id="next" value="Next" type="submit" />
 	</nav>
