@@ -37,10 +37,22 @@
 					<table>
 						<tr>
 							<th>
+								<label for="idp.status"><g:message code="label.status" /></label>
+							</th>
+							<td>
+								<g:radioGroup name="idp.status" values="['true', 'false']" labels="['label.active', 'label.inactive']" value="${identityProvider.active}" >
+									 ${it.radio} <g:message code="${it.label}" />
+								</g:radioGroup>
+								<fr:tooltip code='fedreg.help.identityprovider.status' />
+							</td>
+						</tr>
+						<tr>
+							<th>
 								<label for="idp.displayName"><g:message code="label.displayname" /></label>
 							</th>
 							<td>
 								<g:textField name="idp.displayName"  value="${identityProvider.displayName}" size="50" class="required" minlength="4" maxlength="255" />
+								<fr:tooltip code='fedreg.help.identityprovider.displayname' />
 							</td>
 						</tr>
 						<tr>
@@ -49,6 +61,7 @@
 							</th>
 							<td>
 								<g:textArea name="idp.description"  value="${identityProvider.description}" class="required" minlength="4" rows="8" cols="36" maxlength="2000"/>
+								<fr:tooltip code='fedreg.help.identityprovider.description' />
 							</td>
 						</tr>
 						<tr>
@@ -57,26 +70,7 @@
 							</th>
 							<td>
 								<g:textField name="idp.scope"  value="${identityProvider.scope}" class="required" size="50" class="required" minlength="4" maxlength="255"/>
-							</td>
-						</tr>
-						<tr>
-							<th>
-								<label for="idp.status"><g:message code="label.status" /></label>
-							</th>
-							<td>
-								<g:radioGroup name="idp.status" values="['true', 'false']" labels="['label.active', 'label.inactive']" value="${identityProvider.active}" >
-									 ${it.radio} <g:message code="${it.label}" /> <br>
-								</g:radioGroup>
-							</td>
-						</tr>
-						<tr>
-							<th>
-								<label for="idp.autoacceptservices"><g:message code="label.autoacceptservices" /></label>
-							</th>
-							<td>
-								<g:radioGroup name="idp.autoacceptservices" values="['true', 'false']" labels="['label.true', 'label.false']" value="${identityProvider.autoAcceptServices}" >
-									 ${it.radio} <g:message code="${it.label}" /> <br>
-								</g:radioGroup>
+								<fr:tooltip code='fedreg.help.identityprovider.scope' />
 							</td>
 						</tr>
 					</table>

@@ -134,17 +134,6 @@
 					</td>
 				</tr>
 				<tr>
-					<th><g:message code="label.autoacceptservices"/></th>
-					<td>
-						<g:if test="${identityProvider.autoAcceptServices}">
-							<g:message code="label.yes" />
-						</g:if>
-						<g:else>
-							<g:message code="label.no" />
-						</g:else>
-					</td>
-				</tr>
-				<tr>
 					<th><g:message code="label.datecreated" /></th>
 					<td>${fieldValue(bean: identityProvider, field: "dateCreated")}</td>
 				</tr>
@@ -226,7 +215,7 @@
 				<div id="tab-attributes" class="tabcontent">
 					<h3><g:message code="label.supportedattributes" /></h3>
 					<div id="attributes">
-						<g:render template="/templates/attributes/list" plugin="federationcore" model="[descriptor:identityProvider, attrs:identityProvider.attributes, containerID:'attributes']" />
+						<g:render template="/templates/attributes/list" plugin="federationcore" model="[descriptor:identityProvider, attrs:identityProvider.sortedAttributes(), containerID:'attributes']" />
 					</div>
 					<g:render template="/templates/attributes/add" plugin="federationcore" model="[descriptor:identityProvider, type:'idp', containerID:'attributes']"/>
 				</div>

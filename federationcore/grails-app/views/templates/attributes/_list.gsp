@@ -3,16 +3,19 @@
 	<thead>
 		<tr>
 			<th><g:message code="label.attribute" /></th>
-			<th><g:message code="label.oid" /></th>
+			<th><g:message code="label.category" /></th>
 			<th><g:message code="label.description" /></th>
 			<th/>
 		</tr>
 	</thead>
 	<tbody>
-	<g:each in="${attrs.sort{it.base.friendlyName}}" status="i" var="attr">
+	<g:each in="${attrs}" status="i" var="attr">
 		<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-			<td>${attr.base.friendlyName.encodeAsHTML()}</td>
-			<td>${attr.base.oid.encodeAsHTML()}</td>
+			<td>
+				${attr.base.friendlyName.encodeAsHTML()}
+				<pre>OID: ${attr.base.oid.encodeAsHTML()}</pre>
+			</td>
+			<td>${attr.base.category.name.encodeAsHTML()}</td>
 			<td> ${attr.base.description.encodeAsHTML()}</td>
 			<td>
 				<n:hasPermission target="descriptor:${descriptor.id}:attribute:remove">

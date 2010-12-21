@@ -18,6 +18,9 @@
  */
 package fedreg.core
 
+import org.apache.commons.lang.builder.EqualsBuilder
+import org.apache.commons.lang.builder.HashCodeBuilder
+
 /**
  * @author Bradley Beddoes
  */
@@ -57,5 +60,32 @@ class IDPSSODescriptor extends SSODescriptor  {
 	
 	public boolean functioning() {
 		( active && approved && entityDescriptor.functioning() )
+	}
+	
+	public List sortedAttributes() {
+		def c = Attribute.createCriteria()
+		def attributeList = c.list {
+			eq("idpSSODescriptor", this)
+			createAlias("base","_base")
+			order("_base.category", "asc")
+			order("_base.friendlyName", "asc")
+		}
+	}
+	
+	public boolean equals(Object obj) {
+		if( this.is(obj) ) return true
+		if ( obj == null ) return false
+		if ( !obj.instanceOf(IDPSSODescriptor) ) return false
+		
+		IDPSSODescriptor rhs = (IDPSSODescriptor) obj
+		return new EqualsBuilder()
+			.isEquals()
+	}
+
+	public int hashCode() {
+		// hard-coded, randomly chosen, non-zero, odd number different for each class
+		return new HashCodeBuilder(21, 123).
+		append(uri).
+		toHashCode();
 	}
 }
