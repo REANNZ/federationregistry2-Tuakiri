@@ -46,12 +46,14 @@
 										<th><g:message code="label.reason"/><th>
 										<td>
 											<input name="reasoning" type="text" class="required" size="60"/>
+											<fr:tooltip code='fedreg.help.acs.reason' />
 										</td>
 									</tr>
 									<tr>
 										<th><g:message code="label.required"/><th>
 										<td>
 											<g:checkBox name="isrequired" />
+											<fr:tooltip code='fedreg.help.acs.isrequired' />
 										</td>
 									</tr>
 								</tbody>

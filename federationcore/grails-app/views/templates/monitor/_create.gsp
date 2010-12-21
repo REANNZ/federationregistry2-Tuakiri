@@ -25,12 +25,14 @@
 					<th><g:message code="label.monitortype"/><th>
 					<td>
 						<g:select name="type" from="${MonitorType.list()}" optionKey="id" optionValue="name"/>
+						<fr:tooltip code='fedreg.help.monitor.type' />
 					</td>
 				</tr>
 				<tr>
 					<th><g:message code="label.location"/><th>
 					<td>
 						<input name="url" type="text" class="required" size="60"/>
+						<fr:tooltip code='fedreg.help.monitor.location' />
 					</td>
 				</tr>
 			</tbody>

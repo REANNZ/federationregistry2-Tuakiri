@@ -39,6 +39,7 @@
 																		<th><g:message code="label.value"/><th>
 																		<td>
 																			<input name="value" type="text" class="required" size="60"/>
+																			<fr:tooltip code='fedreg.help.acs.specvalue' />
 																		</td>
 																	</tr>
 																</tbody>

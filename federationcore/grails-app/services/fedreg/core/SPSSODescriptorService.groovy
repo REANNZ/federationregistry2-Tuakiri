@@ -290,7 +290,7 @@ class SPSSODescriptorService {
 		}
 		
 		serviceProvider.serviceDescription.connectURL = params.sp?.servicedescription?.connecturl
-		serviceProvider.serviceDescription.logoURL = params.sp?.servicedescription?.logo
+		serviceProvider.serviceDescription.logoURL = params.sp?.servicedescription?.logourl
 		serviceProvider.serviceDescription.furtherInfo = params.sp?.servicedescription?.furtherinfo
 		serviceProvider.serviceDescription.provides = params.sp?.servicedescription?.provides
 		serviceProvider.serviceDescription.benefits = params.sp?.servicedescription?.benefits

@@ -25,12 +25,14 @@
 					<th><g:message code="label.binding"/><th>
 					<td>
 						<g:select name="binding" from="${SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding)}" optionKey="id" optionValue="uri"/>
+						<fr:tooltip code='fedreg.help.endpoint.binding' />
 					</td>
 				</tr>
 				<tr>
 					<th><g:message code="label.location"/><th>
 					<td>
 						<input name="location" type="text" class="required url" size="60"/>
+						<fr:tooltip code='fedreg.help.endpoint.location' />
 					</td>
 				</tr>
 				<g:if test="${resloc}">
@@ -45,6 +47,7 @@
 					<th><g:message code="label.active"/><th>
 					<td>
 						<g:checkBox name="active" value="${true}" />
+						<fr:tooltip code='fedreg.help.endpoint.active' />
 					</td>
 				</tr>
 			</tbody>

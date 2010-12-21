@@ -1,4 +1,6 @@
 
+<%@page import="fedreg.core.SPSSODescriptor" %>
+
 <n:hasPermission target="descriptor:${descriptor.id}:crypto:create">
 	<script type="text/javascript">
 		var newCertificateValid = false;
@@ -25,19 +27,31 @@
 				<tbody>
 					<tr>
 						<th><g:message code="label.name"/></th>
-						<td><g:textField name="certname" size="50"/></td>
+						<td>
+							<g:textField name="certname" size="50"/>
+							<fr:tooltip code='fedreg.help.certificate.name' />
+						</td>
 					</tr>
 					<tr>
 						<th><g:message code="label.certificate"/></th>
-						<td><g:textArea name="cert" rows="25" cols="80"/></td>
+						<td>
+							<g:textArea name="cert" rows="25" cols="80"/>
+							<fr:tooltip code='fedreg.help.certificate' />
+						</td>
 					</tr>
 					<tr>
 						<th><g:message code="label.signing" /></th>
-						<td><g:checkBox name="signing" value="${true}" /></td>
+						<td>
+							<g:checkBox name="signing" value="${true}" />
+							<fr:tooltip code='fedreg.help.certificate.sign' />
+						</td>
 					</tr>
 					<tr>
 						<th><g:message code="label.encryption" /></th>
-						<td><g:checkBox name="encryption" /></td>
+						<td>
+							<g:checkBox name="encryption" value="${descriptor.instanceOf(SPSSODescriptor)}"/>
+							<fr:tooltip code='fedreg.help.certificate.enc' />
+						</td>
 					</tr>
 					<tr>
 						<td/>

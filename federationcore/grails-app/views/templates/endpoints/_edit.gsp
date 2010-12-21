@@ -1,5 +1,16 @@
 <%@page import="fedreg.core.SamlURI" %>
 <%@page import="fedreg.core.SamlURIType" %>
+
+<script type="text/javascript">
+  <njs:flashgrowl/>
+
+	$(function() {		
+		$(function(){
+			$('.tip').tipTip({maxWidth: "auto", edgeOffset: 10, maxWidth:'200px', defaultPosition:"top"});
+		});
+	});
+</script>
+
 <div class="overlaycontent">
 	<h4><g:message code="fedreg.templates.endpoints.edit.heading"/></h4>
 	<form id="endpoint-edit-${endpoint.id}">
@@ -10,12 +21,14 @@
 					<th><g:message code="label.binding"/><th>
 					<td>
 						<g:select name="binding" from="${SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding)}" optionKey="id" optionValue="uri" value="${endpoint.binding.id}"/>
+						<fr:tooltip code='fedreg.help.endpoint.binding' />
 					</td>
 				</tr>
 				<tr>
 					<th><g:message code="label.location"/><th>
 					<td>
 						<input name="location" type="text" class="required url" size="60" value="${endpoint.location.uri}"/>
+						<fr:tooltip code='fedreg.help.endpoint.location' />
 					</td>
 				</tr>
 			</tbody>

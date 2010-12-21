@@ -2,7 +2,7 @@
 	<g:if test="${descriptor.keyDescriptors && descriptor.keyDescriptors.findAll{it.disabled == false}.size() > 0}">
 		<table>
 			<tbody>
-			<g:each in="${descriptor.keyDescriptors.sort{it.dateCreated}}" status="i" var="kd">
+			<g:each in="${descriptor.keyDescriptors.sort{it.id}}" status="i" var="kd">
 				<g:if test="${!kd.disabled}">
 					<tr><td colspan="2"><h4><g:message code="label.certificate"/> ${i+1}</h4></td></tr>
 					<tr>
@@ -11,6 +11,7 @@
 						<td>
 							<n:hasPermission target="descriptor:${descriptor.id}:crypto:delete">
 								<n:confirmaction action="fedreg.keyDescriptor_delete(${kd.id});" title="${message(code: 'fedreg.templates.certificates.remove.confirm.title')}" msg="${message(code: 'fedreg.templates.certificates.remove.confirm.descriptive')}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" label="${message(code: 'label.delete')}" icon="trash" />
+								<fr:tooltip code='fedreg.help.certificate.delete' />
 							</n:hasPermission>
 						</td>
 					</tr>

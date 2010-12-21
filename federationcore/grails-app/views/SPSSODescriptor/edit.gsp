@@ -8,14 +8,9 @@
 			$(function() {			
 				$('form').validate({
 						ignore: ":disabled",
-						success: function(label) {
-							if($(label).next())
-								$(label).next().remove()	// fix annoying bug where success labels are left laying about if duplicate validations
-							label.removeClass("error").addClass("icon icon_accept").html("&nbsp;");
-						},
 						keyup: false
 				});
-				$('formz').formwizard({ 
+				$('form').formwizard({ 
 				 	formPluginEnabled: false,
 				 	validationEnabled: true,
 				 	focusFirstInput : true
@@ -37,10 +32,22 @@
 					<table>
 						<tr>
 							<th>
+								<label for="sp.status"><g:message code="label.status" /></label>
+							</th>
+							<td>
+								<g:radioGroup name="sp.status" values="['true', 'false']" labels="['label.active', 'label.inactive']" value="${serviceProvider.active}" >
+									 ${it.radio} <g:message code="${it.label}" />
+								</g:radioGroup>
+								<fr:tooltip code='fedreg.help.serviceprovider.status' />
+							</td>
+						</tr>
+						<tr>
+							<th>
 								<label for="sp.displayName"><g:message code="label.displayname" /></label>
 							</th>
 							<td>
 								<g:textField name="sp.displayName"  value="${serviceProvider.displayName}" size="50" class="required" minlength="4" maxlength="255" />
+								<fr:tooltip code='fedreg.help.serviceprovider.displayname' />
 							</td>
 						</tr>
 						<tr>
@@ -49,16 +56,7 @@
 							</th>
 							<td>
 								<g:textArea name="sp.description"  value="${serviceProvider.description}" class="required" minlength="4" rows="8" cols="36" maxlength="2000"/>
-							</td>
-						</tr>
-						<tr>
-							<th>
-								<label for="sp.status"><g:message code="label.status" /></label>
-							</th>
-							<td>
-								<g:radioGroup name="sp.status" values="['true', 'false']" labels="['label.active', 'label.inactive']" value="${serviceProvider.active}" >
-									 ${it.radio} <g:message code="${it.label}" /> <br>
-								</g:radioGroup>
+								<fr:tooltip code='fedreg.help.serviceprovider.description' />
 							</td>
 						</tr>
 						<tr>
@@ -67,6 +65,7 @@
 							</th>
 							<td>
 								<g:textField name="sp.servicedescription.connecturl" value="${serviceProvider.serviceDescription.connectURL}" size="50" class="required url" maxlength="255"/>
+								<fr:tooltip code='fedreg.help.serviceprovider.connecturl' />
 							</td>
 						</tr>
 						<tr>
@@ -75,6 +74,7 @@
 							</th>
 							<td>
 								<g:textField name="sp.servicedescription.logourl" value="${serviceProvider.serviceDescription.logoURL}" size="50" class="url" maxlength="255"/>
+								<fr:tooltip code='fedreg.help.serviceprovider.logourl' />
 							</td>
 						</tr>
 					</table>

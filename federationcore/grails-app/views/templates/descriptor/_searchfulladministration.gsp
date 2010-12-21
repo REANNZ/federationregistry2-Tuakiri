@@ -15,7 +15,10 @@
 		<table>
 			<tbody>
 				<tr>
-					<td><input type="text" id="q" name="q"/></td>
+					<td>
+						<input type="text" id="q" name="q"/>
+						<fr:tooltip code='fedreg.help.admins.search' />
+					</td>
 					<td>
 						<n:button href="#" onclick="fedreg.descriptor_fulladministrator_search(${descriptor.id});" label="${message(code:'label.search')}" icon="search"/>
 						<n:button onclick="\$('#searchfulladministrator').hide(); \$('#availablefulladministrators').fadeOut(); \$('#addfulladministrator').fadeIn(); \$('#availablefulladministrators').empty();" label="${message(code:'label.close')}" icon="close"/>

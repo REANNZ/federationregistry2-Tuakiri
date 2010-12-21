@@ -14,11 +14,6 @@
 						}
 					}
 				},
-				success: function(label) {
-					if($(label).next())
-						$(label).next().remove()	// fix annoying bug where success labels are left laying about if duplicate validations
-					label.removeClass("error").addClass("icon icon_accept").html("&nbsp;");
-				},
 				keyup: false
 		});
 		$('form').formwizard({ 
@@ -406,7 +401,7 @@
 					<th><g:message code="label.category" /></th>
 					<th><g:message code="label.description" /></th>
 					<th><g:message code="label.requested" /></th>
-					<th><g:message code="label.required" /></th>
+					<th><g:message code="label.required" /> <fr:tooltip code='fedreg.help.serviceprovider.attribute.isrequired' /></th>
 					<th><g:message code="label.reasonrequested" /></th>
 				</tr>
 				<g:each in="${attributeList}" var="attr" status="i">
