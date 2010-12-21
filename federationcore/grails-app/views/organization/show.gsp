@@ -89,7 +89,9 @@
 					</n:hasPermission>
 					<li><a href="#tab-idp"><g:message code="label.identityproviders" /></a></li>
 					<li><a href="#tab-sp"><g:message code="label.serviceproviders" /></a></li>
-					<li><a href="#tab-admins"><g:message code="label.administrators" /></a></li>
+					<g:if test="${organization.approved}">
+						<li><a href="#tab-admins"><g:message code="label.administrators" /></a></li>
+					</g:if>
 					<g:if test="${organization.extensions}">
 						<li><a href="#tab-ext" class="icon icon_cog"><g:message code="label.extensions" /></a></li>
 					</g:if>
@@ -189,12 +191,14 @@
 						<p><g:message code="fedreg.view.members.organization.no.serviceproviders" /></p>
 					</g:else>
 				</div>
-				<div id="tab-admins">
-					<g:render template="/templates/organization/listfulladministration" plugin="federationcore" model="[organization:organization, administrators:administrators]" />
-					<n:hasPermission target="organization:${organization.id}:manage:administrators">
-						<g:render template="/templates/organization/searchfulladministration" plugin="federationcore" model="[organization:organization, administrators:administrators]" />
-					</n:hasPermission>
-				</div>
+				<g:if test="${organization.approved}">
+					<div id="tab-admins">
+						<g:render template="/templates/organization/listfulladministration" plugin="federationcore" model="[organization:organization, administrators:administrators]" />
+						<n:hasPermission target="organization:${organization.id}:manage:administrators">
+							<g:render template="/templates/organization/searchfulladministration" plugin="federationcore" model="[organization:organization, administrators:administrators]" />
+						</n:hasPermission>
+					</div>
+				</g:if>
 				<g:if test="${organization.extensions}">
 					<div id="tab-ext">	
 						${fieldValue(bean: organization, field: "extensions")}

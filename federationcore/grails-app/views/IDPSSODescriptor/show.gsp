@@ -148,7 +148,9 @@
 					<li><a href="#tab-attributes" ><g:message code="label.supportedattributes" /></a></li>
 					<li><a href="#tab-nameidformats" ><g:message code="label.supportednameidformats" /></a></li>
 					<li><a href="#tab-attrfilpol" ><g:message code="label.attributefilter" /></a></li>
-					<li><a href="#tab-admins" ><g:message code="label.administrators" /></a></li>
+					<g:if test="${identityProvider.approved}">
+						<li><a href="#tab-admins" ><g:message code="label.administrators" /></a></li>
+					</g:if>
 					<li><a href="#tab-monitors" ><g:message code="label.monitoring" /></a></li>
 				</ul>
 				
@@ -248,12 +250,14 @@
 					     });
 					</script>
 				</div>
-				<div id="tab-admins">
-					<g:render template="/templates/descriptor/listfulladministration" plugin="federationcore" model="[descriptor:identityProvider, administrators:administrators]" />
-					<n:hasPermission target="descriptor:${identityProvider.id}:manage:administrators">
-						<g:render template="/templates/descriptor/searchfulladministration" plugin="federationcore" model="[descriptor:identityProvider]" />
-					</n:hasPermission>
-				</div>
+				<g:if test="${identityProvider.approved}">
+					<div id="tab-admins">
+						<g:render template="/templates/descriptor/listfulladministration" plugin="federationcore" model="[descriptor:identityProvider, administrators:administrators]" />
+						<n:hasPermission target="descriptor:${identityProvider.id}:manage:administrators">
+							<g:render template="/templates/descriptor/searchfulladministration" plugin="federationcore" model="[descriptor:identityProvider]" />
+						</n:hasPermission>
+					</div>
+				</g:if>
 				<div id="tab-monitors">
 					<div id="monitors">
 						<g:render template="/templates/monitor/list" plugin="federationcore" model="[roleDescriptor:identityProvider]" />

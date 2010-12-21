@@ -132,7 +132,9 @@
 					<li><a href="#tab-endpoints"><g:message code="label.endpoints" /></a></li>
 					<li><a href="#tab-attributes"><g:message code="label.attributeconsumingservices" /></a></li>
 					<li><a href="#tab-nameidformats"><g:message code="label.supportednameidformats" /></a></li>
-					<li><a href="#tab-admins" class="icon icon_database_key"><g:message code="label.administrators" /></a></li>
+					<g:if test="${serviceProvider.approved}">
+						<li><a href="#tab-admins" class="icon icon_database_key"><g:message code="label.administrators" /></a></li>
+					</g:if>
 					<li><a href="#tab-monitors" class="icon icon_database_key"><g:message code="label.monitoring" /></a></li>
 				</ul>
 				
@@ -218,12 +220,14 @@
 					
 					<g:render template="/templates/nameidformats/add" plugin="federationcore" model="[descriptor:serviceProvider, containerID:'nameidformats']"/>
 				</div>
-				<div id="tab-admins">
-					<g:render template="/templates/descriptor/listfulladministration" plugin="federationcore" model="[descriptor:serviceProvider, administrators:administrators]" />
-					<n:hasPermission target="descriptor:${serviceProvider.id}:manage:administrators">
-						<g:render template="/templates/descriptor/searchfulladministration" plugin="federationcore" model="[descriptor:serviceProvider]" />
-					</n:hasPermission>
-				</div>
+				<g:if test="${serviceProvider.approved}">
+					<div id="tab-admins">
+						<g:render template="/templates/descriptor/listfulladministration" plugin="federationcore" model="[descriptor:serviceProvider, administrators:administrators]" />
+						<n:hasPermission target="descriptor:${serviceProvider.id}:manage:administrators">
+							<g:render template="/templates/descriptor/searchfulladministration" plugin="federationcore" model="[descriptor:serviceProvider]" />
+						</n:hasPermission>
+					</div>
+				</g:if>
 				<div id="tab-monitors">
 					<div id="monitors">
 						<g:render template="/templates/monitor/list" plugin="federationcore" model="[roleDescriptor:serviceProvider]" />
