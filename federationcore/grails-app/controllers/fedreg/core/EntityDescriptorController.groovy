@@ -114,5 +114,44 @@ class EntityDescriptorController {
 			response.sendError(403)
 		}
 	}
+	
+	def delete = {
+		if(!params.id) {
+			log.warn "EntityDescriptor ID was not present"
+			flash.type="error"
+			flash.message = message(code: 'fedreg.controllers.namevalue.missing')
+			redirect(action: "list")
+			return
+		}
+		
+		def entityDescriptor = EntityDescriptor.get(params.id)
+		if (!entityDescriptor) {
+			flash.type="error"
+			flash.message = message(code: 'fedreg.core.entitydescriptor.nonexistant')
+			redirect(action: "list")
+			return
+		}
+		
+		if(!(entityDescriptor.holdsIDPOnly() || entityDescriptor.holdsSPOnly())) {
+			flash.type="error"
+			flash.message = message(code: 'fedreg.core.entitydescriptor.nonstandard')
+			redirect(action: "list")
+			return
+		}
+		
+		if(SecurityUtils.subject.isPermitted("descriptor:${entityDescriptor.id}:delete")) {
+			entityDescriptorService.delete(entityDescriptor.id)
+			
+			flash.type="success"
+			flash.message = message(code: 'fedreg.core.entitydescriptor.deleted')
+			log.info "$authenticatedUser deleted $entityDescriptor"
+			
+			redirect(action: "list")
+		}
+		else {
+			log.warn("Attempt to delete $entityDescriptor by $authenticatedUser was denied, incorrect permission set")
+			response.sendError(403)
+		}
+	}
 
 }
