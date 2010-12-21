@@ -64,6 +64,10 @@ target(main: "This script imports custom themes for FR deployment from the direc
 def parseArgs() {
 	args = args ? args.split('\n') : []
 	switch (args.size()) {
+		case 0: 
+			println "Importing default AAF based theme from ../branding"
+			return "../branding"
+			break
 		case 1:
 			println "Importing theme from ${args[0]}"
 			
