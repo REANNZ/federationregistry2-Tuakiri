@@ -10,7 +10,7 @@
 			<th><g:message code="label.requestedattributes" /></th>
 			<td>
 				<div id="acsreqattr${i}">
-					<g:render template="/templates/acs/listrequestedattributes" plugin="federationcore" model='[acs:acs, requestedAttributes:acs.requestedAttributes, containerID:"acsreqattr${i}"]' />
+					<g:render template="/templates/acs/listrequestedattributes" plugin="federationcore" model='[acs:acs, requestedAttributes:acs.sortedAttributes(), containerID:"acsreqattr${i}"]' />
 				</div>
 			</td>
 		</tr>

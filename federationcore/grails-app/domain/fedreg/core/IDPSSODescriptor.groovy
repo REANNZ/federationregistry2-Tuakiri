@@ -85,7 +85,6 @@ class IDPSSODescriptor extends SSODescriptor  {
 	public int hashCode() {
 		// hard-coded, randomly chosen, non-zero, odd number different for each class
 		return new HashCodeBuilder(21, 123).
-		append(uri).
 		toHashCode();
 	}
 }

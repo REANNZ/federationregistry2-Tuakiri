@@ -3,6 +3,7 @@
 		<thead>
 			<tr>
 				<th><g:message code="label.attribute" /></th>
+				<th><g:message code="label.category" /></th>
 				<th><g:message code="label.required" /></th>
 				<th><g:message code="label.reason" /></th>
 				<th><g:message code="label.approved" /></th>
@@ -10,10 +11,13 @@
 			</tr>
 		</thead>
 		<tbody>
-			<g:each in="${requestedAttributes?.sort{it.base.friendlyName}}" status="j" var="ra">
+			<g:each in="${requestedAttributes}" status="j" var="ra">
 				<tr class="${(j % 2) == 0 ? 'odd' : 'even'}">
-					<!-- ${ra.id} -->
-					<td>${ra.base.friendlyName.encodeAsHTML()}</td>
+					<td>
+						${ra.base.friendlyName.encodeAsHTML()}
+						<pre>OID: ${ra.base.oid?.encodeAsHTML()}</pre>
+					</td>
+					<td>${ra.base.category.name.encodeAsHTML()}</td>
 					<td>
 						<g:if test="${ra.isRequired}">
 							<g:message code="label.yes" />

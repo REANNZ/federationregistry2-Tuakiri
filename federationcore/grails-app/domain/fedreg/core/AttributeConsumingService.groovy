@@ -16,8 +16,10 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
 package fedreg.core
+
+import org.apache.commons.lang.builder.EqualsBuilder
+import org.apache.commons.lang.builder.HashCodeBuilder
 
 /**
  * @author Bradley Beddoes
@@ -51,5 +53,30 @@ class AttributeConsumingService {
 	}
 	
 	public String toString() {	"attributeconsumingservice:[id:$id, name: $serviceNames]" }
+	
+	public List sortedAttributes() {
+		def c = RequestedAttribute.createCriteria()
+		def attributeList = c.list {
+			eq("attributeConsumingService", this)
+			createAlias("base","_base")
+			order("_base.category", "asc")
+			order("_base.friendlyName", "asc")
+		}
+	}
+	
+	public boolean equals(Object obj) {
+		if( this.is(obj) ) return true
+		if ( obj == null ) return false
+		if ( !obj.instanceOf(AttributeConsumingService) ) return false
+		
+		AttributeConsumingService rhs = (AttributeConsumingService) obj
+		return new EqualsBuilder()
+			.isEquals()
+	}
 
+	public int hashCode() {
+		// hard-coded, randomly chosen, non-zero, odd number different for each class
+		return new HashCodeBuilder(25, 153).
+		toHashCode();
+	}
 }

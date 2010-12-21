@@ -13,7 +13,7 @@
 		<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 			<td>
 				${attr.base.friendlyName.encodeAsHTML()}
-				<pre>OID: ${attr.base.oid.encodeAsHTML()}</pre>
+				<pre>OID: ${attr.base.oid?.encodeAsHTML()}</pre>
 			</td>
 			<td>${attr.base.category.name.encodeAsHTML()}</td>
 			<td> ${attr.base.description.encodeAsHTML()}</td>
