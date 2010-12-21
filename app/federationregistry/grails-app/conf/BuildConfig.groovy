@@ -1,11 +1,11 @@
 
 // Local Plugins
-grails.plugin.location.federationcore="../federationcore"
-grails.plugin.location.federationcompliance="../federationcompliance"
-grails.plugin.location.federationworkflow="../federationworkflow"
-grails.plugin.location.federationmetadata="../federationmetadata"
-grails.plugin.location.console="../console"
-grails.plugin.location.nimble="../nimble"
+grails.plugin.location.federationcore="../plugins/federationcore"
+grails.plugin.location.federationcompliance="../plugins/federationcompliance"
+grails.plugin.location.federationworkflow="../plugins/federationworkflow"
+grails.plugin.location.federationmetadata="../plugins/federationmetadata"
+grails.plugin.location.console="../plugins/console"
+grails.plugin.location.nimble="../plugins/nimble"
 
 grails.project.class.dir = "target/classes"
 grails.project.test.class.dir = "target/test-classes"
