@@ -8,11 +8,6 @@
 			$(function() {			
 				$('form').validate({
 						ignore: ":disabled",
-						success: function(label) {
-							if($(label).next())
-								$(label).next().remove()	// fix annoying bug where success labels are left laying about if duplicate validations
-							label.removeClass("error").addClass("icon icon_accept").html("&nbsp;");
-						},
 						keyup: false
 				});
 				$('form').formwizard({ 
@@ -39,10 +34,22 @@
 					<table>
 						<tr>
 							<th>
+								<label for="organization.status"><g:message code="label.status" /></label>
+							</th>
+							<td>
+								<g:radioGroup name="organization.active" values="['true', 'false']" labels="['label.active', 'label.inactive']" value="${organization.active}" >
+									 ${it.radio} <g:message code="${it.label}" />
+								</g:radioGroup>
+								<fr:tooltip code='fedreg.help.organization.status' />
+							</td>
+						</tr>
+						<tr>
+							<th>
 								<label for="organization.name"><g:message code="label.name" /></label>
 							</th>
 							<td>
 								<g:textField name="organization.name"  value="${organization.name}" class="required" minlength="4" maxlength="255"/>
+								<fr:tooltip code='fedreg.help.organization.name' />
 							</td>
 						</tr>
 						<tr>
@@ -51,6 +58,7 @@
 							</th>
 							<td>
 								<g:textField name="organization.displayName"  value="${organization.displayName}" size="50" class="required" minlength="4" maxlength="255" />
+								<fr:tooltip code='fedreg.help.organization.displayName' />
 							</td>
 						</tr>
 						<tr>
@@ -59,16 +67,7 @@
 							</th>
 							<td>
 								<g:textField name="organization.url"  size="50" class="required url" minlength="4" maxlength="255" value="${organization.url.uri}"/>
-							</td>
-						</tr>
-						<tr>
-							<th>
-								<label for="organization.status"><g:message code="label.status" /></label>
-							</th>
-							<td>
-								<g:radioGroup name="organization.active" values="['true', 'false']" labels="['label.active', 'label.inactive']" value="${organization.active}" >
-									 ${it.radio} <g:message code="${it.label}" /> <br>
-								</g:radioGroup>
+								<fr:tooltip code='fedreg.help.organization.url' />
 							</td>
 						</tr>
 						<tr>
@@ -77,6 +76,7 @@
 							</th>
 							<td>
 								<g:select name="organization.primary" from="${organizationTypes}" optionKey="id" optionValue="displayName" value="${organization.primary.id}"/>
+								<fr:tooltip code='fedreg.help.organization.edit.type' />
 							</td>
 						</tr>
 						<tr>
@@ -90,6 +90,7 @@
 											<li><g:checkBox name="organization.types.${t.id}" value="on" checked="${organization.types.contains(t)}"/> ${fieldValue(bean: t, field: "displayName")}</li>
 										</g:if>
 									</g:each>
+									<fr:tooltip code='fedreg.help.organization.edit.secondarytype' />
 								</ul>
 							</td>
 						</tr>
