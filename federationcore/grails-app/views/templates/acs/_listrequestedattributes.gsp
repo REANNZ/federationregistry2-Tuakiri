@@ -32,7 +32,7 @@
 							<g:message code="label.yes" />
 						</g:if>
 						<g:else>
-							<span class="error"><g:message code="label.no" /></span>
+							<span class="warning"><g:message code="fedreg.templates.acs.reqattributes.workflow" /></span>
 						</g:else>
 					</td>
 					<n:hasPermission target="descriptor:${ra.attributeConsumingService.descriptor.id}:attribute:remove">

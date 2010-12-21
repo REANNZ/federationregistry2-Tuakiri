@@ -1,4 +1,8 @@
 <%@ page import="fedreg.core.Organization" %>
+<%@ page import="fedreg.core.SPSSODescriptor" %>
+<%@ page import="fedreg.core.IDPSSODescriptor" %>
+<%@ page import="fedreg.core.Contact" %>
+<%@ page import="fedreg.core.RequestedAttribute" %>
 <html>
 	<head>	
 		<meta name="layout" content="workflow" />
@@ -15,6 +19,7 @@
 						<tr>
 							<th><g:message code="label.name" /></th>
 							<th><g:message code="label.description" /></th>
+							<th><g:message code="label.creator" /></th>
 							<th><g:message code="label.processinstance" /></th>
 							<th><g:message code="label.action" /></th>
 						</tr>
@@ -23,7 +28,15 @@
 						<g:each in="${tasks}" status="i" var="instance">
 							<tr>
 								<td>${fieldValue(bean: instance, field: "task.name")}</td>
-								<td>${fieldValue(bean: instance, field: "task.description")}</td>
+								<td style="width:300px;">${fieldValue(bean: instance, field: "task.description")}</td>
+								<td>
+									<g:if test="${instance.processInstance.params.creator}">
+										<g:set var="contact" value="${Contact.get(instance.processInstance.params.creator)}" />
+										<g:link controller="contact" action="show" id="${instance.processInstance.params.creator}">${fieldValue(bean: contact, field: "givenName")} ${fieldValue(bean: contact, field: "surname")}</g:link>
+									</g:if>
+									<g:else>
+										<g:message code="label.publiccreation" />
+									</g:else>
 								<td>
 									${fieldValue(bean: instance, field: "processInstance.description")}
 									<br><br>

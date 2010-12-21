@@ -31,7 +31,7 @@ class AttributeConsumingServiceController {
 			response.setStatus(500)
 			return
 		}
-		render (template:"/templates/acs/listrequestedattributes", contextPath: pluginContextPath, model:[requestedAttributes:acs.requestedAttributes, containerID:params.containerID])
+		render (template:"/templates/acs/listrequestedattributes", contextPath: pluginContextPath, model:[requestedAttributes:acs.sortedAttributes(), containerID:params.containerID])
 	}
 	
 	def listSpecifiedAttributes = {
@@ -55,7 +55,7 @@ class AttributeConsumingServiceController {
 			response.setStatus(500)
 			return
 		}
-		render (template:"/templates/acs/listspecifiedattributes", contextPath: pluginContextPath, model:[requestedAttributes:acs.requestedAttributes, specificationAttributes: AttributeBase.findAllWhere(specificationRequired:true), containerID:params.containerID])
+		render (template:"/templates/acs/listspecifiedattributes", contextPath: pluginContextPath, model:[requestedAttributes:acs.sortedAttributes(), specificationAttributes: AttributeBase.findAllWhere(specificationRequired:true), containerID:params.containerID])
 	}
 	
 	def listSpecifiedAttributeValue = {
@@ -244,12 +244,12 @@ class AttributeConsumingServiceController {
 			}
 			
 			def workflowParams = [ creator:authenticatedUser?.contact?.id?.toString(), requestedAttribute:reqAttr?.id?.toString(), serviceProvider:acs?.descriptor?.id?.toString(), locale:LCH.getLocale().getLanguage() ]
-			def (initiated, processInstance) = workflowProcessService.initiate( "requestedattribute_create", "Approval for creation of ${reqAttr}", ProcessPriority.MEDIUM, workflowParams)
+			def (initiated, processInstance) = workflowProcessService.initiate( "requestedattribute_create", "Approval for addition of the attribute '${reqAttr.base?.friendlyName}' (OID: ${reqAttr.base?.oid}) to the service '${acs?.descriptor?.displayName}'", ProcessPriority.MEDIUM, workflowParams)
 
 			if(initiated)
 				workflowProcessService.run(processInstance)
 			else
-				throw new ErronousStateException("Unable to execute workflow when creating ${identityProvider}")
+				throw new ErronousStateException("Unable to execute workflow when creating ${reqAttr}")
 		
 			log.info "$authenticatedUser added ${reqAttr} referencing ${attr} to ${acs} and ${acs.descriptor}"
 			render message(code: 'fedreg.attributeconsumingservice.requestedattribute.add.success')

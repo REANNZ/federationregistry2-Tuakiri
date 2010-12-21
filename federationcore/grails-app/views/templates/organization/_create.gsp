@@ -5,11 +5,6 @@
 	$(function() {	
 
 		$('form').validate({
-				success: function(label) {
-					if($(label).next())
-						$(label).next().remove()	// fix annoying bug where success labels are left laying about if duplicate validations
-					label.removeClass("error").addClass("icon icon_accept").html("&nbsp;");
-				},
 				keyup: false
 		});
 		$('form').formwizard({ 
