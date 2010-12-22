@@ -30,11 +30,13 @@ class OrganizationController {
 			def adminRole = Role.findByName("organization-${organization.id}-administrators")
 			def identityproviders = []
 			def serviceproviders = []
+						
 			entities.each { e ->
 				e.idpDescriptors.each { idp -> identityproviders.add(idp)}
 				e.spDescriptors.each { sp -> serviceproviders.add(sp) }
 			}
-			[organization: organization, entities:entities, identityproviders:identityproviders, serviceproviders:serviceproviders, contacts:contacts, administrators:adminRole?.users]
+			
+			[organization: organization, statistics:organization.buildStatistics(), entities:entities, identityproviders:identityproviders, serviceproviders:serviceproviders, contacts:contacts, administrators:adminRole?.users]
 		}
 		else {
 			flash.type="error"

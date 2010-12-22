@@ -83,6 +83,7 @@
 		
 			<div id="tabs">
 				<ul>
+					<li><a href="#tab-statistics"><g:message code="label.statistics" /></a></li>
 					<li><a href="#tab-contacts"><g:message code="label.contacts" /></a></li>
 					<n:hasPermission target="saml:advanced">
 						<li><a href="#tab-entities"><g:message code="label.entities" /></a></li>
@@ -96,6 +97,49 @@
 						<li><a href="#tab-ext" class="icon icon_cog"><g:message code="label.extensions" /></a></li>
 					</g:if>
 				</ul>
+				
+				<div id="tab-statistics">
+					<h3><g:message code="label.statistics" /></h3>
+					<table>
+						<thead>
+							<tr>
+								<th></th>
+								<th><g:message code="label.total" /></th>
+								<th><g:message code="label.active" /></th>
+								<th><g:message code="label.inactive" /></th>
+								<th><g:message code="label.approved" /></th>
+								<th><g:message code="label.unapproved" /></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr class="odd">
+								<th><g:message code="label.entitydescriptors" /></th>
+								<td>${statistics.entityDescriptors.total.encodeAsHTML()}</td>
+								<td>${statistics.entityDescriptors.activeEntityDescriptors.encodeAsHTML()}</td>
+								<td>${statistics.entityDescriptors.inactiveEntityDescriptors.encodeAsHTML()}</td>
+								<td>${statistics.entityDescriptors.approvedEntityDescriptors.encodeAsHTML()}</td>
+								<td>${statistics.entityDescriptors.unapprovedEntityDescriptors.encodeAsHTML()}</td>
+							</tr>
+							<tr>
+								<th><g:message code="label.identityproviders" /></th>
+								<td>${statistics.idpSSODescriptors.total.encodeAsHTML()}</td>
+								<td>${statistics.idpSSODescriptors.activeIDPSSODescriptors.encodeAsHTML()}</td>
+								<td>${statistics.idpSSODescriptors.inactiveIDPSSODescriptors.encodeAsHTML()}</td>
+								<td>${statistics.idpSSODescriptors.approvedIDPSSODescriptors.encodeAsHTML()}</td>
+								<td>${statistics.idpSSODescriptors.unapprovedIDPSSODescriptors.encodeAsHTML()}</td>
+							</tr>
+							<tr>
+								<th><g:message code="label.serviceproviders" /></th>
+								<td>${statistics.spSSODescriptors.total.encodeAsHTML()}</td>
+								<td>${statistics.spSSODescriptors.activeSPSSODescriptors.encodeAsHTML()}</td>
+								<td>${statistics.spSSODescriptors.inactiveSPSSODescriptors.encodeAsHTML()}</td>
+								<td>${statistics.spSSODescriptors.approvedSPSSODescriptors.encodeAsHTML()}</td>
+								<td>${statistics.spSSODescriptors.unapprovedSPSSODescriptors.encodeAsHTML()}</td>
+							</tr>
+						</tbody>
+					</table>
+						
+				</div>
 				
 				<div id="tab-contacts">
 					<g:if test="${contacts}">

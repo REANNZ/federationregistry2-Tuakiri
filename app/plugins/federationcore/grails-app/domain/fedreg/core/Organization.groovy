@@ -74,4 +74,32 @@ class Organization  {	// Also called a participant in AAF land
 	public boolean functioning() {
 		( active && approved )
 	}
+	
+	public Map buildStatistics() {
+		def edTotal = this.entityDescriptors?.size()
+		def activeEntityDescriptors = EntityDescriptor.countByOrganizationAndActive(this, true)
+		def inactiveEntityDescriptors = EntityDescriptor.countByOrganizationAndActive(this, false)
+		def approvedEntityDescriptors = EntityDescriptor.countByOrganizationAndApproved(this, true)
+		def unapprovedEntityDescriptors = EntityDescriptor.countByOrganizationAndApproved(this, false)
+		
+		def entityDescriptors = [total:edTotal, activeEntityDescriptors:activeEntityDescriptors, inactiveEntityDescriptors:inactiveEntityDescriptors, approvedEntityDescriptors:approvedEntityDescriptors, unapprovedEntityDescriptors:unapprovedEntityDescriptors]
+
+		def idpTotal = IDPSSODescriptor.countByOrganization(this)
+		def activeIDPSSODescriptors = IDPSSODescriptor.countByOrganizationAndActive(this, true)
+		def inactiveIDPSSODescriptors = IDPSSODescriptor.countByOrganizationAndActive(this, false)
+		def approvedIDPSSODescriptors = IDPSSODescriptor.countByOrganizationAndApproved(this, true)
+		def unapprovedIDPSSODescriptors = IDPSSODescriptor.countByOrganizationAndApproved(this, false)
+		
+		def idpSSODescriptors = [total:idpTotal, activeIDPSSODescriptors:activeIDPSSODescriptors, inactiveIDPSSODescriptors:inactiveIDPSSODescriptors, approvedIDPSSODescriptors:approvedIDPSSODescriptors, unapprovedIDPSSODescriptors:unapprovedIDPSSODescriptors]
+		
+		def spTotal = SPSSODescriptor.countByOrganization(this)
+		def activeSPSSODescriptors = SPSSODescriptor.countByOrganizationAndActive(this, true)
+		def inactiveSPSSODescriptors = SPSSODescriptor.countByOrganizationAndActive(this, false)
+		def approvedSPSSODescriptors = SPSSODescriptor.countByOrganizationAndApproved(this, true)
+		def unapprovedSPSSODescriptors = SPSSODescriptor.countByOrganizationAndApproved(this, false)
+		
+		def spSSODescriptors = [total:spTotal, activeSPSSODescriptors:activeSPSSODescriptors, inactiveSPSSODescriptors:inactiveSPSSODescriptors, approvedSPSSODescriptors:approvedSPSSODescriptors, unapprovedSPSSODescriptors:unapprovedSPSSODescriptors]
+		
+		[entityDescriptors:entityDescriptors, idpSSODescriptors:idpSSODescriptors, spSSODescriptors:spSSODescriptors]
+	}
 }
