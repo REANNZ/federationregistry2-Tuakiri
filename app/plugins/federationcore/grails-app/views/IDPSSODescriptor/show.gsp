@@ -43,9 +43,12 @@
 			var monitorListEndpoint = "${createLink(controller:'roleDescriptorMonitor', action:'list', id:identityProvider.id )}";
 			var monitorCreateEndpoint = "${createLink(controller:'roleDescriptorMonitor', action:'create', id:identityProvider.id )}";
 			
+			var attributeFilterEndpoint = "${createLink(controller:'attributeFilter', action:'generate', id:identityProvider.id )}";
+			
 			$(function() {
 				$("#tabs").tabs();
 				$("#tabs2").tabs();
+				$("#attrfilpolood").hide();
 			});
 			
 			
@@ -231,9 +234,13 @@
 				</div>
 				<div id="tab-attrfilpol">
 					<h3><g:message code="label.attributefilter"/></h3>
+					
+					<p id="attrfilpolood" class="error" style="margin: 6px;"><g:message code="fedreg.view.members.identityprovider.show.attributefilter.outofdate" /> <a href="#" onClick="fedreg.attributefilter_refresh(); return false;"><strong><g:message code="label.refreshnow" />.</strong></a></p>
+					
 					<p><g:message code="fedreg.view.members.identityprovider.show.attributefilter.description" /></p>
 					<p><g:message code="fedreg.view.members.identityprovider.show.attributefilter.configuration" /></p>
 					<p><g:message code="fedreg.view.members.identityprovider.show.attributefilter.configurationurl" /> <strong><g:link controller="attributeFilter" action="generate" id="${identityProvider.id}">${createLink(controller:'attributeFilter', action:'generate', id:identityProvider.id, absolute:true)}</g:link></strong></p>
+					
 					<g:textArea id="attrfilter" name="attrfilter" value="${attributeFilter}" rows="25" cols="40"/>
 					<script type="text/javascript">
 						 var textarea = $("#attrfilter");

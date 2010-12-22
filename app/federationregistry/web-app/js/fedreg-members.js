@@ -687,6 +687,7 @@ fedreg.attribute_remove = function(attributeID, containerID) {
 		success: function(res) {
 			nimble.growl('success', res);
 			fedreg.attribute_list(containerID);
+			$('#attrfilpolood').show();
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
 			nimble.growl('error', xhr.responseText);
@@ -720,6 +721,24 @@ fedreg.attribute_add = function(containerID) {
 		success: function(res) {
 			nimble.growl('success', res);
 			fedreg.attribute_list(containerID);
+			$('#attrfilpolood').show();
+	    },
+	    error: function (xhr, ajaxOptions, thrownError) {
+			nimble.growl('error', xhr.responseText);
+	    }
+	});
+};
+
+fedreg.attributefilter_refresh = function() {
+	$("#working").trigger("fedreg.working");
+	editor.setCode('working...');
+	$.ajax({
+		type: "GET",
+		url: attributeFilterEndpoint,
+		dataType: "text",
+		success: function(res) {
+			editor.setCode(res);
+			$('#attrfilpolood').hide();
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
 			nimble.growl('error', xhr.responseText);
