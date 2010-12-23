@@ -15,6 +15,7 @@
 			var acsAddAttr = "${createLink(controller:'attributeConsumingService', action:'addRequestedAttribute')}";
 			var acsListAttr = "${createLink(controller:'attributeConsumingService', action:'listRequestedAttributes')}";
 			var acsRemoveAttr = "${createLink(controller:'attributeConsumingService', action:'removeRequestedAttribute')}";
+			var acsUpdateAttr = "${createLink(controller:'attributeConsumingService', action:'updateRequestedAttribute')}";
 			var acsAddSpecAttrVal = "${createLink(controller:'attributeConsumingService', action:'addSpecifiedAttributeValue')}";
 			var acsRemoveSpecAttrVal = "${createLink(controller:'attributeConsumingService', action:'removeSpecifiedAttributeValue')}";
 			var acsListSpecAttrVal = "${createLink(controller:'attributeConsumingService', action:'listSpecifiedAttributeValue')}";

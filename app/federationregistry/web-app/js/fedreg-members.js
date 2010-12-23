@@ -540,6 +540,26 @@ fedreg.acs_reqattribute_remove = function(raID, acsID, containerID) {
 	});
 };
 
+fedreg.acs_reqattribute_update = function(acsID, id, reason, required, containerID) {
+	$("#working").trigger("fedreg.working");
+	var dataString = "id=" + id + "&reasoning=" + reason
+	if(required)
+		dataString = dataString + "&required=" + required;
+	$.ajax({
+		type: "POST",
+		url: acsUpdateAttr,
+		data: dataString + "&_method=put",
+		success: function(res) {
+			nimble.growl('success', res);
+			fedreg.acs_reqattribute_list(acsID, containerID);
+			fedreg.acs_specattributes_list(acsID, 'acsspecattributes');
+	    },
+	    error: function (xhr, ajaxOptions, thrownError) {
+			nimble.growl('error', xhr.responseText);
+	    }
+	});
+};
+
 fedreg.acs_reqattribute_list = function(acsID, containerID) {
 	var dataString = "id=" + acsID + "&containerID=" + containerID;
 	$.ajax({

@@ -34,10 +34,7 @@
 		$(function() {
 			nimble.createTabs('tabs');
 			nimble.createTabs('tabs2');
-			
-			$(function(){
-				$('.tip').tipTip({maxWidth: "auto", edgeOffset: 10, maxWidth:'200px', defaultPosition:"top"});
-			});
+			$('.tip').tipTip({maxWidth: "auto", edgeOffset: 10, maxWidth:'200px', defaultPosition:"top"});
 		});
 	</script>
     <g:layoutHead />

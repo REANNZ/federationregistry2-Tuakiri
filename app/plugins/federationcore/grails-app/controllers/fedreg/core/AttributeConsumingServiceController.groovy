@@ -6,7 +6,7 @@ import org.springframework.context.i18n.LocaleContextHolder as LCH
 import fedreg.workflow.ProcessPriority
 
 class AttributeConsumingServiceController {
-	def allowedMethods = [addSpecifiedAttributeValue:'POST', addRequestedAttribute:'POST', removeSpecifiedAttributeValue:'DELETE', ]
+	def allowedMethods = [addSpecifiedAttributeValue:'POST', addRequestedAttribute:'POST', removeSpecifiedAttributeValue:'DELETE', removeRequestedAttribute:'DELETE', updateRequestedAttribute:'PUT']
 		
 	def workflowProcessService
 	
@@ -259,7 +259,51 @@ class AttributeConsumingServiceController {
 		}
 	}
 	
-	def removeRequestedAttribute = {		
+	def updateRequestedAttribute = {
+		if(!params.id) {
+			log.warn "Requested attribute ID was not present"
+			render message(code: 'fedreg.controllers.namevalue.missing')
+			response.setStatus(500)
+			return
+		}
+		
+		if(!params.reasoning) {
+			log.warn "Reason for requesting attribute was not present"
+			render message(code: 'fedreg.controllers.namevalue.missing')
+			response.setStatus(500)
+			return
+		}
+		
+		def ra = RequestedAttribute.get(params.id)
+		if(!ra) {
+			log.warn "Requested Attribute identified by id ${params.id} was not located"
+			render message(code: 'fedreg.attributeconsumingservice.nonexistant', args: [params.id])
+			response.setStatus(500)
+			return
+		}
+		
+		if(SecurityUtils.subject.isPermitted("descriptor:${ra.attributeConsumingService.descriptor.id}:attribute:update")) {
+			ra.reasoning = params.reasoning
+			ra.isRequired = params.required ? true:false
+			
+			if(!ra.save()) {
+				ra.errors.each {
+					log.warn it
+				}
+				render message(code: 'fedreg.attributeconsumingservice.requestedattribute.update.failed')
+				response.setStatus(500)
+				return
+			}
+		
+			log.info "$authenticatedUser updated ${ra} referencing ${ra.base}"
+			render message(code: 'fedreg.attributeconsumingservice.requestedattribute.update.success')
+		} else {
+			log.warn("Attempt to update a requested attribute by $authenticatedUser was denied, incorrect permission set")
+			response.sendError(403)
+		}
+	}
+	
+	def removeRequestedAttribute = {
 		if(!params.raid) {
 			log.warn "Requested attribute ID was not present"
 			render message(code: 'fedreg.controllers.namevalue.missing')
