@@ -78,6 +78,11 @@
 	</g:if>
 	<g:hiddenField name="contact.type" value="administrative" />
 	
+	<div class="step" id="overview">
+		<h3><g:message code="fedreg.templates.serviceprovider.create.overview.heading" /></h3>
+		<g:message code="fedreg.templates.serviceprovider.create.overview.details" />
+	</div>
+	
 	<g:if test="${requiresContactDetails}">
 		<div class="step" id="contact">
 			<h3><g:message code="fedreg.templates.serviceprovider.create.contact.heading" /></h3>

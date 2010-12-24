@@ -29,6 +29,11 @@
 	<g:hiddenField name="contact.type" value="administrative" />
 	<g:hiddenField name="organization.lang" value="en" />
 	
+	<div class="step" id="overview">
+		<h3><g:message code="fedreg.templates.organization.create.overview.heading" /></h3>
+		<g:message code="fedreg.templates.organization.create.overview.details" />
+	</div>
+	
 	<g:if test="${requiresContactDetails}">
 		<div class="step" id="contact">
 			<h3><g:message code="fedreg.templates.organization.create.contact.heading" /></h3>
