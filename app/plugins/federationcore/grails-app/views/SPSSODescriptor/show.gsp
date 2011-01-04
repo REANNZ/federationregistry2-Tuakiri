@@ -38,9 +38,9 @@
 			var nameIDFormatListEndpoint = "${createLink(controller:'descriptorNameIDFormat', action:'list', id:serviceProvider.id )}";
 			var nameIDFormatAddEndpoint = "${createLink(controller:'descriptorNameIDFormat', action:'add', id:serviceProvider.id )}";
 			
-			var serviceCategoryListEndpoint = "${createLink(controller:'SPSSODescriptor', action:'listCategories', id:serviceProvider.id )}";
-			var serviceCategoryAddEndpoint = "${createLink(controller:'SPSSODescriptor', action:'addCategory', id:serviceProvider.id )}";
-			var serviceCategoryRemoveEndpoint = "${createLink(controller:'SPSSODescriptor', action:'removeCategory', id:serviceProvider.id )}";
+			var serviceCategoryListEndpoint = "${createLink(controller:'serviceCategory', action:'list', id:serviceProvider.id )}";
+			var serviceCategoryAddEndpoint = "${createLink(controller:'serviceCategory', action:'add', id:serviceProvider.id )}";
+			var serviceCategoryRemoveEndpoint = "${createLink(controller:'serviceCategory', action:'remove', id:serviceProvider.id )}";
 			
 			var attributeRemoveEndpoint = "${createLink(controller:'descriptorAttribute', action:'remove', id:serviceProvider.id )}";
 			var attributeListEndpoint = "${createLink(controller:'descriptorAttribute', action:'list', id:serviceProvider.id )}";

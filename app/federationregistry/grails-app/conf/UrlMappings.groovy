@@ -49,12 +49,16 @@ class UrlMappings {
 			controller = "descriptorContact"
 		}
 	
-		"/membership/backend/roleDescriptorCrypto/$action?/$id?"{
+		"/membership/backend/roledescriptorcrypto/$action?/$id?"{
 			controller = "roleDescriptorCrypto"
 		}
 	
 		"/membership/backend/endpoint/$action?/$id?"{
 			controller = "descriptorEndpoint"
+		}
+		
+		"/membership/backend/servicecategories/$action?/$id?"{
+			controller = "serviceCategory"
 		}
 	
 		"/membership/backend/nameidformat/$action?/$id?"{
@@ -75,6 +79,11 @@ class UrlMappings {
 	
 		"/confirmadministrator/$action?/$id?"{
 			controller = "invitation"
+		}
+		
+		"/servicecategories/json/$id" {
+			controller = "serviceCategory"
+			action = "json"
 		}
 	
 		"/registration/$action?/$id?"{
