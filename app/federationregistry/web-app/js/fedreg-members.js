@@ -696,6 +696,57 @@ fedreg.nameIDFormat_add = function(containerID) {
 	});
 };
 
+// Service Categories
+fedreg.serviceCategory_list = function(containerID) {
+	var dataString = "containerID=" + containerID
+	$.ajax({
+		type: "GET",
+		cache: false,
+		url: serviceCategoryListEndpoint,
+		data: dataString,
+		success: function(res) {
+			$("#"+containerID).html(res)
+	    },
+	    error: function (xhr, ajaxOptions, thrownError) {
+			nimble.growl('error', xhr.responseText);
+	    }
+	});
+};
+
+fedreg.serviceCategory_add = function(containerID) {
+	$("#working").trigger("fedreg.working");
+	var dataString = $("#newservicecategorydata").serialize();
+	$.ajax({
+		type: "POST",
+		url: serviceCategoryAddEndpoint,
+		data: dataString,
+		success: function(res) {
+			nimble.growl('success', res);
+			fedreg.serviceCategory_list(containerID);
+	    },
+	    error: function (xhr, ajaxOptions, thrownError) {
+			nimble.growl('error', xhr.responseText);
+	    }
+	});
+};
+
+fedreg.serviceCategory_remove = function(categoryID, containerID) {
+	$("#working").trigger("fedreg.working");
+	var dataString = "categoryID=" + categoryID;
+	$.ajax({
+		type: "POST",
+		url: serviceCategoryRemoveEndpoint,
+		data: dataString + "&_method=delete",
+		success: function(res) {
+			nimble.growl('success', res);
+			fedreg.serviceCategory_list(containerID);
+	    },
+	    error: function (xhr, ajaxOptions, thrownError) {
+			nimble.growl('error', xhr.responseText);
+	    }
+	});
+};
+
 // Attributes
 fedreg.attribute_remove = function(attributeID, containerID) {
 	$("#working").trigger("fedreg.working");

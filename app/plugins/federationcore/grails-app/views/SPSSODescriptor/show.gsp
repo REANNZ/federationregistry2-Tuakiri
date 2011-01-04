@@ -38,6 +38,10 @@
 			var nameIDFormatListEndpoint = "${createLink(controller:'descriptorNameIDFormat', action:'list', id:serviceProvider.id )}";
 			var nameIDFormatAddEndpoint = "${createLink(controller:'descriptorNameIDFormat', action:'add', id:serviceProvider.id )}";
 			
+			var serviceCategoryListEndpoint = "${createLink(controller:'SPSSODescriptor', action:'listCategories', id:serviceProvider.id )}";
+			var serviceCategoryAddEndpoint = "${createLink(controller:'SPSSODescriptor', action:'addCategory', id:serviceProvider.id )}";
+			var serviceCategoryRemoveEndpoint = "${createLink(controller:'SPSSODescriptor', action:'removeCategory', id:serviceProvider.id )}";
+			
 			var attributeRemoveEndpoint = "${createLink(controller:'descriptorAttribute', action:'remove', id:serviceProvider.id )}";
 			var attributeListEndpoint = "${createLink(controller:'descriptorAttribute', action:'list', id:serviceProvider.id )}";
 			var attributeAddEndpoint = "${createLink(controller:'descriptorAttribute', action:'add', id:serviceProvider.id )}";
@@ -128,6 +132,7 @@
 			<div id="tabs">
 				<ul>
 					<li><a href="#tab-details"><g:message code="label.details" /></a></li>
+					<li><a href="#tab-categories"><g:message code="label.categories" /></a></li>
 					<li><a href="#tab-contacts"><g:message code="label.contacts" /></a></li>
 					<li><a href="#tab-crypto"><g:message code="label.crypto" /></a></li>
 					<li><a href="#tab-endpoints"><g:message code="label.endpoints" /></a></li>
@@ -145,7 +150,14 @@
 						<g:render template="/templates/spssodescriptor/details" plugin="federationcore" model="[serviceProvider:serviceProvider]" />
 					</div>
 				</div>
-				
+				<div id="tab-categories" class="tabcontent">
+					<h3><g:message code="label.categories" /></h3>
+					<div id="categories">
+						<g:render template="/templates/servicecategories/list" plugin="federationcore" model="[descriptor:serviceProvider, categories:serviceProvider.serviceCategories, containerID:'categories']" />
+					</div>
+					
+					<g:render template="/templates/servicecategories/add" plugin="federationcore" model="[descriptor:serviceProvider, containerID:'categories']"/>
+				</div>
 				<div id="tab-contacts" class="tabcontent">
 					<h3><g:message code="label.contacts" /></h3>
 					<div id="contacts">
