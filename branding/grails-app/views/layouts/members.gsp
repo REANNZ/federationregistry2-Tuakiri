@@ -4,19 +4,18 @@
   <head>
     <title><g:message code="fedreg.title" /> | <g:layoutTitle /></title>
 
-	<!--[if lt IE 9]>
-		<script type="text/javascript" src="${resource(dir: 'js', file: '/html5.js')}"></script>
-	<![endif]-->
-	<script type="text/javascript" src="${resource(dir: 'js', file: '/modernizr-1.5.min.js')}"></script>
-
 	<link rel="stylesheet" href="${resource(dir:'css',file:'jquery-ui-1.8.2.custom.css')}" />
 	<link rel="stylesheet" href="${resource(dir:'css',file:'jquery.jgrowl.css')}" />
 	<link rel="stylesheet" href="${resource(dir:'css',file:'jquery.tiptip.css')}" />
 	<link rel="stylesheet/less" href="${resource(dir:'css',file:'frtheme.less')}" />
+	
+	<!--[if lt IE 9]>
+		<script type="text/javascript" src="${resource(dir: 'js', file: '/html5.js')}"></script>
+	<![endif]-->
+	<script type="text/javascript" src="${resource(dir: 'js', file: '/modernizr-1.5.min.js')}"></script>
 		
 	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/jquery-1.4.2.min.js')}"></script>
 	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/jquery-ui-1.8.2.custom.min.js')}"></script>
-	<script type="text/javascript" src="${resource(dir: 'js', file: 'less-1.0.35.min.js')}"></script>
 	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/jquery.jgrowl.min.js')}"></script>
 	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/jquery.validate.pack.js')}"></script>
 	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/jquery.validate.additional-methods.js')}"></script>
@@ -24,21 +23,14 @@
 	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/jquery.datatables.min.js')}"></script>
 	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/jquery.alphanumeric.pack.js')}"></script>
 	<script type="text/javascript" src="${resource(dir: 'js', file: '/jquery/jquery.tiptip.minified.js')}"></script>
+	<script type="text/javascript" src="${resource(dir: 'js', file: 'less-1.0.35.min.js')}"></script>
+	
+	<script type="text/javascript" src="${resource(dir: 'js', file: 'application.js', plugin: 'nimble')}"></script>
+	<script type="text/javascript" src="${resource(dir: 'js', file: 'interface.js', plugin: 'nimble')}"></script>
+	
+	<script type="text/javascript" src="${resource(dir: 'js', file: '/application.js')}"></script>
 
-	<script type="text/javascript" src="${resource(dir: 'js', file: '/fedreg-members.js')}"></script>
-	<nh:nimbleui/>
-		
-	<script type="text/javascript">
-      <njs:flashgrowl/>
-
-		$(function() {
-			nimble.createTabs('tabs');
-			nimble.createTabs('tabs2');
-			$('.tip').tipTip({maxWidth: "auto", edgeOffset: 10, maxWidth:'200px', defaultPosition:"top"});
-		});
-	</script>
     <g:layoutHead />
-
 </head>
 
 <body>

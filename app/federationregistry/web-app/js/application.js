@@ -1,4 +1,8 @@
 
+window.nimble = window.nimble || {};
+var nimble = window.nimble;
+nimble.endpoints = nimble.endpoints || {};
+
 window.fedreg = window.fedreg || {};
 var fedreg = window.fedreg;
 
@@ -21,6 +25,13 @@ $(function() {
 		if (e.keyCode == 13) {
 			return false;
 		}
+	});
+	
+	nimble.createTabs('tabs');
+	nimble.createTabs('tabs2');
+
+	$(function(){
+		$('.tip').tipTip({maxWidth: "auto", edgeOffset: 10, maxWidth:'200px', defaultPosition:"top"});
 	});
 });
 
