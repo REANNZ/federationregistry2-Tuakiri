@@ -12,7 +12,7 @@
 	<hr>
 
 	<div id="addmonitor" class="searcharea">
-		<n:button onclick="\$('#addmonitor').fadeOut(); \$('#newmonitor').fadeIn();" label="${message(code:'label.addmonitor')}" icon="plus"/>
+		<n:button onclick="\$('#addmonitor').fadeOut(); \$('#newmonitor').fadeIn();" label="${message(code:'label.addmonitor')}" class="add-button"/>
 	</div>
 	
 	<div id="newmonitor" class="searcharea">
@@ -37,8 +37,8 @@
 				</tr>
 			</tbody>
 		</table>
-		<n:button onclick="if(\$('#newmonitordata').valid()) fedreg.monitor_create();" label="${message(code:'label.add')}" icon="plus"/>
-		<n:button onclick="\$('#newmonitor').fadeOut(); \$('#addmonitor').fadeIn();" label="${message(code:'label.close')}" icon="close"/>
+		<n:button onclick="if(\$('#newmonitordata').valid()) fedreg.monitor_create();" label="${message(code:'label.add')}" class="add-button"/>
+		<n:button onclick="\$('#newmonitor').fadeOut(); \$('#addmonitor').fadeIn();" label="${message(code:'label.close')}" class="close-button"/>
 		</form>
 	</div>
 	

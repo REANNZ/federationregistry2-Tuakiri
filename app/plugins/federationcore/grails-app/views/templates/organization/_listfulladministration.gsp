@@ -19,10 +19,10 @@
 						<td><a href="mailto:${admin.profile.email?.encodeAsHTML()}">${admin.profile.email?.encodeAsHTML()}</a></td>
 						<td>
 							<n:isAdministrator>
-								<n:button href="${createLink(controller:'user', action:'show', id: admin.id)}" label="${message(code:'label.view')}" icon="arrowthick-1-ne"/>
+								<n:button href="${createLink(controller:'user', action:'show', id: admin.id)}" label="${message(code:'label.view')}" class="view-button"/>
 							</n:isAdministrator>
 							<n:hasPermission target="organization:${organization.id}:manage:administrators">
-								<n:confirmaction action="fedreg.organization_fulladministrator_revoke(${admin.id});" title="${message(code: 'fedreg.templates.organization.full.administrator.revoke.confirm.title')}" msg="${message(code: 'fedreg.templates.organization.full.administrator.revoke.confirm.descriptive')}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" icon="circle-close" label="${message(code: 'label.revoke')}"/>
+								<n:confirmaction action="fedreg.organization_fulladministrator_revoke(${admin.id});" title="${message(code: 'fedreg.templates.organization.full.administrator.revoke.confirm.title')}" msg="${message(code: 'fedreg.templates.organization.full.administrator.revoke.confirm.descriptive')}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" class="revoke-button" label="${message(code: 'label.revoke')}"/>
 							</n:hasPermission>
 						</td>
 					</tr>

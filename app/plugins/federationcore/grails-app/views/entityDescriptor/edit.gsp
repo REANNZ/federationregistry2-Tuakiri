@@ -24,7 +24,7 @@
 				</table>
 				
 				<nav>
-					<n:button onclick="\$('form').submit();" label="label.update" icon="plus"/>
+					<n:button onclick="\$('form').submit();" label="label.update" class="add-button"/>
 					<n:button href="${createLink(action:'show', id:entity.id)}"  label="label.cancel" icon="cancel"/>
 				</nav>
 				

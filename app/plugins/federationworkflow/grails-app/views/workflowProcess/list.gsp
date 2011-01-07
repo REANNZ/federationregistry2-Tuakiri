@@ -24,7 +24,7 @@
 						<td>${fieldValue(bean: p, field: "name")}</td>
 						<td>${fieldValue(bean: p, field: "description")}</td>
 						<td>
-							<n:button href="${createLink(controller:'workflowProcess', action:'show', id: p.id)}" label="${message(code:'label.view')}" icon="arrowthick-1-ne"/>
+							<n:button href="${createLink(controller:'workflowProcess', action:'show', id: p.id)}" label="${message(code:'label.view')}" class="view-button"/>
 						</td>
 					</tr>
 				</g:each>

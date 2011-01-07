@@ -64,7 +64,7 @@
 					<tr>
 						<td colspan="2">
 							<n:hasPermission target="descriptor:${ep.descriptor.id}:endpoint:edit">
-								<n:button onclick="fedreg.endpoint_edit(${ep.id}, '${endpointType}', '${containerID}');" label="label.edit" icon="arrowthick-1-ne" />
+								<n:button onclick="fedreg.endpoint_edit(${ep.id}, '${endpointType}', '${containerID}');" label="label.edit" class="view-button" />
 							</n:hasPermission>
 							<n:hasPermission target="descriptor:${ep.descriptor.id}:endpoint:toggle">
 								<n:confirmaction action="fedreg.endpoint_toggle(${ep.id}, '${endpointType}', '${containerID}' );" title="${message(code: 'fedreg.templates.endpoints.toggle.confirm.title')}" msg="${message(code: 'fedreg.templates.endpoints.toggle.confirm.descriptive')}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" label="${message(code: 'label.togglestate')}" icon="refresh" />

@@ -39,7 +39,11 @@ applyBehaviourTo = function(e) {
         '.next-button': 'ui-icon-arrowthick-1-e',
         '.download-button': 'ui-icon-arrowreturnthick-1-s',
         '.approve-button': 'ui-icon-check',
-        '.redo-button': 'ui-icon-arrowrefresh-1-e'
+        '.redo-button': 'ui-icon-arrowrefresh-1-e',
+		'.search-button': 'ui-icon-search',
+		'.close-button': 'ui-icon-close',
+		'.grant-button': 'ui-icon-circle-plus',
+		'.revoke-button': 'ui-icon-circle-minus'
     }, function(selector, icon) {
         $(e).find(selector).button({'icons': {'primary': icon}});
     });     
@@ -114,7 +118,11 @@ fedreg.organization_fulladministrator_list = function() {
 		cache: false,
 		url: organizationFullAdministratorListEndpoint,
 		success: function(res) {
-			$("#organizationfulladministratorlist").html(res);
+			var list = $("#organizationfulladministratorlist");
+			list.empty();
+			list.append(res);
+			applyBehaviourTo(list);
+			list.fadeIn();
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
 			nimble.growl('error', xhr.responseText);
@@ -131,9 +139,11 @@ fedreg.organization_fulladministrator_search = function() {
 		url: organizationFullAdministratorSearchEndpoint,
 		data: dataString,
 		success: function(res) {
-			$("#availablefulladministrators").empty();
-			$("#availablefulladministrators").append(res);
-			$("#availablefulladministrators").fadeIn();
+			var list = $("#availablefulladministrators");
+			list.empty();
+			list.append(res);
+			applyBehaviourTo(list);
+			list.fadeIn();
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
 			nimble.growl('error', xhr.responseText);
@@ -185,7 +195,10 @@ fedreg.descriptor_fulladministrator_list = function() {
 		cache: false,
 		url: descriptorFullAdministratorListEndpoint,
 		success: function(res) {
-			$("#descriptorfulladministratorlist").html(res);
+			var list = $("#descriptorfulladministratorlist")
+			
+			applyBehaviourTo(res);
+			list.html(res);
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
 			nimble.growl('error', xhr.responseText);

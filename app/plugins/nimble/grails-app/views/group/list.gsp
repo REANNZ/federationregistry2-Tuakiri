@@ -32,7 +32,7 @@
 						<td>${fieldValue(bean: group, field: 'name')}</td>
 						<td>${fieldValue(bean: group, field: 'description')}</td>
 						<td>
-							<n:button href="${createLink(action:'show', id: group.id)}" label="label.view" icon="arrowthick-1-ne"/>
+							<n:button href="${createLink(action:'show', id: group.id)}" label="label.view" class="view-button"/>
 						</td>
 					</tr>
 				</g:each>

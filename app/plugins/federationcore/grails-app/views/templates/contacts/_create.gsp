@@ -15,7 +15,7 @@
 	</script>
 	<hr>
 	<div id="addcontact" class="searcharea">
-		<n:button onclick="\$('#addcontact').fadeOut(); \$('#searchcontact').fadeIn(); \$('#email').focus();" label="${message(code:'label.addcontact')}" icon="plus"/>
+		<n:button onclick="\$('#addcontact').fadeOut(); \$('#searchcontact').fadeIn(); \$('#email').focus();" label="${message(code:'label.addcontact')}" class="add-button"/>
 	</div>
 
 	<div id="searchcontact" class="searcharea">
@@ -35,8 +35,8 @@
 					<td><input type="text" id="surname" name="surname" class="enhancedinput"/></td>
 					<td><input type="text" id="email" name="email" class="enhancedinput"/></td>
 					<td>
-						<n:button href="#" onclick="fedreg.contact_search(${descriptor.id});" label="${message(code:'label.search')}" icon="search"/>
-						<n:button onclick="\$('#searchcontact').fadeOut(); \$('#availablecontacts').fadeOut(); \$('#addcontact').fadeIn(); \$('#availablecontacts').empty();" label="${message(code:'label.close')}" icon="close"/>
+						<n:button href="#" onclick="fedreg.contact_search(${descriptor.id});" label="${message(code:'label.search')}" class="search-button"/>
+						<n:button onclick="\$('#searchcontact').fadeOut(); \$('#availablecontacts').fadeOut(); \$('#addcontact').fadeIn(); \$('#availablecontacts').empty();" label="${message(code:'label.close')}" class="close-button"/>
 		            </td>
 				</tr>
 			</tbody>

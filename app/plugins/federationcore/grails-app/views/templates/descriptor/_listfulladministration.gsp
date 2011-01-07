@@ -18,10 +18,10 @@
 						<td><g:link controller='organization' action='show' id="${admin.contact?.organization?.id}">${admin.contact?.organization?.displayName?.encodeAsHTML()}</g:link></td>
 						<td>
 							<n:isAdministrator>
-								<n:button href="${createLink(controller:'user', action:'show', id: admin.id)}" label="${message(code:'label.view')}" icon="arrowthick-1-ne"/>
+								<n:button href="${createLink(controller:'user', action:'show', id: admin.id)}" label="${message(code:'label.view')}" class="view-button"/>
 							</n:isAdministrator>
 							<n:hasPermission target="descriptor:${descriptor.id}:manage:administrators">
-								<n:confirmaction action="fedreg.descriptor_fulladministrator_revoke(${admin.id});" title="${message(code: 'fedreg.templates.descriptor.full.administrator.revoke.confirm.title')}" msg="${message(code: 'fedreg.templates.descriptor.full.administrator.revoke.confirm.descriptive')}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" icon="circle-close" label="${message(code: 'label.revoke')}"/>
+								<n:confirmaction action="fedreg.descriptor_fulladministrator_revoke(${admin.id});" title="${message(code: 'fedreg.templates.descriptor.full.administrator.revoke.confirm.title')}" msg="${message(code: 'fedreg.templates.descriptor.full.administrator.revoke.confirm.descriptive')}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" class="revoke-button" label="${message(code: 'label.revoke')}"/>
 							</n:hasPermission>
 						</td>
 					</tr>

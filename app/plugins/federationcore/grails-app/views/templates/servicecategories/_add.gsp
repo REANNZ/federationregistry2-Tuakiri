@@ -10,7 +10,7 @@
 	<hr>
 
 	<div id="addcategory" class="searcharea">
-		<n:button onclick="\$('#addcategory').fadeOut(); \$('#newcategory').fadeIn();" label="${message(code:'label.addcategory')}" icon="plus"/>
+		<n:button onclick="\$('#addcategory').fadeOut(); \$('#newcategory').fadeIn();" label="${message(code:'label.addcategory')}" class="add-button"/>
 	</div>
 	
 	<div id="newcategory"  class="searcharea">
@@ -26,8 +26,8 @@
 				</tr>
 			</tbody>
 		</table>
-		<n:button onclick="fedreg.serviceCategory_add('${containerID}');" id="createcategorylink" label="${message(code:'label.add')}" icon="plus"/>
-		<n:button onclick="\$('#newcategory').fadeOut(); \$('#addcategory').fadeIn();" label="${message(code:'label.close')}" icon="close"/>
+		<n:button onclick="fedreg.serviceCategory_add('${containerID}');" id="createcategorylink" label="${message(code:'label.add')}" class="add-button"/>
+		<n:button onclick="\$('#newcategory').fadeOut(); \$('#addcategory').fadeIn();" label="${message(code:'label.close')}" class="close-button"/>
 		</form>
 	</div>
 	

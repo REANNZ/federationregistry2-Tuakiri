@@ -38,7 +38,7 @@
 						</td>
 						<td>
 
-							<n:button id="analyzecompatibility" label="${message(code:'label.compare')}" icon="search"/>
+							<n:button id="analyzecompatibility" label="${message(code:'label.compare')}" class="search-button"/>
 						</td>
 						<td>
 							<h3><g:message code="label.identityprovider"/></h3>

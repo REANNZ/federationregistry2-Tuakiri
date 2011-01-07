@@ -13,7 +13,7 @@
 				<td>${contact.givenName?.encodeAsHTML()} ${contact.surname?.encodeAsHTML()}</td>
 				<td><a href="mailto:${contact.email?.uri.encodeAsHTML()}">${contact.email?.uri.encodeAsHTML()}</a></td>
 				<td>
-					<n:button href="${createLink(controller:'contacts', action:'show', id: contact.id)}" label="${message(code:'label.view')}" icon="arrowthick-1-ne"/>
+					<n:button href="${createLink(controller:'contacts', action:'show', id: contact.id)}" label="${message(code:'label.view')}" class="view-button"/>
 				</td>
 			</tr>
 		</g:each>

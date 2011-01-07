@@ -105,7 +105,7 @@
 													<div class="icon icon_cross"><g:message code="label.inactive" /></div>
 												</g:else>
 											</td>
-											<td><n:button href="${createLink(controller:'IDPSSODescriptor', action:'show', id:idp.id)}" label="label.view" icon="arrowthick-1-ne"/></td>
+											<td><n:button href="${createLink(controller:'IDPSSODescriptor', action:'show', id:idp.id)}" label="label.view" class="view-button"/></td>
 										</tr>
 									</g:each>
 							</tbody>
@@ -139,7 +139,7 @@
 												<div class="icon icon_cross"><g:message code="label.inactive" /></div>
 											</g:else>
 										</td>
-										<td><n:button href="${createLink(controller:'SPSSODescriptor', action:'show', id:sp.id)}" label="label.view" icon="arrowthick-1-ne"/></td>
+										<td><n:button href="${createLink(controller:'SPSSODescriptor', action:'show', id:sp.id)}" label="label.view" class="view-button"/></td>
 									</tr>
 								</g:each>
 							</tbody>

@@ -29,7 +29,7 @@
 						<td>${fieldValue(bean: contact, field: "surname")}</td>
 						<td><a href="mailto:${fieldValue(bean: contact, field: "email.uri")}">${fieldValue(bean: contact, field: "email.uri")}</a></td>
 						<td>${fieldValue(bean: contact, field: "organization.displayName")}</td>
-						<td><n:button href="${createLink(action:'show', id:contact.id)}" label="label.view"  icon="arrowthick-1-ne"/></td>
+						<td><n:button href="${createLink(action:'show', id:contact.id)}" label="label.view"  class="view-button"/></td>
 					</tr>
 				</g:each>
 				</tbody>

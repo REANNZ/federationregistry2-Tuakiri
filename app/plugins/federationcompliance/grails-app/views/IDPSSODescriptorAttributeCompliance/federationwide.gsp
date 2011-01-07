@@ -30,7 +30,7 @@
 						</g:else>
 						</td>
 						<td style="width:200px;">
-							<n:button href="${createLink(controller: 'IDPSSODescriptorAttributeCompliance', action:'comprehensive', id: idp.id)}" label="${message(code:'label.idpattributesupport')}" icon="arrowthick-1-ne"/>
+							<n:button href="${createLink(controller: 'IDPSSODescriptorAttributeCompliance', action:'comprehensive', id: idp.id)}" label="${message(code:'label.idpattributesupport')}" class="view-button"/>
 						</td>
 					</tr>
 				</g:each>

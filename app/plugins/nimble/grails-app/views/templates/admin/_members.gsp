@@ -5,7 +5,7 @@
 
 	<g:if test="${!protect}">
 		<div id="showaddmembers">
-			<n:button label="label.addmembers" icon="plus" onclick="\$('#showaddmembers').hide(); \$('#addmembers').fadeIn();"/>
+			<n:button label="label.addmembers" class="add-button" onclick="\$('#showaddmembers').hide(); \$('#addmembers').fadeIn();"/>
 		</div>
 
 		<div id="addmembers">
@@ -23,8 +23,8 @@
 
 				<div class="searchbox">
 					<g:textField name="qmembers" class="enhancedinput"/>
-					<n:button onclick="nimble.searchMembers(${parent.id.encodeAsHTML()});" class="button icon icon_magnifier" label="label.searchusers" icon="search"/>
-					<n:button label="label.close" icon="close" onclick="\$('#addmembers').hide(); \$('#showaddmembers').fadeIn();"/>
+					<n:button onclick="nimble.searchMembers(${parent.id.encodeAsHTML()});" class="button icon icon_magnifier" label="label.searchusers" class="search-button"/>
+					<n:button label="label.close" class="close-button" onclick="\$('#addmembers').hide(); \$('#showaddmembers').fadeIn();"/>
 				</div>
 				<div id="membersearchresponse" class="clear">
 				</div>
@@ -38,8 +38,8 @@
 
 					<div class="searchbox">
 						<g:textField name="qmembersgroup" class="enhancedinput"/>
-						<n:button onclick="nimble.searchGroupMembers(${parent.id.encodeAsHTML()});" class="button icon icon_magnifier" label="label.searchgroups" icon="search"/>
-						<n:button label="label.close" icon="close" onclick="\$('#addmembers').hide(); \$('#showaddmembers').fadeIn();"/>
+						<n:button onclick="nimble.searchGroupMembers(${parent.id.encodeAsHTML()});" class="button icon icon_magnifier" label="label.searchgroups" class="search-button"/>
+						<n:button label="label.close" class="close-button" onclick="\$('#addmembers').hide(); \$('#showaddmembers').fadeIn();"/>
 					</div>
 					<div id="membergroupsearchresponse">
 					</div>

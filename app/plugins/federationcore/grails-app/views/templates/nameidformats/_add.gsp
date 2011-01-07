@@ -13,7 +13,7 @@
 	<hr>
 
 	<div id="addnameidformat" class="searcharea">
-		<n:button onclick="\$('#addnameidformat').fadeOut(); \$('#newnameidformat').fadeIn();" label="${message(code:'label.addnameidformat')}" icon="plus"/>
+		<n:button onclick="\$('#addnameidformat').fadeOut(); \$('#newnameidformat').fadeIn();" label="${message(code:'label.addnameidformat')}" class="add-button"/>
 	</div>
 	
 	<div id="newnameidformat"  class="searcharea">
@@ -29,8 +29,8 @@
 				</tr>
 			</tbody>
 		</table>
-		<n:button onclick="fedreg.nameIDFormat_add('${containerID}');" id="createnameidformatlink" label="${message(code:'label.add')}" icon="plus"/>
-		<n:button onclick="\$('#newnameidformat').fadeOut(); \$('#addnameidformat').fadeIn();" label="${message(code:'label.close')}" icon="close"/>
+		<n:button onclick="fedreg.nameIDFormat_add('${containerID}');" id="createnameidformatlink" label="${message(code:'label.add')}" class="add-button"/>
+		<n:button onclick="\$('#newnameidformat').fadeOut(); \$('#addnameidformat').fadeIn();" label="${message(code:'label.close')}" class="close-button"/>
 		</form>
 	</div>
 	

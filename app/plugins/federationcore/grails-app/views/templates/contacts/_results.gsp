@@ -18,7 +18,7 @@
 					<td>${contact.email?.uri?.encodeAsHTML()}</td>
 					<td>${contact.organization?.displayName?.encodeAsHTML()}</td>
 					<td>						
-						<n:button href="#" onclick="fedreg.contact_confirm('${contact.id}', '${contact.givenName} ${contact.surname}', '${contact.email?.uri}');" label="${message(code:'label.add')}" icon="plus"/>
+						<n:button href="#" onclick="fedreg.contact_confirm('${contact.id}', '${contact.givenName} ${contact.surname}', '${contact.email?.uri}');" label="${message(code:'label.add')}" class="add-button"/>
 					</td>
 				</tr>
 			</g:each>
@@ -27,5 +27,5 @@
 	</g:if>
 	<g:else>
 		<p class="icon icon_information"><g:message code="label.noresults"/></p>
-		<n:button href="${createLink(controller:'contacts', action:'create')}" label="${message(code:'label.newcontact')}" icon="plus"/>
+		<n:button href="${createLink(controller:'contacts', action:'create')}" label="${message(code:'label.newcontact')}" class="add-button"/>
 	</g:else>

@@ -7,7 +7,7 @@
 	</script>
 	<hr>
 	<div id="addfulladministrator" class="searcharea">
-		<n:button onclick="\$('#addfulladministrator').hide(); \$('#searchfulladministrator').fadeIn(); \$('#email').focus();" label="${message(code:'label.addadministrator')}" icon="plus"/>
+		<n:button onclick="\$('#addfulladministrator').hide(); \$('#searchfulladministrator').fadeIn(); \$('#email').focus();" label="${message(code:'label.addadministrator')}" class="add-button"/>
 	</div>
 
 	<div id="searchfulladministrator">
@@ -20,8 +20,8 @@
 						<fr:tooltip code='fedreg.help.admins.search' />
 					</td>
 					<td>
-						<n:button href="#" onclick="fedreg.descriptor_fulladministrator_search(${descriptor.id});" label="${message(code:'label.search')}" icon="search"/>
-						<n:button onclick="\$('#searchfulladministrator').hide(); \$('#availablefulladministrators').fadeOut(); \$('#addfulladministrator').fadeIn(); \$('#availablefulladministrators').empty();" label="${message(code:'label.close')}" icon="close"/>
+						<n:button href="#" onclick="fedreg.descriptor_fulladministrator_search(${descriptor.id});" label="${message(code:'label.search')}" class="search-button"/>
+						<n:button onclick="\$('#searchfulladministrator').hide(); \$('#availablefulladministrators').fadeOut(); \$('#addfulladministrator').fadeIn(); \$('#availablefulladministrators').empty();" label="${message(code:'label.close')}" class="close-button"/>
 		            </td>
 				</tr>
 			</tbody>

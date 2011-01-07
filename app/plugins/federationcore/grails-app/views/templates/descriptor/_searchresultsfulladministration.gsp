@@ -17,7 +17,7 @@
 				<td>${user.profile.email?.encodeAsHTML()}</td>
 				<td><g:link controller='organization' action='show' id="${user.contact?.organization?.id}">${user.contact?.organization?.displayName?.encodeAsHTML()}</g:link></td>
 				<td>						
-				<n:confirmaction action="fedreg.descriptor_fulladministrator_grant(${user.id});" title="${message(code: 'fedreg.templates.descriptor.full.administrator.grant.confirm.title')}" msg="${message(code: 'fedreg.templates.descriptor.full.administrator.grant.confirm.descriptive')}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" icon="circle-plus" label="${message(code: 'label.grant')}"/>
+				<n:confirmaction action="fedreg.descriptor_fulladministrator_grant(${user.id});" title="${message(code: 'fedreg.templates.descriptor.full.administrator.grant.confirm.title')}" msg="${message(code: 'fedreg.templates.descriptor.full.administrator.grant.confirm.descriptive')}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" class="grant-button" label="${message(code: 'label.grant')}"/>
 				</td>
 			</tr>
 		</g:each>

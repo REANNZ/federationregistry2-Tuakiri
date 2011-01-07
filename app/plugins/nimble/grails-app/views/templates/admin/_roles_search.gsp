@@ -13,8 +13,8 @@
 					<td>${role.name?.encodeAsHTML()}</td>
 					<td>${role.description?.encodeAsHTML()}</td>
 					<td>
-						<n:button href="${createLink(controller:'role', action:'show', id:role.id)}" label="label.view" icon="arrowthick-1-ne" />
-						<n:button onclick="nimble.grantRole('${ownerID.encodeAsHTML()}', '${role.id.encodeAsHTML()}');" label="label.add" icon="plus" />
+						<n:button href="${createLink(controller:'role', action:'show', id:role.id)}" label="label.view" class="view-button" />
+						<n:button onclick="nimble.grantRole('${ownerID.encodeAsHTML()}', '${role.id.encodeAsHTML()}');" label="label.add" class="add-button" />
 					</td>
 				</tr>
 			</g:each>

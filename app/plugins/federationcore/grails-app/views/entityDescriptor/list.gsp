@@ -31,7 +31,7 @@
 						<td>${fieldValue(bean: entity, field: "organization.name")}</td>
 						<td>${fieldValue(bean: entity, field: "active")}</td>
 						<td>${fieldValue(bean: entity, field: "approved")}</td>
-						<td><n:button href="${createLink(controller:'entityDescriptor', action:'show', id:entity.id)}" label="label.view" icon="arrowthick-1-ne" /></td>
+						<td><n:button href="${createLink(controller:'entityDescriptor', action:'show', id:entity.id)}" label="label.view" class="view-button" /></td>
 					</tr>
 				</g:each>
 				</tbody>

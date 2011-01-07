@@ -5,7 +5,7 @@
 	</div>
 
 	<div id="showaddgroups">
-		<n:button onclick="\$('#showaddgroups').hide(); \$('#addgroups').fadeIn();" label="label.addgroups" icon="plus"/>
+		<n:button onclick="\$('#showaddgroups').hide(); \$('#addgroups').fadeIn();" label="label.addgroups" class="add-button"/>
 	</div>
 
 	<div id="addgroups">
@@ -16,8 +16,8 @@
 
 		<div class="searchbox">
 			<g:textField name="qgroups" class="enhancedinput"/>
-			<n:button onclick="nimble.searchGroups('${parent.id.encodeAsHTML()}');" label="label.search" icon="search"/>
-			<n:button onclick="\$('#addgroups').hide(); \$('#showaddgroups').fadeIn();" label="label.close" icon="close"/>
+			<n:button onclick="nimble.searchGroups('${parent.id.encodeAsHTML()}');" label="label.search" class="search-button"/>
+			<n:button onclick="\$('#addgroups').hide(); \$('#showaddgroups').fadeIn();" label="label.close" class="close-button"/>
 		</div>
 
 		<div id="groupsearchresponse"></div>

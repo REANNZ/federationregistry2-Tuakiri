@@ -46,7 +46,7 @@
 							</g:else>
 						</td>
 						<td>
-								<n:button href="${createLink(action:'show', id: user.id)}" label="label.view" icon="arrowthick-1-ne"/>
+								<n:button href="${createLink(action:'show', id: user.id)}" label="label.view" class="view-button"/>
 						</td>
 					</tr>
 				</g:each>

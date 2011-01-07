@@ -18,8 +18,8 @@
 					</g:else>
 					<td>${user?.profile?.fullName.encodeAsHTML()}</td>
 					<td>
-						<n:button href="${createLink(controller:'user', action:'show', id:user.id)}" label="label.view" icon="arrowthick-1-ne" />
-						<n:button onclick="nimble.grantAdministrator('${user.id.encodeAsHTML()}', '${user.username.encodeAsHTML()}');" label="label.grant" icon="plus" />
+						<n:button href="${createLink(controller:'user', action:'show', id:user.id)}" label="label.view" class="view-button" />
+						<n:button onclick="nimble.grantAdministrator('${user.id.encodeAsHTML()}', '${user.username.encodeAsHTML()}');" label="label.grant" class="add-button" />
 					</td>
 				</tr>
 			</g:each>

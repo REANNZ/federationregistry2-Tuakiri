@@ -13,8 +13,8 @@
 					<td>${group.name.encodeAsHTML()}</td>
 					<td>${group.description.encodeAsHTML()}</td>
 					<td>
-						<n:button href="${createLink(controller:'group', action:'show', id:group.id)}" label="label.view" icon="arrowthick-1-ne" />
-						<n:button onclick="nimble.addGroupMember('${parent.id.encodeAsHTML()}', '${group.id.encodeAsHTML()}', '${group.name.encodeAsHTML()}');" label="label.add" icon="plus" />
+						<n:button href="${createLink(controller:'group', action:'show', id:group.id)}" label="label.view" class="view-button" />
+						<n:button onclick="nimble.addGroupMember('${parent.id.encodeAsHTML()}', '${group.id.encodeAsHTML()}', '${group.name.encodeAsHTML()}');" label="label.add" class="add-button" />
 					</td>
 				</tr>
 			</g:each>

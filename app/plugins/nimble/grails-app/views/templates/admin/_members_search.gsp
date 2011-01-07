@@ -23,8 +23,8 @@
 						<td>N/A</td>
 					</g:else>
 					<td>
-						<n:button href="${createLink(controller:'user', action:'show', id:user.id)}" label="label.view" icon="arrowthick-1-ne" />
-						<n:button onclick="nimble.addMember('${parent.id.encodeAsHTML()}', '${user.id.encodeAsHTML()}', '${user.username.encodeAsHTML()}');" label="label.add" icon="plus"/></a>
+						<n:button href="${createLink(controller:'user', action:'show', id:user.id)}" label="label.view" class="view-button" />
+						<n:button onclick="nimble.addMember('${parent.id.encodeAsHTML()}', '${user.id.encodeAsHTML()}', '${user.username.encodeAsHTML()}');" label="label.add" class="add-button"/></a>
 					</td>
 				</tr>
 			</g:each>

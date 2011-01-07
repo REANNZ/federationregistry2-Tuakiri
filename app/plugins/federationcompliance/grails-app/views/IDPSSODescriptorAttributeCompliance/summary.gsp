@@ -29,7 +29,7 @@
 							</td>
 						</g:findAll>
 						<td style="width:300px;">
-							<n:button href="${createLink(controller: 'IDPSSODescriptorAttributeCompliance', action:'comprehensive', id: idp.id)}" label="${message(code:'label.view')}" icon="arrowthick-1-ne"/>
+							<n:button href="${createLink(controller: 'IDPSSODescriptorAttributeCompliance', action:'comprehensive', id: idp.id)}" label="${message(code:'label.view')}" class="view-button"/>
 						</td>
 					</tr>
 				</g:each>

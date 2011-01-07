@@ -23,7 +23,7 @@
 		</p>
 
 		<g:textField name="q" size="30"/>
-		<n:button onclick="nimble.searchAdministrators();" label="label.search" icon="search"/>
+		<n:button onclick="nimble.searchAdministrators();" label="label.search" class="search-button"/>
 
 		<div id="searchresponse" class="clear">
 		</div>

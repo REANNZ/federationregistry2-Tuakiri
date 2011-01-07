@@ -31,7 +31,7 @@
 						<td>${fieldValue(bean: serviceProvider, field: "active")}</td>
 						<td>${fieldValue(bean: serviceProvider, field: "approved")}</td>
 						<td>
-							<n:button href="${createLink(controller:'SPSSODescriptor', action:'show', id: serviceProvider.id)}" label="${message(code:'label.view')}" icon="arrowthick-1-ne"/>
+							<n:button href="${createLink(controller:'SPSSODescriptor', action:'show', id: serviceProvider.id)}" label="${message(code:'label.view')}" class="view-button"/>
 						</td>
 					</tr>
 				</g:each>

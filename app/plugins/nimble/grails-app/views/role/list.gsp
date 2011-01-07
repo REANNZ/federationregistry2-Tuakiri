@@ -28,7 +28,7 @@
 						<td>${role.name?.encodeAsHTML()}</td>
 						<td>${role.description?.encodeAsHTML()}</td>
 						<td>
-							<n:button href="${createLink(action:'show', id: role.id)}" label="label.view" icon="arrowthick-1-ne"/>
+							<n:button href="${createLink(action:'show', id: role.id)}" label="label.view" class="view-button"/>
 						</td>
 					</tr>
 				</g:each>

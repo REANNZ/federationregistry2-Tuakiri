@@ -13,7 +13,7 @@
 					<td>${role.name?.encodeAsHTML()}</td>
 					<td>${role.description?.encodeAsHTML()}</td>
 					<td>
-						<n:button href="${createLink(controller:'role', action:'show', id:role.id)}" label="label.view" icon="arrowthick-1-ne" />
+						<n:button href="${createLink(controller:'role', action:'show', id:role.id)}" label="label.view" class="view-button" />
 						<g:if test="${role.protect == false}">
 							<n:confirmaction action="nimble.removeRole('${ownerID.encodeAsHTML()}', '${role.id.encodeAsHTML()}');" title="nimble.role.remove.confirm.title" msg="nimble.role.remove.confirm.descriptive" accept="label.accept" cancel="label.cancel"  label="label.remove" icon="minus" />
 						</g:if>

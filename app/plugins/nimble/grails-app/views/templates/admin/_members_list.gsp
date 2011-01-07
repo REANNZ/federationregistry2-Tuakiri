@@ -24,7 +24,7 @@
 						<td>N/A</td>
 					</g:else>
 					<td>
-						<n:button href="${createLink(controller:'user', action:'show', id:user.id)}" label="label.view" icon="arrowthick-1-ne" />
+						<n:button href="${createLink(controller:'user', action:'show', id:user.id)}" label="label.view" class="view-button" />
 						<g:if test="${!protect}">
 							<n:confirmaction action="nimble.removeMember('${parent.id.encodeAsHTML()}', '${user.id.encodeAsHTML()}', '${user.username.encodeAsHTML()}');" title="nimble.role.user.remove.confirm.title" msg="nimble.role.user.remove.confirm.descriptive" accept="label.accept" cancel="label.cancel" label="label.remove" icon="minus" />
 						</g:if>
@@ -57,7 +57,7 @@
 						<td>${group.name.encodeAsHTML()}</td>
 						<td>${group.description.encodeAsHTML()}</td>
 						<td>
-							<n:button href="${createLink(controller:'group', action:'show', id:group.id)}" label="label.view" icon="arrowthick-1-ne" />
+							<n:button href="${createLink(controller:'group', action:'show', id:group.id)}" label="label.view" class="view-button" />
 							<g:if test="${!protect}">
 								<n:confirmaction action="nimble.removeGroupMember('${parent.id.encodeAsHTML()}', '${group.id.encodeAsHTML()}', '${group.name.encodeAsHTML()}');" title="nimble.role.group.remove.confirm.title" msg="nimble.role.group.remove.confirm.descriptive" accept="label.accept" cancel="label.cancel" label="label.remove" icon="minus" />
 							</g:if>

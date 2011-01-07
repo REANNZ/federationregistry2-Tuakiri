@@ -72,7 +72,7 @@
 				</table>
 				
 				<nav>
-					<n:button onclick="\$('form').submit();" label="label.create" icon="plus"/>
+					<n:button onclick="\$('form').submit();" label="label.create" class="add-button"/>
 					<n:button href="${createLink(action:'list')}"  label="label.cancel" icon="cancel"/>
 				</nav>
 				

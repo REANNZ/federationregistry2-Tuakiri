@@ -23,7 +23,7 @@ modules = {
 	'formwizard' {
 		dependsOn 'jquery-ui'
 		defaultBundle false
-		resource url:[dir:'js/jquery', file:'jquery.formwizard.min.js'], bundle: 'extjs'		// 3.0.4
+		resource url:[dir:'js/jquery', file:'jquery.formwizard.min.js']		// 3.0.4
 	}
 	'datatables' {
 		dependsOn 'jquery' 

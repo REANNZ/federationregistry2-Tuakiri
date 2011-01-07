@@ -13,7 +13,7 @@
 	<hr>
 
 	<div id="add${endpointType}" class="searcharea">
-		<n:button onclick="\$('#add${endpointType}').fadeOut(); \$('#new${endpointType}').fadeIn();" label="${message(code:'label.addendpoint')}" icon="plus"/>
+		<n:button onclick="\$('#add${endpointType}').fadeOut(); \$('#new${endpointType}').fadeIn();" label="${message(code:'label.addendpoint')}" class="add-button"/>
 	</div>
 	
 	<div id="new${endpointType}" class="searcharea">
@@ -52,8 +52,8 @@
 				</tr>
 			</tbody>
 		</table>
-		<n:button onclick="if(\$('#new${endpointType}data').valid()) fedreg.endpoint_create('${endpointType}', '${containerID}');" label="${message(code:'label.add')}" icon="plus"/>
-		<n:button onclick="\$('#new${endpointType}').fadeOut(); \$('#add${endpointType}').fadeIn();" label="${message(code:'label.close')}" icon="close"/>
+		<n:button onclick="if(\$('#new${endpointType}data').valid()) fedreg.endpoint_create('${endpointType}', '${containerID}');" label="${message(code:'label.add')}" class="add-button"/>
+		<n:button onclick="\$('#new${endpointType}').fadeOut(); \$('#add${endpointType}').fadeIn();" label="${message(code:'label.close')}" class="close-button"/>
 		</form>
 	</div>
 	

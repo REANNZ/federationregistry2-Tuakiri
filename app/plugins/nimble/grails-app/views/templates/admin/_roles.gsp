@@ -5,7 +5,7 @@
 </div>
 
 <div id="showaddroles">
-	<n:button onclick="\$('#showaddroles').hide(); \$('#addroles').fadeIn();" label="label.addroles" icon="plus"/>
+	<n:button onclick="\$('#showaddroles').hide(); \$('#addroles').fadeIn();" label="label.addroles" class="add-button"/>
 </div>
 
 <div id="addroles">
@@ -16,8 +16,8 @@
 
 	<div class="searchbox">
 		<g:textField name="qroles" class=""/>
-		<n:button onclick="nimble.searchRoles(${parent.id.encodeAsHTML()});" label="label.search" icon="search"/>
-		<n:button onclick="\$('#addroles').hide(); \$('#showaddroles').fadeIn();" label="label.close" icon="close"/>
+		<n:button onclick="nimble.searchRoles(${parent.id.encodeAsHTML()});" label="label.search" class="search-button"/>
+		<n:button onclick="\$('#addroles').hide(); \$('#showaddroles').fadeIn();" label="label.close" class="close-button"/>
 	</div>
 
 	<div id="rolesearchresponse" class="clear">

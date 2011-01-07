@@ -25,7 +25,7 @@
 
 				<n:hasPermission target="descriptor:${acs.descriptor.id}:attribute:add">
 					<div id="addattribute${i}">
-						<n:button onclick="\$('#addattribute${i}').fadeOut(); \$('#newattribute${i}').fadeIn();" label="${message(code:'label.addattribute')}" icon="plus"/>
+						<n:button onclick="\$('#addattribute${i}').fadeOut(); \$('#newattribute${i}').fadeIn();" label="${message(code:'label.addattribute')}" class="add-button"/>
 					</div>
 
 					<div id="newattribute${i}">
@@ -58,7 +58,7 @@
 									</tr>
 								</tbody>
 							</table>
-							<n:button onclick="if(\$('#newattributedata${i}').valid()) fedreg.acs_reqattribute_add(${acs.id}, 'newattributedata${i}', 'acsreqattr${i}' );" label="${message(code:'label.add')}" icon="plus"/>
+							<n:button onclick="if(\$('#newattributedata${i}').valid()) fedreg.acs_reqattribute_add(${acs.id}, 'newattributedata${i}', 'acsreqattr${i}' );" label="${message(code:'label.add')}" class="add-button"/>
 							<n:button onclick="\$('#newattribute${i}').fadeOut(); \$('#addattribute${i}').fadeIn();" label="${message(code:'label.close')}" icon="cancel"/>
 						</form>
 					</div>

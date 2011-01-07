@@ -32,7 +32,7 @@
 								</g:else>
 							</td>
 							<td style="width:200px;">
-								<n:button href="${createLink(controller: 'IDPSSODescriptorAttributeCompliance', action:'federationwide', id: attr.id)}" label="${message(code:'label.federationwide')}" icon="arrowthick-1-ne"/>
+								<n:button href="${createLink(controller: 'IDPSSODescriptorAttributeCompliance', action:'federationwide', id: attr.id)}" label="${message(code:'label.federationwide')}" class="view-button"/>
 							</td>
                         </tr>
                     </g:each>

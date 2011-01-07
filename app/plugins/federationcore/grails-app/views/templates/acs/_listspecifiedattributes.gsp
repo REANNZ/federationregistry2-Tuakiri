@@ -25,7 +25,7 @@
 														});
 													</script>
 													<div id="addnewspecattributeval${j}">
-														<n:button onclick="\$('#addnewspecattributeval${j}').fadeOut(); \$('#newspecattributeval${j}').fadeIn();" label="${message(code:'label.addvalue')}" icon="plus"/>
+														<n:button onclick="\$('#addnewspecattributeval${j}').fadeOut(); \$('#newspecattributeval${j}').fadeIn();" label="${message(code:'label.addvalue')}" class="add-button"/>
 													</div>
 													<div id="newspecattributeval${j}">
 														<h3><g:message code="fedreg.templates.acs.specattributes.add.heading"/></h3>
@@ -45,7 +45,7 @@
 																</tbody>
 															</table>
 														</form>
-														<n:button onclick="if(\$('#newspecattributedata${j}').valid()) fedreg.acs_specattribute_add(${ra.id}, 'newspecattributedata${j}', 'acsspecattrvals${j}' );" label="${message(code:'label.add')}" icon="plus"/>
+														<n:button onclick="if(\$('#newspecattributedata${j}').valid()) fedreg.acs_specattribute_add(${ra.id}, 'newspecattributedata${j}', 'acsspecattrvals${j}' );" label="${message(code:'label.add')}" class="add-button"/>
 														<n:button onclick="\$('#newspecattributeval${j}').fadeOut(); \$('#addnewspecattributeval${j}').fadeIn();" label="${message(code:'label.close')}" icon="cancel"/>
 													</div>
 												</td>

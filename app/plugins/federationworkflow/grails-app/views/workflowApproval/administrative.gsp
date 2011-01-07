@@ -30,13 +30,13 @@
 									<br><br>
 									<ul class="clean">
 										<g:if test="${instance.processInstance.params.containsKey('identityProvider')}">
-											<li><n:button href="${createLink(controller:'IDPSSODescriptor', action:'show', id:instance.processInstance.params.identityProvider)}" label="${message(code: 'label.view')} ${message(code: 'label.identityprovider')}" icon="arrowthick-1-ne"/></li>
+											<li><n:button href="${createLink(controller:'IDPSSODescriptor', action:'show', id:instance.processInstance.params.identityProvider)}" label="${message(code: 'label.view')} ${message(code: 'label.identityprovider')}" class="view-button"/></li>
 										</g:if>
 										<g:if test="${instance.processInstance.params.containsKey('serviceProvider')}">
-											<li><n:button href="${createLink(controller:'SPSSODescriptor', action:'show', id:instance.processInstance.params.serviceProvider)}" label="${message(code: 'label.view')} ${message(code: 'label.serviceprovider')}" icon="arrowthick-1-ne"/></li>
+											<li><n:button href="${createLink(controller:'SPSSODescriptor', action:'show', id:instance.processInstance.params.serviceProvider)}" label="${message(code: 'label.view')} ${message(code: 'label.serviceprovider')}" class="view-button"/></li>
 										</g:if>
 										<g:if test="${instance.processInstance.params.containsKey('organization') && instance.processInstance.params.organization.isNumber()}">
-											<li><n:button href="${createLink(controller:'organization', action:'show', id:instance.processInstance.params.organization)}" label="${message(code: 'label.view')} ${message(code: 'label.organization')}" icon="arrowthick-1-ne"/></li>
+											<li><n:button href="${createLink(controller:'organization', action:'show', id:instance.processInstance.params.organization)}" label="${message(code: 'label.view')} ${message(code: 'label.organization')}" class="view-button"/></li>
 										</g:if>
 									</ul>
 								</td>
@@ -57,7 +57,7 @@
 												<g:form action="reject" id="${instance.id}" name="submitrejection${i}">
 													<g:hiddenField name="rejection" value="${rej.key}" />
 												</g:form>
-												<n:confirmaction action="\$('#submitrejection${i}').submit();" title="${message(code: 'fedreg.view.workflow.approval.rejection.confirm.title')}" msg="${message(code: 'fedreg.view.workflow.approval.rejection.confirm.descriptive', args:[instance.task.name, instance.processInstance.description, rej.value.description])}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" label="${rej.value.name}" icon="close" />
+												<n:confirmaction action="\$('#submitrejection${i}').submit();" title="${message(code: 'fedreg.view.workflow.approval.rejection.confirm.title')}" msg="${message(code: 'fedreg.view.workflow.approval.rejection.confirm.descriptive', args:[instance.task.name, instance.processInstance.description, rej.value.description])}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" label="${rej.value.name}" class="close-button" />
 											</li>
 										</g:each>
 									</ul>

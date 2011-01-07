@@ -10,7 +10,7 @@
 	<hr>
 
 	<div id="addattribute" class="searcharea">
-		<n:button onclick="\$('#addattribute').fadeOut(); \$('#newattribute').fadeIn();" label="${message(code:'label.addattribute')}" icon="plus"/>
+		<n:button onclick="\$('#addattribute').fadeOut(); \$('#newattribute').fadeIn();" label="${message(code:'label.addattribute')}" class="add-button"/>
 	</div>
 	
 	<div id="newattribute"  class="searcharea">
@@ -29,7 +29,7 @@
 				</tr>
 			</tbody>
 		</table>
-		<n:button id="createattributelink" onclick="fedreg.attribute_add('${containerID}');" label="${message(code:'label.add')}" icon="plus"/>
+		<n:button id="createattributelink" onclick="fedreg.attribute_add('${containerID}');" label="${message(code:'label.add')}" class="add-button"/>
 		<n:button onclick="\$('#newattribute').fadeOut(); \$('#addattribute').fadeIn();" label="${message(code:'label.close')}" icon="cancel"/>
 		</form>
 	</div>

@@ -17,7 +17,7 @@
 				</g:else>
 				<td>${admin?.profile?.fullName.encodeAsHTML()}</td>
 				<td>
-					<n:button href="${createLink(controller:'user', action:'show', id:admin.id)}" label="label.view" icon="arrowthick-1-ne" />
+					<n:button href="${createLink(controller:'user', action:'show', id:admin.id)}" label="label.view" class="view-button" />
 					<g:if test="${currentAdmin != admin}">
 						<n:confirmaction action="nimble.deleteAdministrator(${admin.id});" label="label.remove" icon="minus" title="nimble.admin.remove.confirm.title" msg="nimble.admin.remove.confirm.descriptive" accept="label.accept" cancel="label.cancel" />
 					</g:if>

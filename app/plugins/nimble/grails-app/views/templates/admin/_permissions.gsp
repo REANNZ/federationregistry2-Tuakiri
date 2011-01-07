@@ -4,7 +4,7 @@
 </div>
 
 <div id="showaddpermissions">
-	<n:button onclick="\$('#showaddpermissions').hide(); \$('#addpermissions').fadeIn();" label="label.addpermission" icon="plus"/>
+	<n:button onclick="\$('#showaddpermissions').hide(); \$('#addpermissions').fadeIn();" label="label.addpermission" class="add-button"/>
 </div>
 
 <div id="addpermissions">
@@ -29,7 +29,7 @@
 	</table>
 	
 	<div class="buttons">
-		<n:button onclick="nimble.createPermission(${parent.id.encodeAsHTML()});" label="label.add" icon="plus"/>
-		<n:button onclick="\$('#addpermissions').hide(); \$('#showaddpermissions').fadeIn();" label="label.close" icon="close"/>
+		<n:button onclick="nimble.createPermission(${parent.id.encodeAsHTML()});" label="label.add" class="add-button"/>
+		<n:button onclick="\$('#addpermissions').hide(); \$('#showaddpermissions').fadeIn();" label="label.close" class="close-button"/>
 	</div>
 </div>

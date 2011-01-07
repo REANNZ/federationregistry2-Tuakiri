@@ -51,7 +51,7 @@
 			</table>
 
 			<div class="buttons">
-				<n:button onclick="\$('form').submit();" label="label.add" icon="plus"/>
+				<n:button onclick="\$('form').submit();" label="label.add" class="add-button"/>
 				<n:button href="${createLink(action:'list')}" label="label.cancel" icon="cancel"/>
 			</div>
 		</g:form>

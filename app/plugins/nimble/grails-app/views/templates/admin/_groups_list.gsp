@@ -13,7 +13,7 @@
 					<td>${group.name?.encodeAsHTML()}</td>
 					<td>${group.description?.encodeAsHTML()}</td>
 					<td>
-						<n:button href="${createLink(controller:'group', action:'show', id:group.id)}" label="label.view" icon="arrowthick-1-ne" />
+						<n:button href="${createLink(controller:'group', action:'show', id:group.id)}" label="label.view" class="view-button" />
 						<g:if test="${group.protect == false}">
 							<n:confirmaction action="nimble.removeGroup('${ownerID.encodeAsHTML()}', '${group.id.encodeAsHTML()}');" title="nimble.group.remove.confirm.title" msg="nimble.group.remove.confirm.descriptive" accept="label.accept" cancel="label.cancel" label="label.remove" icon="minus" />
 						</g:if>

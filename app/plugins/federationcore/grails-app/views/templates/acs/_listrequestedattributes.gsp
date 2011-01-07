@@ -80,7 +80,7 @@
 					</td>
 					<td>
 						<n:button onclick="if( \$('#ra-edit-${ra.id}-reason').parent().valid() ) fedreg.acs_reqattribute_update( ${ra.attributeConsumingService.id}, ${ra.id}, \$('#ra-edit-${ra.id}-reason').val(), \$('#ra-edit-${ra.id}-required').is(':checked'), '${containerID}');" label="${message(code:'label.update')}" icon="check"/>
-						<n:button onclick="\$('#ra-edit-${ra.id}').hide(); \$('#ra-${ra.id}').fadeIn(); return false;" label="${message(code:'label.cancel')}" icon="close"/>
+						<n:button onclick="\$('#ra-edit-${ra.id}').hide(); \$('#ra-${ra.id}').fadeIn(); return false;" label="${message(code:'label.cancel')}" class="close-button"/>
 					</td>
 				</tr>
 			</g:each>

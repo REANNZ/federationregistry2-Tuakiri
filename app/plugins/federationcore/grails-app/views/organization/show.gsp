@@ -174,7 +174,7 @@
 												<div><g:message code="label.inactive" /></div>
 											</g:else>
 										</td>
-										<td><n:button href="${createLink(controller:'entityDescriptor', action:'show', id:ent.id)}" label="label.view" icon="arrowthick-1-ne" /></td>
+										<td><n:button href="${createLink(controller:'entityDescriptor', action:'show', id:ent.id)}" label="label.view" class="view-button" /></td>
 									</tr>
 								</g:each>
 								</tbody>
@@ -200,7 +200,7 @@
 									<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 										<td>${idp.displayName.encodeAsHTML()}</td>
 										<td>${idp.entityDescriptor.entityID.encodeAsHTML()}</td>
-										<td><n:button href="${createLink(controller:'IDPSSODescriptor', action:'show', id:idp.id)}" label="label.view" icon="arrowthick-1-ne" /></td>
+										<td><n:button href="${createLink(controller:'IDPSSODescriptor', action:'show', id:idp.id)}" label="label.view" class="view-button" /></td>
 									</tr>
 								</g:each>
 							</tbody>
@@ -225,7 +225,7 @@
 									<tr>
 										<td>${(sp.displayName?:"N/A").encodeAsHTML()}</td>
 										<td>${sp.entityDescriptor.entityID.encodeAsHTML()}</td>
-										<td><n:button href="${createLink(controller:'SPSSODescriptor', action:'show', id:sp.id)}" label="label.view" icon="arrowthick-1-ne" /></td>
+										<td><n:button href="${createLink(controller:'SPSSODescriptor', action:'show', id:sp.id)}" label="label.view" class="view-button" /></td>
 									</tr>
 								</g:each>
 							</tbody>
