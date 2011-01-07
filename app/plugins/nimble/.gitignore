@@ -16,7 +16,6 @@ docs.tar.gz
 web-app/plugins/*
 web-app/css/*
 web-app/images/*
-web-app/js/*
 target/
 test/reports/*
 unzipped/*
