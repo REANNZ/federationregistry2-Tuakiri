@@ -25,9 +25,14 @@ class FedRegTagLib {
 
 	def tooltip = { attrs ->
 		def msg = g.message(code:attrs.code)
-		def src = g.resource(dir:'images', file:'help.png', plugin:'federationregistry')
-		out << "<img src='$src' class='tip' title='$msg'>"
+		def src = g.resource()
+		
+		out << r.img(dir:'images', file:'help.png', plugin:'federationregistry', title:msg, width:'16px', height:'16px', class:'tip')
     }
+
+	def working = {
+		out << "<div id='working'>${r.img(plugin:'federationregistry', dir:'images', file:'spinner.gif', width:'20px', height:'20px')}<br/>${g.message(code:'label.working')}</div>"
+	}
 
 	// Renders the contact ID of the logged in user
 	def contactID = {

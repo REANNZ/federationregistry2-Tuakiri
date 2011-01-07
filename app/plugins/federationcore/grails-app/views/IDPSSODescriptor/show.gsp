@@ -1,6 +1,7 @@
 
 <html>
 	<head>
+		<r:use modules="codemirror"/>
 		
 		<meta name="layout" content="members" />
 
@@ -53,8 +54,6 @@
 			
 			
 		</script>
-		
-		<script src="${request.contextPath}/js/codemirror/js/codemirror.js" type="text/javascript" charset="utf-8"></script>
 	</head>
 	<body>
 		<section>
@@ -242,20 +241,22 @@
 					<p><g:message code="fedreg.view.members.identityprovider.show.attributefilter.configurationurl" /> <strong><g:link controller="attributeFilter" action="generate" id="${identityProvider.id}">${createLink(controller:'attributeFilter', action:'generate', id:identityProvider.id, absolute:true)}</g:link></strong></p>
 					
 					<g:textArea id="attrfilter" name="attrfilter" value="${attributeFilter}" rows="25" cols="40"/>
-					<script type="text/javascript">
-						 var textarea = $("#attrfilter");
-						  var editor = CodeMirror.fromTextArea('attrfilter',  {
-					        height: "600px",
-					        content: textarea.value,
-					        parserfile: ["tokenizegroovy.js", "parsegroovy.js"],
-					        stylesheet: "${request.contextPath}/js/codemirror/css/groovycolors.css",
-					        path: "${request.contextPath}/js/codemirror/js/",
-					        autoMatchParens: true,
-					        disableSpellcheck: true,
-					        lineNumbers: true,
-					        tabMode: 'shift'
-					     });
-					</script>
+					
+					<r:script>
+						var textarea = $("#attrfilter");
+						var editor = CodeMirror.fromTextArea("attrfilter",  {
+							height: "600px",
+							path: "",
+							stylesheet: "${r.resource(dir:'/js/codemirror/css', file:'groovycolors.css', plugin:'federationregistry') }",
+							basefiles: ["${r.resource(dir:'/js/codemirror/js', file:'codemirror.groovy.inframe.min.js', plugin:'federationregistry') }"],
+							parserfile: [],
+							content: textarea.value,
+							autoMatchParens: true,
+							disableSpellcheck: true,
+							lineNumbers: true,
+							tabMode: 'shift',
+						});
+					</r:script>
 				</div>
 				<g:if test="${identityProvider.approved}">
 					<div id="tab-admins">

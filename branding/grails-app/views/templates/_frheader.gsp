@@ -1,5 +1,5 @@
 <div id="headerleft">
-	<img src="${resource(absolute: true, dir:'images', file:'logo.jpg')}" alt="${message(code:'fedreg.title')}" border="0" />
+	<r:img dir='images' file='logo.jpg' alt="${message(code:'fedreg.title')}" width="102px" height="50px" />
 	<h1><g:message code="fedreg.title" /></h1>
 </div>
 <div id="headerright">

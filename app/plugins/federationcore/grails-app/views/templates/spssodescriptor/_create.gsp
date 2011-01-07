@@ -19,7 +19,8 @@
 		$('form').formwizard({ 
 		 	formPluginEnabled: false,
 		 	validationEnabled: true,
-		 	focusFirstInput : true
+		 	focusFirstInput : true,
+			disableUIStyles: true
 		});
 		jQuery.validator.addMethod("validcert", function(value, element, params) { 
 			validateCertificate();
@@ -445,60 +446,61 @@
 		<p>
 			<g:message code="fedreg.templates.serviceprovider.create.specifiedattributesupport.details" />
 		</p>
-			<table>
-				<tbody>
-					<tr>
-						<th><g:message code="label.name" /></th>
-						<th><g:message code="label.description" /></th>
-						<th><g:message code="label.requested" /></th>
-						<th><g:message code="label.required" /></th>
-						<th><g:message code="label.reasonrequested" /></th>
-					</tr>
-					<g:each in="${attributeList.sort{it.friendlyName}}" var="attr" status="i">
-						<g:if test="${attr.specificationRequired}">
-							<g:set var="ra" value="${supportedAttributes.find {it.base == attr}}" />
-							<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-								<td>
-									${fieldValue(bean: attr, field: "friendlyName")}<br>
-									<pre>OID: ${fieldValue(bean: attr, field: "oid")}</pre>
-								</td>
-								<td  style="width: 300px;">
-									${fieldValue(bean: attr, field: "description")}
-								</td>
-								<td>
-									<g:checkBox name="sp.attributes.${attr.id}.requested" onClick="\$('#spattributes${attr.id}reasoning').toggleClass('required'); \$('#spattributes${attr.id}requestedvalues1').toggleClass('required');" checked="${ra}"/>
-								</td>
-								<td>
-									<g:checkBox name="sp.attributes.${attr.id}.required" checked="${ra?.isRequired}"/>
-								</td>
-								<td>
-									<g:textField name="sp.attributes.${attr.id}.reasoning" id="spattributes${attr.id}reasoning" size="40" value="${ra?.reasoning}" class="tip" title="${g.message(code:'fedreg.help.serviceprovider.attribute.reason')}"/>
-									<fr:tooltip code='fedreg.help.serviceprovider.attribute.reason' />
-								</td>
-							</tr>
-							<tr>
-								<td>
-								<td colspan="4">
-									<table>
-										<tbody>
-											<tr>
-												<th>
-													<g:message code="label.requestedvalues" />
-												</th>
-												<td colspan="4">
-													<g:each in="${1..10}" var="v">
-														<g:textField name="sp.attributes.${attr.id}.requestedvalues.${v}" id="spattributes${attr.id}requestedvalues${v}" size="40" />
-														<fr:tooltip code='fedreg.help.serviceprovider.attribute.specvalue' /><br>
-													</g:each>
-												</td>
-											</tr>
-										</tbody>
-									</table>
-							</tr>
-						</g:if>
-					</g:each>
-				</tbody>
-			</table>
+		<table>
+			<tbody>
+				<tr>
+					<th><g:message code="label.name" /></th>
+					<th><g:message code="label.description" /></th>
+					<th><g:message code="label.requested" /></th>
+					<th><g:message code="label.required" /></th>
+					<th><g:message code="label.reasonrequested" /></th>
+				</tr>
+				<g:each in="${attributeList.sort{it.friendlyName}}" var="attr" status="i">
+					<g:if test="${attr.specificationRequired}">
+						<g:set var="ra" value="${supportedAttributes.find {it.base == attr}}" />
+						<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
+							<td>
+								${fieldValue(bean: attr, field: "friendlyName")}<br>
+								<pre>OID: ${fieldValue(bean: attr, field: "oid")}</pre>
+							</td>
+							<td  style="width: 300px;">
+								${fieldValue(bean: attr, field: "description")}
+							</td>
+							<td>
+								<g:checkBox name="sp.attributes.${attr.id}.requested" onClick="\$('#spattributes${attr.id}reasoning').toggleClass('required'); \$('#spattributes${attr.id}requestedvalues1').toggleClass('required');" checked="${ra}"/>
+							</td>
+							<td>
+								<g:checkBox name="sp.attributes.${attr.id}.required" checked="${ra?.isRequired}"/>
+							</td>
+							<td>
+								<g:textField name="sp.attributes.${attr.id}.reasoning" id="spattributes${attr.id}reasoning" size="40" value="${ra?.reasoning}" class="tip" title="${g.message(code:'fedreg.help.serviceprovider.attribute.reason')}"/>
+								<fr:tooltip code='fedreg.help.serviceprovider.attribute.reason' />
+							</td>
+						</tr>
+						<tr>
+							<td>
+							<td colspan="4">
+								<table>
+									<tbody>
+										<tr>
+											<th>
+												<g:message code="label.requestedvalues" />
+											</th>
+											<td colspan="4">
+												<g:each in="${1..10}" var="v">
+													<g:textField name="sp.attributes.${attr.id}.requestedvalues.${v}" id="spattributes${attr.id}requestedvalues${v}" size="40" />
+													<fr:tooltip code='fedreg.help.serviceprovider.attribute.specvalue' /><br>
+												</g:each>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</td>
+						</tr>
+					</g:if>
+				</g:each>
+			</tbody>
+		</table>
 	</div>
 	
 	<div class="step" id="nameidformatsupport">
@@ -539,8 +541,8 @@
 	</div>
 
 	<nav>
-		<input class="navigation_button" id="back" value="Back" type="reset" />
-		<input class="navigation_button" id="next" value="Next" type="submit" />
+		<input id="back" value="${g.message(code:'label.back')}" type="reset" /> 
+		<input id="next" value="${g.message(code:'label.next')}" type="submit" />
 	</nav>
 
 </g:form>

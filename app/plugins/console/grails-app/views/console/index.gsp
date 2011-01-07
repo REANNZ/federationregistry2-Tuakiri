@@ -5,6 +5,9 @@
    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
    <title>Grails Console</title>
    <style type="text/css" media="screen"> 
+	  body {
+		width: 99%;
+	}
       img {
          border-style: none;
       }           
@@ -16,6 +19,7 @@
          background: #ddd;
          overflow: auto; 
          clear: both;
+		text-align: left;
       }    
       #result .output {
          font-family: monospace;
@@ -75,27 +79,16 @@
          padding: 2px 5px;
       }          
       .CodeMirror-line-numbers {
-         padding: 4px;
-         font-size: 14px;
-         font-family: monospace;
+         padding: 3px;
          color: #999;
-         text-align: right;
-         background: #444;
-      }         
-      .plugin-info {
-         float: right;
-         color: #fff;
-         padding: 10px;
-         font-size: 10px;                                 
-         text-align: right;
-      }                  
-      .authors {
-         font-size: 9px;
-      }
+      }     
+      .bottom-toolbar {
+	      padding-top: 6px;
+	  }
    </style>  
    
-   <script src="${request.contextPath}${pluginContextPath}/js/codemirror/js/mirrorframe.js" type="text/javascript" charset="utf-8"></script>
-   <script src="${request.contextPath}${pluginContextPath}/js/codemirror/js/codemirror.js" type="text/javascript" charset="utf-8"></script>
+   	<r:use modules="jquery-ui, codemirror, app"/>
+	<r:layoutResources/>
 </head>
 <body>   
    <div id="progress">
@@ -108,7 +101,7 @@
    <div id="editor">
       <textarea id="code" style="width: 100%; height: 400px;" rows="40" cols="100">${(session['_grails_console_last_code_'] ?: "").encodeAsHTML()}</textarea>  
       <div class="bottom-toolbar">  
-         <div class="buttons">
+         <div>
             <button id="submit" title="(Ctrl + Return)">Execute</button>
             <button id="clear"  title="(Esc + Esc)">Clear Results</button>           
          </div>
@@ -116,28 +109,35 @@
             <img src="${createLinkTo(dir:'images',file:'spinner.gif')}" style="border: 0;" align="absmiddle" alt="" />
             Executing Script...
          </span>  
-      </div> 
-      <div id="drag-handle">...</div>  
+      </div>
+		<div id="drag-handle">...</div>
    </div>   
    <div id="result">
    </div>   
    <g:javascript library="scriptaculous" />
-   <script type="text/javascript" charset="utf-8">
+   <r:script>
 
+		// TODO: (BB) I have started to sanitize this plugin from what we got from the Grails repo but have run out of time, at least it now uses optimized versions of codemirror
+		// We need to re-write this to just be JQuery when there is time and get rid of calls to scriptaculous. For now minor used feature for admins so not overly concerning.
+
+		var textarea = $('code');
+		window.editor = CodeMirror.fromTextArea('code',  {
+			width: "98%",
+			height: "400px",
+			path: "",
+			stylesheet: "${r.resource(dir:'/js/codemirror/css', file:'groovycolors.css', plugin:'federationregistry') }",
+			basefiles: ["${r.resource(dir:'/js/codemirror/js', file:'codemirror.groovy.inframe.min.js', plugin:'federationregistry') }"],
+			parserfile: [],
+			content: textarea.value,
+			autoMatchParens: true,
+			disableSpellcheck: true,
+			lineNumbers: true,
+			tabMode: 'shift',
+		});
+			
       Event.observe(window, Prototype.Browser.IE ? 'load':"dom:loaded", function(){
 
-         var textarea = $('code');
-         window.editor = new MirrorFrame(CodeMirror.replace(textarea), {
-            height: "300px",
-            content: textarea.value,
-            parserfile: ["tokenizegroovy.js", "parsegroovy.js"],
-            stylesheet: "${request.contextPath}${pluginContextPath}/js/codemirror/css/groovycolors.css",
-            path: "${request.contextPath}${pluginContextPath}/js/codemirror/js/",
-            autoMatchParens: true,
-            disableSpellcheck: true,
-            lineNumbers: true,
-            tabMode: 'shift'
-         });                
+             
          
 
          var submitButton = $('submit');
@@ -147,7 +147,7 @@
             $('progress').show();
             new Ajax.Request("${createLink(action: 'execute')}", {
                parameters: {
-                  code: editor.mirror.getCode().strip()
+                  code: editor.getCode().strip()
                },
                onSuccess: function(response, json) {
                   resultContainer.appendChild(
@@ -163,19 +163,7 @@
          submitButton.observe("click", executeCode);
          $('clear').observe("click", function() {
             resultContainer.update("");
-         });   
-                                         
-//         var handle = $('drag-handle'), ho = Position.cumulativeOffset(handle)[1], iframe = $$('#editor iframe')[0], ih = 300;
-//         new Draggable('drag-handle', {
-//            snap: function(x,y) {
-//               return [0, y];
-//            },
-//            onEnd: function() {          
-//               ih -= (ho - (ho=Position.cumulativeOffset(handle)[1]));
-//                iframe.setStyle({ height: (ih + 'px') });        
-//                doLayout();
-//            } 
-//         });   
+         });
 
          var resultPanel = $('result');
          var splitter = $('drag-handle'), sh = splitter.getHeight();
@@ -203,21 +191,17 @@
          }           
                     
          setTimeout(function(){
-            editor.mirror.grabKeys(function(evt){  
+            editor.grabKeys(function(evt){  
                var c = evt.keyCode;      
                if(c == Event.KEY_ESC) {
                   clearResultPanel();
-               } else {
-                  if(evt.ctrlKey || evt.metaKey) {
-                     executeCode();
-                  } else {
-                     editor.mirror.editor.insertNewLine();
-                  }  
                }
-            }, function(c) { return c == Event.KEY_RETURN || c == Event.KEY_ESC; });
+            }, function(c) { return c == Event.KEY_ESC; });
          },1000);
 
       });
-   </script>
+   </r:script>
+
+	<r:layoutResources/>
 </body>
 </html>

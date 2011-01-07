@@ -32,7 +32,7 @@
 								<td>
 									<g:if test="${instance.processInstance.params.creator}">
 										<g:set var="contact" value="${Contact.get(instance.processInstance.params.creator)}" />
-										<g:link controller="contact" action="show" id="${instance.processInstance.params.creator}">${fieldValue(bean: contact, field: "givenName")} ${fieldValue(bean: contact, field: "surname")}</g:link>
+										<g:link controller="contacts" action="show" id="${instance.processInstance.params.creator}">${fieldValue(bean: contact, field: "givenName")} ${fieldValue(bean: contact, field: "surname")}</g:link>
 									</g:if>
 									<g:else>
 										<g:message code="label.publiccreation" />

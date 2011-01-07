@@ -7,8 +7,6 @@ Developed for the <a href="http://www.aaf.edu.au">Australian Access Federation</
 <br>
 Powered by Grails <g:meta name="app.grails.version"/>
 
-<link rel="stylesheet" href="${resource(dir:'css',file:'zenbox-2.0.css')}" />
-<script type="text/javascript" src="${resource(dir: 'js', file: 'zenbox-2.0.js')}"></script>
 <script type="text/javascript">
   if (typeof(Zenbox) !== "undefined") {
     Zenbox.init({

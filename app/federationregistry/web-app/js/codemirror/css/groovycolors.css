@@ -1,3 +1,4 @@
+
 .editbox {
   margin: .4em;
   padding: 0;
@@ -15,46 +16,46 @@ pre.code, .editbox {
   margin: 0;
 }
 
-span.groovy-punctuation {
+span.groovyPunctuation {
   color: #666666;
 }
 
-span.groovy-operator {
+span.groovyOperator {
   color: #666666;
 }
 
-span.groovy-keyword {
+span.groovyKeyword {
   color: #7ad500;
 }                      
 
-span.grails-keyword {
+span.grailsKeyword {
     font-weight: bold;
 }
 
-span.groovy-atom {
+span.groovyAtom {
   color: #228811;
 }
 
-span.groovy-variable {
+span.groovyVariable {
   color: #ddd;
 }
 
-span.groovy-variabledef {
+span.groovyVariabledef {
   color: #63ccff;
 }
 
-span.groovy-localvariable {
+span.groovyLocalvariable {
   color: #63ccff;
 }
 
-span.groovy-property {
+span.groovyProperty {
   color: #63ccff;
 }
 
-span.groovy-comment {
+span.groovyComment {
   color: #AA7700;
 }
 
-span.groovy-string {
+span.groovyString {
   color: #cc64fb;
 }

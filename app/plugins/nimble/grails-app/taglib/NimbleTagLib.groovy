@@ -100,14 +100,6 @@ class NimbleTagLib {
     }
 
 	def button = { attrs -> 
-		def type
-		if(attrs.label && attrs.icon)
-			type = 'ui-button-text-icon'
-			else
-				if(attrs.label)
-					type = 'ui-button-text-only'
-					else
-						type = 'ui-button-icon-only'
 		def id = ""
 		if(attrs.id) 
 			id = "id = ${attrs.id}"
@@ -123,18 +115,9 @@ class NimbleTagLib {
 		def cssclass = ""
 		if(attrs.class)
 			cssclass = attrs.class
-		
-		if(attrs.plain) {
-			out << "<a $href $onclick $id class='$cssclass'>${message(code:attrs.label)}</a>"
-		}
-		else {
-			out << "<a $href $onclick $id class='ui-button $type ui-widget ui-state-default ui-corner-all $cssclass'>"
-			if(type.contains('icon'))
-				out << "<span class='ui-button-icon-primary ui-icon ui-icon-${attrs.icon}'></span>"
-			if(type.contains('text'))
-				out << "<span class='ui-button-text'>${message(code:attrs.label)}</span>"
-			out << "</a>"
-		}
+
+		out << "<a $href $onclick $id class='$cssclass'>${message(code:attrs.label)}</a>"
+
 	}
 	
 	def confirmaction = { attrs, body ->

@@ -6,10 +6,15 @@ nimble.endpoints = nimble.endpoints || {};
 window.fedreg = window.fedreg || {};
 var fedreg = window.fedreg;
 
-// AJAX indicator
 $(function() {
+	applyBehaviourTo(document);
+
+	nimble.createTabs('tabs');
+	nimble.createTabs('tabs2');
+});
+
+applyBehaviourTo = function(e) {
 	$("#working").hide();
-	
 	$("#working").bind("fedreg.working", function(){
 		if( $(this).is(':hidden') ) {
 			$(this).css({left: $(window).scrollLeft() + 6, top: $(window).scrollTop() + 6})
@@ -21,19 +26,49 @@ $(function() {
 		}
 	 });
 	
-	$("form").bind("keypress", function(e) {
-		if (e.keyCode == 13) {
-			return false;
-		}
-	});
-	
-	nimble.createTabs('tabs');
-	nimble.createTabs('tabs2');
+    $(e).find('.button').button();
+    $.each({
+        '.add-button': 'ui-icon-plusthick',
+        '.back-button': 'ui-icon-arrowreturnthick-1-w',
+        '.save-button': 'ui-icon-check',
+        '.delete-button': 'ui-icon-trash',
+        '.edit-button': 'ui-icon-pencil',
+        '.view-button': 'ui-icon-triangle-1-e',
+        '.search-button': 'ui-icon-search',
+        '.prev-button': 'ui-icon-arrowthick-1-w',
+        '.next-button': 'ui-icon-arrowthick-1-e',
+        '.download-button': 'ui-icon-arrowreturnthick-1-s',
+        '.approve-button': 'ui-icon-check',
+        '.redo-button': 'ui-icon-arrowrefresh-1-e'
+    }, function(selector, icon) {
+        $(e).find(selector).button({'icons': {'primary': icon}});
+    });     
+            
+    $(e).find('.buttonset').buttonset();
+    $(e).find('.tip').tipTip({maxWidth: "auto", edgeOffset: 10, maxWidth:'200px', defaultPosition:"top"});
 
-	$(function(){
-		$('.tip').tipTip({maxWidth: "auto", edgeOffset: 10, maxWidth:'200px', defaultPosition:"top"});
-	});
-});
+	$('.sortable-table').each(function(index) {
+			$(this).dataTable( {
+				"sPaginationType": "full_numbers",
+				"bLengthChange": false,
+				"iDisplayLength": 10,
+				"aaSorting": [[0, "asc"]],
+				"oLanguage": {
+						"sSearch": "Filter: ",
+						"sZeroRecords": "No matches found",
+						"sInfo": "Showing _START_ to _END_ of _TOTAL_ records",
+						"sInfoEmpty": "Showing 0 to 0 of 0 records",
+						"sInfoFiltered": "(filtered from _MAX_ total records)",
+						"oPaginate": {
+							"sFirst": "First",
+							"sLast": "Last",
+							"sNext": "Next",
+							"sPrevious": "Previous",
+						}
+				}
+			});
+		});
+}
 
 // Organization Administrators
 fedreg.organization_fulladministrator_grant = function(userID) {
@@ -53,7 +88,7 @@ fedreg.organization_fulladministrator_grant = function(userID) {
 			nimble.growl('error', xhr.responseText);
 	    }
 	});
-}
+};
 
 fedreg.organization_fulladministrator_revoke = function(userID) {
 	$("#working").trigger("fedreg.working");
@@ -71,7 +106,7 @@ fedreg.organization_fulladministrator_revoke = function(userID) {
 			nimble.growl('error', xhr.responseText);
 	    }
 	});
-}
+};
 
 fedreg.organization_fulladministrator_list = function() {
 	$.ajax({

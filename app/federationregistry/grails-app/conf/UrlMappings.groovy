@@ -21,7 +21,7 @@ class UrlMappings {
 			controller = "organization"
 		}
 	
-		"/membership/entity/$action?/$id?"{
+		"/membership/entitydescriptor/$action?/$id?"{
 			controller = "entityDescriptor"
 		}
 	

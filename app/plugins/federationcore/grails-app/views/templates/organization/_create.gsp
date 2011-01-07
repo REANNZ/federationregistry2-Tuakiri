@@ -1,19 +1,19 @@
-<script type="text/javascript">
+<r:script disposition:'head'>
 	var certificateValidationEndpoint = "${createLink(controller:'coreUtilities', action:'validateCertificate')}";
 	var newCertificateValid = false;
 	
 	$(function() {	
-
 		$('form').validate({
 				keyup: false
 		});
 		$('form').formwizard({ 
 		 	formPluginEnabled: false,
 		 	validationEnabled: true,
-		 	focusFirstInput : true
+		 	focusFirstInput : true,
+			disableUIStyles: true
 		});
 	});
-</script>
+</r:script>
 
 <g:hasErrors>
     <div class="warning">
@@ -127,9 +127,9 @@
 		</p>
 	</div>
 
-	<nav> 							
-		<input class="navigation_button" id="back" value="Back" type="reset" />
-		<input class="navigation_button" id="next" value="Next" type="submit" />
+	<nav>
+		<input id="back" value="${g.message(code:'label.back')}" type="reset" /> 
+		<input id="next" value="${g.message(code:'label.next')}" type="submit" />
 	</nav>
 
 </g:form>

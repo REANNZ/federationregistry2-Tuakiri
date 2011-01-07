@@ -1,18 +1,14 @@
 
 <html>
 	<head>
-		
 		<meta name="layout" content="members" />
 		<title><g:message code="fedreg.view.members.identityprovider.list.title" /></title>
-		<script type="text/javascript">
-			<njs:datatable tableID="idpssodescriptorlist" sortColumn="0" />
-		</script>
 	</head>
 	<body>
 
 		<section>
 			<h2><g:message code="fedreg.view.members.identityprovider.list.heading" /></h2>
-			<table id="idpssodescriptorlist">
+			<table class="sortable-table">
 				<thead>
 					<tr>
 						<th><g:message code="label.identityprovider" /></th>
@@ -32,7 +28,7 @@
 						<td>${fieldValue(bean: identityProvider, field: "active")}</td>
 						<td>${fieldValue(bean: identityProvider, field: "approved")}</td>
 						<td>
-							<n:button href="${createLink(controller:'IDPSSODescriptor', action:'show', id: identityProvider.id)}" label="${message(code:'label.view')}" icon="arrowthick-1-ne"/>
+							<n:button href="${createLink(controller:'IDPSSODescriptor', action:'show', id: identityProvider.id)}" label="${message(code:'label.view')}" class="view-button"/>
 						</td>
 					</tr>
 				</g:each>

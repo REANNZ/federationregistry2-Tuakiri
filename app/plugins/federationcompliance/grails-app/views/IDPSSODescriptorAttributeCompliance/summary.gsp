@@ -1,39 +1,32 @@
 <%! import fedreg.core.AttributeCategory %>
 <html>
-	<head>
-		
+	<head>	
 		<meta name="layout" content="compliance" />
-		<g:set var="entityName" value="${message(code: 'identityProviderAttributeCompliance.label')}" />
-		<title><g:message code="fedreg.view.compliance.summary.title"/></title>
-		
-		<script type="text/javascript">
-			<njs:datatable tableID="summarylist" sortColumn="0" />
-		</script>
-		
+		<title><g:message code="fedreg.view.compliance.summary.title"/></title>		
 	</head>
 	<body>
 		<section>
 			<h2><g:message code="fedreg.view.compliance.summary.heading"/></h2>		
-			<table id="summarylist">
+			<table class="sortable-table">
 				<thead>
-					<tr>						  
+					<tr>
 						<th><g:message code="label.identityprovider" /></th>
 						<g:each in="${AttributeCategory.listOrderByName()}">
 							<th><g:message code="label.${it.name.toLowerCase()}" /></th>
 						</g:each>
-						<th/>						 
+						<th/>
 					</tr>
 				</thead>
 				<tbody>
 				<g:each in="${identityProviderList}" status="i" var="idp">
 					<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 						<td class="organizationname" style="width:300px;">${idp?.displayName?.encodeAsHTML()}</td>
-							<g:findAll in="${categorySupportSummaries}" expr="it.idp == idp">
+						<g:findAll in="${categorySupportSummaries}" expr="it.idp.id == idp.id">
 							<td style="width:200px;">
 								<div class="numeric">
 									<strong>${it.supportedCount.encodeAsHTML()}<span class="total"> / ${it.totalCount.encodeAsHTML()}</span></strong>
 								</div>
-							</td>							
+							</td>
 						</g:findAll>
 						<td style="width:300px;">
 							<n:button href="${createLink(controller: 'IDPSSODescriptorAttributeCompliance', action:'comprehensive', id: idp.id)}" label="${message(code:'label.view')}" icon="arrowthick-1-ne"/>
