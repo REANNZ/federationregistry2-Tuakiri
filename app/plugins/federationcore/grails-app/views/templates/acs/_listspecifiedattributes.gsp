@@ -46,7 +46,7 @@
 															</table>
 														</form>
 														<n:button onclick="if(\$('#newspecattributedata${j}').valid()) fedreg.acs_specattribute_add(${ra.id}, 'newspecattributedata${j}', 'acsspecattrvals${j}' );" label="${message(code:'label.add')}" class="add-button"/>
-														<n:button onclick="\$('#newspecattributeval${j}').fadeOut(); \$('#addnewspecattributeval${j}').fadeIn();" label="${message(code:'label.close')}" icon="cancel"/>
+														<n:button onclick="\$('#newspecattributeval${j}').fadeOut(); \$('#addnewspecattributeval${j}').fadeIn();" label="${message(code:'label.close')}" class="close-button"/>
 													</div>
 												</td>
 											</tr>

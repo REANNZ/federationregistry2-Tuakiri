@@ -31,9 +31,10 @@ applyBehaviourTo = function(e) {
         '.add-button': 'ui-icon-plusthick',
         '.back-button': 'ui-icon-arrowreturnthick-1-w',
         '.save-button': 'ui-icon-check',
+		'.update-button' : 'ui-icon-check',
         '.delete-button': 'ui-icon-trash',
         '.edit-button': 'ui-icon-pencil',
-        '.view-button': 'ui-icon-triangle-1-e',
+        '.view-button': 'ui-icon-circle-arrow-e',
         '.search-button': 'ui-icon-search',
         '.prev-button': 'ui-icon-arrowthick-1-w',
         '.next-button': 'ui-icon-arrowthick-1-e',
@@ -43,7 +44,8 @@ applyBehaviourTo = function(e) {
 		'.search-button': 'ui-icon-search',
 		'.close-button': 'ui-icon-close',
 		'.grant-button': 'ui-icon-circle-plus',
-		'.revoke-button': 'ui-icon-circle-minus'
+		'.revoke-button': 'ui-icon-circle-minus',
+		'.toggle-button': 'ui-icon-power',
     }, function(selector, icon) {
         $(e).find(selector).button({'icons': {'primary': icon}});
     });     
@@ -236,7 +238,9 @@ fedreg.keyDescriptor_verify = function(entity) {
 		url: certificateValidationEndpoint,
 		data: dataString,
 		success: function(res) {
-			$("#newcertificatedetails").html(res);
+			var data = $("#newcertificatedetails")
+			data.html(res);
+			applyBehaviourTo(data);
 			newCertificateValid = true;
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {

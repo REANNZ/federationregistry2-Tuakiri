@@ -13,7 +13,8 @@
 				$('form').formwizard({ 
 				 	formPluginEnabled: false,
 				 	validationEnabled: true,
-				 	focusFirstInput : true
+				 	focusFirstInput : true,
+					disableUIStyles: true
 				});
 			});
 		</script>

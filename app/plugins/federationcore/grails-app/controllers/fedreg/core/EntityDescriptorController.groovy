@@ -101,7 +101,7 @@ class EntityDescriptorController {
 			def (updated, entityDescriptor) = entityDescriptorService.update(params)
 			if(updated) {
 				log.info "$authenticatedUser updated $entityDescriptor"
-				redirect (action: "show", id: entityDescriptor.id)
+				redirect (controller: "entityDescriptor", action: "show", id: entityDescriptor.id)
 			} else {
 				flash.type="error"
 				flash.message = message(code: 'fedreg.core.entitydescriptor.update.validation.error')

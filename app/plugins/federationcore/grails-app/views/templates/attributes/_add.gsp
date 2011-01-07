@@ -30,7 +30,7 @@
 			</tbody>
 		</table>
 		<n:button id="createattributelink" onclick="fedreg.attribute_add('${containerID}');" label="${message(code:'label.add')}" class="add-button"/>
-		<n:button onclick="\$('#newattribute').fadeOut(); \$('#addattribute').fadeIn();" label="${message(code:'label.close')}" icon="cancel"/>
+		<n:button onclick="\$('#newattribute').fadeOut(); \$('#addattribute').fadeIn();" label="${message(code:'label.close')}" class="close-button"/>
 		</form>
 	</div>
 </n:hasPermission>

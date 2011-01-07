@@ -47,10 +47,10 @@
 					</td>
 					<td>
 						<n:hasPermission target="descriptor:${ra.attributeConsumingService.descriptor.id}:attribute:add">
-							<n:button onclick="\$('#ra-${ra.id}').hide(); \$('#ra-edit-${ra.id}').fadeIn(); return false;" label="label.edit" icon="gear"/>
+							<n:button onclick="\$('#ra-${ra.id}').hide(); \$('#ra-edit-${ra.id}').fadeIn(); return false;" label="label.edit" class="edit-button"/>
 						</n:hasPermission>
 						<n:hasPermission target="descriptor:${ra.attributeConsumingService.descriptor.id}:attribute:remove">
-								<n:confirmaction action="fedreg.acs_reqattribute_remove(${ra.id}, ${ra.attributeConsumingService.id}, '${containerID}' );" title="${message(code: 'fedreg.templates.acs.reqattributes.remove.confirm.title')}" msg="${message(code: 'fedreg.templates.acs.reqattributes.remove.confirm.descriptive', args:[ra.base.friendlyName.encodeAsHTML()])}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" icon="trash" label="label.remove" />
+								<n:confirmaction action="fedreg.acs_reqattribute_remove(${ra.id}, ${ra.attributeConsumingService.id}, '${containerID}' );" title="${message(code: 'fedreg.templates.acs.reqattributes.remove.confirm.title')}" msg="${message(code: 'fedreg.templates.acs.reqattributes.remove.confirm.descriptive', args:[ra.base.friendlyName.encodeAsHTML()])}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" class="delete-button" label="label.remove" />
 						</n:hasPermission>
 					</td>
 				</tr>
@@ -79,7 +79,7 @@
 						</form>
 					</td>
 					<td>
-						<n:button onclick="if( \$('#ra-edit-${ra.id}-reason').parent().valid() ) fedreg.acs_reqattribute_update( ${ra.attributeConsumingService.id}, ${ra.id}, \$('#ra-edit-${ra.id}-reason').val(), \$('#ra-edit-${ra.id}-required').is(':checked'), '${containerID}');" label="${message(code:'label.update')}" icon="check"/>
+						<n:button onclick="if( \$('#ra-edit-${ra.id}-reason').parent().valid() ) fedreg.acs_reqattribute_update( ${ra.attributeConsumingService.id}, ${ra.id}, \$('#ra-edit-${ra.id}-reason').val(), \$('#ra-edit-${ra.id}-required').is(':checked'), '${containerID}');" label="${message(code:'label.update')}" class="update-button"/>
 						<n:button onclick="\$('#ra-edit-${ra.id}').hide(); \$('#ra-${ra.id}').fadeIn(); return false;" label="${message(code:'label.cancel')}" class="close-button"/>
 					</td>
 				</tr>

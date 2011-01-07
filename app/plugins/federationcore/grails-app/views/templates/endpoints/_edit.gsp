@@ -33,7 +33,7 @@
 				</tr>
 			</tbody>
 		</table>
-		<n:button onclick="if(\$('#endpoint-edit-${endpoint.id}').valid()) fedreg.endpoint_update('${endpoint.id}', '${endpointType}', '${containerID}');" label="${message(code:'label.update')}" icon="check"/>
+		<n:button onclick="if(\$('#endpoint-edit-${endpoint.id}').valid()) fedreg.endpoint_update('${endpoint.id}', '${endpointType}', '${containerID}');" label="${message(code:'label.update')}" class="update-button"/>
 		<n:button onclick="fedreg.endpoint_list('${endpointType}', '${containerID}');" label="${message(code:'label.cancel')}" class="close-button"/>
 	</form>
 </div>

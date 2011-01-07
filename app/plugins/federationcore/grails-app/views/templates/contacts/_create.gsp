@@ -52,8 +52,8 @@
 			<p><g:message code="fedreg.templates.contacts.selecttype"/></p>
 			<g:select id="contactselectedtype" name="contactType" from="${contactTypes}" optionKey="name" optionValue="displayName"/>
 			<div class="buttons">
-				<n:button href="#" onclick="fedreg.contact_create();" label="${message(code:'label.accept')}" icon="check" class="modal_close"/>
-				<n:button href="#" onclick="\$('#contactconfirmationdialog').dialog('close');" label="${message(code:'label.cancel')}" icon="cancel" class="modal_close"/>
+				<n:button href="#" onclick="fedreg.contact_create();" label="${message(code:'label.accept')}" class="update-button" class="modal_close"/>
+				<n:button href="#" onclick="\$('#contactconfirmationdialog').dialog('close');" label="${message(code:'label.cancel')}" class="close-button" class="modal_close"/>
 			</div>
 		</div>
 	</div>

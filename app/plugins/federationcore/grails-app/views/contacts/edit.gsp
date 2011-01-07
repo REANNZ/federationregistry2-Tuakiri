@@ -73,7 +73,7 @@
 				
 				<nav>
 					<n:button onclick="\$('form').submit();" label="label.update" class="add-button"/>
-					<n:button href="${createLink(action:'show', id:contact.id)}"  label="label.cancel" icon="cancel"/>
+					<n:button href="${createLink(action:'show', id:contact.id)}"  label="label.cancel" class="close-button"/>
 				</nav>
 					
 			</g:form>

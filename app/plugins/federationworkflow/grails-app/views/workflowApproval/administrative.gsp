@@ -49,7 +49,7 @@
 								</td>
 								<td>
 									<g:form action="approve" id="${instance.id}" name="submitapproval${i}"></g:form>
-									<n:confirmaction action="\$('#submitapproval${i}').submit();" title="${message(code: 'fedreg.view.workflow.approval.approve.confirm.title')}" msg="${message(code: 'fedreg.view.workflow.approval.approve.confirm.descriptive', args:[instance.task.name, instance.processInstance.description])}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" label="${message(code: 'label.approve')}" icon="check" />
+									<n:confirmaction action="\$('#submitapproval${i}').submit();" title="${message(code: 'fedreg.view.workflow.approval.approve.confirm.title')}" msg="${message(code: 'fedreg.view.workflow.approval.approve.confirm.descriptive', args:[instance.task.name, instance.processInstance.description])}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" label="${message(code: 'label.approve')}" class="update-button" />
 									<h5>or reject due to:</h5>
 									<ul class="clean">
 										<g:each in="${instance.task.rejections}" var="rej">

@@ -3,8 +3,9 @@
 	<head>
 		<meta name="layout" content="members" />
 		<title><g:message code="fedreg.view.members.identityprovider.edit.title" /></title>
-		
-		<script type="text/javascript">
+	</head>
+	<body>
+		<r:script>
 			$(function() {			
 				$('form').validate({
 						ignore: ":disabled",
@@ -18,13 +19,11 @@
 				$('form').formwizard({ 
 				 	formPluginEnabled: false,
 				 	validationEnabled: true,
-				 	focusFirstInput : true
+				 	focusFirstInput : true,
+					disableUIStyles: true
 				});
 			});
-		</script>
-	</head>
-	<body>
-
+		</r:script>
 		<section>
 			<h2><g:message code="fedreg.view.members.identityprovider.edit.heading" args="[identityProvider.displayName]"/></h2>
 			

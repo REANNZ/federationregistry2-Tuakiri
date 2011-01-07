@@ -19,7 +19,7 @@
 			<td> ${attr.base.description.encodeAsHTML()}</td>
 			<td>
 				<n:hasPermission target="descriptor:${descriptor.id}:attribute:remove">
-					<n:confirmaction action="fedreg.attribute_remove(${attr.id}, '${containerID}' );" title="${message(code: 'fedreg.templates.attributes.remove.confirm.title')}" msg="${message(code: 'fedreg.templates.attributes.remove.confirm.descriptive', args:[attr.base.friendlyName.encodeAsHTML()])}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" icon="trash" label="label.remove" />
+					<n:confirmaction action="fedreg.attribute_remove(${attr.id}, '${containerID}' );" title="${message(code: 'fedreg.templates.attributes.remove.confirm.title')}" msg="${message(code: 'fedreg.templates.attributes.remove.confirm.descriptive', args:[attr.base.friendlyName.encodeAsHTML()])}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" class="delete-button" label="label.remove" />
 				</n:hasPermission>
 			</td>
 		</tr>

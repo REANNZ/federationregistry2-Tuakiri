@@ -6,7 +6,7 @@
 					<td> ${val.value?.encodeAsHTML()}</td>
 					<n:hasPermission target="descriptor:${requestedAttribute.attributeConsumingService.descriptor.id}:attribute:value:remove">
 						<td>
-							<n:confirmaction action="fedreg.acs_specattribute_remove(${requestedAttribute.id}, ${val.id}, '${containerID}');" title="${message(code: 'fedreg.templates.acs.reqattributes.remove.value.confirm.title')}" msg="${message(code: 'fedreg.templates.acs.reqattributes.remove.value.confirm.descriptive', args:[requestedAttribute.base.friendlyName.encodeAsHTML()])}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" icon="trash" label="label.remove" />
+							<n:confirmaction action="fedreg.acs_specattribute_remove(${requestedAttribute.id}, ${val.id}, '${containerID}');" title="${message(code: 'fedreg.templates.acs.reqattributes.remove.value.confirm.title')}" msg="${message(code: 'fedreg.templates.acs.reqattributes.remove.value.confirm.descriptive', args:[requestedAttribute.base.friendlyName.encodeAsHTML()])}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" class="delete-button" label="label.remove" />
 						</td>
 					</n:hasPermission>
 				</tr>

@@ -67,16 +67,16 @@
 								<n:button onclick="fedreg.endpoint_edit(${ep.id}, '${endpointType}', '${containerID}');" label="label.edit" class="view-button" />
 							</n:hasPermission>
 							<n:hasPermission target="descriptor:${ep.descriptor.id}:endpoint:toggle">
-								<n:confirmaction action="fedreg.endpoint_toggle(${ep.id}, '${endpointType}', '${containerID}' );" title="${message(code: 'fedreg.templates.endpoints.toggle.confirm.title')}" msg="${message(code: 'fedreg.templates.endpoints.toggle.confirm.descriptive')}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" label="${message(code: 'label.togglestate')}" icon="refresh" />
+								<n:confirmaction action="fedreg.endpoint_toggle(${ep.id}, '${endpointType}', '${containerID}' );" title="${message(code: 'fedreg.templates.endpoints.toggle.confirm.title')}" msg="${message(code: 'fedreg.templates.endpoints.toggle.confirm.descriptive')}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" label="${message(code: 'label.togglestate')}" class="toggle-button" />
 							</n:hasPermission>
 							<g:if test="${ep.instanceOf(fedreg.core.IndexedEndpoint) && !ep.isDefault}">
 								<n:hasPermission target="descriptor:${ep.descriptor.id}:endpoint:toggle">
-									<n:confirmaction action="fedreg.endpoint_makedefault(${ep.id}, '${endpointType}', '${containerID}' );" title="${message(code: 'fedreg.templates.endpoints.makedefault.confirm.title')}" msg="${message(code: 'fedreg.templates.endpoints.makedefault.confirm.descriptive')}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" label="${message(code: 'label.makedefault')}" icon="pin-s" />
+									<n:confirmaction action="fedreg.endpoint_makedefault(${ep.id}, '${endpointType}', '${containerID}' );" title="${message(code: 'fedreg.templates.endpoints.makedefault.confirm.title')}" msg="${message(code: 'fedreg.templates.endpoints.makedefault.confirm.descriptive')}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" label="${message(code: 'label.makedefault')}" class="add-button" />
 								</n:hasPermission>
 							</g:if>
 							<n:hasPermission target="descriptor:${ep.descriptor.id}:endpoint:remove">
 								<g:if test="${endpoints.size() > minEndpoints}">
-									<n:confirmaction action="fedreg.endpoint_delete(${ep.id}, '${endpointType}', '${containerID}' );" title="${message(code: 'fedreg.templates.endpoints.remove.confirm.title')}" msg="${message(code: 'fedreg.templates.endpoints.remove.confirm.descriptive')}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" icon="trash" label="${message(code: 'label.delete')}"/>
+									<n:confirmaction action="fedreg.endpoint_delete(${ep.id}, '${endpointType}', '${containerID}' );" title="${message(code: 'fedreg.templates.endpoints.remove.confirm.title')}" msg="${message(code: 'fedreg.templates.endpoints.remove.confirm.descriptive')}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" class="delete-button" label="${message(code: 'label.delete')}"/>
 								</g:if>
 							</n:hasPermission>
 						</td>

@@ -37,8 +37,8 @@
 			</table>
 			
 			<div class="buttons">
-				<n:button onclick="\$('form').submit();" label="label.confirm" icon="check"/>
-				<n:button href="${createLink(action:'show', id: user.id)}" label="label.cancel" icon="cancel"/>
+				<n:button onclick="\$('form').submit();" label="label.confirm" class="update-button"/>
+				<n:button href="${createLink(action:'show', id: user.id)}" label="label.cancel" class="close-button"/>
 			</div>
 			
 		</g:form>

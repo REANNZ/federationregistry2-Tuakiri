@@ -2,14 +2,14 @@
 <%@page import="fedreg.core.SPSSODescriptor" %>
 
 <n:hasPermission target="descriptor:${descriptor.id}:crypto:create">
-	<script type="text/javascript">
+	<r:script>
 		var newCertificateValid = false;
 		$(function() {
 			$("#newcertificate").hide();
 			$("#addnewcertificatelink").hide();
 			$("#cert").bind('paste', function() { setTimeout(function() {fedreg.keyDescriptor_verify('${descriptor.entityDescriptor.entityID}'); 		if(newCertificateValid) $("#addnewcertificatelink").fadeIn(); else 	$("#addnewcertificatelink").fadeOut(); }, 100); });
 		});
-	</script>
+	</r:script>
 	<hr>
 	<div id="addcertificate">
 		<n:button onclick="\$('#addcertificate').fadeOut(); \$('#newcertificate').fadeIn();" label="${message(code:'label.addcertificate')}" class="add-button"/>

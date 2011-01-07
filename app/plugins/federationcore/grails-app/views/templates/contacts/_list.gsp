@@ -18,7 +18,7 @@
 					<td>
 						<n:button href="${createLink(controller:'contacts', action:'show', id: contactPerson.contact.id)}" label="${message(code:'label.view')}" class="view-button"/>
 						<n:hasPermission target="descriptor:${descriptor.id}:contact:remove">
-							<n:confirmaction action="fedreg.contact_delete(${contactPerson.id});" label="${message(code:'label.delete')}" icon="trash" title="${message(code: 'fedreg.templates.contacts.remove.confirm.title')}" msg="${message(code: 'fedreg.templates.contacts.remove.confirm.descriptive')}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}"/>
+							<n:confirmaction action="fedreg.contact_delete(${contactPerson.id});" label="${message(code:'label.delete')}" class="delete-button" title="${message(code: 'fedreg.templates.contacts.remove.confirm.title')}" msg="${message(code: 'fedreg.templates.contacts.remove.confirm.descriptive')}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}"/>
 						</n:hasPermission>
 					</td>
 				</tr>

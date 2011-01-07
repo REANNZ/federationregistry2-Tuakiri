@@ -52,7 +52,7 @@
 
 			<div class="buttons">
 				<n:button onclick="\$('form').submit();" label="label.add" class="add-button"/>
-				<n:button href="${createLink(action:'list')}" label="label.cancel" icon="cancel"/>
+				<n:button href="${createLink(action:'list')}" label="label.cancel" class="close-button"/>
 			</div>
 		</g:form>
 

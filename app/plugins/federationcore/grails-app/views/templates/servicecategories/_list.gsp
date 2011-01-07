@@ -18,7 +18,7 @@
 			<td>${cat.description?.encodeAsHTML()}</td>
 			<td>
 				<n:hasPermission target="descriptor:${descriptor.id}:category:remove">
-					<n:confirmaction action="fedreg.serviceCategory_remove(${cat.id}, '${containerID}' );" title="${message(code: 'fedreg.templates.servicecategories.remove.confirm.title')}" msg="${message(code: 'fedreg.templates.servicecategories.remove.confirm.descriptive')}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" icon="trash" label="${message(code: 'label.remove')}" />
+					<n:confirmaction action="fedreg.serviceCategory_remove(${cat.id}, '${containerID}' );" title="${message(code: 'fedreg.templates.servicecategories.remove.confirm.title')}" msg="${message(code: 'fedreg.templates.servicecategories.remove.confirm.descriptive')}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" class="delete-button" label="${message(code: 'label.remove')}" />
 				</n:hasPermission>
 			</td>
 		</tr>

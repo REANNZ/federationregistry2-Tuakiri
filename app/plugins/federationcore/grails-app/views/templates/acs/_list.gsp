@@ -59,7 +59,7 @@
 								</tbody>
 							</table>
 							<n:button onclick="if(\$('#newattributedata${i}').valid()) fedreg.acs_reqattribute_add(${acs.id}, 'newattributedata${i}', 'acsreqattr${i}' );" label="${message(code:'label.add')}" class="add-button"/>
-							<n:button onclick="\$('#newattribute${i}').fadeOut(); \$('#addattribute${i}').fadeIn();" label="${message(code:'label.close')}" icon="cancel"/>
+							<n:button onclick="\$('#newattribute${i}').fadeOut(); \$('#addattribute${i}').fadeIn();" label="${message(code:'label.close')}" class="close-button"/>
 						</form>
 					</div>
 				</n:hasPermission>
