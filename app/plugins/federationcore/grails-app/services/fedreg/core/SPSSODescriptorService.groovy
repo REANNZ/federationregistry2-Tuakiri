@@ -99,7 +99,7 @@ class SPSSODescriptorService {
 		serviceProvider.addToAssertionConsumerServices(httpPostACS)
 		httpPostACS.validate()
 
-		def artifactBinding = SamlURI.findByUri(SamlConstants.soap)
+		def artifactBinding = SamlURI.findByUri(SamlConstants.httpArtifact)
 		def artifactLocation = new UrlURI(uri: params.sp?.acs?.artifact?.uri)
 		def soapArtifactACS = new AssertionConsumerService(approved: true, binding: artifactBinding, location:artifactLocation, active:params.active, isDefault:(params.sp?.acs?.artifact?.isdefault == 'true') ? true:false)
 		serviceProvider.addToAssertionConsumerServices(soapArtifactACS)
