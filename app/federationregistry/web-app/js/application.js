@@ -8,9 +8,6 @@ var fedreg = window.fedreg;
 
 $(function() {
 	applyBehaviourTo(document);
-
-	nimble.createTabs('tabs');
-	nimble.createTabs('tabs2');
 });
 
 applyBehaviourTo = function(e) {
@@ -25,6 +22,7 @@ applyBehaviourTo = function(e) {
 			$(this).fadeOut();
 		}
 	 });
+	$(".tabs").tabs();
 	
     $(e).find('.button').button();
     $.each({
@@ -120,11 +118,11 @@ fedreg.organization_fulladministrator_list = function() {
 		cache: false,
 		url: organizationFullAdministratorListEndpoint,
 		success: function(res) {
-			var list = $("#organizationfulladministratorlist");
-			list.empty();
-			list.append(res);
-			applyBehaviourTo(list);
-			list.fadeIn();
+			var target = $("#organizationfulladministratorlist");
+			target.empty();
+			target.append(res);
+			applyBehaviourTo(target);
+			target.fadeIn();
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
 			nimble.growl('error', xhr.responseText);
@@ -134,18 +132,17 @@ fedreg.organization_fulladministrator_list = function() {
 
 fedreg.organization_fulladministrator_search = function() {
 	$("#working").trigger("fedreg.working");
-	$("#availablefulladministrators").fadeOut().empty();
 	var dataString = "q=" + $('#q').val()
 	$.ajax({
 		type: "GET",
 		url: organizationFullAdministratorSearchEndpoint,
 		data: dataString,
 		success: function(res) {
-			var list = $("#availablefulladministrators");
-			list.empty();
-			list.append(res);
-			applyBehaviourTo(list);
-			list.fadeIn();
+			var target = $("#availablefulladministrators");
+			target.html(res);
+			applyBehaviourTo(target);
+			target.fadeIn();
+			
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
 			nimble.growl('error', xhr.responseText);
@@ -197,10 +194,9 @@ fedreg.descriptor_fulladministrator_list = function() {
 		cache: false,
 		url: descriptorFullAdministratorListEndpoint,
 		success: function(res) {
-			var list = $("#descriptorfulladministratorlist")
-			
-			applyBehaviourTo(res);
-			list.html(res);
+			var target = $("#descriptorfulladministratorlist")
+			target.html(res);
+			applyBehaviourTo(target);
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
 			nimble.growl('error', xhr.responseText);
@@ -210,16 +206,16 @@ fedreg.descriptor_fulladministrator_list = function() {
 
 fedreg.descriptor_fulladministrator_search = function() {
 	$("#working").trigger("fedreg.working");
-	$("#availablefulladministrators").fadeOut().empty();
 	var dataString = "q=" + $('#q').val()
 	$.ajax({
 		type: "GET",
 		url: descriptorFullAdministratorSearchEndpoint,
 		data: dataString,
-		success: function(res) {
-			$("#availablefulladministrators").empty();
-			$("#availablefulladministrators").append(res);
-			$("#availablefulladministrators").fadeIn();
+		success: function(res) {	
+			var target = $("#availablefulladministrators");
+			target.html(res);
+			applyBehaviourTo(target);
+			target.fadeIn();
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
 			nimble.growl('error', xhr.responseText);
@@ -238,9 +234,9 @@ fedreg.keyDescriptor_verify = function(entity) {
 		url: certificateValidationEndpoint,
 		data: dataString,
 		success: function(res) {
-			var data = $("#newcertificatedetails")
-			data.html(res);
-			applyBehaviourTo(data);
+			var target = $("#newcertificatedetails")
+			target.html(res);
+			applyBehaviourTo(target);
 			newCertificateValid = true;
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
@@ -277,7 +273,9 @@ fedreg.keyDescriptor_list = function() {
 		cache: false,
 		url: certificateListEndpoint,
 		success: function(res) {
-			$("#certificates").html(res);
+			var target = $("#certificates");
+			target.html(res);
+			applyBehaviourTo(target);
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
 			nimble.growl('error', xhr.responseText);
@@ -343,7 +341,9 @@ fedreg.monitor_list = function(containerID) {
 		cache: false,
 		url: monitorListEndpoint,
 		success: function(res) {
-			$("#monitors").html(res);
+			var target = $("#monitors");
+			target.html(res);
+			applyBehaviourTo(target);
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
 			nimble.growl('error', xhr.responseText);
@@ -369,16 +369,16 @@ fedreg.contact_dialogInit = function() {
 
 fedreg.contact_search = function(id) {
 	$("#working").trigger("fedreg.working");
-	$("#availablecontacts").fadeOut().html('');
 	var dataString = "givenName=" + $('#givenName').val() + '&surname=' + $('#surname').val() + '&email=' + $('#email').val()
 	$.ajax({
 		type: "GET",
 		url: contactSearchEndpoint,
 		data: dataString,
 		success: function(res) {
-			$("#availablecontacts").empty();
-			$("#availablecontacts").append(res);
-			$("#availablecontacts").fadeIn();
+			var target = $("#availablecontacts");
+			target.html(res);
+			applyBehaviourTo(target);
+			target.fadeIn();
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
 			nimble.growl('error', xhr.responseText);
@@ -389,8 +389,10 @@ fedreg.contact_search = function(id) {
 fedreg.contact_confirm = function(contactID, name, email) {
 	activeContact = contactID;
 	$("#contactnameconfirmation").html(name);
-	$("#contactemailconfirmation").html(email)
-	$("#contactconfirmationdialog").dialog('open');
+	$("#contactemailconfirmation").html(email);
+	
+	var target = $("#contactconfirmationdialog")
+	target.dialog('open');
 };
 
 fedreg.contact_create = function(contactType) {
@@ -434,7 +436,9 @@ fedreg.contact_list = function() {
 		cache: false,
 		url: contactListEndpoint,
 		success: function(res) {
-			$("#contacts").html(res);
+			var target = $("#contacts");
+			target.html(res);
+			applyBehaviourTo(target);
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
 			nimble.growl('error', xhr.responseText);
@@ -453,7 +457,11 @@ fedreg.endpoint_edit = function(id, endpointType, containerID) {
 		url: endpointEditEndpoint,
 		data: dataString,
 		success: function(res) {
-			$("#endpoint-"+id).html(res).fadeIn();
+			var target = $("#endpoint-"+id);
+			target.empty();
+			target.html(res);
+			applyBehaviourTo(target);
+			target.fadeIn();
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
 			nimble.growl('error', xhr.responseText);
@@ -503,7 +511,9 @@ fedreg.endpoint_list = function(endpointType, containerID) {
 		url: endpointListEndpoint,
 		data: dataString,
 		success: function(res) {
-			$("#"+containerID).html(res)
+			var target = $("#"+containerID);
+			target.html(res);
+			applyBehaviourTo(target);
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
 			nimble.growl('error', xhr.responseText);
@@ -631,7 +641,9 @@ fedreg.acs_reqattribute_list = function(acsID, containerID) {
 		url: acsListAttr,
 		data: dataString,
 		success: function(res) {
-			$("#"+containerID).html(res)
+			var target = $("#"+containerID);
+			target.html(res);
+			applyBehaviourTo(target);
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
 			nimble.growl('error', xhr.responseText);
@@ -684,7 +696,9 @@ fedreg.acs_specattribute_list = function(id, containerID) {
 		url: acsListSpecAttrVal,
 		data: dataString,
 		success: function(res) {
-			$("#"+containerID).html(res)
+			var target = $("#"+containerID);
+			target.html(res);
+			applyBehaviourTo(target);
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
 			nimble.growl('error', xhr.responseText);
@@ -700,7 +714,9 @@ fedreg.acs_specattributes_list = function(id, containerID) {
 		url: acsListSpecAttrsVal,
 		data: dataString,
 		success: function(res) {
-			$("#"+containerID).html(res)
+			var target = $("#"+containerID);
+			target.html(res);
+			applyBehaviourTo(target);
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
 			nimble.growl('error', xhr.responseText);
@@ -734,7 +750,9 @@ fedreg.nameIDFormat_list = function(containerID) {
 		url: nameIDFormatListEndpoint,
 		data: dataString,
 		success: function(res) {
-			$("#"+containerID).html(res)
+			var target = $("#"+containerID);
+			target.html(res);
+			applyBehaviourTo(target);
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
 			nimble.growl('error', xhr.responseText);
@@ -768,7 +786,9 @@ fedreg.serviceCategory_list = function(containerID) {
 		url: serviceCategoryListEndpoint,
 		data: dataString,
 		success: function(res) {
-			$("#"+containerID).html(res)
+			var target = $("#"+containerID);
+			target.html(res);
+			applyBehaviourTo(target);
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
 			nimble.growl('error', xhr.responseText);
@@ -837,7 +857,9 @@ fedreg.attribute_list = function(containerID) {
 		url: attributeListEndpoint,
 		data: dataString,
 		success: function(res) {
-			$("#"+containerID).html(res)
+			var target = $("#"+containerID);
+			target.html(res);
+			applyBehaviourTo(target);
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
 			nimble.growl('error', xhr.responseText);

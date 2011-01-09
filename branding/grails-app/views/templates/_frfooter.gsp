@@ -7,7 +7,7 @@ Developed for the <a href="http://www.aaf.edu.au">Australian Access Federation</
 <br>
 Powered by Grails <g:meta name="app.grails.version"/>
 
-<script type="text/javascript">
+<r:script>
   if (typeof(Zenbox) !== "undefined") {
     Zenbox.init({
       dropboxID:   "6875",
@@ -16,4 +16,4 @@ Powered by Grails <g:meta name="app.grails.version"/>
       hide_tab:	   true
     });
   }
-</script>
+</r:script>

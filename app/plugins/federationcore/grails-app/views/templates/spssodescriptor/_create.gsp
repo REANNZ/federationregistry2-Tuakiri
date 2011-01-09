@@ -1,4 +1,4 @@
-<script type="text/javascript">
+<r:script>
 	var certificateValidationEndpoint = "${createLink(controller:'coreUtilities', action:'validateCertificate')}";
 	var newCertificateValid = false;
 	
@@ -63,7 +63,7 @@
 		}
 	}
 	
-</script>
+</r:script>
 
 <g:hasErrors>
     <div class="warning">

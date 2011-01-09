@@ -5,7 +5,7 @@
 		<meta name="layout" content="members" />
 		<title><g:message code="fedreg.view.members.entity.show.title" /></title>
 		
-		<script type="text/javascript">
+		<r:script>
 			var activeContact
 			var contactCreateEndpoint = "${createLink(controller:'descriptorContact', action:'create', id:entity.id )}";
 			var contactDeleteEndpoint = "${createLink(controller:'descriptorContact', action:'delete' )}";
@@ -16,7 +16,7 @@
 			var descriptorFullAdministratorRevokeEndpoint = "${createLink(controller:'descriptorAdministration', action:'revokeFullAdministration', id:entity.id)}";
 			var descriptorFullAdministratorListEndpoint = "${createLink(controller:'descriptorAdministration', action:'listFullAdministration', id:entity.id)}";
 			var descriptorFullAdministratorSearchEndpoint = "${createLink(controller:'descriptorAdministration', action:'searchFullAdministration', id:entity.id)}";
-		</script>
+		</r:script>
 		
 	</head>
 	<body>
@@ -62,7 +62,7 @@
 				</tbody>
 			</table>
 		
-			<div id="tabs">
+			<div class="tabs">
 				<ul>
 					<li><a href="#tab-contacts" class="icon icon_user_comment"><g:message code="label.contacts" /></a></li>
 					<li><a href="#tab-idp" class="icon icon_cog"><g:message code="label.identityproviders" /></a></li>

@@ -6,12 +6,12 @@
 		<meta name="layout" content="members" />
 		<title><g:message code="fedreg.view.members.organization.show.title" /></title>
 		
-		<script type="text/javascript">
+		<r:script>
 			var organizationFullAdministratorGrantEndpoint = "${createLink(controller:'organizationAdministration', action:'grantFullAdministration', id:organization.id)}";
 			var organizationFullAdministratorRevokeEndpoint = "${createLink(controller:'organizationAdministration', action:'revokeFullAdministration', id:organization.id)}";
 			var organizationFullAdministratorListEndpoint = "${createLink(controller:'organizationAdministration', action:'listFullAdministration', id:organization.id)}";
 			var organizationFullAdministratorSearchEndpoint = "${createLink(controller:'organizationAdministration', action:'searchFullAdministration', id:organization.id)}";
-		</script>
+		</r:script>
 		
 	</head>
 	<body>
@@ -81,7 +81,7 @@
 				</tbody>
 			</table>
 		
-			<div id="tabs">
+			<div class="tabs">
 				<ul>
 					<li><a href="#tab-statistics"><g:message code="label.statistics" /></a></li>
 					<li><a href="#tab-contacts"><g:message code="label.contacts" /></a></li>

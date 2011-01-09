@@ -5,7 +5,7 @@
 
 		<title><g:message code="fedreg.view.members.serviceprovider.show.title" /></title>
 		
-		<script type="text/javascript">
+		<r:script>
 			var activeContact
 			var contactCreateEndpoint = "${createLink(controller:'descriptorContact', action:'create', id:serviceProvider.id )}";
 			var contactDeleteEndpoint = "${createLink(controller:'descriptorContact', action:'delete' )}";
@@ -54,12 +54,7 @@
 			var monitorDeleteEndpoint = "${createLink(controller:'roleDescriptorMonitor', action:'delete')}";
 			var monitorListEndpoint = "${createLink(controller:'roleDescriptorMonitor', action:'list', id:serviceProvider.id )}";
 			var monitorCreateEndpoint = "${createLink(controller:'roleDescriptorMonitor', action:'create', id:serviceProvider.id )}";
-			
-			$(function() {
-				$("#tabs").tabs();
-				$("#tabs2").tabs();
-			});
-		</script>
+		</r:script>
 	</head>
 	<body>
 		<section>
@@ -129,7 +124,7 @@
 			</tbody>
 		</table>
 			
-			<div id="tabs">
+			<div class="tabs">
 				<ul>
 					<li><a href="#tab-details"><g:message code="label.details" /></a></li>
 					<li><a href="#tab-categories"><g:message code="label.categories" /></a></li>
@@ -176,7 +171,7 @@
 				</div>
 				<div id="tab-endpoints" class="tabcontent">
 					<h3><g:message code="label.supportedendpoints" /></h3>
-					<div id="tabs2">
+					<div class="tabs">
 						<ul>
 							<li><a href="#tab-acs"><g:message code="label.assertionconsumerservice" /></a></li>
 							<li><a href="#tab-ars"><g:message code="label.artifactresolutionservices" /></a></li>

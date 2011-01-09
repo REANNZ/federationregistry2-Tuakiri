@@ -7,7 +7,7 @@
 
 		<title><g:message code="fedreg.view.members.identityprovider.show.title" /></title>
 		
-		<script type="text/javascript">
+		<r:script>
 			var activeContact
 			var contactCreateEndpoint = "${createLink(controller:'descriptorContact', action:'create', id:identityProvider.id )}";
 			var contactDeleteEndpoint = "${createLink(controller:'descriptorContact', action:'delete' )}";
@@ -47,13 +47,9 @@
 			var attributeFilterEndpoint = "${createLink(controller:'attributeFilter', action:'generate', id:identityProvider.id )}";
 			
 			$(function() {
-				$("#tabs").tabs();
-				$("#tabs2").tabs();
 				$("#attrfilpolood").hide();
-			});
-			
-			
-		</script>
+			});	
+		</r:script>
 	</head>
 	<body>
 		<section>
@@ -142,7 +138,7 @@
 			</tbody>
 		</table>
 			
-			<div id="tabs">
+			<div class="tabs">
 				<ul>
 					<li><a href="#tab-contacts" ><g:message code="label.contacts" /></a></li>
 					<li><a href="#tab-crypto" ><g:message code="label.crypto" /></a></li>
@@ -173,7 +169,7 @@
 				</div>
 				<div id="tab-endpoints" class="tabcontent">
 					<h3><g:message code="label.supportedendpoints" /></h3>
-					<div id="tabs2">
+					<div class="tabs">
 						<ul>
 							<li><a href="#tab-sso" ><g:message code="label.ssoservices" /></a></li>
 							<li><a href="#tab-ars" ><g:message code="label.artifactresolutionservices" /></a></li>
