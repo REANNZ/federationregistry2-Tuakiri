@@ -6,9 +6,12 @@ class EndpointService {
 	
 	def grailsApplication
 
-	def create(def descriptor, def endpointClass, def endpointType, def binding, def loc) {		
+	def create(def descriptor, def endpointClass, def endpointType, def binding, def loc, def index, def active) {
+				println "active $active"
 		def location = new UrlURI(uri:loc)
-		def endpoint = grailsApplication.classLoader.loadClass(endpointClass).newInstance(descriptor:descriptor, binding: binding, location: location, active:true, approved:true)
+		def endpoint = grailsApplication.classLoader.loadClass(endpointClass).newInstance(descriptor:descriptor, binding: binding, location: location, active:active ? true:false, approved:true)
+		if(index)
+			endpoint.index = index
 		descriptor."addTo${capitalize(endpointType)}"(endpoint)
 		
 		descriptor.save()
@@ -25,9 +28,12 @@ class EndpointService {
 		log.info "$authenticatedUser created $endpoint for $descriptor of type $endpointType at $loc"
 	}
 	
-	def update(def endpoint, def binding, def location) {
+	def update(def endpoint, def binding, def location, def index) {
 		endpoint.binding = binding
 		endpoint.location.uri = location
+		
+		if(index)
+			endpoint.index = index
 		
 		endpoint.save()
 		if(endpoint.hasErrors()) {

@@ -155,7 +155,7 @@
 				<div id="tab-contacts" class="tabcontent">
 					<h3><g:message code="label.contacts" /></h3>
 					<div id="contacts">
-						<g:render template="/templates/contacts/list" plugin="federationcore" model="[descriptor:identityProvider, allowremove:true]" />
+						<g:render template="/templates/contacts/list" plugin="federationcore" model="[descriptor:identityProvider]" />
 					</div>
 					
 					<g:render template="/templates/contacts/create" plugin="federationcore" model="[descriptor:identityProvider, contactTypes:contactTypes]"/>
@@ -163,7 +163,7 @@
 				<div id="tab-crypto" class="tabcontent">
 					<h3><g:message code="label.publishedcertificates" plugin="federationcore" /></h3>
 					<div id="certificates">
-						<g:render template="/templates/certificates/list" plugin="federationcore" model="[descriptor:identityProvider, allowremove:true]" />
+						<g:render template="/templates/certificates/list" plugin="federationcore" model="[descriptor:identityProvider]" />
 					</div>
 					<g:render template="/templates/certificates/create" plugin="federationcore" model="[descriptor:identityProvider]"/>
 				</div>
@@ -181,7 +181,7 @@
 						
 						<div id="tab-sso" class="componentlist">
 							<div id="ssoendpoints">
-								<g:render template="/templates/endpoints/list" plugin="federationcore" model="[endpoints:identityProvider.singleSignOnServices, allowremove:true, endpointType:'singleSignOnServices', containerID:'ssoendpoints', minEndpoints:1]" />
+								<g:render template="/templates/endpoints/list" plugin="federationcore" model="[endpoints:identityProvider.singleSignOnServices, endpointType:'singleSignOnServices', containerID:'ssoendpoints', minEndpoints:1]" />
 							</div>
 							
 							<g:render template="/templates/endpoints/create" plugin="federationcore" model="[descriptor:identityProvider, endpointType:'singleSignOnServices', containerID:'ssoendpoints']" />
@@ -189,14 +189,14 @@
 						</div>
 						<div id="tab-ars" class="componentlist">
 							<div id="artifactendpoints">
-								<g:render template="/templates/endpoints/list" plugin="federationcore" model="[endpoints:identityProvider.artifactResolutionServices, allowremove:true, endpointType:'artifactResolutionServices', containerID:'artifactendpoints']" />
+								<g:render template="/templates/endpoints/list" plugin="federationcore" model="[endpoints:identityProvider.artifactResolutionServices, endpointType:'artifactResolutionServices', containerID:'artifactendpoints']" />
 							</div>
 							
-							<g:render template="/templates/endpoints/create" plugin="federationcore" model="[descriptor:identityProvider, endpointType:'artifactResolutionServices', containerID:'artifactendpoints']" />
+							<g:render template="/templates/endpoints/create" plugin="federationcore" model="[descriptor:identityProvider, endpointType:'artifactResolutionServices', containerID:'artifactendpoints', indexed:true]" />
 						</div>
 						<div id="tab-slo" class="componentlist">
 							<div id="singlelogoutendpoints">
-								<g:render template="/templates/endpoints/list" plugin="federationcore" model="[endpoints:identityProvider.singleLogoutServices, allowremove:true, endpointType:'singleLogoutServices', containerID:'singlelogoutendpoints']" />
+								<g:render template="/templates/endpoints/list" plugin="federationcore" model="[endpoints:identityProvider.singleLogoutServices, endpointType:'singleLogoutServices', containerID:'singlelogoutendpoints']" />
 							</div>
 							
 							<g:render template="/templates/endpoints/create" plugin="federationcore" model="[descriptor:identityProvider, endpointType:'singleLogoutServices', containerID:'singlelogoutendpoints']" />
@@ -204,7 +204,7 @@
 						<g:if test="${identityProvider.collaborator}">
 							<div id="tab-attrs" class="componentlist">
 								<div id="attributeserviceendpoints">
-									<g:render template="/templates/endpoints/list" plugin="federationcore" model="[endpoints:identityProvider.collaborator.attributeServices, allowremove:true, endpointType:'attributeServices', containerID:'attributeserviceendpoints']" />
+									<g:render template="/templates/endpoints/list" plugin="federationcore" model="[endpoints:identityProvider.collaborator.attributeServices, endpointType:'attributeServices', containerID:'attributeserviceendpoints']" />
 								</div>
 								
 								<g:render template="/templates/endpoints/create" plugin="federationcore" model="[descriptor:identityProvider, endpointType:'attributeServices', containerID:'attributeserviceendpoints']" />

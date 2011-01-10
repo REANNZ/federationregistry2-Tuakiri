@@ -72,7 +72,7 @@ class DescriptorEndpointController {
 		}
 		
 		if(SecurityUtils.subject.isPermitted("descriptor:${endpoint.descriptor.id}:endpoint:update")) {
-			endpointService.update(endpoint, binding, params.location)
+			endpointService.update(endpoint, binding, params.location, params.int('samlindex'))
 		
 			log.info "$authenticatedUser updated $endpoint for ${endpoint.descriptor}"
 			render message(code: 'fedreg.endpoint.update.success')
@@ -225,7 +225,8 @@ class DescriptorEndpointController {
 			}
 		
 			if(allowedEndpoints.containsKey(endpointType) && descriptor.hasProperty(endpointType)) {
-				endpointService.create(descriptor, allowedEndpoints.get(endpointType), endpointType, binding, params.location)
+				println params
+				endpointService.create(descriptor, allowedEndpoints.get(endpointType), endpointType, binding, params.location, params.int('samlindex'), params.active ? true:false)
 				endpointService.determineDescriptorProtocolSupport(descriptor)
 				
 				log.info "$authenticatedUser created new endpoint location ${params.location}, $binding for $descriptor"

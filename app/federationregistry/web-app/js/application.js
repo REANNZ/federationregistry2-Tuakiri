@@ -530,9 +530,7 @@ fedreg.endpoint_create = function(endpointType, containerID) {
 		data: dataString,
 		success: function(res) {
 			nimble.growl('success', res);
-			$(':input', "#new" + endpointType + "data")
-			 	.not(':button, :submit, :reset, :hidden, select[name=binding]')
-			 	.val('')
+			$("#new" + endpointType + "data").each(function(){ this.reset(); });
 			fedreg.endpoint_list(endpointType, containerID);
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {

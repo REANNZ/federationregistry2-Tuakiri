@@ -160,12 +160,12 @@ class MetadataGenerationService {
 		}
 	}
 	
-	def indexedEndpoint(builder, all, minimal, type, endpoint, index) { 
+	def indexedEndpoint(builder, all, minimal, type, endpoint) { 
 		if(all || endpoint.functioning() ) {
 			if(!endpoint.responseLocation)
-				builder."$type"(Binding: endpoint.binding.uri, Location:endpoint.location.uri, index:index, isDefault:endpoint.isDefault)
+				builder."$type"(Binding: endpoint.binding.uri, Location:endpoint.location.uri, index:endpoint.index, isDefault:endpoint.isDefault)
 			else
-				builder."$type"(Binding: endpoint.binding.uri, Location:endpoint.location.uri, ResponseLocation: endpoint.responseLocation.uri, index:index, isDefault:endpoint.isDefault)
+				builder."$type"(Binding: endpoint.binding.uri, Location:endpoint.location.uri, ResponseLocation: endpoint.responseLocation.uri, index:endpoint.index, isDefault:endpoint.isDefault)
 		}
 	}
 	
@@ -244,7 +244,7 @@ class MetadataGenerationService {
 	}
 	
 	def ssoDescriptor(builder, all, minimal, ssoDescriptor) {
-		ssoDescriptor.artifactResolutionServices?.sort{it.id}.eachWithIndex{ars, i -> indexedEndpoint(builder, all, minimal, "ArtifactResolutionService", ars, i+1)}
+		ssoDescriptor.artifactResolutionServices?.sort{it.id}.eachWithIndex{ars, i -> indexedEndpoint(builder, all, minimal, "ArtifactResolutionService", ars)}
 		ssoDescriptor.singleLogoutServices?.sort{it.id}.each{sls -> endpoint(builder, all, minimal, "SingleLogoutService", sls)}
 		ssoDescriptor.manageNameIDServices?.sort{it.id}.each{mnids -> endpoint(builder, all, minimal, "ManageNameIDService", mnids)}
 		ssoDescriptor.nameIDFormats?.sort{it.uri}.each{nidf -> samlURI(builder, "NameIDFormat", nidf)}
@@ -272,7 +272,7 @@ class MetadataGenerationService {
 				roleDescriptor(builder, minimal, roleExtensions, spSSODescriptor)
 				ssoDescriptor(builder, all, minimal, spSSODescriptor)
 			
-				spSSODescriptor.assertionConsumerServices?.sort{it.id}.eachWithIndex{ ars, i -> indexedEndpoint(builder, all, minimal, "AssertionConsumerService", ars, i+1) }
+				spSSODescriptor.assertionConsumerServices?.sort{it.id}.eachWithIndex{ ars, i -> indexedEndpoint(builder, all, minimal, "AssertionConsumerService", ars) }
 				spSSODescriptor.attributeConsumingServices?.sort{it.id}.eachWithIndex{ acs, i -> 
 					if(acs.serviceNames?.size() > 0 && acs.requestedAttributes?.size() > 0 )
 						attributeConsumingService(builder, all, minimal, acs, i+1)
@@ -323,8 +323,8 @@ class MetadataGenerationService {
 	def SPSSODescriptorExtensions(builder, spSSODescriptor) {
 		if(spSSODescriptor.discoveryResponseServices) {
 			builder.Extensions() {
-				spSSODescriptor.discoveryResponseServices.eachWithIndex { endpoint, i ->
-					builder."dsr:DiscoveryResponse"("xmlns:dsr":"urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol", Binding: endpoint.binding.uri, Location:endpoint.location.uri, index:i+1, isDefault:endpoint.isDefault)
+				spSSODescriptor.discoveryResponseServices.each { endpoint ->
+					builder."dsr:DiscoveryResponse"("xmlns:dsr":"urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol", Binding: endpoint.binding.uri, Location:endpoint.location.uri, index:endpoint.index, isDefault:endpoint.isDefault)
 				}
 			}
 		}

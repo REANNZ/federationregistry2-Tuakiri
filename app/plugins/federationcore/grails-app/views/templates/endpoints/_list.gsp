@@ -34,8 +34,17 @@
 						</td>
 					</tr>
 					<tr>
+						<th><g:message code="label.lastupdated" /></th>
+						<td>${ep.lastUpdated.encodeAsHTML()}</td>
+					</tr>
+					<tr>
+						<th><g:message code="label.binding" /></th>
+						<td>${ep.binding.uri.encodeAsHTML()}</td>
+						<td/>
+					</tr>
+					<tr>
 						<th><g:message code="label.location" /></th>
-						<td>${ep.location.uri.encodeAsHTML()}</td>
+						<td><strong>${ep.location.uri.encodeAsHTML()}</strong></td>
 					</tr>
 					<g:if test="${resloc}">
 						<tr>
@@ -44,6 +53,12 @@
 						</tr>
 					</g:if>
 					<g:if test="${ep.instanceOf(fedreg.core.IndexedEndpoint)}">
+						<tr>
+							<th><g:message code="label.index" /></th>
+							<td>
+								${ep.index.encodeAsHTML()}
+							</td>
+						</tr>
 						<tr>
 							<th><g:message code="label.isdefault" /></th>
 							<td>
@@ -56,11 +71,6 @@
 							</td>
 						</tr>
 					</g:if>
-					<tr>
-						<th><g:message code="label.binding" /></th>
-						<td>${ep.binding.uri.encodeAsHTML()}</td>
-						<td/>
-					</tr>
 					<tr>
 						<td colspan="2">
 							<n:hasPermission target="descriptor:${ep.descriptor.id}:endpoint:edit">

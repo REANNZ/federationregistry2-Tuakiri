@@ -1,8 +1,37 @@
 <r:script>
 	var certificateValidationEndpoint = "${createLink(controller:'coreUtilities', action:'validateCertificate')}";
+	var knownIDPImplEndpoint = "${createLink(controller:'coreUtilities', action:'knownIDPImpl')}";
 	var newCertificateValid = false;
 	
+	var knownIDPImpl
+	var currentImpl
+	
 	$(function() {
+		$.ajax({
+			type: "GET",
+			cache: false,
+			dataType: 'json',
+			url: knownIDPImplEndpoint,
+			success: function(res) {
+				knownIDPImpl = res;
+				$.each(knownIDPImpl, function(key, value) {
+					if(knownIDPImpl[key].default == 'true') {
+						currentImpl = key
+						$('<input type="radio" class="currentimpl" name="knownimpls" checked value='+key+'> <strong>' + knownIDPImpl[key].displayName + '</strong><br>').appendTo($("#knownimpl"));
+					}
+					else
+						$('<input type="radio" class="currentimpl" name="knownimpls" value='+key+'> <strong>' + knownIDPImpl[key].displayName + '</strong>').appendTo($("#knownimpl"));
+				});
+				
+				$('input.currentimpl').change(function() {
+					currentImpl = $(this).val();
+					configureSAML($('#hostname'));
+				});
+		    },
+		    error: function (xhr, ajaxOptions, thrownError) {
+				nimble.growl('error', xhr.responseText);
+		    }
+		});
 		
 		$('#hostname').alphanumeric({nocaps:true, ichars:';'});
 		$('#idp\\.scope').alphanumeric({nocaps:true, allow:'.'});
@@ -37,15 +66,21 @@
 		$('#samladvancedmode').hide();
 		
 		$('#hostname').bind('blur',  function() {
-			if($(this).val().length > 0) {
-				$('#entity\\.identifier').val($(this).val() + '/idp/shibboleth');
-				$('#idp\\.post\\.uri').val($(this).val() + '/idp/profile/SAML2/POST/SSO');
-				$('#idp\\.redirect\\.uri').val($(this).val() + '/idp/profile/SAML2/Redirect/SSO');
-				$('#idp\\.artifact\\.uri').val($(this).val() + '/idp/profile/SAML2/SOAP/ArtifactResolution');
-				$('#aa\\.attributeservice\\.uri').val($(this).val() + '/idp/profile/SAML2/SOAP/AttributeQuery');
-			}
+			configureSAML($(this));
 		});
 	});
+	
+	function configureSAML(h) {
+		var host = h.val();
+		if(host.length > 0) {
+			$('#entity\\.identifier').val( knownIDPImpl[currentImpl].entitydescriptor.replace('$host', host));
+			$('#idp\\.post\\.uri').val( knownIDPImpl[currentImpl].post.uri.replace('$host', host) );
+			$('#idp\\.redirect\\.uri').val( knownIDPImpl[currentImpl].redirect.uri.replace('$host', host) );
+			$('#idp\\.artifact\\.uri').val( knownIDPImpl[currentImpl].artifact.uri.replace('$host', host) );
+			$('#idp\\.artifact\\.index').val( knownIDPImpl[currentImpl].artifact.index );
+			$('#aa\\.attributeservice\\.uri').val( knownIDPImpl[currentImpl].attributeservice.uri.replace('$host', host) );
+		}
+	}
 	
 	function attrchange(id) {
 		if($('#idp\\.attributes\\.' + id + ':checked').val() != null)
@@ -166,12 +201,18 @@
 		</p>
 
 		<span id="samlbasicmode">
-			<h4><g:message code="fedreg.templates.identityprovider.create.saml.shibboleth.heading" /></h4>
-			<p><g:message code="fedreg.templates.identityprovider.create.saml.shibboleth.descriptive" /></p>
+			<h4><g:message code="fedreg.templates.identityprovider.create.saml.known.heading" /></h4>
+			<p><g:message code="fedreg.templates.identityprovider.create.saml.known.descriptive" /></p>
+			<p><span style="float:right;"><a href="#" class="view-button" onClick="$('#samlbasicmode').hide(); $('#samladvancedmode').fadeIn(); return false;"><g:message code="fedreg.templates.identityprovider.create.saml.known.switch.advanced" /></a></span></p>
 			<table>
 				<tr>
-					<td/>
-					<td><a href="#" onClick="$('#samlbasicmode').hide(); $('#samladvancedmode').fadeIn(); return false;"><g:message code="fedreg.templates.identityprovider.create.saml.shibboleth.switch.advanced" /></a></td>
+					<td>
+						<label for="knownimpl"><g:message code="label.implementation" /></label>
+					</td>
+					<td>
+						<span id="knownimpl"></span>
+						<fr:tooltip code='fedreg.help.identityprovider.known' />
+					</td>
 				</tr>
 				<tr>
 					<td>
@@ -192,75 +233,83 @@
 		<span id="samladvancedmode">
 			<h4><g:message code="fedreg.templates.identityprovider.create.saml.advanced.heading" /></h4>
 			<p><g:message code="fedreg.templates.identityprovider.create.saml.advanced.descriptive" /></p>
+			<p><span style="float: right;"><a href="#" class="view-button" onClick="$('#samladvancedmode').hide(); $('#samlbasicmode').fadeIn(); return false;"><g:message code="fedreg.templates.identityprovider.create.saml.advanced.switch.shibboleth" /></a></span></p>
 			<table>
-				<tr>
-					<td/>
-					<td><a href="#" onClick="$('#samladvancedmode').hide(); $('#samlbasicmode').fadeIn(); return false;"><g:message code="fedreg.templates.identityprovider.create.saml.advanced.switch.shibboleth" /></a></td>
-				</tr>
-				<tr>
-					<td>
-						<label for="entity.identifier"><g:message code="label.entitydescriptor" /></label>
-					</td>
-					<td>
-						<g:hasErrors bean="${entityDescriptor}">
-							<div class="error"><g:renderErrors bean="${entityDescriptor}"as="list"/></div>
-						</g:hasErrors>
-						<g:textField name="entity.identifier" size="75" class="required url" value="${entityDescriptor?.entityID}"/>
-						<fr:tooltip code='fedreg.help.identityprovider.entitydescriptor' />
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<label for="idp.post.uri"><g:message code="label.httppostendpoint" /></label>
-						<pre><g:message code="label.binding" />: SAML:2.0:bindings:HTTP-POST</pre>
-					</td>
-					<td>
-						<g:hasErrors bean="${httpPost}">
-							<div class="error"><g:renderErrors bean="${httpPost}"as="list"/></div>
-						</g:hasErrors>
-						<g:textField name="idp.post.uri" size="75" class="required url" value="${httpPost?.location?.uri}"/>
-						<fr:tooltip code='fedreg.help.identityprovider.authpost' />
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<label for="idp.redirect.uri"><g:message code="label.httpredirectendpoint" /></label>
-						<pre><g:message code="label.binding" />: SAML:2.0:bindings:HTTP-Redirect</pre>
-					</td>
-					<td>
-						<g:hasErrors bean="${httpRedirect}">
-							<div class="error"><g:renderErrors bean="${httpRedirect}"as="list"/></div>
-						</g:hasErrors>
-						<g:textField name="idp.redirect.uri" size="75" class="required url" value="${httpRedirect?.location?.uri}"/>
-						<fr:tooltip code='fedreg.help.identityprovider.authredirect' />
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<label for="idp.artifact.uri"><g:message code="label.soapartifactendpoint" /></label>
-						<pre><g:message code="label.binding" />: SAML:2.0:bindings:HTTP-Artifact</pre>
-					</td>
-					<td>
-						<g:hasErrors bean="${soapArtifact}">
-							<div class="error"><g:renderErrors bean="${soapArtifact}"as="list"/></div>
-						</g:hasErrors>
-						<g:textField name="idp.artifact.uri" size="75" class="required url" value="${soapArtifact?.location?.uri}"/>
-						<fr:tooltip code='fedreg.help.identityprovider.authartifact' />
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<label for="aa.attributeservice.uri"><g:message code="label.soapatrributequeryendpoint" /></label>
-						<pre><g:message code="label.binding" />: SAML:2.0:bindings:SOAP</pre>
-					</td>
-					<td>
-						<g:hasErrors bean="${attributeAuthority}">
-							<div class="error"><g:renderErrors bean="${attributeAuthority}"as="list"/></div>
-						</g:hasErrors>
-						<g:textField name="aa.attributeservice.uri" size="75" class="required url" value="${attributeAuthority?.attributeServices?.get(0)?.location?.uri}"}/>
-						<fr:tooltip code='fedreg.help.identityprovider.aasoap' />
-					</td>
-				</tr>
+				<thead>
+					<th/>
+					<th><g:message code="label.url"/></th>
+					<th><g:message code="label.index"/></th>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<label for="entity.identifier"><g:message code="label.entitydescriptor" /></label>
+						</td>
+						<td>
+							<g:hasErrors bean="${entityDescriptor}">
+								<div class="error"><g:renderErrors bean="${entityDescriptor}"as="list"/></div>
+							</g:hasErrors>
+							<g:textField name="entity.identifier" size="64" class="required url" value="${entityDescriptor?.entityID}"/>
+							<fr:tooltip code='fedreg.help.identityprovider.entitydescriptor' />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label for="idp.post.uri"><g:message code="label.httppostendpoint" /></label>
+							<pre><g:message code="label.binding" />: SAML:2.0:bindings:HTTP-POST</pre>
+						</td>
+						<td>
+							<g:hasErrors bean="${httpPost}">
+								<div class="error"><g:renderErrors bean="${httpPost}"as="list"/></div>
+							</g:hasErrors>
+							<g:textField name="idp.post.uri" size="64" class="required url" value="${httpPost?.location?.uri}"/>
+							<fr:tooltip code='fedreg.help.identityprovider.authpost' />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label for="idp.redirect.uri"><g:message code="label.httpredirectendpoint" /></label>
+							<pre><g:message code="label.binding" />: SAML:2.0:bindings:HTTP-Redirect</pre>
+						</td>
+						<td>
+							<g:hasErrors bean="${httpRedirect}">
+								<div class="error"><g:renderErrors bean="${httpRedirect}"as="list"/></div>
+							</g:hasErrors>
+							<g:textField name="idp.redirect.uri" size="64" class="required url" value="${httpRedirect?.location?.uri}"/>
+							<fr:tooltip code='fedreg.help.identityprovider.authredirect' />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label for="idp.artifact.uri"><g:message code="label.soapartifactendpoint" /></label>
+							<pre><g:message code="label.binding" />: SAML:2.0:bindings:HTTP-Artifact</pre>
+						</td>
+						<td>
+							<g:hasErrors bean="${soapArtifact}">
+								<div class="error"><g:renderErrors bean="${soapArtifact}"as="list"/></div>
+							</g:hasErrors>
+							<g:textField name="idp.artifact.uri" size="64" class="required url" value="${soapArtifact?.location?.uri}"/>
+							<fr:tooltip code='fedreg.help.identityprovider.authartifact' />
+						</td>
+						<td>
+							<g:textField name="idp.artifact.index" size="2" class="required number" value="${soapArtifact?.location?.index}"/>
+							<fr:tooltip code='fedreg.help.endpoint.index' />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label for="aa.attributeservice.uri"><g:message code="label.soapatrributequeryendpoint" /></label>
+							<pre><g:message code="label.binding" />: SAML:2.0:bindings:SOAP</pre>
+						</td>
+						<td>
+							<g:hasErrors bean="${attributeAuthority}">
+								<div class="error"><g:renderErrors bean="${attributeAuthority}"as="list"/></div>
+							</g:hasErrors>
+							<g:textField name="aa.attributeservice.uri" size="64" class="required url" value="${attributeAuthority?.attributeServices?.get(0)?.location?.uri}"}/>
+							<fr:tooltip code='fedreg.help.identityprovider.aasoap' />
+						</td>
+					</tr>
+				</tbody>
 			</table>
 		</span>
 	</div>

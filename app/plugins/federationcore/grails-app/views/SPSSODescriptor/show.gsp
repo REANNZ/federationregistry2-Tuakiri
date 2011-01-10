@@ -184,14 +184,14 @@
 								<g:render template="/templates/endpoints/list" plugin="federationcore" model="[endpoints:serviceProvider.assertionConsumerServices, allowremove:true, endpointType:'assertionConsumerServices', containerID:'assertionconsumerendpoints']" />
 							</div>
 							
-							<g:render template="/templates/endpoints/create" plugin="federationcore" model="[descriptor:serviceProvider, endpointType:'assertionConsumerServices', containerID:'assertionconsumerendpoints']" />
+							<g:render template="/templates/endpoints/create" plugin="federationcore" model="[descriptor:serviceProvider, endpointType:'assertionConsumerServices', containerID:'assertionconsumerendpoints', indexed:true]" />
 						</div>
 						<div id="tab-ars" class="componentlist">
 							<div id="artifactendpoints">
 								<g:render template="/templates/endpoints/list" plugin="federationcore" model="[endpoints:serviceProvider.artifactResolutionServices, allowremove:true, endpointType:'artifactResolutionServices', containerID:'artifactendpoints']" />
 							</div>
 							
-							<g:render template="/templates/endpoints/create" plugin="federationcore" model="[descriptor:serviceProvider, endpointType:'artifactResolutionServices', containerID:'artifactendpoints']" />
+							<g:render template="/templates/endpoints/create" plugin="federationcore" model="[descriptor:serviceProvider, endpointType:'artifactResolutionServices', containerID:'artifactendpoints', indexed:true]" />
 						</div>
 						<div id="tab-slo" class="componentlist">
 							<div id="singlelogoutendpoints">
@@ -205,7 +205,7 @@
 								<g:render template="/templates/endpoints/list" plugin="federationcore" model="[endpoints:serviceProvider.discoveryResponseServices, allowremove:true, endpointType:'discoveryResponseServices', containerID:'discoveryresponseservices']" />
 							</div>
 							
-							<g:render template="/templates/endpoints/create" plugin="federationcore" model="[descriptor:serviceProvider, endpointType:'discoveryResponseServices', containerID:'discoveryresponseservices']" />
+							<g:render template="/templates/endpoints/create" plugin="federationcore" model="[descriptor:serviceProvider, endpointType:'discoveryResponseServices', containerID:'discoveryresponseservices', indexed:true]" />
 						</div>
 						<div id="tab-nim" class="componentlist">
 							<div id="managenameidservices">
