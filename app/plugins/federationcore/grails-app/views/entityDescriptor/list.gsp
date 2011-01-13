@@ -4,15 +4,12 @@
 		
 		<meta name="layout" content="members" />
 		<title><g:message code="fedreg.view.members.entity.list.title" /></title>
-		<script type="text/javascript">
-			<njs:datatable tableID="entitydescriptorlist" sortColumn="0" />
-		</script>
 	</head>
 	<body>
 		<section>
 			<h2><g:message code="fedreg.view.members.entity.list.heading" /></h2>
 
-			<table id="entitydescriptorlist">
+			<table id="entitydescriptorlist" class="sortable-table">
 				<thead>
 					<tr>
 					

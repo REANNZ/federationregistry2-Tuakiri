@@ -58,7 +58,7 @@ class SPSSODescriptorService {
 			def attrID = a.key
 			def val = a.value
 		
-			if(!( val instanceof String )) {					// org.codehaus.groovy.grails.web.servlet.mvc.GrailsParameterMap oddities where vals are both in maps and individually presented as Strings
+			if(!( val instanceof String )) {	// org.codehaus.groovy.grails.web.servlet.mvc.GrailsParameterMap oddities where vals are both in maps and individually presented as Strings
 				if(val.requested && val.requested == "on") {
 					def attr = AttributeBase.get(attrID)
 					if(attr) {
@@ -95,15 +95,15 @@ class SPSSODescriptorService {
 		// Assertion Consumer Services
 		def postBinding = SamlURI.findByUri(SamlConstants.httpPost)
 		def postLocation = new UrlURI(uri: params.sp?.acs?.post?.uri)
-		def httpPostACS = new AssertionConsumerService(approved: true, binding: postBinding, location:postLocation, active:params.active, isDefault:(params.sp?.acs?.post?.isdefault == 'true') ? true:false)
+		def httpPostACS = new AssertionConsumerService(approved: true, binding: postBinding, location:postLocation, index:params.sp?.acs?.post?.index, active:params.active, isDefault:(params.sp?.acs?.post?.isdefault == 'true') ? true:false)
 		serviceProvider.addToAssertionConsumerServices(httpPostACS)
 		httpPostACS.validate()
 
 		def artifactBinding = SamlURI.findByUri(SamlConstants.httpArtifact)
 		def artifactLocation = new UrlURI(uri: params.sp?.acs?.artifact?.uri)
-		def soapArtifactACS = new AssertionConsumerService(approved: true, binding: artifactBinding, location:artifactLocation, active:params.active, isDefault:(params.sp?.acs?.artifact?.isdefault == 'true') ? true:false)
-		serviceProvider.addToAssertionConsumerServices(soapArtifactACS)
-		soapArtifactACS.validate()
+		def httpArtifactACS = new AssertionConsumerService(approved: true, binding: artifactBinding, location:artifactLocation, index:params.sp?.acs?.artifact?.index, active:params.active, isDefault:(params.sp?.acs?.artifact?.isdefault == 'true') ? true:false)
+		serviceProvider.addToAssertionConsumerServices(httpArtifactACS)
+		httpArtifactACS.validate()
 	
 		// Single Logout Services
 		def sloArtifact, sloRedirect, sloSOAP, sloPost
@@ -207,7 +207,7 @@ class SPSSODescriptorService {
 		ret.serviceProvider = serviceProvider
 		ret.hostname = params.hostname
 		ret.httpPostACS = httpPostACS
-		ret.soapArtifactACS = soapArtifactACS
+		ret.httpArtifactACS = httpArtifactACS
 		ret.sloArtifact = sloArtifact
 		ret.sloRedirect = sloRedirect
 		ret.sloSOAP = sloSOAP

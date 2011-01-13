@@ -9,43 +9,11 @@ class CoreUtilitiesController {
 	def cryptoService
 	
 	def knownIDPImpl = {
-		
-		def implementations = [:]
-		
-		def shib22 = [:]
-		shib22.id = "shib22x"
-		shib22.displayName = "Shibboleth Identity Provider (2.2.x)"
-		shib22.'default' = 'true'
-		shib22.entitydescriptor = '$host/idp/shibboleth'
-		shib22.post = [:]
-		shib22.post.uri = '$host/idp/profile/SAML2/POST/SSO'
-		shib22.redirect = [:]
-		shib22.redirect.uri = '$host/idp/profile/SAML2/Redirect/SSO'
-		shib22.artifact = [:]
-		shib22.artifact.uri = '$host/idp/profile/SAML2/SOAP/ArtifactResolution'
-		shib22.artifact.index = 1
-		shib22.attributeservice = [:]
-		shib22.attributeservice.uri = '$host/idp/profile/SAML2/SOAP/AttributeQuery'
-		
-		implementations.shib22 = shib22
-		
-		def shib23 = [:]
-		shib23.id = "shib23x"
-		shib23.displayName = "Shibboleth Identity Provider (2.3.x)"
-		shib23.entitydescriptor = '$host/idp/shibboleth'
-		shib23.post = [:]
-		shib23.post.uri = '$host/idp/profile/SAML2/POST/SSO'
-		shib23.redirect = [:]
-		shib23.redirect.uri = '$host/idp/profile/SAML2/Redirect/SSO'
-		shib23.artifact = [:]
-		shib23.artifact.uri = '$host/idp/profile/SAML2/SOAP/ArtifactResolution'
-		shib23.artifact.index = 2
-		shib23.attributeservice = [:]
-		shib23.attributeservice.uri = '$host/idp/profile/SAML2/SOAP/AttributeQuery'
-		
-		implementations.shib23 = shib23
-		
-		render implementations as JSON
+		render grailsApplication.config.fedreg.knownimplementations.identityproviders as JSON
+	}
+	
+	def knownSPImpl = {		
+		render grailsApplication.config.fedreg.knownimplementations.serviceproviders as JSON
 	}
 	
 	def validateCertificate = {

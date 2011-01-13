@@ -92,7 +92,7 @@ class IDPSSODescriptorService {
 
 		def artifactBinding = SamlURI.findByUri(SamlConstants.soap)
 		def artifactLocation = new UrlURI(uri: params.idp?.artifact?.uri)
-		def soapArtifact = new ArtifactResolutionService(approved: true, binding: artifactBinding, location:artifactLocation, active:params.active, isDefault:true)
+		def soapArtifact = new ArtifactResolutionService(approved: true, binding: artifactBinding, location:artifactLocation, index:params.idp?.artifact?.index, active:params.active, isDefault:true)
 		identityProvider.addToArtifactResolutionServices(soapArtifact)
 		soapArtifact.validate()
 

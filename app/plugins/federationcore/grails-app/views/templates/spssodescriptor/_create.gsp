@@ -1,8 +1,39 @@
 <r:script>
 	var certificateValidationEndpoint = "${createLink(controller:'coreUtilities', action:'validateCertificate')}";
+	var knownSPImplEndpoint = "${createLink(controller:'coreUtilities', action:'knownSPImpl')}";
+	
 	var newCertificateValid = false;
+	var knownSPImpl;
+	var currentImpl;
 	
 	$(function() {
+		$.ajax({
+			type: "GET",
+			cache: false,
+			dataType: 'json',
+			url: knownSPImplEndpoint,
+			success: function(res) {
+				knownSPImpl = res;
+				
+				$.each(knownSPImpl, function(key, value) {
+					if(knownSPImpl[key].selected) {
+						currentImpl = key
+						$('<input type="radio" class="currentimpl" name="knownimpls" checked value='+key+'> <strong>' + knownSPImpl[key].displayName + '</strong><br>').appendTo($("#knownimpl"));
+					}
+					else
+						$('<input type="radio" class="currentimpl" name="knownimpls" value='+key+'> <strong>' + knownSPImpl[key].displayName + '</strong><br>').appendTo($("#knownimpl"));
+				});
+				
+				$('input.currentimpl').change(function() {
+					currentImpl = $(this).val();
+					fedreg.configureServiceProviderSAML($('#hostname').val());
+				});
+		    },
+		    error: function (xhr, ajaxOptions, thrownError) {
+				nimble.growl('error', xhr.responseText);
+		    }
+		});
+		
 		$('#hostname').alphanumeric({nocaps:true, ichars:';'});
 		
 		$('form').validate({
@@ -23,7 +54,7 @@
 			disableUIStyles: true
 		});
 		jQuery.validator.addMethod("validcert", function(value, element, params) { 
-			validateCertificate();
+			fedreg.validateCertificate();
 			return newCertificateValid == true; 
 		}, jQuery.format("PEM data invalid"));
 		
@@ -35,34 +66,9 @@
 		$('#samladvancedmode').hide();
 		
 		$('#hostname').bind('blur',  function() {
-			if($(this).val().length > 0) {
-				$(this).val($(this).val().toLowerCase());
-				
-				$('#entity\\.identifier').val($(this).val() + '/shibboleth');
-				$('#sp\\.acs\\.post\\.uri').val($(this).val() + '/Shibboleth.sso/SAML2/POST');
-				$('#sp\\.acs\\.artifact\\.uri').val($(this).val() + '/Shibboleth.sso/SAML2/Artifact');
-			
-				$('#sp\\.slo\\.artifact\\.uri').val($(this).val() + '/Shibboleth.sso/SLO/Artifact');
-				$('#sp\\.slo\\.redirect\\.uri').val($(this).val() + '/Shibboleth.sso/SLO/Redirect');
-				$('#sp\\.slo\\.soap\\.uri').val($(this).val() + '/Shibboleth.sso/SLO/SOAP');
-				$('#sp\\.slo\\.post\\.uri').val($(this).val() + '/Shibboleth.sso/SLO/POST');
-				$('#sp\\.drs\\.uri').val($(this).val() + '/Shibboleth.sso/DS');
-				$('#sp\\.mnid\\.artifact\\.uri').val($(this).val() + '/Shibboleth.sso/NIM/Artifact');
-				$('#sp\\.mnid\\.redirect\\.uri').val($(this).val() + '/Shibboleth.sso/NIM/Redirect');
-				$('#sp\\.mnid\\.soap\\.uri').val($(this).val() + '/Shibboleth.sso/NIM/SOAP');
-				$('#sp\\.mnid\\.post\\.uri').val($(this).val() + '/Shibboleth.sso/NIM/POST');
-			}
+			fedreg.configureServiceProviderSAML( $(this).val() );
 		});
 	});
-	
-	function validateCertificate() {
-		$('#newcertificatedata').removeClass('error');
-		fedreg.keyDescriptor_verify($('#entity\\.identifier').val());
-		if(!newCertificateValid) {
-			$('#newcertificatedata').addClass('error');
-		}
-	}
-	
 </r:script>
 
 <g:hasErrors>
@@ -181,12 +187,17 @@
 			<g:message code="fedreg.templates.serviceprovider.create.saml.details" />
 		</p>
 		<div id="samlbasicmode">
-			<h4><g:message code="fedreg.templates.serviceprovider.create.saml.shibboleth.heading" /></h4>
-			<p><g:message code="fedreg.templates.serviceprovider.create.saml.shibboleth.descriptive" /></p>
+			<h4><g:message code="fedreg.templates.serviceprovider.create.saml.known.heading" /></h4>
+			<p><g:message code="fedreg.templates.serviceprovider.create.saml.known.descriptive" /></p>
+			<p><span style="float:right;"><a href="#" class="view-button" onClick="$('#samlbasicmode').hide(); $('#samladvancedmode').fadeIn(); return false;"><g:message code="fedreg.templates.serviceprovider.create.saml.known.switch" /></a></span></p>
 			<table>
 				<tr>
-					<td/>
-					<td><a href="#" onClick="$('#samlbasicmode').hide(); $('#samladvancedmode').fadeIn();"><g:message code="fedreg.templates.identityprovider.create.saml.shibboleth.switch.advanced" /></a></td>
+					<td>
+						<label for="knownimpl"><g:message code="label.implementation" /></label>
+					</td>
+					<td>
+						<span id="knownimpl"></span>
+					</td>
 				</tr>
 				<tr>
 					<td>
@@ -206,169 +217,181 @@
 		<div id="samladvancedmode">
 			<h4><g:message code="fedreg.templates.serviceprovider.create.saml.advanced.heading" /></h4>
 			<p><g:message code="fedreg.templates.serviceprovider.create.saml.advanced.descriptive" /></p>
+			<p><span style="float: right;"><a href="#" class="view-button" onClick="$('#samladvancedmode').hide(); $('#samlbasicmode').fadeIn(); return false;"><g:message code="fedreg.templates.serviceprovider.create.saml.advanced.switch" /></a></span></p>
 			<table>
-				<tr>
-					<td/>
-					<td><a href="#" onClick="$('#samladvancedmode').hide(); $('#samlbasicmode').fadeIn();"><g:message code="fedreg.templates.serviceprovider.create.saml.advanced.switch.shibboleth" /></a></td>
-				</tr>
-				<tr>
-					<td>
-						<label for="entity.identifier"><g:message code="label.entitydescriptor" /></label>
-					</td>
-					<td>
-						<g:hasErrors bean="${entityDescriptor}">
-							<div class="error"><g:renderErrors bean="${entityDescriptor}"as="list"/></div>
-						</g:hasErrors>
-						<g:textField name="entity.identifier" size="75" class="required url"  value="${entityDescriptor?.entityID}"/>
-						<fr:tooltip code='fedreg.help.serviceprovider.entitydescriptor' />
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<label for="sp.acs.post.uri"><g:message code="label.acspostendpoint" /></label>
-						<pre><g:message code="label.binding" />: SAML:2.0:bindings:HTTP-POST</pre>
-					</td>
-					<td>
-						<g:hasErrors bean="${httpPostACS}">
-							<div class="error"><g:renderErrors bean="${httpPostACS}"as="list"/></div>
-						</g:hasErrors>
-						<g:hiddenField name="sp.acs.post.isdefault" value="true" />
-						<g:textField name="sp.acs.post.uri" size="75" class="required url"  value="${httpPostACS?.location?.uri}"/>
-						<fr:tooltip code='fedreg.help.serviceprovider.acspost' />
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<label for="sp.acs.artifact.uri"><g:message code="label.acsartifactendpoint" /></label>
-						<pre><g:message code="label.binding" />: SAML:2.0:bindings:HTTP-Artifact</pre>
-					</td>
-					<td>
-						<g:hasErrors bean="${soapArtifactACS}">
-							<div class="error"><g:renderErrors bean="${soapArtifactACS}"as="list"/></div>
-						</g:hasErrors>
-						<g:hiddenField name="sp.acs.artifact.isdefault" value="false" />
-						<g:textField name="sp.acs.artifact.uri" size="75" class="required url" value="${soapArtifactACS?.location?.uri}"/>
-						<fr:tooltip code='fedreg.help.serviceprovider.acsartifcate' />
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<label for="sp.slo.artifact.uri"><g:message code="label.sloartifactendpoint" /></label>
-						<pre><g:message code="label.binding" />: SAML:2.0:bindings:HTTP-Artifact</pre>
-					</td>
-					<td>
-						<g:hasErrors bean="${sloArtifact}">
-							<div class="error"><g:renderErrors bean="${sloArtifact}"as="list"/></div>
-						</g:hasErrors>
-						<g:textField name="sp.slo.artifact.uri" size="75" class="url" value="${sloArtifact?.location?.uri}"/>
-						<fr:tooltip code='fedreg.help.serviceprovider.sloartifact' />
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<label for="sp.slo.redirect.uri"><g:message code="label.sloredirectendpoint" /></label>
-						<pre><g:message code="label.binding" />: SAML:2.0:bindings:HTTP-Redirect</pre>
-					</td>
-					<td>
-						<g:hasErrors bean="${sloRedirect}">
-							<div class="error"><g:renderErrors bean="${sloRedirect}"as="list"/></div>
-						</g:hasErrors>
-						<g:textField name="sp.slo.redirect.uri" size="75" class="url" value="${sloRedirect?.location?.uri}"/>
-						<fr:tooltip code='fedreg.help.serviceprovider.sloredriect' />
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<label for="sp.slo.soap.uri"><g:message code="label.slosoapendpoint" /></label>
-						<pre><g:message code="label.binding" />: SAML:2.0:bindings:SOAP</pre>
-					</td>
-					<td>
-						<g:hasErrors bean="${sloSOAP}">
-							<div class="error"><g:renderErrors bean="${sloSOAP}"as="list"/></div>
-						</g:hasErrors>
-						<g:textField name="sp.slo.soap.uri" size="75" class="url" value="${sloSOAP?.location?.uri}"/>
-						<fr:tooltip code='fedreg.help.serviceprovider.slosoap' />
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<label for="sp.slo.post.uri"><g:message code="label.slopostendpoint" /></label>
-						<pre><g:message code="label.binding" />: SAML:2.0:bindings:HTTP-POST</pre>
-					</td>
-					<td>
-						<g:hasErrors bean="${sloPost}">
-							<div class="error"><g:renderErrors bean="${sloPost}"as="list"/></div>
-						</g:hasErrors>
-						<g:textField name="sp.slo.post.uri" size="75" class="url"  value="${sloPost?.location?.uri}"/>
-						<fr:tooltip code='fedreg.help.serviceprovider.slopost' />
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<label for="sp.drs.uri"><g:message code="label.drsendpoint" /></label>
-						<pre><g:message code="label.binding" />: SAML:profiles:SSO:idp-discovery-protocol</pre>
-					</td>
-					<td>
-						<g:hasErrors bean="${discoveryResponseService}">
-							<div class="error"><g:renderErrors bean="${discoveryResponseService}"as="list"/></div>
-						</g:hasErrors>
-						<g:textField name="sp.drs.uri" size="75" class="url" value="${discoveryResponseService?.location?.uri}"/>
-						<g:hiddenField name="sp.drs.isdefault" value="true" />
-						<fr:tooltip code='fedreg.help.serviceprovider.disco' />
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<label for="sp.mnid.artifact.uri"><g:message code="label.mnidartifactendpoint" /></label>
-						<pre><g:message code="label.binding" />: SAML:2.0:bindings:HTTP-Artifact</pre>
-					</td>
-					<td>
-						<g:hasErrors bean="${mnidArtifact}">
-							<div class="error"><g:renderErrors bean="${mnidArtifact}"as="list"/></div>
-						</g:hasErrors>
-						<g:textField name="sp.mnid.artifact.uri" size="75" class="url" value="${mnidArtifact?.location?.uri}"/>
-						<fr:tooltip code='fedreg.help.serviceprovider.mnidaritfact' />
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<label for="sp.mnid.redirect.uri"><g:message code="label.mnidredirectendpoint" /></label>
-						<pre><g:message code="label.binding" />: SAML:2.0:bindings:HTTP-Redirect</pre>
-					</td>
-					<td>
-						<g:hasErrors bean="${mnidRedirect}">
-							<div class="error"><g:renderErrors bean="${mnidRedirect}"as="list"/></div>
-						</g:hasErrors>
-						<g:textField name="sp.mnid.redirect.uri" size="75" class="url" value="${mnidRedirect?.location?.uri}"/>
-						<fr:tooltip code='fedreg.help.serviceprovider.mnidredirect' />
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<label for="sp.mnid.soap.uri"><g:message code="label.mnidsoapendpoint" /></label>
-						<pre><g:message code="label.binding" />: SAML:2.0:bindings:SOAP</pre>
-					</td>
-					<td>
-						<g:hasErrors bean="${mnidSOAP}">
-							<div class="error"><g:renderErrors bean="${mnidSOAP}"as="list"/></div>
-						</g:hasErrors>
-						<g:textField name="sp.mnid.soap.uri" size="75" class="url" value="${mnidSOAP?.location?.uri}"/>
-						<fr:tooltip code='fedreg.help.serviceprovider.mnidsoap' />
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<label for="sp.mnid.post.uri"><g:message code="label.mnidpostendpoint" /></label>
-						<pre><g:message code="label.binding" />: SAML:2.0:bindings:HTTP-POST</pre>
-					</td>
-					<td>
-						<g:hasErrors bean="${mnidPost}">
-							<div class="error"><g:renderErrors bean="${mnidPost}"as="list"/></div>
-						</g:hasErrors>
-						<g:textField name="sp.mnid.post.uri" size="75" class="url" value="${mnidPost?.location?.uri}"/>
-						<fr:tooltip code='fedreg.help.serviceprovider.mnidpost' />
-					</td>
-				</tr>
+				<thead>
+					<th/>
+					<th><g:message code="label.url"/></th>
+					<th><g:message code="label.index"/></th>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<label for="entity.identifier"><g:message code="label.entitydescriptor" /></label>
+						</td>
+						<td>
+							<g:hasErrors bean="${entityDescriptor}">
+								<div class="error"><g:renderErrors bean="${entityDescriptor}"as="list"/></div>
+							</g:hasErrors>
+							<g:textField name="entity.identifier" size="75" class="required url"  value="${entityDescriptor?.entityID}"/>
+							<fr:tooltip code='fedreg.help.serviceprovider.entitydescriptor' />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label for="sp.acs.post.uri"><g:message code="label.acspostendpoint" /></label>
+							<pre><g:message code="label.binding" />: SAML:2.0:bindings:HTTP-POST</pre>
+						</td>
+						<td>
+							<g:hasErrors bean="${httpPostACS}">
+								<div class="error"><g:renderErrors bean="${httpPostACS}"as="list"/></div>
+							</g:hasErrors>
+							<g:hiddenField name="sp.acs.post.isdefault" value="true" />
+							<g:textField name="sp.acs.post.uri" size="75" class="required url"  value="${httpPostACS?.location?.uri}"/>
+							<fr:tooltip code='fedreg.help.serviceprovider.acspost' />
+						</td>
+						<td>
+							<g:textField name="sp.acs.post.index" size="2" class="required number" value="${httpPostACS?.location?.index}"/>
+							<fr:tooltip code='fedreg.help.endpoint.index' />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label for="sp.acs.artifact.uri"><g:message code="label.acsartifactendpoint" /></label>
+							<pre><g:message code="label.binding" />: SAML:2.0:bindings:HTTP-Artifact</pre>
+						</td>
+						<td>
+							<g:hasErrors bean="${httpArtifactACS}">
+								<div class="error"><g:renderErrors bean="${httpArtifactACS}"as="list"/></div>
+							</g:hasErrors>
+							<g:hiddenField name="sp.acs.artifact.isdefault" value="false" />
+							<g:textField name="sp.acs.artifact.uri" size="75" class="required url" value="${httpArtifactACS?.location?.uri}"/>
+							<fr:tooltip code='fedreg.help.serviceprovider.acsartifcate' />
+						</td>
+						<td>
+							<g:textField name="sp.acs.artifact.index" size="2" class="required number" value="${httpArtifactACS?.location?.index}"/>
+							<fr:tooltip code='fedreg.help.endpoint.index' />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label for="sp.slo.artifact.uri"><g:message code="label.sloartifactendpoint" /></label>
+							<pre><g:message code="label.binding" />: SAML:2.0:bindings:HTTP-Artifact</pre>
+						</td>
+						<td>
+							<g:hasErrors bean="${sloArtifact}">
+								<div class="error"><g:renderErrors bean="${sloArtifact}"as="list"/></div>
+							</g:hasErrors>
+							<g:textField name="sp.slo.artifact.uri" size="75" class="samloptional url" value="${sloArtifact?.location?.uri}"/>
+							<fr:tooltip code='fedreg.help.serviceprovider.sloartifact' />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label for="sp.slo.redirect.uri"><g:message code="label.sloredirectendpoint" /></label>
+							<pre><g:message code="label.binding" />: SAML:2.0:bindings:HTTP-Redirect</pre>
+						</td>
+						<td>
+							<g:hasErrors bean="${sloRedirect}">
+								<div class="error"><g:renderErrors bean="${sloRedirect}"as="list"/></div>
+							</g:hasErrors>
+							<g:textField name="sp.slo.redirect.uri" size="75" class="samloptional url" value="${sloRedirect?.location?.uri}"/>
+							<fr:tooltip code='fedreg.help.serviceprovider.sloredriect' />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label for="sp.slo.soap.uri"><g:message code="label.slosoapendpoint" /></label>
+							<pre><g:message code="label.binding" />: SAML:2.0:bindings:SOAP</pre>
+						</td>
+						<td>
+							<g:hasErrors bean="${sloSOAP}">
+								<div class="error"><g:renderErrors bean="${sloSOAP}"as="list"/></div>
+							</g:hasErrors>
+							<g:textField name="sp.slo.soap.uri" size="75" class="samloptional url" value="${sloSOAP?.location?.uri}"/>
+							<fr:tooltip code='fedreg.help.serviceprovider.slosoap' />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label for="sp.slo.post.uri"><g:message code="label.slopostendpoint" /></label>
+							<pre><g:message code="label.binding" />: SAML:2.0:bindings:HTTP-POST</pre>
+						</td>
+						<td>
+							<g:hasErrors bean="${sloPost}">
+								<div class="error"><g:renderErrors bean="${sloPost}"as="list"/></div>
+							</g:hasErrors>
+							<g:textField name="sp.slo.post.uri" size="75" class="samloptional url"  value="${sloPost?.location?.uri}"/>
+							<fr:tooltip code='fedreg.help.serviceprovider.slopost' />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label for="sp.drs.uri"><g:message code="label.drsendpoint" /></label>
+							<pre><g:message code="label.binding" />: SAML:profiles:SSO:idp-discovery-protocol</pre>
+						</td>
+						<td>
+							<g:hasErrors bean="${discoveryResponseService}">
+								<div class="error"><g:renderErrors bean="${discoveryResponseService}"as="list"/></div>
+							</g:hasErrors>
+							<g:textField name="sp.drs.uri" size="75" class="samloptional url" value="${discoveryResponseService?.location?.uri}"/>
+							<g:hiddenField name="sp.drs.isdefault" value="true" />
+							<fr:tooltip code='fedreg.help.serviceprovider.disco' />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label for="sp.mnid.artifact.uri"><g:message code="label.mnidartifactendpoint" /></label>
+							<pre><g:message code="label.binding" />: SAML:2.0:bindings:HTTP-Artifact</pre>
+						</td>
+						<td>
+							<g:hasErrors bean="${mnidArtifact}">
+								<div class="error"><g:renderErrors bean="${mnidArtifact}"as="list"/></div>
+							</g:hasErrors>
+							<g:textField name="sp.mnid.artifact.uri" size="75" class="samloptional url" value="${mnidArtifact?.location?.uri}"/>
+							<fr:tooltip code='fedreg.help.serviceprovider.mnidaritfact' />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label for="sp.mnid.redirect.uri"><g:message code="label.mnidredirectendpoint" /></label>
+							<pre><g:message code="label.binding" />: SAML:2.0:bindings:HTTP-Redirect</pre>
+						</td>
+						<td>
+							<g:hasErrors bean="${mnidRedirect}">
+								<div class="error"><g:renderErrors bean="${mnidRedirect}"as="list"/></div>
+							</g:hasErrors>
+							<g:textField name="sp.mnid.redirect.uri" size="75" class="samloptional url" value="${mnidRedirect?.location?.uri}"/>
+							<fr:tooltip code='fedreg.help.serviceprovider.mnidredirect' />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label for="sp.mnid.soap.uri"><g:message code="label.mnidsoapendpoint" /></label>
+							<pre><g:message code="label.binding" />: SAML:2.0:bindings:SOAP</pre>
+						</td>
+						<td>
+							<g:hasErrors bean="${mnidSOAP}">
+								<div class="error"><g:renderErrors bean="${mnidSOAP}"as="list"/></div>
+							</g:hasErrors>
+							<g:textField name="sp.mnid.soap.uri" size="75" class="samloptional url" value="${mnidSOAP?.location?.uri}"/>
+							<fr:tooltip code='fedreg.help.serviceprovider.mnidsoap' />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label for="sp.mnid.post.uri"><g:message code="label.mnidpostendpoint" /></label>
+							<pre><g:message code="label.binding" />: SAML:2.0:bindings:HTTP-POST</pre>
+						</td>
+						<td>
+							<g:hasErrors bean="${mnidPost}">
+								<div class="error"><g:renderErrors bean="${mnidPost}"as="list"/></div>
+							</g:hasErrors>
+							<g:textField name="sp.mnid.post.uri" size="75" class="samloptional url" value="${mnidPost?.location?.uri}"/>
+							<fr:tooltip code='fedreg.help.serviceprovider.mnidpost' />
+						</td>
+					</tr>
+				</tbody>
 			</table>
 		</div>
 	</div>

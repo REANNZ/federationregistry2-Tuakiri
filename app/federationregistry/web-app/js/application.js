@@ -899,3 +899,73 @@ fedreg.attributefilter_refresh = function() {
 	    }
 	});
 };
+
+fedreg.validateCertificate = function() {
+	$('#newcertificatedata').removeClass('error');
+	fedreg.keyDescriptor_verify($('#entity\\.identifier').val());
+	if(!newCertificateValid) {
+		$('#newcertificatedata').addClass('error');
+	}
+}
+
+fedreg.configureIdentityProviderSAML = function(host) {
+	$(".samloptional").val("");
+	if(host.length > 0) {
+		host = host.toLowerCase();
+		
+		$('#entity\\.identifier').val( knownIDPImpl[currentImpl].entitydescriptor.replace('$host', host));
+		$('#idp\\.post\\.uri').val( knownIDPImpl[currentImpl].post.uri.replace('$host', host) );
+		$('#idp\\.redirect\\.uri').val( knownIDPImpl[currentImpl].redirect.uri.replace('$host', host) );
+		$('#idp\\.artifact\\.uri').val( knownIDPImpl[currentImpl].artifact.uri.replace('$host', host) );
+		$('#idp\\.artifact\\.index').val( knownIDPImpl[currentImpl].artifact.index );
+		$('#aa\\.attributeservice\\.uri').val( knownIDPImpl[currentImpl].attributeservice.uri.replace('$host', host) );
+	}
+}
+
+fedreg.configureServiceProviderSAML = function(host) {
+	$(".samloptional").val("");
+	if(host.length > 0) {
+		host = host.toLowerCase();
+		
+		$('#entity\\.identifier').val( knownSPImpl[currentImpl].entitydescriptor.replace('$host', host) );
+		
+		$('#sp\\.acs\\.post\\.uri').val( knownSPImpl[currentImpl].acs.post.uri.replace('$host', host) );
+		$('#sp\\.acs\\.post\\.index').val( knownSPImpl[currentImpl].acs.post.index );
+		
+		$('#sp\\.acs\\.artifact\\.uri').val( knownSPImpl[currentImpl].acs.artifact.uri.replace('$host', host) );
+		$('#sp\\.acs\\.artifact\\.index').val( knownSPImpl[currentImpl].acs.artifact.index );
+		
+		if(knownSPImpl[currentImpl].drs) {
+			$('#sp\\.drs\\.uri').val( knownSPImpl[currentImpl].drs.uri.replace('$host', host) );
+			$('#sp\\.drs\\.index').val( knownSPImpl[currentImpl].drs.index );
+		}
+		
+		if( knownSPImpl[currentImpl].slo ) {
+			if( knownSPImpl[currentImpl].slo.artifact )
+				$('#sp\\.slo\\.artifact\\.uri').val( knownSPImpl[currentImpl].slo.artifact.uri.replace('$host', host) );
+		
+			if( knownSPImpl[currentImpl].slo.redirect )
+				$('#sp\\.slo\\.redirect\\.uri').val( knownSPImpl[currentImpl].slo.redirect.uri.replace('$host', host) );
+		
+			if( knownSPImpl[currentImpl].slo.soap )
+				$('#sp\\.slo\\.soap\\.uri').val( knownSPImpl[currentImpl].slo.soap.uri.replace('$host', host) );
+		
+			if( knownSPImpl[currentImpl].slo.post )
+				$('#sp\\.slo\\.post\\.uri').val( knownSPImpl[currentImpl].slo.post.uri.replace('$host', host) );
+		}
+		
+		if( knownSPImpl[currentImpl].mnid ) {
+			if( knownSPImpl[currentImpl].mnid.artifact )
+				$('#sp\\.mnid\\.artifact\\.uri').val( knownSPImpl[currentImpl].mnid.artifact.uri.replace('$host', host) );
+		
+			if( knownSPImpl[currentImpl].mnid.redirect )
+				$('#sp\\.mnid\\.redirect\\.uri').val( knownSPImpl[currentImpl].mnid.redirect.uri.replace('$host', host) );
+		
+			if( knownSPImpl[currentImpl].mnid.soap )
+				$('#sp\\.mnid\\.soap\\.uri').val( knownSPImpl[currentImpl].mnid.soap.uri.replace('$host', host) );
+		
+			if( knownSPImpl[currentImpl].mnid.post )
+				$('#sp\\.mnid\\.post\\.uri').val( knownSPImpl[currentImpl].mnid.post.uri.replace('$host', host) );
+		}
+	}
+};

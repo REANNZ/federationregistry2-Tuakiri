@@ -3,8 +3,8 @@
 	var knownIDPImplEndpoint = "${createLink(controller:'coreUtilities', action:'knownIDPImpl')}";
 	var newCertificateValid = false;
 	
-	var knownIDPImpl
-	var currentImpl
+	var knownIDPImpl;
+	var currentImpl;
 	
 	$(function() {
 		$.ajax({
@@ -15,17 +15,17 @@
 			success: function(res) {
 				knownIDPImpl = res;
 				$.each(knownIDPImpl, function(key, value) {
-					if(knownIDPImpl[key].default == 'true') {
+					if(knownIDPImpl[key].selected) {
 						currentImpl = key
 						$('<input type="radio" class="currentimpl" name="knownimpls" checked value='+key+'> <strong>' + knownIDPImpl[key].displayName + '</strong><br>').appendTo($("#knownimpl"));
 					}
 					else
-						$('<input type="radio" class="currentimpl" name="knownimpls" value='+key+'> <strong>' + knownIDPImpl[key].displayName + '</strong>').appendTo($("#knownimpl"));
+						$('<input type="radio" class="currentimpl" name="knownimpls" value='+key+'> <strong>' + knownIDPImpl[key].displayName + '</strong><br>').appendTo($("#knownimpl"));
 				});
 				
 				$('input.currentimpl').change(function() {
 					currentImpl = $(this).val();
-					configureSAML($('#hostname'));
+					fedreg.configureIdentityProviderSAML($('#hostname').val());
 				});
 		    },
 		    error: function (xhr, ajaxOptions, thrownError) {
@@ -53,7 +53,7 @@
 			disableUIStyles: true
 		});
 		jQuery.validator.addMethod("validcert", function(value, element, params) { 
-			validateCertificate();
+			fedreg.validateCertificate();
 			return newCertificateValid == true; 
 		}, jQuery.format("PEM data invalid"));
 		
@@ -66,35 +66,15 @@
 		$('#samladvancedmode').hide();
 		
 		$('#hostname').bind('blur',  function() {
-			configureSAML($(this));
+			fedreg.configureIdentityProviderSAML($(this).val());
 		});
 	});
-	
-	function configureSAML(h) {
-		var host = h.val();
-		if(host.length > 0) {
-			$('#entity\\.identifier').val( knownIDPImpl[currentImpl].entitydescriptor.replace('$host', host));
-			$('#idp\\.post\\.uri').val( knownIDPImpl[currentImpl].post.uri.replace('$host', host) );
-			$('#idp\\.redirect\\.uri').val( knownIDPImpl[currentImpl].redirect.uri.replace('$host', host) );
-			$('#idp\\.artifact\\.uri').val( knownIDPImpl[currentImpl].artifact.uri.replace('$host', host) );
-			$('#idp\\.artifact\\.index').val( knownIDPImpl[currentImpl].artifact.index );
-			$('#aa\\.attributeservice\\.uri').val( knownIDPImpl[currentImpl].attributeservice.uri.replace('$host', host) );
-		}
-	}
 	
 	function attrchange(id) {
 		if($('#idp\\.attributes\\.' + id + ':checked').val() != null)
 			$('#aa\\.attributes\\.' + id).val('on');
 		else
 			$('#aa\\.attributes\\.' + id).val('off');
-	}
-	
-	function validateCertificate() {
-		$('#newcertificatedata').removeClass('error');
-		fedreg.keyDescriptor_verify($('#entity\\.identifier').val());
-		if(!newCertificateValid) {
-			$('#newcertificatedata').addClass('error');
-		}
 	}
 	
 </r:script>
@@ -203,7 +183,7 @@
 		<span id="samlbasicmode">
 			<h4><g:message code="fedreg.templates.identityprovider.create.saml.known.heading" /></h4>
 			<p><g:message code="fedreg.templates.identityprovider.create.saml.known.descriptive" /></p>
-			<p><span style="float:right;"><a href="#" class="view-button" onClick="$('#samlbasicmode').hide(); $('#samladvancedmode').fadeIn(); return false;"><g:message code="fedreg.templates.identityprovider.create.saml.known.switch.advanced" /></a></span></p>
+			<p><span style="float:right;"><a href="#" class="view-button" onClick="$('#samlbasicmode').hide(); $('#samladvancedmode').fadeIn(); return false;"><g:message code="fedreg.templates.identityprovider.create.saml.known.switch" /></a></span></p>
 			<table>
 				<tr>
 					<td>
@@ -211,7 +191,6 @@
 					</td>
 					<td>
 						<span id="knownimpl"></span>
-						<fr:tooltip code='fedreg.help.identityprovider.known' />
 					</td>
 				</tr>
 				<tr>
@@ -233,7 +212,7 @@
 		<span id="samladvancedmode">
 			<h4><g:message code="fedreg.templates.identityprovider.create.saml.advanced.heading" /></h4>
 			<p><g:message code="fedreg.templates.identityprovider.create.saml.advanced.descriptive" /></p>
-			<p><span style="float: right;"><a href="#" class="view-button" onClick="$('#samladvancedmode').hide(); $('#samlbasicmode').fadeIn(); return false;"><g:message code="fedreg.templates.identityprovider.create.saml.advanced.switch.shibboleth" /></a></span></p>
+			<p><span style="float: right;"><a href="#" class="view-button" onClick="$('#samladvancedmode').hide(); $('#samlbasicmode').fadeIn(); return false;"><g:message code="fedreg.templates.identityprovider.create.saml.advanced.switch" /></a></span></p>
 			<table>
 				<thead>
 					<th/>

@@ -4,7 +4,7 @@
 		<meta name="layout" content="members" />
 		<title><g:message code="fedreg.view.members.entity.create.title" /></title>
 		
-		<script type="text/javascript">
+		<r:script>
 			$(function() {	
 
 				$('form').validate({
@@ -21,7 +21,7 @@
 				 	focusFirstInput : true
 				});
 			});
-		</script>
+		</r:script>
 	</head>
 	<body>
 		<section>
