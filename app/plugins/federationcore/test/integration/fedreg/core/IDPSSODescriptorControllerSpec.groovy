@@ -201,8 +201,8 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		identityProvider == controller.modelAndView.model.identityProvider
 		attributeAuthority == controller.modelAndView.model.attributeAuthority
 		
-		controller.flash.type = "error"
-		controller.flash.message = "fedreg.core.idpssoroledescriptor.save.validation.error"	
+		controller.flash.type == "error"
+		controller.flash.message == "fedreg.core.idpssoroledescriptor.save.validation.error"	
 	}
 	
 	def "Validate successful update"() {
@@ -238,7 +238,7 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		def model = controller.update()
 		
 		then:
-		controller.flash.type = "error"
-		controller.flash.message = "fedreg.core.idpssoroledescriptor.update.validation.error"	
+		controller.flash.type == "error"
+		controller.flash.message == "fedreg.core.idpssoroledescriptor.update.validation.error"	
 	}
 }

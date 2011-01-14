@@ -3,9 +3,9 @@ package fedreg.core
 import java.security.*
 import java.security.cert.*
 
-import grails.plugin.spock.IntegrationSpecification
+import grails.plugin.spock.*
 
-class CryptoServiceSpecification extends IntegrationSpecification {
+class CryptoServiceSpecification extends IntegrationSpec {
 	
 	def cryptoService
 	

@@ -147,8 +147,8 @@ class EntityDescriptorControllerSpec extends IntegrationSpec {
 		//entityDescriptor == controller.modelAndView.model.entityDescriptor	
 		//serviceProvider == controller.modelAndView.model.serviceProvider
 		
-		controller.flash.type = "error"
-		controller.flash.message = "fedreg.core.entitydescriptor.save.validation.error"	
+		controller.flash.type == "error"
+		controller.flash.message == "fedreg.core.entitydescriptor.save.validation.error"	
 	}
 	
 	def "Validate successful update"() {
@@ -177,8 +177,8 @@ class EntityDescriptorControllerSpec extends IntegrationSpec {
 		
 		then:
 		controller.response.redirectedUrl == "/entityDescriptor/list"	
-		controller.flash.type = "error"
-		controller.flash.message = "fedreg.core.entitydescriptor.nonexistant"
+		controller.flash.type == "error"
+		controller.flash.message == "fedreg.core.entitydescriptor.nonexistant"
 	}
 	
 	def "Invalid service response fails update"() {
@@ -199,8 +199,8 @@ class EntityDescriptorControllerSpec extends IntegrationSpec {
 		//entityDescriptor == controller.modelAndView.model.entityDescriptor	
 		//serviceProvider == controller.modelAndView.model.serviceProvider
 		
-		controller.flash.type = "error"
-		controller.flash.message = "fedreg.core.entitydescriptor.update.validation.error"	
+		controller.flash.type == "error"
+		controller.flash.message == "fedreg.core.entitydescriptor.update.validation.error"	
 	}
 
 }

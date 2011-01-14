@@ -170,8 +170,8 @@ class SPSSODescriptorControllerSpec extends IntegrationSpec {
 		//entityDescriptor == controller.modelAndView.model.entityDescriptor	
 		//serviceProvider == controller.modelAndView.model.serviceProvider
 		
-		controller.flash.type = "error"
-		controller.flash.message = "fedreg.core.spssoroledescriptor.save.validation.error"	
+		controller.flash.type == "error"
+		controller.flash.message == "fedreg.core.spssoroledescriptor.save.validation.error"	
 	}
 	
 	def "Validate successful update"() {
@@ -201,8 +201,8 @@ class SPSSODescriptorControllerSpec extends IntegrationSpec {
 		
 		then:
 		controller.response.redirectedUrl == "/SPSSODescriptor/list"	
-		controller.flash.type = "error"
-		controller.flash.message = "fedreg.core.spssoroledescriptor.nonexistant"
+		controller.flash.type == "error"
+		controller.flash.message == "fedreg.core.spssoroledescriptor.nonexistant"
 	}
 	
 	def "Invalid service response fails update"() {
@@ -224,7 +224,7 @@ class SPSSODescriptorControllerSpec extends IntegrationSpec {
 		//entityDescriptor == controller.modelAndView.model.entityDescriptor	
 		//serviceProvider == controller.modelAndView.model.serviceProvider
 		
-		controller.flash.type = "error"
-		controller.flash.message = "fedreg.core.spssoroledescriptor.update.validation.error"	
+		controller.flash.type == "error"
+		controller.flash.message == "fedreg.core.spssoroledescriptor.update.validation.error"	
 	}
 }

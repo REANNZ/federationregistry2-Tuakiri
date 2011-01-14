@@ -71,7 +71,7 @@ class OrganizationServiceSpec extends IntegrationSpec {
 		wfPriority == ProcessPriority.MEDIUM
 		wfParams.size() == 2
 		wfParams.organization == "${organization_.id}"
-		wfParams.creator = contact_.id
+		wfParams.creator == contact_.id
 	}
 	
 	def "Create succeeds when valid organization data and existing contact is provided"() {
@@ -116,7 +116,7 @@ class OrganizationServiceSpec extends IntegrationSpec {
 		wfPriority == ProcessPriority.MEDIUM
 		wfParams.size() == 2
 		wfParams.organization == "${organization_.id}"
-		wfParams.creator = contact_.id
+		wfParams.creator == contact_.id
 	}
 	
 	def "Create fails when invalid organization data and existing contact is provided"() {

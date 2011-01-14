@@ -141,8 +141,8 @@ class OrganizationControllerSpec extends IntegrationSpec {
 		def model = controller.save()
 		
 		then:
-		controller.flash.type = "error"
-		controller.flash.message = "fedreg.core.organization.save.validation.error"	
+		controller.flash.type == "error"
+		controller.flash.message == "fedreg.core.organization.save.validation.error"	
 	}
 	
 	def "Validate successful update"() {
@@ -170,8 +170,8 @@ class OrganizationControllerSpec extends IntegrationSpec {
 		
 		then:
 		controller.response.redirectedUrl == "/organization/list"	
-		controller.flash.type = "error"
-		controller.flash.message = "fedreg.core.organization.nonexistant"
+		controller.flash.type == "error"
+		controller.flash.message == "fedreg.core.organization.nonexistant"
 	}
 	
 	def "Invalid organization data fails update"() {
@@ -187,7 +187,7 @@ class OrganizationControllerSpec extends IntegrationSpec {
 		def model = controller.update()
 		
 		then:		
-		controller.flash.type = "error"
-		controller.flash.message = "fedreg.core.organization.update.validation.error"	
+		controller.flash.type == "error"
+		controller.flash.message == "fedreg.core.organization.update.validation.error"	
 	}
 }

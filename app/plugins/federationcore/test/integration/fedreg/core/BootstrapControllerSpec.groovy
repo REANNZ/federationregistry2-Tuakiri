@@ -7,9 +7,7 @@ import fedreg.workflow.*
 import grails.plugins.nimble.core.*
 import com.icegreen.greenmail.util.*
 
-class BootstrapControllerSpec extends IntegrationSpec {
-	
-	def greenMail
+class BootstrapControllerSpec extends IntegrationSpec {	
 	def controller
 	def savedMetaClasses
 	def idpssoDescriptorService = new IDPSSODescriptorService()
@@ -21,7 +19,6 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		idpssoDescriptorService.metaClass = IDPSSODescriptorService.metaClass
 		spssoDescriptorService.metaClass = SPSSODescriptorService.metaClass
 		organizationService.metaClass = OrganizationService.metaClass
-		greenMail.deleteAllMessages()
 	}
 	
 	def setup () {
@@ -42,7 +39,7 @@ class BootstrapControllerSpec extends IntegrationSpec {
 	def "Validate IDP start register"() {
 		setup:
 		(1..10).each {
-			Organization.build().save()
+			Organization.build(active:true, approved:true).save()
 		}
 		
 		(1..11).each { i ->
@@ -59,14 +56,10 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		then:
 		model.identityProvider != null
 		model.identityProvider instanceof IDPSSODescriptor
-		model.organizationList.size() == 10
-		model.attributeList.size() == 11
-		model.nameIDFormatList.size() == 12
 	}
 	
 	def "Validate successful IDP registration"() {
 		setup:
-		def params = [:]
 		def organization = Organization.build().save()
 		def entityDescriptor = EntityDescriptor.build(organization:organization).save()
 		def identityProvider = IDPSSODescriptor.build(entityDescriptor:entityDescriptor).save()
@@ -74,56 +67,65 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		def httpPost = SingleSignOnService.build(descriptor:identityProvider).save()
 		def httpRedirect = SingleSignOnService.build(descriptor:identityProvider).save()
 		def soapArtifact = SingleSignOnService.build(descriptor:identityProvider).save()
-		def organizationList = [organization]
-		def attributeList = [Attribute.build().save()]
-		def nameIDFormatList = [SamlURI.build().save()]
 		def contact = Contact.build().save()
+		
+		def ret = [:]
+		ret.organization = organization
+		ret.entityDescriptor = entityDescriptor
+		ret.identityProvider = identityProvider
+		ret.attributeAuthority = attributeAuthority
+		ret.hostname = "test.host.com"
+		ret.scope = "host.com"
+		ret.httpPost = httpPost
+		ret.httpRedirect = httpRedirect
+		ret.soapArtifact = soapArtifact
+		ret.contact = contact
 		
 		when:
 		idpssoDescriptorService.metaClass.create = { def p -> 
-			return [true, organization, entityDescriptor, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact]
+			return [true, ret]
 		} 
 		def model = controller.saveidp()
 		
 		then:
 		controller.response.redirectedUrl == "/bootstrap/idpregistered/${identityProvider.id}"
-		greenMail.getReceivedMessages().length == 1
-		def message = greenMail.getReceivedMessages()[0]
-		message.subject == "fedreg.templates.mail.idpssoroledescriptor.register.subject"
-		GreenMailUtil.getBody(message).contains(organization.displayName)
-		GreenMailUtil.getBody(message).contains(httpPost.location.uri)
-		GreenMailUtil.getBody(message).contains(httpRedirect.location.uri)
-		GreenMailUtil.getBody(message).contains(httpRedirect.location.uri)
-		GreenMailUtil.getBody(message).contains("fedreg.templates.mail.get.support")
 	}
 	
 	def "Validate failed IDP registration"() {
 		setup:
-		def params = [:]
 		def organization = Organization.build().save()
 		def entityDescriptor = EntityDescriptor.build(organization:organization).save()
 		def identityProvider = IDPSSODescriptor.build(entityDescriptor:entityDescriptor).save()
 		def attributeAuthority = AttributeAuthorityDescriptor.build(entityDescriptor:entityDescriptor).save()
-		def httpPost = SamlURI.build().save()
-		def httpRedirect = SamlURI.build().save()
-		def soapArtifact = SamlURI.build().save()
-		def organizationList = [organization]
-		def attributeList = [Attribute.build().save()]
-		def nameIDFormatList = [SamlURI.build().save()]
+		def httpPost = SingleSignOnService.build(descriptor:identityProvider).save()
+		def httpRedirect = SingleSignOnService.build(descriptor:identityProvider).save()
+		def soapArtifact = SingleSignOnService.build(descriptor:identityProvider).save()
 		def contact = Contact.build().save()
+		
+		def ret = [:]
+		ret.organization = organization
+		ret.entityDescriptor = entityDescriptor
+		ret.identityProvider = identityProvider
+		ret.attributeAuthority = attributeAuthority
+		ret.hostname = "test.host.com"
+		ret.scope = "host.com"
+		ret.httpPost = httpPost
+		ret.httpRedirect = httpRedirect
+		ret.soapArtifact = soapArtifact
+		ret.contact = contact
 		
 		when:
 		idpssoDescriptorService.metaClass.create = { def p -> 
-			return [false, organization, entityDescriptor, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact]
+			return [false, ret]
 		} 
 		def model = controller.saveidp()
 		
 		then:
-		controller.flash.type = "error"
-		controller.flash.message = "fedreg.core.idpssoroledescriptor.register.validation.error"
+		controller.flash.type == "error"
+		controller.flash.message == "fedreg.core.idpssoroledescriptor.register.validation.error"
 	}
 	
-	def "Validate IDP Registered with no supplied ID"() {		
+	def "Validate IDP Registered with no supplied ID"() {
 		when:
 		def model = controller.idpregistered()
 		
@@ -133,9 +135,9 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		controller.response.redirectedUrl == "/"
 	}
 	
-	def "Validate IDP Registered with invalid supplied ID"() {		
+	def "Validate IDP Registered with invalid supplied ID"() {
 		setup:
-		controller.params.id = 2
+		controller.params.id = -1
 		
 		when:
 		def model = controller.idpregistered()
@@ -149,11 +151,11 @@ class BootstrapControllerSpec extends IntegrationSpec {
 	def "Validate SP register"() {
 		setup:
 		(1..10).each {
-			Organization.build().save()
+			Organization.build(active:true, approved:true).save()
 		}
 		
 		(1..11).each { i ->
-			AttributeBase.build(name: "attr$i").save()
+			AttributeBase.build().save()
 		}
 		
 		(1..12).each { i ->
@@ -166,53 +168,53 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		then:
 		model.serviceProvider != null
 		model.serviceProvider instanceof SPSSODescriptor
-		model.organizationList.size() == 10
-		model.attributeList.size() == 11
-		model.nameIDFormatList.size() == 12
 	}
 	
 	def "Validate successful SP registration"() {
 		setup:
-		def organization = Organization.build().save()
+		def organization = Organization.build(active:true, approved:true).save()
 		def entityDescriptor = EntityDescriptor.build(organization:organization).save()
 		def serviceProvider = SPSSODescriptor.build(entityDescriptor:entityDescriptor).save()
 		def contact = Contact.build().save()
 		
+		def ret = [:]
+		ret.organization = organization
+		ret.entityDescriptor = entityDescriptor
+		ret.serviceProvider = serviceProvider
+		
 		when:
 		spssoDescriptorService.metaClass.create = { def p -> 
-			return [true, organization, entityDescriptor, serviceProvider, null, null, null, null, null, null, null, null, null, contact]
+			return [true, ret]
 		} 
 		def model = controller.savesp()
 		
 		then:
 		controller.response.redirectedUrl == "/bootstrap/spregistered/${serviceProvider.id}"	
-		greenMail.getReceivedMessages().length == 1
-		def message = greenMail.getReceivedMessages()[0]
-		message.subject == "fedreg.templates.mail.spssoroledescriptor.register.subject"
-		GreenMailUtil.getBody(message).contains(organization.displayName)
-		GreenMailUtil.getBody(message).contains(entityDescriptor.entityID)
-		GreenMailUtil.getBody(message).contains(serviceProvider.displayName)
-		GreenMailUtil.getBody(message).contains("fedreg.templates.mail.get.support")
 	}
 	
 	def "Validate failed SP registration"() {
 		setup:
-		def organization = Organization.build().save()
+		def organization = Organization.build(active:true, approved:true).save()
 		def entityDescriptor = EntityDescriptor.build(organization:organization).save()
 		def serviceProvider = SPSSODescriptor.build(entityDescriptor:entityDescriptor).save()
 		
-		when:
+		def ret = [:]
+		ret.organization = organization
+		ret.entityDescriptor = entityDescriptor
+		ret.serviceProvider = serviceProvider
 		spssoDescriptorService.metaClass.create = { def p -> 
-			return [false, organization, entityDescriptor, serviceProvider]	//.. deliberately leaving out other return vals here
-		} 
+			return [false, ret]	//.. deliberately leaving out other return vals here
+		}
+		
+		when:
 		def model = controller.savesp()
 		
-		then:		
-		controller.flash.type = "error"
-		controller.flash.message = "fedreg.core.spssoroledescriptor.register.validation.error"	
+		then:
+		controller.flash.type == "error"
+		controller.flash.message == "fedreg.core.spssoroledescriptor.register.validation.error"	
 	}
 	
-	def "Validate SP Registered with no supplied ID"() {		
+	def "Validate SP Registered with no supplied ID"() {
 		when:
 		def model = controller.spregistered()
 		
@@ -224,7 +226,7 @@ class BootstrapControllerSpec extends IntegrationSpec {
 	
 	def "Validate SP Registered with invalid supplied ID"() {		
 		setup:
-		controller.params.id = 2
+		controller.params.id = -1
 		
 		when:
 		def model = controller.spregistered()
@@ -247,12 +249,11 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		then:
 		model.organization != null
 		model.organization instanceof Organization
-		model.organizationTypes.size() == 10
 	}
 	
 	def "Validate successful organization register"() {
 		setup:
-		def organization = Organization.build().save()
+		def organization = Organization.build(active:true, approved:true).save()
 		def contact = Contact.build().save()
 		
 		when:
@@ -263,15 +264,11 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		
 		then:
 		controller.response.redirectedUrl == "/bootstrap/organizationregistered/${organization.id}"	
-		greenMail.getReceivedMessages().length == 1
-		def message = greenMail.getReceivedMessages()[0]
-		message.subject == "fedreg.templates.mail.organization.register.subject"
-		GreenMailUtil.getBody(message).contains(organization.displayName)
 	}
 	
-	def "Validate failed  organization register"() {
+	def "Validate failed organization register"() {
 		setup:
-		def organization = Organization.build().save()
+		def organization = Organization.build(active:true, approved:true).save()
 		
 		when:
 		organizationService.metaClass.create = { def p -> 
@@ -280,8 +277,8 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		def model = controller.saveorganization()
 		
 		then:
-		controller.flash.type = "error"
-		controller.flash.message = "fedreg.core.organization.register.validation.error"	
+		controller.flash.type == "error"
+		controller.flash.message == "fedreg.core.organization.register.validation.error"	
 	}
 	
 	def "Validate Organization Registered with no supplied ID"() {		
@@ -296,7 +293,7 @@ class BootstrapControllerSpec extends IntegrationSpec {
 	
 	def "Validate Organization Registered with invalid supplied ID"() {		
 		setup:
-		controller.params.id = 2
+		controller.params.id = -1
 		
 		when:
 		def model = controller.organizationregistered()

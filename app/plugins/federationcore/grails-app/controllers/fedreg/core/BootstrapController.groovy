@@ -43,7 +43,7 @@ class BootstrapController {
 			redirect uri:"/"
 			return
 		}
-
+		
 		[identityProvider: identityProvider]
 	}
 	
@@ -61,7 +61,7 @@ class BootstrapController {
 		}
 		else {
 			flash.type="error"
-			flash.message = message(code: 'fedreg.core.spssoroledescriptor.save.validation.error')
+			flash.message = message(code: 'fedreg.core.spssoroledescriptor.register.validation.error')
 			render (view:'sp', model:ret + [organizationList: Organization.findAllWhere(active:true, approved:true), attributeList: AttributeBase.list(), nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)])
 		}
 	}
@@ -99,6 +99,7 @@ class BootstrapController {
 			redirect (action: "organizationregistered", id: organization.id)
 		}
 		else {
+			flash.type="error"
 			flash.message = message(code: 'fedreg.core.organization.register.validation.error')
 			render (view:'organization', model:[organization:organization, contact:contact, organizationTypes: OrganizationType.list()])
 		}
@@ -115,12 +116,13 @@ class BootstrapController {
 		
 		def organization = Organization.get(params.id)
 		if (!organization) {
-			flash.type="error"
+			flash.type = "error"
 			flash.message = message(code: 'fedreg.core.organization.nonexistant')
 			redirect uri: "/"
 			return
 		}
 
+		println "OIOOOXOXOXOXO"
 		[organization: organization]
 	}
 }
