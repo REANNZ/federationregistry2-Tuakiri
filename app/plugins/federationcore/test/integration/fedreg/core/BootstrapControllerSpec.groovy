@@ -10,28 +10,28 @@ import com.icegreen.greenmail.util.*
 class BootstrapControllerSpec extends IntegrationSpec {	
 	def controller
 	def savedMetaClasses
-	def idpssoDescriptorService = new IDPSSODescriptorService()
-	def spssoDescriptorService = new SPSSODescriptorService()
-	def organizationService = new OrganizationService()
+	def IDPSSODescriptorService
+	def SPSSODescriptorService
+	def organizationService
 	
 	def cleanup() {
 		SpecHelpers.resetMetaClasses(savedMetaClasses)
-		idpssoDescriptorService.metaClass = IDPSSODescriptorService.metaClass
-		spssoDescriptorService.metaClass = SPSSODescriptorService.metaClass
-		organizationService.metaClass = OrganizationService.metaClass
+		IDPSSODescriptorService.metaClass = fedreg.core.IDPSSODescriptorService.metaClass
+		SPSSODescriptorService.metaClass = fedreg.core.SPSSODescriptorService.metaClass
+		organizationService.metaClass = fedreg.core.OrganizationService.metaClass
 	}
 	
 	def setup () {
 		savedMetaClasses = [:]
 		
-		SpecHelpers.registerMetaClass(IDPSSODescriptorService, savedMetaClasses)
-		SpecHelpers.registerMetaClass(SPSSODescriptorService, savedMetaClasses)
-		SpecHelpers.registerMetaClass(OrganizationService, savedMetaClasses)
-		idpssoDescriptorService.metaClass = IDPSSODescriptorService.metaClass
-		spssoDescriptorService.metaClass = SPSSODescriptorService.metaClass
-		organizationService.metaClass = OrganizationService.metaClass
+		SpecHelpers.registerMetaClass(fedreg.core.IDPSSODescriptorService, savedMetaClasses)
+		SpecHelpers.registerMetaClass(fedreg.core.SPSSODescriptorService, savedMetaClasses)
+		SpecHelpers.registerMetaClass(fedreg.core.OrganizationService, savedMetaClasses)
+		this.IDPSSODescriptorService.metaClass = fedreg.core.IDPSSODescriptorService.metaClass
+		this.SPSSODescriptorService.metaClass = fedreg.core.SPSSODescriptorService.metaClass
+		this.organizationService.metaClass = fedreg.core.OrganizationService.metaClass
 		
-		controller = new BootstrapController(IDPSSODescriptorService:idpssoDescriptorService, SPSSODescriptorService:spssoDescriptorService, organizationService:organizationService)
+		controller = new BootstrapController(IDPSSODescriptorService:IDPSSODescriptorService, SPSSODescriptorService:SPSSODescriptorService, organizationService:organizationService)
 		def user = UserBase.build()
 		SpecHelpers.setupShiroEnv(user)
 	}
@@ -39,15 +39,15 @@ class BootstrapControllerSpec extends IntegrationSpec {
 	def "Validate IDP start register"() {
 		setup:
 		(1..10).each {
-			Organization.build(active:true, approved:true).save()
+			Organization.build(active:true, approved:true)
 		}
 		
 		(1..11).each { i ->
-			AttributeBase.build(name: "attr$i").save()
+			AttributeBase.build(name: "attr$i")
 		}
 		
 		(1..12).each { i ->
-			SamlURI.build(type:SamlURIType.NameIdentifierFormat).save()
+			SamlURI.build(type:SamlURIType.NameIdentifierFormat)
 		}
 		
 		when:
@@ -60,14 +60,14 @@ class BootstrapControllerSpec extends IntegrationSpec {
 	
 	def "Validate successful IDP registration"() {
 		setup:
-		def organization = Organization.build().save()
-		def entityDescriptor = EntityDescriptor.build(organization:organization).save()
-		def identityProvider = IDPSSODescriptor.build(entityDescriptor:entityDescriptor).save()
-		def attributeAuthority = AttributeAuthorityDescriptor.build(entityDescriptor:entityDescriptor).save()
-		def httpPost = SingleSignOnService.build(descriptor:identityProvider).save()
-		def httpRedirect = SingleSignOnService.build(descriptor:identityProvider).save()
-		def soapArtifact = SingleSignOnService.build(descriptor:identityProvider).save()
-		def contact = Contact.build().save()
+		def organization = Organization.build()
+		def entityDescriptor = EntityDescriptor.build(organization:organization)
+		def identityProvider = IDPSSODescriptor.build(entityDescriptor:entityDescriptor)
+		def attributeAuthority = AttributeAuthorityDescriptor.build(entityDescriptor:entityDescriptor)
+		def httpPost = SingleSignOnService.build(descriptor:identityProvider)
+		def httpRedirect = SingleSignOnService.build(descriptor:identityProvider)
+		def soapArtifact = SingleSignOnService.build(descriptor:identityProvider)
+		def contact = Contact.build()
 		
 		def ret = [:]
 		ret.organization = organization
@@ -82,7 +82,7 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		ret.contact = contact
 		
 		when:
-		idpssoDescriptorService.metaClass.create = { def p -> 
+		IDPSSODescriptorService.metaClass.create = { def p -> 
 			return [true, ret]
 		} 
 		def model = controller.saveidp()
@@ -93,14 +93,14 @@ class BootstrapControllerSpec extends IntegrationSpec {
 	
 	def "Validate failed IDP registration"() {
 		setup:
-		def organization = Organization.build().save()
-		def entityDescriptor = EntityDescriptor.build(organization:organization).save()
-		def identityProvider = IDPSSODescriptor.build(entityDescriptor:entityDescriptor).save()
-		def attributeAuthority = AttributeAuthorityDescriptor.build(entityDescriptor:entityDescriptor).save()
-		def httpPost = SingleSignOnService.build(descriptor:identityProvider).save()
-		def httpRedirect = SingleSignOnService.build(descriptor:identityProvider).save()
-		def soapArtifact = SingleSignOnService.build(descriptor:identityProvider).save()
-		def contact = Contact.build().save()
+		def organization = Organization.build()
+		def entityDescriptor = EntityDescriptor.build(organization:organization)
+		def identityProvider = IDPSSODescriptor.build(entityDescriptor:entityDescriptor)
+		def attributeAuthority = AttributeAuthorityDescriptor.build(entityDescriptor:entityDescriptor)
+		def httpPost = SingleSignOnService.build(descriptor:identityProvider)
+		def httpRedirect = SingleSignOnService.build(descriptor:identityProvider)
+		def soapArtifact = SingleSignOnService.build(descriptor:identityProvider)
+		def contact = Contact.build()
 		
 		def ret = [:]
 		ret.organization = organization
@@ -115,7 +115,7 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		ret.contact = contact
 		
 		when:
-		idpssoDescriptorService.metaClass.create = { def p -> 
+		IDPSSODescriptorService.metaClass.create = { def p -> 
 			return [false, ret]
 		} 
 		def model = controller.saveidp()
@@ -151,15 +151,15 @@ class BootstrapControllerSpec extends IntegrationSpec {
 	def "Validate SP register"() {
 		setup:
 		(1..10).each {
-			Organization.build(active:true, approved:true).save()
+			Organization.build(active:true, approved:true)
 		}
 		
 		(1..11).each { i ->
-			AttributeBase.build().save()
+			AttributeBase.build()
 		}
 		
 		(1..12).each { i ->
-			SamlURI.build(type:SamlURIType.NameIdentifierFormat).save()
+			SamlURI.build(type:SamlURIType.NameIdentifierFormat)
 		}
 		
 		when:
@@ -172,10 +172,10 @@ class BootstrapControllerSpec extends IntegrationSpec {
 	
 	def "Validate successful SP registration"() {
 		setup:
-		def organization = Organization.build(active:true, approved:true).save()
-		def entityDescriptor = EntityDescriptor.build(organization:organization).save()
-		def serviceProvider = SPSSODescriptor.build(entityDescriptor:entityDescriptor).save()
-		def contact = Contact.build().save()
+		def organization = Organization.build(active:true, approved:true)
+		def entityDescriptor = EntityDescriptor.build(organization:organization)
+		def serviceProvider = SPSSODescriptor.build(entityDescriptor:entityDescriptor)
+		def contact = Contact.build()
 		
 		def ret = [:]
 		ret.organization = organization
@@ -183,7 +183,7 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		ret.serviceProvider = serviceProvider
 		
 		when:
-		spssoDescriptorService.metaClass.create = { def p -> 
+		SPSSODescriptorService.metaClass.create = { def p -> 
 			return [true, ret]
 		} 
 		def model = controller.savesp()
@@ -194,15 +194,15 @@ class BootstrapControllerSpec extends IntegrationSpec {
 	
 	def "Validate failed SP registration"() {
 		setup:
-		def organization = Organization.build(active:true, approved:true).save()
-		def entityDescriptor = EntityDescriptor.build(organization:organization).save()
-		def serviceProvider = SPSSODescriptor.build(entityDescriptor:entityDescriptor).save()
+		def organization = Organization.build(active:true, approved:true)
+		def entityDescriptor = EntityDescriptor.build(organization:organization)
+		def serviceProvider = SPSSODescriptor.build(entityDescriptor:entityDescriptor)
 		
 		def ret = [:]
 		ret.organization = organization
 		ret.entityDescriptor = entityDescriptor
 		ret.serviceProvider = serviceProvider
-		spssoDescriptorService.metaClass.create = { def p -> 
+		SPSSODescriptorService.metaClass.create = { def p -> 
 			return [false, ret]	//.. deliberately leaving out other return vals here
 		}
 		
@@ -240,7 +240,7 @@ class BootstrapControllerSpec extends IntegrationSpec {
 	def "Validate Organization register"() {
 		setup:
 		(1..10).each {
-			OrganizationType.build().save()
+			OrganizationType.build()
 		}
 		
 		when:
@@ -253,11 +253,11 @@ class BootstrapControllerSpec extends IntegrationSpec {
 	
 	def "Validate successful organization register"() {
 		setup:
-		def organization = Organization.build(active:true, approved:true).save()
-		def contact = Contact.build().save()
+		def organization = Organization.build(active:true, approved:true)
+		def contact = Contact.build()
 		
 		when:
-		organizationService.metaClass.create = { def p -> 
+		OrganizationService.metaClass.create = { def p -> 
 			return [true, organization, contact]
 		} 
 		def model = controller.saveorganization()
@@ -268,10 +268,10 @@ class BootstrapControllerSpec extends IntegrationSpec {
 	
 	def "Validate failed organization register"() {
 		setup:
-		def organization = Organization.build(active:true, approved:true).save()
+		def organization = Organization.build(active:true, approved:true)
 		
 		when:
-		organizationService.metaClass.create = { def p -> 
+		OrganizationService.metaClass.create = { def p -> 
 			return [false, organization]
 		} 
 		def model = controller.saveorganization()

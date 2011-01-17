@@ -8,6 +8,8 @@ import grails.plugins.nimble.core.*
 
 class EntityDescriptorControllerSpec extends IntegrationSpec {
 	
+	static transactional = true
+	
 	def controller
 	def savedMetaClasses
 	def entityDescriptorService
@@ -31,7 +33,9 @@ class EntityDescriptorControllerSpec extends IntegrationSpec {
 	def "Validate list"() {
 		setup:
 		
-		(1..25).each { i ->
+		println "INLIST: ${EntityDescriptor.list()}"
+		
+		(1..20).each { i ->
 			def ed = EntityDescriptor.build(entityID:"http://sp.test.com/$i")
 			ed.save()
 		}
@@ -40,6 +44,7 @@ class EntityDescriptorControllerSpec extends IntegrationSpec {
 		def model = controller.list()
 
 		then:
+		println "OUTLIST: ${EntityDescriptor.list()}"
 		model.entityList.size() == 20
 	}
 	

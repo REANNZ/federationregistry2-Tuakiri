@@ -27,6 +27,10 @@ testDataConfig {
 			def i = 1
 			uri = {-> "mail${i++}@test.com" }
 		}
+		'grails.plugins.nimble.core.UserBase' {
+			def i = 1
+			username = {-> "username${i++}" }
+		}
 	}
 }
 
