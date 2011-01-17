@@ -13,7 +13,9 @@ import grails.plugins.nimble.core.ProfileBase
 public class SpecHelpers {
 	
 	static void setupShiroEnv(def user) {
-		def subject = [ getPrincipal: { user.id }, isAuthenticated: { true } ] as Subject
+		UserBase.metaClass.perms = [] as List
+		
+		def subject = [ getPrincipal: { user.id }, isAuthenticated: { true }, isPermitted: { perm -> def res = false; user.perms.each { if (it == perm) { res = true }}; res;} ] as Subject
 		ThreadContext.put( ThreadContext.SECURITY_MANAGER_KEY, [ getSubject: { subject } ] as SecurityManager )
 		SecurityUtils.metaClass.static.getSubject = { subject }
 	}

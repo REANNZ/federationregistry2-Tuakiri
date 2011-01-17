@@ -105,7 +105,7 @@ class AttributeConsumingServiceController {
 			response.setStatus(500)
 			return
 		}
-		
+
 		if(SecurityUtils.subject.isPermitted("descriptor:${reqAttr.attributeConsumingService.descriptor.id}:attribute:value:add")) {
 			reqAttr.addToValues(new AttributeValue(value:params.value))
 			reqAttr.save(flush:true)
@@ -213,7 +213,7 @@ class AttributeConsumingServiceController {
 			return
 		}
 		
-		if(SecurityUtils.subject.isPermitted("descriptor:${acs.descriptor.id}:attribute:add")) {
+		if(SecurityUtils.subject.isPermitted("descriptor:${acs.descriptor.id}:attribute:add")) {			
 			def attr = AttributeBase.get(params.attrid)
 			if(!attr) {
 				log.warn "Attribute identified by id ${params.attrid} was not located"
