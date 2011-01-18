@@ -46,14 +46,17 @@ class ShibbolethRealm {
 			throw new UnknownAccountException("Authentication attempt for Shibboleth provider, denying attempt as no homeOrganization (ShibbolethToken.homeOrganization) was provided")
 		}
 		
-		if (!authToken.givenName) {
-			log.error("Authentication attempt for Shibboleth provider, denying attempt as no givenName (ShibbolethToken.givenName) was provided")
-			throw new UnknownAccountException("Authentication attempt for Shibboleth provider, denying attempt as no givenName (ShibbolethToken.givenName) was provided")
+		if(authToken.displayName == null) {
+			if (authToken.givenName == null || authToken.surname == null) {
+				log.error("Authentication attempt for Shibboleth provider, denying attempt as no name details (either givenName + surname or displayName) provided")
+				throw new UnknownAccountException("Authentication attempt for Shibboleth provider, denying attempt as no name details (either givenName + surname or displayName) provided")
+			}
 		}
-		
-		if (!authToken.surname) {
-			log.error("Authentication attempt for Shibboleth provider, denying attempt as no surname (ShibbolethToken.surname) was provided")
-			throw new UnknownAccountException("Authentication attempt for Shibboleth provider, denying attempt as no surname (ShibbolethToken.surname) was provided")
+		else { 
+			if (!authToken.displayName.contains(' ')) {
+				log.error("Authentication attempt for Shibboleth provider, provided displayName has only one part and will fail split on space char for local storage")
+				throw new UnknownAccountException("Authentication attempt for Shibboleth provider, provided displayName has only one part and will fail split on space char for local storage")
+			}
 		}
 		
 		if (!authToken.email) {
