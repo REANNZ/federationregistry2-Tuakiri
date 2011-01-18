@@ -11,6 +11,8 @@ dataSource {
 	dialect= org.hibernate.dialect.MySQLInnoDBDialect
 	
 	url = "jdbc:mysql://localhost/federationregistry"
+	
+	loggingSql = false
 }
 
 // Logging state
@@ -20,7 +22,7 @@ log4j = {
 		file:"/tmp/federationregistry.log", datePattern:"'.'yyyy-MM-dd")
 	}
 	
-    error 	fedreglogger: 	'org.codehaus.groovy.grails.web.servlet',
+    warn 	fedreglogger: 	'org.codehaus.groovy.grails.web.servlet',
           					'org.codehaus.groovy.grails.web.pages',
           					'org.codehaus.groovy.grails.web.sitemesh',
           					'org.codehaus.groovy.grails.web.mapping.filter',
@@ -29,9 +31,9 @@ log4j = {
        						'org.codehaus.groovy.grails.plugins',
 							'org.apache.shiro'
 
-	info	fedreglogger: 	'grails.app'
+	warn	fedreglogger: 	'grails.app'
 
-    debug 	fedreglogger: 	'grails.plugins.nimble',
+    warn 	fedreglogger: 	'grails.plugins.nimble',
 							'grails.app.controller',
 							'grails.app.domain',
 							'grails.app.service'
@@ -39,19 +41,19 @@ log4j = {
 
 // Federation Registry specific configuration
 fedreg {
-	oldrr {
-		connection = "jdbc:mysql://localhost:3306/resourceregistry"
-		user = "rr"
-		password = "password"
-		driver = "com.mysql.jdbc.Driver"
+	deployment.environment = "development"
+	bootstrap = false
+	
+	certificates {
+		maxlifeindays = 7665	// shib default of 20 years for assertion certs
 	}
 	
 	shibboleth {
 		name = "fedreg.templates.federation.shibboleth.name"
-	    displayname = "fedreg.templates.federation.shibboleth.displayname"
-	    description = "fedreg.templates.federation.shibboleth.description"
-	    alttext = "fedreg.templates.federation.shibboleth.alttext"
-        url = "http://www.federation.org"
+        displayname = "fedreg.templates.federation.shibboleth.displayname"
+        description = "fedreg.templates.federation.shibboleth.description"
+        url = "http://www.aaf.edu.au"
+        alttext = "fedreg.templates.federation.shibboleth.alttext"
 
         federationprovider {
 			spactive = false
@@ -70,6 +72,104 @@ fedreg {
 			email= "mail"
 		}
     }
+
+	metadata {
+		federation = "aaf.edu.au"
+		current {
+			validForDays = 25
+			cacheForDays = 10
+		}
+		all {
+			validForDays = 2
+			cacheForDays = 1
+		}
+		wayf {
+			generateconfig {
+				orgtypes = ['university', 'nzuniversity', 'marcs', 'vho', 'others'] as List
+			}
+		}
+	}
+	
+	knownimplementations {
+		identityproviders {
+			shib22 {
+				displayName = 'Shibboleth Identity Provider (2.2.x)'
+				selected = true
+				entitydescriptor = '$host/idp/shibboleth'
+				post.uri = '$host/idp/profile/SAML2/POST/SSO'
+				redirect.uri = '$host/idp/profile/SAML2/Redirect/SSO'
+				artifact {
+					uri = '$host/idp/profile/SAML2/SOAP/ArtifactResolution'
+					index = 1
+				}
+				attributeservice.uri = '$host/idp/profile/SAML2/SOAP/AttributeQuery'
+			}
+		}
+		serviceproviders {
+			shib23 {
+				displayName = "Shibboleth Service Provider (2.3.x)"
+				selected = true
+				entitydescriptor = '$host/shibboleth'
+				acs {
+					post {
+						uri = '$host/Shibboleth.sso/SAML2/POST'
+						index = 1
+					}
+					artifact {
+						uri = '$host/Shibboleth.sso/SAML2/Artifact'
+						index = 3
+					}
+				}
+				drs {
+					uri = '$host/Shibboleth.sso/DS'
+					index = 1
+				}
+				slo {
+					artifact.uri = '$host/Shibboleth.sso/SLO/Artifact'
+					slo.redirect.uri = '$host/Shibboleth.sso/SLO/Redirect'
+					soap.uri = '$host/Shibboleth.sso/SLO/SOAP' 
+					post.uri = '$host/Shibboleth.sso/SLO/POST'
+				}
+				mnid {
+					artifact.uri = '$host/Shibboleth.sso/NIM/Artifact'
+					redirect.uri = '$host/Shibboleth.sso/NIM/Redirect' 
+					soap.uri = '$host/Shibboleth.sso/NIM/SOAP'
+					post.uri = '$host/Shibboleth.sso/NIM/POST'
+				}
+			}
+			shib24 {
+				displayName = "Shibboleth Service Provider (2.4.x)"
+				selected = false
+				entitydescriptor = '$host/shibboleth'
+				acs {
+					post {
+						uri = '$host/Shibboleth.sso/SAML2/POST'
+						index = 1
+					}
+					artifact {
+						uri = '$host/Shibboleth.sso/SAML2/Artifact'
+						index = 3
+					}
+				}
+				drs {
+					uri = '$host/Shibboleth.sso/Login'
+					index = 1
+				}
+				slo {
+					artifact.uri = '$host/Shibboleth.sso/SLO/Artifact'
+					slo.redirect.uri = '$host/Shibboleth.sso/SLO/Redirect'
+					soap.uri = '$host/Shibboleth.sso/SLO/SOAP' 
+					post.uri = '$host/Shibboleth.sso/SLO/POST'
+				}
+				mnid {
+					artifact.uri = '$host/Shibboleth.sso/NIM/Artifact'
+					redirect.uri = '$host/Shibboleth.sso/NIM/Redirect' 
+					soap.uri = '$host/Shibboleth.sso/NIM/SOAP'
+					post.uri = '$host/Shibboleth.sso/NIM/POST'
+				}
+			}
+		}
+	}
 }
 
 // Shiro integration
@@ -78,9 +178,7 @@ security.shiro.authc.required = false
 // set per-environment serverURL stem for creating absolute links
 environments {
     production {
-        grails.serverURL = "https://example.com/${appName}"
-		testDataConfig {
-        	enabled = false
-      	}
+        grails.serverURL = "https://manager.test.aaf.edu.au/${appName}"
     }
 }
+
