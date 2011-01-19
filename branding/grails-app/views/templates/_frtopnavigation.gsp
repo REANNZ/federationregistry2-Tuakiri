@@ -39,8 +39,10 @@
 					<g:link controller="code" class=""><g:message code="fedreg.navigation.codeconsole" /></g:link>
 				</li>
 			</n:isAdministrator>
+		</n:isLoggedIn>
 			<li><a style="color: #fff;" href="http://support.aaf.edu.au/forums"><g:message code="fedreg.navigation.help" /></a></li>
 			<li><a style="color: #fff;" href="#" onClick="script: Zenbox.show(); return false;"><g:message code="fedreg.navigation.support" /></a></li>
+		<n:isLoggedIn>
 			<li class="">
 				<g:link controller="auth" action="logout" class=""><g:message code="label.logout" /></g:link>
 			</li>

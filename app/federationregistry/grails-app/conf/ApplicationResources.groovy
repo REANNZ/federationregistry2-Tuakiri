@@ -37,7 +37,7 @@ modules = {
 	}
 	'zenbox' { 
 		defaultBundle false
-		resource url:'js/zenbox.js', disposition:'head', bundle: 'extjs'	// 2.0
+		resource url:'js/zenbox.js', disposition:'head'	// 2.0
 		resource url:'css/zenbox.css', bundle: 'css'
 	}
 	'codemirror' {	// 0.9.2
