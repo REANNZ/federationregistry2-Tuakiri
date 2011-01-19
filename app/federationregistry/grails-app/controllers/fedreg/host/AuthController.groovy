@@ -73,6 +73,7 @@ class AuthController {
 		if (grailsApplication.config.fedreg.shibboleth.federationprovider.spactive) {	
 
 			def uniqueID = request.getHeader(grailsApplication.config.fedreg.shibboleth.headers.uniqueID)
+			def displayName =  request.getHeader(grailsApplication.config.fedreg.shibboleth.headers.displayName)
 			def givenName = request.getHeader(grailsApplication.config.fedreg.shibboleth.headers.givenName)
 			def surname = request.getHeader(grailsApplication.config.fedreg.shibboleth.headers.surname)
 			def email = request.getHeader(grailsApplication.config.fedreg.shibboleth.headers.email)
@@ -97,15 +98,10 @@ class AuthController {
 				incomplete = true
 				errors.add('fedreg.controller.auth.incomplete.homeorganizationtype')
 			}
-
-			if (!givenName) {
+			
+			if( !displayName?.contains(' ') && !(givenName && surname) ) {
 				incomplete = true
-				errors.add('fedreg.controller.auth.incomplete.givenname')
-			}
-
-			if (!surname) {
-				incomplete = true
-				errors.add('fedreg.controller.auth.incomplete.surname')
+				errors.add('fedreg.controller.auth.incomplete.name')
 			}
 
 			if (!email) {
@@ -183,7 +179,7 @@ class AuthController {
 			return
 		}
 		
-		def authToken = new ShibbolethToken(principal:params.uniqueID, givenName:params.givenName, surname:params.surname, email:params.email, entityID:params.entityID, homeOrganization:params.homeOrganization, homeOrganizationType:params.homeOrganizationType)
+		def authToken = new ShibbolethToken(principal:params.uniqueID, displayName: params.displayName, givenName:params.givenName, surname:params.surname, email:params.email, entityID:params.entityID, homeOrganization:params.homeOrganization, homeOrganizationType:params.homeOrganizationType)
 		SecurityUtils.subject.login(authToken)
         this.userService.createLoginRecord(request)
         def targetUri = session.getAttribute(TARGET)

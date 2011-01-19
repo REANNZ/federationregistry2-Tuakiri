@@ -71,6 +71,18 @@ class ShibbolethRealm {
 		}
 
 		UserBase.withTransaction {
+			def givenName, surname
+			
+			if(authToken.givenName && authToken.surname) {
+				givenName = authToken.givenName
+				surname = authToken.surname
+			}
+			else {
+				def names = authToken.displayName.split()
+				givenName = names[0]
+				surname = names[names.size() - 1] // This hack supports people with attributes who have 1..n middle names supplied instead of just "FIRST LAST"
+			}
+
 			def user = UserBase.findByUsername(authToken.principal)
 			if (!user) {
 				log.info("No account representing user ${authToken.principal} exists")
@@ -88,7 +100,7 @@ class ShibbolethRealm {
 			
 					newUser.profile = InstanceGenerator.profile()
 					newUser.profile.owner = newUser
-					newUser.profile.fullName = "${authToken.givenName} ${authToken.surname}"
+					newUser.profile.fullName = "${givenName} ${surname}"
 					newUser.profile.email = (authToken.email == "") ? null : authToken.email.toLowerCase()
 					
 					user = userService.createUser(newUser)
@@ -103,7 +115,7 @@ class ShibbolethRealm {
 					// Attempt to link to local contact instance
 					def contact = MailURI.findByUri(newUser.profile.email)?.contact
 					if(!contact) {
-						contact = new Contact(givenName:authToken.givenName, surname:authToken.surname, email:new MailURI(uri:authToken.email?.toLowerCase()), organization: entityDescriptor.organization)
+						contact = new Contact(givenName:givenName, surname:surname, email:new MailURI(uri:authToken.email?.toLowerCase()), organization: entityDescriptor.organization)
 						if(!contact.save()) {
 							log.error "Unable to create Contact to link with incoming user" 
 							contact.errors.each { log.error it }
@@ -130,10 +142,15 @@ class ShibbolethRealm {
 				}
 				else
 					throw new UnknownAccountException("No account representing user $username exists and autoProvision is false")
-			}else {
+			} else {
+				
+				if(!user.contact) {
+					throw new UnknownAccountException("Found existing account $user but without contact link. This shouldn't be the case for end user accounts. Manual intervention required.")
+				}
+				
 				// Update name and email to what IDP has supplied - this could be extended to role membership etc in the future
 				boolean change = false
-				def fullName = "${authToken.givenName} ${authToken.surname}"
+				def fullName = "${givenName} ${surname}"
 				def email = (authToken.email == "") ? null : authToken.email?.toLowerCase() 
 			
 				if(user.profile.email.toLowerCase() != email.toLowerCase()) {
@@ -173,10 +190,10 @@ class ShibbolethRealm {
 						user.profile.email = email
 					}
 				}
-				if(user.profile.fullName != fullName || user.contact.givenName != authToken.givenName || user.contact.surname != authToken.surname) {
+				if(user.profile.fullName != fullName || user.contact.givenName != givenName || user.contact.surname != surname) {
 					change = true
-					user.contact.givenName = authToken.givenName
-					user.contact.surname = authToken.surname
+					user.contact.givenName = givenName
+					user.contact.surname = surname
 					user.profile.fullName = fullName
 				}	
 				if(user.entityDescriptor != entityDescriptor) {
