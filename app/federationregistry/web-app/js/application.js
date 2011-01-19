@@ -135,6 +135,7 @@ fedreg.organization_fulladministrator_search = function() {
 	var dataString = "q=" + $('#q').val()
 	$.ajax({
 		type: "GET",
+		cache: false,
 		url: organizationFullAdministratorSearchEndpoint,
 		data: dataString,
 		success: function(res) {
@@ -209,6 +210,7 @@ fedreg.descriptor_fulladministrator_search = function() {
 	var dataString = "q=" + $('#q').val()
 	$.ajax({
 		type: "GET",
+		cache: false,
 		url: descriptorFullAdministratorSearchEndpoint,
 		data: dataString,
 		success: function(res) {	
@@ -372,6 +374,7 @@ fedreg.contact_search = function(id) {
 	var dataString = "givenName=" + $('#givenName').val() + '&surname=' + $('#surname').val() + '&email=' + $('#email').val()
 	$.ajax({
 		type: "GET",
+		cache: false,
 		url: contactSearchEndpoint,
 		data: dataString,
 		success: function(res) {
@@ -454,6 +457,7 @@ fedreg.endpoint_edit = function(id, endpointType, containerID) {
 	var dataString = "id=" + id + "&endpointType=" + endpointType + "&containerID=" + containerID;
 	$.ajax({
 		type: "GET",
+		cache: false,
 		url: endpointEditEndpoint,
 		data: dataString,
 		success: function(res) {
@@ -888,6 +892,7 @@ fedreg.attributefilter_refresh = function() {
 	editor.setCode('working...');
 	$.ajax({
 		type: "GET",
+		cache: false,
 		url: attributeFilterEndpoint,
 		dataType: "text",
 		success: function(res) {

@@ -1,8 +1,6 @@
 <html>
-	<head>
-	    
+	<head>	    
 	    <meta name="layout" content="public" />
-	    <title><g:message code="fedreg.view.index.title"/></title>
 	</head>
 
 	<body>
