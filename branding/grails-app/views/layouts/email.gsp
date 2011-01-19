@@ -3,7 +3,7 @@
 <html>
 	<head>
 		<!-- Fun tip: email styles have to be inlined because many clients are broken loading external CSS :( -->
-		<title><g:message code="fedreg.title" /></title>
+		<title><g:message code="fedreg.title.${grailsApplication.config.fedreg.deployment.environment}" /></title>
 	</head>
 
 	<body style="padding:0; margin:0; font-family: Helvetica, Arial, sans-serif; font-size: 1.0em;">
