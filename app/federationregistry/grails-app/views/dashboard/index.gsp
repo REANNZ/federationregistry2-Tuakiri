@@ -64,7 +64,7 @@
 				<div class="dashcol3">
 					<div class="user">
 						<div class="userlogo">
-							<a href="http://gravatar.com"><avatar:gravatar email="${authenticatedUser.profile.email}" size="50" defaultGravatarUrl="${resource(absolute: true, dir:'images', file:'avatar.png')}" /></a>
+							<a href="http://gravatar.com"><avatar:gravatar email="${authenticatedUser.profile.email}" size="50" /></a>
 							<br>
 							<a href="http://gravatar.com"><g:message code="label.change"/></a>
 						</div>
