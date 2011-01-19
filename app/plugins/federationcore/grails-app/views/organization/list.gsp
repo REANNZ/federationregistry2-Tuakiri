@@ -4,16 +4,12 @@
 		
 		<meta name="layout" content="members" />
 		<title><g:message code="fedreg.view.members.organization.list.title" /></title>
-		
-		<script type="text/javascript">
-			<njs:datatable tableID="organizationlist" sortColumn="0" />
-		</script>
 	</head>
 	<body>
 		<section>
 			<h2><g:message code="fedreg.view.members.organization.list.heading" /></h2>
 
-			<table id="organizationlist">
+			<table class="sortable-table">
 				<thead>
 					<tr>
 					
