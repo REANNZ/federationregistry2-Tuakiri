@@ -2,13 +2,13 @@
 	<head>
 		<meta name="layout" content="${grailsApplication.config.nimble.layout.administration}"/>
 		<title><g:message code="nimble.view.user.show.title" args="[user.profile?.fullName ?: user.username]" /></title>
-		<script type="text/javascript">
+		<r:script>
 			<njs:user user="${user}"/>
 			<njs:permission parent="${user}"/>
 			<njs:role parent="${user}"/>
 			<njs:group parent="${user}"/>
 			nimble.createTabs('tabs');
-		</script>
+		</r:script>
 	</head>
 
 	<body>

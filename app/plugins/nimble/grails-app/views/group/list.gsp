@@ -5,9 +5,9 @@
 		<meta name="layout" content="${grailsApplication.config.nimble.layout.administration}"/>
 		<title><g:message code="nimble.view.group.list.title" /></title>
 		
-		<script type="text/javascript">
+		<r:script>
 			<njs:datatable tableID="grouplist" sortColumn="0" />
-		</script>
+		</r:script>
 	</head>
 	
 	<body>

@@ -4,9 +4,9 @@
 		<meta name="layout" content="${grailsApplication.config.nimble.layout.administration}"/>
 		<title><g:message code="nimble.view.user.list.title" /></title>
 		
-		<script type="text/javascript">
+		<r:script>
 			<njs:datatable tableID="userlist" sortColumn="1" />
-		</script>
+		</r:script>
 	</head>
 
 	<body>

@@ -2,9 +2,9 @@
 	<head>
 		<meta name="layout" content="${grailsApplication.config.nimble.layout.administration}"/>
 		<title><g:message code="nimble.view.admins.title" /></title>
-		<script type="text/javascript">
+		<r:script>
 			<njs:admin />
-		</script>
+		</r:script>
 	</head>
 
 	<body>

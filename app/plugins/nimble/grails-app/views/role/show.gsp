@@ -2,11 +2,11 @@
 	<head>
 		<meta name="layout" content="${grailsApplication.config.nimble.layout.administration}"/>
 		<title><g:message code="nimble.view.role.show.title" args="[role.name]" /></title>
-		<script type="text/javascript">
+		<r:script>
 			<njs:permission parent="${role}"/>
 			<njs:member parent="${role}"/>
 			nimble.createTabs('tabs');
-		</script>
+		</r:script>
 	</head>
 	
 	<body>
