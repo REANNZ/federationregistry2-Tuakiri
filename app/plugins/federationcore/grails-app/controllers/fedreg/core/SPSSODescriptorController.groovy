@@ -59,7 +59,13 @@ class SPSSODescriptorController {
 			flash.message = message(code: 'fedreg.core.spssoroledescriptor.save.validation.error')
 			
 			log.info "$authenticatedUser failed attempting to create ${ret.serviceProvider}"
-			render (view:'create', model: ret + [organizationList: Organization.findAllWhere(active:true, approved:true), attributeList: AttributeBase.list(), nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)])
+			
+			def c = AttributeBase.createCriteria()
+			def attributeList = c.list {
+				order("category", "asc")
+				order("friendlyName", "asc")
+			}
+			render (view:'create', model: ret + [organizationList: Organization.findAllWhere(active:true, approved:true), attributeList: attributeList, nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)])
 		}
 	}
 	

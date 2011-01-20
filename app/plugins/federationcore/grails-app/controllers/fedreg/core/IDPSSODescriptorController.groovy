@@ -55,7 +55,12 @@ class IDPSSODescriptorController {
 		else {
 			flash.type="error"
 			flash.message = message(code: 'fedreg.core.idpssoroledescriptor.save.validation.error')
-			render (view:'create', model:ret + [organizationList: Organization.findAllWhere(active:true, approved:true), attributeList: AttributeBase.list(), nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)])
+			def c = AttributeBase.createCriteria()
+			def attributeList = c.list {
+				order("category", "asc")
+				order("friendlyName", "asc")
+			}
+			render (view:'create', model:ret + [organizationList: Organization.findAllWhere(active:true, approved:true), attributeList: attributeList, nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)])
 		}
 	}
 	
