@@ -79,6 +79,10 @@ class IDPSSODescriptor extends SSODescriptor  {
 		
 		IDPSSODescriptor rhs = (IDPSSODescriptor) obj
 		return new EqualsBuilder()
+			.append(this.id, obj.id)
+			.append(this.scope, obj.scope)
+			.append(this.displayName, obj.displayName)
+			.append(this.organization, obj.organization)
 			.isEquals()
 	}
 

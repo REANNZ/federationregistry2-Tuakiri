@@ -19,6 +19,9 @@
 
 package fedreg.core
 
+import org.apache.commons.lang.builder.EqualsBuilder
+import org.apache.commons.lang.builder.HashCodeBuilder
+
 /**
  * @author Bradley Beddoes
  */
@@ -48,5 +51,24 @@ class SPSSODescriptor extends SSODescriptor {
 	
 	public boolean functioning() {
 		( active && approved && entityDescriptor.functioning() )
+	}
+	
+	public boolean equals(Object obj) {
+		if( this.is(obj) ) return true
+		if ( obj == null ) return false
+		if ( !obj.instanceOf(IDPSSODescriptor) ) return false
+		
+		IDPSSODescriptor rhs = (IDPSSODescriptor) obj
+		return new EqualsBuilder()
+			.append(this.id, obj.id)
+			.append(this.displayName, obj.displayName)
+			.append(this.organization, obj.organization)
+			.isEquals()
+	}
+
+	public int hashCode() {
+		// hard-coded, randomly chosen, non-zero, odd number different for each class
+		return new HashCodeBuilder(43, 129).
+		toHashCode();
 	}
 }
