@@ -271,7 +271,7 @@
 							<fr:tooltip code='fedreg.help.identityprovider.authartifact' />
 						</td>
 						<td>
-							<g:textField name="idp.artifact.index" size="2" class="required number" value="${soapArtifact?.location?.index}"/>
+							<g:textField name="idp.artifact.index" size="2" class="required number" value="${soapArtifact?.index}"/>
 							<fr:tooltip code='fedreg.help.endpoint.index' />
 						</td>
 					</tr>
