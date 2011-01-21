@@ -110,7 +110,7 @@ class EntityDescriptorController {
 			}
 		}
 		else {
-			log.warn("Attempt to update $entityDescriptor by $authenticatedUser was denied, incorrect permission set")
+			log.warn("Attempt to update $entityDescriptor_ by $authenticatedUser was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}
