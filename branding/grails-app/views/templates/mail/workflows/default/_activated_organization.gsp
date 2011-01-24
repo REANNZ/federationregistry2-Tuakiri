@@ -9,7 +9,7 @@
 			<table>
 				<tr>
 					<td>
-						<g:message code="label.internalid" />
+						<strong><g:message code="label.internalid" /></strong>: 
 					</td>
 					<td>
 						${fieldValue(bean: serviceProvider, field: "id")}
@@ -17,7 +17,7 @@
 				</tr>
 				<tr>
 					<td>
-						<g:message code="label.displayname" />
+						<strong><g:message code="label.displayname" /></strong>: 
 					</td>
 					<td>
 						${fieldValue(bean: organization, field: "displayName")}
