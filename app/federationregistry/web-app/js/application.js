@@ -52,7 +52,7 @@ applyBehaviourTo = function(e) {
 	fedreg.stylebuttons(e); 
             
 	$(e).find('.buttonset').buttonset();
-	$(e).find('.tip').tipTip({maxWidth: "auto", edgeOffset: 10, maxWidth:'200px', defaultPosition:"top"});
+	$(e).find('.tip').tipTip({activation:"hover", maxWidth: "auto", edgeOffset: 10, maxWidth:'200px', defaultPosition:"top"});
 }
 
 fedreg.stylebuttons = function(e) {
