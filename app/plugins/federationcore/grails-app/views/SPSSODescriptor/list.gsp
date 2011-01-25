@@ -3,15 +3,12 @@
 	<head>
 		<meta name="layout" content="members" />
 		<title><g:message code="fedreg.view.members.serviceprovider.list.title" /></title>
-		<script type="text/javascript">
-			<njs:datatable tableID="spssodescriptorlist" sortColumn="0" />
-		</script>
 	</head>
 	<body>
 
 		<section>
 			<h2><g:message code="fedreg.view.members.serviceprovider.list.heading" /></h2>
-			<table id="spssodescriptorlist">
+			<table  class="sortable-table">
 				<thead>
 					<tr>
 						<th><g:message code="label.serviceprovider" /></th>
