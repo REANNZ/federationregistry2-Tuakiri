@@ -286,7 +286,7 @@
 							<g:hasErrors bean="${attributeAuthority}">
 								<div class="error"><g:renderErrors bean="${attributeAuthority}"as="list"/></div>
 							</g:hasErrors>
-							<g:textField name="aa.attributeservice.uri" size="64" class="required url" value="${attributeAuthority?.attributeServices?.get(0)?.location?.uri}"}/>
+							<g:textField name="aa.attributeservice.uri" size="64" class="required url" value="${soapAttributeService?.location?.uri}"}/>
 							<fr:tooltip code='fedreg.help.identityprovider.aasoap' />
 						</td>
 					</tr>
