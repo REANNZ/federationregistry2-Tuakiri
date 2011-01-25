@@ -19,6 +19,8 @@
     <div class="warning">
        <g:message code="fedreg.templates.organization.create.errors" />
     </div>
+
+	<n:errors bean="${organization}" />
 </g:hasErrors>
 
 <g:form action="${saveAction}">

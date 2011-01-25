@@ -75,6 +75,8 @@
     <div class="warning">
        <g:message code="fedreg.templates.serviceprovider.create.errors" />
     </div>
+
+	<n:errors bean="${serviceProvider}" />
 </g:hasErrors>
 
 <g:form action="${saveAction}">

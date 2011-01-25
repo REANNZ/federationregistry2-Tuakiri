@@ -83,6 +83,8 @@
     <div class="warning">
        <g:message code="fedreg.templates.identityprovider.create.errors" />
     </div>
+
+	<n:errors bean="${identityProvider}" />
 </g:hasErrors>
 
 <g:form action="${saveAction}" name="idpssodescriptorcreateform">
