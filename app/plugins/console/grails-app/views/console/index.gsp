@@ -133,7 +133,7 @@
 			autoMatchParens: true,
 			disableSpellcheck: true,
 			lineNumbers: true,
-			tabMode: 'shift',
+			tabMode: 'shift'
 		});
 			
       Event.observe(window, Prototype.Browser.IE ? 'load':"dom:loaded", function(){

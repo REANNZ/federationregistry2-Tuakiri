@@ -4,10 +4,6 @@
 	<head>
 		<meta name="layout" content="${grailsApplication.config.nimble.layout.administration}"/>
 		<title><g:message code="nimble.view.group.list.title" /></title>
-		
-		<r:script>
-			<njs:datatable tableID="grouplist" sortColumn="0" />
-		</r:script>
 	</head>
 	
 	<body>
@@ -18,7 +14,7 @@
 			<g:message code="nimble.view.group.edit.descriptive" />
 		</p>
 
-		<table id="grouplist">
+		<table  class="sortable-table">
 			<thead>
 				<tr>
 					<th><g:message code="label.name" /></th>

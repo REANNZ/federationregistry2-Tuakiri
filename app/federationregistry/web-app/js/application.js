@@ -31,17 +31,18 @@ applyBehaviourTo = function(e) {
 			"iDisplayLength": 10,
 			"aaSorting": [[0, "asc"]],
 			"oLanguage": {
-					"sSearch": "Filter: ",
-					"sZeroRecords": "No matches found",
-					"sInfo": "Showing _START_ to _END_ of _TOTAL_ records",
-					"sInfoEmpty": "Showing 0 to 0 of 0 records",
-					"sInfoFiltered": "(filtered from _MAX_ total records)",
-					"oPaginate": {
-						"sFirst": "First",
-						"sLast": "Last",
-						"sNext": "Next",
-						"sPrevious": "Previous",
-				},
+				"sSearch": "Filter: ",
+				"sZeroRecords": "No matches found",
+				"sInfo": "Showing _START_ to _END_ of _TOTAL_ records",
+				"sInfoEmpty": "Showing 0 to 0 of 0 records",
+				"sInfoFiltered": "(filtered from _MAX_ total records)",
+				"oPaginate": {
+					"sFirst": "First",
+					"sLast": "Last",
+					"sNext": "Next",
+					"sPrevious": "Previous"
+				}
+					
 			},
 			"fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) { fedreg.stylebuttons(nRow); return nRow;}
 		});
@@ -75,7 +76,7 @@ fedreg.stylebuttons = function(e) {
 		'.close-button': 'ui-icon-close',
 		'.grant-button': 'ui-icon-circle-plus',
 		'.revoke-button': 'ui-icon-circle-minus',
-		'.toggle-button': 'ui-icon-power',
+		'.toggle-button': 'ui-icon-power'
     }, function(selector, icon) {
         $(e).find(selector).button({'icons': {'primary': icon}});
     });

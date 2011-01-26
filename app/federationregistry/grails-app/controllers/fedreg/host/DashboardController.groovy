@@ -20,13 +20,13 @@ class DashboardController {
 		
 		def tasks = workflowTaskService.retrieveTasksAwaitingApproval(authenticatedUser)
 		
-		organizations.add(authenticatedUser.entityDescriptor.organization)
+		organizations.add(authenticatedUser?.entityDescriptor?.organization)
 		
 		// Find all additional orgs this user can admin
 		def orgs = Organization.list()
 		orgs.each {
 			if(SecurityUtils.subject.hasRole("organization-${it.id}-administrators"))
-				if(it.id != authenticatedUser.entityDescriptor.organization.id)
+				if(it.id != authenticatedUser?.entityDescriptor?.organization?.id)
 					organizations.add(it)
 		}
 		

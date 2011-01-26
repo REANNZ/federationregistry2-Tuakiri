@@ -4,17 +4,13 @@
 	<head>
 		<meta name="layout" content="${grailsApplication.config.nimble.layout.administration}"/>
 		<title><g:message code="nimble.view.role.list.title" /></title>
-		
-		<r:script>
-			<njs:datatable tableID="rolelist" sortColumn="0" />
-		</r:script>
 	</head>
 
 	<body>
 
 		<h2><g:message code="nimble.view.role.list.heading" /></h2>
 
-		<table id="rolelist">
+		<table class="sortable-table">
 			<thead>
 				<tr>
 					<th><g:message code="label.name" /></th>

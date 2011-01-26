@@ -3,17 +3,13 @@
 	<head>
 		<meta name="layout" content="${grailsApplication.config.nimble.layout.administration}"/>
 		<title><g:message code="nimble.view.user.list.title" /></title>
-		
-		<r:script>
-			<njs:datatable tableID="userlist" sortColumn="1" />
-		</r:script>
 	</head>
 
 	<body>
 
 		<h2><g:message code="nimble.view.user.list.heading" /></h2>
 
-		<table id="userlist">
+		<table class="sortable-table">
 			<thead>
 				<tr>
 					<th><g:message code="label.username" /></th>

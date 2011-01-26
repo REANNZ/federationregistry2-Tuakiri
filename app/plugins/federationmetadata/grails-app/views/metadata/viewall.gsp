@@ -24,7 +24,7 @@
 				autoMatchParens: true,
 				disableSpellcheck: true,
 				lineNumbers: true,
-				tabMode: 'shift',
+				tabMode: 'shift'
 			});
 		</r:script>
 	</body>

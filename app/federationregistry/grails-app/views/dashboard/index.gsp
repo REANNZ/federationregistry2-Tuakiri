@@ -15,7 +15,7 @@
 					<g:if test="${organizations}">
 					<ul  class="dashlist">
 						<g:each in="${organizations}" var="org">
-							<li><a href="${createLink(controller:'organization', action:'show', id:org.id)}">${fieldValue(bean: org, field: 'displayName')} </a></li>
+							<li><a href="${createLink(controller:'organization', action:'show', id:org?.id)}">${fieldValue(bean: org, field: 'displayName')} </a></li>
 						</g:each>
 					</ul>
 					</g:if>
