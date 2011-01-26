@@ -60,9 +60,9 @@ class SPSSODescriptor extends SSODescriptor {
 		
 		IDPSSODescriptor rhs = (IDPSSODescriptor) obj
 		return new EqualsBuilder()
-			.append(this.id, obj.id)
-			.append(this.displayName, obj.displayName)
-			.append(this.organization, obj.organization)
+			.append(this.id, rhs.id)
+			.append(this.displayName, rhs.displayName)
+			.append(this.organization, rhs.organization)
 			.isEquals()
 	}
 

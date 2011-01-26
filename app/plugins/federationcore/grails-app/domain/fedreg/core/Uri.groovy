@@ -54,6 +54,7 @@ class Uri  {
 		
 		Uri rhs = (Uri) obj
 		return new EqualsBuilder()
+			.append(id, rhs.uri)
 			.append(uri, rhs.uri)
 			.isEquals()
 	}
