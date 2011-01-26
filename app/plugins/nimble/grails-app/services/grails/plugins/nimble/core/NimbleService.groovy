@@ -74,7 +74,7 @@ class NimbleService {
             adminPermission.managed = true
             adminPermission.type = Permission.adminPerm
 
-            permissionService.createPermission(savedAdminRole, user)
+            permissionsService.createPermission(savedAdminRole, user)
         }
 
         // Execute all service init that relies on base Nimble environment
