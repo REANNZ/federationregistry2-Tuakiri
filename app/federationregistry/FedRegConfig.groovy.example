@@ -43,6 +43,7 @@ log4j = {
 fedreg {
 	deployment.environment = "development"
 	bootstrap = false
+	enabledemonstration = false
 	
 	certificates {
 		maxlifeindays = 7665	// shib default of 20 years for assertion certs

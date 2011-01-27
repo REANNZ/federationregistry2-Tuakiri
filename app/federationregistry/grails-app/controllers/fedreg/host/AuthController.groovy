@@ -41,7 +41,7 @@ class AuthController {
 			return
 		}
 		
-		if (GrailsUtil.environment != GrailsApplication.ENV_DEVELOPMENT) {
+		if (!grailsApplication.config.fedreg.enabledemonstration) {
 			response.sendError(403)
 			return
 		}
@@ -174,7 +174,7 @@ class AuthController {
 	}
 	
 	def devauth = {
-		if (!(GrailsUtil.environment == GrailsApplication.ENV_DEVELOPMENT) || grailsApplication.config.fedreg.shibboleth.federationprovider.spactive) {
+		if (!grailsApplication.config.fedreg.enabledemonstration) {
 			response.sendError(403)
 			return
 		}
