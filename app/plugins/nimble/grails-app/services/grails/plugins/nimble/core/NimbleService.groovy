@@ -27,7 +27,7 @@ import org.apache.shiro.SecurityUtils
 class NimbleService {
 
     def grailsApplication
-	def permissionsService
+	def permissionService
     
     boolean transactional = true
 
@@ -57,7 +57,7 @@ class NimbleService {
         def adminRole = Role.findByName(AdminsService.ADMIN_ROLE)
         if (!adminRole) {
             adminRole = new Role()
-            adminRole.description = 'Assigned to users who are considered to be system wide administrators'
+            adminRole.description = 'Assigned to users who are considered to be system wide administrator'
             adminRole.name = AdminsService.ADMIN_ROLE
             adminRole.protect = true
             def savedAdminRole = adminRole.save()
@@ -74,7 +74,7 @@ class NimbleService {
             adminPermission.managed = true
             adminPermission.type = Permission.adminPerm
 
-            permissionsService.createPermission(savedAdminRole, user)
+            permissionService.createPermission(adminPermission, savedAdminRole)
         }
 
         // Execute all service init that relies on base Nimble environment
