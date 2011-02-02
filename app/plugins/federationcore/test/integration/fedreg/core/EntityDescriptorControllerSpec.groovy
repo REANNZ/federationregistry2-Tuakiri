@@ -13,6 +13,7 @@ class EntityDescriptorControllerSpec extends IntegrationSpec {
 	def controller
 	def savedMetaClasses
 	def entityDescriptorService
+	def user
 	
 	def cleanup() {
 		SpecHelpers.resetMetaClasses(savedMetaClasses)
@@ -26,18 +27,19 @@ class EntityDescriptorControllerSpec extends IntegrationSpec {
 		entityDescriptorService.metaClass = EntityDescriptorService.metaClass
 		
 		controller = new EntityDescriptorController(entityDescriptorService:entityDescriptorService)
-		def user = UserBase.build()
+		user = UserBase.build()
 		SpecHelpers.setupShiroEnv(user)
+		
+		// Clear storage - odd issue with 1.3.6 have not yet confirmed where bug lies
+		EntityDescriptor.findAll()*.delete(flush:true)
+		Organization.findAll()*.delete(flush:true)
 	}
 	
 	def "Validate list"() {
-		setup:
-		
-		println "INLIST: ${EntityDescriptor.list()}"
-		
+		setup:		
 		(1..20).each { i ->
 			def ed = EntityDescriptor.build(entityID:"http://sp.test.com/$i")
-			ed.save()
+			ed
 		}
 		
 		when:
@@ -52,7 +54,7 @@ class EntityDescriptorControllerSpec extends IntegrationSpec {
 		setup:
 		(1..25).each { i ->
 			def ed = EntityDescriptor.build(entityID:"http://sp.test.com/$i")
-			ed.save()
+			ed
 		}
 		controller.params.max = 10
 		
@@ -69,7 +71,7 @@ class EntityDescriptorControllerSpec extends IntegrationSpec {
 		setup:
 		(1..25).each { i->
 			def ed = EntityDescriptor.build(entityID:"http://sp.test.com/$i")
-			ed.save()
+			ed
 		}
 		controller.params.max = 10
 		controller.params.offset = 5
@@ -109,7 +111,7 @@ class EntityDescriptorControllerSpec extends IntegrationSpec {
 	def "Validate create"() {
 		setup:
 		(1..10).each {
-			Organization.build().save()
+			Organization.build()
 		}
 		
 		when:
@@ -123,8 +125,8 @@ class EntityDescriptorControllerSpec extends IntegrationSpec {
 	
 	def "Validate successful save"() {
 		setup:
-		def organization = Organization.build().save()
-		def entityDescriptor = EntityDescriptor.build(organization:organization).save()
+		def organization = Organization.build()
+		def entityDescriptor = EntityDescriptor.build(organization:organization) 
 		
 		when:
 		entityDescriptorService.metaClass.create = { def p -> 
@@ -133,13 +135,13 @@ class EntityDescriptorControllerSpec extends IntegrationSpec {
 		def model = controller.save()
 		
 		then:
-		controller.response.redirectedUrl == "/entityDescriptor/show/${entityDescriptor.id}"	
+		controller.response.redirectedUrl == "/entityDescriptor/show/${entityDescriptor.id}"
 	}
 	
 	def "Validate failed save"() {
 		setup:
-		def organization = Organization.build().save()
-		def entityDescriptor = EntityDescriptor.build(organization:organization).save()
+		def organization = Organization.build()
+		def entityDescriptor = EntityDescriptor.build(organization:organization)
 		
 		when:
 		entityDescriptorService.metaClass.create = { def p -> 
@@ -147,21 +149,18 @@ class EntityDescriptorControllerSpec extends IntegrationSpec {
 		} 
 		def model = controller.save()
 		
-		then:
-		//organization == controller.modelAndView.model.organization	
-		//entityDescriptor == controller.modelAndView.model.entityDescriptor	
-		//serviceProvider == controller.modelAndView.model.serviceProvider
-		
+		then:		
 		controller.flash.type == "error"
 		controller.flash.message == "fedreg.core.entitydescriptor.save.validation.error"	
 	}
 	
-	def "Validate successful update"() {
+	def "Validate successful update with correct permissions"() {
 		setup:
-		def organization = Organization.build().save()
-		def entityDescriptor = EntityDescriptor.build(organization:organization).save()
+		def organization = Organization.build()
+		def entityDescriptor = EntityDescriptor.build(organization:organization)
 		
 		controller.params.id = entityDescriptor.id
+		user.perms.add("descriptor:${entityDescriptor.id}:update")
 		
 		when:
 		entityDescriptorService.metaClass.update = { def p -> 
@@ -170,7 +169,7 @@ class EntityDescriptorControllerSpec extends IntegrationSpec {
 		def model = controller.update()
 		
 		then:
-		controller.response.redirectedUrl == "/entityDescriptor/show/${entityDescriptor.id}"	
+		controller.response.redirectedUrl == "/entityDescriptor/show/${entityDescriptor.id}"
 	}
 	
 	def "Invalid or non existing EntityDescriptor fails update"() {
@@ -186,12 +185,13 @@ class EntityDescriptorControllerSpec extends IntegrationSpec {
 		controller.flash.message == "fedreg.core.entitydescriptor.nonexistant"
 	}
 	
-	def "Invalid service response fails update"() {
+	def "Invalid service response fails update with correct permissions"() {
 		setup:
-		def organization = Organization.build().save()
-		def entityDescriptor = EntityDescriptor.build(organization:organization).save()
+		def organization = Organization.build()
+		def entityDescriptor = EntityDescriptor.build(organization:organization)
 		
 		controller.params.id = entityDescriptor.id
+		user.perms.add("descriptor:${entityDescriptor.id}:update")
 		
 		when:
 		entityDescriptorService.metaClass.update = { def p -> 
@@ -199,13 +199,23 @@ class EntityDescriptorControllerSpec extends IntegrationSpec {
 		} 
 		def model = controller.update()
 		
-		then:
-		//organization == controller.modelAndView.model.organization	
-		//entityDescriptor == controller.modelAndView.model.entityDescriptor	
-		//serviceProvider == controller.modelAndView.model.serviceProvider
-		
+		then:		
 		controller.flash.type == "error"
 		controller.flash.message == "fedreg.core.entitydescriptor.update.validation.error"	
+	}
+	
+	def "Validate unsuccessful update without correct permissions"() {
+		setup:
+		def organization = Organization.build()
+		def entityDescriptor = EntityDescriptor.build(organization:organization)
+		
+		controller.params.id = entityDescriptor.id
+		
+		when:
+		def model = controller.update()
+		
+		then:
+		controller.response.status == 403
 	}
 
 }

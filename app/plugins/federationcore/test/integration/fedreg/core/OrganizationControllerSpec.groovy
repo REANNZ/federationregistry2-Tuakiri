@@ -26,6 +26,10 @@ class OrganizationControllerSpec extends IntegrationSpec {
 		controller = new OrganizationController(organizationService:organizationService)
 		def user = UserBase.build()
 		SpecHelpers.setupShiroEnv(user)
+		
+		// Clear storage - odd issue with 1.3.6 have not yet confirmed where bug lies
+		EntityDescriptor.findAll()*.delete(flush:true)
+		Organization.findAll()*.delete(flush:true)
 	}
 	
 	def "Validate list"() {

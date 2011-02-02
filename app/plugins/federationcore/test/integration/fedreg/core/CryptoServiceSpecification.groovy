@@ -9,6 +9,11 @@ class CryptoServiceSpecification extends IntegrationSpec {
 	
 	def cryptoService
 	
+	def setup () {
+		KeyDescriptor.findAll()*.delete(flush:true)
+		CACertificate.findAll()*.delete(flush:true)
+	}
+	
 	def 'validate signing certificate association with role descriptor'() {
 		setup:
 		def ca = new File('./test/integration/data/demoCA/cacertminimal.pem').text

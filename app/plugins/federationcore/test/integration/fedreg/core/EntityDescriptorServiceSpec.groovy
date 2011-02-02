@@ -20,6 +20,9 @@ class EntityDescriptorServiceSpec extends IntegrationSpec {
 		SpecHelpers.setupShiroEnv(user)
 		
 		params = [:]
+		
+		EntityDescriptor.findAll()*.delete(flush:true)
+		Organization.findAll()*.delete(flush:true)
 	}
 	
 	def cleanup() {

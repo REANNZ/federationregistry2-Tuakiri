@@ -26,6 +26,11 @@ class SPSSODescriptorControllerSpec extends IntegrationSpec {
 		controller = new SPSSODescriptorController(SPSSODescriptorService:spssoDescriptorService)
 		def user = UserBase.build()
 		SpecHelpers.setupShiroEnv(user)
+		
+		// Clear storage - odd issue with 1.3.6 have not yet confirmed where bug lies
+		SPSSODescriptor.findAll()*.delete(flush:true)
+		EntityDescriptor.findAll()*.delete(flush:true)
+		Organization.findAll()*.delete(flush:true)
 	}
 	
 	def setupBindings() {
