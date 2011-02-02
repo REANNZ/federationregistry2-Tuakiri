@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head class="html5reset-bare-bones">
+
+	<meta charset="utf-8">
+
+	<!--[if IE]><![endif]-->
+	
+	<title>{{ page.title }}</title>
+	
+	<meta name="description" content="{{ page.description }}">
+
+	<link rel="stylesheet" href="{{page.location}}/css/main.css">
+	<link rel="stylesheet" href="{{page.location}}/css/print/main.css" media="print">
+	
+	<!--[if IE]>
+	<link rel="stylesheet" href="{{page.location}}/css/patches/win-ie-all.css">
+	<![endif]-->
+	<!--[if IE 7]>
+	<link rel="stylesheet" href="{{page.location}}/css/patches/win-ie7.css">
+	<![endif]-->
+	<!--[if lt IE 7]>
+	<link rel="stylesheet" href="{{page.location}}/css/patches/win-ie-old.css">
+	<![endif]-->
+	
+	<link rel="stylesheet/less"  href="{{page.location}}/css/theme.less">
+		
+	<script type="text/javascript" src="{{page.location}}/js/modernizr-1.5.min.js"></script>
+	<script type="text/javascript" src="{{page.location}}/js/jquery-1.4.4.min.js"></script>
+	
+	<script type="text/javascript" src="{{page.location}}/js/less-1.0.35.min.js"></script>
+	
+	<script type="text/javascript">
+		$(window).load(function() {
+	    	$('#slider').nivoSlider({
+				controlNav:false,
+				directionNav: false,
+				pauseTime:5000
+			});
+		});
+	</script>
+</head>
+
+<body>
+		<a href="https://github.com/ausaccessfed/federationregistrymaster"><img style="position: absolute; top: 0; right: 0; border: 0;" src="{{page.location}}/images/gh-banner.png" alt="Fork me on GitHub"></a>
+		<header>
+			<h1> Federation Registry </h1>
+		</header>
+	
+		<section>
+			<section>
+				<div class="col20">
+					<h3>Content</h3>
+					<ul class="clean">
+						<li><a href="{{page.location}}/">Home</a>
+						<li><a href="{{page.location}}/doc/index.html">Overview</a>
+						<li><a href="{{page.location}}/doc/screenshots.html">Screenshots</a>
+						<li><a href="{{page.location}}/doc/install.html">Installation</a>
+						<li><a href="{{page.location}}/doc/theme.html">Theme customization</a>	
+					</ul>
+					
+					<h3>Architecture</h3>
+					<ul class="clean">
+						<li><a href="{{page.location}}/doc/arch/requirements.html">Requirements</a>
+						<li><a href="{{page.location}}/doc/arch/usermanagement.html">User management and access control</a>
+						<li><a href="{{page.location}}/doc/arch/workflow.html">Workflow</a>
+						<li><a href="{{page.location}}/doc/arch/core.html">Core</a>
+						<li><a href="{{page.location}}/doc/arch/compliance.html">Compliance</a>
+						<li><a href="{{page.location}}/doc/arch/main.html">Main</a>
+					</ul>
+				</div>
+				<div class="col80">
+					{{ content }}
+				</div>
+			</section>
+		</section>
+		
+		<footer>
+			
+		</footer>
+
+</body>
+</html>

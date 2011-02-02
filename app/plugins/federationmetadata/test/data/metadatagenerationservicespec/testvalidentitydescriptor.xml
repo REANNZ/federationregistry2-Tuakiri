@@ -1,0 +1,66 @@
+<EntityDescriptor entityID='https://test.example.com/myuniqueID'>
+  <IDPSSODescriptor protocolSupportEnumeration='uri'>
+    <Extensions>
+      <shibmd:Scope regexp='false'>scope</shibmd:Scope>
+    </Extensions>
+    <Organization>
+      <OrganizationName xml:lang='en'>Test Organization</OrganizationName>
+      <OrganizationDisplayName xml:lang='en'>Test Organization Display</OrganizationDisplayName>
+      <OrganizationURL xml:lang='en'>http://example.com</OrganizationURL>
+    </Organization>
+  </IDPSSODescriptor>
+  <IDPSSODescriptor protocolSupportEnumeration='uri'>
+    <Extensions>
+      <shibmd:Scope regexp='false'>scope</shibmd:Scope>
+    </Extensions>
+    <Organization>
+      <OrganizationName xml:lang='en'>Test Organization</OrganizationName>
+      <OrganizationDisplayName xml:lang='en'>Test Organization Display</OrganizationDisplayName>
+      <OrganizationURL xml:lang='en'>http://example.com</OrganizationURL>
+    </Organization>
+  </IDPSSODescriptor>
+  <SPSSODescriptor protocolSupportEnumeration='uri'>
+    <Organization>
+      <OrganizationName xml:lang='en'>Test Organization</OrganizationName>
+      <OrganizationDisplayName xml:lang='en'>Test Organization Display</OrganizationDisplayName>
+      <OrganizationURL xml:lang='en'>http://example.com</OrganizationURL>
+    </Organization>
+  </SPSSODescriptor>
+  <SPSSODescriptor protocolSupportEnumeration='uri'>
+    <Organization>
+      <OrganizationName xml:lang='en'>Test Organization</OrganizationName>
+      <OrganizationDisplayName xml:lang='en'>Test Organization Display</OrganizationDisplayName>
+      <OrganizationURL xml:lang='en'>http://example.com</OrganizationURL>
+    </Organization>
+  </SPSSODescriptor>
+  <SPSSODescriptor protocolSupportEnumeration='uri'>
+    <Organization>
+      <OrganizationName xml:lang='en'>Test Organization</OrganizationName>
+      <OrganizationDisplayName xml:lang='en'>Test Organization Display</OrganizationDisplayName>
+      <OrganizationURL xml:lang='en'>http://example.com</OrganizationURL>
+    </Organization>
+  </SPSSODescriptor>
+  <AttributeAuthorityDescriptor protocolSupportEnumeration='uri'>
+    <Extensions>
+      <shibmd:Scope regexp='false'>scope</shibmd:Scope>
+    </Extensions>
+    <Organization>
+      <OrganizationName xml:lang='en'>Test Organization</OrganizationName>
+      <OrganizationDisplayName xml:lang='en'>Test Organization Display</OrganizationDisplayName>
+      <OrganizationURL xml:lang='en'>http://example.com</OrganizationURL>
+    </Organization>
+  </AttributeAuthorityDescriptor>
+  <Organization>
+    <OrganizationName xml:lang='en'>Test Organization</OrganizationName>
+    <OrganizationDisplayName xml:lang='en'>Test Organization Display</OrganizationDisplayName>
+    <OrganizationURL xml:lang='en'>http://example.com</OrganizationURL>
+  </Organization>
+  <ContactPerson contactType='administrative'>
+    <GivenName>Test</GivenName>
+    <SurName>User</SurName>
+    <EmailAddress>test@example.com</EmailAddress>
+    <TelephoneNumber>(567) 222 22222</TelephoneNumber>
+    <TelephoneNumber>(07) 1111 1111</TelephoneNumber>
+    <TelephoneNumber>0413 867 208</TelephoneNumber>
+  </ContactPerson>
+</EntityDescriptor>

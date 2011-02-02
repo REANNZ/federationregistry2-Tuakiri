@@ -1,0 +1,5 @@
+This is the official AAF branding for the AAF deployment of Federation Registry.
+
+Other federations may choose to use this as a source to form their own branding effort. In particular please ensure all support related messages are modified to suit your own federation.
+
+As requirements for layouts, css etc change over time in newer FR releases they will be reflected here, other Federations should monitor this sub-project for changes they need to locally incorporate before pushing out new releases. Limiting yourself to CSS changes will give you the best chance of simply performing merges to your branding effort.
