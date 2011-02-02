@@ -26,6 +26,11 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		controller = new IDPSSODescriptorController(IDPSSODescriptorService:idpssoDescriptorService)
 		def user = UserBase.build()
 		SpecHelpers.setupShiroEnv(user)
+		
+		// Clear storage - odd issue with 1.3.6 have not yet confirmed where bug lies
+		IDPSSODescriptor.findAll()*.delete(flush:true)
+		EntityDescriptor.findAll()*.delete(flush:true)
+		Organization.findAll()*.delete(flush:true)
 	}
 	
 	def setupBindings() {

@@ -83,6 +83,8 @@
     <div class="warning">
        <g:message code="fedreg.templates.identityprovider.create.errors" />
     </div>
+
+	<n:errors bean="${identityProvider}" />
 </g:hasErrors>
 
 <g:form action="${saveAction}" name="idpssodescriptorcreateform">
@@ -271,7 +273,7 @@
 							<fr:tooltip code='fedreg.help.identityprovider.authartifact' />
 						</td>
 						<td>
-							<g:textField name="idp.artifact.index" size="2" class="required number" value="${soapArtifact?.location?.index}"/>
+							<g:textField name="idp.artifact.index" size="2" class="required number" value="${soapArtifact?.index}"/>
 							<fr:tooltip code='fedreg.help.endpoint.index' />
 						</td>
 					</tr>
@@ -284,7 +286,7 @@
 							<g:hasErrors bean="${attributeAuthority}">
 								<div class="error"><g:renderErrors bean="${attributeAuthority}"as="list"/></div>
 							</g:hasErrors>
-							<g:textField name="aa.attributeservice.uri" size="64" class="required url" value="${attributeAuthority?.attributeServices?.get(0)?.location?.uri}"}/>
+							<g:textField name="aa.attributeservice.uri" size="64" class="required url" value="${soapAttributeService?.location?.uri}"}/>
 							<fr:tooltip code='fedreg.help.identityprovider.aasoap' />
 						</td>
 					</tr>

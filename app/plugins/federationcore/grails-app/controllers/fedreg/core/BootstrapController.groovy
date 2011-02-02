@@ -10,7 +10,12 @@ class BootstrapController {
 	
 	def idp = {
 		def identityProvider = new IDPSSODescriptor()
-		[identityProvider: identityProvider, organizationList: Organization.findAllWhere(active:true, approved:true), attributeList: AttributeBase.list(), nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)]
+		def c = AttributeBase.createCriteria()
+		def attributeList = c.list {
+			order("category", "asc")
+			order("friendlyName", "asc")
+		}
+		[identityProvider: identityProvider, organizationList: Organization.findAllWhere(active:true, approved:true), attributeList: attributeList, nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)]
 	}
 	
 	def saveidp = {
@@ -23,7 +28,12 @@ class BootstrapController {
 		else {
 			flash.type="error"
 			flash.message = message(code: 'fedreg.core.idpssoroledescriptor.register.validation.error')
-			render (view:'idp', model:ret + [organizationList: Organization.findAllWhere(active:true, approved:true), attributeList: AttributeBase.list(), nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)])
+			def c = AttributeBase.createCriteria()
+			def attributeList = c.list {
+				order("category", "asc")
+				order("friendlyName", "asc")
+			}
+			render (view:'idp', model:ret + [organizationList: Organization.findAllWhere(active:true, approved:true), attributeList: attributeList, nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)])
 		}
 	}
 	
@@ -49,7 +59,12 @@ class BootstrapController {
 	
 	def sp = {
 		def serviceProvider = new SPSSODescriptor()
-		[serviceProvider: serviceProvider, organizationList: Organization.findAllWhere(active:true, approved:true), attributeList: AttributeBase.list(), nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)]
+		def c = AttributeBase.createCriteria()
+		def attributeList = c.list {
+			order("category", "asc")
+			order("friendlyName", "asc")
+		}
+		[serviceProvider: serviceProvider, organizationList: Organization.findAllWhere(active:true, approved:true), attributeList: attributeList, nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)]
 	}
 	
 	def savesp = {
@@ -62,7 +77,12 @@ class BootstrapController {
 		else {
 			flash.type="error"
 			flash.message = message(code: 'fedreg.core.spssoroledescriptor.register.validation.error')
-			render (view:'sp', model:ret + [organizationList: Organization.findAllWhere(active:true, approved:true), attributeList: AttributeBase.list(), nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)])
+			def c = AttributeBase.createCriteria()
+			def attributeList = c.list {
+				order("category", "asc")
+				order("friendlyName", "asc")
+			}
+			render (view:'sp', model:ret + [organizationList: Organization.findAllWhere(active:true, approved:true), attributeList: attributeList, nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)])
 		}
 	}
 	

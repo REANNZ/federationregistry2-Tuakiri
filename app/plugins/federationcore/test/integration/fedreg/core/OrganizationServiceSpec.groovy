@@ -25,6 +25,8 @@ class OrganizationServiceSpec extends IntegrationSpec {
 		SpecHelpers.setupShiroEnv(user)
 		
 		params = [:]
+		
+		Organization.findAll()*.delete(flush:true)
 	}
 	
 	def cleanup() {

@@ -9,7 +9,7 @@
 			<table>
 				<tr>
 					<td>
-						<g:message code="label.internalid" />
+						<strong><g:message code="label.internalid" /></strong>: 
 					</td>
 					<td>
 						${fieldValue(bean: identityProvider, field: "id")}
@@ -17,7 +17,7 @@
 				</tr>
 				<tr>
 					<td>
-						<g:message code="label.displayname" />
+						<strong><g:message code="label.displayname" /></strong>: 
 					</td>
 					<td>
 						${fieldValue(bean: identityProvider, field: "displayName")}
@@ -25,7 +25,7 @@
 				</tr>
 				<tr>
 					<td>
-						<g:message code="label.description" />
+						<strong><g:message code="label.description" /></strong>: 
 					</td>
 					<td>
 						${fieldValue(bean: identityProvider, field: "description")}
@@ -33,7 +33,7 @@
 				</tr>
 				<tr>
 					<td>
-						<g:message code="label.organization" />
+						<strong><g:message code="label.organization" /></strong>: 
 					</td>
 					<td>
 						${fieldValue(bean: identityProvider, field: "organization.displayName")}

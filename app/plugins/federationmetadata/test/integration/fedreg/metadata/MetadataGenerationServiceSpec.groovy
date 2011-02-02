@@ -136,11 +136,11 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def idp = IDPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, organization:organization, entityDescriptor:entityDescriptor, approved:true, active:true)
 		
 		def location = new UrlURI(uri:"https://test.example.com/artifact")
-		def ars = ArtifactResolutionService.build(descriptor: idp, active:true, approved:true, binding:httpPost, location:location)
+		def ars = ArtifactResolutionService.build(descriptor: idp, active:true, approved:true, binding:httpPost, location:location, index:100)
 		def result = loadResult('testvalidindexedendpointgeneration')
 		
 		when:
-		metadataGenerationService.indexedEndpoint(builder, false, false, "ArtifactResolutionService", ars, 1)
+		metadataGenerationService.indexedEndpoint(builder, false, false, "ArtifactResolutionService", ars)
 		
 		then:
 		def xml = writer.toString()
@@ -157,11 +157,11 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		
 		def location = new UrlURI(uri:"https://test.example.com/artifact")
 		def responseLocation = new UrlURI(uri:"https://test.example.com/response")
-		def ars = ArtifactResolutionService.build(descriptor:idp, active:true, approved:true, binding:httpPost, location:location, responseLocation:responseLocation)
+		def ars = ArtifactResolutionService.build(descriptor:idp, active:true, approved:true, binding:httpPost, location:location, responseLocation:responseLocation, index:100)
 		def result = loadResult('testvalidindexedendpointgenerationresponse')
 		
 		when:
-		metadataGenerationService.indexedEndpoint(builder, false, false, "ArtifactResolutionService", ars, 1)
+		metadataGenerationService.indexedEndpoint(builder, false, false, "ArtifactResolutionService", ars)
 		
 		then:
 		def xml = writer.toString()
@@ -177,10 +177,10 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def idp = IDPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, organization:organization, entityDescriptor:entityDescriptor, approved:true, active:true)
 		
 		def location = new UrlURI(uri:"https://test.example.com/artifact")
-		def ars = ArtifactResolutionService.build(descriptor:idp, active:false, approved:true, binding:httpPost, location:location)
+		def ars = ArtifactResolutionService.build(descriptor:idp, active:false, approved:true, binding:httpPost, location:location, index:100)
 		
 		when:
-		metadataGenerationService.indexedEndpoint(builder, false, false, "ArtifactResolutionService", ars, 1)
+		metadataGenerationService.indexedEndpoint(builder, false, false, "ArtifactResolutionService", ars)
 		
 		then:
 		def xml = writer.toString()
@@ -196,10 +196,10 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def idp = IDPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, organization:organization, entityDescriptor:entityDescriptor, approved:true, active:true)
 		
 		def location = new UrlURI(uri:"https://test.example.com/artifact")
-		def ars = ArtifactResolutionService.build(descriptor:idp, active:true, approved:false, binding:httpPost, location:location)
+		def ars = ArtifactResolutionService.build(descriptor:idp, active:true, approved:false, binding:httpPost, location:location, index:100)
 		
 		when:
-		metadataGenerationService.indexedEndpoint(builder, false, false, "ArtifactResolutionService", ars, 1)
+		metadataGenerationService.indexedEndpoint(builder, false, false, "ArtifactResolutionService", ars)
 		
 		then:
 		def xml = writer.toString()
@@ -460,8 +460,8 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def keyInfo2 = KeyInfo.build(keyName:"key2", certificate:certificate)
 		def keyDescriptor2 = KeyDescriptor.build(keyInfo:keyInfo2, keyType:KeyTypes.signing)
 		
-		def ars = ArtifactResolutionService.build(active:true, approved:true, isDefault:true, binding:soap, location:UrlURI.build(uri:"https://test.example.com/ars/artifact"))
-		def ars2 = ArtifactResolutionService.build(active:true, approved:true, isDefault:false, binding:soap, location:UrlURI.build(uri:"https://test.example.com/ars/artifact2"))
+		def ars = ArtifactResolutionService.build(index:100, active:true, approved:true, isDefault:true, binding:soap, location:UrlURI.build(uri:"https://test.example.com/ars/artifact"))
+		def ars2 = ArtifactResolutionService.build(index:101, active:true, approved:true, isDefault:false, binding:soap, location:UrlURI.build(uri:"https://test.example.com/ars/artifact2"))
 		
 		def slo = SingleLogoutService.build(active:true, approved:true, binding:httpPost, location:UrlURI.build(uri:"https://test.example.com/slo/POST"))
 		def mnid = ManageNameIDService.build(active:true, approved:true, binding:httpRedirect, location:UrlURI.build(uri:"https://test.example.com/mnid/REDIRECT"))
@@ -560,14 +560,14 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def keyInfo2 = KeyInfo.build(keyName:"key2", certificate:certificate)
 		def keyDescriptor2 = KeyDescriptor.build(keyInfo:keyInfo2, keyType:KeyTypes.signing)
 		
-		def ars = ArtifactResolutionService.build(active:true, approved:true, isDefault:true, binding:soap, location:new UrlURI(uri:"https://test.example.com/ars/artifact"))
-		def ars2 = ArtifactResolutionService.build(active:true, approved:true, isDefault:false, binding:soap, location:new UrlURI(uri:"https://test.example.com/ars/artifact2"))
+		def ars = ArtifactResolutionService.build(index:200, active:true, approved:true, isDefault:true, binding:soap, location:new UrlURI(uri:"https://test.example.com/ars/artifact"))
+		def ars2 = ArtifactResolutionService.build(index:201, active:true, approved:true, isDefault:false, binding:soap, location:new UrlURI(uri:"https://test.example.com/ars/artifact2"))
 		
 		def slo = SingleLogoutService.build(active:true, approved:true, binding:httpPost, location:new UrlURI(uri:"https://test.example.com/slo/POST"))
 		def mnid = ManageNameIDService.build(active:true, approved:true, binding:httpRedirect, location:new UrlURI(uri:"https://test.example.com/mnid/REDIRECT"))
 		def nidf = SamlURI.build(uri:"supported:nameid:format:urn")
 		
-		def acs = AssertionConsumerService.build(active:true, approved:true, binding:soap, location:new UrlURI(uri:"https://test.example.com/acs/SOAP"))
+		def acs = AssertionConsumerService.build(index:300, active:true, approved:true, binding:httpArtifact, location:new UrlURI(uri:"https://test.example.com/acs/ART"))
 		
 		def nf = SamlURI.build(uri:'test:attr:format')
 		def base1 = AttributeBase.build(name:'test attr', nameFormat:nf , friendlyName:'test attr friendly')

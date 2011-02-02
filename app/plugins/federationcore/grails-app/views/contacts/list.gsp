@@ -3,16 +3,13 @@
 	<head>
 		<meta name="layout" content="members" />
 		<title><g:message code="fedreg.view.members.contacts.list.title" /></title>
-		<script type="text/javascript">
-			<njs:datatable tableID="contactlist" sortColumn="0" />
-		</script>
 	</head>
 	<body>
 
 		<section>
 			<h2><g:message code="fedreg.view.members.contacts.list.heading" /></h2>
 
-			<table id="contactlist">
+			<table class="sortable-table">
 				<thead>
 					<tr>
 						<th><g:message code='label.givenname' /></th>

@@ -3,7 +3,7 @@
 <html>
 	<head>
 		<title><g:message code="fedreg.title.${grailsApplication.config.fedreg.deployment.environment}" /> | <g:layoutTitle /></title>
-		<r:use modules="html5, jquery-ui, tiptip, jgrowl, zenbox, app"/>
+		<r:use modules="html5, tiptip, jgrowl, zenbox, app"/>
 		<r:layoutResources/>
 		<g:layoutHead />
 	</head>
@@ -26,6 +26,8 @@
 		<footer>
 			<g:render template='/templates/frfooter' />
 		</footer>
+		
+		<r:layoutResources/>
 	</body>
 
 </html>

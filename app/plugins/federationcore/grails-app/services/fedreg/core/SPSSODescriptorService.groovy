@@ -47,11 +47,11 @@ class SPSSODescriptorService {
 		// SP
 		def saml2Namespace = SamlURI.findByUri('urn:oasis:names:tc:SAML:2.0:protocol')
 		def serviceProvider = new SPSSODescriptor(approved:false, active:params.active, displayName: params.sp?.displayName, description: params.sp?.description, organization: organization, authnRequestsSigned:false, wantAssertionsSigned:false)
+		
 		serviceProvider.addToProtocolSupportEnumerations(saml2Namespace)
 	
 		def acs = new AttributeConsumingService(approved:true, lang:params.lang ?:'en')
-		acs.addToServiceNames(params.sp?.displayName ?: '')
-		acs.addToServiceDescriptions(params.sp?.description ?: '')
+		acs.addToServiceNames(params.sp?.displayName)
 		
 		def supportedAttributes = []
 		params.sp.attributes.each { a -> 
@@ -263,15 +263,7 @@ class SPSSODescriptorService {
 			
 		serviceProvider.attributeConsumingServices.each {
 			it.removeFromServiceNames(serviceProvider.displayName)
-			it.removeFromServiceDescriptions(serviceProvider.description)
-			
 			it.addToServiceNames(params.sp?.displayName)
-			
-			def description = params.sp?.description
-			if(description)
-				if(description.size() > 255)
-					description = description.substring(0, 254)
-			it.addToServiceDescriptions(description)
 		}
 		
 		serviceProvider.displayName = params.sp.displayName

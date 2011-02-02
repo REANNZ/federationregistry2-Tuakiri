@@ -36,7 +36,7 @@ environments {
 				mail {
 					host = 'localhost'
 					port = com.icegreen.greenmail.util.ServerSetupTest.SMTP.port
-					from = "workflow@example.com"
+					from = "workflow@test.com"
 				}
 			}
 		}

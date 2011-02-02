@@ -84,13 +84,13 @@ class AttributeReleaseControllerSpec extends IntegrationSpec {
 		model.suppliedRequiredAttributes.size() == 2
 		model.suppliedRequiredAttributes.contains(ab)
 		model.suppliedRequiredAttributes.contains(ab2)
-		model.minimumRequirements = true
+		model.minimumRequirements
 		
 		model.optionalAttributes.size() == 1
 		model.optionalAttributes.contains(ab3)
 		model.suppliedOptionalAttributes.size() == 0
 		
-		model.identityProvider = identityProvider
+		model.identityProvider == identityProvider
 	}
 	
 	def "Validate compare when idp releases all requested attributes and optional attributes"() {
@@ -129,13 +129,13 @@ class AttributeReleaseControllerSpec extends IntegrationSpec {
 		model.suppliedRequiredAttributes.size() == 2
 		model.suppliedRequiredAttributes.contains(ab)
 		model.suppliedRequiredAttributes.contains(ab2)
-		model.minimumRequirements = true
+		model.minimumRequirements
 		
 		model.optionalAttributes.size() == 1
 		model.optionalAttributes.contains(ab3)
 		model.suppliedOptionalAttributes.size() == 1
 		
-		model.identityProvider = identityProvider
+		model.identityProvider == identityProvider
 	}
 	
 	def "Validate compare when idp doesn't release all requested attributes"() {
@@ -172,13 +172,13 @@ class AttributeReleaseControllerSpec extends IntegrationSpec {
 
 		model.suppliedRequiredAttributes.size() == 1
 		model.suppliedRequiredAttributes.contains(ab)
-		model.minimumRequirements = true
+		!model.minimumRequirements
 		
 		model.optionalAttributes.size() == 1
 		model.optionalAttributes.contains(ab3)
 		model.suppliedOptionalAttributes.size() == 1
 		
-		model.identityProvider = identityProvider
+		model.identityProvider == identityProvider
 	}
 
 }

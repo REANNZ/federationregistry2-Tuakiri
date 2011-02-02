@@ -17,6 +17,12 @@ class AttributeConsumingServiceControllerSpec extends IntegrationSpec {
 		UserBase.metaClass.contact = [ getId: 1 ]
 		user = UserBase.build()
 		SpecHelpers.setupShiroEnv(user)
+		
+		// Clear storage - odd issue with 1.3.6 have not yet confirmed where bug lies
+		EntityDescriptor.findAll()*.delete(flush:true)
+		Organization.findAll()*.delete(flush:true)
+		AttributeConsumingService.findAll()*.delete(flush:true)
+		RequestedAttribute.findAll()*.delete(flush:true)
 	}
 	
 	def cleanup() {
@@ -161,11 +167,11 @@ class AttributeConsumingServiceControllerSpec extends IntegrationSpec {
 	def "List requested attributes functions correctly"() {
 		setup:
 		def controller = new AttributeConsumingServiceController()
-		def ed = EntityDescriptor.build(entityID:'http://unique.com').save()
+		def ed = EntityDescriptor.build(entityID:'http://unique.com')
 		def sp = SPSSODescriptor.build(entityDescriptor:ed)
-		def acs = AttributeConsumingService.build(descriptor:sp).save()
-		def ra1 = RequestedAttribute.build().save()
-		def ra2 = RequestedAttribute.build().save()
+		def acs = AttributeConsumingService.build(descriptor:sp)
+		def ra1 = RequestedAttribute.build()
+		def ra2 = RequestedAttribute.build()
 		
 		acs.addToRequestedAttributes(ra1)
 		acs.addToRequestedAttributes(ra2)
@@ -177,9 +183,7 @@ class AttributeConsumingServiceControllerSpec extends IntegrationSpec {
 		controller.listRequestedAttributes()
 		
 		then:
-		// Grails 1.3.3 bug where modelAndView is null for some reason
-		// controller.modelAndView.model.requestedAttributes.size() == 2
-		true
+		controller.modelAndView.model.requestedAttributes.size() == 2
 	}
 
 }

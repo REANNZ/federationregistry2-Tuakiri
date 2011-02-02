@@ -87,7 +87,7 @@
 	  }
    </style>  
    
-   	<r:use modules="jquery-ui, codemirror, app"/>
+   	<r:use modules="jquery-ui, codemirror"/>
 	<r:layoutResources/>
 </head>
 <body>   
@@ -114,7 +114,8 @@
    </div>   
    <div id="result">
    </div>   
-   <g:javascript library="scriptaculous" />
+   
+	<g:javascript library="scriptaculous" />
    <r:script>
 
 		// TODO: (BB) I have started to sanitize this plugin from what we got from the Grails repo but have run out of time, at least it now uses optimized versions of codemirror
@@ -132,7 +133,7 @@
 			autoMatchParens: true,
 			disableSpellcheck: true,
 			lineNumbers: true,
-			tabMode: 'shift',
+			tabMode: 'shift'
 		});
 			
       Event.observe(window, Prototype.Browser.IE ? 'load':"dom:loaded", function(){

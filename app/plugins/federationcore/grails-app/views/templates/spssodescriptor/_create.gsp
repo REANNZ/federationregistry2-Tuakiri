@@ -75,6 +75,8 @@
     <div class="warning">
        <g:message code="fedreg.templates.serviceprovider.create.errors" />
     </div>
+
+	<n:errors bean="${serviceProvider}" />
 </g:hasErrors>
 
 <g:form action="${saveAction}">
@@ -251,7 +253,7 @@
 							<fr:tooltip code='fedreg.help.serviceprovider.acspost' />
 						</td>
 						<td>
-							<g:textField name="sp.acs.post.index" size="2" class="required number" value="${httpPostACS?.location?.index}"/>
+							<g:textField name="sp.acs.post.index" size="2" class="required number" value="${httpPostACS?.index}"/>
 							<fr:tooltip code='fedreg.help.endpoint.index' />
 						</td>
 					</tr>
@@ -269,7 +271,7 @@
 							<fr:tooltip code='fedreg.help.serviceprovider.acsartifcate' />
 						</td>
 						<td>
-							<g:textField name="sp.acs.artifact.index" size="2" class="required number" value="${httpArtifactACS?.location?.index}"/>
+							<g:textField name="sp.acs.artifact.index" size="2" class="required number" value="${httpArtifactACS?.index}"/>
 							<fr:tooltip code='fedreg.help.endpoint.index' />
 						</td>
 					</tr>

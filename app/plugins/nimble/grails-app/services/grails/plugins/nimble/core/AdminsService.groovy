@@ -73,13 +73,6 @@ class AdminsService {
                 throw new RuntimeException("Unable to grant administration role to [$user.id]$user.username")
             }
 
-            // Grant administrative 'ALL' permission
-            Permission adminPermission = new Permission(target:'*')
-            adminPermission.managed = true
-            adminPermission.type = Permission.adminPerm
-
-            permissionService.createPermission(adminPermission, user)
-
             log.info "Granted administration privileges to [$user.id]$user.username"
             return true
         }
@@ -129,29 +122,6 @@ class AdminsService {
                 }
 
                 throw new RuntimeException("Unable to revoke administration privilege from [$user.id]$user.username failed to modify user account")
-            }
-
-            // Revoke administrative 'ALL' permission(s)
-            def permToRemove = []
-            user.permissions.each {
-                if (it.type.equals(AllPermission.class.name) || it.type.equals(grails.plugins.nimble.auth.AllPermission.class.name)) {
-                    permToRemove.add(it)
-                    log.debug("Found $it.type for user [$user.id]$user.username adding to remove queue")
-                }
-            }
-
-            permToRemove.each {
-                user.permissions.remove(it)
-                log.debug("Removing $it.type from user [$user.id]$user.username")
-            }
-
-            if (!user.save()) {
-                log.error "Unable to revoke administration permission from [$user.id]$user.username failed to modify user account"
-                user.errors.each {
-                    log.error it
-                }
-
-                throw new RuntimeException("Unable to revoke administration permission from [$user.id]$user.username")
             }
 
             log.info "Revoked administration privilege from [$user.id]$user.username"

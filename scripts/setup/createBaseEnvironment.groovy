@@ -5,11 +5,12 @@ import fedreg.core.*
 Perform initial population of Organization and IDP for FR deployers who
 are not moving across from an existing Resource Registry instance or who are developing locally and wish to start from a clean platform.
 
-Expects that samlBase.groovy has already been executed (and aafAttributePopulation.groovy or equivalent if relevant) as part of boostrap
+Expects that samlBase.groovy has already been executed and aafAttributePopulation.groovy or equivalent has been executed as part of boostrap.
 
 Requires that a pre existing trsut relationship exists between the IDP and SP protecting Federation Registry (or you're using local development mode)
 
-You should provide the hostname of your existing IDP below and ensure that the generated entityID will match what your IDP will assert during authentication.
+You should provide the hostname of your existing IDP below and ensure that the generated entityID will match what your IDP will assert during authentication. This script
+assumes endpoint format and index values are based on a Shibboleth 2.2.1 IDP release. If using a differing IDP version you may need to edit endpoints to suit.
 
 When complete and you're able to login you should use the web interface to add certificates, attribute support and NameID support as well as administrators for the IDP.
 Following this you should create a service provider using the web interface to represent the service provider protecting this FR instance.
@@ -18,7 +19,7 @@ Once these stages are complete FR should be generating minimal but valid metadat
 document with the Internet2 XMLSec tool before distributing to remote endpoints.
 
 Bradley Beddoes
-14/12/10
+27/1/11
 */
 
 roleService = ctx.getBean('roleService')
@@ -32,22 +33,26 @@ def otName = "university"
 def otDisplayName = "Australian Universities"
 def otDescription = "Organization Type that is associated with all Australian Universities"
 
-def orgName = 'dropbear.edu.au'
-def orgDisplayName = 'Dropbear University'
-def orgURL = 'http://www.dropbear.edu.au'
+def orgName = 'one.edu.au'
+def orgDisplayName = 'University One'
+def orgURL = 'http://www.one.edu.au'
 
-def contactName = 'Mick'
-def contactSurname = 'Dundee'
-def contactEmail = 'thatsaknife@dropbear.edu.au'
+def contactName = 'Fred'
+def contactSurname = 'Bloggs'
+def contactEmail = 'fredbloggs@one.edu.au'
 
-def hostname = 'idp.dropbear.edu.au'
-def scope = 'dropbear.edu.au'
-def displayName = 'Drop Bear IDP'
-def description = 'Identity Provider for Drop Bear university'
+def hostname = 'idp.one.edu.au'
+def scope = 'one.edu.au'
+def displayName = 'One University'
+def description = 'Identity Provider for One University'
 
 //-----------
 // Shouldn't be any need for hacking after this point for most usage scenarios
 //-----------
+
+// Default Service Category
+def sc = new ServiceCategory(name:'General', description:'Default category that suits majority of federation provided services')
+sc.save()​
 
 // Default PING monitor
 def mt = new MonitorType(name:'ping', description:'Ping check of associated endpoint to ensure availability')
@@ -119,7 +124,7 @@ identityProvider.addToSingleSignOnServices(httpRedirect)
 
 def artifactBinding = SamlURI.findByUri(SamlConstants.soap)
 def artifactLocation = new UrlURI(uri:"https://$hostname/idp/profile/SAML2/SOAP/ArtifactResolution")
-def soapArtifact = new ArtifactResolutionService(approved: true, binding: artifactBinding, location:artifactLocation, active:true, isDefault:true)
+def soapArtifact = new ArtifactResolutionService(approved: true, binding: artifactBinding, location:artifactLocation, active:true, isDefault:true, index:1)
 identityProvider.addToArtifactResolutionServices(soapArtifact)
 
 attributeAuthority = new AttributeAuthorityDescriptor(approved:true, active:true, displayName:displayName, description:description, scope: scope, collaborator: identityProvider, organization:organization)

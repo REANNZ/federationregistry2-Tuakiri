@@ -34,7 +34,7 @@
 					<tr>
 						<td>
 							<h3><g:message code="label.serviceprovider"/></h3>
-							<g:select id="sp" from="${activeServiceProviderList}" optionKey="id" optionValue="${{it.displayName ? it.displayName.encodeAsHTML():it.entityDescriptor.entityID.encodeAsHTML()}}"/>
+							<g:select id="sp" from="${activeServiceProviderList.sort{it.displayName}}" optionKey="id" optionValue="displayName"/>
 						</td>
 						<td>
 
@@ -42,7 +42,7 @@
 						</td>
 						<td>
 							<h3><g:message code="label.identityprovider"/></h3>
-							<g:select id="idp" from="${activeIdentityProviderList}" optionKey="id" optionValue="${{it.displayName ? it.displayName.encodeAsHTML():it.entityDescriptor.entityID.encodeAsHTML()}}"/>
+							<g:select id="idp" from="${activeIdentityProviderList.sort{it.displayName}}" optionKey="id" optionValue="displayName"/>
 						</td>
 					</tr>
 				</tbody>

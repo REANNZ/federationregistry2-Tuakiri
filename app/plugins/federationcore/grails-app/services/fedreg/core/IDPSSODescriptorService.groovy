@@ -172,7 +172,7 @@ class IDPSSODescriptorService {
 
 		if(!identityProvider.validate()) {
 			log.info "$authenticatedUser attempted to create $identityProvider but failed IDPSSODescriptor validation"
-			identityProvider.errors.each { log.debug it }
+			identityProvider.errors.each { log.error it }
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly()
 			entityDescriptor.delete()
 			return [false, ret]

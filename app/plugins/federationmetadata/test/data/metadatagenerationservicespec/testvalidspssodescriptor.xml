@@ -65,12 +65,12 @@ wU7I1/N110XAqdxIAZo7giAij4IKE122u7bPYs8YlQ8JoMb4hPJY5g==
     <TelephoneNumber>(07) 1111 1111</TelephoneNumber>
     <TelephoneNumber>0413 867 208</TelephoneNumber>
   </ContactPerson>
-  <ArtifactResolutionService Binding='urn:oasis:names:tc:SAML:2.0:bindings:SOAP' Location='https://test.example.com/ars/artifact' index='1' isDefault='true' />
-  <ArtifactResolutionService Binding='urn:oasis:names:tc:SAML:2.0:bindings:SOAP' Location='https://test.example.com/ars/artifact2' index='2' isDefault='false' />
+  <ArtifactResolutionService Binding='urn:oasis:names:tc:SAML:2.0:bindings:SOAP' Location='https://test.example.com/ars/artifact' index='200' isDefault='true' />
+  <ArtifactResolutionService Binding='urn:oasis:names:tc:SAML:2.0:bindings:SOAP' Location='https://test.example.com/ars/artifact2' index='201' isDefault='false' />
   <SingleLogoutService Binding='urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST' Location='https://test.example.com/slo/POST' />
   <ManageNameIDService Binding='urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect' Location='https://test.example.com/mnid/REDIRECT' />
   <NameIDFormat>supported:nameid:format:urn</NameIDFormat>
-  <AssertionConsumerService Binding='urn:oasis:names:tc:SAML:2.0:bindings:SOAP' Location='https://test.example.com/acs/SOAP' index='1' isDefault='false' />
+  <AssertionConsumerService Binding='urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact' Location='https://test.example.com/acs/ART' index='300' isDefault='false' />
   <AttributeConsumingService index='1' isDefault='false'>
     <ServiceName xml:lang='en'>Test Name 1</ServiceName>
     <ServiceName xml:lang='en'>Test Name 2</ServiceName>

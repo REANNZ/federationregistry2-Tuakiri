@@ -7,6 +7,10 @@ class InvitationServiceSpec extends IntegrationSpec {
 	
 	def invitationService
 	
+	def setup() {
+		Invitation.findAll()*.delete(flush:true)
+	}
+	
 	def "Ensure no duplicate invitations are created"() {		
 		when:
 			(1..5000).each {

@@ -10,7 +10,7 @@
       border-bottom-width: 0;
     }
       #zenbox_main #overlay_header span {
-        float:right; height:20px; padding-right:20px; background: transparent url('/external/zenbox/images/close.png') no-repeat 33px 0;
+        float:right; height:20px; padding-right:20px;
         text-decoration:underline; font-size:11px; cursor:pointer; color: #fff;
       }
 

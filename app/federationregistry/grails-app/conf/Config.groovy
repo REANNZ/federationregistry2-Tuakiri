@@ -1,17 +1,24 @@
+import javax.naming.InitialContext
+import javax.naming.Context
 
 // Import externalized configuration for the Federation Registry application
-def externalConf = System.getenv("FEDREG_CONFIG")
+def externalConf = getFromEnvironment("fr_config")
 if(externalConf) {
-	println( "Including configuration file: ${externalConf}" )
-	grails.config.locations = ["file:${externalConf}/FedRegConfig.groovy",
-							   "file:${externalConf}/NimbleConfig.groovy"]
+	println( "Including external configuration from: ${externalConf}" )
+	grails.config.locations = ["file:${externalConf}/fr-config.groovy"]
 } else {
 	println "No external configuration location specified as environment variable FEDREG_CONFIG, terminating startup"
 	throw new RuntimeException("No external configuration location specified as environment variable FEDREG_CONFIG, terminating startup")
 }
 
-// Standard Grails configuration
+// Extract user details to append to Audit Table
+auditLog {
+  actorClosure = { request, session ->
+     org.apache.shiro.SecurityUtils.getSubject()?.getPrincipal()
+  }
+}
 
+// Standard Grails configuration
 grails.gorm.default.mapping = {
 
 }
@@ -40,30 +47,12 @@ grails.converters.encoding = "UTF-8"
 grails.enable.native2ascii = true
 grails.views.gsp.sitemesh.preprocess = true
 
-auditLog {
-  actorClosure = { request, session ->
-     org.apache.shiro.SecurityUtils.getSubject()?.getPrincipal()
-  }
-}
-
 // Environmental configuration
 environments {
     test {
-        grails.serverURL = "http://localhost:8080/${appName}"
 		testDataConfig {
         	enabled = true
       	}
-		
-		log4j = {
-			debug	'fedreg.workflow',
-					'grails.app.controller',
-					'grails.app.service',
-					'grails.app.domain'
-
-			appenders {
-				console name:'stdout', layout:pattern(conversionPattern: '%d %-5p: %m%n')
-			}
-		}
 		
 		nimble {
 			messaging {
@@ -77,23 +66,9 @@ environments {
     }
     development {
 		grails.gsp.enable.reload = true
-        grails.serverURL = "http://localhost:8080/${appName}"
 		testDataConfig {
         	enabled = false
       	}
-
-		log4j = {
-			debug	'fedreg.workflow',
-					'fedreg.core',
-					'fedreg.host',
-					'grails.app.controller',
-					'grails.app.service',
-					'grails.app.domain'
-
-			appenders {
-				console name:'stdout', layout:pattern(conversionPattern: '%d %-5p: %m%n')
-			}
-		}
 		
 		nimble {
 			messaging {
@@ -104,4 +79,20 @@ environments {
 			}
 		}
     }
+}
+
+/**
+* This is a little hacky but lets us move away from environment variables in production scenarios
+* while maintaining flexibility in local development.
+*
+* Essentially this looks for a per-context value for the key we care about. If not found falls back to standard environment variable
+*/
+public String getFromEnvironment(final String name) {
+	if(name == null) return null;
+	try {
+		final Object object = ((Context)(new InitialContext().lookup("java:comp/env"))).lookup(name);
+		if (object != null) return object.toString();
+	} catch (final Exception e) {}
+	
+	return System.getenv(name);
 }

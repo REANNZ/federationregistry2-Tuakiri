@@ -1,48 +1,13 @@
 import org.apache.log4j.DailyRollingFileAppender
 
 appName=federationregistry
+grails.serverURL = "http://localhost:8080/federationregistry"
 
-// Federation Registry data repository
-dataSource {
-	pooled = true
-	driverClassName = "com.mysql.jdbc.Driver"
-	username = "fr"
-	password =  "password"
-	dialect= org.hibernate.dialect.MySQLInnoDBDialect
-	
-	url = "jdbc:mysql://localhost/federationregistry"
-	
-	loggingSql = false
-}
-
-// Logging state
-log4j = {
-	appenders {
-		appender new DailyRollingFileAppender(name:"fedreglogger", layout:pattern(conversionPattern: "%d{[ dd.MM.yy HH:mm:ss.SSS]} [%t] %-5p %c %x - %m%n"), 
-		file:"/tmp/federationregistry.log", datePattern:"'.'yyyy-MM-dd")
-	}
-	
-    warn 	fedreglogger: 	'org.codehaus.groovy.grails.web.servlet',
-          					'org.codehaus.groovy.grails.web.pages',
-          					'org.codehaus.groovy.grails.web.sitemesh',
-          					'org.codehaus.groovy.grails.web.mapping.filter',
-          					'org.codehaus.groovy.grails.web.mapping',
-          					'org.codehaus.groovy.grails.commons',
-       						'org.codehaus.groovy.grails.plugins',
-							'org.apache.shiro'
-
-	warn	fedreglogger: 	'grails.app'
-
-    warn 	fedreglogger: 	'grails.plugins.nimble',
-							'grails.app.controller',
-							'grails.app.domain',
-							'grails.app.service'
-}
-
-// Federation Registry specific configuration
+// Federation Registry internal configuration
 fedreg {
 	deployment.environment = "development"
 	bootstrap = false
+	enabledemonstration = false
 	
 	certificates {
 		maxlifeindays = 7665	// shib default of 20 years for assertion certs
@@ -172,13 +137,85 @@ fedreg {
 	}
 }
 
-// Shiro integration
+// Shiro internal configuration
 security.shiro.authc.required = false
 
-// set per-environment serverURL stem for creating absolute links
-environments {
-    production {
-        grails.serverURL = "https://manager.test.aaf.edu.au/${appName}"
+// Nimble internal configuration
+
+nimble {
+	layout {
+        administration = 'access'
+		login = 'public'
+    }
+
+    resources {
+        jslibrary = 'jquery'
+        usejsdev = false
+        usecssdev = false
+    }
+
+    messaging {
+		enabled = false
+		
+        mail {
+            from = "noreply@aaf.edu.au"
+            host = ""
+            port = com.icegreen.greenmail.util.ServerSetupTest.SMTP.port
+            username = ""
+            password = ""
+            props = ["mail.smtp.auth": "false"]
+        }
+    }
+
+    implementation {
+    	user = "fedreg.host.User"
+    	profile = "fedreg.host.Profile"
     }
 }
 
+//Data repository
+/**
+USE FOR DEVELOPMENT - NON JNDI
+
+dataSource {
+	pooled = true
+	driverClassName = "com.mysql.jdbc.Driver"
+	username = "fr"
+	password =  "password"
+	dialect= org.hibernate.dialect.MySQLInnoDBDialect
+	
+	url = "jdbc:mysql://localhost/federationregistry"
+	
+	loggingSql = false
+}
+**/
+
+/**
+USE FOR PRODUCTION - JNDI Datasource
+dataSource {
+	dbCreate = "update"
+	dialect= org.hibernate.dialect.MySQLInnoDBDialect
+	jndiName= "java:comp/env/jdbc/FEDERATIONREGISTRY"	
+}
+**/
+
+// Logging configuration
+log4j = {
+	appenders {
+		appender new DailyRollingFileAppender(name:"fr-app", layout:pattern(conversionPattern: "%d{[ dd.MM.yy HH:mm:ss.SSS]} %-5p %c %x - %m%n"), file:"/tmp/fr-app.log", datePattern:"'.'yyyy-MM-dd")
+	}
+	
+    warn 	'fr-app': 	'org.codehaus.groovy.grails.web.servlet',
+						'org.codehaus.groovy.grails.web.pages',
+						'org.codehaus.groovy.grails.web.sitemesh',
+						'org.codehaus.groovy.grails.web.mapping.filter',
+						'org.codehaus.groovy.grails.web.mapping',
+						'org.codehaus.groovy.grails.commons',
+						'org.codehaus.groovy.grails.plugins',
+						'org.apache.shiro'
+
+    info 	'fr-app': 	'grails.plugins.nimble',
+						'grails.app.controller',
+						'grails.app.domain',
+						'grails.app.service',
+}
