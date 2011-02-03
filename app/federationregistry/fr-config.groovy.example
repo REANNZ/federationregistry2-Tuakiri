@@ -10,7 +10,7 @@ fedreg {
 	enabledemonstration = false
 	
 	certificates {
-		maxlifeindays = 7665	// shib default of 20 years for assertion certs
+		maxlifeindays = 7800	// shib default of 20 years for assertion certs
 	}
 	
 	shibboleth {
@@ -41,12 +41,10 @@ fedreg {
 	metadata {
 		federation = "aaf.edu.au"
 		current {
-			validForDays = 25
-			cacheForDays = 10
+			validForDays = 7
 		}
 		all {
-			validForDays = 2
-			cacheForDays = 1
+			validForDays = 7
 		}
 		wayf {
 			generateconfig {
@@ -217,5 +215,5 @@ log4j = {
     info 	'fr-app': 	'grails.plugins.nimble',
 						'grails.app.controller',
 						'grails.app.domain',
-						'grails.app.service',
+						'grails.app.service'
 }
