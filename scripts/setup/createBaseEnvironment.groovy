@@ -2,6 +2,8 @@ import grails.plugins.nimble.core.*
 import fedreg.core.*
 
 /*
+DON'T RUN THIS UNTIL frFullSetup.groovy has been executed. (You may need to compile this by running "groovy buildFRFullSetup.groovy" from the command line)
+
 Perform initial population of Organization and IDP for FR deployers who
 are not moving across from an existing Resource Registry instance or who are developing locally and wish to start from a clean platform.
 
