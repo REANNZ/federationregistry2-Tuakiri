@@ -2,6 +2,11 @@ package fedreg.core
 
 import org.apache.shiro.SecurityUtils
 
+/**
+ * Provides attribute management views for Descriptors.
+ *
+ * @author Bradley Beddoes
+ */
 class DescriptorAttributeController {
 	def allowedMethods = [add: 'POST', remove: 'DELETE']
 	

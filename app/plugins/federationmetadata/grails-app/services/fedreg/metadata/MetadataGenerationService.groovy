@@ -4,6 +4,11 @@ import java.text.SimpleDateFormat
 import org.springframework.transaction.annotation.*
 import fedreg.core.*
 
+/**
+ * Provides methods to generate Metadata for the entire federation or specific components.
+ *
+ * @author Bradley Beddoes
+ */
 class MetadataGenerationService {
 	
 	def localizedName(builder, type, lang, content) {

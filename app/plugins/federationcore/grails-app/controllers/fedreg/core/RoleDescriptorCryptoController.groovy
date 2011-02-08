@@ -2,6 +2,11 @@ package fedreg.core
 
 import org.apache.shiro.SecurityUtils
 
+/**
+ * Provides crypto(certificate) management views for Descriptors.
+ *
+ * @author Bradley Beddoes
+ */
 class RoleDescriptorCryptoController {
 	def allowedMethods = [create:'POST', delete: 'DELETE']
 	

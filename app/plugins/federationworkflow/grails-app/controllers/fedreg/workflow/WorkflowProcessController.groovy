@@ -2,6 +2,11 @@ package fedreg.workflow
 
 import org.apache.shiro.SecurityUtils
 
+/**
+ * Provides workflow process management views.
+ *
+ * @author Bradley Beddoes
+ */
 class WorkflowProcessController {
 	static defaultAction = "list"
 		

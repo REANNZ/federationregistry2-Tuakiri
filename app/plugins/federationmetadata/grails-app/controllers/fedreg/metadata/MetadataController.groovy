@@ -3,6 +3,11 @@ package fedreg.metadata
 import groovy.xml.MarkupBuilder
 import fedreg.core.*
 
+/**
+ * Provides metadata views.
+ *
+ * @author Bradley Beddoes
+ */
 class MetadataController {
 	def metadataGenerationService
 	def grailsApplication

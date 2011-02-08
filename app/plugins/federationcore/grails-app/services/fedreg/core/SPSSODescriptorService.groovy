@@ -5,6 +5,11 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport
 
 import fedreg.workflow.ProcessPriority
 
+/**
+ * Provides methods for managing SPSSODescriptor instances.
+ *
+ * @author Bradley Beddoes
+ */
 class SPSSODescriptorService {
 
 	def cryptoService

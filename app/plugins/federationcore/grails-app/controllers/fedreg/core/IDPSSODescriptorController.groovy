@@ -3,6 +3,11 @@ package fedreg.core
 import org.apache.shiro.SecurityUtils
 import grails.plugins.nimble.core.Role
 
+/**
+ * Provides IDPSSODescriptor views.
+ *
+ * @author Bradley Beddoes
+ */
 class IDPSSODescriptorController {
 	def defaultAction = "list"
 	def allowedMethods = [save: 'POST', update: 'PUT', delete: 'DELETE']

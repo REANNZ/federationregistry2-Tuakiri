@@ -1,5 +1,10 @@
 package fedreg.core
 
+/**
+ * Provides public bootstrap(registration) views.
+ *
+ * @author Bradley Beddoes
+ */
 class BootstrapController {
 	def allowedMethods = [saveidp: 'POST', savesp: 'POST', saveorganization: 'POST']
 	

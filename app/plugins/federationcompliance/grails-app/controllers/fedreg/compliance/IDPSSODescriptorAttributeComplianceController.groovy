@@ -4,6 +4,11 @@ import fedreg.core.AttributeBase
 import fedreg.core.AttributeCategory
 import fedreg.core.IDPSSODescriptor
 
+/**
+ * Provides IDPSSODescriptor attribute compliance views.
+ *
+ * @author Bradley Beddoes
+ */
 class IDPSSODescriptorAttributeComplianceController {
 	
 	static defaultAction = "summary"

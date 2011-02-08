@@ -5,6 +5,11 @@ import org.springframework.context.i18n.LocaleContextHolder as LCH
 
 import fedreg.workflow.ProcessPriority
 
+/**
+ * Provides AttributeConsumingService views.
+ *
+ * @author Bradley Beddoes
+ */
 class AttributeConsumingServiceController {
 	def allowedMethods = [addSpecifiedAttributeValue:'POST', addRequestedAttribute:'POST', removeSpecifiedAttributeValue:'DELETE', removeRequestedAttribute:'DELETE', updateRequestedAttribute:'PUT']
 		

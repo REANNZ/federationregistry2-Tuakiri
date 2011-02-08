@@ -2,9 +2,10 @@ package fedreg.wayf
 
 import fedreg.core.*
 
-/*
- Integrates with Switch based WAYF by providing configuration for selectable categories etc
- Author: Bradley Beddoes
+/**
+ * Integrates with Switch based WAYF by providing configuration for selectable categories etc
+ *
+ * @author Bradley Beddoes
 */
 class WayfController {
 	

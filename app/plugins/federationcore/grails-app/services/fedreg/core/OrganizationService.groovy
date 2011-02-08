@@ -6,6 +6,11 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport
 import fedreg.workflow.ProcessPriority
 import grails.plugins.nimble.core.UserBase
 
+/**
+ * Provides methods for managing Organization instances.
+ *
+ * @author Bradley Beddoes
+ */
 class OrganizationService {
 
 	def workflowProcessService

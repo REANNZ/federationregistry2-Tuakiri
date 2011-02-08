@@ -3,7 +3,7 @@ package fedreg.compliance
 import fedreg.core.Certificate
 
 /**
- * Reports compliance to approved CA's across RoleDescriptors
+ * Provides compliance to approved CA's across RoleDescriptors view
  *
  * @author Bradley Beddoes
  */

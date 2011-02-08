@@ -2,6 +2,11 @@ package fedreg.workflow
 
 import org.apache.shiro.SecurityUtils
 
+/**
+ * Provides workflow scripting management views.
+ *
+ * @author Bradley Beddoes
+ */
 class WorkflowScriptController {
 	def defaultAction = "list"
 

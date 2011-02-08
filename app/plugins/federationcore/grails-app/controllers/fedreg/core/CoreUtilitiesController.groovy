@@ -2,6 +2,11 @@ package fedreg.core
 
 import grails.converters.JSON
 
+/**
+ * Provides core utility views.
+ *
+ * @author Bradley Beddoes
+ */
 class CoreUtilitiesController {
 	def allowedMethods = [validateCertificate: 'POST']
 	

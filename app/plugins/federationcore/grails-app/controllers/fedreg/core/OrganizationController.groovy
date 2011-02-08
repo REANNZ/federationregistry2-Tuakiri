@@ -4,6 +4,11 @@ import org.apache.shiro.SecurityUtils
 
 import grails.plugins.nimble.core.Role
 
+/**
+ * Provides Organization views.
+ *
+ * @author Bradley Beddoes
+ */
 class OrganizationController {
 	static defaultAction = "index"
 	def allowedMethods = [save: 'POST', update: 'PUT']

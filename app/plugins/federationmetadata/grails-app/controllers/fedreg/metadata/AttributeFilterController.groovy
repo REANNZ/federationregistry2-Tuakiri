@@ -3,6 +3,11 @@ package fedreg.metadata
 import groovy.xml.MarkupBuilder
 import fedreg.core.*
 
+/**
+ * Provides AttributeFilter views.
+ *
+ * @author Bradley Beddoes
+ */
 class AttributeFilterController {
 	def attributeFilterGenerationService
 	def grailsApplication

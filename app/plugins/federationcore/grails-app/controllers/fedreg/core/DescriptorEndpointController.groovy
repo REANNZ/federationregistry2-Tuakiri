@@ -4,6 +4,11 @@ import static org.apache.commons.lang.StringUtils.*
 
 import org.apache.shiro.SecurityUtils
 
+/**
+ * Provides endpoint management views for Descriptors.
+ *
+ * @author Bradley Beddoes
+ */
 class DescriptorEndpointController {
 	def allowedMethods = [create:'POST', update:'PUT', toggle:'PUT', makeDefault:'PUT', delete:'DELETE']
 	

@@ -1,5 +1,10 @@
 package fedreg.workflow
 
+/**
+ * Provides functionality to create, manage and execute workflow processes.
+ *
+ * @author Bradley Beddoes
+ */
 class WorkflowProcessService {
 	
 	def workflowTaskService

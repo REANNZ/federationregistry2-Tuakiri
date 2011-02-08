@@ -3,6 +3,11 @@ package fedreg.workflow
 import org.apache.shiro.SecurityUtils
 import grails.plugins.nimble.core.AdminsService
 
+/**
+ * Provides workflow approval views.
+ *
+ * @author Bradley Beddoes
+ */
 class WorkflowApprovalController {
 	static defaultAction = "list"
 	

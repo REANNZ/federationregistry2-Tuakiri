@@ -3,6 +3,11 @@ package fedreg.host
 import java.security.MessageDigest
 import grails.plugins.nimble.core.*
 
+/**
+ * Provides methods for managing invitations.
+ *
+ * @author Bradley Beddoes
+ */
 class InvitationService {
 	def roleService
 	def groupService

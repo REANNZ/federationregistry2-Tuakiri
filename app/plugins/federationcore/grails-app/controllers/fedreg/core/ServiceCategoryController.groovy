@@ -5,6 +5,11 @@ import grails.plugins.nimble.core.Role
 
 import grails.converters.JSON
 
+/**
+ * Provides ServiceCategory views.
+ *
+ * @author Bradley Beddoes
+ */
 class ServiceCategoryController {
 	def allowedMethods = [add: 'POST', update: 'PUT', delete: 'DELETE']
 	
