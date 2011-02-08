@@ -1,13 +1,12 @@
 package fedreg.host
 
+import grails.plugins.nimble.core.*
+
 /**
  * Provides methods for interacting with Shibboleth authentication processes.
  *
  * @author Bradley Beddoes
  */
-
-import grails.plugins.nimble.core.*
-
 class ShibbolethService {
 	public static final federationProviderUid = "shibboleth"
 	public static final federationProviderDiscriminator = ""

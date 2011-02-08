@@ -2,6 +2,11 @@ package fedreg.core
 
 import static org.apache.commons.lang.StringUtils.*
 
+/**
+ * Provides methods for managing Endpoint instances.
+ *
+ * @author Bradley Beddoes
+ */
 class EndpointService {
 	
 	def grailsApplication

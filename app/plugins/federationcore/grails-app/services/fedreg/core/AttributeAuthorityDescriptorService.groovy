@@ -1,5 +1,10 @@
 package fedreg.core
 
+/**
+ * Provides methods for managing AttributeAuthorityDescriptor instances.
+ *
+ * @author Bradley Beddoes
+ */
 class AttributeAuthorityDescriptorService {
 
 	def delete(def id) {

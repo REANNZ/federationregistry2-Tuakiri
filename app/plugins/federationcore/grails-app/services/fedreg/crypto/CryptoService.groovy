@@ -6,6 +6,11 @@ import java.security.cert.*
 
 import fedreg.core.*
 
+/**
+ * Provides methods for managing Crypto/Certificates.
+ *
+ * @author Bradley Beddoes
+ */
 class CryptoService {
 	
 	def associateCertificate(RoleDescriptor descriptor, String data, String name, KeyTypes type) {

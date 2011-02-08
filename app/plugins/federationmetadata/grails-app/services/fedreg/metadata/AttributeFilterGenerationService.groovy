@@ -2,6 +2,11 @@ package fedreg.metadata
 
 import fedreg.core.*
 
+/**
+ * Provides methods to generate AttributeFilters for IDPSSODescriptor instances.
+ *
+ * @author Bradley Beddoes
+ */
 class AttributeFilterGenerationService {
 
 	def generate(builder, id, groupID, idp) {

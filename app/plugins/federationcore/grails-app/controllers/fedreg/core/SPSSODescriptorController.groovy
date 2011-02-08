@@ -3,6 +3,11 @@ package fedreg.core
 import org.apache.shiro.SecurityUtils
 import grails.plugins.nimble.core.Role
 
+/**
+ * Provides SPSSODescriptor views.
+ *
+ * @author Bradley Beddoes
+ */
 class SPSSODescriptorController {
 	static defaultAction = "list"
 	def allowedMethods = [save: 'POST', update: 'PUT', delete: 'DELETE']

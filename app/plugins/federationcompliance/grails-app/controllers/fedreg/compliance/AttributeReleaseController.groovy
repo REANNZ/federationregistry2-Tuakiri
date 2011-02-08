@@ -3,6 +3,11 @@ package fedreg.compliance
 import fedreg.core.IDPSSODescriptor
 import fedreg.core.SPSSODescriptor
 
+/**
+ * Provides attribute release compliance views.
+ *
+ * @author Bradley Beddoes
+ */
 class AttributeReleaseController {
 	
 	def index = {	

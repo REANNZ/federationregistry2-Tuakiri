@@ -8,9 +8,11 @@ import grails.plugins.nimble.core.ProfileBase
 import grails.plugins.nimble.core.Role
 import grails.plugins.nimble.core.Group
 
-/*
-@author Bradley Beddoes
-*/
+/**
+ * Provides functionality to create, manage and execute workflow tasks.
+ *
+ * @author Bradley Beddoes
+ */
 class WorkflowTaskService {
 	static transactional = true
 	

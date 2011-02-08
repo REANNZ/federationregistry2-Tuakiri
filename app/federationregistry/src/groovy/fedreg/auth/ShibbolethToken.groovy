@@ -3,7 +3,7 @@ package fedreg.auth
 import org.apache.shiro.authc.AuthenticationToken
 
 /**
- * Token used with OpenID Shiro realm for authentication purposes
+ * Token used with Shibboleth Shiro realm for authentication purposes
  *
  * @author Bradley Beddoes
  */

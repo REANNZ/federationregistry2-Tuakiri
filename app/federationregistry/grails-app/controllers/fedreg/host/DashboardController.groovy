@@ -3,6 +3,11 @@ package fedreg.host
 import fedreg.core.*
 import org.apache.shiro.SecurityUtils
 
+/**
+ * Provides the dashboard view for FR users.
+ *
+ * @author Bradley Beddoes
+ */
 class DashboardController {
 	
 	def workflowTaskService

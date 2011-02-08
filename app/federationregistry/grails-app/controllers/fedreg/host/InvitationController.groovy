@@ -1,5 +1,10 @@
 package fedreg.host
 
+/**
+ * Provides invitation management endpoints
+ *
+ * @author Bradley Beddoes
+ */
 class InvitationController {
 	
 	def invitationService

@@ -10,7 +10,7 @@ fedreg {
 	enabledemonstration = false
 	
 	certificates {
-		maxlifeindays = 7665	// shib default of 20 years for assertion certs
+		maxlifeindays = 7800	// shib default of 20 years for assertion certs
 	}
 	
 	shibboleth {
@@ -41,12 +41,10 @@ fedreg {
 	metadata {
 		federation = "aaf.edu.au"
 		current {
-			validForDays = 25
-			cacheForDays = 10
+			validForDays = 7
 		}
 		all {
-			validForDays = 2
-			cacheForDays = 1
+			validForDays = 7
 		}
 		wayf {
 			generateconfig {
@@ -180,13 +178,13 @@ USE FOR DEVELOPMENT - NON JNDI
 dataSource {
 	pooled = true
 	driverClassName = "com.mysql.jdbc.Driver"
-	username = "fr"
-	password =  "password"
-	dialect= org.hibernate.dialect.MySQLInnoDBDialect
+	dialect = org.hibernate.dialect.MySQL5InnoDBDialect
+	dbCreate = "update"
+	loggingSql = false
 	
 	url = "jdbc:mysql://localhost/federationregistry"
-	
-	loggingSql = false
+	username = "fr"
+	password =  "password"
 }
 **/
 
@@ -194,7 +192,7 @@ dataSource {
 USE FOR PRODUCTION - JNDI Datasource
 dataSource {
 	dbCreate = "update"
-	dialect= org.hibernate.dialect.MySQLInnoDBDialect
+	dialect= org.hibernate.dialect.MySQL5InnoDBDialect
 	jndiName= "java:comp/env/jdbc/FEDERATIONREGISTRY"	
 }
 **/
@@ -217,5 +215,5 @@ log4j = {
     info 	'fr-app': 	'grails.plugins.nimble',
 						'grails.app.controller',
 						'grails.app.domain',
-						'grails.app.service',
+						'grails.app.service'
 }

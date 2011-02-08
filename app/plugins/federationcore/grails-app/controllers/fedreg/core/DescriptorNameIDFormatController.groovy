@@ -2,6 +2,11 @@ package fedreg.core
 
 import org.apache.shiro.SecurityUtils
 
+/**
+ * Provides nameID management views for Descriptors.
+ *
+ * @author Bradley Beddoes
+ */
 class DescriptorNameIDFormatController {
 	def allowedMethods = [add:'POST', remove: 'DELETE']
 	

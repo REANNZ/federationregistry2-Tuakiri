@@ -2,6 +2,11 @@ package fedreg.core
 
 import org.apache.shiro.SecurityUtils
 
+/**
+ * Provides Contact views.
+ *
+ * @author Bradley Beddoes
+ */
 class ContactsController {
 	static defaultAction = "index"
 	def allowedMethods = [save: 'POST', update: 'PUT']

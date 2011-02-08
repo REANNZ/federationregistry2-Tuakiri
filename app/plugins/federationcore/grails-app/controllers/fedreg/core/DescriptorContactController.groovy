@@ -2,6 +2,11 @@ package fedreg.core
 
 import org.apache.shiro.SecurityUtils
 
+/**
+ * Provides contact management views for Descriptors.
+ *
+ * @author Bradley Beddoes
+ */
 class DescriptorContactController {
 	def allowedMethods = [create:'POST', delete:'DELETE']
 	

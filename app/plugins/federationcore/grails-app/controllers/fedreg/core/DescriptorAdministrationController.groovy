@@ -6,6 +6,11 @@ import grails.plugins.nimble.core.UserBase
 import grails.plugins.nimble.core.ProfileBase
 import grails.plugins.nimble.core.Role
 
+/**
+ * Provides administration management views for Descriptors.
+ *
+ * @author Bradley Beddoes
+ */
 class DescriptorAdministrationController {
 	def allowedMethods = [grantFullAdministration: 'POST', revokeFullAdministration: 'DELETE']
 	

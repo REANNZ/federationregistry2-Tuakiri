@@ -6,6 +6,11 @@ import grails.plugins.nimble.core.UserBase
 import grails.plugins.nimble.core.Role
 import grails.plugins.nimble.core.LevelPermission
 
+/**
+ * Provides methods for managing EntityDescriptor instances.
+ *
+ * @author Bradley Beddoes
+ */
 class EntityDescriptorService {
 
 	def grailsApplication

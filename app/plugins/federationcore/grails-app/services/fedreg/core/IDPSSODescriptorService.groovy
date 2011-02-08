@@ -5,6 +5,11 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport
 
 import fedreg.workflow.ProcessPriority
 
+/**
+ * Provides methods for managing IDPSSODescriptor instances.
+ *
+ * @author Bradley Beddoes
+ */
 class IDPSSODescriptorService {
 	
 	def cryptoService

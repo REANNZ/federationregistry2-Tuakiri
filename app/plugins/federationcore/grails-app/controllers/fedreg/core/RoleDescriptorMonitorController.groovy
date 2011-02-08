@@ -2,6 +2,11 @@ package fedreg.core
 
 import org.apache.shiro.SecurityUtils
 
+/**
+ * Provides monitoring management views for Descriptors.
+ *
+ * @author Bradley Beddoes
+ */
 class RoleDescriptorMonitorController {
 	def allowedMethods = [create:'POST', delete:'DELETE']
 	
