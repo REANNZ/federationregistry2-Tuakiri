@@ -1,3 +1,4 @@
+<%@ page contentType="text/html"%>
 
 <g:applyLayout name="email">
 	<g:message code="fedreg.templates.mail.workflow.requestapproval.descriptive" />
