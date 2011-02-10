@@ -32,11 +32,12 @@ class ContactPerson  {
 	Date dateCreated
 	Date lastUpdated
 
-  	static belongsTo = [descriptor:RoleDescriptor, entity:EntityDescriptor]
+  	static belongsTo = [descriptor:RoleDescriptor, entity:EntityDescriptor, organization:Organization]
 
 	static constraints = {
 		descriptor(nullable:true)
         entity(nullable:true)
+		organization(nullable:true)
 		extensions(nullable:true)
 		dateCreated(nullable:true)
 		lastUpdated(nullable:true)
