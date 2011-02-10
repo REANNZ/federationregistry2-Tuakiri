@@ -7,6 +7,12 @@
 		<title><g:message code="fedreg.view.members.organization.show.title" /></title>
 		
 		<r:script>
+			var activeContact
+			var contactCreateEndpoint = "${createLink(controller:'organizationContact', action:'create', id:organization.id )}";
+			var contactDeleteEndpoint = "${createLink(controller:'organizationContact', action:'delete' )}";
+			var contactListEndpoint = "${createLink(controller:'organizationContact', action:'list', id:organization.id ) }";
+			var contactSearchEndpoint = "${createLink(controller:'organizationContact', action:'search')}";
+		
 			var organizationFullAdministratorGrantEndpoint = "${createLink(controller:'organizationAdministration', action:'grantFullAdministration', id:organization.id)}";
 			var organizationFullAdministratorRevokeEndpoint = "${createLink(controller:'organizationAdministration', action:'revokeFullAdministration', id:organization.id)}";
 			var organizationFullAdministratorListEndpoint = "${createLink(controller:'organizationAdministration', action:'listFullAdministration', id:organization.id)}";
@@ -142,14 +148,12 @@
 				</div>
 				
 				<div id="tab-contacts">
-					<g:if test="${contacts}">
-						<div id="contacts">
-							<g:render template="/templates/contacts/list_org" plugin="federationcore" model="[organization:organization, contacts:contacts]" />
-						</div>
-					</g:if>
-					<g:else>
-						<p><g:message code="fedreg.view.members.organization.no.contacts" /></p>
-					</g:else>
+					<h3><g:message code="label.contacts" /></h3>
+					<div id="contacts">
+						<g:render template="/templates/orgcontacts/list" plugin="federationcore" model="[organization:organization]" />
+					</div>
+					
+					<g:render template="/templates/orgcontacts/create" plugin="federationcore" model="[organization:organization, contactTypes:contactTypes]"/>
 				</div>
 				<n:hasPermission target="saml:advanced">
 					<div id="tab-entities">

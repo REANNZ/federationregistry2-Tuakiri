@@ -40,7 +40,7 @@ class OrganizationController {
 				e.spDescriptors.each { sp -> serviceproviders.add(sp) }
 			}
 			
-			[organization: organization, statistics:organization.buildStatistics(), entities:entities, identityproviders:identityproviders, serviceproviders:serviceproviders, administrators:adminRole?.users]
+			[organization: organization, statistics:organization.buildStatistics(), entities:entities, identityproviders:identityproviders, serviceproviders:serviceproviders, administrators:adminRole?.users, contactTypes:ContactType.list()]
 		}
 		else {
 			flash.type="error"
