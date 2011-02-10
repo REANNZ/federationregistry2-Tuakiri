@@ -127,7 +127,7 @@ class DescriptorNameIDFormatController {
 				return
 			}
 		
-			if(descriptor.nameIDFormats.contains(nameIDFormat)) {
+			if(descriptor.nameIDFormats?.contains(nameIDFormat)) {
 				log.warn "NameIDFormat identified by id $params.formatID was already supported by descriptor ${params.id}"
 				response.setStatus(500)
 				render message(code: 'fedreg.nameidformat.add.alreadysupported', args:[nameIDFormat.uri])
@@ -139,7 +139,7 @@ class DescriptorNameIDFormatController {
 			if(descriptor.hasErrors()) {
 				log.warn "Adding nameIDFormat $nameIDFormat to $descriptor failed"
 				descriptor.errors.each {
-					log.debug it
+					log.error it
 				}
 				render message(code: 'fedreg.nameidformat.add.failed', args:[nameIDFormat.uri])
 				response.setStatus(500)
