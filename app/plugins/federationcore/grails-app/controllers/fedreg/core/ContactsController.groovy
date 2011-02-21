@@ -35,14 +35,9 @@ class ContactsController {
 	}
 
 	def create = {
-		if(SecurityUtils.subject.isPermitted("contact:create")) {
-			def contact = new Contact()
-			def organizations = Organization.list()
-			[contact: contact, organizations:organizations]
-		} else {
-			log.warn("Attempt to create new contact by $authenticatedUser was denied, incorrect permission set")
-			response.sendError(403)
-		}
+		def contact = new Contact()
+		def organizations = Organization.list()
+		[contact: contact, organizations:organizations]
 	}
 
 	def save = {
