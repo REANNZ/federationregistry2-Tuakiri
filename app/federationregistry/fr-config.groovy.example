@@ -35,6 +35,7 @@ fedreg {
 			givenName= "givenName"
 			surname= "sn"
 			email= "mail"
+			displayName = "displayName"
 		}
     }
 
