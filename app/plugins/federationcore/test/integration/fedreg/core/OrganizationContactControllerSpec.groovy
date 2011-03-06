@@ -5,11 +5,15 @@ import grails.plugin.spock.*
 import fedreg.core.*
 import grails.plugins.nimble.core.*
 
-class OrganizationContactControllerSpec extends ControllerSpec {
-
+class OrganizationContactControllerSpec extends IntegrationSpec {
+	def user
+	
 	def setup () {
-		def user = new UserBase(username:"testuser", profile:new ProfileBase())
+		user = new UserBase(username:"testuser", profile:new ProfileBase())
 		SpecHelpers.setupShiroEnv(user)
+		
+		controller.metaClass.message = { Map map -> return "" }
+		controller.metaClass.pluginContextPath = ""
 	}
 	
 	def "Test contact search"() {
