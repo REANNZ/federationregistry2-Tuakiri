@@ -43,6 +43,7 @@ class Organization  {	// Also called a participant in AAF land
 	Date lastUpdated
 	
 	static hasMany = [
+		contacts: ContactPerson,
 		types : OrganizationType,
 		suspensions: OrganizationType,	// Won't render in DS/WAYF listing
 		sponsors: Organization,

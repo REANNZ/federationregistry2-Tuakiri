@@ -457,6 +457,87 @@ fedreg.contact_list = function() {
 	});
 };
 
+// Organization contacts
+fedreg.orgcontact_search = function(id) {
+	$("#working").trigger("fedreg.working");
+	var dataString = "givenName=" + $('#givenName').val() + '&surname=' + $('#surname').val() + '&email=' + $('#email').val()
+	$.ajax({
+		type: "GET",
+		cache: false,
+		url: contactSearchEndpoint,
+		data: dataString,
+		success: function(res) {
+			var target = $("#availablecontacts");
+			target.html(res);
+			applyBehaviourTo(target);
+			target.fadeIn();
+	    },
+	    error: function (xhr, ajaxOptions, thrownError) {
+			nimble.growl('error', xhr.responseText);
+	    }
+	});
+};
+
+fedreg.orgcontact_confirm = function(contactID, name, email) {
+	activeContact = contactID;
+	$("#contactnameconfirmation").html(name);
+	$("#contactemailconfirmation").html(email);
+	
+	var target = $("#contactconfirmationdialog")
+	target.dialog('open');
+};
+
+fedreg.orgcontact_create = function(contactType) {
+	$("#working").trigger("fedreg.working");
+	var dataString = "contactID=" + activeContact + "&contactType=" + $('#contactselectedtype').val()
+	$.ajax({
+		type: "POST",
+		url: contactCreateEndpoint,
+		data: dataString,
+		success: function(res) {
+			fedreg.contact_list();
+			$("#contactconfirmationdialog").dialog('close');
+			nimble.growl('success', res);
+	    },
+	    error: function (xhr, ajaxOptions, thrownError) {
+			nimble.growl('error', xhr.responseText);
+	    }
+	});
+};
+
+fedreg.orgcontact_delete = function(contactID) {
+	$("#working").trigger("fedreg.working");
+	var dataString = "id=" + contactID;
+	$.ajax({
+		type: "POST",
+		url: contactDeleteEndpoint,
+		data: dataString + "&_method=delete",
+		success: function(res) {
+			fedreg.contact_list();
+			nimble.growl('success', res);
+	    },
+	    error: function (xhr, ajaxOptions, thrownError) {
+			nimble.growl('error', xhr.responseText);
+	    }
+	});
+};
+
+fedreg.orgcontact_list = function() {
+	$.ajax({
+		type: "GET",
+		cache: false,
+		url: contactListEndpoint,
+		success: function(res) {
+			var target = $("#contacts");
+			target.html(res);
+			applyBehaviourTo(target);
+	    },
+	    error: function (xhr, ajaxOptions, thrownError) {
+			nimble.growl('error', xhr.responseText);
+	    }
+	});
+};
+
 
 // Endpoint
 fedreg.endpoint_edit = function(id, endpointType, containerID) {

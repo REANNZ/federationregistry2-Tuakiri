@@ -35,69 +35,59 @@ class ContactsController {
 	}
 
 	def create = {
-		if(SecurityUtils.subject.isPermitted("contact:create")) {
-			def contact = new Contact()
-			def organizations = Organization.list()
-			[contact: contact, organizations:organizations]
-		} else {
-			log.warn("Attempt to create new contact by $authenticatedUser was denied, incorrect permission set")
-			response.sendError(403)
-		}
+		def contact = new Contact()
+		def organizations = Organization.list()
+		[contact: contact, organizations:organizations]
 	}
 
 	def save = {
-		if(SecurityUtils.subject.isPermitted("contact:create")) {
-			def contact = new Contact()
+		def contact = new Contact()
 
-			contact.givenName = params.givenname
-			contact.surname = params.surname
-			contact.email = new MailURI(uri:params.email)
-			contact.description = params.description
-	
-			if(params.secondaryEmail)
-				contact.secondaryEmail = new MailURI(uri:params.secondaryEmail)
-	
-			if(params.workPhone)
-				contact.workPhone = new TelNumURI(uri:params.workPhone)
+		contact.givenName = params.givenname
+		contact.surname = params.surname
+		contact.email = new MailURI(uri:params.email)
+		contact.description = params.description
 
+		if(params.secondaryEmail)
+			contact.secondaryEmail = new MailURI(uri:params.secondaryEmail)
+
+		if(params.workPhone)
+			contact.workPhone = new TelNumURI(uri:params.workPhone)
+
+		
+		if(params.mobilePhone)
+			contact.mobilePhone = new TelNumURI(uri:params.mobilePhone)
+		
+		if(params.homePhone)
+			contact.homePhone = new TelNumURI(uri:params.homePhone)
 			
-			if(params.mobilePhone)
-				contact.mobilePhone = new TelNumURI(uri:params.mobilePhone)
-			
-			if(params.homePhone)
-				contact.homePhone = new TelNumURI(uri:params.homePhone)
-				
-			if(params.organization) {
-				if(params.organization == "null") {
-					contact.organization = null
-				} else {
-					def organization = Organization.get(params.organization)
-					if(organization) {
-						contact.organization = organization
-					}
+		if(params.organization) {
+			if(params.organization == "null") {
+				contact.organization = null
+			} else {
+				def organization = Organization.get(params.organization)
+				if(organization) {
+					contact.organization = organization
 				}
 			}
-			
-			contact.save()
-			if(contact.hasErrors()) {
-				contact.errors.each {
-					log.warn it
-				}
-				flash.type = "error"
-			    flash.message = message(code: 'fedreg.contact.create.error')
-				def organizations = Organization.list()
-				render view: "create", model: [contact: contact, organizations:organizations]
-				return
-			}
-	
-			flash.type = "success"
-		    flash.message = message(code: 'fedreg.contact.create.success')
-			log.info "$authenticatedUser created $contact"
-			redirect action: "show", id: contact.id
-		} else {
-			log.warn("Attempt to create new contact by $authenticatedUser was denied, incorrect permission set")
-			response.sendError(403)
 		}
+		
+		contact.save()
+		if(contact.hasErrors()) {
+			contact.errors.each {
+				log.warn it
+			}
+			flash.type = "error"
+		    flash.message = message(code: 'fedreg.contact.create.error')
+			def organizations = Organization.list()
+			render view: "create", model: [contact: contact, organizations:organizations]
+			return
+		}
+
+		flash.type = "success"
+	    flash.message = message(code: 'fedreg.contact.create.success')
+		log.info "$authenticatedUser created $contact"
+		redirect action: "show", id: contact.id
 	}
 
 	def edit = {

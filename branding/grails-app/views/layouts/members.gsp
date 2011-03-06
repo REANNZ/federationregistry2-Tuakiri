@@ -114,9 +114,7 @@
 				<g:if test="${controllerName == 'contacts'}">
 					<ul class="level3a">
 						<li class="${actionName == 'list' ? 'active':''}"><g:link controller="contacts" action="list"><g:message code="label.list"/></g:link></li>
-						<n:hasPermission target="contact:create">
-							<li class="${actionName == 'create' ? 'active':''}"><g:link controller="contacts" action="create"><g:message code="label.create"/></g:link></li>
-						</n:hasPermission>
+						<li class="${actionName == 'create' ? 'active':''}"><g:link controller="contacts" action="create"><g:message code="label.create"/></g:link></li>
 						<g:if test="${actionName in ['show', 'edit']}">
 							<li> | </li>
 							<li><g:message code="fedreg.view.members.contacts.show.heading" args="[contact.givenName, contact.surname]"/>: </li>
