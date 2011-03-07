@@ -202,6 +202,7 @@ dataSource {
 log4j = {
 	appenders {
 		appender new DailyRollingFileAppender(name:"fr-app", layout:pattern(conversionPattern: "%d{[ dd.MM.yy HH:mm:ss.SSS]} %-5p %c %x - %m%n"), file:"/tmp/fr-app.log", datePattern:"'.'yyyy-MM-dd")
+		appender new DailyRollingFileAppender(name:"stacktrace", layout:pattern(conversionPattern: "%d{[ dd.MM.yy HH:mm:ss.SSS]} %-5p %c %x - %m%n"), file:"/tmp/stacktrace.log", datePattern:"'.'yyyy-MM-dd")
 	}
 	
     warn 	'fr-app': 	'org.codehaus.groovy.grails.web.servlet',
