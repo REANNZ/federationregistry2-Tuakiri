@@ -333,12 +333,14 @@ class UserService {
         }
 
         log.debug("Creating new record for user [$user.id]$user.username login")
-        def record = new LoginRecord()
 
+		def ua = request.getHeader("User-Agent")
+		ua = ua.length() > 254 ? ua.substring(0,250) : ua	// Handle user agents that present more then 255 char
+
+        def record = new LoginRecord()
         record.remoteAddr = request.getRemoteAddr()
         record.remoteHost = request.getRemoteHost()
-        record.userAgent = request.getHeader("User-Agent")
-
+        record.userAgent = ua
         record.owner = user
         user.addToLoginRecords(record)
 
