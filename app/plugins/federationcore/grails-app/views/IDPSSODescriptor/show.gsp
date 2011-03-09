@@ -46,8 +46,11 @@
 			
 			var attributeFilterEndpoint = "${createLink(controller:'attributeFilter', action:'generate', id:identityProvider.id )}";
 			
+			var descriptorMetadataEndpoint = "${createLink(controller:'metadata', action:'entity', id:identityProvider.entityDescriptor.id )}";
+			
 			$(function() {
 				$("#attrfilpolood").hide();
+				fedreg.descriptor_metadata();
 			});	
 		</r:script>
 	</head>
@@ -145,6 +148,7 @@
 					<li><a href="#tab-endpoints" ><g:message code="label.endpoints" /></a></li>
 					<li><a href="#tab-attributes" ><g:message code="label.supportedattributes" /></a></li>
 					<li><a href="#tab-nameidformats" ><g:message code="label.supportednameidformats" /></a></li>
+					<li><a href="#tab-metadata" ><g:message code="label.metadata" /></a></li>
 					<li><a href="#tab-attrfilpol" ><g:message code="label.attributefilter" /></a></li>
 					<g:if test="${identityProvider.approved}">
 						<li><a href="#tab-admins" ><g:message code="label.administrators" /></a></li>
@@ -253,6 +257,9 @@
 							tabMode: 'shift'
 						});
 					</r:script>
+				</div>
+				<div id="tab-metadata">
+					<div id="descriptormetadata"></div>
 				</div>
 				<g:if test="${identityProvider.approved}">
 					<div id="tab-admins">
