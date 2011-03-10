@@ -243,7 +243,7 @@ class SPSSODescriptorService {
 			return [false, ret]
 		}
 	
-		if(!serviceProvider.save()) {			
+		if(!serviceProvider.save(flush:true)) {
 			serviceProvider.errors.each {log.warn it}
 			throw new ErronousStateException("Unable to save when creating ${serviceProvider}")
 		}

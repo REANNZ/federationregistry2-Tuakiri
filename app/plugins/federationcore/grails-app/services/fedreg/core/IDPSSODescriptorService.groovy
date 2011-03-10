@@ -197,7 +197,7 @@ class IDPSSODescriptorService {
 			throw new ErronousStateException("Unable to save when creating ${identityProvider}")
 		}
 		
-		if(!identityProvider.save()) {
+		if(!identityProvider.save(flush:true)) {
 			identityProvider.errors.each {log.debug it}
 			throw new ErronousStateException("Unable to save when creating ${identityProvider}")
 		}
