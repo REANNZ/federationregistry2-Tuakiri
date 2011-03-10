@@ -93,7 +93,6 @@ fedreg.descriptor_metadata = function() {
 			var target = $("#descriptormetadata");
 			target.html(res);
 			applyBehaviourTo(target);
-			target.fadeIn();
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {
 			nimble.growl('error', xhr.responseText);

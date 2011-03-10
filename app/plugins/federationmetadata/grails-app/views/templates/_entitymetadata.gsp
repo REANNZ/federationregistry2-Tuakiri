@@ -1,1 +1,1 @@
-<pre><code>${md.encodeAsHTML()}</code></pre>
+<pre class="metadata"><code>${md.encodeAsHTML()}</code></pre>
