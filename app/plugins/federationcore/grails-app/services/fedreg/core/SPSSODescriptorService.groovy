@@ -19,7 +19,7 @@ class SPSSODescriptorService {
 	def create(def params) {
 			
 		// Organization
-		def organization = Organization.get(params.organization?.id)
+		def organization = Organization.lock(params.organization?.id)
 
 		// Contact
 		def contact = Contact.get(params.contact?.id)
@@ -41,7 +41,7 @@ class SPSSODescriptorService {
 		// Entity Descriptor
 		def entityDescriptor
 		if(params.entity?.id) {		
-			entityDescriptor = EntityDescriptor.get(params.entity?.id)
+			entityDescriptor = EntityDescriptor.lock(params.entity?.id)
 		}
 	
 		if(!entityDescriptor) {

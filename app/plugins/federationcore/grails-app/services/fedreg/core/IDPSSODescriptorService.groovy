@@ -23,7 +23,7 @@ class IDPSSODescriptorService {
 		you'll note validation calls on most larger objects, this is to get finer grained object error population */
 	
 		// Organization
-		def organization = Organization.get(params.organization?.id)
+		def organization = Organization.lock(params.organization?.id)
 
 		// Contact
 		def contact = Contact.get(params.contact?.id)
@@ -45,7 +45,7 @@ class IDPSSODescriptorService {
 		// Entity Descriptor
 		def entityDescriptor
 		if(params.entity?.id) {		
-			entityDescriptor = EntityDescriptor.get(params.entity?.id)
+			entityDescriptor = EntityDescriptor.lock(params.entity?.id)
 		}
 	
 		if(!entityDescriptor) {
