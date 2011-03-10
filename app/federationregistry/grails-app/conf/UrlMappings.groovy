@@ -94,7 +94,7 @@ class UrlMappings {
 			controller = "bootstrap"
 		}
 	
-		"/metadata/$action"{
+		"/metadata/$action?/$id?"{
 			controller = "metadata"
 		}
 	

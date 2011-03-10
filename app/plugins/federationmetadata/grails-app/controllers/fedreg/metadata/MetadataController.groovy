@@ -42,6 +42,25 @@ class MetadataController {
 		[md:md]
 	}
 	
+	def entity = {
+		if(!params.id) {
+			render message(code: 'fedreg.controllers.namevalue.missing')
+			response.setStatus(500)
+			return
+		}
+		
+		def entity = EntityDescriptor.get(params.id)
+		if (!entity) {
+			render message(code: 'fedreg.endpoint.nonexistant', args: [params.id])
+			response.setStatus(500)
+			return
+		}
+		
+		def md = entityMetadata(entity)
+		
+		render template:"/templates/entitymetadata", contextPath: pluginContextPath, model:[md:md], contentType: "text/plain"
+	}
+	
 	private def currentPublishedMetadata(def minimal, def ext) {
 		def now = new Date();
 		def validUntil = now + grailsApplication.config.fedreg.metadata.current.validForDays
@@ -73,6 +92,15 @@ class MetadataController {
 		entitiesDescriptor.entityDescriptors = EntityDescriptor.list()
 		
 		metadataGenerationService.entitiesDescriptor(builder, true, minimal, true, entitiesDescriptor, validUntil, certificateAuthorities)
+		writer.toString()
+	}
+	
+	private def entityMetadata(def entity) {
+		def writer = new StringWriter()
+		def builder = new MarkupBuilder(writer)
+		builder.doubleQuotes = true
+		
+		metadataGenerationService.entityDescriptor(builder, false, false, true, entity)
 		writer.toString()
 	}
 		

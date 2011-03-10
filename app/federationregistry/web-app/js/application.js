@@ -82,6 +82,24 @@ fedreg.stylebuttons = function(e) {
     });
 };
 
+// Descriptor Metadata
+fedreg.descriptor_metadata = function() {
+	$("#working").trigger("fedreg.working");
+	$.ajax({
+		type: "GET",
+		cache: false,
+		url: descriptorMetadataEndpoint,
+		success: function(res) {
+			var target = $("#descriptormetadata");
+			target.html(res);
+			applyBehaviourTo(target);
+	    },
+	    error: function (xhr, ajaxOptions, thrownError) {
+			nimble.growl('error', xhr.responseText);
+	    }
+	});
+}
+
 // Organization Administrators
 fedreg.organization_fulladministrator_grant = function(userID) {
 	$("#working").trigger("fedreg.working");
