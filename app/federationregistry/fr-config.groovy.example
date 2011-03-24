@@ -64,7 +64,7 @@ fedreg {
 				redirect.uri = '$host/idp/profile/SAML2/Redirect/SSO'
 				artifact {
 					uri = '$host:8443/idp/profile/SAML2/SOAP/ArtifactResolution'
-					index = 1
+					index = 2
 				}
 				attributeservice.uri = '$host:8443/idp/profile/SAML2/SOAP/AttributeQuery'
 			}
