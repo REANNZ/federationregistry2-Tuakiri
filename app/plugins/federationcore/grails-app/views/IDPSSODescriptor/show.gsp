@@ -1,8 +1,6 @@
 
 <html>
-	<head>
-		<r:use modules="codemirror"/>
-		
+	<head>		
 		<meta name="layout" content="members" />
 
 		<title><g:message code="fedreg.view.members.identityprovider.show.title" /></title>
@@ -46,8 +44,11 @@
 			
 			var attributeFilterEndpoint = "${createLink(controller:'attributeFilter', action:'generate', id:identityProvider.id )}";
 			
+			var descriptorMetadataEndpoint = "${createLink(controller:'metadata', action:'entity', id:identityProvider.entityDescriptor.id )}";
+			
 			$(function() {
 				$("#attrfilpolood").hide();
+				fedreg.descriptor_metadata();
 			});	
 		</r:script>
 	</head>
@@ -145,11 +146,12 @@
 					<li><a href="#tab-endpoints" ><g:message code="label.endpoints" /></a></li>
 					<li><a href="#tab-attributes" ><g:message code="label.supportedattributes" /></a></li>
 					<li><a href="#tab-nameidformats" ><g:message code="label.supportednameidformats" /></a></li>
+					<li><a href="#tab-monitors" ><g:message code="label.monitoring" /></a></li>
+					<li><a href="#tab-metadata" ><g:message code="label.metadata" /></a></li>
 					<li><a href="#tab-attrfilpol" ><g:message code="label.attributefilter" /></a></li>
 					<g:if test="${identityProvider.approved}">
 						<li><a href="#tab-admins" ><g:message code="label.administrators" /></a></li>
 					</g:if>
-					<li><a href="#tab-monitors" ><g:message code="label.monitoring" /></a></li>
 				</ul>
 				
 				<div id="tab-contacts" class="tabcontent">
@@ -236,23 +238,16 @@
 					<p><g:message code="fedreg.view.members.identityprovider.show.attributefilter.configuration" /></p>
 					<p><g:message code="fedreg.view.members.identityprovider.show.attributefilter.configurationurl" /> <strong><g:link controller="attributeFilter" action="generate" id="${identityProvider.id}">${createLink(controller:'attributeFilter', action:'generate', id:identityProvider.id, absolute:true)}</g:link></strong></p>
 					
-					<g:textArea id="attrfilter" name="attrfilter" value="${attributeFilter}" rows="25" cols="40"/>
+					<pre class="metadata"><code>${attributeFilter.encodeAsHTML()}</code></pre>
+
+				</div>
+				<div id="tab-metadata">
+					<h3><g:message code="label.metadata" /></h3>
+					<p><g:message code="fedreg.view.members.identityprovider.show.metadata.details" />
+					<a href="#" onClick="fedreg.descriptor_metadata(); nimble.growl('success', '${g.message(code:'label.metadatareload')}'); false;" style="float:right;" class="redo-button"><g:message code="label.reload" /></a>
+					</p>
 					
-					<r:script>
-						var textarea = $("#attrfilter");
-						var editor = CodeMirror.fromTextArea("attrfilter",  {
-							height: "600px",
-							path: "",
-							stylesheet: "${r.resource(dir:'/js/codemirror/css', file:'groovycolors.css', plugin:'federationregistry') }",
-							basefiles: ["${r.resource(dir:'/js/codemirror/js', file:'codemirror.groovy.inframe.min.js', plugin:'federationregistry') }"],
-							parserfile: [],
-							content: textarea.value,
-							autoMatchParens: true,
-							disableSpellcheck: true,
-							lineNumbers: true,
-							tabMode: 'shift'
-						});
-					</r:script>
+					<div id="descriptormetadata"></div>
 				</div>
 				<g:if test="${identityProvider.approved}">
 					<div id="tab-admins">

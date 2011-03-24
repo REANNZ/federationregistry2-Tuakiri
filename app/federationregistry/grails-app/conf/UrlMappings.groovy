@@ -48,6 +48,10 @@ class UrlMappings {
 		"/membership/backend/contact/$action?/$id?"{
 			controller = "descriptorContact"
 		}
+		
+		"/membership/backend/orgcontact/$action?/$id?"{
+			controller = "organizationContact"
+		}
 	
 		"/membership/backend/roledescriptorcrypto/$action?/$id?"{
 			controller = "roleDescriptorCrypto"
@@ -90,7 +94,7 @@ class UrlMappings {
 			controller = "bootstrap"
 		}
 	
-		"/metadata/$action"{
+		"/metadata/$action?/$id?"{
 			controller = "metadata"
 		}
 	

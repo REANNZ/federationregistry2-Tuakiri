@@ -31,7 +31,6 @@ class OrganizationController {
 		def organization = Organization.get(params.id)
 		if (organization) {
 			def entities = EntityDescriptor.findAllWhere(organization:organization)
-			def contacts = Contact.findAllWhere(organization:organization)
 			def adminRole = Role.findByName("organization-${organization.id}-administrators")
 			def identityproviders = []
 			def serviceproviders = []
@@ -41,7 +40,7 @@ class OrganizationController {
 				e.spDescriptors.each { sp -> serviceproviders.add(sp) }
 			}
 			
-			[organization: organization, statistics:organization.buildStatistics(), entities:entities, identityproviders:identityproviders, serviceproviders:serviceproviders, contacts:contacts, administrators:adminRole?.users]
+			[organization: organization, statistics:organization.buildStatistics(), entities:entities, identityproviders:identityproviders, serviceproviders:serviceproviders, administrators:adminRole?.users, contactTypes:ContactType.list()]
 		}
 		else {
 			flash.type="error"

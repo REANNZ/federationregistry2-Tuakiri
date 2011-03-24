@@ -6,7 +6,6 @@
 			<thead>
 				<tr>
 					<th><g:message code="label.name" /></th>
-					<th><g:message code="label.username" /></th>
 					<th><g:message code="label.email" /></th>
 					<th/>
 				</tr>
@@ -15,7 +14,6 @@
 				<g:each in="${administrators.sort{it.username}}" var="admin" status="i">
 					<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 						<td>${admin.profile.fullName?.encodeAsHTML()}</td>
-						<td>${admin.username?.encodeAsHTML()}</td>
 						<td><a href="mailto:${admin.profile.email?.encodeAsHTML()}">${admin.profile.email?.encodeAsHTML()}</a></td>
 						<td>
 							<n:isAdministrator>

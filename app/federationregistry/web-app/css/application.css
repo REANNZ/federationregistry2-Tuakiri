@@ -447,6 +447,25 @@ td pre {
 	margin-left: 6px;
 }
 
+pre.metadata {
+	clear: both;
+	padding: 0;
+	margin: 0;
+	margin-top: 18px;
+	background: #f2f2f2;
+	border: 1px solid #ccc;
+	
+	overflow: auto;
+}
+pre.metadata code {
+	margin: 6px;
+	padding: 6px;
+	display: block;
+	
+	font-face: courier;
+	font-size: 1.1em;
+	line-height: 1.5em; 
+}
 
 #dashboardcontent {
 	.automargin;

@@ -65,7 +65,7 @@ public class SecurityFilters extends grails.plugins.nimble.security.NimbleFilter
 		}
 
 		// Members Backend
-		membersbackend(controller: "(attributeConsumingSerivce|descriptorAdministration|descriptorAttribute|descriptorContact|descriptorEndpoint|descriptorNameIDFormat|organizationAdministration|roleDescriptorCrypto|roleDescriptorMonitor)") {
+		membersbackend(controller: "(attributeConsumingSerivce|descriptorAdministration|descriptorAttribute|descriptorContact|descriptorEndpoint|descriptorNameIDFormat|organizationAdministration|organizationContact|roleDescriptorCrypto|roleDescriptorMonitor)") {
 			before = {
 				accessControl (auth: false) {
 					role(UserService.USER_ROLE)

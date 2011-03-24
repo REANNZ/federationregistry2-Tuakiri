@@ -54,6 +54,12 @@
 			var monitorDeleteEndpoint = "${createLink(controller:'roleDescriptorMonitor', action:'delete')}";
 			var monitorListEndpoint = "${createLink(controller:'roleDescriptorMonitor', action:'list', id:serviceProvider.id )}";
 			var monitorCreateEndpoint = "${createLink(controller:'roleDescriptorMonitor', action:'create', id:serviceProvider.id )}";
+			
+			var descriptorMetadataEndpoint = "${createLink(controller:'metadata', action:'entity', id:serviceProvider.entityDescriptor.id )}";
+			
+			$(function() {
+				fedreg.descriptor_metadata();
+			});
 		</r:script>
 	</head>
 	<body>
@@ -133,10 +139,11 @@
 					<li><a href="#tab-endpoints"><g:message code="label.endpoints" /></a></li>
 					<li><a href="#tab-attributes"><g:message code="label.attributeconsumingservices" /></a></li>
 					<li><a href="#tab-nameidformats"><g:message code="label.supportednameidformats" /></a></li>
+					<li><a href="#tab-monitors" class="icon icon_database_key"><g:message code="label.monitoring" /></a></li>
+					<li><a href="#tab-metadata" ><g:message code="label.metadata" /></a></li>
 					<g:if test="${serviceProvider.approved}">
 						<li><a href="#tab-admins" class="icon icon_database_key"><g:message code="label.administrators" /></a></li>
 					</g:if>
-					<li><a href="#tab-monitors" class="icon icon_database_key"><g:message code="label.monitoring" /></a></li>
 				</ul>
 				
 				<div id="tab-details" class="tabcontent">
@@ -227,6 +234,14 @@
 					</div>
 					
 					<g:render template="/templates/nameidformats/add" plugin="federationcore" model="[descriptor:serviceProvider, containerID:'nameidformats']"/>
+				</div>
+				<div id="tab-metadata">
+					<h3><g:message code="label.metadata" /></h3>
+					<p><g:message code="fedreg.view.members.serviceprovider.show.metadata.details" />
+					<a href="#" onClick="fedreg.descriptor_metadata(); nimble.growl('success', '${g.message(code:'label.metadatareload')}'); false;" style="float:right;" class="redo-button"><g:message code="label.reload" /></a>
+					</p>
+					
+					<div id="descriptormetadata"></div>
 				</div>
 				<g:if test="${serviceProvider.approved}">
 					<div id="tab-admins">

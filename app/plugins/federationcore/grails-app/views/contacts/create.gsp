@@ -1,6 +1,10 @@
 <html>
 	<head>
-		
+		<r:script>
+			$(function() {
+				$('form').validate();
+			});
+		</r:script>
 		<meta name="layout" content="members" />
 		<title><g:message code="fedreg.view.members.contacts.create.title" /></title>
 	</head>
@@ -24,24 +28,24 @@
 						</tr>	
 						<tr>
 							<th><g:message code="label.givenname" /></th>
-							<td><input type="text" name="givenname" value="${fieldValue(bean: contact, field: 'givenName')}" /></td>
+							<td><input type="text" name="givenname" value="${fieldValue(bean: contact, field: 'givenName')}" class="required"/></td>
 						</tr>
 						<tr>
 							<tr>
 								<th><g:message code="label.surname" /></th>
-								<td><input type="text" name="surname" value="${fieldValue(bean: contact, field: 'surname')}" /></td>
+								<td><input type="text" name="surname" value="${fieldValue(bean: contact, field: 'surname')}" class="required"/></td>
 							</tr>
 						</tr>
 						<tr>
 							<tr>
 								<th><g:message code="label.email" /></th>
-								<td><input type="text" name="email" value="${fieldValue(bean: contact, field: 'email.uri')}" /></td>
+								<td><input type="text" name="email" value="${fieldValue(bean: contact, field: 'email.uri')}" class="required email"/></td>
 							</tr>
 						</tr>
 						<tr>
 							<th><g:message code="label.secondaryemail" /></th>
 							<td>
-								<input type="text" name="secondaryEmail" value="${fieldValue(bean: contact, field: 'secondaryEmail.uri')}" />
+								<input type="text" name="secondaryEmail" value="${fieldValue(bean: contact, field: 'secondaryEmail.uri')}" class="email"/>
 							</td>
 						</tr>
 						<tr>

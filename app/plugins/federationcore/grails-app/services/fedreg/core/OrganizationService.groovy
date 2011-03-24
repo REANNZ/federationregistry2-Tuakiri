@@ -33,7 +33,7 @@ class OrganizationService {
 			return [ false, organization, contact ]
 		}
 		
-		def savedOrg = organization.save()
+		def savedOrg = organization.save(flush:true)
 		if(!savedOrg) {
 			organization?.errors.each { log.error it }
 			throw new ErronousStateException("Unable to save when creating ${organization}")
@@ -50,7 +50,7 @@ class OrganizationService {
 			return [ false, organization, contact ]
 		}
 		
-		if(!contact.save()) {
+		if(!contact.save(flush:true)) {
 			contact?.errors.each { log.error it }
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly() 
 			throw new ErronousStateException("Unable to save when creating ${contact}")
