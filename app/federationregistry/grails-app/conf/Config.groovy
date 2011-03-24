@@ -7,8 +7,8 @@ if(externalConf) {
 	println( "Including external configuration from: ${externalConf}" )
 	grails.config.locations = ["file:${externalConf}/fr-config.groovy"]
 } else {
-	println "No external configuration location specified as environment variable FEDREG_CONFIG, terminating startup"
-	throw new RuntimeException("No external configuration location specified as environment variable FEDREG_CONFIG, terminating startup")
+	println "No external configuration location specified as environment variable fr_config, terminating startup"
+	throw new RuntimeException("No external configuration location specified as environment variable fr_config, terminating startup")
 }
 
 // Extract user details to append to Audit Table
