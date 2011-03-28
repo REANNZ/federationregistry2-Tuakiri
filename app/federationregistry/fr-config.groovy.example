@@ -173,9 +173,7 @@ nimble {
 }
 
 //Data repository
-/**
-USE FOR DEVELOPMENT - NON JNDI
-
+/** - USE FOR DEVELOPMENT - NON JNDI
 dataSource {
 	pooled = true
 	driverClassName = "com.mysql.jdbc.Driver"
@@ -189,8 +187,7 @@ dataSource {
 }
 **/
 
-/**
-USE FOR PRODUCTION - JNDI Datasource
+/** - USE FOR PRODUCTION - JNDI Datasource
 dataSource {
 	dbCreate = "update"
 	dialect= org.hibernate.dialect.MySQL5InnoDBDialect
