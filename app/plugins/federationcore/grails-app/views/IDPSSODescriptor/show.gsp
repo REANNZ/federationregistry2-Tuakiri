@@ -146,6 +146,7 @@
 					<li><a href="#tab-endpoints" ><g:message code="label.endpoints" /></a></li>
 					<li><a href="#tab-attributes" ><g:message code="label.supportedattributes" /></a></li>
 					<li><a href="#tab-nameidformats" ><g:message code="label.supportednameidformats" /></a></li>
+					<li><a href="#tab-reports" ><g:message code="label.reporting" /></a></li>
 					<li><a href="#tab-monitors" ><g:message code="label.monitoring" /></a></li>
 					<li><a href="#tab-metadata" ><g:message code="label.metadata" /></a></li>
 					<li><a href="#tab-attrfilpol" ><g:message code="label.attributefilter" /></a></li>
@@ -228,6 +229,12 @@
 					</div>
 					
 					<g:render template="/templates/nameidformats/add" plugin="federationcore" model="[descriptor:identityProvider, containerID:'nameidformats']"/>
+				</div>
+				<div id="tab-reports" class="tabcontent">
+					<h3><g:message code="label.reporting" /></h3>
+					<div id="reporting">
+						<g:render template="/templates/reporting/idp/arc" plugin="federationreporting" model="[id:identityProvider.id, month:2]" />
+					</div>
 				</div>
 				<div id="tab-attrfilpol">
 					<h3><g:message code="label.attributefilter"/></h3>
