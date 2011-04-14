@@ -67,9 +67,15 @@ class AttributeFilterGenerationService {
 								if(ra.values?.size() > 0) {
 									AttributeRule(attributeID:ra.base.alias){
 										PermitValueRule("xsi:type":"basic:OR") {
-											"basic:Rule"("xsi:type":"basic:AttributeRequesterString", value:"${serviceProvider.entityDescriptor.entityID}")		// OR requires min 2 rules. We add this here to be schema compliant even when only a single value is requested
-											ra.values.sort{it.value}.each { v ->
+											if(ra.values.size() == 1) {
+												def v = ra.values.toList().get(0)	// OR requires min 2 rules. We add this here to be schema compliant even when only a single value is requested
 												"basic:Rule" ("xsi:type":"basic:AttributeValueString", value:v.value, ignoreCase:"true")
+												"basic:Rule" ("xsi:type":"basic:AttributeValueString", value:v.value, ignoreCase:"true")
+											}
+											else {	
+												ra.values.sort{it.value}.each { v ->
+													"basic:Rule" ("xsi:type":"basic:AttributeValueString", value:v.value, ignoreCase:"true")
+												}
 											}
 										}
 									}
