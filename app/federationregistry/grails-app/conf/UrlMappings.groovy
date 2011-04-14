@@ -5,8 +5,8 @@ class UrlMappings {
 			controller = "dashboard"
 		}
 		
-		"/reporting/internal/$action/$id?" {
-			controller = "internalReports"
+		"/reporting/idp/$action/$id?" {
+			controller = "idPReports"
 		}
 	
 		"/compliance/identityprovider/attributes/$action?/$id?"{

@@ -23,6 +23,7 @@ applyBehaviourTo = function(e) {
 		}
 	 });
 	$(".tabs").tabs();
+	$(".loadhide").hide();
 	
 	$('.sortable-table').each(function(index) {
 		$(this).dataTable( {
@@ -1081,3 +1082,39 @@ fedreg.configureServiceProviderSAML = function(host) {
 		}
 	}
 };
+
+// Reporting
+
+fedreg.renderIdPConnectivityReport = function() {
+	$("#working").trigger("fedreg.working");
+	$(".idpreport").hide();
+	
+	if( $(".reporttype option:selected").val() == 'connections') {
+		$(".reportrefinementinput").slideUp();
+		$(".reportrefinementopen").show();
+		var dataString = $("#reportrequirements").serialize();
+		$.ajax({url: idpReportsConnectivityEndpoint, 
+			data: dataString,
+			dataType: 'json',
+			async:false, 
+			success: function(d){
+	    		renderConnectivity(d, false);
+				$("#idpconnectivityreport").show();
+			}
+		});
+	}
+}
+
+fedreg.refineIdPConnectivityReport = function(refinement) {
+	$("#working").trigger("fedreg.working");
+	var dataString = $("#reportrequirements").serialize() + "&" + refinement.serialize();
+	$.ajax({url: idpReportsConnectivityEndpoint, 
+		data: dataString,
+		dataType: 'json',
+		async:false, 
+		success: function(d){
+    		renderConnectivity(d, true);
+			$("#idpconnectivityreport").show();
+		}
+	});
+}

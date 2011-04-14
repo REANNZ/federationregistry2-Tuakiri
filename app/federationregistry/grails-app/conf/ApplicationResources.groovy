@@ -64,10 +64,6 @@ modules = {
 		resource url:'js/protovis-r3.2.js'
 	}
 	
-	'datejs' {
-		resource url:'js/date.js', disposition:'head'
-	}
-	
 	overrides {
 		'jquery-ui' {	
 			// We're using smoothness so we override definition from jquery-ui plugin

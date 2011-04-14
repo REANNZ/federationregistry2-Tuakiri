@@ -29,8 +29,8 @@ class WayfAccessRecord {
 	String sourceIPAddress
 	String requestType
 	
-	long idpEntityID
-	long spEntityID 
+	long idpID
+	long spID 
 
 	static constraints = {
 		dateCreated(nullable: true)

@@ -46,6 +46,8 @@
 			
 			var descriptorMetadataEndpoint = "${createLink(controller:'metadata', action:'entity', id:identityProvider.entityDescriptor.id )}";
 			
+			var idpReportsConnectivityEndpoint = "${createLink(controller:'idPReports', action:'connectivityjson', id:identityProvider.id)}"
+			
 			$(function() {
 				$("#attrfilpolood").hide();
 				fedreg.descriptor_metadata();
@@ -231,9 +233,8 @@
 					<g:render template="/templates/nameidformats/add" plugin="federationcore" model="[descriptor:identityProvider, containerID:'nameidformats']"/>
 				</div>
 				<div id="tab-reports" class="tabcontent">
-					<h3><g:message code="label.reporting" /></h3>
 					<div id="reporting">
-						<g:render template="/templates/reporting/idp/arc" plugin="federationreporting" model="[id:identityProvider.id, month:2]" />
+						<g:render template="/templates/reporting/idp/reports" plugin="federationreporting" model="[id:identityProvider.id]" />
 					</div>
 				</div>
 				<div id="tab-attrfilpol">
