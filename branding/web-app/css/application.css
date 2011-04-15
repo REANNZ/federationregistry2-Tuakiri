@@ -209,6 +209,75 @@ ul.clean li {
 	}
 }
 
+#reporting {
+	text-align: center;
+}
+
+#reportrequirements {
+	.rounded;
+	text-align: center;
+	display: block;
+	background-color: #fafafa;
+	border: 1px solid #e2e2e2;
+	padding: 6px;
+}
+#reportrequirements label {
+	margin-right: 24px;
+}
+
+#reportrequirements input {
+	font-size: 12px;
+	padding: 3px;
+}
+
+#reportrequirements select {
+	font-size: 12px;
+	padding: 3px;
+}
+
+#reporting .description {
+	text-align: left;
+}
+
+.reportrefinementcomponents {
+	text-align: left;
+}
+.reportrefinementcomponents label {
+	width: 350px;
+	display: inline-block;
+	margin-left: 6px;
+}
+
+.reportrefinement form {
+	.rounded;
+	display: block;
+	background-color: #fafafa;
+	border: 1px solid #e2e2e2;
+	padding: 6px;
+}
+
+.reportrefinementval {
+	margin-top: 12px;
+}
+
+.reportrefinementval label{
+	margin-left: 12px;
+}
+
+.reportrefinementval input {
+	font-size: 11px;
+	padding: 3px;
+}
+
+.reportrefinement .reportrefinementval {
+	margin-top: 6px;
+}
+
+.reportrefinement .buttons{
+	text-align: right;
+}
+
+
 body {
 	.zero;
 	background-color: @bgColor;

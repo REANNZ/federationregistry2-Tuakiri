@@ -47,6 +47,8 @@
 			var descriptorMetadataEndpoint = "${createLink(controller:'metadata', action:'entity', id:identityProvider.entityDescriptor.id )}";
 			
 			var idpReportsConnectivityEndpoint = "${createLink(controller:'idPReports', action:'connectivityjson', id:identityProvider.id)}"
+			var idpReportsTotalsEndpoint = "${createLink(controller:'idPReports', action:'totalsjson', id:identityProvider.id)}"
+			var idpReportsLoginsEndpoint = "${createLink(controller:'idPReports', action:'loginsjson', id:identityProvider.id)}"
 			
 			$(function() {
 				$("#attrfilpolood").hide();

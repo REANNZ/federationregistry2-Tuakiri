@@ -1085,36 +1085,77 @@ fedreg.configureServiceProviderSAML = function(host) {
 
 // Reporting
 
-fedreg.renderIdPConnectivityReport = function() {
+fedreg.renderIdPReport = function(refinement) {
 	$("#working").trigger("fedreg.working");
 	$(".idpreport").hide();
 	
+	$(".reportrefinementinput").hide();
+	$(".reportrefinementopen").show();
+	
+	var dataString = $("#reportrequirements").serialize();
+	
 	if( $(".reporttype option:selected").val() == 'connections') {
-		$(".reportrefinementinput").slideUp();
-		$(".reportrefinementopen").show();
-		var dataString = $("#reportrequirements").serialize();
 		$.ajax({url: idpReportsConnectivityEndpoint, 
 			data: dataString,
 			dataType: 'json',
 			async:false, 
-			success: function(d){
-	    		renderConnectivity(d, false);
+			success: function(data){
+	    		fedreg.renderIdPConnectivity(data, false);
 				$("#idpconnectivityreport").show();
+			}
+		});
+	}
+	
+	if( $(".reporttype option:selected").val() == 'totals') {
+		$.ajax({url: idpReportsTotalsEndpoint, 
+			data: dataString,
+			dataType: 'json',
+			async:false, 
+			success: function(data){
+	    		fedreg.renderIdPTotals(data, false);
+				$("#idptotalsreport").show();
+			}
+		});
+	}
+	
+	if( $(".reporttype option:selected").val() == 'logins') {
+		$.ajax({url: idpReportsLoginsEndpoint, 
+			data: dataString,
+			dataType: 'json',
+			async:false, 
+			success: function(data){
+	    		fedreg.renderIdPLogins(data);
+				$("#idploginsreport").show();
 			}
 		});
 	}
 }
 
-fedreg.refineIdPConnectivityReport = function(refinement) {
+fedreg.refineIdPReport = function(refinement) {
 	$("#working").trigger("fedreg.working");
 	var dataString = $("#reportrequirements").serialize() + "&" + refinement.serialize();
-	$.ajax({url: idpReportsConnectivityEndpoint, 
-		data: dataString,
-		dataType: 'json',
-		async:false, 
-		success: function(d){
-    		renderConnectivity(d, true);
-			$("#idpconnectivityreport").show();
-		}
-	});
+	
+	if( $(".reporttype option:selected").val() == 'connections') {
+		$.ajax({url: idpReportsConnectivityEndpoint, 
+			data: dataString,
+			dataType: 'json',
+			async:false, 
+			success: function(data){
+	    		fedreg.renderIdPConnectivity(data, true);
+				$("#idpconnectivityreport").show();
+			}
+		});
+	}
+	
+	if( $(".reporttype option:selected").val() == 'totals') {
+		$.ajax({url: idpReportsTotalsEndpoint, 
+			data: dataString,
+			dataType: 'json',
+			async:false, 
+			success: function(data){
+	    		fedreg.renderIdPTotals(data, true);
+				$("#idptotalsreport").show();
+			}
+		});
+	}
 }

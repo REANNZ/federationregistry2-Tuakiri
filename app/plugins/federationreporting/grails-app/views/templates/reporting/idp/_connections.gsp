@@ -10,11 +10,11 @@
 			
 			
 			
-			<span id="connectivitycomponents" class="reportrefinementcomponenets">
+			<span id="connectivitycomponents" class="reportrefinementcomponents">
 			</span>
 			
 			<div  class="buttons">
-				<a href="#" onClick="fedreg.refineIdPConnectivityReport($('#connectivityrefinement')); return false;" class="update-button"><g:message code="label.update" /></a>
+				<a href="#" onClick="fedreg.refineIdPReport($('#connectivityrefinement')); return false;" class="update-button"><g:message code="label.update" /></a>
 				<a href="#" onClick="$('.reportrefinementinput').slideUp(); $('.reportrefinementopen').show(); return false;" class="close-button"><g:message code="label.close" /></a>
 			</div>
 		</form>
@@ -28,7 +28,7 @@
 </div>
 
 <script type="text/javascript+protovis">
-	renderConnectivity = function(data, refine) {
+	fedreg.renderIdPConnectivity = function(data, refine) {
 		$('#connectivitydata').empty();
 		$('#connectivitytitle').html(data.title);
 		
@@ -57,7 +57,6 @@
 	
 		var line = arc.link.add(pv.Line)
 		
-
 		var dot = arc.node.add(pv.Dot)
 		    .size(function(d) d.linkDegree);
 
