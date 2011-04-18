@@ -37,7 +37,13 @@
 			$('#connectivitydata').empty();
 			$('#connectivitytitle').html(data.title);
 		
-			if(!refine) {
+			if(refine) {
+				if(!data.populated) {
+					$('#connectivityreportnodata').fadeIn();
+					return;
+				} else
+					$('#connectivityreportnodata').hide();
+			} else {
 				$('.reportdata').hide();
 				
 				$('#connectivitycomponents').empty();
@@ -47,13 +53,6 @@
 					else
 						$("#connectivitycomponents").append("<label class='choice'><input type='checkbox' name='activesp' value='"+sp.id+"'></input>"+sp.name+"</label>");
 				});
-			} else {
-				if(!data.populated) {
-					$('#connectivityreportnodata').fadeIn();
-					return;
-				} else {
-					$('#connectivityreportnodata').hide();
-				}	
 			}
 		
 			var canvas = document.createElement("div");

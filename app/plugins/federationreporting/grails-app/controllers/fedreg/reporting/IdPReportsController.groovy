@@ -121,45 +121,42 @@ class IdPReportsController {
 		results.bars = bars
 		results.barlabels = barLabels
 		results.title = "${g.message(code:'fedreg.templates.reports.identityprovider.totals.title', args:[idp.displayName])} ${day ? day + ' /':''} ${month ? month + ' /':''} $year"
+	
+		def loginQuery = "select count(*), spID from WayfAccessRecord where idpID = :idpid and year(dateCreated) = :year"
+		def loginParams = [:]
+		loginParams.idpid = idp.id
+		loginParams.year = year
 		
-		def sps = SPSSODescriptor.listOrderByDisplayName()
-		sps.each { sp ->
-			
-			def loginQuery = "select count(*) as count from WayfAccessRecord where idpID = :idpid and spID = :spid and year(dateCreated) = :year"
-			def loginParams = [:]
-			loginParams.idpid = idp.id
-			loginParams.spid = sp.id
-			loginParams.year = year
-			
-			if(month) {
-				loginQuery = loginQuery + " and month(dateCreated) = :month"
-				loginParams.month = month
-			}
-			if(day) {
-				loginQuery = loginQuery + " and day(dateCreated) = :day"
-				loginParams.day = day
-			}
-			
-			def loginCount = WayfAccessRecord.executeQuery(loginQuery, loginParams)
+		if(month) {
+			loginQuery = loginQuery + " and month(dateCreated) = :month"
+			loginParams.month = month
+		}
+		if(day) {
+			loginQuery = loginQuery + " and day(dateCreated) = :day"
+			loginParams.day = day
+		}
 		
-			if(loginCount[0] > 0) {
-				def service = [:]
-				service.name = sp.displayName
-				service.id = sp.id
-				services.add(service)
-			
-				if((activeSP == null || activeSP.contains(sp.id.toString())) && (!min || loginCount[0] >= min) && (!max || loginCount[0] <= max)) {
-					service.rendered = true
-					bars.add(loginCount[0])
-					barLabels.add(sp.displayName)
-					
-					if(maxLogins < loginCount[0])
-						maxLogins = loginCount[0]
-					count++
-				}
-				else
-					service.rendered = false
+		loginQuery = loginQuery + " group by spID"
+		
+		def logins = WayfAccessRecord.executeQuery(loginQuery, loginParams)
+		logins.each { login ->
+			def sp = SPSSODescriptor.get(login[1])
+			def service = [:]
+			service.name = sp.displayName
+			service.id = sp.id
+			services.add(service)
+		
+			if((activeSP == null || activeSP.contains(sp.id.toString())) && (!min || login[0] >= min) && (!max || login[0] <= max)) {
+				service.rendered = true
+				bars.add(login[0])
+				barLabels.add(sp.displayName)
+				
+				if(maxLogins < login[0])
+					maxLogins = login[0]
+				count++
 			}
+			else
+				service.rendered = false
 		}
 
 		results.maxlogins = maxLogins
@@ -242,14 +239,10 @@ class IdPReportsController {
 				node.group = 1
 				nodes.add(node)
 			}
-	
-			def sps = SPSSODescriptor.listOrderByDisplayName()
-			sps.each { sp ->
 				
-				def loginQuery = "select count(*) as count from WayfAccessRecord where idpID = :idpid and spID = :spid and year(dateCreated) = :year"
+				def loginQuery = "select count(*), spID from WayfAccessRecord where idpID = :idpid and year(dateCreated) = :year"
 				def loginParams = [:]
 				loginParams.idpid = idp.id
-				loginParams.spid = sp.id
 				loginParams.year = year
 				
 				if(month) {
@@ -260,13 +253,14 @@ class IdPReportsController {
 					loginQuery = loginQuery + " and day(dateCreated) = :day"
 					loginParams.day = day
 				}
-				
-				def loginCount = WayfAccessRecord.executeQuery(loginQuery, loginParams)
-			
-				if(loginCount[0] > 0) {
+				loginQuery = loginQuery + " group by spID"
+
+				def logins = WayfAccessRecord.executeQuery(loginQuery, loginParams)			
+				logins.each { login ->
+					def sp = SPSSODescriptor.get(login[1])
 					def service = [:]
-					service.name = sp.displayName
 					service.id = sp.id
+					service.name = sp.displayName
 					services.add(service)
 				
 					if(activeSP == null || activeSP.contains(sp.id.toString())) {
@@ -279,7 +273,7 @@ class IdPReportsController {
 	
 						def link = [:]
 						link.source = 0
-						def value = ((loginCount[0] / totalLogins[0]) * 20)		/* 0 - 20 instead of 0 - 1, makes graph look nicer*/
+						def value = ((login[0] / totalLogins[0]) * 20)		/* 0 - 20 instead of 0 - 1, makes graph look nicer*/
 						link.value = value
 						link.target = target++
 
@@ -288,7 +282,7 @@ class IdPReportsController {
 					else
 						service.rendered = false
 				}
-			}
+
 		} else {
 			results.populated = false
 		}

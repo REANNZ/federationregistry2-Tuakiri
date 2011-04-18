@@ -23,14 +23,12 @@
 			var canvas = document.createElement("div");
 			$('#loginsdata').append(canvas);
 
-			/* Sizing and scales. */
 			var w = 900,
 			    h = 400,
 			    r = 200,
 				c = pv.Colors.category20(),
 			    a = pv.Scale.linear(0, pv.sum(data.values)).range(0, 2 * Math.PI);
 
-			/* The root panel. */
 			var vis = new pv.Panel()
 				.canvas(canvas)
 				.top(0)
@@ -38,7 +36,6 @@
 			    .width(w)
 			    .height(h);
 
-			/* The wedge, with centered label. */
 			vis.add(pv.Wedge)
 			    .data(data.values)
 			    .bottom(200)
@@ -50,7 +47,6 @@
 			    .event("mouseover", function() this.innerRadius(0))
 			    .event("mouseout", function() this.innerRadius(r - 40))
 			
-			  /* A legend entry for each person. */
 			vis.add(pv.Dot)
 			    .data(data.values)
 			    .left(10)

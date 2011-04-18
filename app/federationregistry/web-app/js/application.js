@@ -1100,7 +1100,10 @@ fedreg.renderIdPReport = function(refinement) {
 			async:false, 
 			success: function(data){
 	    		fedreg.renderIdPConnectivity(data, false);
-			}
+			},
+		    error: function (xhr, ajaxOptions, thrownError) {
+				nimble.growl('error', xhr.responseText);
+		    }
 		});
 	}
 	
@@ -1111,7 +1114,10 @@ fedreg.renderIdPReport = function(refinement) {
 			async:false, 
 			success: function(data){
 	    		fedreg.renderIdPTotals(data, false);
-			}
+			},
+		    error: function (xhr, ajaxOptions, thrownError) {
+				nimble.growl('error', xhr.responseText);
+		    }
 		});
 	}
 	
@@ -1122,7 +1128,10 @@ fedreg.renderIdPReport = function(refinement) {
 			async:false, 
 			success: function(data){
 	    		fedreg.renderIdPLogins(data);
-			}
+			},
+		    error: function (xhr, ajaxOptions, thrownError) {
+				nimble.growl('error', xhr.responseText);
+		    }
 		});
 	}
 }
@@ -1138,7 +1147,10 @@ fedreg.refineIdPReport = function(refinement) {
 			async:false, 
 			success: function(data){
 	    		fedreg.renderIdPConnectivity(data, true);
-			}
+			},
+		    error: function (xhr, ajaxOptions, thrownError) {
+				nimble.growl('error', xhr.responseText);
+		    }
 		});
 	}
 	
@@ -1149,7 +1161,10 @@ fedreg.refineIdPReport = function(refinement) {
 			async:false, 
 			success: function(data){
 	    		fedreg.renderIdPTotals(data, true);
-			}
+			},
+		    error: function (xhr, ajaxOptions, thrownError) {
+				nimble.growl('error', xhr.responseText);
+		    }
 		});
 	}
 }

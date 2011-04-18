@@ -2,9 +2,9 @@
 <form id="reportrequirements">
 	<label><g:message code="label.type" />
 		<select class="reporttype">
-				<option value="logins"><g:message code="label.loginbreakdown" /></option>
 				<option value="connections"><g:message code="label.connections" /></option>
 				<option value="totals"><g:message code="label.usagetotals" /></option>
+				<option value="logins"><g:message code="label.loginbreakdown" /></option>
 		</select>
 	</label>
 	
