@@ -15,12 +15,8 @@
 	<a href="#" onClick="if($('#reportrequirements').valid()){ fedreg.renderIdPReport(); } return false;" class="search-button"><g:message code="label.generate" /></a>
 </form>
 
-<div id="idpconnectivityreport" class="loadhide idpreport">
+<div id="reports">
 	<g:render template="/templates/reporting/idp/connections" plugin="federationreporting" />
-</div>
-<div id="idptotalsreport" class="loadhide idpreport">
 	<g:render template="/templates/reporting/idp/totals" plugin="federationreporting" />
-</div>
-<div id="idploginsreport" class="loadhide idpreport">
 	<g:render template="/templates/reporting/idp/logins" plugin="federationreporting" />
 </div>

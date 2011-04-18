@@ -23,7 +23,7 @@ applyBehaviourTo = function(e) {
 		}
 	 });
 	$(".tabs").tabs();
-	$(".loadhide").hide();
+	$(".revealable").hide();
 	
 	$('.sortable-table').each(function(index) {
 		$(this).dataTable( {
@@ -1087,7 +1087,6 @@ fedreg.configureServiceProviderSAML = function(host) {
 
 fedreg.renderIdPReport = function(refinement) {
 	$("#working").trigger("fedreg.working");
-	$(".idpreport").hide();
 	
 	$(".reportrefinementinput").hide();
 	$(".reportrefinementopen").show();
@@ -1101,7 +1100,6 @@ fedreg.renderIdPReport = function(refinement) {
 			async:false, 
 			success: function(data){
 	    		fedreg.renderIdPConnectivity(data, false);
-				$("#idpconnectivityreport").show();
 			}
 		});
 	}
@@ -1113,7 +1111,6 @@ fedreg.renderIdPReport = function(refinement) {
 			async:false, 
 			success: function(data){
 	    		fedreg.renderIdPTotals(data, false);
-				$("#idptotalsreport").show();
 			}
 		});
 	}
@@ -1125,7 +1122,6 @@ fedreg.renderIdPReport = function(refinement) {
 			async:false, 
 			success: function(data){
 	    		fedreg.renderIdPLogins(data);
-				$("#idploginsreport").show();
 			}
 		});
 	}
@@ -1142,7 +1138,6 @@ fedreg.refineIdPReport = function(refinement) {
 			async:false, 
 			success: function(data){
 	    		fedreg.renderIdPConnectivity(data, true);
-				$("#idpconnectivityreport").show();
 			}
 		});
 	}
@@ -1154,7 +1149,6 @@ fedreg.refineIdPReport = function(refinement) {
 			async:false, 
 			success: function(data){
 	    		fedreg.renderIdPTotals(data, true);
-				$("#idptotalsreport").show();
 			}
 		});
 	}

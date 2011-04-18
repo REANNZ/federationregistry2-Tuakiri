@@ -67,7 +67,11 @@ class IdPReportsController {
 		loginsQuery = loginsQuery + " group by hour(date_created)"
 		
 		def totalLogins = WayfAccessRecord.executeQuery(loginsQuery, loginsParams)
-		println totalLogins
+		if(totalLogins.size() == 0)
+			results.populated = false
+		else
+			results.populated = true
+
 		totalLogins.each {
 			def val = [:]
 			values.add( it[0] )
@@ -160,6 +164,12 @@ class IdPReportsController {
 
 		results.maxlogins = maxLogins
 		results.servicecount = count
+		
+		if(count > 0)
+			results.populated = true
+		else
+			results.populated = false
+		
 		render results as JSON
 	}
 	
@@ -223,6 +233,8 @@ class IdPReportsController {
 		totalLogins = WayfAccessRecord.executeQuery(totalQuery, totalParams)
 			
 		if(totalLogins[0] > 0) {
+			results.populated = true
+			
 			def val = 0
 			if(idp) {
 				def node = [:]
@@ -277,7 +289,10 @@ class IdPReportsController {
 						service.rendered = false
 				}
 			}
+		} else {
+			results.populated = false
 		}
+		
 		render results as JSON
 	}
 }
