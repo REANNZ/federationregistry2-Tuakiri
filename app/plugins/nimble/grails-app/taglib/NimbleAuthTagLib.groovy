@@ -265,6 +265,20 @@ class NimbleAuthTagLib {
 
     /**
      * This tag only writes its body to the output if the current user
+     * has any of the given permissions.
+     */
+    def hasAnyPermission = {attrs, body ->
+        def inList = attrs['in']
+        if (!inList)
+            throwTagError('Tag [hasAnyPermission] must have [in] attribute.')
+
+        if(inList.any { checkPermission(it) } ) {
+            out << body()
+        }
+    }
+
+    /**
+     * This tag only writes its body to the output if the current user
      * does not have the given permission.
      */
     def lacksPermission = {attrs, body ->
