@@ -19,26 +19,24 @@
 
 package fedreg.reporting
 
+import fedreg.core.*
+
 /**
  * @author Bradley Beddoes
  */
-class WayfAccessRecord {
-	static auditable = true
+class Robot {
 	
 	String sourceIPAddress
-	String requestType
-	String dsHost
+	String username
 	
-	long idpID	// We use ID instead of direct links to allow for descriptors to be deleted without impacting reporting
-	long spID
-	
-	Robot robot
+	boolean active = true
 	
 	Date dateCreated
-
+	
 	static constraints = {
 		dateCreated(nullable: true)
-		robot(nullable: true)
+		username(nullable:true, blank: false, unique: true, minSize: 4, maxSize: 255)
+		sourceIPAddress(nullable: true, blank:false)
  	}
 
 }
