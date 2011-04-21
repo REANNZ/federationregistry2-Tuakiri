@@ -1107,6 +1107,20 @@ fedreg.renderIdPReport = function(refinement) {
 		});
 	}
 	
+	if( $(".reporttype option:selected").val() == 'sessions') {
+		$.ajax({url: idpReportsSessionsEndpoint, 
+			data: dataString,
+			dataType: 'json',
+			async:false, 
+			success: function(data){
+	    		fedreg.renderIdPSessions(data, false);
+			},
+		    error: function (xhr, ajaxOptions, thrownError) {
+				nimble.growl('error', xhr.responseText);
+		    }
+		});
+	}
+	
 	if( $(".reporttype option:selected").val() == 'totals') {
 		$.ajax({url: idpReportsTotalsEndpoint, 
 			data: dataString,

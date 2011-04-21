@@ -26,7 +26,7 @@ import fedreg.core.*
  */
 class Robot {
 	
-	String sourceIPAddress
+	String source
 	String username
 	
 	boolean active = true
@@ -36,7 +36,7 @@ class Robot {
 	static constraints = {
 		dateCreated(nullable: true)
 		username(nullable:true, blank: false, unique: true, minSize: 4, maxSize: 255)
-		sourceIPAddress(nullable: true, blank:false)
+		source(nullable: true, blank:false)
  	}
 
 }

@@ -25,14 +25,14 @@ package fedreg.reporting
 class WayfAccessRecord {
 	static auditable = true
 	
-	String sourceIPAddress
+	String source
 	String requestType
 	String dsHost
 	
 	long idpID	// We use ID instead of direct links to allow for descriptors to be deleted without impacting reporting
 	long spID
 	
-	Robot robot
+	boolean robot
 	
 	Date dateCreated
 
