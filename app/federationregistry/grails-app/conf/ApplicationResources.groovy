@@ -35,6 +35,11 @@ modules = {
 		defaultBundle false
 		resource url:[dir:'js/jquery', file:'jquery.alphanumeric.min.js'], bundle: 'extjs' 
 	}
+	'blockui' {
+		dependsOn 'jquery'
+		defaultBundle false
+		resource url:[dir:'js/jquery', file:'jquery.blockui.js'], bundle: 'extjs' 
+	}
 	'zenbox' { 
 		defaultBundle false
 		resource url:'js/zenbox.js', disposition:'head'	// 2.0

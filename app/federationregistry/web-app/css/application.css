@@ -194,8 +194,7 @@ ul.clean li {
 
 #working {
 	.rounded;
-	position: absolute;
-	margin: 6px;
+	border: 0px;
 	padding: 6px;
 	background-color: #000;
 	opacity: 0.85;
@@ -203,7 +202,6 @@ ul.clean li {
 	color: #f2f2f2;
 	font-size: 0.8em;
 	font-weight: bold;
-	z-index: 99;
 	img {
 		margin-bottom: 6px;
 	}
@@ -447,25 +445,6 @@ td pre {
 	margin-left: 6px;
 }
 
-pre.metadata {
-	clear: both;
-	padding: 0;
-	margin: 0;
-	margin-top: 18px;
-	background: #f2f2f2;
-	border: 1px solid #ccc;
-	
-	overflow: auto;
-}
-pre.metadata code {
-	margin: 6px;
-	padding: 6px;
-	display: block;
-	
-	font-face: courier;
-	font-size: 1.1em;
-	line-height: 1.5em; 
-}
 
 #dashboardcontent {
 	.automargin;
