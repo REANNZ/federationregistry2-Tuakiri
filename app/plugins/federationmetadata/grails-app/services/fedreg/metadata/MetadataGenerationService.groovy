@@ -328,7 +328,7 @@ class MetadataGenerationService {
 	def SPSSODescriptorExtensions(builder, spSSODescriptor) {
 		if(spSSODescriptor.discoveryResponseServices) {
 			builder.Extensions() {
-				spSSODescriptor.discoveryResponseServices.each { endpoint ->
+				spSSODescriptor.discoveryResponseServices?.sort{it.id}.each { endpoint ->
 					builder."dsr:DiscoveryResponse"("xmlns:dsr":"urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol", Binding: endpoint.binding.uri, Location:endpoint.location.uri, index:endpoint.index, isDefault:endpoint.isDefault)
 				}
 			}

@@ -11,17 +11,15 @@ $(function() {
 });
 
 applyBehaviourTo = function(e) {
+	 
 	$("#working").hide();
 	$("#working").bind("fedreg.working", function(){
 		if( $(this).is(':hidden') ) {
-			$(this).css({left: $(window).scrollLeft() + 6, top: $(window).scrollTop() + 6})
-			$(this).fadeIn();
-		}
-	 }).bind("ajaxComplete", function(){
-		if( $(this).is(':visible') ) {
-			$(this).fadeOut();
+			$.blockUI({centerX: true, centerY: true, message:$("#working"), css : {border: '0px', backgroundColor: 'transparent'}});
 		}
 	 });
+	$(document).ajaxStop($.unblockUI);
+	
 	$(".tabs").tabs();
 	$(".revealable").hide();
 	
@@ -43,12 +41,9 @@ applyBehaviourTo = function(e) {
 					"sNext": "Next",
 					"sPrevious": "Previous"
 				}
-					
 			},
-			"fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) { fedreg.stylebuttons(nRow); return nRow;}
+			"fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) { fedreg.stylebuttons(nRow); return nRow; }
 		});
-		
-		
 	});
 	
 	fedreg.stylebuttons(e); 
@@ -85,7 +80,7 @@ fedreg.stylebuttons = function(e) {
 
 // Descriptor Metadata
 fedreg.descriptor_metadata = function() {
-	$("#working").trigger("fedreg.working");
+//	$("#working").trigger("fedreg.working");
 	$.ajax({
 		type: "GET",
 		cache: false,
