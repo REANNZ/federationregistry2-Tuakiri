@@ -2,7 +2,6 @@ package fedreg.reporting
 
 import org.apache.shiro.SecurityUtils
 
-import fedreg.host.User
 import fedreg.core.*
 import grails.plugins.nimble.core.Role
 import grails.plugins.nimble.core.LoginRecord
@@ -31,7 +30,7 @@ class IdPReportsController {
 			return
 		}
 			
-		if(SecurityUtils.subject.isPermitted("descriptor:${idp.id}:reporting:logins") || SecurityUtils.subject.isPermitted("federation:reporting")) {
+		if(SecurityUtils.subject.isPermitted("descriptor:${idp.id}:reporting") || SecurityUtils.subject.isPermitted("federation:reporting")) {
 			def year, month, day, min, max
 			year = params.int('year')
 			if(!year) {
@@ -101,7 +100,7 @@ class IdPReportsController {
 			response.setStatus(500)
 			return
 		}
-		if(SecurityUtils.subject.isPermitted("descriptor:${idp.id}:reporting:sessions")  || SecurityUtils.subject.isPermitted("federation:reporting")) {
+		if(SecurityUtils.subject.isPermitted("descriptor:${idp.id}:reporting")  || SecurityUtils.subject.isPermitted("federation:reporting")) {
 			def year, month, day
 		
 			year = params.int('year')
@@ -186,7 +185,7 @@ class IdPReportsController {
 			response.setStatus(500)
 			return
 		}
-		if(SecurityUtils.subject.isPermitted("descriptor:${idp.id}:reporting:totals")  || SecurityUtils.subject.isPermitted("federation:reporting")) {
+		if(SecurityUtils.subject.isPermitted("descriptor:${idp.id}:reporting")  || SecurityUtils.subject.isPermitted("federation:reporting")) {
 			def year, month, day, min, max
 		
 			year = params.int('year')
@@ -285,7 +284,7 @@ class IdPReportsController {
 			response.setStatus(500)
 			return
 		}
-		if(SecurityUtils.subject.isPermitted("descriptor:${idp.id}:reporting:connections") || SecurityUtils.subject.isPermitted("federation:reporting")) {
+		if(SecurityUtils.subject.isPermitted("descriptor:${idp.id}:reporting") || SecurityUtils.subject.isPermitted("federation:reporting")) {
 			def year, month, day
 		
 			year = params.int('year')
