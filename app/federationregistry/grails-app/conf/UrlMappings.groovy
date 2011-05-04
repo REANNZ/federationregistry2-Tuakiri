@@ -8,6 +8,10 @@ class UrlMappings {
 		"/reporting/idp/$action/$id?" {
 			controller = "idPReports"
 		}
+
+		"/reporting/sp/$action/$id?" {
+			controller = "spReports"
+		}
 	
 		"/compliance/identityprovider/attributes/$action?/$id?"{
 			controller = "IDPSSODescriptorAttributeCompliance"

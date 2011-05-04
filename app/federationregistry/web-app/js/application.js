@@ -1177,3 +1177,101 @@ fedreg.refineIdPReport = function(refinement) {
 		});
 	}
 }
+
+fedreg.renderSPReport = function(refinement) {
+	$("#working").trigger("fedreg.working");
+	
+	$(".reportrefinementinput").hide();
+	$(".reportrefinementopen").show();
+	
+	var dataString = $("#reportrequirements").serialize();
+	
+	if( $(".reporttype option:selected").val() == 'connections') {
+		$.ajax({url: spReportsConnectivityEndpoint, 
+			data: dataString,
+			dataType: 'json',
+			async:true, 
+			success: function(data){
+	    		fedreg.renderSPConnectivity(data, false);
+			},
+		    error: function (xhr, ajaxOptions, thrownError) {
+				nimble.growl('error', xhr.responseText);
+		    }
+		});
+	}
+	
+	if( $(".reporttype option:selected").val() == 'sessions') {
+		$.ajax({url: spReportsSessionsEndpoint, 
+			data: dataString,
+			dataType: 'json',
+			async:true, 
+			success: function(data){
+	    		fedreg.renderSPSessions(data, false);
+			},
+		    error: function (xhr, ajaxOptions, thrownError) {
+				nimble.growl('error', xhr.responseText);
+		    }
+		});
+	}
+	
+	if( $(".reporttype option:selected").val() == 'totals') {
+		$.ajax({url: spReportsTotalsEndpoint, 
+			data: dataString,
+			dataType: 'json',
+			async:true, 
+			success: function(data){
+	    		fedreg.renderSPTotals(data, false);
+			},
+		    error: function (xhr, ajaxOptions, thrownError) {
+				nimble.growl('error', xhr.responseText);
+		    }
+		});
+	}
+	
+	if( $(".reporttype option:selected").val() == 'logins') {
+		$.ajax({url: spReportsLoginsEndpoint, 
+			data: dataString,
+			dataType: 'json',
+			async:true, 
+			success: function(data){
+	    		fedreg.renderSPLogins(data);
+			},
+		    error: function (xhr, ajaxOptions, thrownError) {
+				nimble.growl('error', xhr.responseText);
+		    }
+		});
+	}
+}
+
+fedreg.refineSPReport = function(refinement) {
+	$("#working").trigger("fedreg.working");
+	var dataString = $("#reportrequirements").serialize() + "&" + refinement.serialize();
+	
+	if( $(".reporttype option:selected").val() == 'connections') {
+		$.ajax({url: spReportsConnectivityEndpoint, 
+			data: dataString,
+			dataType: 'json',
+			async:true, 
+			success: function(data){
+	    		fedreg.renderSPConnectivity(data, true);
+			},
+		    error: function (xhr, ajaxOptions, thrownError) {
+				nimble.growl('error', xhr.responseText);
+		    }
+		});
+	}
+	
+	if( $(".reporttype option:selected").val() == 'totals') {
+		$.ajax({url: spReportsTotalsEndpoint, 
+			data: dataString,
+			dataType: 'json',
+			async:true, 
+			success: function(data){
+	    		fedreg.renderSPTotals(data, true);
+			},
+		    error: function (xhr, ajaxOptions, thrownError) {
+				nimble.growl('error', xhr.responseText);
+		    }
+		});
+	}
+}
