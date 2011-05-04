@@ -71,8 +71,6 @@
 			</n:isLoggedIn>
 		</nav>
 		<section>
-			<fr:working/>
-
 			<g:layoutBody/>
 	    </section>
 

@@ -11,13 +11,6 @@ $(function() {
 });
 
 applyBehaviourTo = function(e) {
-	 
-	$("#working").hide();
-	$("#working").bind("fedreg.working", function(){
-		if( $(this).is(':hidden') ) {
-			$.blockUI({centerX: true, centerY: true, message:$("#working"), css : {border: '0px', backgroundColor: 'transparent'}});
-		}
-	 });
 	$(document).ajaxStop($.unblockUI);
 	
 	$(".tabs").tabs();
@@ -52,6 +45,10 @@ applyBehaviourTo = function(e) {
 	$(e).find('.tip').tipTip({activation:"hover", maxWidth: "auto", edgeOffset: 10, maxWidth:'200px', defaultPosition:"top"});
 }
 
+fedreg.workingOverlay = function() {
+	$.blockUI({fadeIn:100, fadeOut:100, centerX: true, centerY: true, message:" working ", css : {border: '0px', padding: '3px', color:'#fff', backgroundColor: '#000'}});
+}
+
 fedreg.stylebuttons = function(e) {
 	$(e).find('.button').button();
     $.each({
@@ -80,7 +77,7 @@ fedreg.stylebuttons = function(e) {
 
 // Descriptor Metadata
 fedreg.descriptor_metadata = function() {
-//	$("#working").trigger("fedreg.working");
+//	fedreg.workingOverlay();
 	$.ajax({
 		type: "GET",
 		cache: false,
@@ -98,7 +95,7 @@ fedreg.descriptor_metadata = function() {
 
 // Organization Administrators
 fedreg.organization_fulladministrator_grant = function(userID) {
-	$("#working").trigger("fedreg.working");
+	fedreg.workingOverlay();
 	var dataString = "userID=" + userID
 	$.ajax({
 		async: false,
@@ -117,7 +114,7 @@ fedreg.organization_fulladministrator_grant = function(userID) {
 };
 
 fedreg.organization_fulladministrator_revoke = function(userID) {
-	$("#working").trigger("fedreg.working");
+	fedreg.workingOverlay();
 	var dataString = "userID=" + userID
 	$.ajax({
 		async: false,
@@ -153,7 +150,7 @@ fedreg.organization_fulladministrator_list = function() {
 };
 
 fedreg.organization_fulladministrator_search = function() {
-	$("#working").trigger("fedreg.working");
+	fedreg.workingOverlay();
 	var dataString = "q=" + $('#q').val()
 	$.ajax({
 		type: "GET",
@@ -175,7 +172,7 @@ fedreg.organization_fulladministrator_search = function() {
 
 // Descriptor Administrators
 fedreg.descriptor_fulladministrator_grant = function(userID) {
-	$("#working").trigger("fedreg.working");
+	fedreg.workingOverlay();
 	var dataString = "userID=" + userID
 	$.ajax({
 		async: false,
@@ -194,7 +191,7 @@ fedreg.descriptor_fulladministrator_grant = function(userID) {
 }
 
 fedreg.descriptor_fulladministrator_revoke = function(userID) {
-	$("#working").trigger("fedreg.working");
+	fedreg.workingOverlay();
 	var dataString = "userID=" + userID
 	$.ajax({
 		async: false,
@@ -228,7 +225,7 @@ fedreg.descriptor_fulladministrator_list = function() {
 };
 
 fedreg.descriptor_fulladministrator_search = function() {
-	$("#working").trigger("fedreg.working");
+	fedreg.workingOverlay();
 	var dataString = "q=" + $('#q').val()
 	$.ajax({
 		type: "GET",
@@ -249,7 +246,7 @@ fedreg.descriptor_fulladministrator_search = function() {
 
 // Key Descriptor
 fedreg.keyDescriptor_verify = function(entity) {
-	$("#working").trigger("fedreg.working");
+	fedreg.workingOverlay();
 	var dataString = $("#cert").serialize() + "&entity=" + entity;
 	newCertificateValid = false;
 	$.ajax({
@@ -271,7 +268,7 @@ fedreg.keyDescriptor_verify = function(entity) {
 };
 
 fedreg.keyDescriptor_create = function() {
-	$("#working").trigger("fedreg.working");
+	fedreg.workingOverlay();
 	var dataString = $("#newcryptoform").serialize();
 	$.ajax({
 		type: "POST",
@@ -308,7 +305,7 @@ fedreg.keyDescriptor_list = function() {
 };
 
 fedreg.keyDescriptor_delete = function(id) {
-	$("#working").trigger("fedreg.working");
+	fedreg.workingOverlay();
 	var dataString = "id=" + id;
 	$.ajax({
 		type: "POST",
@@ -326,7 +323,7 @@ fedreg.keyDescriptor_delete = function(id) {
 
 // Monitors
 fedreg.monitor_create = function() {
-	$("#working").trigger("fedreg.working");
+	fedreg.workingOverlay();
 	var dataString = $("#newmonitordata").serialize();
 	$.ajax({
 		type: "POST",
@@ -343,7 +340,7 @@ fedreg.monitor_create = function() {
 };
 
 fedreg.monitor_delete = function(monitorID) {
-	$("#working").trigger("fedreg.working");
+	fedreg.workingOverlay();
 	var dataString = "id=" + monitorID;
 	$.ajax({
 		type: "POST",
@@ -392,7 +389,7 @@ fedreg.contact_dialogInit = function() {
 };
 
 fedreg.contact_search = function(id) {
-	$("#working").trigger("fedreg.working");
+	fedreg.workingOverlay();
 	var dataString = "givenName=" + $('#givenName').val() + '&surname=' + $('#surname').val() + '&email=' + $('#email').val()
 	$.ajax({
 		type: "GET",
@@ -421,7 +418,7 @@ fedreg.contact_confirm = function(contactID, name, email) {
 };
 
 fedreg.contact_create = function(contactType) {
-	$("#working").trigger("fedreg.working");
+	fedreg.workingOverlay();
 	var dataString = "contactID=" + activeContact + "&contactType=" + $('#contactselectedtype').val()
 	$.ajax({
 		type: "POST",
@@ -439,7 +436,7 @@ fedreg.contact_create = function(contactType) {
 };
 
 fedreg.contact_delete = function(contactID) {
-	$("#working").trigger("fedreg.working");
+	fedreg.workingOverlay();
 	var dataString = "id=" + contactID;
 	$.ajax({
 		type: "POST",
@@ -473,7 +470,7 @@ fedreg.contact_list = function() {
 
 // Organization contacts
 fedreg.orgcontact_search = function(id) {
-	$("#working").trigger("fedreg.working");
+	fedreg.workingOverlay();
 	var dataString = "givenName=" + $('#givenName').val() + '&surname=' + $('#surname').val() + '&email=' + $('#email').val()
 	$.ajax({
 		type: "GET",
@@ -502,7 +499,7 @@ fedreg.orgcontact_confirm = function(contactID, name, email) {
 };
 
 fedreg.orgcontact_create = function(contactType) {
-	$("#working").trigger("fedreg.working");
+	fedreg.workingOverlay();
 	var dataString = "contactID=" + activeContact + "&contactType=" + $('#contactselectedtype').val()
 	$.ajax({
 		type: "POST",
@@ -520,7 +517,7 @@ fedreg.orgcontact_create = function(contactType) {
 };
 
 fedreg.orgcontact_delete = function(contactID) {
-	$("#working").trigger("fedreg.working");
+	fedreg.workingOverlay();
 	var dataString = "id=" + contactID;
 	$.ajax({
 		type: "POST",
@@ -555,7 +552,7 @@ fedreg.orgcontact_list = function() {
 
 // Endpoint
 fedreg.endpoint_edit = function(id, endpointType, containerID) {
-	$("#working").trigger("fedreg.working");
+	fedreg.workingOverlay();
 	$("#endpoint-"+id).fadeOut();
 	var dataString = "id=" + id + "&endpointType=" + endpointType + "&containerID=" + containerID;
 	$.ajax({
@@ -577,7 +574,7 @@ fedreg.endpoint_edit = function(id, endpointType, containerID) {
 }
 
 fedreg.endpoint_update = function(id, endpointType, containerID) {
-	$("#working").trigger("fedreg.working");
+	fedreg.workingOverlay();
 	var dataString =  $("#endpoint-edit-" + id).serialize();
 	$.ajax({
 		type: "POST",
@@ -594,7 +591,7 @@ fedreg.endpoint_update = function(id, endpointType, containerID) {
 }
 
 fedreg.endpoint_delete = function(id, endpointType, containerID) {
-	$("#working").trigger("fedreg.working");
+	fedreg.workingOverlay();
 	var dataString = "id=" + id + "&endpointType=" + endpointType;
 	$.ajax({
 		type: "POST",
@@ -629,7 +626,7 @@ fedreg.endpoint_list = function(endpointType, containerID) {
 };
 
 fedreg.endpoint_create = function(endpointType, containerID) {
-	$("#working").trigger("fedreg.working");
+	fedreg.workingOverlay();
 	var dataString = "endpointType=" + endpointType + "&" + $("#new" + endpointType + "data").serialize();
 	$.ajax({
 		type: "POST",
@@ -647,7 +644,7 @@ fedreg.endpoint_create = function(endpointType, containerID) {
 };
 
 fedreg.endpoint_toggle = function(id, endpointType, containerID) {
-	$("#working").trigger("fedreg.working");
+	fedreg.workingOverlay();
 	var dataString = "id=" + id;
 	$.ajax({
 		type: "POST",
@@ -664,7 +661,7 @@ fedreg.endpoint_toggle = function(id, endpointType, containerID) {
 };
 
 fedreg.endpoint_makedefault = function(id, endpointType, containerID) {
-	$("#working").trigger("fedreg.working");
+	fedreg.workingOverlay();
 	var dataString = "id=" + id + "&endpointType=" + endpointType;
 	$.ajax({
 		type: "POST",
@@ -682,7 +679,7 @@ fedreg.endpoint_makedefault = function(id, endpointType, containerID) {
 
 // Attribute Consuming Services
 fedreg.acs_reqattribute_add = function(acsID, formID, containerID) {
-	$("#working").trigger("fedreg.working");
+	fedreg.workingOverlay();
 	var dataString = "id=" + acsID + "&" + $("#" + formID).serialize();
 	$.ajax({
 		type: "POST",
@@ -701,7 +698,7 @@ fedreg.acs_reqattribute_add = function(acsID, formID, containerID) {
 };
 
 fedreg.acs_reqattribute_remove = function(raID, acsID, containerID) {
-	$("#working").trigger("fedreg.working");
+	fedreg.workingOverlay();
 	var dataString = "raid=" + raID;
 	$.ajax({
 		type: "POST",
@@ -719,7 +716,7 @@ fedreg.acs_reqattribute_remove = function(raID, acsID, containerID) {
 };
 
 fedreg.acs_reqattribute_update = function(acsID, id, reason, required, containerID) {
-	$("#working").trigger("fedreg.working");
+	fedreg.workingOverlay();
 	var dataString = "id=" + id + "&reasoning=" + reason
 	if(required)
 		dataString = dataString + "&required=" + required;
@@ -757,7 +754,7 @@ fedreg.acs_reqattribute_list = function(acsID, containerID) {
 };
 
 fedreg.acs_specattribute_add = function(id, formID, containerID) {
-	$("#working").trigger("fedreg.working");
+	fedreg.workingOverlay();
 	var dataString = "id=" + id + "&" + $("#" + formID).serialize();
 	$.ajax({
 		type: "POST",
@@ -777,7 +774,7 @@ fedreg.acs_specattribute_add = function(id, formID, containerID) {
 }
 
 fedreg.acs_specattribute_remove = function(id, valueID, containerID) {
-	$("#working").trigger("fedreg.working");
+	fedreg.workingOverlay();
 	var dataString = "id=" + id + "&valueid=" + valueID;
 	$.ajax({
 		type: "POST",
@@ -831,7 +828,7 @@ fedreg.acs_specattributes_list = function(id, containerID) {
 
 // Name ID Formats
 fedreg.nameIDFormat_remove = function(formatID, containerID) {
-	$("#working").trigger("fedreg.working");
+	fedreg.workingOverlay();
 	var dataString = "formatID=" + formatID;
 	$.ajax({
 		type: "POST",
@@ -866,7 +863,7 @@ fedreg.nameIDFormat_list = function(containerID) {
 };
 
 fedreg.nameIDFormat_add = function(containerID) {
-	$("#working").trigger("fedreg.working");
+	fedreg.workingOverlay();
 	var dataString = $("#newnameidformatdata").serialize();
 	$.ajax({
 		type: "POST",
@@ -902,7 +899,7 @@ fedreg.serviceCategory_list = function(containerID) {
 };
 
 fedreg.serviceCategory_add = function(containerID) {
-	$("#working").trigger("fedreg.working");
+	fedreg.workingOverlay();
 	var dataString = $("#newservicecategorydata").serialize();
 	$.ajax({
 		type: "POST",
@@ -919,7 +916,7 @@ fedreg.serviceCategory_add = function(containerID) {
 };
 
 fedreg.serviceCategory_remove = function(categoryID, containerID) {
-	$("#working").trigger("fedreg.working");
+	fedreg.workingOverlay();
 	var dataString = "categoryID=" + categoryID;
 	$.ajax({
 		type: "POST",
@@ -937,7 +934,7 @@ fedreg.serviceCategory_remove = function(categoryID, containerID) {
 
 // Attributes
 fedreg.attribute_remove = function(attributeID, containerID) {
-	$("#working").trigger("fedreg.working");
+	fedreg.workingOverlay();
 	var dataString = "attributeID=" + attributeID;
 	$.ajax({
 		type: "POST",
@@ -973,7 +970,7 @@ fedreg.attribute_list = function(containerID) {
 };
 
 fedreg.attribute_add = function(containerID) {
-	$("#working").trigger("fedreg.working");
+	fedreg.workingOverlay();
 	var dataString = $("#newattributedata").serialize();
 	$.ajax({
 		type: "POST",
@@ -991,7 +988,7 @@ fedreg.attribute_add = function(containerID) {
 };
 
 fedreg.attributefilter_refresh = function() {
-	$("#working").trigger("fedreg.working");
+	fedreg.workingOverlay();
 	editor.setCode('working...');
 	$.ajax({
 		type: "GET",
@@ -1081,7 +1078,7 @@ fedreg.configureServiceProviderSAML = function(host) {
 // Reporting
 
 fedreg.renderIdPReport = function(refinement) {
-	$("#working").trigger("fedreg.working");
+	fedreg.workingOverlay();
 	
 	$(".reportrefinementinput").hide();
 	$(".reportrefinementopen").show();
@@ -1092,7 +1089,7 @@ fedreg.renderIdPReport = function(refinement) {
 		$.ajax({url: idpReportsConnectivityEndpoint, 
 			data: dataString,
 			dataType: 'json',
-			async:false, 
+			async:true, 
 			success: function(data){
 	    		fedreg.renderIdPConnectivity(data, false);
 			},
@@ -1106,7 +1103,7 @@ fedreg.renderIdPReport = function(refinement) {
 		$.ajax({url: idpReportsSessionsEndpoint, 
 			data: dataString,
 			dataType: 'json',
-			async:false, 
+			async:true, 
 			success: function(data){
 	    		fedreg.renderIdPSessions(data, false);
 			},
@@ -1120,7 +1117,7 @@ fedreg.renderIdPReport = function(refinement) {
 		$.ajax({url: idpReportsTotalsEndpoint, 
 			data: dataString,
 			dataType: 'json',
-			async:false, 
+			async:true, 
 			success: function(data){
 	    		fedreg.renderIdPTotals(data, false);
 			},
@@ -1134,7 +1131,7 @@ fedreg.renderIdPReport = function(refinement) {
 		$.ajax({url: idpReportsLoginsEndpoint, 
 			data: dataString,
 			dataType: 'json',
-			async:false, 
+			async:true, 
 			success: function(data){
 	    		fedreg.renderIdPLogins(data);
 			},
@@ -1146,14 +1143,14 @@ fedreg.renderIdPReport = function(refinement) {
 }
 
 fedreg.refineIdPReport = function(refinement) {
-	$("#working").trigger("fedreg.working");
+	fedreg.workingOverlay();
 	var dataString = $("#reportrequirements").serialize() + "&" + refinement.serialize();
 	
 	if( $(".reporttype option:selected").val() == 'connections') {
 		$.ajax({url: idpReportsConnectivityEndpoint, 
 			data: dataString,
 			dataType: 'json',
-			async:false, 
+			async:true, 
 			success: function(data){
 	    		fedreg.renderIdPConnectivity(data, true);
 			},
@@ -1167,7 +1164,7 @@ fedreg.refineIdPReport = function(refinement) {
 		$.ajax({url: idpReportsTotalsEndpoint, 
 			data: dataString,
 			dataType: 'json',
-			async:false, 
+			async:true, 
 			success: function(data){
 	    		fedreg.renderIdPTotals(data, true);
 			},
@@ -1179,7 +1176,7 @@ fedreg.refineIdPReport = function(refinement) {
 }
 
 fedreg.renderSPReport = function(refinement) {
-	$("#working").trigger("fedreg.working");
+	fedreg.workingOverlay();
 	
 	$(".reportrefinementinput").hide();
 	$(".reportrefinementopen").show();
@@ -1244,7 +1241,7 @@ fedreg.renderSPReport = function(refinement) {
 }
 
 fedreg.refineSPReport = function(refinement) {
-	$("#working").trigger("fedreg.working");
+	fedreg.workingOverlay();
 	var dataString = $("#reportrequirements").serialize() + "&" + refinement.serialize();
 	
 	if( $(".reporttype option:selected").val() == 'connections') {
