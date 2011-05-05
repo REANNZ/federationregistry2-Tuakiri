@@ -88,7 +88,7 @@
 				.textStyle("white");
 
 			bar.anchor("left").add(pv.Label)
-			    .textMargin(5)
+			    .textMargin(10)
 			    .textAlign("right")
 			    .text(function(d) data.barlabels[this.index]);
 
