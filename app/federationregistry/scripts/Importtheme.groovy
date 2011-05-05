@@ -19,7 +19,7 @@ target(main: "This script imports custom themes for FR deployment from the direc
 	def dirs = [	"grails-app/i18n"	]
 	def files = [	"grails-app/views/layouts/access.gsp",
 					"grails-app/views/layouts/bootstrap.gsp",
-					"grails-app/views/layouts/compliance.gsp",
+					"grails-app/views/layouts/reporting.gsp",
 					"grails-app/views/layouts/dashboard.gsp",
 					"grails-app/views/layouts/email.gsp",
 					"grails-app/views/layouts/members.gsp",

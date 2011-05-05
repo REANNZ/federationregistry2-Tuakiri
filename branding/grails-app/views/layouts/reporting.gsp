@@ -17,8 +17,17 @@
 		<nav>
 		<n:isLoggedIn>
 			<g:render template='/templates/frtopnavigation'/>
-		
-			<ul class="level2a">
+			
+			<ul class="level2">
+				<n:hasPermission target="federation:reporting">
+					<li class="${controllerName == '' ? 'active':''}"><g:link controller="" action=""><g:message code="fedreg.navigation.federationreports"/></g:link></li>
+					<li class="${controllerName == '' ? 'active':''}"><g:link controller="" action=""><g:message code="fedreg.navigation.idpreports"/></g:link></li>
+					<li class="${controllerName == '' ? 'active':''}"><g:link controller="" action=""><g:message code="fedreg.navigation.spreports"/></g:link></li>
+				</n:hasPermission>
+				<li class="${controllerName in ['IDPSSODescriptorAttributeCompliance', 'attributeRelease', 'certifyingAuthorityUsage'] ? 'active':''}"><g:link controller="IDPSSODescriptorAttributeCompliance" action="summary"><g:message code="fedreg.navigation.compliance"/></g:link></li>
+			</ul>
+			
+			<ul class="level3a">
 				<li class="${controllerName == 'IDPSSODescriptorAttributeCompliance' ? 'active':''}">
 					<g:link controller="IDPSSODescriptorAttributeCompliance" action="summary"><g:message code="label.attributesummary" /></g:link>
 			 	</li>

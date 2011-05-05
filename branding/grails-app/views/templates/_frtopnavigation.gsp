@@ -23,7 +23,7 @@
 				<g:link controller="organization" action="list" class=""><g:message code="fedreg.navigation.membership" /></g:link>
 			</li>
 			<li class="${['IDPSSODescriptorAttributeCompliance', 'attributeRelease', 'certifyingAuthorityUsage'].contains(controllerName) ? 'active' : ''}">
-				<g:link controller="IDPSSODescriptorAttributeCompliance" action="summary" class=""><g:message code="fedreg.navigation.compliance" /></g:link>
+				<g:link controller="IDPSSODescriptorAttributeCompliance" action="summary" class=""><g:message code="fedreg.navigation.reporting" /></g:link>
 			</li>
 			<li class="${['metadata'].contains(controllerName) ? 'active' : ''}">
 				<g:link controller="metadata" action="view" class=""><g:message code="fedreg.navigation.metadata" /></g:link>
