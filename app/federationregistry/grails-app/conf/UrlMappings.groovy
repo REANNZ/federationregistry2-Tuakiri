@@ -5,11 +5,15 @@ class UrlMappings {
 			controller = "dashboard"
 		}
 		
-		"/reporting/idp/$action/$id?" {
+		"/reporting/federation/$action/$id?" {
+			controller = "federationReports"
+		}
+		
+		"/reporting/identityprovider/$action/$id?" {
 			controller = "idPReports"
 		}
 
-		"/reporting/sp/$action/$id?" {
+		"/reporting/serviceprovider/$action/$id?" {
 			controller = "spReports"
 		}
 	
