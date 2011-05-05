@@ -22,7 +22,7 @@
 			<li class="${['organization', 'entityDescriptor', 'IDPSSODescriptor', 'SPSSODescriptor', 'contacts'].contains(controllerName) ? 'active' : ''}">
 				<g:link controller="organization" action="list" class=""><g:message code="fedreg.navigation.membership" /></g:link>
 			</li>
-			<li class="${['idPReports', 'IDPSSODescriptorAttributeCompliance', 'attributeRelease', 'certifyingAuthorityUsage'].contains(controllerName) ? 'active' : ''}">
+			<li class="${['idPReports', 'spReports', 'IDPSSODescriptorAttributeCompliance', 'attributeRelease', 'certifyingAuthorityUsage'].contains(controllerName) ? 'active' : ''}">
 				<g:link controller="IDPSSODescriptorAttributeCompliance" action="summary" class=""><g:message code="fedreg.navigation.reporting" /></g:link>
 			</li>
 			<li class="${['metadata'].contains(controllerName) ? 'active' : ''}">

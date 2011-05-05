@@ -21,6 +21,7 @@
 						      optionValue="displayName"
 						      optionKey="id" />
 					</label>
+					<br><br>
 					<label><g:message code="label.type" />
 						<select class="reporttype">
 								<option value="sessions"><g:message code="label.sessions" /></option>

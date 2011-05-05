@@ -14,6 +14,11 @@ import grails.converters.JSON
  * @author Bradley Beddoes
  */
 class SpReportsController {
+
+	def view = {
+		def spList = SPSSODescriptor.listOrderByDisplayName()
+		[spList:spList]
+	}
 	
 	def loginsjson = {
 		if(!params.id) {

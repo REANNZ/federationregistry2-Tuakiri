@@ -16,7 +16,7 @@ import grails.converters.JSON
 class IdPReportsController {
 
 	def view = {
-		def idpList = IDPSSODescriptor.list()
+		def idpList = IDPSSODescriptor.listOrderByDisplayName()
 		[idpList:idpList]
 	}
 	

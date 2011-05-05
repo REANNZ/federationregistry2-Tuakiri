@@ -22,7 +22,7 @@
 				<n:hasPermission target="federation:reporting">
 					<li class="${controllerName == '' ? 'directactive':''}"><g:link controller="" action=""><g:message code="fedreg.navigation.federationreports"/></g:link></li>
 					<li class="${controllerName == 'idPReports' ? 'directactive':''}"><g:link controller="idPReports" action="view"><g:message code="fedreg.navigation.idpreports"/></g:link></li>
-					<li class="${controllerName == '' ? 'directactive':''}"><g:link controller="" action=""><g:message code="fedreg.navigation.spreports"/></g:link></li>
+					<li class="${controllerName == 'spReports' ? 'directactive':''}"><g:link controller="spReports" action="view"><g:message code="fedreg.navigation.spreports"/></g:link></li>
 				</n:hasPermission>
 				<li class="${controllerName in ['IDPSSODescriptorAttributeCompliance', 'attributeRelease', 'certifyingAuthorityUsage'] ? 'active':''}"><g:link controller="IDPSSODescriptorAttributeCompliance" action="summary"><g:message code="fedreg.navigation.compliance"/></g:link></li>
 			</ul>
