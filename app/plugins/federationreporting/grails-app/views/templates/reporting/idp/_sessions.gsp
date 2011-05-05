@@ -37,7 +37,7 @@
 			    .width(w)
 			    .height(h)
 			    .bottom(20)
-			    .left(200)
+			    .left(80)
 			    .right(5)
 			    .top(5);
 

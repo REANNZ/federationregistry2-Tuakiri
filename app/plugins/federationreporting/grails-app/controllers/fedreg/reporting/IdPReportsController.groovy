@@ -14,6 +14,11 @@ import grails.converters.JSON
  * @author Bradley Beddoes
  */
 class IdPReportsController {
+
+	def view = {
+		def idpList = IDPSSODescriptor.list()
+		[idpList:idpList]
+	}
 	
 	def loginsjson = {
 
