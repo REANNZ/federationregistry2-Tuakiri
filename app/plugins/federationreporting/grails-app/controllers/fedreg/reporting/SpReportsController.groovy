@@ -115,8 +115,6 @@ class SpReportsController {
 			month = params.int('month')
 			if(month)
 				day = params.int('day')
-				
-			def activeIDP = params.activesp as List
 		
 			def count = 0, maxLogins = 0, totalLogins
 			def results = [:]

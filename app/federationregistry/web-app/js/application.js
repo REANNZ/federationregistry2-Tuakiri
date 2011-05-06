@@ -1294,4 +1294,37 @@ fedreg.renderFederationReport = function(type) {
 		    }
 		});
 	}
+	
+	if( type == 'services') {
+		$.ajax({url: federationReportsServicesEndpoint, 
+			data: dataString,
+			dataType: 'json',
+			async:true, 
+			success: function(data){
+	    		fedreg.renderFederationServices(data);
+			},
+		    error: function (xhr, ajaxOptions, thrownError) {
+				nimble.growl('error', xhr.responseText);
+		    }
+		});
+	}
+}
+
+fedreg.refineFederationReport = function(type, refinement) {
+	fedreg.workingOverlay();
+	var dataString = $("#reportrequirements").serialize() + "&" + refinement.serialize();
+	
+	if( type == 'services') {
+		$.ajax({url: federationReportsServicesEndpoint, 
+			data: dataString,
+			dataType: 'json',
+			async:true, 
+			success: function(data){
+	    		fedreg.renderFederationServices(data);
+			},
+		    error: function (xhr, ajaxOptions, thrownError) {
+				nimble.growl('error', xhr.responseText);
+		    }
+		});
+	}
 }
