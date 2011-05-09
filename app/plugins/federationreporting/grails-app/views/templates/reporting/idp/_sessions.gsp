@@ -43,7 +43,7 @@
 
 			/* Y-axis and ticks. */
 			vis.add(pv.Rule)
-			    .data(y.ticks(5))
+			    .data(y.ticks(10))
 			    .bottom(y)
 			    .strokeStyle(function(d) d ? "#eee" : "#000")
 			  .anchor("left").add(pv.Label)

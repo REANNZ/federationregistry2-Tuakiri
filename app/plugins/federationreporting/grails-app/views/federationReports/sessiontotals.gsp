@@ -41,7 +41,7 @@
 										</span>
 									</span>
 			
-									<h5><g:message code="fedreg.templates.reports.identityprovider.services.refinement.maxmin.title"/> ( <a href="#" onClick="$('#.reportrefinementval :input').val(''); return false;"><g:message code="label.clear" /></a>  )</h5>
+									<h5><g:message code="fedreg.view.reporting.federation.sessiontotals.maxmin.refinement.title"/> ( <a href="#" onClick="$('#.reportrefinementval :input').val(''); return false;"><g:message code="label.clear" /></a>  )</h5>
 									<div class="reportrefinementval">
 										<label><g:message code="label.min" /><input name="min" size="4" value="" class="number"/><fr:tooltip code='fedreg.help.report.min' /></label>
 										<label><g:message code="label.max" /><input name="max" size="4" value="" class="number"/><fr:tooltip code='fedreg.help.report.max' /></label>
@@ -100,12 +100,14 @@
 										else
 											$("#servicescomponentstopten").append("<label class='choice'><input type='checkbox' name='activesp' value='"+sp.id+"'></input>"+sp.name+"</label>");
 									});
-									$.each( data.remainingservices, function(index, sp) {
-										if(sp.rendered)
-											$("#servicescomponentsremaining").append("<label class='choice'><input type='checkbox' checked='checked' name='activesp' value='"+sp.id+"'></input>"+sp.name+"</label>");
-										else
-											$("#servicescomponentsremaining").append("<label class='choice'><input type='checkbox' name='activesp' value='"+sp.id+"'></input>"+sp.name+"</label>");
-									});
+									if(data.remainingservices) {
+										$.each( data.remainingservices, function(index, sp) {
+											if(sp.rendered)
+												$("#servicescomponentsremaining").append("<label class='choice'><input type='checkbox' checked='checked' name='activesp' value='"+sp.id+"'></input>"+sp.name+"</label>");
+											else
+												$("#servicescomponentsremaining").append("<label class='choice'><input type='checkbox' name='activesp' value='"+sp.id+"'></input>"+sp.name+"</label>");
+										});
+									}
 								}
 		
 								var canvas = document.createElement("div");
@@ -131,6 +133,7 @@
 									.height(y.range().band)
 									.left(0)
 									.width(x)
+									.fillStyle("rgb(148,103,189)")
 									.text(function(d) d + " ( " + ((d / data.totallogins) * 100).toFixed(3) + "%" + " of sessions for period )")
 									.event("mouseover", pv.Behavior.tipsy({gravity:'w', fade:true}));
 

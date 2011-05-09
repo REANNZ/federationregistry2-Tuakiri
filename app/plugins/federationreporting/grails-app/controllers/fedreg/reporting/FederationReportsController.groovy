@@ -193,11 +193,10 @@ class FederationReportsController {
 			if(month)
 				day = params.int('day')
 
+			def maxLogins = 0;
 			def results = [:]
-			def values = []
-			def labels = []
-			results.values = values
-			results.labels = labels
+			def logins = []
+			results.logins = logins
 
 			results.title = "${g.message(code:'fedreg.views.reporting.federation.logins.report.title')} ${day ? day + ' /':''} ${month ? month + ' /':''} $year"
 	
@@ -223,11 +222,17 @@ class FederationReportsController {
 				results.populated = true
 
 			totalLogins.each {
-				def val = [:]
-				values.add( it[0] )
-				labels.add( it[1] )
+				def login = [:]
+				login.count = it[0]
+				login.hour = it[1]
+				
+				if(maxLogins < login.count)
+					maxLogins = login.count
+				
+				logins.add(login)
 			}
-	
+			results.maxlogins = maxLogins
+			
 			render results as JSON
 		}
 		else {

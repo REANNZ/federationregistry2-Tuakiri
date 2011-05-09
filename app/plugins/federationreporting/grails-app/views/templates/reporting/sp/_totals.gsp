@@ -83,6 +83,7 @@
 			    .height(y.range().band)
 			    .left(0)
 			    .width(x)
+				.fillStyle("rgb(148,103,189)")
 			    .text(function(d) d)
 				.event("mouseover", pv.Behavior.tipsy({gravity:'w', fade:true}));
 
