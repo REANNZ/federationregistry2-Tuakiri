@@ -1295,8 +1295,22 @@ fedreg.renderFederationReport = function(type) {
 		});
 	}
 	
-	if( type == 'services') {
-		$.ajax({url: federationReportsServicesEndpoint, 
+	if( type == 'sessions') {
+		$.ajax({url: federationReportsSessionsEndpoint, 
+			data: dataString,
+			dataType: 'json',
+			async:true, 
+			success: function(data){
+	    		fedreg.renderFederationSessions(data);
+			},
+		    error: function (xhr, ajaxOptions, thrownError) {
+				nimble.growl('error', xhr.responseText);
+		    }
+		});
+	}
+	
+	if( type == 'sessiontotals') {
+		$.ajax({url: federationReportsSessionTotalsEndpoint, 
 			data: dataString,
 			dataType: 'json',
 			async:true, 
@@ -1314,8 +1328,8 @@ fedreg.refineFederationReport = function(type, refinement) {
 	fedreg.workingOverlay();
 	var dataString = $("#reportrequirements").serialize() + "&" + refinement.serialize();
 	
-	if( type == 'services') {
-		$.ajax({url: federationReportsServicesEndpoint, 
+	if( type == 'sessiontotals') {
+		$.ajax({url: federationReportsSessionTotalsEndpoint, 
 			data: dataString,
 			dataType: 'json',
 			async:true, 

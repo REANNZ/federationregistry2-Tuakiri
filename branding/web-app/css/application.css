@@ -244,6 +244,10 @@ ul.clean li {
 	margin-left: 6px;
 }
 
+.reportrefinementopen {
+	float: right;
+}
+
 .reportrefinement form {
 	.rounded;
 	display: block;

@@ -1,15 +1,15 @@
 <html>
 	<head>
 		<meta name="layout" content="reporting" />
-		<title><g:message code="fedreg.view.reporting.federation.services.title" /></title>
+		<title><g:message code="fedreg.view.reporting.federation.sessiontotals.title" /></title>
 		
 		<r:script>
-			var federationReportsServicesEndpoint = "${createLink(controller:'federationReports', action:'totalsjson')}"
+			var federationReportsSessionTotalsEndpoint = "${createLink(controller:'federationReports', action:'totalsjson')}"
 		</r:script>
 	</head>
 	<body>
 		<section>
-			<h2><g:message code="fedreg.view.reporting.federation.services.heading" /></h2>
+			<h2><g:message code="fedreg.view.reporting.federation.sessiontotals.heading" /></h2>
 			
 			<div id="reporting">
 				<div id="reports">
@@ -19,24 +19,24 @@
 						<label><g:message code="label.month" />: <input name="month" size="2" class="number"/><fr:tooltip code='fedreg.help.report.month' /></label>
 						<label><g:message code="label.year" />: <input name="year" size="4" value="2011" class="required number"/><fr:tooltip code='fedreg.help.report.year' /></label>
 
-						<a href="#" onClick="if($('#reportrequirements').valid()){ fedreg.renderFederationReport('services'); } return false;" class="search-button"><g:message code="label.generate" /></a>
+						<a href="#" onClick="if($('#reportrequirements').valid()){ fedreg.renderFederationReport('sessiontotals'); } return false;" class="search-button"><g:message code="label.generate" /></a>
 					</form>
 					
 					<div id="servicesreport" class="revealable reportdata">
 						<div class="description">
 							<h3 id="servicestitle"></h3>
-							<p><g:message code="fedreg.view.reporting.federation.services.period.description"/></p>
+							<p><g:message code="fedreg.view.reporting.federation.sessiontotals.period.description"/></p>
 
 							<div class="reportrefinement">
 								<form id='servicesrefinement' class="reportrefinementinput loadhide">
 									<input type="hidden" name='activesp' value='0'/>
 			
 									<span id="servicescomponents" class="reportrefinementcomponents">
-										<h5><g:message code="fedreg.view.reporting.federation.services.topten.refinement.title"/> ( <a href="#" onClick="$('#servicescomponentstopten :unchecked').attr('checked', true); return false;"><g:message code="label.addallchecks" /></a> | <a href="#" onClick="$('#servicescomponentstopten :checked').attr('checked', false); return false;"><g:message code="label.removeallchecks" /></a> )</h5>
+										<h5><g:message code="fedreg.view.reporting.federation.sessiontotals.topten.refinement.title"/> ( <a href="#" onClick="$('#servicescomponentstopten :unchecked').attr('checked', true); return false;"><g:message code="label.addallchecks" /></a> | <a href="#" onClick="$('#servicescomponentstopten :checked').attr('checked', false); return false;"><g:message code="label.removeallchecks" /></a> )</h5>
 										<span id="servicescomponentstopten" class="reportrefinementcomponents">
 										</span>
 										<hr>
-										<h5><g:message code="fedreg.view.reporting.federation.services.remaining.refinement.title"/> ( <a href="#" onClick="$('#servicescomponentsremaining :unchecked').attr('checked', true); return false;"><g:message code="label.addallchecks" /></a> | <a href="#" onClick="$('#servicescomponentsremaining :checked').attr('checked', false); return false;"><g:message code="label.removeallchecks" /></a> )</h5>
+										<h5><g:message code="fedreg.view.reporting.federation.sessiontotals.remaining.refinement.title"/> ( <a href="#" onClick="$('#servicescomponentsremaining :unchecked').attr('checked', true); return false;"><g:message code="label.addallchecks" /></a> | <a href="#" onClick="$('#servicescomponentsremaining :checked').attr('checked', false); return false;"><g:message code="label.removeallchecks" /></a> )</h5>
 										<span id="servicescomponentsremaining" class="reportrefinementcomponents">
 										</span>
 									</span>
@@ -47,7 +47,7 @@
 										<label><g:message code="label.max" /><input name="max" size="4" value="" class="number"/><fr:tooltip code='fedreg.help.report.max' /></label>
 									</div>
 									<div class="buttons">
-										<a href="#" onClick="$('.reportrefinementinput').slideUp(); $('.reportrefinementopen').show(); fedreg.refineFederationReport('services', $('#servicesrefinement')); return false;" class="update-button"><g:message code="label.update" /></a>
+										<a href="#" onClick="$('.reportrefinementinput').slideUp(); $('.reportrefinementopen').show(); fedreg.refineFederationReport('sessiontotals', $('#servicesrefinement')); return false;" class="update-button"><g:message code="label.update" /></a>
 										<a href="#" onClick="$('.reportrefinementinput').slideUp(); $('.reportrefinementopen').show(); return false;" class="close-button"><g:message code="label.close" /></a>
 									</div>
 								</form>
@@ -59,13 +59,13 @@
 
 						<div id="servicesdata">
 							<div class="description">
-								<h4><g:message code="fedreg.view.reporting.federation.services.totals" /></h4>
+								<h4><g:message code="fedreg.view.reporting.federation.sessiontotals.totals" /></h4>
 							</div>
 							<div id="servicesdatatotals">
 							</div>
 							<br><br>
 							<div class="description">
-								<h4><g:message code="fedreg.view.reporting.federation.services.percentage" /></h4>
+								<h4><g:message code="fedreg.view.reporting.federation.sessiontotals.percentage" /></h4>
 							</div>
 							<div id="servicesdatapercent">
 							</div>

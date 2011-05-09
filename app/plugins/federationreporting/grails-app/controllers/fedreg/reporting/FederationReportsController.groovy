@@ -16,8 +16,76 @@ import grails.converters.JSON
 class FederationReportsController {
 
 	def summary = {}
+	def sessions = {}
 	def sessiontotals = {}
 	def logins = {}
+	
+	def sessionsjson = {
+		if(SecurityUtils.subject.isPermitted("federation:reporting")) {
+			def year, month, day
+		
+			year = params.int('year')
+			if(!year) {
+				def cal = Calendar.instance
+				year = cal.get(Calendar.YEAR)
+			}
+			month = params.int('month')
+			if(month)
+				day = params.int('day')
+				
+			def activeSP = params.activesp as List
+		
+			def count = 0, maxLogins = 0, totalLogins
+			def results = [:]
+			def sessions = []
+		
+			results.sessions = sessions
+			results.title = "${g.message(code:'fedreg.view.reporting.federation.sessions.period.title')} ${day ? day + ' /':''} ${month ? month + ' /':''} $year"
+			
+			def sessionsQuery
+			def sessionsParams = [:]
+			sessionsParams.year = year
+			if(day) {
+				sessionsQuery = "select count(*), hour(dateCreated) from WayfAccessRecord where year(dateCreated) = :year and month(dateCreated) = :month and day(dateCreated) = :day group by hour(dateCreated)"
+				sessionsParams.month = month
+				sessionsParams.day = day
+			} else {
+				if(month) {
+					sessionsQuery = "select count(*), day(dateCreated) from WayfAccessRecord where year(dateCreated) = :year and month(dateCreated) = :month group by day(dateCreated)"
+					sessionsParams.month = month
+				} else {
+					sessionsQuery = "select count(*), month(dateCreated) from WayfAccessRecord where year(dateCreated) = :year group by month(dateCreated)"					
+				}
+			}
+
+			def sessionCount = WayfAccessRecord.executeQuery(sessionsQuery, sessionsParams)
+			sessionCount.each { s ->
+				def session = [:]
+				session.count = s[0]
+				
+				if(maxLogins < session.count)
+					maxLogins = session.count
+				
+				session.date = s[1]
+				
+				sessions.add(session)
+			}
+
+			if(sessionCount.size() > 0)
+				results.populated = true
+			else
+				results.populated = false
+				
+			results.maxlogins = maxLogins
+		
+			render results as JSON
+		}
+		else {
+			log.warn("Attempt to query session json for federation by $authenticatedUser was denied, incorrect permission set")
+			render message(code: 'fedreg.help.unauthorized')
+			response.setStatus(403)
+		}
+	}
 	
 	def totalsjson = {
 		if(SecurityUtils.subject.isPermitted("federation:reporting")) {
@@ -45,7 +113,7 @@ class FederationReportsController {
 		
 			results.bars = bars
 			results.barlabels = barLabels
-			results.title = "${g.message(code:'fedreg.view.reporting.federation.services.period.title')} ${day ? day + ' /':''} ${month ? month + ' /':''} $year"
+			results.title = "${g.message(code:'fedreg.view.reporting.federation.sessiontotals.period.title')} ${day ? day + ' /':''} ${month ? month + ' /':''} $year"
 	
 			def loginQuery = "select count(*), spID from WayfAccessRecord where year(dateCreated) = :year"
 			def loginParams = [:]
