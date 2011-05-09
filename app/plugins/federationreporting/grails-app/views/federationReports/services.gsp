@@ -24,7 +24,7 @@
 					
 					<div id="servicesreport" class="revealable reportdata">
 						<div class="description">
-							<h4 id="servicestitle"></h4>
+							<h3 id="servicestitle"></h3>
 							<p><g:message code="fedreg.view.reporting.federation.services.period.description"/></p>
 
 							<div class="reportrefinement">
@@ -59,13 +59,13 @@
 
 						<div id="servicesdata">
 							<div class="description">
-								<h3><g:message code="fedreg.view.reporting.federation.services.totals" /></h3>
+								<h4><g:message code="fedreg.view.reporting.federation.services.totals" /></h4>
 							</div>
 							<div id="servicesdatatotals">
 							</div>
 							<br><br>
 							<div class="description">
-								<h3><g:message code="fedreg.view.reporting.federation.services.percentage" /></h3>
+								<h4><g:message code="fedreg.view.reporting.federation.services.percentage" /></h4>
 							</div>
 							<div id="servicesdatapercent">
 							</div>
@@ -112,7 +112,7 @@
 								$('#servicesdatatotals').append(canvas);
 
 								var w = 900,
-									h = data.servicecount * 30,
+									h = data.servicecount * 25,
 									x = pv.Scale.linear(0, data.maxlogins).range(0, w),
 									y = pv.Scale.ordinal(pv.range(data.servicecount + 1)).splitBanded(0, h, 4/5);
 

@@ -228,7 +228,7 @@ class SpReportsController {
 				loginParams.day = day
 			}
 		
-			loginQuery = loginQuery + " group by idpID"
+			loginQuery = loginQuery + " group by idpID order by count(idpID) desc"
 		
 			def logins = WayfAccessRecord.executeQuery(loginQuery, loginParams)
 			logins.each { login ->

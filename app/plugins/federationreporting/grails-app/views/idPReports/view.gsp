@@ -26,7 +26,7 @@
 						<select class="reporttype">
 								<option value="sessions"><g:message code="label.sessions" /></option>
 								<option value="connections"><g:message code="label.connections" /></option>
-								<option value="totals"><g:message code="label.usagetotals" /></option>
+								<option value="totals"><g:message code="label.sessiontotals" /></option>
 								<option value="logins"><g:message code="label.loginbreakdown" /></option>
 						</select>
 					</label>

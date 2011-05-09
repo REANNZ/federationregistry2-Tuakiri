@@ -64,7 +64,7 @@
 			$('#totalsdata').append(canvas);
 
 			var w = 900,
-			    h = 500,
+			    h = data.bars.length * 25,
 			    x = pv.Scale.linear(0, data.maxlogins).range(0, w),
 			    y = pv.Scale.ordinal(pv.range(data.providercount + 1)).splitBanded(0, h, 4/5);
 
@@ -82,10 +82,9 @@
 			    .top(function() y(this.index))
 			    .height(y.range().band)
 			    .left(0)
-			    .width(x);
-
-			bar.anchor("right").add(pv.Label)
-				.textStyle("white");
+			    .width(x)
+			    .text(function(d) d)
+				.event("mouseover", pv.Behavior.tipsy({gravity:'w', fade:true}));
 
 			bar.anchor("left").add(pv.Label)
 			    .textMargin(10)

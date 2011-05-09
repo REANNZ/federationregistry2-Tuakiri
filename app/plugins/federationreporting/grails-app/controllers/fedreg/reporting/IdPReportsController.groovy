@@ -213,8 +213,6 @@ class IdPReportsController {
 			def bars = []
 			def barLabels = []
 		
-			results.bars = bars
-			results.barlabels = barLabels
 			results.title = "${g.message(code:'fedreg.templates.reports.identityprovider.totals.title', args:[idp.displayName])} ${day ? day + ' /':''} ${month ? month + ' /':''} $year"
 	
 			// We remove any SP with a -1 id as this indicates the SP could not be determined at record creation time
@@ -232,7 +230,7 @@ class IdPReportsController {
 				loginParams.day = day
 			}
 		
-			loginQuery = loginQuery + " group by spID"
+			loginQuery = loginQuery + " group by spID order by count(spID) desc"
 		
 			def logins = WayfAccessRecord.executeQuery(loginQuery, loginParams)
 			logins.each { login ->
@@ -241,6 +239,7 @@ class IdPReportsController {
 					def service = [:]
 					service.name = sp.displayName
 					service.id = sp.id
+					service.count = login[0]
 					services.add(service)
 		
 					if((activeSP == null || activeSP.contains(sp.id.toString())) && (!min || login[0] >= min) && (!max || login[0] <= max)) {
@@ -260,6 +259,8 @@ class IdPReportsController {
 			results.services = services.sort{it.get('name').toLowerCase()}
 			results.maxlogins = maxLogins
 			results.servicecount = count
+			results.bars = bars
+			results.barlabels = barLabels
 		
 			if(count > 0)
 				results.populated = true
