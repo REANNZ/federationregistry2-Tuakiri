@@ -25,7 +25,7 @@
 					<div id="servicesreport" class="revealable reportdata">
 						<div class="description">
 							<h4 id="servicestitle"></h4>
-							<p><g:message code="fedreg.templates.reports.identityprovider.services.description"/></p>
+							<p><g:message code="fedreg.view.reporting.federation.services.period.description"/></p>
 
 							<div class="reportrefinement">
 								<form id='servicesrefinement' class="reportrefinementinput loadhide">

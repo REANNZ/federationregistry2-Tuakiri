@@ -45,7 +45,7 @@ class FederationReportsController {
 		
 			results.bars = bars
 			results.barlabels = barLabels
-			results.title = "${g.message(code:'fedreg.templates.reports.identityprovider.totals.title')} ${day ? day + ' /':''} ${month ? month + ' /':''} $year"
+			results.title = "${g.message(code:'fedreg.view.reporting.federation.services.period.title')} ${day ? day + ' /':''} ${month ? month + ' /':''} $year"
 	
 			def loginQuery = "select count(*), spID from WayfAccessRecord where year(dateCreated) = :year"
 			def loginParams = [:]
