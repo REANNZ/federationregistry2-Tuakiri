@@ -16,10 +16,10 @@ import grails.converters.JSON
 class FederationReportsController {
 
 	def summary = {}
-	def services = {}
+	def sessiontotals = {}
 	def logins = {}
 	
-	def servicesjson = {
+	def totalsjson = {
 		if(SecurityUtils.subject.isPermitted("federation:reporting")) {
 			def year, month, day, min, max
 		

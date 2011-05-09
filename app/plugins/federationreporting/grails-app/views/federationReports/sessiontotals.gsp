@@ -4,7 +4,7 @@
 		<title><g:message code="fedreg.view.reporting.federation.services.title" /></title>
 		
 		<r:script>
-			var federationReportsServicesEndpoint = "${createLink(controller:'federationReports', action:'servicesjson')}"
+			var federationReportsServicesEndpoint = "${createLink(controller:'federationReports', action:'totalsjson')}"
 		</r:script>
 	</head>
 	<body>
