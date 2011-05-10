@@ -123,7 +123,6 @@ class IdPReportsController {
 				day = params.int('day')
 				
 			def activeSP = params.activesp as List
-		
 			def count = 0, maxLogins = 0, totalLogins
 			def results = [:]
 			def sessions = []
@@ -133,22 +132,18 @@ class IdPReportsController {
 			
 			def sessionsQuery
 			def sessionsParams = [:]
+			sessionsParams.idpID = idp.id
+			sessionsParams.year = year
 			if(day) {
 				sessionsQuery = "select count(*), hour(dateCreated) from WayfAccessRecord where idpID = :idpID and year(dateCreated) = :year and month(dateCreated) = :month and day(dateCreated) = :day group by hour(dateCreated)"
-				sessionsParams.idpID = idp.id
-				sessionsParams.year = year
 				sessionsParams.month = month
 				sessionsParams.day = day
 			} else {
 				if(month) {
 					sessionsQuery = "select count(*), day(dateCreated) from WayfAccessRecord where idpID = :idpID and year(dateCreated) = :year and month(dateCreated) = :month group by day(dateCreated)"
-					sessionsParams.idpID = idp.id
-					sessionsParams.year = year
 					sessionsParams.month = month
 				} else {
-					sessionsQuery = "select count(*), month(dateCreated) from WayfAccessRecord where idpID = :idpID and year(dateCreated) = :year group by month(dateCreated)"
-					sessionsParams.idpID = idp.id
-					sessionsParams.year = year
+					sessionsQuery = "select count(*), month(dateCreated) from WayfAccessRecord where idpID = :idpID and year(dateCreated) = :year group by month(dateCreated)"	
 				}
 			}
 
