@@ -5,25 +5,27 @@
 		<p><g:message code="fedreg.templates.reports.serviceprovider.totals.description"/></p>
 
 		<div class="reportrefinement">
-			<form id='totalsrefinement' class="reportrefinementinput loadhide">
-				<h5><g:message code="fedreg.templates.reports.serviceprovider.totals.refinement.title"/> ( <a href="#" onClick="$('#totalscomponents :unchecked').attr('checked', true); return false;"><g:message code="label.addallchecks" /></a> | <a href="#" onClick="$('#totalscomponents :checked').attr('checked', false); return false;"><g:message code="label.removeallchecks" /></a> )</h5>
-				<input type="hidden" name='activeidp' value='0'/>
+			<div class="reportrefinementinput revealable">
+				<form id='totalsrefinement'>
+					<h5><g:message code="fedreg.templates.reports.serviceprovider.totals.refinement.title"/> ( <a href="#" onClick="$('#totalscomponents :unchecked').attr('checked', true); return false;"><g:message code="label.addallchecks" /></a> | <a href="#" onClick="$('#totalscomponents :checked').attr('checked', false); return false;"><g:message code="label.removeallchecks" /></a> )</h5>
+					<input type="hidden" name='activeidp' value='0'/>
 			
-				<span id="totalscomponents" class="reportrefinementcomponents">
-				</span>
+					<span id="totalscomponents" class="reportrefinementcomponents">
+					</span>
 			
-				<h5><g:message code="fedreg.templates.reports.serviceprovider.totals.refinement.maxmin.title"/> ( <a href="#" onClick="$('#.reportrefinementval :input').val(''); return false;"><g:message code="label.clear" /></a>  )</h5>
-				<div class="reportrefinementval">
-					<label><g:message code="label.min" /><input name="min" size="4" value="" class="number"/><fr:tooltip code='fedreg.help.report.min' /></label>
-					<label><g:message code="label.max" /><input name="max" size="4" value="" class="number"/><fr:tooltip code='fedreg.help.report.max' /></label>
-				</div>
-				<div class="buttons">
-					<a href="#" onClick="fedreg.refineSPReport($('#totalsrefinement')); return false;" class="update-button"><g:message code="label.update" /></a>
-					<a href="#" onClick="$('.reportrefinementinput').slideUp(); $('.reportrefinementopen').show(); return false;" class="close-button"><g:message code="label.close" /></a>
-				</div>
-			</form>
+					<h5><g:message code="fedreg.templates.reports.serviceprovider.totals.refinement.maxmin.title"/> ( <a href="#" onClick="$('#.reportrefinementval :input').val(''); return false;"><g:message code="label.clear" /></a>  )</h5>
+					<div class="reportrefinementval">
+						<label><g:message code="label.min" /><input name="min" size="4" value="" class="number"/><fr:tooltip code='fedreg.help.report.min' /></label>
+						<label><g:message code="label.max" /><input name="max" size="4" value="" class="number"/><fr:tooltip code='fedreg.help.report.max' /></label>
+					</div>
+					<div class="buttons">
+						<a href="#" onClick="fedreg.refineSPReport($('#totalsrefinement')); return false;" class="update-button"><g:message code="label.update" /></a>
+						<a href="#" onClick="fedreg.closeRefinement();" class="close-button"><g:message code="label.close" /></a>
+					</div>
+				</form>
+			</div>
 			<div class="reportrefinementopen">
-				<a href="#" onClick="$('.reportrefinementopen').hide(); $('.reportrefinementinput').slideDown(); return false;" class="download-button"><g:message code="label.refine" /></a>
+				<a href="#" onClick="fedreg.openRefinement();" class="download-button"><g:message code="label.refine" /></a>
 			</div>
 		</div>
 	</div>

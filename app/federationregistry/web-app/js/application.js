@@ -1076,13 +1076,24 @@ fedreg.configureServiceProviderSAML = function(host) {
 };
 
 // Reporting
+fedreg.openRefinement = function() {
+	$(".reportrefinementopen").hide();
+	$(".reportrefinementinput").slideDown();
+	
+	return false;
+}
+
+fedreg.closeRefinement = function() {
+	$(".reportrefinementinput").slideUp();
+	$(".reportrefinementopen").show();
+	
+	return false;
+}
 
 fedreg.renderIdPReport = function(refinement) {
 	fedreg.workingOverlay();
-	
-	$(".reportrefinementinput").hide();
-	$(".reportrefinementopen").show();
-	
+	fedreg.closeRefinement();
+
 	var dataString = $("#reportrequirements").serialize();
 	
 	if( $(".reporttype option:selected").val() == 'connections') {
@@ -1144,6 +1155,8 @@ fedreg.renderIdPReport = function(refinement) {
 
 fedreg.refineIdPReport = function(refinement) {
 	fedreg.workingOverlay();
+	fedreg.closeRefinement();
+	
 	var dataString = $("#reportrequirements").serialize() + "&" + refinement.serialize();
 	
 	if( $(".reporttype option:selected").val() == 'connections') {
@@ -1177,9 +1190,7 @@ fedreg.refineIdPReport = function(refinement) {
 
 fedreg.renderSPReport = function(refinement) {
 	fedreg.workingOverlay();
-	
-	$(".reportrefinementinput").hide();
-	$(".reportrefinementopen").show();
+	fedreg.closeRefinement();
 	
 	var dataString = $("#reportrequirements").serialize();
 	
@@ -1242,6 +1253,8 @@ fedreg.renderSPReport = function(refinement) {
 
 fedreg.refineSPReport = function(refinement) {
 	fedreg.workingOverlay();
+	fedreg.closeRefinement();
+	
 	var dataString = $("#reportrequirements").serialize() + "&" + refinement.serialize();
 	
 	if( $(".reporttype option:selected").val() == 'connections') {
@@ -1275,9 +1288,7 @@ fedreg.refineSPReport = function(refinement) {
 
 fedreg.renderFederationReport = function(type) {
 	fedreg.workingOverlay();
-	
-	$(".reportrefinementinput").hide();
-	$(".reportrefinementopen").show();
+	fedreg.closeRefinement();
 	
 	var dataString = $("#reportrequirements").serialize();
 	
@@ -1326,6 +1337,8 @@ fedreg.renderFederationReport = function(type) {
 
 fedreg.refineFederationReport = function(type, refinement) {
 	fedreg.workingOverlay();
+	fedreg.closeRefinement();
+	
 	var dataString = $("#reportrequirements").serialize() + "&" + refinement.serialize();
 	
 	if( type == 'sessiontotals') {

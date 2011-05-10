@@ -28,31 +28,33 @@
 							<p><g:message code="fedreg.view.reporting.federation.sessiontotals.period.description"/></p>
 
 							<div class="reportrefinement">
-								<form id='servicesrefinement' class="reportrefinementinput loadhide">
-									<input type="hidden" name='activesp' value='0'/>
+								<div class="reportrefinementinput revealable">
+									<form id='servicesrefinement'>
+										<input type="hidden" name='activesp' value='0'/>
 			
-									<span id="servicescomponents" class="reportrefinementcomponents">
-										<h5><g:message code="fedreg.view.reporting.federation.sessiontotals.topten.refinement.title"/> ( <a href="#" onClick="$('#servicescomponentstopten :unchecked').attr('checked', true); return false;"><g:message code="label.addallchecks" /></a> | <a href="#" onClick="$('#servicescomponentstopten :checked').attr('checked', false); return false;"><g:message code="label.removeallchecks" /></a> )</h5>
-										<span id="servicescomponentstopten" class="reportrefinementcomponents">
+										<span id="servicescomponents" class="reportrefinementcomponents">
+											<h5><g:message code="fedreg.view.reporting.federation.sessiontotals.topten.refinement.title"/> ( <a href="#" onClick="$('#servicescomponentstopten :unchecked').attr('checked', true); return false;"><g:message code="label.addallchecks" /></a> | <a href="#" onClick="$('#servicescomponentstopten :checked').attr('checked', false); return false;"><g:message code="label.removeallchecks" /></a> )</h5>
+											<span id="servicescomponentstopten" class="reportrefinementcomponents">
+											</span>
+											<hr>
+											<h5><g:message code="fedreg.view.reporting.federation.sessiontotals.remaining.refinement.title"/> ( <a href="#" onClick="$('#servicescomponentsremaining :unchecked').attr('checked', true); return false;"><g:message code="label.addallchecks" /></a> | <a href="#" onClick="$('#servicescomponentsremaining :checked').attr('checked', false); return false;"><g:message code="label.removeallchecks" /></a> )</h5>
+											<span id="servicescomponentsremaining" class="reportrefinementcomponents">
+											</span>
 										</span>
-										<hr>
-										<h5><g:message code="fedreg.view.reporting.federation.sessiontotals.remaining.refinement.title"/> ( <a href="#" onClick="$('#servicescomponentsremaining :unchecked').attr('checked', true); return false;"><g:message code="label.addallchecks" /></a> | <a href="#" onClick="$('#servicescomponentsremaining :checked').attr('checked', false); return false;"><g:message code="label.removeallchecks" /></a> )</h5>
-										<span id="servicescomponentsremaining" class="reportrefinementcomponents">
-										</span>
-									</span>
 			
-									<h5><g:message code="fedreg.view.reporting.federation.sessiontotals.maxmin.refinement.title"/> ( <a href="#" onClick="$('#.reportrefinementval :input').val(''); return false;"><g:message code="label.clear" /></a>  )</h5>
-									<div class="reportrefinementval">
-										<label><g:message code="label.min" /><input name="min" size="4" value="" class="number"/><fr:tooltip code='fedreg.help.report.min' /></label>
-										<label><g:message code="label.max" /><input name="max" size="4" value="" class="number"/><fr:tooltip code='fedreg.help.report.max' /></label>
-									</div>
-									<div class="buttons">
-										<a href="#" onClick="$('.reportrefinementinput').slideUp(); $('.reportrefinementopen').show(); fedreg.refineFederationReport('sessiontotals', $('#servicesrefinement')); return false;" class="update-button"><g:message code="label.update" /></a>
-										<a href="#" onClick="$('.reportrefinementinput').slideUp(); $('.reportrefinementopen').show(); return false;" class="close-button"><g:message code="label.close" /></a>
-									</div>
-								</form>
+										<h5><g:message code="fedreg.view.reporting.federation.sessiontotals.maxmin.refinement.title"/> ( <a href="#" onClick="$('#.reportrefinementval :input').val(''); return false;"><g:message code="label.clear" /></a>  )</h5>
+										<div class="reportrefinementval">
+											<label><g:message code="label.min" /><input name="min" size="4" value="" class="number"/><fr:tooltip code='fedreg.help.report.min' /></label>
+											<label><g:message code="label.max" /><input name="max" size="4" value="" class="number"/><fr:tooltip code='fedreg.help.report.max' /></label>
+										</div>
+										<div class="buttons">
+											<a href="#" onClick="fedreg.refineFederationReport('sessiontotals', $('#servicesrefinement')); return false;" class="update-button"><g:message code="label.update" /></a>
+											<a href="#" onClick="fedreg.closeRefinement();" class="close-button"><g:message code="label.close" /></a>
+										</div>
+									</form>
+								</div>
 								<div class="reportrefinementopen">
-									<a href="#" onClick="$('.reportrefinementopen').hide(); $('.reportrefinementinput').slideDown(); return false;" class="download-button"><g:message code="label.refine" /></a>
+									<a href="#" onClick="fedreg.openRefinement();" class="download-button"><g:message code="label.refine" /></a>
 								</div>
 							</div>
 						</div>
