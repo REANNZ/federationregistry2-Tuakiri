@@ -20,6 +20,85 @@ class FederationReportsController {
 	def sessiontotals = {}
 	def logins = {}
 	
+	def summaryjson = {
+		if(SecurityUtils.subject.isPermitted("federation:reporting")) {
+			def results = [:]
+			
+			// Key object creations
+			def minYear = WayfAccessRecord.executeQuery("select min(year(dateCreated)) from WayfAccessRecord")[0]
+			def maxYear = WayfAccessRecord.executeQuery("select max(year(dateCreated)) from WayfAccessRecord")[0]
+			
+			if(minYear && maxYear) {
+				def sessionValues=[], orgValues =[], idpValues = [], spValues = [], yearLabels = []
+				def sessionMax = 0, orgMax = 0, idpMax = 0, spMax = 0
+				(minYear..maxYear).each { year ->				
+					yearLabels.add(year)
+					
+					// Sessions per year
+					def sessionValue = [:]	
+					sessionValue.x = year
+					def sessionCount = WayfAccessRecord.executeQuery("select count(*) from fedreg.reporting.WayfAccessRecord where year(dateCreated) = ?", [year])[0]
+					if(sessionCount) {
+						sessionValue.y = sessionCount
+						if(sessionMax < sessionCount)
+							sessionMax = sessionCount
+					} else { sessionValue.y = 0 }
+					sessionValues.add(sessionValue)
+				
+					// Organization creations per year	
+					def orgValue = [:]	
+					orgValue.x = year
+					def orgCount = Organization.executeQuery("select count(*) from fedreg.core.Organization where year(dateCreated) = ?", [year])[0]
+					if(orgCount) {
+						orgValue.y = orgCount
+						if(orgMax < orgCount)
+							orgMax = orgCount
+					} else { orgValue.y = 0 }
+					orgValues.add(orgValue)	
+					
+					// IdP creations per year
+					def idpValue = [:]	
+					idpValue.x = year
+					def idpCount = IDPSSODescriptor.executeQuery("select count(*) from fedreg.core.IDPSSODescriptor where year(dateCreated) = ?", [year])[0]
+					if(idpCount) {
+						idpValue.y = idpCount
+						if(idpMax < idpCount)
+							idpMax = idpCount
+					} else { idpValue.y = 0 }
+					idpValues.add(idpValue)
+					
+					// SP creations per year
+					def spValue = [:]	
+					spValue.x = year
+					def spCount = SPSSODescriptor.executeQuery("select count(*) from fedreg.core.SPSSODescriptor where year(dateCreated) = ?", [year])[0]
+					if(idpCount) {
+						spValue.y = spCount
+						if(spMax < spCount)
+							spMax = spCount
+					} else { spValue.y = 0 }
+					spValues.add(spValue)
+				}
+				
+				results.sessionvalues = sessionValues
+				results.sessionmax = sessionMax
+				results.orgvalues = orgValues
+				results.orgmax = orgMax
+				results.idpvalues = idpValues
+				results.idpmax = idpMax
+				results.spvalues = spValues
+				results.spmax = spMax
+				results.yearlabels = yearLabels
+			}
+			
+			render results as JSON
+		}
+		else {
+			log.warn("Attempt to query summary json for federation by $authenticatedUser was denied, incorrect permission set")
+			render message(code: 'fedreg.help.unauthorized')
+			response.setStatus(403)
+		}
+	}
+	
 	def sessionsjson = {
 		if(SecurityUtils.subject.isPermitted("federation:reporting")) {
 			def year, month, day

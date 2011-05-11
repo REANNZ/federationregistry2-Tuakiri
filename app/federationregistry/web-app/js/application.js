@@ -1358,3 +1358,18 @@ fedreg.refineFederationReport = function(type, refinement) {
 		});
 	}
 }
+
+fedreg.renderFederationSummaryReport = function(type) {
+	fedreg.workingOverlay();
+	
+	$.ajax({url: federationReportsSummaryEndpoint, 
+		dataType: 'json',
+		async:true, 
+		success: function(data){
+    		fedreg.renderCreationSummary(data);
+		},
+	    error: function (xhr, ajaxOptions, thrownError) {
+			nimble.growl('error', xhr.responseText);
+	    }
+	});
+}

@@ -277,6 +277,17 @@ ul.clean li {
 	text-align: right;
 }
 
+.reportsummaryrow {
+	.zero;
+	.automargin;
+	width: 1000px;
+	clear: both;
+}
+
+.reportsummarycell {
+	float: left; 
+	margin: 12px;
+}
 
 body {
 	.zero;
