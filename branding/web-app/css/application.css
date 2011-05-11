@@ -289,6 +289,14 @@ ul.clean li {
 	margin: 12px;
 }
 
+.metadata {
+	.rounded;
+	margin: 3px;
+	padding: 6px;
+	border: 1px solid #ccc;
+	background-color: #f2f2f2;
+}
+
 body {
 	.zero;
 	background-color: @bgColor;
