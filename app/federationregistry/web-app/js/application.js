@@ -1090,9 +1090,10 @@ fedreg.closeRefinement = function() {
 	return false;
 }
 
-fedreg.renderIdPReport = function(refinement) {
+fedreg.renderIdPReport = function() {
 	fedreg.workingOverlay();
 	fedreg.closeRefinement();
+	$(".revealable").hide();
 
 	var dataString = $("#reportrequirements").serialize();
 	
@@ -1188,9 +1189,10 @@ fedreg.refineIdPReport = function(refinement) {
 	}
 }
 
-fedreg.renderSPReport = function(refinement) {
+fedreg.renderSPReport = function() {
 	fedreg.workingOverlay();
 	fedreg.closeRefinement();
+	$(".revealable").hide();
 	
 	var dataString = $("#reportrequirements").serialize();
 	
@@ -1289,6 +1291,7 @@ fedreg.refineSPReport = function(refinement) {
 fedreg.renderFederationReport = function(type) {
 	fedreg.workingOverlay();
 	fedreg.closeRefinement();
+	$(".revealable").hide();
 	
 	var dataString = $("#reportrequirements").serialize();
 	

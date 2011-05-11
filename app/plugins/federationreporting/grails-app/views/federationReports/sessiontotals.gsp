@@ -63,13 +63,13 @@
 							<div class="description">
 								<h4><g:message code="fedreg.view.reporting.federation.sessiontotals.totals" /></h4>
 							</div>
-							<div id="servicesdatatotals">
+							<div id="servicesdatatotals" class="dynamic">
 							</div>
 							<br><br>
 							<div class="description">
 								<h4><g:message code="fedreg.view.reporting.federation.sessiontotals.percentage" /></h4>
 							</div>
-							<div id="servicesdatapercent">
+							<div id="servicesdatapercent" class="dynamic">
 							</div>
 						</div>
 					</div>
@@ -81,8 +81,7 @@
 					<script type="text/javascript+protovis">
 						fedreg.renderFederationServices = function(data, refine) {
 							if(refine || data.populated) {
-								$('#servicesdatatotals').empty();
-								$('#servicesdatapercent').empty();
+								$('.dynamic').empty();
 								$('#servicestitle').html(data.title);
 		
 								if(refine) {
@@ -115,34 +114,34 @@
 								var canvas = document.createElement("div");
 								$('#servicesdatatotals').append(canvas);
 
-								var w = 900,
-									h = data.servicecount * 25,
-									x = pv.Scale.linear(0, data.maxlogins).range(0, w),
-									y = pv.Scale.ordinal(pv.range(data.servicecount + 1)).splitBanded(0, h, 4/5);
+								var w = 840,
+									h = data.values.length * 25,
+									x = pv.Scale.linear(0, data.maxsessions).range(0, w),
+									y = pv.Scale.ordinal(pv.range(data.values.length)).splitBanded(0, h, 4/5);
 
 								var vis = new pv.Panel()
 									.canvas(canvas)
 									.width(w)
 									.height(h)
 									.bottom(20)
-									.left(200)
+									.left(240)
 									.right(10)
 									.top(5);
 
 								var bar = vis.add(pv.Bar)
-									.data(data.bars)
+									.data(data.values)
 									.top(function() y(this.index))
 									.height(y.range().band)
 									.left(0)
 									.width(x)
 									.fillStyle("rgb(148,103,189)")
-									.text(function(d) d + " ( " + ((d / data.totallogins) * 100).toFixed(3) + "%" + " of sessions for period )")
+									.text(function(d) d + " ( " + ((d / data.totalsessions) * 100).toFixed(3) + "%" + " of sessions for period )")
 									.event("mouseover", pv.Behavior.tipsy({gravity:'w', fade:true}));
 
 								bar.anchor("left").add(pv.Label)
 									.textMargin(10)
 									.textAlign("right")
-									.text(function(d) data.barlabels[this.index]);
+									.text(function(d) data.valuelabels[this.index]);
 
 								vis.add(pv.Rule)
 									.data(x.ticks(10))
@@ -160,10 +159,10 @@
 								$('#servicesdatapercent').append(canvas2);
 
 								var w2 = 900,
-									h2 = data.servicecount * 18 < 450 ? 450 : data.servicecount * 18,
+									h2 = data.values.length * 18 < 450 ? 450 : data.values.length * 18,
 									r = 200,
 									c = pv.Colors.category20(),
-									a = pv.Scale.linear(0, pv.sum(data.bars)).range(0, 2 * Math.PI);
+									a = pv.Scale.linear(0, pv.sum(data.values)).range(0, 2 * Math.PI);
 
 								var vis2 = new pv.Panel()
 									.canvas(canvas2)
@@ -173,7 +172,7 @@
 									.height(h2);
 
 								vis2.add(pv.Wedge)
-									.data(data.bars)
+									.data(data.values)
 									.top(225)
 									.left(400)
 									.outerRadius(r)
@@ -181,7 +180,7 @@
 									.fillStyle(function(d) c(d))
 			
 								vis2.add(pv.Dot)
-									.data(data.bars)
+									.data(data.values)
 									.right(250)
 									.top(function() 20 + this.index * 16)
 									.fillStyle(function(d) c(d))
@@ -190,7 +189,7 @@
 								  .anchor("right").add(pv.Label)
 									.textMargin(6)
 									.textAlign("left")
-									.text(function(d) data.barlabels[this.index] + " - " + ((d / data.totallogins) * 100).toFixed(3) + "%");
+									.text(function(d) data.valuelabels[this.index] + " - " + ((d / data.totalsessions) * 100).toFixed(3) + "%");
 
 								vis2.render();
 								

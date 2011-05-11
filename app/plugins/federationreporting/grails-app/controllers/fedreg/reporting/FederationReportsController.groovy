@@ -105,52 +105,50 @@ class FederationReportsController {
 			
 			def activeSP = params.activesp as List
 		
-			def count = 0, maxLogins = 0, totalLogins = 0
+			def maxSessions = 0, totalSessions = 0
 			def results = [:]
 			def services = []
-			def bars = []
-			def barLabels = []
+			def values = []
+			def valueLabels = []
 		
-			results.bars = bars
-			results.barlabels = barLabels
+			results.values = values
+			results.valuelabels = valueLabels
 			results.title = "${g.message(code:'fedreg.view.reporting.federation.sessiontotals.period.title')} ${day ? day + ' /':''} ${month ? month + ' /':''} $year"
 	
-			def loginQuery = "select count(*), spID from WayfAccessRecord where year(dateCreated) = :year"
-			def loginParams = [:]
-			loginParams.year = year
+			def query = new StringBuilder("select count(*), spID from WayfAccessRecord where year(dateCreated) = :year")
+			def queryParams = [:]
+			queryParams.year = year
 		
 			if(month) {
-				loginQuery = loginQuery + " and month(dateCreated) = :month"
-				loginParams.month = month
+				query << " and month(dateCreated) = :month"
+				queryParams.month = month
 			}
 			if(day) {
-				loginQuery = loginQuery + " and day(dateCreated) = :day"
-				loginParams.day = day
+				query << " and day(dateCreated) = :day"
+				queryParams.day = day
 			}
 		
-			loginQuery = loginQuery + " group by spID order by count(spID) desc"
+			query << " group by spID order by count(spID) desc"
 		
-			def logins = WayfAccessRecord.executeQuery(loginQuery, loginParams)
-			logins.each { login ->
-				
-				def sp = SPSSODescriptor.get(login[1])
+			def sessions = WayfAccessRecord.executeQuery(query.toString(), queryParams)
+			sessions.each { s ->
+				def sp = SPSSODescriptor.get(s[1])
 				if(sp) {
-					totalLogins = totalLogins + login[0]
-					
 					def service = [:]
 					service.name = sp.displayName
 					service.id = sp.id
-					service.count = login[0]
+					service.count = s[0]
 					services.add(service)
+					
+					totalSessions = totalSessions + service.count
 		
-					if((activeSP == null || activeSP.contains(sp.id.toString())) && (!min || login[0] >= min) && (!max || login[0] <= max)) {
+					if((activeSP == null || activeSP.contains(sp.id.toString())) && (!min || service.count >= min) && (!max || service.count <= max)) {
 						service.rendered = true
-						bars.add(login[0])
-						barLabels.add(sp.displayName)
+						values.add(service.count)
+						valueLabels.add(sp.displayName)
 				
-						if(maxLogins < login[0])
-							maxLogins = login[0]
-						count++
+						if(maxSessions < service.count)
+							maxSessions = service.count
 					}
 					else
 						service.rendered = false
@@ -163,11 +161,10 @@ class FederationReportsController {
 			} else {
 				results.toptenservices = services.sort{it.displayName}
 			}
-			results.maxlogins = maxLogins
-			results.servicecount = count
-			results.totallogins = totalLogins
+			results.maxsessions = maxSessions
+			results.totalsessions = totalSessions
 		
-			if(count > 0)
+			if(values.size() > 0)
 				results.populated = true
 			else
 				results.populated = false
@@ -200,22 +197,22 @@ class FederationReportsController {
 
 			results.title = "${g.message(code:'fedreg.views.reporting.federation.logins.report.title')} ${day ? day + ' /':''} ${month ? month + ' /':''} $year"
 	
-			def loginsQuery = "select count(*) as count, hour(date_created) as hour from WayfAccessRecord where year(dateCreated) = :year"
-			def loginsParams = [:]
-			loginsParams.year = year
+			def query = new StringBuilder("select count(*) as count, hour(date_created) as hour from WayfAccessRecord where year(dateCreated) = :year")
+			def queryParams = [:]
+			queryParams.year = year
 
 			if(month) {
-				loginsQuery = loginsQuery + " and month(dateCreated) = :month"
-				loginsParams.month = month
+				query << " and month(dateCreated) = :month"
+				queryParams.month = month
 			}
 			if(day) {
-				loginsQuery = loginsQuery + " and day(dateCreated) = :day"
-				loginsParams.day = day
+				query << " and day(dateCreated) = :day"
+				queryParams.day = day
 			}
 	
-			loginsQuery = loginsQuery + " group by hour(date_created)"
+			query << " group by hour(date_created)"
 	
-			def totalLogins = WayfAccessRecord.executeQuery(loginsQuery, loginsParams)
+			def totalLogins = WayfAccessRecord.executeQuery(query.toString(), queryParams)
 			if(totalLogins.size() == 0)
 				results.populated = false
 			else
