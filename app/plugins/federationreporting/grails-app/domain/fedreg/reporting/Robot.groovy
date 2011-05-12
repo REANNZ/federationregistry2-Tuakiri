@@ -1,6 +1,5 @@
 /*
- *	A Grails/Hibernate compatible environment for SAML2 metadata types with application specific 
- *	data extensions as appropriate.
+ *	Reporting functionality for Federation Registry.
  * 
  *	Copyright (C) 2010 Australian Access Federation
  *

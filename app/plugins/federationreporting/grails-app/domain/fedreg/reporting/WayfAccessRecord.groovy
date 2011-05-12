@@ -1,6 +1,5 @@
 /*
- *	A Grails/Hibernate compatible environment for SAML2 metadata types with application specific 
- *	data extensions as appropriate.
+ *	Reporting functionality for Federation Registry.
  * 
  *	Copyright (C) 2010 Australian Access Federation
  *
@@ -32,7 +31,7 @@ class WayfAccessRecord {
 	long idpID	// We use ID instead of direct links to allow for descriptors to be deleted without impacting reporting
 	long spID
 	
-	boolean robot
+	boolean robot = false
 	
 	Date dateCreated
 
