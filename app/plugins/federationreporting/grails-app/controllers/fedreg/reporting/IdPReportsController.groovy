@@ -358,32 +358,34 @@ class IdPReportsController {
 				query << " and robot = :robot group by spID"
 				
 				def sessions = WayfAccessRecord.executeQuery(query.toString(), queryParams)
-				sessions.each { s ->
-					def sp = SPSSODescriptor.get(s[1])
-					if(sp) {
-						def service = [:]
-						service.id = sp.id
-						service.name = sp.displayName
-						services.add(service)
+				if(sessions) {
+					sessions.each { s ->
+						def sp = SPSSODescriptor.get(s[1])
+						if(sp) {
+							def service = [:]
+							service.id = sp.id
+							service.name = sp.displayName
+							services.add(service)
 			
-						if(activeSP == null || activeSP.contains(sp.id.toString())) {
-							service.rendered = true
+							if(activeSP == null || activeSP.contains(sp.id.toString())) {
+								service.rendered = true
 			
-							def node = [:]
-							node.nodeName = sp.displayName
-							node.group = 2
-							nodes.add(node)
+								def node = [:]
+								node.nodeName = sp.displayName
+								node.group = 2
+								nodes.add(node)
 
-							def link = [:]
-							link.source = 0
-							def value = ((s[0] / totalSessions[0]) * 20)		/* 0 - 20 instead of 0 - 1, makes graph look nicer */
-							link.value = value
-							link.target = target++
+								def link = [:]
+								link.source = 0
+								def value = ((s[0] / totalSessions[0]) * 20)		/* 0 - 20 instead of 0 - 1, makes graph look nicer */
+								link.value = value
+								link.target = target++
 
-							links.add(link)
+								links.add(link)
+							}
+							else
+								service.rendered = false
 						}
-						else
-							service.rendered = false
 					}
 				}
 				results.services = services.sort{it.get('name').toLowerCase()}
