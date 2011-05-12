@@ -23,7 +23,7 @@ class FederationReportsController {
 	def summaryjson = {
 		if(SecurityUtils.subject.isPermitted("federation:reporting")) {
 			def results = [:]
-			def robot = params.robot ? params.robot : false
+			def robot = params.robot ? params.robot.toBoolean() : false
 			
 			// Key object creations
 			def minYear = WayfAccessRecord.executeQuery("select min(year(dateCreated)) from WayfAccessRecord")[0]
@@ -38,7 +38,8 @@ class FederationReportsController {
 					// Sessions per year
 					def sessionValue = [:]	
 					sessionValue.x = year
-					def sessionCount = WayfAccessRecord.executeQuery("select count(*) from fedreg.reporting.WayfAccessRecord where year(dateCreated) = ? and robot = ?", [year, robot])[0]
+					def sessionQuery = "select count(*) from fedreg.reporting.WayfAccessRecord where year(dateCreated) = ? ${robots(robot)}"
+					def sessionCount = WayfAccessRecord.executeQuery(sessionQuery, [year])[0]
 					if(sessionCount) {
 						sessionValue.y = sessionCount
 						if(sessionMax < sessionCount)
@@ -102,6 +103,7 @@ class FederationReportsController {
 	
 	def sessionsjson = {
 		if(SecurityUtils.subject.isPermitted("federation:reporting")) {
+			def robot = params.robot ? params.robot.toBoolean() : false
 			def year, month, day
 		
 			year = params.int('year')
@@ -124,18 +126,17 @@ class FederationReportsController {
 			
 			def query
 			def queryParams = [:]
-			queryParams.robot = params.robot ? params.robot : false
 			queryParams.year = year
 			if(day) {
-				query = "select count(*), hour(dateCreated) from WayfAccessRecord where year(dateCreated) = :year and month(dateCreated) = :month and day(dateCreated) = :day and robot = :robot group by hour(dateCreated)"
+				query = "select count(*), hour(dateCreated) from WayfAccessRecord where year(dateCreated) = :year and month(dateCreated) = :month and day(dateCreated) = :day ${robots(robot)} group by hour(dateCreated)"
 				queryParams.month = month
 				queryParams.day = day
 			} else {
 				if(month) {
-					query = "select count(*), day(dateCreated) from WayfAccessRecord where year(dateCreated) = :year and month(dateCreated) = :month and robot = :robot group by day(dateCreated)"
+					query = "select count(*), day(dateCreated) from WayfAccessRecord where year(dateCreated) = :year and month(dateCreated) = :month ${robots(robot)} group by day(dateCreated)"
 					queryParams.month = month
 				} else {
-					query = "select count(*), month(dateCreated) from WayfAccessRecord where year(dateCreated) = :year and robot = :robot group by month(dateCreated)"					
+					query = "select count(*), month(dateCreated) from WayfAccessRecord where year(dateCreated) = :year ${robots(robot)} group by month(dateCreated)"					
 				}
 			}
 
@@ -169,6 +170,7 @@ class FederationReportsController {
 	
 	def totalsjson = {
 		if(SecurityUtils.subject.isPermitted("federation:reporting")) {
+			def robot = params.robot ? params.robot.toBoolean() : false
 			def year, month, day, min, max
 		
 			year = params.int('year')
@@ -197,7 +199,6 @@ class FederationReportsController {
 	
 			def query = new StringBuilder("select count(*), spID from WayfAccessRecord where year(dateCreated) = :year")
 			def queryParams = [:]
-			queryParams.robot = params.robot ? params.robot : false
 			queryParams.year = year
 		
 			if(month) {
@@ -209,7 +210,7 @@ class FederationReportsController {
 				queryParams.day = day
 			}
 		
-			query << " and robot = :robot group by spID order by count(spID) desc"
+			query << " ${robots(robot)} group by spID order by count(spID) desc"
 		
 			def sessions = WayfAccessRecord.executeQuery(query.toString(), queryParams)
 			if(sessions) {
@@ -262,6 +263,7 @@ class FederationReportsController {
 	
 	def loginsjson = {
 		if(SecurityUtils.subject.isPermitted("federation:reporting")) {
+			def robot = params.robot ? params.robot.toBoolean() : false
 			def year, month, day, min, max
 			year = params.int('year')
 			if(!year) {
@@ -281,7 +283,6 @@ class FederationReportsController {
 	
 			def query = new StringBuilder("select count(*) as count, hour(date_created) as hour from WayfAccessRecord where year(dateCreated) = :year")
 			def queryParams = [:]
-			queryParams.robot = params.robot ? params.robot : false
 			queryParams.year = year
 
 			if(month) {
@@ -293,7 +294,7 @@ class FederationReportsController {
 				queryParams.day = day
 			}
 	
-			query << " and robot = :robot group by hour(date_created)"
+			query << " ${robots(robot)} group by hour(date_created)"
 	
 			def totalLogins = WayfAccessRecord.executeQuery(query.toString(), queryParams)
 			if(totalLogins) {
@@ -322,5 +323,8 @@ class FederationReportsController {
 			response.setStatus(403)
 		}
 	}
-
+	
+	def robots(def robot) {
+		robot ? '':'and robot = false'
+	}
 }

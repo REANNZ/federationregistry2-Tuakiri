@@ -35,6 +35,7 @@ class SpReportsController {
 		}
 			
 		if(SecurityUtils.subject.isPermitted("descriptor:${sp.id}:reporting") || SecurityUtils.subject.isPermitted("federation:reporting")) {
+			def robot = params.robot ? params.robot.toBoolean() : false
 			def year, month, day, min, max
 			year = params.int('year')
 			if(!year) {
@@ -54,7 +55,6 @@ class SpReportsController {
 		
 			def query = new StringBuilder("select count(*) as count, hour(date_created) as hour from WayfAccessRecord where spid = :spid and year(dateCreated) = :year")
 			def queryParams = [:]
-			queryParams.robot = params.robot ? params.robot : false
 			queryParams.spid = sp.id
 			queryParams.year = year
 
@@ -67,7 +67,7 @@ class SpReportsController {
 				queryParams.day = day
 			}
 		
-			query << " and robot = :robot group by hour(date_created)"
+			query << " ${robots(robot)} group by hour(date_created)"
 		
 			def totalLogins = WayfAccessRecord.executeQuery(query.toString(), queryParams)
 			if(totalLogins){
@@ -109,6 +109,7 @@ class SpReportsController {
 			return
 		}
 		if(SecurityUtils.subject.isPermitted("descriptor:${sp.id}:reporting")  || SecurityUtils.subject.isPermitted("federation:reporting")) {
+			def robot = params.robot ? params.robot.toBoolean() : false
 			def year, month, day
 		
 			year = params.int('year')
@@ -129,20 +130,19 @@ class SpReportsController {
 			
 			def query
 			def queryParams = [:]
-			queryParams.robot = params.robot ? params.robot : false
 			queryParams.spID = sp.id
 			queryParams.year = year
 					
 			if(day) {
-				query = "select count(*), hour(dateCreated) from WayfAccessRecord where spID = :spID and year(dateCreated) = :year and month(dateCreated) = :month and day(dateCreated) = :day and robot = :robot group by hour(dateCreated)"
+				query = "select count(*), hour(dateCreated) from WayfAccessRecord where spID = :spID and year(dateCreated) = :year and month(dateCreated) = :month and day(dateCreated) = :day ${robots(robot)} group by hour(dateCreated)"
 				queryParams.month = month
 				queryParams.day = day
 			} else {
 				if(month) {
-					query = "select count(*), day(dateCreated) from WayfAccessRecord where spID = :spID and year(dateCreated) = :year and month(dateCreated) = :month and robot = :robot group by day(dateCreated)"
+					query = "select count(*), day(dateCreated) from WayfAccessRecord where spID = :spID and year(dateCreated) = :year and month(dateCreated) = :month ${robots(robot)} group by day(dateCreated)"
 					queryParams.month = month
 				} else {
-					query = "select count(*), month(dateCreated) from WayfAccessRecord where spID = :spID and year(dateCreated) = :year and robot = :robot group by month(dateCreated)"
+					query = "select count(*), month(dateCreated) from WayfAccessRecord where spID = :spID and year(dateCreated) = :year ${robots(robot)} group by month(dateCreated)"
 				}
 			}
 
@@ -185,6 +185,7 @@ class SpReportsController {
 			return
 		}
 		if(SecurityUtils.subject.isPermitted("descriptor:${sp.id}:reporting")  || SecurityUtils.subject.isPermitted("federation:reporting")) {
+			def robot = params.robot ? params.robot.toBoolean() : false
 			def year, month, day, min, max
 		
 			year = params.int('year')
@@ -213,7 +214,6 @@ class SpReportsController {
 	
 			def query = new StringBuilder("select count(*), idpID from WayfAccessRecord where spID = :spid and year(dateCreated) = :year")
 			def queryParams = [:]
-			queryParams.robot = params.robot ? params.robot : false
 			queryParams.spid = sp.id
 			queryParams.year = year
 		
@@ -226,7 +226,7 @@ class SpReportsController {
 				queryParams.day = day
 			}
 		
-			query << " and robot = :robot group by idpID order by count(idpID) desc"
+			query << " ${robots(robot)} group by idpID order by count(idpID) desc"
 		
 			def sessions = WayfAccessRecord.executeQuery(query.toString(), queryParams)
 			if(sessions) {
@@ -285,6 +285,7 @@ class SpReportsController {
 			return
 		}
 		if(SecurityUtils.subject.isPermitted("descriptor:${sp.id}:reporting:connections") || SecurityUtils.subject.isPermitted("federation:reporting")) {
+			def robot = params.robot ? params.robot.toBoolean() : false
 			def year, month, day
 		
 			year = params.int('year')
@@ -308,9 +309,8 @@ class SpReportsController {
 			results.links = links
 			results.title = "${g.message(code:'fedreg.templates.reports.serviceprovider.connectivity.title', args:[sp.displayName])} ${day ? day + ' /':''} ${month ? month + ' /':''} $year"
 
-			def totalQuery = new StringBuilder("select count(*) as count from WayfAccessRecord where spid = :spid and year(dateCreated) = :year and robot = :robot")
+			def totalQuery = new StringBuilder("select count(*) as count from WayfAccessRecord where spid = :spid and year(dateCreated) = :year ${robots(robot)}")
 			def totalParams = [:]
-			totalParams.robot = params.robot ? params.robot : false
 			totalParams.spid = sp.id
 			totalParams.year = year
 
@@ -341,7 +341,6 @@ class SpReportsController {
 				// We remove any SP with a -1 id as this indicates the SP could not be determined at record creation time
 				def query = new StringBuilder("select count(*), idpID from WayfAccessRecord where spID != -1 and spID = :spid and year(dateCreated) = :year")
 				def queryParams = [:]
-				queryParams.robot = params.robot ? params.robot : false
 				queryParams.spid = sp.id
 				queryParams.year = year
 			
@@ -353,7 +352,7 @@ class SpReportsController {
 					query << " and day(dateCreated) = :day"
 					queryParams.day = day
 				}
-				query << " and robot = :robot group by idpID"
+				query << " ${robots(robot)} group by idpID"
 				
 				def sessions = WayfAccessRecord.executeQuery(query.toString(), queryParams)
 				if(sessions) {
@@ -399,4 +398,7 @@ class SpReportsController {
 		}
 	}
 	
+	def robots(def robot) {
+		robot ? '':'and robot = false'
+	}	
 }
