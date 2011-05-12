@@ -52,39 +52,38 @@ class SpReportsController {
 
 			results.title = "${g.message(code:'fedreg.templates.reports.serviceprovider.logins.title', args:[sp.displayName])} ${day ? day + ' /':''} ${month ? month + ' /':''} $year"
 		
-			def loginsQuery = new StringBuilder("select count(*) as count, hour(date_created) as hour from WayfAccessRecord where spid = :spid and year(dateCreated) = :year")
-			def loginsParams = [:]
-			loginsParams.spid = sp.id
-			loginsParams.year = year
+			def query = new StringBuilder("select count(*) as count, hour(date_created) as hour from WayfAccessRecord where spid = :spid and year(dateCreated) = :year")
+			def queryParams = [:]
+			queryParams.robot = params.robot ? params.robot : false
+			queryParams.spid = sp.id
+			queryParams.year = year
 
 			if(month) {
-				loginsQuery << " and month(dateCreated) = :month"
-				loginsParams.month = month
+				query << " and month(dateCreated) = :month"
+				queryParams.month = month
 			}
 			if(day) {
-				loginsQuery << " and day(dateCreated) = :day"
-				loginsParams.day = day
+				query << " and day(dateCreated) = :day"
+				queryParams.day = day
 			}
 		
-			loginsQuery << " group by hour(date_created)"
+			query << " and robot = :robot group by hour(date_created)"
 		
-			def totalLogins = WayfAccessRecord.executeQuery(loginsQuery.toString(), loginsParams)
-			if(totalLogins.size() == 0)
-				results.populated = false
-			else
+			def totalLogins = WayfAccessRecord.executeQuery(query.toString(), queryParams)
+			if(totalLogins){
 				results.populated = true
-
-			totalLogins.each {
-				def login = [:]
-				login.count = it[0]
-				login.hour = it[1]
+				totalLogins.each {
+					def login = [:]
+					login.count = it[0]
+					login.hour = it[1]
 				
-				if(maxLogins < login.count)
-					maxLogins = login.count
+					if(maxLogins < login.count)
+						maxLogins = login.count
 				
-				logins.add(login)
-			}
-			results.maxlogins = maxLogins
+					logins.add(login)
+				}
+				results.maxlogins = maxLogins
+			} else { results.populated = false }
 		
 			render results as JSON
 		}
@@ -128,47 +127,40 @@ class SpReportsController {
 			results.sessions = sessions
 			results.title = "${g.message(code:'fedreg.templates.reports.serviceprovider.sessions.title', args:[sp.displayName])} ${day ? day + ' /':''} ${month ? month + ' /':''} $year"
 			
-			def sessionsQuery
-			def sessionsParams = [:]
+			def query
+			def queryParams = [:]
+			queryParams.robot = params.robot ? params.robot : false
+			queryParams.spID = sp.id
+			queryParams.year = year
+					
 			if(day) {
-				sessionsQuery = "select count(*), hour(dateCreated) from WayfAccessRecord where spID = :spID and year(dateCreated) = :year and month(dateCreated) = :month and day(dateCreated) = :day group by hour(dateCreated)"
-				sessionsParams.spID = sp.id
-				sessionsParams.year = year
-				sessionsParams.month = month
-				sessionsParams.day = day
+				query = "select count(*), hour(dateCreated) from WayfAccessRecord where spID = :spID and year(dateCreated) = :year and month(dateCreated) = :month and day(dateCreated) = :day and robot = :robot group by hour(dateCreated)"
+				queryParams.month = month
+				queryParams.day = day
 			} else {
 				if(month) {
-					sessionsQuery = "select count(*), day(dateCreated) from WayfAccessRecord where spID = :spID and year(dateCreated) = :year and month(dateCreated) = :month group by day(dateCreated)"
-					sessionsParams.spID = sp.id
-					sessionsParams.year = year
-					sessionsParams.month = month
+					query = "select count(*), day(dateCreated) from WayfAccessRecord where spID = :spID and year(dateCreated) = :year and month(dateCreated) = :month and robot = :robot group by day(dateCreated)"
+					queryParams.month = month
 				} else {
-					sessionsQuery = "select count(*), month(dateCreated) from WayfAccessRecord where spID = :spID and year(dateCreated) = :year group by month(dateCreated)"
-					sessionsParams.spID = sp.id
-					sessionsParams.year = year
+					query = "select count(*), month(dateCreated) from WayfAccessRecord where spID = :spID and year(dateCreated) = :year and robot = :robot group by month(dateCreated)"
 				}
 			}
 
-			def sessionCount = WayfAccessRecord.executeQuery(sessionsQuery, sessionsParams)
-			sessionCount.each { s ->
-				def session = [:]
-				session.count = s[0]
-				
-				if(maxLogins < session.count)
-					maxLogins = session.count
-				
-				session.date = s[1]
-				
-				sessions.add(session)
-			}
-
-			if(sessionCount.size() > 0)
+			def sessionCount = WayfAccessRecord.executeQuery(query, queryParams)
+			if(sessionCount) {
 				results.populated = true
-			else
-				results.populated = false
+				sessionCount.each { s ->
+					def session = [:]
+					session.count = s[0]
+					session.date = s[1]
+					if(maxLogins < session.count)
+						maxLogins = session.count
 				
-			results.maxlogins = maxLogins
-		
+					sessions.add(session)
+				}
+				results.maxlogins = maxLogins
+			} else { results.populated = false }
+				
 			render results as JSON
 		}
 		else {
@@ -219,57 +211,56 @@ class SpReportsController {
 			results.valuelabels = valueLabels
 			results.title = "${g.message(code:'fedreg.templates.reports.serviceprovider.totals.title', args:[sp.displayName])} ${day ? day + ' /':''} ${month ? month + ' /':''} $year"
 	
-			def sessionQuery = new StringBuilder("select count(*), idpID from WayfAccessRecord where spID = :spid and year(dateCreated) = :year")
+			def query = new StringBuilder("select count(*), idpID from WayfAccessRecord where spID = :spid and year(dateCreated) = :year")
 			def queryParams = [:]
+			queryParams.robot = params.robot ? params.robot : false
 			queryParams.spid = sp.id
 			queryParams.year = year
 		
 			if(month) {
-				sessionQuery << " and month(dateCreated) = :month"
+				query << " and month(dateCreated) = :month"
 				queryParams.month = month
 			}
 			if(day) {
-				sessionQuery << " and day(dateCreated) = :day"
+				query << " and day(dateCreated) = :day"
 				queryParams.day = day
 			}
 		
-			sessionQuery << " group by idpID order by count(idpID) desc"
+			query << " and robot = :robot group by idpID order by count(idpID) desc"
 		
-			def sessions = WayfAccessRecord.executeQuery(sessionQuery.toString(), queryParams)
-			sessions.each { s ->
-				def idp = IDPSSODescriptor.get(s[1])
-				if(idp) {
-					def provider = [:]
-					provider.name = idp.displayName
-					provider.id = idp.id
-					provider.count = s[0]
-					providers.add(provider)
-					
-					totalSessions = totalSessions + provider.count
-		
-					if((activeIDP == null || activeIDP.contains(idp.id.toString())) && (!min || provider.count >= min) && (!max || provider.count <= max)) {
-						provider.rendered = true
-						values.add(provider.count)
-						valueLabels.add(idp.displayName)
-				
-						if(maxSessions < provider.count)
-							maxSessions = provider.count
-						count++
-					}
-					else
-						provider.rendered = false
-				}
-			}
-
-			results.providers = providers.sort{it.get('name').toLowerCase()}
-			results.maxsessions = maxSessions
-			results.totalsessions = totalSessions
-		
-			if(count > 0)
+			def sessions = WayfAccessRecord.executeQuery(query.toString(), queryParams)
+			if(sessions) {
 				results.populated = true
-			else
-				results.populated = false
+				sessions.each { s ->
+					def idp = IDPSSODescriptor.get(s[1])
+					if(idp) {
+						def provider = [:]
+						provider.name = idp.displayName
+						provider.id = idp.id
+						provider.count = s[0]
+						providers.add(provider)
+					
+						totalSessions = totalSessions + provider.count
 		
+						if((activeIDP == null || activeIDP.contains(idp.id.toString())) && (!min || provider.count >= min) && (!max || provider.count <= max)) {
+							provider.rendered = true
+							values.add(provider.count)
+							valueLabels.add(idp.displayName)
+				
+							if(maxSessions < provider.count)
+								maxSessions = provider.count
+							count++
+						}
+						else
+							provider.rendered = false
+					}
+				}
+
+				results.providers = providers.sort{it.get('name').toLowerCase()}
+				results.maxsessions = maxSessions
+				results.totalsessions = totalSessions
+			} else {results.populated = false}
+
 			render results as JSON
 		}
 		else {
@@ -317,8 +308,9 @@ class SpReportsController {
 			results.links = links
 			results.title = "${g.message(code:'fedreg.templates.reports.serviceprovider.connectivity.title', args:[sp.displayName])} ${day ? day + ' /':''} ${month ? month + ' /':''} $year"
 
-			def totalQuery = new StringBuilder("select count(*) as count from WayfAccessRecord where spid = :spid and year(dateCreated) = :year")
+			def totalQuery = new StringBuilder("select count(*) as count from WayfAccessRecord where spid = :spid and year(dateCreated) = :year and robot = :robot")
 			def totalParams = [:]
+			totalParams.robot = params.robot ? params.robot : false
 			totalParams.spid = sp.id
 			totalParams.year = year
 
@@ -335,54 +327,55 @@ class SpReportsController {
 				totalParams.activeIDP = activeIDP
 			}
 		
-			def totalLogins = WayfAccessRecord.executeQuery(totalQuery.toString(), totalParams)
+			def totalSessions = WayfAccessRecord.executeQuery(totalQuery.toString(), totalParams)
 			
-			if(totalLogins[0] > 0) {
+			if(totalSessions && totalSessions[0] > 0) {
 				results.populated = true
 			
 				def val = 0
-				if(sp) {
-					def node = [:]
-					node.nodeName = sp.displayName
-					node.group = 2
-					nodes.add(node)
-				}
-					// We remove any SP with a -1 id as this indicates the SP could not be determined at record creation time
-					def loginQuery = new StringBuilder("select count(*), idpID from WayfAccessRecord where spID != -1 and spID = :spid and year(dateCreated) = :year")
-					def loginParams = [:]
-					loginParams.spid = sp.id
-					loginParams.year = year
+				def spNode = [:]
+				spNode.nodeName = sp.displayName
+				spNode.group = 2
+				nodes.add(spNode)
 				
-					if(month) {
-						loginQuery << " and month(dateCreated) = :month"
-						loginParams.month = month
-					}
-					if(day) {
-						loginQuery << " and day(dateCreated) = :day"
-						loginParams.day = day
-					}
-					loginQuery << " group by idpID"
-					
-					def logins = WayfAccessRecord.executeQuery(loginQuery.toString(), loginParams)
-					logins.each { login ->
-						def idp = IDPSSODescriptor.get(login[1])
+				// We remove any SP with a -1 id as this indicates the SP could not be determined at record creation time
+				def query = new StringBuilder("select count(*), idpID from WayfAccessRecord where spID != -1 and spID = :spid and year(dateCreated) = :year")
+				def queryParams = [:]
+				queryParams.robot = params.robot ? params.robot : false
+				queryParams.spid = sp.id
+				queryParams.year = year
+			
+				if(month) {
+					query << " and month(dateCreated) = :month"
+					queryParams.month = month
+				}
+				if(day) {
+					query << " and day(dateCreated) = :day"
+					queryParams.day = day
+				}
+				query << " and robot = :robot group by idpID"
+				
+				def sessions = WayfAccessRecord.executeQuery(query.toString(), queryParams)
+				if(sessions) {
+					sessions.each { s ->
+						def idp = IDPSSODescriptor.get(s[1])
 						if(idp) {
 							def provider = [:]
 							provider.id = idp.id
 							provider.name = idp.displayName
 							providers.add(provider)
-				
+			
 							if(activeIDP == null || activeIDP.contains(idp.id.toString())) {
 								provider.rendered = true
-				
+			
 								def node = [:]
 								node.nodeName = idp.displayName
 								node.group = 1
 								nodes.add(node)
-	
+
 								def link = [:]
 								link.source = 0
-								def value = ((login[0] / totalLogins[0]) * 20)		// 0 - 20 instead of 0 - 1, makes graph look nicer
+								def value = ((s[0] / totalSessions[0]) * 20)		// 0 - 20 instead of 0 - 1, makes graph look nicer
 								link.value = value
 								link.target = target++
 
@@ -392,12 +385,11 @@ class SpReportsController {
 								provider.rendered = false
 						}
 					}
-
-			} else {
-				results.populated = false
-			}
+				}
+				results.providers = providers.sort{it.get('name').toLowerCase()}
+			} else { results.populated = false }
 			
-			results.providers = providers.sort{it.get('name').toLowerCase()}
+			
 			render results as JSON
 		}
 		else {
