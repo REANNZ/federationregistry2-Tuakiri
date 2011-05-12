@@ -75,6 +75,15 @@ fedreg.stylebuttons = function(e) {
     });
 };
 
+fedreg.getParameterByName = function(name) {
+    var match = RegExp('[?&]' + name + '=([^&]*)')
+                    .exec(window.location.search);
+ 
+    return match ?
+        decodeURIComponent(match[1].replace(/\+/g, ' '))
+        : null;
+}
+
 // Descriptor Metadata
 fedreg.descriptor_metadata = function() {
 //	fedreg.workingOverlay();
@@ -1095,7 +1104,7 @@ fedreg.renderIdPReport = function() {
 	fedreg.closeRefinement();
 	$(".revealable").hide();
 
-	var dataString = $("#reportrequirements").serialize();
+	var dataString = $("#reportrequirements").serialize() + fedreg.includeRobotsInReporting(true);
 	
 	if( $(".reporttype option:selected").val() == 'connections') {
 		$.ajax({url: idpReportsConnectivityEndpoint, 
@@ -1158,7 +1167,7 @@ fedreg.refineIdPReport = function(refinement) {
 	fedreg.workingOverlay();
 	fedreg.closeRefinement();
 	
-	var dataString = $("#reportrequirements").serialize() + "&" + refinement.serialize();
+	var dataString = $("#reportrequirements").serialize() + "&" + refinement.serialize() + fedreg.includeRobotsInReporting(true);
 	
 	if( $(".reporttype option:selected").val() == 'connections') {
 		$.ajax({url: idpReportsConnectivityEndpoint, 
@@ -1194,7 +1203,7 @@ fedreg.renderSPReport = function() {
 	fedreg.closeRefinement();
 	$(".revealable").hide();
 	
-	var dataString = $("#reportrequirements").serialize();
+	var dataString = $("#reportrequirements").serialize() + fedreg.includeRobotsInReporting(true);
 	
 	if( $(".reporttype option:selected").val() == 'connections') {
 		$.ajax({url: spReportsConnectivityEndpoint, 
@@ -1257,7 +1266,7 @@ fedreg.refineSPReport = function(refinement) {
 	fedreg.workingOverlay();
 	fedreg.closeRefinement();
 	
-	var dataString = $("#reportrequirements").serialize() + "&" + refinement.serialize();
+	var dataString = $("#reportrequirements").serialize() + "&" + refinement.serialize() + fedreg.includeRobotsInReporting(true);
 	
 	if( $(".reporttype option:selected").val() == 'connections') {
 		$.ajax({url: spReportsConnectivityEndpoint, 
@@ -1293,7 +1302,7 @@ fedreg.renderFederationReport = function(type) {
 	fedreg.closeRefinement();
 	$(".revealable").hide();
 	
-	var dataString = $("#reportrequirements").serialize();
+	var dataString = $("#reportrequirements").serialize() + fedreg.includeRobotsInReporting(true);
 	
 	if( type == 'logins') {
 		$.ajax({url: federationReportsLoginsEndpoint, 
@@ -1342,7 +1351,7 @@ fedreg.refineFederationReport = function(type, refinement) {
 	fedreg.workingOverlay();
 	fedreg.closeRefinement();
 	
-	var dataString = $("#reportrequirements").serialize() + "&" + refinement.serialize();
+	var dataString = $("#reportrequirements").serialize() + "&" + refinement.serialize() + fedreg.includeRobotsInReporting(true);
 	
 	if( type == 'sessiontotals') {
 		$.ajax({url: federationReportsSessionTotalsEndpoint, 
@@ -1362,7 +1371,10 @@ fedreg.refineFederationReport = function(type, refinement) {
 fedreg.renderFederationSummaryReport = function(type) {
 	fedreg.workingOverlay();
 	
+	var dataString = fedreg.includeRobotsInReporting(false)
+	
 	$.ajax({url: federationReportsSummaryEndpoint, 
+		data: dataString,
 		dataType: 'json',
 		async:true, 
 		success: function(data){
@@ -1372,4 +1384,9 @@ fedreg.renderFederationSummaryReport = function(type) {
 			nimble.growl('error', xhr.responseText);
 	    }
 	});
+}
+
+fedreg.includeRobotsInReporting = function(append) {
+	var robot = fedreg.getParameterByName('robots');
+	return robot == 'true' ? (append ? "&robot=true" : "robot=true") : "" 
 }
