@@ -16,6 +16,11 @@ applyBehaviourTo = function(e) {
 	$(".tabs").tabs();
 	$(".revealable").hide();
 	
+	if((Modernizr.svg))
+		$('.reportingunsupported').hide();
+	else
+		$('.reportingsupported').hide();
+	
 	$('.sortable-table').each(function(index) {
 		$(this).dataTable( {
 			"sPaginationType": "full_numbers",
@@ -1098,291 +1103,331 @@ fedreg.closeRefinement = function() {
 };
 
 fedreg.renderIdPReport = function() {
-	fedreg.workingOverlay();
-	fedreg.closeRefinement();
-	$(".revealable").hide();
+	if (Modernizr.svg) {
+		fedreg.workingOverlay();
+		fedreg.closeRefinement();
+		$(".revealable").hide();
 
-	var dataString = $("#reportrequirements").serialize() + fedreg.includeRobotsInReporting(true);
+		var dataString = $("#reportrequirements").serialize() + fedreg.includeRobotsInReporting(true);
 	
-	if( $(".reporttype option:selected").val() == 'connections') {
-		$.ajax({url: idpReportsConnectivityEndpoint, 
-			data: dataString,
-			dataType: 'json',
-			async:true, 
-			success: function(data){
-	    		fedreg.renderIdPConnectivity(data, false);
-			},
-		    error: function (xhr, ajaxOptions, thrownError) {
-				nimble.growl('error', xhr.responseText);
-		    }
-		});
-	}
+		if( $(".reporttype option:selected").val() == 'connections') {
+			$.ajax({url: idpReportsConnectivityEndpoint, 
+				data: dataString,
+				dataType: 'json',
+				async:true, 
+				success: function(data){
+					fedreg.renderIdPConnectivity(data, false);
+				},
+				error: function (xhr, ajaxOptions, thrownError) {
+					nimble.growl('error', xhr.responseText);
+				}
+			});
+		}
 	
-	if( $(".reporttype option:selected").val() == 'sessions') {
-		$.ajax({url: idpReportsSessionsEndpoint, 
-			data: dataString,
-			dataType: 'json',
-			async:true, 
-			success: function(data){
-	    		fedreg.renderIdPSessions(data, false);
-			},
-		    error: function (xhr, ajaxOptions, thrownError) {
-				nimble.growl('error', xhr.responseText);
-		    }
-		});
-	}
+		if( $(".reporttype option:selected").val() == 'sessions') {
+			$.ajax({url: idpReportsSessionsEndpoint, 
+				data: dataString,
+				dataType: 'json',
+				async:true, 
+				success: function(data){
+					fedreg.renderIdPSessions(data, false);
+				},
+				error: function (xhr, ajaxOptions, thrownError) {
+					nimble.growl('error', xhr.responseText);
+				}
+			});
+		}
 	
-	if( $(".reporttype option:selected").val() == 'totals') {
-		$.ajax({url: idpReportsTotalsEndpoint, 
-			data: dataString,
-			dataType: 'json',
-			async:true, 
-			success: function(data){
-	    		fedreg.renderIdPTotals(data, false);
-			},
-		    error: function (xhr, ajaxOptions, thrownError) {
-				nimble.growl('error', xhr.responseText);
-		    }
-		});
-	}
+		if( $(".reporttype option:selected").val() == 'totals') {
+			$.ajax({url: idpReportsTotalsEndpoint, 
+				data: dataString,
+				dataType: 'json',
+				async:true, 
+				success: function(data){
+					fedreg.renderIdPTotals(data, false);
+				},
+				error: function (xhr, ajaxOptions, thrownError) {
+					nimble.growl('error', xhr.responseText);
+				}
+			});
+		}
 	
-	if( $(".reporttype option:selected").val() == 'logins') {
-		$.ajax({url: idpReportsLoginsEndpoint, 
-			data: dataString,
-			dataType: 'json',
-			async:true, 
-			success: function(data){
-	    		fedreg.renderIdPLogins(data);
-			},
-		    error: function (xhr, ajaxOptions, thrownError) {
-				nimble.growl('error', xhr.responseText);
-		    }
-		});
+		if( $(".reporttype option:selected").val() == 'logins') {
+			$.ajax({url: idpReportsLoginsEndpoint, 
+				data: dataString,
+				dataType: 'json',
+				async:true, 
+				success: function(data){
+					fedreg.renderIdPLogins(data);
+				},
+				error: function (xhr, ajaxOptions, thrownError) {
+					nimble.growl('error', xhr.responseText);
+				}
+			});
+		}
+	} else {
+		fedreg.toggleReportingContent(false);
 	}
 };
 
 fedreg.refineIdPReport = function(refinement) {
-	fedreg.workingOverlay();
-	fedreg.closeRefinement();
+	if (Modernizr.svg) {
+		fedreg.workingOverlay();
+		fedreg.closeRefinement();
 	
-	var dataString = $("#reportrequirements").serialize() + "&" + refinement.serialize() + fedreg.includeRobotsInReporting(true);
+		var dataString = $("#reportrequirements").serialize() + "&" + refinement.serialize() + fedreg.includeRobotsInReporting(true);
 	
-	if( $(".reporttype option:selected").val() == 'connections') {
-		$.ajax({url: idpReportsConnectivityEndpoint, 
-			data: dataString,
-			dataType: 'json',
-			async:true, 
-			success: function(data){
-	    		fedreg.renderIdPConnectivity(data, true);
-			},
-		    error: function (xhr, ajaxOptions, thrownError) {
-				nimble.growl('error', xhr.responseText);
-		    }
-		});
-	}
+		if( $(".reporttype option:selected").val() == 'connections') {
+			$.ajax({url: idpReportsConnectivityEndpoint, 
+				data: dataString,
+				dataType: 'json',
+				async:true, 
+				success: function(data){
+					fedreg.renderIdPConnectivity(data, true);
+				},
+				error: function (xhr, ajaxOptions, thrownError) {
+					nimble.growl('error', xhr.responseText);
+				}
+			});
+		}
 	
-	if( $(".reporttype option:selected").val() == 'totals') {
-		$.ajax({url: idpReportsTotalsEndpoint, 
-			data: dataString,
-			dataType: 'json',
-			async:true, 
-			success: function(data){
-	    		fedreg.renderIdPTotals(data, true);
-			},
-		    error: function (xhr, ajaxOptions, thrownError) {
-				nimble.growl('error', xhr.responseText);
-		    }
-		});
+		if( $(".reporttype option:selected").val() == 'totals') {
+			$.ajax({url: idpReportsTotalsEndpoint, 
+				data: dataString,
+				dataType: 'json',
+				async:true, 
+				success: function(data){
+					fedreg.renderIdPTotals(data, true);
+				},
+				error: function (xhr, ajaxOptions, thrownError) {
+					nimble.growl('error', xhr.responseText);
+				}
+			});
+		}
+	} else {
+		fedreg.toggleReportingContent(false);
 	}
 };
 
 fedreg.renderSPReport = function() {
-	fedreg.workingOverlay();
-	fedreg.closeRefinement();
-	$(".revealable").hide();
+	if (Modernizr.svg) {
+		fedreg.workingOverlay();
+		fedreg.closeRefinement();
+		$(".revealable").hide();
 	
-	var dataString = $("#reportrequirements").serialize() + fedreg.includeRobotsInReporting(true);
+		var dataString = $("#reportrequirements").serialize() + fedreg.includeRobotsInReporting(true);
 	
-	if( $(".reporttype option:selected").val() == 'connections') {
-		$.ajax({url: spReportsConnectivityEndpoint, 
-			data: dataString,
-			dataType: 'json',
-			async:true, 
-			success: function(data){
-	    		fedreg.renderSPConnectivity(data, false);
-			},
-		    error: function (xhr, ajaxOptions, thrownError) {
-				nimble.growl('error', xhr.responseText);
-		    }
-		});
-	}
+		if( $(".reporttype option:selected").val() == 'connections') {
+			$.ajax({url: spReportsConnectivityEndpoint, 
+				data: dataString,
+				dataType: 'json',
+				async:true, 
+				success: function(data){
+					fedreg.renderSPConnectivity(data, false);
+				},
+				error: function (xhr, ajaxOptions, thrownError) {
+					nimble.growl('error', xhr.responseText);
+				}
+			});
+		}
 	
-	if( $(".reporttype option:selected").val() == 'sessions') {
-		$.ajax({url: spReportsSessionsEndpoint, 
-			data: dataString,
-			dataType: 'json',
-			async:true, 
-			success: function(data){
-	    		fedreg.renderSPSessions(data, false);
-			},
-		    error: function (xhr, ajaxOptions, thrownError) {
-				nimble.growl('error', xhr.responseText);
-		    }
-		});
-	}
+		if( $(".reporttype option:selected").val() == 'sessions') {
+			$.ajax({url: spReportsSessionsEndpoint, 
+				data: dataString,
+				dataType: 'json',
+				async:true, 
+				success: function(data){
+					fedreg.renderSPSessions(data, false);
+				},
+				error: function (xhr, ajaxOptions, thrownError) {
+					nimble.growl('error', xhr.responseText);
+				}
+			});
+		}
 	
-	if( $(".reporttype option:selected").val() == 'totals') {
-		$.ajax({url: spReportsTotalsEndpoint, 
-			data: dataString,
-			dataType: 'json',
-			async:true, 
-			success: function(data){
-	    		fedreg.renderSPTotals(data, false);
-			},
-		    error: function (xhr, ajaxOptions, thrownError) {
-				nimble.growl('error', xhr.responseText);
-		    }
-		});
-	}
+		if( $(".reporttype option:selected").val() == 'totals') {
+			$.ajax({url: spReportsTotalsEndpoint, 
+				data: dataString,
+				dataType: 'json',
+				async:true, 
+				success: function(data){
+					fedreg.renderSPTotals(data, false);
+				},
+				error: function (xhr, ajaxOptions, thrownError) {
+					nimble.growl('error', xhr.responseText);
+				}
+			});
+		}
 	
-	if( $(".reporttype option:selected").val() == 'logins') {
-		$.ajax({url: spReportsLoginsEndpoint, 
-			data: dataString,
-			dataType: 'json',
-			async:true, 
-			success: function(data){
-	    		fedreg.renderSPLogins(data);
-			},
-		    error: function (xhr, ajaxOptions, thrownError) {
-				nimble.growl('error', xhr.responseText);
-		    }
-		});
+		if( $(".reporttype option:selected").val() == 'logins') {
+			$.ajax({url: spReportsLoginsEndpoint, 
+				data: dataString,
+				dataType: 'json',
+				async:true, 
+				success: function(data){
+					fedreg.renderSPLogins(data);
+				},
+				error: function (xhr, ajaxOptions, thrownError) {
+					nimble.growl('error', xhr.responseText);
+				}
+			});
+		}
+	} else {
+		fedreg.toggleReportingContent(false);
 	}
 };
 
 fedreg.refineSPReport = function(refinement) {
-	fedreg.workingOverlay();
-	fedreg.closeRefinement();
+	if (Modernizr.svg) {
+		fedreg.workingOverlay();
+		fedreg.closeRefinement();
 	
-	var dataString = $("#reportrequirements").serialize() + "&" + refinement.serialize() + fedreg.includeRobotsInReporting(true);
+		var dataString = $("#reportrequirements").serialize() + "&" + refinement.serialize() + fedreg.includeRobotsInReporting(true);
 	
-	if( $(".reporttype option:selected").val() == 'connections') {
-		$.ajax({url: spReportsConnectivityEndpoint, 
-			data: dataString,
-			dataType: 'json',
-			async:true, 
-			success: function(data){
-	    		fedreg.renderSPConnectivity(data, true);
-			},
-		    error: function (xhr, ajaxOptions, thrownError) {
-				nimble.growl('error', xhr.responseText);
-		    }
-		});
-	}
+		if( $(".reporttype option:selected").val() == 'connections') {
+			$.ajax({url: spReportsConnectivityEndpoint, 
+				data: dataString,
+				dataType: 'json',
+				async:true, 
+				success: function(data){
+					fedreg.renderSPConnectivity(data, true);
+				},
+				error: function (xhr, ajaxOptions, thrownError) {
+					nimble.growl('error', xhr.responseText);
+				}
+			});
+		}
 	
-	if( $(".reporttype option:selected").val() == 'totals') {
-		$.ajax({url: spReportsTotalsEndpoint, 
-			data: dataString,
-			dataType: 'json',
-			async:true, 
-			success: function(data){
-	    		fedreg.renderSPTotals(data, true);
-			},
-		    error: function (xhr, ajaxOptions, thrownError) {
-				nimble.growl('error', xhr.responseText);
-		    }
-		});
+		if( $(".reporttype option:selected").val() == 'totals') {
+			$.ajax({url: spReportsTotalsEndpoint, 
+				data: dataString,
+				dataType: 'json',
+				async:true, 
+				success: function(data){
+					fedreg.renderSPTotals(data, true);
+				},
+				error: function (xhr, ajaxOptions, thrownError) {
+					nimble.growl('error', xhr.responseText);
+				}
+			});
+		}
+	} else {
+		fedreg.toggleReportingContent(false);
 	}
 };
 
 fedreg.renderFederationReport = function(type) {
-	fedreg.workingOverlay();
-	fedreg.closeRefinement();
-	$(".revealable").hide();
+	if (Modernizr.svg) {
+		fedreg.workingOverlay();
+		fedreg.closeRefinement();
+		$(".revealable").hide();
 	
-	var dataString = $("#reportrequirements").serialize() + fedreg.includeRobotsInReporting(true);
+		var dataString = $("#reportrequirements").serialize() + fedreg.includeRobotsInReporting(true);
 	
-	if( type == 'logins') {
-		$.ajax({url: federationReportsLoginsEndpoint, 
-			data: dataString,
-			dataType: 'json',
-			async:true, 
-			success: function(data){
-	    		fedreg.renderFederationLogins(data);
-			},
-		    error: function (xhr, ajaxOptions, thrownError) {
-				nimble.growl('error', xhr.responseText);
-		    }
-		});
-	}
+		if( type == 'logins') {
+			$.ajax({url: federationReportsLoginsEndpoint, 
+				data: dataString,
+				dataType: 'json',
+				async:true, 
+				success: function(data){
+					fedreg.renderFederationLogins(data);
+				},
+				error: function (xhr, ajaxOptions, thrownError) {
+					nimble.growl('error', xhr.responseText);
+				}
+			});
+		}
 	
-	if( type == 'sessions') {
-		$.ajax({url: federationReportsSessionsEndpoint, 
-			data: dataString,
-			dataType: 'json',
-			async:true, 
-			success: function(data){
-	    		fedreg.renderFederationSessions(data);
-			},
-		    error: function (xhr, ajaxOptions, thrownError) {
-				nimble.growl('error', xhr.responseText);
-		    }
-		});
-	}
+		if( type == 'sessions') {
+			$.ajax({url: federationReportsSessionsEndpoint, 
+				data: dataString,
+				dataType: 'json',
+				async:true, 
+				success: function(data){
+					fedreg.renderFederationSessions(data);
+				},
+				error: function (xhr, ajaxOptions, thrownError) {
+					nimble.growl('error', xhr.responseText);
+				}
+			});
+		}
 	
-	if( type == 'sessiontotals') {
-		$.ajax({url: federationReportsSessionTotalsEndpoint, 
-			data: dataString,
-			dataType: 'json',
-			async:true, 
-			success: function(data){
-	    		fedreg.renderFederationServices(data);
-			},
-		    error: function (xhr, ajaxOptions, thrownError) {
-				nimble.growl('error', xhr.responseText);
-		    }
-		});
+		if( type == 'sessiontotals') {
+			$.ajax({url: federationReportsSessionTotalsEndpoint, 
+				data: dataString,
+				dataType: 'json',
+				async:true, 
+				success: function(data){
+					fedreg.renderFederationServices(data);
+				},
+				error: function (xhr, ajaxOptions, thrownError) {
+					nimble.growl('error', xhr.responseText);
+				}
+			});
+		}
+	} else {
+		fedreg.toggleReportingContent(false);
 	}
 };
 
 fedreg.refineFederationReport = function(type, refinement) {
-	fedreg.workingOverlay();
-	fedreg.closeRefinement();
+	if (Modernizr.svg) {
+		fedreg.workingOverlay();
+		fedreg.closeRefinement();
 	
-	var dataString = $("#reportrequirements").serialize() + "&" + refinement.serialize() + fedreg.includeRobotsInReporting(true);
+		var dataString = $("#reportrequirements").serialize() + "&" + refinement.serialize() + fedreg.includeRobotsInReporting(true);
 	
-	if( type == 'sessiontotals') {
-		$.ajax({url: federationReportsSessionTotalsEndpoint, 
-			data: dataString,
-			dataType: 'json',
-			async:true, 
-			success: function(data){
-	    		fedreg.renderFederationServices(data);
-			},
-		    error: function (xhr, ajaxOptions, thrownError) {
-				nimble.growl('error', xhr.responseText);
-		    }
-		});
+		if( type == 'sessiontotals') {
+			$.ajax({url: federationReportsSessionTotalsEndpoint, 
+				data: dataString,
+				dataType: 'json',
+				async:true, 
+				success: function(data){
+					fedreg.renderFederationServices(data);
+				},
+				error: function (xhr, ajaxOptions, thrownError) {
+					nimble.growl('error', xhr.responseText);
+				}
+			});
+		}
+	} else {
+		fedreg.toggleReportingContent(false);
 	}
 };
 
 fedreg.renderFederationSummaryReport = function(type) {
-	fedreg.workingOverlay();
+	if (Modernizr.svg) {
+		fedreg.toggleReportingContent(true);
+		fedreg.workingOverlay();
 	
-	var dataString = fedreg.includeRobotsInReporting(false);
+		var dataString = fedreg.includeRobotsInReporting(false);
 	
-	$.ajax({url: federationReportsSummaryEndpoint, 
-		data: dataString,
-		dataType: 'json',
-		async:true, 
-		success: function(data){
-    		fedreg.renderCreationSummary(data);
-		},
-	    error: function (xhr, ajaxOptions, thrownError) {
-			nimble.growl('error', xhr.responseText);
-	    }
-	});
+		$.ajax({url: federationReportsSummaryEndpoint, 
+			data: dataString,
+			dataType: 'json',
+			async:true, 
+			success: function(data){
+				fedreg.renderCreationSummary(data);
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+				nimble.growl('error', xhr.responseText);
+			}
+		});
+	} else {
+		fedreg.toggleReportingContent(false);
+	}
 };
+
+fedreg.toggleReportingContent = function(supported) {
+	if(supported == true) {
+		$('.reportingunsupported').hide();
+		$('.reportingsupported').show();
+	} else {
+		$('.reportingsupported').hide();
+		$('.reportingunsupported').show();
+	}
+};
+
 
 fedreg.includeRobotsInReporting = function(append) {
 	var robot = fedreg.getParameterByName('robots');

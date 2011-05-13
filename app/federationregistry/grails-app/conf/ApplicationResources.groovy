@@ -53,8 +53,11 @@ modules = {
 		resource url: [dir:'/js/codemirror/js', file:'codemirror.groovy.inframe.min.js']
 		resource url: [dir:'/js/codemirror/css', file:'groovycolors.css']
 	}
+	'modernizr' {
+		resource url:'js/modernizr.js'
+	}
 	'app' {
-		dependsOn 'nimble-ui'
+		dependsOn 'nimble-ui, modernizr'
 		resource url: 'css/application.css', disposition:'head', attrs:[rel:'stylesheet/less']
 		resource url:'js/application.js'
 		resource url:'js/less.min.js', disposition:'head'		// 1.0.35 

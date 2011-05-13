@@ -297,6 +297,10 @@ ul.clean li {
 	background-color: #f2f2f2;
 }
 
+.reportingunsupported {
+	text-align: left;
+}
+
 body {
 	.zero;
 	background-color: @bgColor;
