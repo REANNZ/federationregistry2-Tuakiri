@@ -65,6 +65,7 @@ environments {
 		
     }
     development {
+    	grails.resources.debug = true
 		grails.gsp.enable.reload = true
 		testDataConfig {
         	enabled = false
