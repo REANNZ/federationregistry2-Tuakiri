@@ -79,9 +79,7 @@ fedreg.getParameterByName = function(name) {
     var match = RegExp('[?&]' + name + '=([^&]*)')
                     .exec(window.location.search);
  
-    return match ?
-        decodeURIComponent(match[1].replace(/\+/g, ' '))
-        : null;
+    return match ? decodeURIComponent(match[1].replace(/\+/g, ' ')) : null;
 }
 
 // Descriptor Metadata
@@ -1020,7 +1018,7 @@ fedreg.validateCertificate = function() {
 	if(!newCertificateValid) {
 		$('#newcertificatedata').addClass('error');
 	}
-}
+};
 
 fedreg.configureIdentityProviderSAML = function(host) {
 	$(".samloptional").val("");
@@ -1034,7 +1032,7 @@ fedreg.configureIdentityProviderSAML = function(host) {
 		$('#idp\\.artifact\\.index').val( knownIDPImpl[currentImpl].artifact.index );
 		$('#aa\\.attributeservice\\.uri').val( knownIDPImpl[currentImpl].attributeservice.uri.replace('$host', host) );
 	}
-}
+};
 
 fedreg.configureServiceProviderSAML = function(host) {
 	$(".samloptional").val("");
@@ -1090,14 +1088,14 @@ fedreg.openRefinement = function() {
 	$(".reportrefinementinput").slideDown();
 	
 	return false;
-}
+};
 
 fedreg.closeRefinement = function() {
 	$(".reportrefinementinput").slideUp();
 	$(".reportrefinementopen").show();
 	
 	return false;
-}
+};
 
 fedreg.renderIdPReport = function() {
 	fedreg.workingOverlay();
@@ -1161,7 +1159,7 @@ fedreg.renderIdPReport = function() {
 		    }
 		});
 	}
-}
+};
 
 fedreg.refineIdPReport = function(refinement) {
 	fedreg.workingOverlay();
@@ -1196,7 +1194,7 @@ fedreg.refineIdPReport = function(refinement) {
 		    }
 		});
 	}
-}
+};
 
 fedreg.renderSPReport = function() {
 	fedreg.workingOverlay();
@@ -1260,7 +1258,7 @@ fedreg.renderSPReport = function() {
 		    }
 		});
 	}
-}
+};
 
 fedreg.refineSPReport = function(refinement) {
 	fedreg.workingOverlay();
@@ -1295,7 +1293,7 @@ fedreg.refineSPReport = function(refinement) {
 		    }
 		});
 	}
-}
+};
 
 fedreg.renderFederationReport = function(type) {
 	fedreg.workingOverlay();
@@ -1345,7 +1343,7 @@ fedreg.renderFederationReport = function(type) {
 		    }
 		});
 	}
-}
+};
 
 fedreg.refineFederationReport = function(type, refinement) {
 	fedreg.workingOverlay();
@@ -1366,12 +1364,12 @@ fedreg.refineFederationReport = function(type, refinement) {
 		    }
 		});
 	}
-}
+};
 
 fedreg.renderFederationSummaryReport = function(type) {
 	fedreg.workingOverlay();
 	
-	var dataString = fedreg.includeRobotsInReporting(false)
+	var dataString = fedreg.includeRobotsInReporting(false);
 	
 	$.ajax({url: federationReportsSummaryEndpoint, 
 		data: dataString,
@@ -1384,9 +1382,9 @@ fedreg.renderFederationSummaryReport = function(type) {
 			nimble.growl('error', xhr.responseText);
 	    }
 	});
-}
+};
 
 fedreg.includeRobotsInReporting = function(append) {
 	var robot = fedreg.getParameterByName('robots');
-	return robot == 'true' ? (append ? "&robot=true" : "robot=true") : "" 
-}
+	return robot == 'true' ? (append ? "&robot=true" : "robot=true") : "" ;
+};
