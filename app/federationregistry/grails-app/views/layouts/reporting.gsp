@@ -46,6 +46,9 @@
 					<li class="${controllerName == 'federationReports' && actionName == 'summary' ? 'active':''}">
 						<g:link controller="federationReports" action="summary"><g:message code="fedreg.navigation.reporting.summary" /></g:link>
 				 	</li>
+					<li class="${controllerName == 'federationReports' && actionName == 'registrations' ? 'active':''}">
+						<g:link controller="federationReports" action="registrations"><g:message code="fedreg.navigation.reporting.registrations" /></g:link>
+				 	</li>
 				 	<li class="${controllerName == 'federationReports' && actionName == 'sessions' ? 'active':''}">
 						<g:link controller="federationReports" action="sessions"><g:message code="fedreg.navigation.reporting.sessions" /></g:link>
 				 	</li>

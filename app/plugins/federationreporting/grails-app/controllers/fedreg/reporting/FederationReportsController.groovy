@@ -16,6 +16,7 @@ import grails.converters.JSON
 class FederationReportsController {
 
 	def summary = {}
+	def registrations = {}
 	def sessions = {}
 	def sessiontotals = {}
 	def logins = {}
@@ -101,6 +102,88 @@ class FederationReportsController {
 		}
 	}
 	
+	def organizationregistrationsjson = {
+		if(SecurityUtils.subject.isPermitted("federation:reporting")) {
+			def robot = params.robot ? params.robot.toBoolean() : false
+			def year, month, day
+		
+			year = params.int('year')
+			if(!year) {
+				def cal = Calendar.instance
+				year = cal.get(Calendar.YEAR)
+			}
+			month = params.int('month')
+			if(month)
+				day = params.int('day')
+		
+			def count = 0, maxRegistrations = 0
+			def results = [:]
+			def registrationTotals = []
+			def registrations = []
+		
+			results.title = "${g.message(code:'fedreg.view.reporting.federation.registrations.organization.period.title')} ${day ? day + ' /':''} ${month ? month + ' /':''} $year"
+			
+			def query
+			def queryTotal
+			def queryParams = [:]
+			queryParams.year = year
+			if(day) {
+				query = "select dateCreated, displayName, id from fedreg.core.Organization where year(dateCreated) = :year and month(dateCreated) = :month and day(dateCreated) = :day order by dateCreated"
+				queryTotal = "select count(*), hour(dateCreated) from fedreg.core.Organization where year(dateCreated) = :year and month(dateCreated) = :month and day(dateCreated) = :day group by hour(dateCreated)"
+				queryParams.month = month
+				queryParams.day = day
+			} else {
+				if(month) {
+					query = "select dateCreated, displayName, id from fedreg.core.Organization where year(dateCreated) = :year and month(dateCreated) = :month order by dateCreated"
+					queryTotal = "select count(*), day(dateCreated) from fedreg.core.Organization where year(dateCreated) = :year and month(dateCreated) = :month group by day(dateCreated)"
+					queryParams.month = month
+				} else {
+					query = "select dateCreated, displayName, id from fedreg.core.Organization where year(dateCreated) = :year order by dateCreated"
+					queryTotal = "select count(*), month(dateCreated) from fedreg.core.Organization where year(dateCreated) = :year group by month(dateCreated)"
+				}
+			}
+
+			def registrationsCount = Organization.executeQuery(queryTotal, queryParams)
+			def registrationsList = Organization.executeQuery(query, queryParams)
+			if(registrationsCount && registrationsList) {
+				results.populated = true
+				registrationsCount.each { rc ->
+					def total = [:]
+					total.count = rc[0]
+					total.date = rc[1]
+					
+					if(maxRegistrations < total.count)
+						maxRegistrations = total.count
+
+					registrationTotals.add(total)
+				}
+				registrationsList.each { r ->
+					def date = r[0].format("dd/MM/yyyy")
+					
+					def registration = [:]
+					registration.date = date
+					registration.name = r[1]
+					registration.id = r[2]
+					
+					registrations.add(registration)
+				}
+				
+				results.maxregistrations = maxRegistrations
+				results.registrationtotals = registrationTotals
+				results.registrations = registrations
+			} else {
+				results.populated = false
+			}
+		
+			render results as JSON
+		}
+		else {
+			log.warn("Attempt to query session json for federation by $authenticatedUser was denied, incorrect permission set")
+			render message(code: 'fedreg.help.unauthorized')
+			response.setStatus(403)
+		}
+	}
+	
 	def sessionsjson = {
 		if(SecurityUtils.subject.isPermitted("federation:reporting")) {
 			def robot = params.robot ? params.robot.toBoolean() : false
@@ -114,8 +197,6 @@ class FederationReportsController {
 			month = params.int('month')
 			if(month)
 				day = params.int('day')
-				
-			def activeSP = params.activesp as List
 		
 			def count = 0, maxLogins = 0, totalLogins
 			def results = [:]
