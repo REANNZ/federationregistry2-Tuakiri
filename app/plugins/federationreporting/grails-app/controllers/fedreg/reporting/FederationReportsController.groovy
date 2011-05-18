@@ -102,11 +102,32 @@ class FederationReportsController {
 		}
 	}
 	
-	def organizationregistrationsjson = {
+	def registrationsjson = {
 		if(SecurityUtils.subject.isPermitted("federation:reporting")) {
-			def robot = params.robot ? params.robot.toBoolean() : false
-			def year, month, day
-		
+			if(!params.type || !['org', 'idp', 'sp'].contains(params.type)) {
+				log.warn "Registration type was not present"
+				render message(code: 'fedreg.controllers.namevalue.missing')
+				response.setStatus(500)
+				return
+			}
+			
+			def i18n, controller, className
+			switch(params.type) {
+				case 'org': i18n = 'organization'
+							controller = 'organization'
+							className = "fedreg.core.Organization"
+							break
+				case 'idp': i18n = 'identityprovider'
+							controller = 'IDPSSODescriptor'
+							className = "fedreg.core.IDPSSODescriptor"
+							break
+				case 'sp': i18n = 'serviceprovider'
+							controller = 'SPSSODescriptor'
+							className = "fedreg.core.SPSSODescriptor"
+							break
+			}
+			
+			def year, month, day		
 			year = params.int('year')
 			if(!year) {
 				def cal = Calendar.instance
@@ -121,25 +142,26 @@ class FederationReportsController {
 			def registrationTotals = []
 			def registrations = []
 		
-			results.title = "${g.message(code:'fedreg.view.reporting.federation.registrations.organization.period.title')} ${day ? day + ' /':''} ${month ? month + ' /':''} $year"
+			def title = "fedreg.view.reporting.federation.registrations.${i18n}.period.title"
+			results.title = "${g.message(code:"${title}")} ${day ? day + ' /':''} ${month ? month + ' /':''} $year"
 			
 			def query
 			def queryTotal
 			def queryParams = [:]
 			queryParams.year = year
 			if(day) {
-				query = "select dateCreated, displayName, id from fedreg.core.Organization where year(dateCreated) = :year and month(dateCreated) = :month and day(dateCreated) = :day order by dateCreated"
-				queryTotal = "select count(*), hour(dateCreated) from fedreg.core.Organization where year(dateCreated) = :year and month(dateCreated) = :month and day(dateCreated) = :day group by hour(dateCreated)"
+				query = "select dateCreated, displayName, id from ${className} where year(dateCreated) = :year and month(dateCreated) = :month and day(dateCreated) = :day order by dateCreated"
+				queryTotal = "select count(*), hour(dateCreated) from ${className} where year(dateCreated) = :year and month(dateCreated) = :month and day(dateCreated) = :day group by hour(dateCreated)"
 				queryParams.month = month
 				queryParams.day = day
 			} else {
 				if(month) {
-					query = "select dateCreated, displayName, id from fedreg.core.Organization where year(dateCreated) = :year and month(dateCreated) = :month order by dateCreated"
-					queryTotal = "select count(*), day(dateCreated) from fedreg.core.Organization where year(dateCreated) = :year and month(dateCreated) = :month group by day(dateCreated)"
+					query = "select dateCreated, displayName, id from ${className} where year(dateCreated) = :year and month(dateCreated) = :month order by dateCreated"
+					queryTotal = "select count(*), day(dateCreated) from ${className} where year(dateCreated) = :year and month(dateCreated) = :month group by day(dateCreated)"
 					queryParams.month = month
 				} else {
-					query = "select dateCreated, displayName, id from fedreg.core.Organization where year(dateCreated) = :year order by dateCreated"
-					queryTotal = "select count(*), month(dateCreated) from fedreg.core.Organization where year(dateCreated) = :year group by month(dateCreated)"
+					query = "select dateCreated, displayName, id from ${className} where year(dateCreated) = :year order by dateCreated"
+					queryTotal = "select count(*), month(dateCreated) from ${className} where year(dateCreated) = :year group by month(dateCreated)"
 				}
 			}
 
@@ -164,6 +186,7 @@ class FederationReportsController {
 					registration.date = date
 					registration.name = r[1]
 					registration.id = r[2]
+					registration.manage = g.createLink(controller:controller, action:'show', id:registration.id)
 					
 					registrations.add(registration)
 				}
@@ -178,7 +201,7 @@ class FederationReportsController {
 			render results as JSON
 		}
 		else {
-			log.warn("Attempt to query session json for federation by $authenticatedUser was denied, incorrect permission set")
+			log.warn("Attempt to query registration json for federation by $authenticatedUser was denied, incorrect permission set")
 			render message(code: 'fedreg.help.unauthorized')
 			response.setStatus(403)
 		}

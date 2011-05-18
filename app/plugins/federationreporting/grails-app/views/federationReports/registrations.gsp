@@ -4,7 +4,7 @@
 		<title><g:message code="fedreg.view.reporting.federation.registrations.title" /></title>
 		
 		<r:script>
-			var federationReportsRegistrationOrganizationsEndpoint = "${createLink(controller:'federationReports', action:'organizationregistrationsjson')}"
+			var federationReportsRegistrationsEndpoint = "${createLink(controller:'federationReports', action:'registrationsjson')}"
 		</r:script>
 	</head>
 	<body>
@@ -33,24 +33,24 @@
 						<div id="registrationsreport" class="revealable reportdata">
 							<div class="description">
 								<h4 id="registrationstitle"></h4>
-								<p><g:message code="fedreg.view.reporting.federation.registrations.period.description"/></p>
 							</div>
 
 							<div id="registrationsdata">
 							</div>
 							
-							<div>
-							<table>
+							<br><br>
+							<table align="center">
 								<thead>
 									<tr>
 										<th><g:message code="label.datecreated" /></th>
+										<th><g:message code="label.id" /></th>
 										<th><g:message code="label.name" /></th>
+										<th></th>
 									</tr>
 								</thead>
 								<tbody id="registrationslist">
 								</tbody>
 							</table>
-							</div>
 						</div>
 
 						<div id="registrationsreportnodata" class="revealable reportdata">
@@ -67,8 +67,9 @@
 									$('#registrationstitle').html(data.title);
 									
 									$.each( data.registrations, function(index, r) {
-											$("#registrationslist").append("<tr><td>"+r.date+"</td><td>"+r.name+"</td></tr>");
+											$("#registrationslist").append("<tr><td>"+r.date+"</td><td>"+r.id+"</td><td>"+r.name+"</td><td><a href='"+r.manage+"' class='view-button'>${g.message(code:"label.view")}</td></tr>");
 									});
+									fedreg.stylebuttons($("#registrationslist"));
 		
 									var canvas = document.createElement("div");
 									$('#registrationsdata').append(canvas);

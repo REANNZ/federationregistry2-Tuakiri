@@ -1368,18 +1368,26 @@ fedreg.renderFederationReport = function(type) {
 		
 		if( type == 'registrations') {
 			if( $("#registrationstype").val() == 'organization') {
-				$.ajax({url: federationReportsRegistrationOrganizationsEndpoint, 
-					data: dataString,
-					dataType: 'json',
-					async:true, 
-					success: function(data){
-						fedreg.renderFederationRegistrations(data, true);
-					},
-					error: function (xhr, ajaxOptions, thrownError) {
-						nimble.growl('error', xhr.responseText);
-					}
-				});
+				dataString = dataString + "&type=org"
 			}
+			if( $("#registrationstype").val() == 'identityprovider') {
+				dataString = dataString + "&type=idp"
+			}
+			if( $("#registrationstype").val() == 'serviceprovider') {
+				dataString = dataString + "&type=sp"
+			}
+			
+			$.ajax({url: federationReportsRegistrationsEndpoint, 
+				data: dataString,
+				dataType: 'json',
+				async:true, 
+				success: function(data){
+					fedreg.renderFederationRegistrations(data, true);
+				},
+				error: function (xhr, ajaxOptions, thrownError) {
+					nimble.growl('error', xhr.responseText);
+				}
+			});
 		}
 		
 	} else {
