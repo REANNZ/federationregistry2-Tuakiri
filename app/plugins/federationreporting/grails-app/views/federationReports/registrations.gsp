@@ -135,7 +135,7 @@
 										.size(20)
 									  .anchor("right").add(pv.Label)
 									  	.textStyle("white")
-										.text(function(d) "Sessions: " + d.count); 
+										.text(function(d) "Registrations: " + d.count); 
 				
 										vis.add(pv.Bar)
 											.fillStyle("rgba(0,0,0,.001)")
