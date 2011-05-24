@@ -9,8 +9,8 @@ import fedreg.core.*
 
 def commit = false
 
-def id = 491
-def host = "https://shib1.its.rmit.edu.au"
+def id =	// ID from IdP view
+def host =	// e.g https://node.idp.uni.edu.au
 
 // No changes below this point
 
