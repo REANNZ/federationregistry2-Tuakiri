@@ -20,6 +20,7 @@ class FederationReportsController {
 	def sessions = {}
 	def sessiontotals = {}
 	def logins = {}
+	def connectivity = {}
 	
 	def summaryjson = {
 		if(SecurityUtils.subject.isPermitted("federation:reporting")) {
@@ -423,6 +424,155 @@ class FederationReportsController {
 		}
 		else {
 			log.warn("Attempt to query logins json for federation by $authenticatedUser was denied, incorrect permission set")
+			render message(code: 'fedreg.help.unauthorized')
+			response.setStatus(403)
+		}
+	}
+	
+	def connectivityjson = {
+		
+		if(SecurityUtils.subject.isPermitted("federation:reporting")) {
+			def robot = params.robot ? params.robot.toBoolean() : false
+			def year, month, day
+		
+			year = params.int('year')
+			if(!year) {
+				def cal = Calendar.instance
+				year = cal.get(Calendar.YEAR)
+			}
+			month = params.int('month')
+			if(month)
+				day = params.int('day')
+		
+			def activeSP = params.activesp as List
+		
+			def target
+			def results = [:]
+			def services = []
+			def nodes = []
+			def links = []
+			def idpMap = [:]
+			def spMap = [:]
+		
+			results.nodes = nodes
+			results.links = links
+			results.title = "${g.message(code:'fedreg.templates.reports.federation.connectivity.title')} ${day ? day + ' /':''} ${month ? month + ' /':''} $year"
+			results.populated = false
+			results.idpcount = IDPSSODescriptor.count()
+			results.spcount = SPSSODescriptor.count()
+			
+			IDPSSODescriptor.list().sort{it.displayName}.each { idp ->
+
+				def query = new StringBuilder("select count(*) as count from WayfAccessRecord where idpid = :idpid and year(dateCreated) = :year ${robots(robot)}")
+				def queryParams = [:]
+				queryParams.idpid = idp.id
+				queryParams.year = year
+
+				if(month) {
+					query << " and month(dateCreated) = :month"
+					queryParams.month = month
+				}
+				if(day) {
+					query << " and day(dateCreated) = :day"
+					queryParams.day = day
+				}
+				if(activeSP) {
+					query << " and spid in (:activeSP)"
+					queryParams.activeSP = activeSP
+				}
+				query << " ${robots(robot)}"
+		
+				def sessions = WayfAccessRecord.executeQuery(query.toString(), queryParams)
+				if(sessions && sessions[0] > 0) {
+					def val = 0
+					def idpNode = [:]
+					idpNode.nodeName = idp.displayName
+					idpNode.group = 1
+					nodes.add(idpNode)
+					idpMap.put(idp.id.toLong(), nodes.size() - 1)
+				}
+			}
+			
+			SPSSODescriptor.list().sort{it.displayName}.each { sp ->
+				
+				def query = new StringBuilder("select count(*) as count from WayfAccessRecord where spid = :spid and year(dateCreated) = :year ${robots(robot)}")
+				def queryParams = [:]
+				queryParams.spid = sp.id
+				queryParams.year = year
+
+				if(month) {
+					query << " and month(dateCreated) = :month"
+					queryParams.month = month
+				}
+				if(day) {
+					query << " and day(dateCreated) = :day"
+					queryParams.day = day
+				}
+				if(activeSP) {
+					query << " and spid in (:activeSP)"
+					queryParams.activeSP = activeSP
+				}
+				query << " ${robots(robot)}"
+		
+				def sessions = WayfAccessRecord.executeQuery(query.toString(), queryParams)
+				if(sessions && sessions[0] > 0) {
+					def val = 0
+					def spNode = [:]
+					spNode.nodeName = sp.displayName
+					spNode.group = 2
+					nodes.add(spNode)
+					spMap.put(sp.id.toLong(), nodes.size() - 1)
+					
+					def service = [:]
+					service.id = sp.id
+					service.name = sp.displayName
+					services.add(service)
+				}
+			
+			}
+			
+			idpMap.keySet().each { idp ->
+				// We remove any SP with a -1 id as this indicates the SP could not be determined at record creation time
+				def query = new StringBuilder("select count(*), spID from WayfAccessRecord where spID != -1 and idpID = :idpid and year(dateCreated) = :year")
+				def queryParams = [:]
+				queryParams.idpid = idp
+				queryParams.year = year
+		
+				if(month) {
+					query << " and month(dateCreated) = :month"
+					queryParams.month = month
+				}
+				if(day) {
+					query << " and day(dateCreated) = :day"
+					queryParams.day = day
+				}
+				query << " ${robots(robot)} group by spID"
+			
+				def sessions = WayfAccessRecord.executeQuery(query.toString(), queryParams)
+				if(sessions) {
+					results.populated = true
+					sessions.each { s ->
+						def sp = SPSSODescriptor.get(s[1])
+						if(sp) {
+
+							if(activeSP == null || activeSP.contains(sp.id.toString())) {
+								def link = [:]
+								link.source = idpMap.get(idp)
+								def value = ( s[0] / 10 )
+								link.value = value
+								link.target = spMap.get(sp.id)
+
+								links.add(link)
+							}
+						}
+					}
+				}
+				results.services = services.sort{it.get('name').toLowerCase()}
+			}
+			render results as JSON
+		}
+		else {
+			log.warn("Attempt to query connections json for federation by $authenticatedUser was denied, incorrect permission set")
 			render message(code: 'fedreg.help.unauthorized')
 			response.setStatus(403)
 		}

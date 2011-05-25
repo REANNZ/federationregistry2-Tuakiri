@@ -1390,6 +1390,20 @@ fedreg.renderFederationReport = function(type) {
 			});
 		}
 		
+		if( type == 'connectivity') {
+			$.ajax({url: federationConnectivtyEndpoint, 
+				data: dataString,
+				dataType: 'json',
+				async:true, 
+				success: function(data){
+					fedreg.renderFederationConnectivity(data);
+				},
+				error: function (xhr, ajaxOptions, thrownError) {
+					nimble.growl('error', xhr.responseText);
+				}
+			});
+		}
+		
 	} else {
 		fedreg.toggleReportingContent(false);
 	}
