@@ -16,7 +16,7 @@
 <script type="text/javascript+protovis">
 	fedreg.renderIdPLogins = function(data) {
 		$('.reportdata').hide();
-		if(data.populated) {
+
 			$('#loginsdata').empty();
 			$('#loginstitle').html(data.title);
 				
@@ -26,8 +26,8 @@
 			/* Sizing and scales. */
 			var w = 800,
 				h = 400,
-				x = pv.Scale.linear(data.logins, function(d) d.hour).range(0, w),
-				y = pv.Scale.linear(0, data.maxlogins + 5).range(0, h),
+				x = pv.Scale.linear(data.totals, function(d) d.t).range(0, w),
+				y = pv.Scale.linear(0, data.max + 5).range(0, h),
 				i = -1;
 				
 			/* The root panel. */
@@ -35,7 +35,7 @@
 			.canvas(canvas)
 				.width(w)
 				.height(h)
-				.bottom(20)
+				.bottom(60)
 				.left(80)
 				.right(5)
 				.top(5);
@@ -47,22 +47,37 @@
 				.strokeStyle(function(d) d ? "#eee" : "#000")
 			  .anchor("left").add(pv.Label)
 				.text(y.tickFormat);
+				
+			/* Y-axis label */
+			vis.add(pv.Label)
+			    .data([data.yaxis])
+			    .left(-45)
+			    .bottom(h/2)
+			    .textAlign("center")
+				.textAngle(-Math.PI/2);
 
 			/* X-axis and ticks. */
 			vis.add(pv.Rule)
-				.data(x.ticks(data.logins.length))
+				.data(x.ticks(data.totals.length))
 				.visible(function(d) d)
 				.left(x)
 				.bottom(-5)
 				.height(5)
 			  .anchor("bottom").add(pv.Label)
 				.text(function(d) d + ":00");
+				
+			/* X-axis label */
+			vis.add(pv.Label)
+			    .data([data.xaxis])
+			    .left(w/2)
+			    .bottom(-45)
+			    .textAlign("center");
 
 			/* The area with top line. */
 			var area = vis.add(pv.Area)
-				.data(data.logins)
-				.left(function(d) x(d.hour))
-				.height(function(d) y(d.count))
+				.data(data.totals)
+				.left(function(d) x(d.t))
+				.height(function(d) y(d.c))
 				.bottom(1)
 				.fillStyle("rgb(152,223,138)")
 
@@ -72,7 +87,7 @@
 
 			 var dot = line.add(pv.Dot)
 				.visible(function() i >= 0)
-				.data(function() [data.logins[i]])
+				.data(function() [data.totals[i]])
 				.fillStyle(function() line.strokeStyle())
 				.strokeStyle("#000")
 				.size(0)
@@ -85,7 +100,7 @@
 				.size(20)
 			  .anchor("right").add(pv.Label)
 			  	.textStyle("#111")
-				.text(function(d) "Sessions: " + d.count); 
+				.text(function(d) "Sessions: " + d.c); 
 
 				vis.add(pv.Bar)
 					.fillStyle("rgba(0,0,0,.001)")
@@ -95,16 +110,12 @@
 					  })
 					.event("mousemove", function() {
 						var mx = x.invert(vis.mouse().x);
-						i = pv.search(data.logins.map(function(d) d.hour), mx);
+						i = pv.search(data.totals.map(function(d) d.t), mx);
 						i = i < 0 ? (-i - 2) : i;
 						return vis;
 					  });
 
 			vis.render();
 			$('#loginsreport').fadeIn();
-		}
-		else {
-			$('#loginsreportnodata').fadeIn();
-		}
 	};
 </script>

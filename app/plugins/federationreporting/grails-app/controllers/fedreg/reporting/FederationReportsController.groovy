@@ -34,13 +34,13 @@ class FederationReportsController {
 			if(minYear && maxYear) {
 				def sessionValues=[], orgValues =[], idpValues = [], spValues = [], yearLabels = []
 				def sessionMax = 0, orgMax = 0, idpMax = 0, spMax = 0
-				(minYear..maxYear).each { year ->				
+				(minYear..maxYear).each { year ->
 					yearLabels.add(year)
 					
 					// Sessions per year
 					def sessionValue = [:]	
 					sessionValue.x = year
-					def sessionQuery = "select count(*) from fedreg.reporting.WayfAccessRecord where year(dateCreated) = ? ${robots(robot)}"
+					def sessionQuery = "select count(*) from fedreg.reporting.WayfAccessRecord where year(dateCreated) = ? ${ReportingHelpers.robots(robot)}"
 					def sessionCount = WayfAccessRecord.executeQuery(sessionQuery, [year])[0]
 					if(sessionCount) {
 						sessionValue.y = sessionCount
@@ -138,67 +138,49 @@ class FederationReportsController {
 			if(month)
 				day = params.int('day')
 		
-			def count = 0, maxRegistrations = 0
-			def results = [:]
-			def registrationTotals = []
-			def registrations = []
-		
+			def results = [:]		
 			def title = "fedreg.view.reporting.federation.registrations.${i18n}.period.title"
 			results.title = "${g.message(code:"${title}")} ${day ? day + ' /':''} ${month ? month + ' /':''} $year"
+			results.yaxis = g.message(code:'label.registrations')
 			
-			def query
-			def queryTotal
-			def queryParams = [:]
+			def query, queryTotal, queryParams = [:]
 			queryParams.year = year
 			if(day) {
-				query = "select dateCreated, displayName, id from ${className} where year(dateCreated) = :year and month(dateCreated) = :month and day(dateCreated) = :day order by dateCreated"
-				queryTotal = "select count(*), hour(dateCreated) from ${className} where year(dateCreated) = :year and month(dateCreated) = :month and day(dateCreated) = :day group by hour(dateCreated)"
+				query = "select new map(dateCreated as date, displayName as name, id as id) from ${className} where year(dateCreated) = :year and month(dateCreated) = :month and day(dateCreated) = :day order by dateCreated"
+				queryTotal = "select new map(count(*) as c, hour(dateCreated) as t) from ${className} where year(dateCreated) = :year and month(dateCreated) = :month and day(dateCreated) = :day group by hour(dateCreated)"
 				queryParams.month = month
 				queryParams.day = day
+				results.xaxis = g.message(code:'label.hour')
 			} else {
 				if(month) {
-					query = "select dateCreated, displayName, id from ${className} where year(dateCreated) = :year and month(dateCreated) = :month order by dateCreated"
-					queryTotal = "select count(*), day(dateCreated) from ${className} where year(dateCreated) = :year and month(dateCreated) = :month group by day(dateCreated)"
+					query = "select new map(dateCreated as date, displayName as name, id as id) from ${className} where year(dateCreated) = :year and month(dateCreated) = :month order by dateCreated"
+					queryTotal = "select new map(count(*) as c, day(dateCreated) as t) from ${className} where year(dateCreated) = :year and month(dateCreated) = :month group by day(dateCreated)"
 					queryParams.month = month
+					results.xaxis = g.message(code:'label.day')
 				} else {
-					query = "select dateCreated, displayName, id from ${className} where year(dateCreated) = :year order by dateCreated"
-					queryTotal = "select count(*), month(dateCreated) from ${className} where year(dateCreated) = :year group by month(dateCreated)"
+					query = "select new map(dateCreated as date, displayName as name, id as id) from ${className} where year(dateCreated) = :year order by dateCreated"
+					queryTotal = "select new map(count(*) as c, month(dateCreated) as t) from ${className} where year(dateCreated) = :year group by month(dateCreated)"
+					results.xaxis = g.message(code:'label.month')
 				}
 			}
 
-			def registrationsCount = Organization.executeQuery(queryTotal, queryParams)
-			def registrationsList = Organization.executeQuery(query, queryParams)
-			if(registrationsCount && registrationsList) {
-				results.populated = true
-				registrationsCount.each { rc ->
-					def total = [:]
-					total.count = rc[0]
-					total.date = rc[1]
-					
-					if(maxRegistrations < total.count)
-						maxRegistrations = total.count
-
-					registrationTotals.add(total)
-				}
-				registrationsList.each { r ->
-					def date = r[0].format("dd/MM/yyyy")
-					
-					def registration = [:]
-					registration.date = date
-					registration.name = r[1]
-					registration.id = r[2]
-					registration.manage = g.createLink(controller:controller, action:'show', id:registration.id)
-					
-					registrations.add(registration)
-				}
+			
+			def registrationCounts = Organization.executeQuery(queryTotal, queryParams)
+			def (registrationTotals, max) = ReportingHelpers.populateTotals(year, month, day, registrationCounts)
+			results.max = max
+			results.totals = registrationTotals
+			
+			results.registrations = []
+			def registrations = Organization.executeQuery(query, queryParams)
+			registrations.each { r ->
+				def registration = [:]
+				registration.date = r.date.format("dd/MM/yyyy HH:mm")
+				registration.name = r.name
+				registration.id = r.id
+				registration.manage = g.createLink(controller:controller, action:'show', id:registration.id)
 				
-				results.maxregistrations = maxRegistrations
-				results.registrationtotals = registrationTotals
-				results.registrations = registrations
-			} else {
-				results.populated = false
+				results.registrations.add(registration)
 			}
-		
 			render results as JSON
 		}
 		else {
@@ -222,47 +204,33 @@ class FederationReportsController {
 			if(month)
 				day = params.int('day')
 		
-			def count = 0, maxLogins = 0, totalLogins
 			def results = [:]
-			def sessions = []
-		
-			results.sessions = sessions
 			results.title = "${g.message(code:'fedreg.view.reporting.federation.sessions.period.title')} ${day ? day + ' /':''} ${month ? month + ' /':''} $year"
+			results.yaxis = g.message(code:'label.sessions')
 			
 			def query
 			def queryParams = [:]
 			queryParams.year = year
 			if(day) {
-				query = "select count(*), hour(dateCreated) from WayfAccessRecord where year(dateCreated) = :year and month(dateCreated) = :month and day(dateCreated) = :day ${robots(robot)} group by hour(dateCreated)"
+				query = "select new map(count(*) as c, hour(dateCreated) as t) from WayfAccessRecord where year(dateCreated) = :year and month(dateCreated) = :month and day(dateCreated) = :day ${ReportingHelpers.robots(robot)} group by hour(dateCreated)"
 				queryParams.month = month
 				queryParams.day = day
+				results.xaxis = g.message(code:'label.hour')
 			} else {
 				if(month) {
-					query = "select count(*), day(dateCreated) from WayfAccessRecord where year(dateCreated) = :year and month(dateCreated) = :month ${robots(robot)} group by day(dateCreated)"
+					query = "select new map(count(*) as c, day(dateCreated) as t) from WayfAccessRecord where year(dateCreated) = :year and month(dateCreated) = :month ${ReportingHelpers.robots(robot)} group by day(dateCreated)"
 					queryParams.month = month
+					results.xaxis = g.message(code:'label.day')
 				} else {
-					query = "select count(*), month(dateCreated) from WayfAccessRecord where year(dateCreated) = :year ${robots(robot)} group by month(dateCreated)"					
+					query = "select new map(count(*) as c, month(dateCreated) as t) from WayfAccessRecord where year(dateCreated) = :year ${ReportingHelpers.robots(robot)} group by month(dateCreated)"
+					results.xaxis = g.message(code:'label.month')
 				}
 			}
 
-			def sessionCount = WayfAccessRecord.executeQuery(query, queryParams)
-			if(sessionCount) {
-				sessionCount.each { s ->
-					def session = [:]
-					session.count = s[0]
-				
-					if(maxLogins < session.count)
-						maxLogins = session.count
-				
-					session.date = s[1]
-				
-					sessions.add(session)
-				}
-				results.populated = true
-				results.maxlogins = maxLogins
-			} else {
-				results.populated = false
-			}
+			def sessionCounts = WayfAccessRecord.executeQuery(query, queryParams)
+			def (sessionTotals, max) = ReportingHelpers.populateTotals(year, month, day, sessionCounts)
+			results.max = max
+			results.totals = sessionTotals
 		
 			render results as JSON
 		}
@@ -315,7 +283,7 @@ class FederationReportsController {
 				queryParams.day = day
 			}
 		
-			query << " ${robots(robot)} group by spID order by count(spID) desc"
+			query << " ${ReportingHelpers.robots(robot)} group by spID order by count(spID) desc"
 		
 			def sessions = WayfAccessRecord.executeQuery(query.toString(), queryParams)
 			if(sessions) {
@@ -369,7 +337,7 @@ class FederationReportsController {
 	def loginsjson = {
 		if(SecurityUtils.subject.isPermitted("federation:reporting")) {
 			def robot = params.robot ? params.robot.toBoolean() : false
-			def year, month, day, min, max
+			def year, month, day
 			year = params.int('year')
 			if(!year) {
 				def cal = Calendar.instance
@@ -379,14 +347,13 @@ class FederationReportsController {
 			if(month)
 				day = params.int('day')
 
-			def maxLogins = 0;
 			def results = [:]
-			def logins = []
-			results.logins = logins
+			results.xaxis = g.message(code:'label.hour')
+			results.yaxis = g.message(code:'label.sessions')
 
 			results.title = "${g.message(code:'fedreg.views.reporting.federation.logins.report.title')} ${day ? day + ' /':''} ${month ? month + ' /':''} $year"
 	
-			def query = new StringBuilder("select count(*) as count, hour(date_created) as hour from WayfAccessRecord where year(dateCreated) = :year")
+			def query = new StringBuilder("select new map(count(*) as c, hour(date_created) as t) from WayfAccessRecord where year(dateCreated) = :year")
 			def queryParams = [:]
 			queryParams.year = year
 
@@ -399,26 +366,12 @@ class FederationReportsController {
 				queryParams.day = day
 			}
 	
-			query << " ${robots(robot)} group by hour(date_created)"
+			query << " ${ReportingHelpers.robots(robot)} group by hour(date_created)"
 	
-			def totalLogins = WayfAccessRecord.executeQuery(query.toString(), queryParams)
-			if(totalLogins) {
-				results.populated = true
-
-				totalLogins.each {
-					def login = [:]
-					login.count = it[0]
-					login.hour = it[1]
-				
-					if(maxLogins < login.count)
-						maxLogins = login.count
-				
-					logins.add(login)
-				}
-				results.maxlogins = maxLogins
-			} else { 
-				results.populated = false 
-			}
+			def loginCounts = WayfAccessRecord.executeQuery(query.toString(), queryParams)
+			def (loginTotals, max) = ReportingHelpers.populateTotals(0..23, loginCounts)
+			results.max = max
+			results.totals = loginTotals
 			
 			render results as JSON
 		}
@@ -463,7 +416,7 @@ class FederationReportsController {
 			
 			IDPSSODescriptor.list().sort{it.displayName}.each { idp ->
 
-				def query = new StringBuilder("select count(*) as count from WayfAccessRecord where idpid = :idpid and year(dateCreated) = :year ${robots(robot)}")
+				def query = new StringBuilder("select count(*) as count from WayfAccessRecord where idpid = :idpid and year(dateCreated) = :year ${ReportingHelpers.robots(robot)}")
 				def queryParams = [:]
 				queryParams.idpid = idp.id
 				queryParams.year = year
@@ -480,7 +433,7 @@ class FederationReportsController {
 					query << " and spid in (:activeSP)"
 					queryParams.activeSP = activeSP
 				}
-				query << " ${robots(robot)}"
+				query << " ${ReportingHelpers.robots(robot)}"
 		
 				def sessions = WayfAccessRecord.executeQuery(query.toString(), queryParams)
 				if(sessions && sessions[0] > 0) {
@@ -495,7 +448,7 @@ class FederationReportsController {
 			
 			SPSSODescriptor.list().sort{it.displayName}.each { sp ->
 				
-				def query = new StringBuilder("select count(*) as count from WayfAccessRecord where spid = :spid and year(dateCreated) = :year ${robots(robot)}")
+				def query = new StringBuilder("select count(*) as count from WayfAccessRecord where spid = :spid and year(dateCreated) = :year ${ReportingHelpers.robots(robot)}")
 				def queryParams = [:]
 				queryParams.spid = sp.id
 				queryParams.year = year
@@ -512,7 +465,7 @@ class FederationReportsController {
 					query << " and spid in (:activeSP)"
 					queryParams.activeSP = activeSP
 				}
-				query << " ${robots(robot)}"
+				query << " ${ReportingHelpers.robots(robot)}"
 		
 				def sessions = WayfAccessRecord.executeQuery(query.toString(), queryParams)
 				if(sessions && sessions[0] > 0) {
@@ -546,7 +499,7 @@ class FederationReportsController {
 					query << " and day(dateCreated) = :day"
 					queryParams.day = day
 				}
-				query << " ${robots(robot)} group by spID"
+				query << " ${ReportingHelpers.robots(robot)} group by spID"
 			
 				def sessions = WayfAccessRecord.executeQuery(query.toString(), queryParams)
 				if(sessions) {
@@ -577,8 +530,5 @@ class FederationReportsController {
 			response.setStatus(403)
 		}
 	}
-	
-	def robots(def robot) {
-		robot ? '':'and robot = false'
-	}
+
 }

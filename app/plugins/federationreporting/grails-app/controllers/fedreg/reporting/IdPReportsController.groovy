@@ -37,7 +37,7 @@ class IdPReportsController {
 			
 		if(SecurityUtils.subject.isPermitted("descriptor:${idp.id}:reporting") || SecurityUtils.subject.isPermitted("federation:reporting")) {
 			def robot = params.robot ? params.robot.toBoolean() : false
-			def year, month, day, min, max
+			def year, month, day
 			year = params.int('year')
 			if(!year) {
 				def cal = Calendar.instance
@@ -47,14 +47,12 @@ class IdPReportsController {
 			if(month)
 				day = params.int('day')
 
-			def maxLogins = 0
 			def results = [:]
-			def logins = []
-			results.logins = logins
-
 			results.title = "${g.message(code:'fedreg.templates.reports.identityprovider.logins.title', args:[idp.displayName])} ${day ? day + ' /':''} ${month ? month + ' /':''} $year"
-		
-			def query = new StringBuilder("select count(*) as count, hour(date_created) as hour from WayfAccessRecord where idpid = :idpid and year(dateCreated) = :year")
+			results.xaxis = g.message(code:'label.hour')
+			results.yaxis = g.message(code:'label.sessions')
+			
+			def query = new StringBuilder("select new map(count(*) as c, hour(date_created) as t) from WayfAccessRecord where idpid = :idpid and year(dateCreated) = :year")
 			def queryParams = [:]
 			queryParams.idpid = idp.id
 			queryParams.year = year
@@ -69,22 +67,11 @@ class IdPReportsController {
 			}
 		
 			query << " ${robots(robot)} group by hour(date_created)"
-		
-			def totalLogins = WayfAccessRecord.executeQuery(query.toString(), queryParams)
-			if(totalLogins) {
-				results.populated = true
-				totalLogins.each {
-					def login = [:]
-					login.count = it[0]
-					login.hour = it[1]
-				
-					if(maxLogins < login.count)
-						maxLogins = login.count
-				
-					logins.add(login)
-				}
-				results.maxlogins = maxLogins
-			} else { results.populated = false }
+			
+			def loginCounts = WayfAccessRecord.executeQuery(query.toString(), queryParams)
+			def (loginTotals, max) = ReportingHelpers.populateTotals(0..23, loginCounts)
+			results.max = max
+			results.totals = loginTotals
 		
 			render results as JSON
 		}
@@ -123,11 +110,8 @@ class IdPReportsController {
 				day = params.int('day')
 				
 			def activeSP = params.activesp as List
-			def count = 0, maxLogins = 0, totalLogins
+
 			def results = [:]
-			def sessions = []
-		
-			results.sessions = sessions
 			results.title = "${g.message(code:'fedreg.templates.reports.identityprovider.sessions.title', args:[idp.displayName])} ${day ? day + ' /':''} ${month ? month + ' /':''} $year"
 			
 			def query
@@ -135,18 +119,18 @@ class IdPReportsController {
 			queryParams.idpID = idp.id
 			queryParams.year = year
 			if(day) {
-				query = "select count(*), hour(dateCreated) from WayfAccessRecord where idpID = :idpID and year(dateCreated) = :year and month(dateCreated) = :month and day(dateCreated) = :day ${robots(robot)} group by hour(dateCreated)"
+				query = "select new map(count(*) as c, hour(dateCreated) as t) from WayfAccessRecord where idpID = :idpID and year(dateCreated) = :year and month(dateCreated) = :month and day(dateCreated) = :day ${robots(robot)} group by hour(dateCreated)"
 				queryParams.month = month
 				queryParams.day = day
 			} else {
 				if(month) {
-					query = "select count(*), day(dateCreated) from WayfAccessRecord where idpID = :idpID and year(dateCreated) = :year and month(dateCreated) = :month ${robots(robot)} group by day(dateCreated)"
+					query = "select new map(count(*) as c, day(dateCreated) as t) from WayfAccessRecord where idpID = :idpID and year(dateCreated) = :year and month(dateCreated) = :month ${robots(robot)} group by day(dateCreated)"
 					queryParams.month = month
 				} else {
-					query = "select count(*), month(dateCreated) from WayfAccessRecord where idpID = :idpID and year(dateCreated) = :year ${robots(robot)} group by month(dateCreated)"	
+					query = "select new map(count(*) as c, month(dateCreated) as t) from WayfAccessRecord where idpID = :idpID and year(dateCreated) = :year ${robots(robot)} group by month(dateCreated)"	
 				}
 			}
-
+/*
 			def sessionCount = WayfAccessRecord.executeQuery(query, queryParams)
 			if(sessionCount) {
 				results.populated = true
@@ -162,6 +146,11 @@ class IdPReportsController {
 				}				
 				results.maxlogins = maxLogins
 			} else { results.populated = false }
+*/
+			def sessionCounts = WayfAccessRecord.executeQuery(query.toString(), queryParams)
+			def (sessionTotals, max) = ReportingHelpers.populateTotals(0..23, sessionCounts)
+			results.max = max
+			results.totals = sessionTotals
 		
 			render results as JSON
 		}
