@@ -1,7 +1,7 @@
 <%! import fedreg.core.AttributeCategory %>
 <html>
 	<head>	
-		<meta name="layout" content="compliance" />
+		<meta name="layout" content="reporting" />
 		<title><g:message code="fedreg.view.compliance.summary.title"/></title>		
 	</head>
 	<body>

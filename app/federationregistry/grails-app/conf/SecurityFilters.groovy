@@ -82,6 +82,15 @@ public class SecurityFilters extends grails.plugins.nimble.security.NimbleFilter
 			}
 		}
 		
+		// Reporting
+		compliance(controller: "(federationReports|idPReports|spReports)") {
+			before = {
+				accessControl (auth: false) {
+					role(UserService.USER_ROLE)
+				}
+			}
+		}
+		
 		// Compliance
 		compliance(controller: "(IDPSSODescriptorAttributeCompliance|attributeRelease|certifyingAuthorityUsage)") {
 			before = {

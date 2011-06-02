@@ -1,7 +1,7 @@
 
 <html>
     <head>
-        <meta name="layout" content="compliance" />
+        <meta name="layout" content="reporting" />
         <g:set var="entityName" value="${message(code: 'identityProviderAttributeCompliance.label')}" />
         <title><g:message code="fedreg.view.compliance.identityprovider.title"/></title>
     </head>

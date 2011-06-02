@@ -5,7 +5,7 @@ modules = {
 	'tiptip' {
 		dependsOn 'jquery'
 		defaultBundle false
-		resource url:[dir:'js/jquery', file:'jquery.tiptip.min.js'], bundle: 'extjs' 
+		resource url:[dir:'js/jquery', file:'jquery.tiptip.min.js'] 
 		resource url:[dir:'css/jquery', file:'jquery.tiptip.css'], bundle: 'css'
 	}
 	'jgrowl' {
@@ -33,7 +33,7 @@ modules = {
 	'alphanumeric' {
 		dependsOn 'jquery'
 		defaultBundle false
-		resource url:[dir:'js/jquery', file:'jquery.alphanumeric.min.js'], bundle: 'extjs' 
+		resource url:[dir:'js/jquery', file:'jquery.alphanumeric.min.js'], bundle: 'extjs'
 	}
 	'blockui' {
 		dependsOn 'jquery'
@@ -53,16 +53,28 @@ modules = {
 		resource url: [dir:'/js/codemirror/js', file:'codemirror.groovy.inframe.min.js']
 		resource url: [dir:'/js/codemirror/css', file:'groovycolors.css']
 	}
+	'modernizr' {
+		resource url:'js/modernizr.js'
+	}
 	'app' {
-		dependsOn 'nimble-ui'
+		dependsOn 'nimble-ui, modernizr'
 		resource url: 'css/application.css', disposition:'head', attrs:[rel:'stylesheet/less']
 		resource url:'js/application.js'
 		resource url:'js/less.min.js', disposition:'head'		// 1.0.35 
 	}
-	
 	'images' {
 		resource url:[dir:'images', file:'logo.jpg'], disposition:'image', attrs:[width:102, height:50]
 		resource url:[dir:'images', file:'spinner.gif'], disposition:'image', attrs:[width:20, height:20]
+	}
+	'tipsy' {
+		dependsOn 'jquery'  
+		defaultBundle false
+		resource url:[dir:'js/jquery', file:'jquery.tipsy.js'] , disposition:'head'
+		resource url:[dir:'css/jquery', file:'jquery.tipsy.css' ], disposition:'head'
+	}
+	'protvis' {
+		resource url:'js/protovis-r3.2.js', disposition:'head'
+		resource url:'js/protovis-tipsy.js', disposition:'head'
 	}
 	
 	overrides {

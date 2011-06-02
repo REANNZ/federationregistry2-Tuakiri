@@ -4,6 +4,18 @@ class UrlMappings {
 		"/dashboard/$action?/$id?"{
 			controller = "dashboard"
 		}
+		
+		"/reporting/federation/$action/$id?" {
+			controller = "federationReports"
+		}
+		
+		"/reporting/identityprovider/$action/$id?" {
+			controller = "idPReports"
+		}
+
+		"/reporting/serviceprovider/$action/$id?" {
+			controller = "spReports"
+		}
 	
 		"/compliance/identityprovider/attributes/$action?/$id?"{
 			controller = "IDPSSODescriptorAttributeCompliance"

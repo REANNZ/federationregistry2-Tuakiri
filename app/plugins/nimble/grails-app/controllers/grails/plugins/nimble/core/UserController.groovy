@@ -428,7 +428,7 @@ class UserController {
       	response.status = 500
     }
 	else {
-    	def permission = Permission.get(params.permID)
+    	def permission = Permission.get(params.long('permID'))
 	    if (!permission) {
 	      	log.warn("Permission identified by id '$params.permID' was not located")
 	      	render message(code: 'nimble.permission.nonexistant', args: [params.permID])
