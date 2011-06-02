@@ -238,9 +238,9 @@ class MetadataGenerationService {
 		}
 	}
 	
-	def roleDescriptor(builder, minimal, roleExtensions, roleDescriptor) {
+	def roleDescriptor(builder, all, minimal, roleExtensions, roleDescriptor) {
 		if(roleExtensions)
-			"${roleDescriptor.class.name.split('\\.').last()}Extensions"(builder, roleDescriptor)
+			"${roleDescriptor.class.name.split('\\.').last()}Extensions"(builder, all, roleDescriptor)
 		roleDescriptor.keyDescriptors?.sort{it.id}.each{keyDescriptor(builder, it)}		
 		if(!minimal) {
 			organization(builder, roleDescriptor.organization)
@@ -258,7 +258,7 @@ class MetadataGenerationService {
 	def idpSSODescriptor(builder, all, minimal, roleExtensions, idpSSODescriptor) {
 		if(all || idpSSODescriptor.functioning() ) {
 			builder.IDPSSODescriptor(protocolSupportEnumeration: idpSSODescriptor.protocolSupportEnumerations.sort{it.uri}.collect({it.uri}).join(' ')) {
-			roleDescriptor(builder, minimal, roleExtensions, idpSSODescriptor)
+			roleDescriptor(builder, all, minimal, roleExtensions, idpSSODescriptor)
 			ssoDescriptor(builder, all, minimal, idpSSODescriptor)
 			
 			idpSSODescriptor.singleSignOnServices?.sort{it.id}.each{ sso -> endpoint(builder, all, minimal, "SingleSignOnService", sso) }
@@ -274,7 +274,7 @@ class MetadataGenerationService {
 	def spSSODescriptor(builder, all, minimal, roleExtensions, spSSODescriptor) {
 		if(all || spSSODescriptor.functioning() ) {
 			builder.SPSSODescriptor(protocolSupportEnumeration: spSSODescriptor.protocolSupportEnumerations.sort{it.uri}.collect({it.uri}).join(' ')) {
-				roleDescriptor(builder, minimal, roleExtensions, spSSODescriptor)
+				roleDescriptor(builder, all, minimal, roleExtensions, spSSODescriptor)
 				ssoDescriptor(builder, all, minimal, spSSODescriptor)
 			
 				spSSODescriptor.assertionConsumerServices?.sort{it.id}.eachWithIndex{ ars, i -> indexedEndpoint(builder, all, minimal, "AssertionConsumerService", ars) }
@@ -296,7 +296,7 @@ class MetadataGenerationService {
 						// We don't currently provide direct AA manipulation to reduce general end user complexity.
 						// So where a collaborative relationship exists we use all common data from the IDP to render the AA
 						// If it isn't collaborative we'll assume manual DB intervention and render direct ;-).
-						roleDescriptor(builder, minimal, roleExtensions, aaDescriptor.collaborator)	
+						roleDescriptor(builder, all, minimal, roleExtensions, aaDescriptor.collaborator)	
 						aaDescriptor.attributeServices?.sort{it.id}.each{ attrserv -> endpoint(builder, all, minimal, "AttributeService", attrserv) }
 						aaDescriptor.collaborator.assertionIDRequestServices?.sort{it.id}.each{ aidrs -> endpoint(builder, all, minimal, "AssertionIDRequestService", aidrs) }
 						aaDescriptor.collaborator.nameIDFormats?.sort{it.uri}.each{ nidf -> samlURI(builder, "NameIDFormat", nidf) }
@@ -308,7 +308,7 @@ class MetadataGenerationService {
 			}
 			else {
 				builder.AttributeAuthorityDescriptor(protocolSupportEnumeration: aaDescriptor.protocolSupportEnumerations.sort{it.uri}.collect({it.uri}).join(' ')) {
-					roleDescriptor(builder, minimal, roleExtensions, aaDescriptor)	
+					roleDescriptor(builder, all, minimal, roleExtensions, aaDescriptor)	
 					aaDescriptor.attributeServices?.sort{it.id}.each{ attrserv -> endpoint(builder, all, minimal, "AttributeService", attrserv) }
 					aaDescriptor.assertionIDRequestServices?.sort{it.id}.each{ aidrs -> endpoint(builder, all, minimal, "AssertionIDRequestService", aidrs) }
 					aaDescriptor.nameIDFormats?.sort{it.id}.each{ nidf -> samlURI(builder, "NameIDFormat", nidf) }
@@ -319,26 +319,28 @@ class MetadataGenerationService {
 		}
 	}
 	
-	def IDPSSODescriptorExtensions(builder, roleDescriptor) {
+	def IDPSSODescriptorExtensions(builder, all, roleDescriptor) {
 		builder.Extensions() {
 			builder."shibmd:Scope" (regexp:false, roleDescriptor.scope)
 		}
 	}
 	
-	def SPSSODescriptorExtensions(builder, spSSODescriptor) {
+	def SPSSODescriptorExtensions(builder, all, spSSODescriptor) {
 		if(spSSODescriptor.discoveryResponseServices) {
 			builder.Extensions() {
 				spSSODescriptor.discoveryResponseServices?.sort{it.id}.each { endpoint ->
-					builder."dsr:DiscoveryResponse"("xmlns:dsr":"urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol", Binding: endpoint.binding.uri, Location:endpoint.location.uri, index:endpoint.index, isDefault:endpoint.isDefault)
+					if(all || endpoint.functioning() ) {
+						builder."dsr:DiscoveryResponse"("xmlns:dsr":"urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol", Binding: endpoint.binding.uri, Location:endpoint.location.uri, index:endpoint.index, isDefault:endpoint.isDefault)
+					}
 				}
 			}
 		}
 	}
 	
-	def AttributeAuthorityDescriptorExtensions(builder, roleDescriptor) {
+	def AttributeAuthorityDescriptorExtensions(builder, all, roleDescriptor) {
 		builder.Extensions() {
 			builder."shibmd:Scope" (regexp:false, roleDescriptor.scope)
-		}
+		} 
 	}
 	
 }
