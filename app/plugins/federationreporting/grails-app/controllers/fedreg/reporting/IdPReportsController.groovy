@@ -50,7 +50,7 @@ class IdPReportsController {
 			def results = [:]
 			results.title = "${g.message(code:'fedreg.templates.reports.identityprovider.logins.title', args:[idp.displayName])} ${day ? day + ' /':''} ${month ? month + ' /':''} $year"
 			results.xaxis = g.message(code:'label.hour')
-			results.yaxis = g.message(code:'label.sessions')
+			results.yaxis = g.message(code:'label.logins')
 			
 			def query = new StringBuilder("select new map(count(*) as c, hour(date_created) as t) from WayfAccessRecord where idpid = :idpid and year(dateCreated) = :year")
 			def queryParams = [:]
@@ -112,7 +112,8 @@ class IdPReportsController {
 			def activeSP = params.activesp as List
 
 			def results = [:]
-			results.title = "${g.message(code:'fedreg.templates.reports.identityprovider.sessions.title', args:[idp.displayName])} ${day ? day + ' /':''} ${month ? month + ' /':''} $year"
+			results.title = "${g.message(code:'fedreg.templates.reports.identityprovider.sessions.title', args:[idp.displayName])} ${day ? day + ' /':''} ${month ? month + ' /':''} $year"		
+			results.yaxis = g.message(code:'label.sessions')
 			
 			def query
 			def queryParams = [:]
@@ -122,31 +123,18 @@ class IdPReportsController {
 				query = "select new map(count(*) as c, hour(dateCreated) as t) from WayfAccessRecord where idpID = :idpID and year(dateCreated) = :year and month(dateCreated) = :month and day(dateCreated) = :day ${robots(robot)} group by hour(dateCreated)"
 				queryParams.month = month
 				queryParams.day = day
+				results.xaxis = g.message(code:'label.hour')
 			} else {
 				if(month) {
 					query = "select new map(count(*) as c, day(dateCreated) as t) from WayfAccessRecord where idpID = :idpID and year(dateCreated) = :year and month(dateCreated) = :month ${robots(robot)} group by day(dateCreated)"
 					queryParams.month = month
+					results.xaxis = g.message(code:'label.day')
 				} else {
 					query = "select new map(count(*) as c, month(dateCreated) as t) from WayfAccessRecord where idpID = :idpID and year(dateCreated) = :year ${robots(robot)} group by month(dateCreated)"	
+					results.xaxis = g.message(code:'label.month')
 				}
 			}
-/*
-			def sessionCount = WayfAccessRecord.executeQuery(query, queryParams)
-			if(sessionCount) {
-				results.populated = true
-				sessionCount.each { s ->
-					def session = [:]
-					session.count = s[0]
-					session.date = s[1]
-					
-					if(maxLogins < session.count)
-						maxLogins = session.count
-								
-					sessions.add(session)
-				}				
-				results.maxlogins = maxLogins
-			} else { results.populated = false }
-*/
+
 			def sessionCounts = WayfAccessRecord.executeQuery(query.toString(), queryParams)
 			def (sessionTotals, max) = ReportingHelpers.populateTotals(0..23, sessionCounts)
 			results.max = max

@@ -9,10 +9,6 @@
 	</div>
 </div>
 
-<div id="loginsreportnodata" class="revealable reportdata">
-	<p><em><g:message code="fedreg.templates.reports.nodata.description"/></em></p>
-</div>
-
 <script type="text/javascript+protovis">
 	fedreg.renderIdPLogins = function(data) {
 		$('.reportdata').hide();

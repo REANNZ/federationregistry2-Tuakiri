@@ -105,7 +105,7 @@
 			    .text(function(d) data.valuelabels[this.index]);
 
 			vis.add(pv.Rule)
-			    .data(x.ticks(10))
+			    .data(x.ticks(5))
 			    .left(x)
 			    .strokeStyle(function(d) d ? "rgba(255,255,255,.3)" : "#000")
 			  .add(pv.Rule)

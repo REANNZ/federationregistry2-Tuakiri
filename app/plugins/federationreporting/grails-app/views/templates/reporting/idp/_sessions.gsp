@@ -35,7 +35,7 @@
 		.canvas(canvas)
 		    .width(w)
 		    .height(h)
-		    .bottom(20)
+		    .bottom(60)
 		    .left(80)
 		    .right(5)
 		    .top(5);
@@ -48,6 +48,14 @@
 		  .anchor("left").add(pv.Label)
 		    .text(y.tickFormat);
 
+		/* Y-axis label */
+		vis.add(pv.Label)
+		    .data([data.yaxis])
+		    .left(-45)
+		    .bottom(h/2)
+		    .textAlign("center")
+			.textAngle(-Math.PI/2);
+
 		/* X-axis and ticks. */
 		vis.add(pv.Rule)
 		    .data(x.ticks(data.totals.length))
@@ -57,7 +65,14 @@
 		    .height(5)
 		  .anchor("bottom").add(pv.Label)
 		    .text(x.tickFormat);
-
+		
+		/* X-axis label */
+		vis.add(pv.Label)
+		    .data([data.xaxis])
+		    .left(w/2)
+		    .bottom(-45)
+		    .textAlign("center");
+			
 		/* The area with top line. */
 		var area = vis.add(pv.Area)
 		    .data(data.totals)
