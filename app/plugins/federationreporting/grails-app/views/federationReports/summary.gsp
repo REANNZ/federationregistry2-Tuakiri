@@ -5,7 +5,6 @@
 		
 		<r:script>
 			var federationReportsSummaryEndpoint = "${createLink(controller:'federationReports', action:'summaryjson')}"
-			fedreg.renderFederationSummaryReport();
 		</r:script>
 	</head>
 	<body>
@@ -40,6 +39,13 @@
 						</div>
 					
 						<script type="text/javascript+protovis">
+							fedreg.renderCreationSummary = function(data) {	
+								fedreg.renderSummaryGraph($('#sessioncreationgraph'), data.sessionvalues, data.sessionmax, "rgb(225,187,120)", "rgb(255,127,14)", "Established");							
+								fedreg.renderSummaryGraph($('#orgcreationgraph'), data.orgvalues, data.orgmax, "rgb(152,223,138)", "rgb(44,160,44)", "Created");
+								fedreg.renderSummaryGraph($('#idpcreationgraph'), data.idpvalues, data.idpmax, "rgb(121,173,210)", "rgb(31,119,180)", "Created");
+								fedreg.renderSummaryGraph($('#spcreationgraph'), data.spvalues, data.spmax, "rgb(197,176,213)", "rgb(148,103,189)", "Created");
+							};
+							
 							fedreg.renderSummaryGraph = function(element, values, maxVal, fillColor, strokeColor, type) {
 						
 								var canvas = document.createElement("div");
@@ -125,13 +131,8 @@
 
 								vis.render();
 							}
-						
-							fedreg.renderCreationSummary = function(data) {	
-								fedreg.renderSummaryGraph($('#sessioncreationgraph'), data.sessionvalues, data.sessionmax, "rgb(225,187,120)", "rgb(255,127,14)", "Established");							
-								fedreg.renderSummaryGraph($('#orgcreationgraph'), data.orgvalues, data.orgmax, "rgb(152,223,138)", "rgb(44,160,44)", "Created");
-								fedreg.renderSummaryGraph($('#idpcreationgraph'), data.idpvalues, data.idpmax, "rgb(121,173,210)", "rgb(31,119,180)", "Created");
-								fedreg.renderSummaryGraph($('#spcreationgraph'), data.spvalues, data.spmax, "rgb(197,176,213)", "rgb(148,103,189)", "Created");
-							};
+							
+							fedreg.renderFederationSummaryReport();
 	 					</script> 
 					</div>
 				</div>
