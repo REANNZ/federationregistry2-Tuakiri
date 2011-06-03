@@ -4,7 +4,11 @@
 			<tbody>
 			<g:each in="${descriptor.keyDescriptors.sort{it.id}}" status="i" var="kd">
 				<g:if test="${!kd.disabled}">
-					<tr><td colspan="2"><h4><g:message code="label.certificate"/> ${i+1}</h4></td></tr>
+					
+					<tr>
+						<th><g:message code="label.id" /></th>
+						<td colspan="2">${kd.id.encodeAsHTML()}</td>
+					</tr>
 					<tr>
 						<th><g:message code="label.keytype" /></th>
 						<td>${kd.keyType.encodeAsHTML()}</td>
@@ -63,6 +67,7 @@
 							</g:else>
 						</td>
 					</tr>
+					<tr><td colspan="3">&nbsp;</td></tr>
 				</g:if>
 			</g:each>
 			</tbody>
