@@ -1390,6 +1390,30 @@ fedreg.renderFederationReport = function(type) {
 			});
 		}
 		
+		if( type == 'subscribers') {
+			if( $("#subscriberstype").val() == 'organization') {
+				dataString = dataString + "&type=org"
+			}
+			if( $("#subscriberstype").val() == 'identityprovider') {
+				dataString = dataString + "&type=idp"
+			}
+			if( $("#subscriberstype").val() == 'serviceprovider') {
+				dataString = dataString + "&type=sp"
+			}
+			
+			$.ajax({url: federationReportsSubscribersEndpoint, 
+				data: dataString,
+				dataType: 'json',
+				async:true, 
+				success: function(data){
+					fedreg.renderFederationSubscribers(data, true);
+				},
+				error: function (xhr, ajaxOptions, thrownError) {
+					nimble.growl('error', xhr.responseText);
+				}
+			});
+		}
+		
 		if( type == 'connectivity') {
 			$.ajax({url: federationConnectivtyEndpoint, 
 				data: dataString,
