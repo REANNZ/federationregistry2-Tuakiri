@@ -16,6 +16,7 @@ import grails.converters.JSON
 class FederationReportsController {
 
 	def summary = {}
+	def subscribers = {}
 	def registrations = {}
 	def sessions = {}
 	def sessiontotals = {}
@@ -28,8 +29,8 @@ class FederationReportsController {
 			def robot = params.robot ? params.robot.toBoolean() : false
 			
 			// Key object creations
-			def minYear = WayfAccessRecord.executeQuery("select min(year(dateCreated)) from WayfAccessRecord")[0]
-			def maxYear = WayfAccessRecord.executeQuery("select max(year(dateCreated)) from WayfAccessRecord")[0]
+			def minYear = WayfAccessRecord.executeQuery("select min(year(dateCreated)) from WayfAccessRecord")[0] 
+			def maxYear = WayfAccessRecord.executeQuery("select max(year(dateCreated)) from WayfAccessRecord")[0] 
 			
 			if(minYear && maxYear) {
 				def sessionValues=[], orgValues =[], idpValues = [], spValues = [], yearLabels = []
@@ -181,6 +182,94 @@ class FederationReportsController {
 				
 				results.registrations.add(registration)
 			}
+			render results as JSON
+		}
+		else {
+			log.warn("Attempt to query registration json for federation by $authenticatedUser was denied, incorrect permission set")
+			render message(code: 'fedreg.help.unauthorized')
+			response.setStatus(403)
+		}
+	}
+	
+	def subscribersjson = {
+		if(SecurityUtils.subject.isPermitted("federation:reporting")) {
+			if(!params.type || !['org', 'idp', 'sp'].contains(params.type)) {
+				log.warn "Registration type was not present"
+				render message(code: 'fedreg.controllers.namevalue.missing')
+				response.setStatus(500)
+				return
+			}
+			
+			def i18n, controller, className
+			switch(params.type) {
+				case 'org': i18n = 'organization'
+							controller = 'organization'
+							className = "fedreg.core.Organization"
+							break
+				case 'idp': i18n = 'identityprovider'
+							controller = 'IDPSSODescriptor'
+							className = "fedreg.core.IDPSSODescriptor"
+							break
+				case 'sp': i18n = 'serviceprovider'
+							controller = 'SPSSODescriptor'
+							className = "fedreg.core.SPSSODescriptor"
+							break
+			}
+			
+			def year, month, day		
+			year = params.int('year')
+			if(year) {
+				month = params.int('month')
+			}
+		
+			def results = [:]		
+			def title = "fedreg.view.reporting.federation.subscribers.${i18n}.period.title"
+			results.title = "${g.message(code:"${title}")} ${day ? day + ' /':''} ${month ? month + ' /':''} ${year ?:''}"
+			results.yaxis = g.message(code:'label.subscribers')
+			
+			def queryBaseLine, queryTotal, queryParams = [:], baseCount = 0
+			
+			if(month) {
+				def cal = new GregorianCalendar(year, month, 1) 
+				queryParams.year = year
+				queryBaseLine = "select count(*) from ${className} where dateCreated < :cal"
+				queryTotal = "select new map(count(*) as c, day(dateCreated) as t) from ${className} where year(dateCreated) = :year and month(dateCreated) = :month group by day(dateCreated)"
+				queryParams.month = month
+				results.xaxis = g.message(code:'label.day')
+				
+				def subscriberBaseCount = Organization.executeQuery(queryBaseLine, [cal:cal.getTime()])
+				baseCount = subscriberBaseCount ? subscriberBaseCount[0] : 0
+				
+				def subscriberCounts = Organization.executeQuery(queryTotal, queryParams)
+				def (subscriberTotals, max) = ReportingHelpers.populateCumulativeTotals(year, month, null, baseCount, subscriberCounts)
+				results.max = max
+				results.totals = subscriberTotals
+				
+			} else if(year) {
+				queryParams.year = year
+				queryBaseLine = "select count(*) from ${className} where year(dateCreated) < :year"
+				queryTotal = "select new map(count(*) as c, month(dateCreated) as t) from ${className} where year(dateCreated) = :year group by month(dateCreated)"
+				results.xaxis = g.message(code:'label.month')
+				
+				def subscriberBaseCount = Organization.executeQuery(queryBaseLine, queryParams)
+				baseCount = subscriberBaseCount ? subscriberBaseCount[0] : 0
+				
+				def subscriberCounts = Organization.executeQuery(queryTotal, queryParams)
+				def (subscriberTotals, max) = ReportingHelpers.populateCumulativeTotals(year, null, null, baseCount, subscriberCounts)
+				results.max = max
+				results.totals = subscriberTotals
+				
+			} else {
+				queryTotal = "select new map(count(*) as c, year(dateCreated) as t) from ${className} group by year(dateCreated)"
+				results.xaxis = g.message(code:'label.year')
+				baseCount = 0
+				
+				def subscriberCounts = Organization.executeQuery(queryTotal, queryParams)
+				def (subscriberTotals, max) = ReportingHelpers.populateCumulativeTotals( 0, subscriberCounts)
+				results.max = max
+				results.totals = subscriberTotals
+			}
+
 			render results as JSON
 		}
 		else {
