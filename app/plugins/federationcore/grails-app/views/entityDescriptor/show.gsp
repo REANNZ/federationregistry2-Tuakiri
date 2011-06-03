@@ -63,10 +63,10 @@
 			</table>
 		
 			<div class="tabs">
-				<ul>
-					<li><a href="#tab-contacts" class="icon icon_user_comment"><g:message code="label.contacts" /></a></li>
+				<ul>				
 					<li><a href="#tab-idp" class="icon icon_cog"><g:message code="label.identityproviders" /></a></li>
 					<li><a href="#tab-sp" class="icon icon_cog"><g:message code="label.serviceproviders" /></a></li>
+					<li><a href="#tab-contacts" class="icon icon_user_comment"><g:message code="label.contacts" /></a></li>
 					<li><a href="#tab-admins" class="icon icon_database_key"><g:message code="label.administrators" /></a></li>
 					<g:if test="${entity.extensions}">
 					<li><a href="#tab-ext" class="icon icon_cog"><g:message code="label.extensions" /></a></li>

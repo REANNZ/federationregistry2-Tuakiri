@@ -23,20 +23,6 @@ class EntityDescriptorService {
 	def createNoSave(def params) {
 		// Organization
 		def organization = Organization.get(params.organization?.id)
-
-		// Contact
-		def contact 
-		if(params.contact.id)
-			contact = Contact.get(params.contact?.id)
-		
-		if(!contact) {
-			if(params.contact?.email)
-				contact = MailURI.findByUri(params.contact?.email)?.contact		// We may already have them referenced by email address and user doesn't realize
-			if(!contact)
-				contact = new Contact(givenName: params.contact?.givenName, surname: params.contact?.surname, email: new MailURI(uri:params.contact?.email), organization:organization)
-				contact.save()
-		}
-		def ct = params.contact?.type ?: 'administrative'
 	
 		// Entity Descriptor
 		def entityDescriptor = new EntityDescriptor(approved:false, active: params.active, entityID: params.entity?.identifier, organization: organization)
