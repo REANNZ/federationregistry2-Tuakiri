@@ -202,14 +202,17 @@ log4j = {
 		appender new DailyRollingFileAppender(name:"stacktrace", layout:pattern(conversionPattern: "%d{[ dd.MM.yy HH:mm:ss.SSS]} %-5p %c %x - %m%n"), file:"/tmp/stacktrace.log", datePattern:"'.'yyyy-MM-dd")
 	}
 	
-    warn 	'fr-app': 	'org.codehaus.groovy.grails.web.servlet',
+    warn 	'fr-app': 	['org.codehaus.groovy.grails.web.servlet',
 						'org.codehaus.groovy.grails.web.pages',
 						'org.codehaus.groovy.grails.web.sitemesh',
 						'org.codehaus.groovy.grails.web.mapping.filter',
 						'org.codehaus.groovy.grails.web.mapping',
 						'org.codehaus.groovy.grails.commons',
 						'org.codehaus.groovy.grails.plugins',
-						'org.apache.shiro'
+						'org.apache.shiro']
 
-    info 	'fr-app': 	['grails.plugins.nimble', 'grails.app.controller', 'grails.app.domain', 'grails.app.service']
+    info 	'fr-app': 	['grails.plugins.nimble', 
+						 'grails.app.controller',
+						 'grails.app.domain',
+						 'grails.app.service']
 }
