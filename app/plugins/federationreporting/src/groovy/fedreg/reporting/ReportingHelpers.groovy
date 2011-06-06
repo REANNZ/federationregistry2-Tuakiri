@@ -6,7 +6,7 @@ class ReportingHelpers {
 		robot ? '':'and robot = false'
 	}
 	
-	static def populateTotals(def year, def month, def day, def counts) {	
+	static def populateTotals(def year, def month, def day, def counts, def limit) {	
 		def timeRange
 		if(year && month && day){
 		    timeRange = 0..23
@@ -21,10 +21,10 @@ class ReportingHelpers {
 		    }
 		}
 		
-		populateTotals(timeRange, counts)
+		populateTotals(timeRange, counts, limit)
 	}
 	
-	static def populateTotals(def timeRange, def counts) {
+	static def populateTotals(def timeRange, def counts, def limit) {
 		def activeDates = [:]
 		counts.each {
 		    activeDates.put(it.t, it.c)
@@ -32,7 +32,7 @@ class ReportingHelpers {
 		
 		def totals = []
 		def max = 0
-		timeRange.each { t ->
+		for(t in timeRange) {
 		    def total = [:]
 		    total.c = activeDates.get(t)?:0
 		    total.t = t
@@ -41,12 +41,15 @@ class ReportingHelpers {
 		        max = total.c
 		    }
 		    totals.add(total)
+		
+			if(limit != 0 && t == limit)
+				break
 		}
 		
 		[totals, max]
 	}
 	
-	static def populateCumulativeTotals(def year, def month, def day, def base, def counts) {	
+	static def populateCumulativeTotals(def year, def month, def day, def base, def counts, def limit) {	
 		def timeRange
 		if(year && month && day){
 		    timeRange = 0..23
@@ -61,19 +64,20 @@ class ReportingHelpers {
 		    }
 		}
 		
-		populateCumulativeTotals(timeRange, base, counts)
+		populateCumulativeTotals(timeRange, base, counts, limit)
 	}
 	
-	static def populateCumulativeTotals(def timeRange, def base, def counts) {
+	static def populateCumulativeTotals(def timeRange, def base, def counts, def limit) {
 		def activeDates = [:]
-		counts.each {
+		def maxRange = 0
+		counts.eachWithIndex { it, i ->
 		    activeDates.put(it.t, it.c)
 		}
 		
 		def count = base
 		def totals = []
 		def max = 0
-		timeRange.each { t ->
+		for(t in timeRange) {
 			count = count + (activeDates.get(t)?:0)
 		    def total = [:]
 		    total.c = count
@@ -83,6 +87,9 @@ class ReportingHelpers {
 		        max = total.c
 		    }
 		    totals.add(total)
+		
+			if(limit != 0 && t == limit)
+				break
 		}
 		
 		[totals, max]

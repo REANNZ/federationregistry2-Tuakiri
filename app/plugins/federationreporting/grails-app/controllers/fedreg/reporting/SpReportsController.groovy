@@ -68,7 +68,7 @@ class SpReportsController {
 			query << " ${robots(robot)} group by hour(date_created)"
 		
 			def loginCounts = WayfAccessRecord.executeQuery(query.toString(), queryParams)
-			def (loginTotals, max) = ReportingHelpers.populateTotals(0..23, loginCounts)
+			def (loginTotals, max) = ReportingHelpers.populateTotals(0..23, loginCounts, 0)
 			results.max = max
 			results.totals = loginTotals
 		
@@ -112,8 +112,7 @@ class SpReportsController {
 			results.title = "${g.message(code:'fedreg.templates.reports.serviceprovider.sessions.title', args:[sp.displayName])} ${day ? day + ' /':''} ${month ? month + ' /':''} $year"
 			results.yaxis = g.message(code:'label.sessions')
 			
-			def query
-			def queryParams = [:]
+			def query, queryParams = [:], limit = 0
 			queryParams.spID = sp.id
 			queryParams.year = year
 					
@@ -124,17 +123,32 @@ class SpReportsController {
 				results.xaxis = g.message(code:'label.hour')
 			} else {
 				if(month) {
+					def cal = new GregorianCalendar(year,month - 1, 1)
+					def currentCal = new GregorianCalendar()
+					def currentYear = (cal.get(Calendar.YEAR) == currentCal.get(Calendar.YEAR))
+					def currentMonth = (cal.get(Calendar.MONTH) == currentCal.get(Calendar.MONTH))
+					if(currentYear && currentMonth) {
+						limit = currentCal.get(Calendar.DAY_OF_MONTH)
+					}
+					
 					query = "select new map(count(*) as c, day(dateCreated) as t) from WayfAccessRecord where spID = :spID and year(dateCreated) = :year and month(dateCreated) = :month ${robots(robot)} group by day(dateCreated)"
 					queryParams.month = month
 					results.xaxis = g.message(code:'label.day')
 				} else {
+					def cal = new GregorianCalendar(year, 0, 1)
+					def currentCal = new GregorianCalendar()
+					def currentYear = (cal.get(Calendar.YEAR) == currentCal.get(Calendar.YEAR))
+					if(currentYear) {
+						limit = currentCal.get(Calendar.MONTH) + 1
+					}
+					
 					query = "select new map(count(*) as c, month(dateCreated) as t) from WayfAccessRecord where spID = :spID and year(dateCreated) = :year ${robots(robot)} group by month(dateCreated)"
 					results.xaxis = g.message(code:'label.month')
 				}
 			}
 
 			def sessionCounts = WayfAccessRecord.executeQuery(query.toString(), queryParams)
-			def (sessionTotals, max) = ReportingHelpers.populateTotals(0..23, sessionCounts)
+			def (sessionTotals, max) = ReportingHelpers.populateTotals(year, month, day, sessionCounts, limit)
 			results.max = max
 			results.totals = sessionTotals
 				

@@ -5,6 +5,7 @@ import org.apache.shiro.SecurityUtils
 import fedreg.core.*
 import grails.plugins.nimble.core.Role
 import grails.plugins.nimble.core.LoginRecord
+import java.util.Calendar
 
 import grails.converters.JSON
 
@@ -144,7 +145,7 @@ class FederationReportsController {
 			results.title = "${g.message(code:"${title}")} ${day ? day + ' /':''} ${month ? month + ' /':''} $year"
 			results.yaxis = g.message(code:'label.registrations')
 			
-			def query, queryTotal, queryParams = [:]
+			def query, queryTotal, queryParams = [:], limit = 0
 			queryParams.year = year
 			if(day) {
 				query = "select new map(dateCreated as date, displayName as name, id as id) from ${className} where year(dateCreated) = :year and month(dateCreated) = :month and day(dateCreated) = :day order by dateCreated"
@@ -154,11 +155,25 @@ class FederationReportsController {
 				results.xaxis = g.message(code:'label.hour')
 			} else {
 				if(month) {
+					def cal = new GregorianCalendar(year, month - 1, 1)
+					def currentCal = new GregorianCalendar()
+					def currentYear = (cal.get(Calendar.YEAR) == currentCal.get(Calendar.YEAR))
+					def currentMonth = (cal.get(Calendar.MONTH) == currentCal.get(Calendar.MONTH))
+					if(currentYear && currentMonth) {
+						limit = currentCal.get(Calendar.DAY_OF_MONTH) 
+					}
 					query = "select new map(dateCreated as date, displayName as name, id as id) from ${className} where year(dateCreated) = :year and month(dateCreated) = :month order by dateCreated"
 					queryTotal = "select new map(count(*) as c, day(dateCreated) as t) from ${className} where year(dateCreated) = :year and month(dateCreated) = :month group by day(dateCreated)"
 					queryParams.month = month
 					results.xaxis = g.message(code:'label.day')
 				} else {
+					def cal = new GregorianCalendar(year,0, 1)
+					def currentCal = new GregorianCalendar()
+					def currentYear = (cal.get(Calendar.YEAR) == currentCal.get(Calendar.YEAR))
+					if(currentYear) {
+						limit = currentCal.get(Calendar.MONTH) + 1
+					}
+					
 					query = "select new map(dateCreated as date, displayName as name, id as id) from ${className} where year(dateCreated) = :year order by dateCreated"
 					queryTotal = "select new map(count(*) as c, month(dateCreated) as t) from ${className} where year(dateCreated) = :year group by month(dateCreated)"
 					results.xaxis = g.message(code:'label.month')
@@ -167,7 +182,7 @@ class FederationReportsController {
 
 			
 			def registrationCounts = Organization.executeQuery(queryTotal, queryParams)
-			def (registrationTotals, max) = ReportingHelpers.populateTotals(year, month, day, registrationCounts)
+			def (registrationTotals, max) = ReportingHelpers.populateTotals(year, month, day, registrationCounts, limit)
 			results.max = max
 			results.totals = registrationTotals
 			
@@ -230,7 +245,15 @@ class FederationReportsController {
 			def queryBaseLine, queryTotal, queryParams = [:], baseCount = 0
 			
 			if(month) {
-				def cal = new GregorianCalendar(year, month, 1) 
+				def limit = 0
+				def cal = new GregorianCalendar(year, month - 1, 1)
+				def currentCal = new GregorianCalendar()
+				def currentYear = (cal.get(Calendar.YEAR) == currentCal.get(Calendar.YEAR))
+				def currentMonth = (cal.get(Calendar.MONTH) == currentCal.get(Calendar.MONTH))
+				if(currentYear && currentMonth) {
+					limit = currentCal.get(Calendar.DAY_OF_MONTH) 
+				}
+				
 				queryParams.year = year
 				queryBaseLine = "select count(*) from ${className} where dateCreated < :cal"
 				queryTotal = "select new map(count(*) as c, day(dateCreated) as t) from ${className} where year(dateCreated) = :year and month(dateCreated) = :month group by day(dateCreated)"
@@ -241,11 +264,15 @@ class FederationReportsController {
 				baseCount = subscriberBaseCount ? subscriberBaseCount[0] : 0
 				
 				def subscriberCounts = Organization.executeQuery(queryTotal, queryParams)
-				def (subscriberTotals, max) = ReportingHelpers.populateCumulativeTotals(year, month, null, baseCount, subscriberCounts)
+				def (subscriberTotals, max) = ReportingHelpers.populateCumulativeTotals(year, month, null, baseCount, subscriberCounts, limit)
 				results.max = max
 				results.totals = subscriberTotals
 				
 			} else if(year) {
+				def cal = new GregorianCalendar(year, 0, 1)
+				def currentCal = new GregorianCalendar()
+				def currentYear = cal.get(Calendar.YEAR) == currentCal.get(Calendar.YEAR)
+				
 				queryParams.year = year
 				queryBaseLine = "select count(*) from ${className} where year(dateCreated) < :year"
 				queryTotal = "select new map(count(*) as c, month(dateCreated) as t) from ${className} where year(dateCreated) = :year group by month(dateCreated)"
@@ -255,7 +282,7 @@ class FederationReportsController {
 				baseCount = subscriberBaseCount ? subscriberBaseCount[0] : 0
 				
 				def subscriberCounts = Organization.executeQuery(queryTotal, queryParams)
-				def (subscriberTotals, max) = ReportingHelpers.populateCumulativeTotals(year, null, null, baseCount, subscriberCounts)
+				def (subscriberTotals, max) = ReportingHelpers.populateCumulativeTotals(year, null, null, baseCount, subscriberCounts, currentYear ? currentCal.get(Calendar.MONTH)+1:0)
 				results.max = max
 				results.totals = subscriberTotals
 				
@@ -297,8 +324,7 @@ class FederationReportsController {
 			results.title = "${g.message(code:'fedreg.view.reporting.federation.sessions.period.title')} ${day ? day + ' /':''} ${month ? month + ' /':''} $year"
 			results.yaxis = g.message(code:'label.sessions')
 			
-			def query
-			def queryParams = [:]
+			def query, queryParams = [:], limit = 0
 			queryParams.year = year
 			if(day) {
 				query = "select new map(count(*) as c, hour(dateCreated) as t) from WayfAccessRecord where year(dateCreated) = :year and month(dateCreated) = :month and day(dateCreated) = :day ${ReportingHelpers.robots(robot)} group by hour(dateCreated)"
@@ -307,17 +333,32 @@ class FederationReportsController {
 				results.xaxis = g.message(code:'label.hour')
 			} else {
 				if(month) {
+					def cal = new GregorianCalendar(year,month - 1, 1)
+					def currentCal = new GregorianCalendar()
+					def currentYear = (cal.get(Calendar.YEAR) == currentCal.get(Calendar.YEAR))
+					def currentMonth = (cal.get(Calendar.MONTH) == currentCal.get(Calendar.MONTH))
+					if(currentYear && currentMonth) {
+						limit = currentCal.get(Calendar.DAY_OF_MONTH)
+					}
+					
 					query = "select new map(count(*) as c, day(dateCreated) as t) from WayfAccessRecord where year(dateCreated) = :year and month(dateCreated) = :month ${ReportingHelpers.robots(robot)} group by day(dateCreated)"
 					queryParams.month = month
 					results.xaxis = g.message(code:'label.day')
 				} else {
+					def cal = new GregorianCalendar(year,0, 1)
+					def currentCal = new GregorianCalendar()
+					def currentYear = (cal.get(Calendar.YEAR) == currentCal.get(Calendar.YEAR))
+					if(currentYear) {
+						limit = currentCal.get(Calendar.MONTH) + 1
+					}
+					
 					query = "select new map(count(*) as c, month(dateCreated) as t) from WayfAccessRecord where year(dateCreated) = :year ${ReportingHelpers.robots(robot)} group by month(dateCreated)"
 					results.xaxis = g.message(code:'label.month')
 				}
 			}
 
 			def sessionCounts = WayfAccessRecord.executeQuery(query, queryParams)
-			def (sessionTotals, max) = ReportingHelpers.populateTotals(year, month, day, sessionCounts)
+			def (sessionTotals, max) = ReportingHelpers.populateTotals(year, month, day, sessionCounts, limit)
 			results.max = max
 			results.totals = sessionTotals
 		
@@ -458,7 +499,7 @@ class FederationReportsController {
 			query << " ${ReportingHelpers.robots(robot)} group by hour(date_created)"
 	
 			def loginCounts = WayfAccessRecord.executeQuery(query.toString(), queryParams)
-			def (loginTotals, max) = ReportingHelpers.populateTotals(0..23, loginCounts)
+			def (loginTotals, max) = ReportingHelpers.populateTotals(0..23, loginCounts, 0)
 			results.max = max
 			results.totals = loginTotals
 			

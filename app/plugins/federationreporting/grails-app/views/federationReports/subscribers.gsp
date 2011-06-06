@@ -55,7 +55,7 @@
 			
 									/* Sizing and scales. */
 									var w = 800,
-										h = 400,
+										h = 600,
 										x = pv.Scale.linear(data.totals, function(d) d.t).range(0, w),
 										y = pv.Scale.linear(0, data.max + 10).range(0, h),
 										i = -1;
@@ -94,7 +94,7 @@
 										.bottom(-5)
 										.height(5)
 									  .anchor("bottom").add(pv.Label)
-										.text(x.tickFormat);
+										.text(function(d) d);
 										
 									/* X-axis label */
 									vis.add(pv.Label)
@@ -110,6 +110,7 @@
 										.height(function(d) y(d.c))
 										.bottom(1)
 										.fillStyle("rgb(243,134,48)")
+										//.fillStyle("rgb(255,255,255)")
 					
 									 var line = area.anchor("top").add(pv.Line)
 										.lineWidth(3)
