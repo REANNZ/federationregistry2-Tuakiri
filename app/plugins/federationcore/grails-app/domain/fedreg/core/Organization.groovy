@@ -33,6 +33,7 @@ class Organization  {	// Also called a participant in AAF land
 	String extensions
 	
 	boolean active
+	boolean archived = false
 	boolean approved = false
 	
 	UrlURI url
@@ -73,7 +74,7 @@ class Organization  {	// Also called a participant in AAF land
 	public String toString() {	"organization:[id:$id, name: $name, displayName: $displayName]" }
 	
 	public boolean functioning() {
-		( active && approved )
+		( !archived && active && approved )
 	}
 	
 	public Map buildStatistics() {

@@ -37,6 +37,7 @@ class RoleDescriptor extends Descriptor {
 	String extensions
 	
 	boolean active
+	boolean archived = false
 	boolean approved = false
 	boolean reporting = true
 

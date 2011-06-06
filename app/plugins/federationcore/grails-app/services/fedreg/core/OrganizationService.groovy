@@ -126,4 +126,39 @@ class OrganizationService {
 		org.delete()
 		log.info "$authenticatedUser deleted $org"
 	}
+	
+	def archive(def id) {
+		def org = Organization.get(id)
+		if(!org)
+			throw new ErronousStateException("Unable to find Organization with id $id")
+
+		def entityDescriptors = EntityDescriptor.findAllWhere(organization:org)
+		entityDescriptors?.each { entityDescriptorService.archive(it.id) }
+		
+		org.archived = true
+		org.active = false
+		if(!org.save()) {
+			log.error "Unable to archive $org"
+			org.errors.each { log.error it }
+			throw new ErronousStateException("Unable to archive Organization with id $id")
+		}
+		log.info "$authenticatedUser successfully archived $org"
+	}
+	
+	def unarchive(def id) {
+		def org = Organization.get(id)
+		if(!org)
+			throw new ErronousStateException("Unable to find Organization with id $id")
+
+		def entityDescriptors = EntityDescriptor.findAllWhere(organization:org)
+		entityDescriptors?.each { entityDescriptorService.unarchive(it.id) }
+		
+		org.archived = false
+		if(!org.save()) {
+			log.error "Unable to unarchive $org"
+			org.errors.each { log.error it }
+			throw new ErronousStateException("Unable to unarchive Organization with id $id")
+		}
+		log.info "$authenticatedUser successfully unarchived $org"
+	}
 }

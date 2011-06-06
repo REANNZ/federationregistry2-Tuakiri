@@ -115,5 +115,75 @@ class EntityDescriptorService {
 		
 		log.info "$authenticatedUser deleted $ed"
 	}
+	
+	def archive (def id) {
+		def ed = EntityDescriptor.get(id)
+		if(!ed)
+			throw new ErronousStateException("Unable to find EntityDescriptor with id $id")
+			
+		def idpService = grailsApplication.mainContext.IDPSSODescriptorService
+		def spService = grailsApplication.mainContext.SPSSODescriptorService
+		def aaService = grailsApplication.mainContext.attributeAuthorityDescriptorService
+			
+		ed.idpDescriptors?.each { idpService.archive(it.id) }
+		ed.spDescriptors?.each { spService.archive(it.id) }
+		ed.attributeAuthorityDescriptors?.each { aaService.archive(it.id) }
+		
+		ed.archived = true
+		ed.active = false
+		if(!ed.save()) {
+			log.error "Unable to archive $ed"
+			ed.errors.each { log.error it }
+			throw new ErronousStateException("Unable to archive EntityDescriptor with id $id")
+		}
+		
+		log.info "$authenticatedUser successfully archived $ed"
+	}
+	
+	def unarchive (def id) {
+		def ed = EntityDescriptor.get(id)
+		if(!ed)
+			throw new ErronousStateException("Unable to find EntityDescriptor with id $id")
+			
+		def idpService = grailsApplication.mainContext.IDPSSODescriptorService
+		def spService = grailsApplication.mainContext.SPSSODescriptorService
+		def aaService = grailsApplication.mainContext.attributeAuthorityDescriptorService
+			
+		ed.idpDescriptors?.each { idpService.unarchive(it.id) }
+		ed.spDescriptors?.each { spService.unarchive(it.id) }
+		ed.attributeAuthorityDescriptors?.each { aaService.unarchive(it.id) }
+		
+		ed.archived = false
+		if(!ed.save()) {
+			log.error "Unable to unarchive $ed"
+			ed.errors.each { log.error it }
+			throw new ErronousStateException("Unable to unarchive EntityDescriptor with id $id")
+		}
+		
+		log.info "$authenticatedUser successfully unarchived $ed"
+	}
+	
+	def activate (def id) {
+		def ed = EntityDescriptor.get(id)
+		if(!ed)
+			throw new ErronousStateException("Unable to find EntityDescriptor with id $id")
+			
+		def idpService = grailsApplication.mainContext.IDPSSODescriptorService
+		def spService = grailsApplication.mainContext.SPSSODescriptorService
+		def aaService = grailsApplication.mainContext.attributeAuthorityDescriptorService
+			
+		ed.idpDescriptors?.each { idpService.activate(it.id) }
+		ed.spDescriptors?.each { spService.activate(it.id) }
+		ed.attributeAuthorityDescriptors?.each { aaService.activate(it.id) }
+		
+		ed.active = true
+		if(!ed.save()) {
+			log.error "Unable to activate $ed"
+			ed.errors.each { log.error it }
+			throw new ErronousStateException("Unable to activate EntityDescriptor with id $id")
+		}
+		
+		log.info "$authenticatedUser successfully activated $ed"
+	}
 
 }

@@ -51,8 +51,8 @@ class AttributeAuthorityDescriptor extends RoleDescriptor {
 	
 	public boolean functioning() {
 		if(collaborator)
-			( active && approved && collaborator.functioning() && entityDescriptor.functioning() )
+			( !archived && active && approved && collaborator.functioning() && entityDescriptor.functioning() )
 		else
-			( active && approved && entityDescriptor.functioning() )
+			( !archived && active && approved && entityDescriptor.functioning() )
 	}
 }

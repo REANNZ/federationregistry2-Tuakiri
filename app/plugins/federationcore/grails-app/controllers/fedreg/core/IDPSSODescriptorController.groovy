@@ -15,7 +15,11 @@ class IDPSSODescriptorController {
 	def IDPSSODescriptorService
 	
 	def list = {
-		[identityProviderList: IDPSSODescriptor.list(params), identityProviderTotal: IDPSSODescriptor.count()]
+		[identityProviderList: IDPSSODescriptor.findAllWhere(archived:false), identityProviderTotal: IDPSSODescriptor.count()]
+	}
+	
+	def listarchived = {
+		[identityProviderList: IDPSSODescriptor.findAllWhere(archived:true), identityProviderTotal: IDPSSODescriptor.count()]
 	}
 
 	def show = {

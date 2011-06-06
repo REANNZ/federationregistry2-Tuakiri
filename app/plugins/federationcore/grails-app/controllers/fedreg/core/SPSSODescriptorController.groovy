@@ -15,7 +15,11 @@ class SPSSODescriptorController {
 	def SPSSODescriptorService
 	
 	def list = {
-		[serviceProviderList: SPSSODescriptor.list(params), serviceProviderTotal: SPSSODescriptor.count()]
+		[serviceProviderList: SPSSODescriptor.findAllWhere(archived:false), serviceProviderTotal: SPSSODescriptor.count()]
+	}
+	
+	def listarchived = {
+		[serviceProviderList: SPSSODescriptor.findAllWhere(archived:true), serviceProviderTotal: SPSSODescriptor.count()]
 	}
 	
 	def show = {

@@ -118,6 +118,17 @@
 					</td>
 				</tr>
 				<tr>
+					<th><g:message code="label.archived"/></th>
+					<td>
+						<g:if test="${serviceProvider.archived}"> 
+							<g:message code="label.yes" /> <div class="warning"><g:message code="label.warningmetadataarchived" /></div>
+						</g:if>
+						<g:else>
+							<g:message code="label.no" /> 
+						</g:else>
+					</td>
+				</tr>
+				<tr>
 					<th><g:message code="label.approved"/></th>
 					<td>
 						<g:if test="${serviceProvider.approved}">

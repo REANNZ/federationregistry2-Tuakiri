@@ -32,6 +32,7 @@ class EntityDescriptor extends Descriptor  {
 	String extensions
 	
 	boolean active
+	boolean archived = false
 	boolean approved
 	
 	Date dateCreated
@@ -74,11 +75,38 @@ class EntityDescriptor extends Descriptor  {
 	}
 	
 	public boolean functioning() {
-		( active && approved && organization.functioning() )
+		( !archived && active && approved && organization.functioning() )
 	}
 	
 	public boolean empty() {
-		( !idpDescriptors && !attributeAuthorityDescriptors && !spDescriptors && !pdpDescriptors )
+		def empty = true
+		// No children or no children functioning indicates an empty ED
+		if(empty && idpDescriptors) {
+		 	idpDescriptors.each {
+				if(it.functioning())
+					empty = false
+			}
+		}
+		if(empty && attributeAuthorityDescriptors) {
+		 	attributeAuthorityDescriptors.each {
+				if(it.functioning())
+					empty = false
+			}
+		}
+		if(empty && spDescriptors) {
+		 	spDescriptors.each {
+				if(it.functioning())
+					empty = false
+			}
+		}
+		if(empty && pdpDescriptors) {
+		 	pdpDescriptors.each {
+				if(it.functioning())
+					empty = false
+			}
+		}
+		
+		empty
 	}
 
 }
