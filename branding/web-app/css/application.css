@@ -282,11 +282,17 @@ ul.clean li {
 	.automargin;
 	width: 1000px;
 	clear: both;
+	
 }
 
 .reportsummarycell {
 	float: left; 
 	margin: 12px;
+}
+
+.reportsummarysinglecell {
+	clear:both;
+	
 }
 
 .metadata {

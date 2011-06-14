@@ -107,7 +107,7 @@ class OrganizationService {
 			throw new ErronousStateException("Unable to find Organization with id $id")
 
 		def entityDescriptors = EntityDescriptor.findAllWhere(organization:org)
-		entityDescriptors.each { println "Removing $it"; entityDescriptorService.delete(it.id) }
+		entityDescriptors.each { entityDescriptorService.delete(it.id) }
 
 		def contacts = Contact.findAllWhere(organization:org)
 		contacts.each { contact ->

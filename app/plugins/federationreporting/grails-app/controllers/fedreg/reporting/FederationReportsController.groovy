@@ -34,10 +34,9 @@ class FederationReportsController {
 			def maxYear = WayfAccessRecord.executeQuery("select max(year(dateCreated)) from WayfAccessRecord")[0] 
 			
 			if(minYear && maxYear) {
-				def sessionValues=[], orgValues =[], idpValues = [], spValues = [], yearLabels = []
+				def sessionValues=[], orgValues =[], idpValues = [], spValues = []
 				def sessionMax = 0, orgMax = 0, idpMax = 0, spMax = 0
 				(minYear..maxYear).each { year ->
-					yearLabels.add(year)
 					
 					// Sessions per year
 					def sessionValue = [:]	
@@ -83,6 +82,29 @@ class FederationReportsController {
 							spMax = spCount
 					} else { spValue.y = 0 }
 					spValues.add(spValue)
+					
+					// Organization subscription
+					def orgSubscriptions = "select new map(count(*) as c, year(dateCreated) as t) from fedreg.core.Organization group by year(dateCreated)"
+					def orgSubscriberCounts = Organization.executeQuery(orgSubscriptions)
+					def (orgSubscriberTotals, orgSubMax) = ReportingHelpers.populateCumulativeTotals( 0, orgSubscriberCounts)
+					
+					// IdP subscription
+					def idpSubscriptions = "select new map(count(*) as c, year(dateCreated) as t) from fedreg.core.IDPSSODescriptor group by year(dateCreated)"
+					def idpSubscriberCounts = IDPSSODescriptor.executeQuery(idpSubscriptions)
+					def (idpSubscriberTotals, idpSubMax) = ReportingHelpers.populateCumulativeTotals( 0, idpSubscriberCounts)
+					
+					// SP subscriptions
+					def spSubscriptions = "select new map(count(*) as c, year(dateCreated) as t) from fedreg.core.SPSSODescriptor group by year(dateCreated)"
+					def spSubscriberCounts = SPSSODescriptor.executeQuery(spSubscriptions)
+					def (spSubscriberTotals, spSubMax) = ReportingHelpers.populateCumulativeTotals( 0, spSubscriberCounts)
+					
+					results.subscribers = []
+					results.subscribers.add( idpSubscriberTotals )
+					results.subscribers.add( spSubscriberTotals )
+					results.subscribersMax =  idpSubMax + spSubMax
+					results.subscriberlabels = []
+					results.subscriberlabels.add(g.message(code:'label.identityproviders'))
+					results.subscriberlabels.add(g.message(code:'label.serviceproviders'))
 				}
 				
 				results.sessionvalues = sessionValues
@@ -93,7 +115,6 @@ class FederationReportsController {
 				results.idpmax = idpMax
 				results.spvalues = spValues
 				results.spmax = spMax
-				results.yearlabels = yearLabels
 			}
 			
 			render results as JSON

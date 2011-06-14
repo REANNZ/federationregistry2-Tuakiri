@@ -37,14 +37,93 @@
 								<div id="spcreationgraph"></div>
 							</div>
 						</div>
+						
+						<div class="reportsummaryrow">
+							<div class="reportsummarycell">
+								<h3 class="description"><g:message code="fedreg.view.reporting.federation.summary.heading.subgrowth" /></h3>
+								<center><div id="subscriberstackgraph"></div></center>
+							</div>
+						</div>
 					
 						<script type="text/javascript+protovis">
 							fedreg.renderCreationSummary = function(data) {	
-								fedreg.renderSummaryGraph($('#sessioncreationgraph'), data.sessionvalues, data.sessionmax, "rgb(225,187,120)", "rgb(255,127,14)", "Established");							
-								fedreg.renderSummaryGraph($('#orgcreationgraph'), data.orgvalues, data.orgmax, "rgb(152,223,138)", "rgb(44,160,44)", "Created");
-								fedreg.renderSummaryGraph($('#idpcreationgraph'), data.idpvalues, data.idpmax, "rgb(121,173,210)", "rgb(31,119,180)", "Created");
-								fedreg.renderSummaryGraph($('#spcreationgraph'), data.spvalues, data.spmax, "rgb(197,176,213)", "rgb(148,103,189)", "Created");
+								fedreg.renderSummaryGraph($('#sessioncreationgraph'), data.sessionvalues, data.sessionmax, "rgba(225,187,120,.7)", "rgb(255,127,14)", "Established");							
+								fedreg.renderSummaryGraph($('#orgcreationgraph'), data.orgvalues, data.orgmax, "rgba(152,223,138,.7)", "rgb(44,160,44)", "Created");
+								fedreg.renderSummaryGraph($('#idpcreationgraph'), data.idpvalues, data.idpmax, "rgba(121,173,210,.7)", "rgb(31,119,180)", "Created");
+								fedreg.renderSummaryGraph($('#spcreationgraph'), data.spvalues, data.spmax, "rgba(197,176,213,.7)", "rgb(148,103,189)", "Created");
+								fedreg.renderStackedGraph($('#subscriberstackgraph'), data.subscribers, data.subscribersMax, data.subscriberlabels, "rgb(197,176,213)", "rgb(148,103,189)", "Created");
 							};
+							
+							fedreg.renderStackedGraph = function(element, data, maxVal, labels, fillColor, strokeColor) {
+								var canvas = document.createElement("div");
+								element.append(canvas);
+								
+								/* Sizing and scales. */
+								var w = 800,
+									h = 300,
+									x = pv.Scale.linear(2010, 2011).range(0, w),
+									y = pv.Scale.linear(0, maxVal + 20).range(0, h),
+									c = pv.Colors.category20(),
+									i = -1;
+				
+								/* The root panel. */
+								var vis = new pv.Panel()
+									.canvas(canvas)
+									.width(w)
+									.height(h)
+									.bottom(20)
+									.left(80)
+									.right(200)
+									.top(5);
+									
+								/* X-axis and ticks. */
+								vis.add(pv.Rule)
+								    .data(x.ticks(data[0].length - 1))
+								    .visible(function(d) d)
+								    .left(x)
+								    .bottom(-5)
+								    .height(5)
+								  .anchor("bottom").add(pv.Label)
+								    .text(function(d) d);
+
+								/* The stack layout. */
+								vis.add(pv.Layout.Stack)
+								    .layers(data)
+								    .x(function(d) x(d.t))
+								    .y(function(d) y(d.c))
+								  .layer.add(pv.Area)
+									 .fillStyle(c.by(pv.parent));
+										
+								/* Y-axis and ticks. */
+								vis.add(pv.Rule)
+								    .data(y.ticks(3))
+								    .bottom(y)
+								    .strokeStyle(function(d) d ? "rgba(128,128,128,.2)" : "#000")
+								  .anchor("left").add(pv.Label)
+								    .text(y.tickFormat);	
+								
+								/* Y-axis label */
+								vis.add(pv.Label)
+								    .text('Subscriptions')
+								    .left(-45)
+								    .bottom(h/2)
+								    .textAlign("center")
+									.textAngle(-Math.PI/2);
+									
+									vis.add(pv.Dot)
+										.data([0,1])
+										.right(-40)
+										.top(function() 20 + this.index * 16)
+										.fillStyle(function(d) c(d))
+										.strokeStyle(null)
+										.size(30)
+									  .anchor("right").add(pv.Label)
+										.textMargin(6)
+										.textAlign("left")
+										.text(function(d) labels[d]);
+												
+								vis.render();
+							}
 							
 							fedreg.renderSummaryGraph = function(element, values, maxVal, fillColor, strokeColor, type) {
 						
