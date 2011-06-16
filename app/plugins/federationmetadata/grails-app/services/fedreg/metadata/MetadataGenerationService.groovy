@@ -11,6 +11,11 @@ import fedreg.core.*
  */
 class MetadataGenerationService {
 	
+	def populateSchema() {
+		["xmlns":"urn:oasis:names:tc:SAML:2.0:metadata", "xmlns:xsi":"http://www.w3.org/2001/XMLSchema-instance", 'xmlns:saml':'urn:oasis:names:tc:SAML:2.0:assertion', 'xmlns:shibmd':'urn:mace:shibboleth:metadata:1.0',
+			'xmlns:ds':'http://www.w3.org/2000/09/xmldsig#', "xsi:schemaLocation":"urn:oasis:names:tc:SAML:2.0:metadata saml-schema-metadata-2.0.xsd urn:mace:shibboleth:metadata:1.0 shibboleth-metadata-1.0.xsd http://www.w3.org/2000/09/xmldsig# xmldsig-core-schema.xsd"]
+	}
+	
 	def localizedName(builder, type, lang, content) {
 		builder."$type"('xml:lang':lang, content)
 	}
@@ -101,12 +106,12 @@ class MetadataGenerationService {
 	def entitiesDescriptor(builder, all, minimal, roleExtensions, entitiesDescriptor, validUntil, certificateAuthorities) {
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
-		
-		builder.EntitiesDescriptor("xmlns":"urn:oasis:names:tc:SAML:2.0:metadata", "xmlns:xsi":"http://www.w3.org/2001/XMLSchema-instance", 'xmlns:saml':'urn:oasis:names:tc:SAML:2.0:assertion', 'xmlns:shibmd':'urn:mace:shibboleth:metadata:1.0',
-			'xmlns:ds':'http://www.w3.org/2000/09/xmldsig#',
-			"xsi:schemaLocation":"urn:oasis:names:tc:SAML:2.0:metadata saml-schema-metadata-2.0.xsd urn:mace:shibboleth:metadata:1.0 shibboleth-metadata-1.0.xsd http://www.w3.org/2000/09/xmldsig# xmldsig-core-schema.xsd",
-			validUntil:sdf.format(validUntil), Name:entitiesDescriptor.name) {
+		def params = [:]
+		params.putAll(populateSchema())
+		params.validUntil = sdf.format(validUntil)
+		params.Name = entitiesDescriptor.name
 			
+		builder.EntitiesDescriptor(params) {
 			if(certificateAuthorities && certificateAuthorities.size() != 0) {
 				builder.Extensions() {
 					builder."shibmd:KeyAuthority"("xmlns:shibmd":"urn:mace:shibboleth:metadata:1.0", VerifyDepth: 5) {
@@ -120,7 +125,7 @@ class MetadataGenerationService {
 				this.entitiesDescriptor(builder, all, minimal, roleExtensions, eds)
 			}
 			entitiesDescriptor.entityDescriptors?.sort{it.entityID}.each { ed ->
-				entityDescriptor(builder, all, minimal, roleExtensions, ed)
+				entityDescriptor(builder, all, minimal, roleExtensions, ed, false)
 			}
 		}
 	}
@@ -132,19 +137,23 @@ class MetadataGenerationService {
 				this.entitiesDescriptor(builder, all, minimal, roleExtensions, eds)
 			}
 			entitiesDescriptor.entityDescriptors?.sort{it.entityID}.each { ed ->
-				entityDescriptor(builder, all, minimal, roleExtensions, ed)
+				entityDescriptor(builder, all, minimal, roleExtensions, ed, false)
 			}
 		}
 	}
 	
 	@Transactional(readOnly = true)
-	def entityDescriptor(builder, all, minimal, roleExtensions, entityDescriptor) {
+	def entityDescriptor(builder, all, minimal, roleExtensions, entityDescriptor, schema) {
 		if(all || entityDescriptor.functioning() ) {
 			if(entityDescriptor.empty()) {
 				log.warn "Not rendering $entityDescriptor no children nodes detected"
 			}
 			else {
-				builder.EntityDescriptor(entityID:entityDescriptor.entityID) {
+				def params = [:]
+				params.entityID = entityDescriptor.entityID
+				if(schema) params.putAll(populateSchema()) 
+					
+				builder.EntityDescriptor(params) {
 					entityDescriptor.idpDescriptors?.sort{it.id}?.each { idp -> idpSSODescriptor(builder, all, minimal, roleExtensions, idp) }
 					entityDescriptor.spDescriptors?.sort{it.id}?.each { sp -> spSSODescriptor(builder, all, minimal, roleExtensions, sp) }
 					entityDescriptor.attributeAuthorityDescriptors?.sort{it.id}?.each { aa -> attributeAuthorityDescriptor(builder, all, minimal, roleExtensions, aa)}

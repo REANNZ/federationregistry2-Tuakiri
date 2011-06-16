@@ -1,6 +1,23 @@
 class UrlMappings {
     static mappings = {
-	
+		// REST APIs
+		"/api/v1/attributefilters"(controller:"attributeFiltersAPIv1"){
+			action = [GET:"list"]
+		}
+		
+		"/api/v1/attributefilters/$id"(controller:"attributeFiltersAPIv1"){
+			action = [GET:"show"]
+		}
+		
+		"/api/v1/metadata"(controller:"metadataAPIv1"){
+			action = [GET: "list"]
+		}
+		
+		"/api/v1/metadata/$type/$id?"(controller:"metadataAPIv1"){
+			action = [GET: "show"]
+		}
+		
+		// Application
 		"/dashboard/$action?/$id?"{
 			controller = "dashboard"
 		}
