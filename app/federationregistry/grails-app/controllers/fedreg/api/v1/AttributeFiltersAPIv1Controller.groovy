@@ -8,24 +8,23 @@ class AttributeFiltersAPIv1Controller {
 	def attributeFilterGenerationService
 	
 	def list = {	
-		def attributefilters = [:]
-		
-		
-		def filters = []
-		attributefilters.attributefilters = filters
+		def results = []
 		
 		// Distribute non functioning IdP filters (but ignore archived) incase they come online and request AA before subsequent update
 		def identityProviders = IDPSSODescriptor.list(archived:false)		
 		identityProviders.each { idp ->
 			def filter = [:]
-			filter.id = idp.id
-			filter.name = idp.displayName
-			filter.link = g.createLink(controller: 'attributeFiltersAPI', id: idp.id, absolute: true)
+			filter.identityprovider = [:]
+			filter.identityprovider.id = idp.id
+			filter.identityprovider.name = idp.displayName
+			filter.format = "xml"
+			filter.link = g.createLink(controller: 'attributeFiltersAPIv1', id: idp.id, absolute: true)
 			
-			filters.add(filter)
+			results.add(filter)
 		}
 		
-		render attributefilters as JSON		
+		def response = [attributefilters:results]
+		render response as JSON		
 	}
 	
 	def show = {		

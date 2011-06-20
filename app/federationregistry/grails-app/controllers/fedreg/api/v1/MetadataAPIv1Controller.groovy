@@ -15,11 +15,11 @@ class MetadataAPIv1Controller {
 	
 	def list = {
 		def metadata = []
-		metadata.add(["minimal":[description:"Minimal set of SAML metadata compliant with Shibboleth 2.x clients", format:"xml", type:"federation", link:g.createLink(controller: 'metadataAPI', params:[type:"minimal"], absolute: true)]])
-		metadata.add(["minimalnoext":[description:"Minimal set of SAML metadata compliant with Shibboleth 1.x clients", format:"xml", type:"federation", link:g.createLink(controller: 'metadataAPI', params:[type:"minimalnoext"], absolute: true)]])
-		metadata.add(["current":[description:"Extended SAML 2 metadata compatible with Shibboleth 2.x clients and other SAML 2 compliant implementations", format:"xml", type:"federation", link:g.createLink(controller: 'metadataAPI', params:[type:"current"], absolute: true)]])
-		metadata.add(["all":[description:"Extended SAML 2 metadata includes all federation components including those unapproved, non-functioning and archived", format:"xml", type:"federation", link:g.createLink(controller: 'metadataAPI', params:[type:"all"], absolute: true)]])
-		metadata.add(["entity":[description:"SAML 2 compliant metadata snippet for specific entity descriptor ID", format:"xml", type:"federation", link:g.createLink(controller: 'metadataAPI', params:[type:"entity"], absolute: true)]])
+		metadata.add([minimal:[description:"Minimal set of SAML metadata compliant with Shibboleth 2.x clients", format:"xml", type:"federation", link:g.createLink(controller: 'metadataAPI', params:[type:"minimal"], absolute: true)]])
+		metadata.add([minimalnoext:[description:"Minimal set of SAML metadata compliant with Shibboleth 1.x clients", format:"xml", type:"federation", link:g.createLink(controller: 'metadataAPI', params:[type:"minimalnoext"], absolute: true)]])
+		metadata.add([current:[description:"Extended SAML 2 metadata compatible with Shibboleth 2.x clients and other SAML 2 compliant implementations", format:"xml", type:"federation", link:g.createLink(controller: 'metadataAPI', params:[type:"current"], absolute: true)]])
+		metadata.add([all:[description:"Extended SAML 2 metadata includes all federation components including those unapproved, non-functioning and archived", format:"xml", type:"federation", link:g.createLink(controller: 'metadataAPI', params:[type:"all"], absolute: true)]])
+		metadata.add([entity:[description:"SAML 2 compliant metadata snippet for specific entity descriptor ID", format:"xml", type:"federation", link:g.createLink(controller: 'metadataAPI', params:[type:"entity"], absolute: true)]])
 		
 		render metadata as JSON
 	}
@@ -43,8 +43,7 @@ class MetadataAPIv1Controller {
 			render(text:xml, contentType:"text/xml", encoding:"UTF-8")
 		else {
 			response.sendError(400)
-		}
-			
+		}			
 	}
 	
 	private String entityMetadata() {
