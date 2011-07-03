@@ -237,9 +237,6 @@ class MetadataGenerationService {
 			acs.serviceNames?.sort{it}.each {
 				localizedName(builder, "ServiceName", acs.lang, it)
 			}
-			acs.serviceDescriptions?.sort{it}.each {
-				localizedName(builder, "ServiceDescription", acs.lang, it)
-			}
 			acs.requestedAttributes?.sort{it.base.name}.each{ attr -> requestedAttribute(builder, all, minimal, attr)}
 		}
 	}
