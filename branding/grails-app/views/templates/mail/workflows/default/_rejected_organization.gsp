@@ -9,18 +9,18 @@
 			<table>
 				<tr>
 					<td>
-						<strong><g:message code="label.organization" /></strong>: 
-					</td>
-					<td>
-						${fieldValue(bean: organization, field: "displayName")}
-					</td>
-				</tr>
-				<tr>
-					<td>
 						<strong><g:message code="label.internalid" /></strong>: 
 					</td>
 					<td>
 						${fieldValue(bean: organization, field: "id")}
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<strong><g:message code="label.displayname" /></strong>: 
+					</td>
+					<td>
+						${fieldValue(bean: organization, field: "displayName")}
 					</td>
 				</tr>
 			</table>

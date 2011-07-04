@@ -9,14 +9,6 @@
 			<table>
 				<tr>
 					<td>
-						<strong><g:message code="label.organization" /></strong>: 
-					</td>
-					<td>
-						${fieldValue(bean: serviceProvider, field: "organization.displayName")}
-					</td>
-				</tr>
-				<tr>
-					<td>
 						<strong><g:message code="label.internalid" /></strong>: 
 					</td>
 					<td>
@@ -45,6 +37,14 @@
 					</td>
 					<td>
 						${fieldValue(bean: serviceProvider, field: "entityDescriptor.entityID")}
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<strong><g:message code="label.organization" /></strong>: 
+					</td>
+					<td>
+						${fieldValue(bean: serviceProvider, field: "organization.displayName")}
 					</td>
 				</tr>
 			</table>
