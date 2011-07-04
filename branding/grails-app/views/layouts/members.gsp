@@ -71,7 +71,7 @@
 									<li class="${actionName == 'edit' ? 'active':''}"><g:link controller="entityDescriptor" action="edit" id="${entity.id}" class="${actionName == 'edit' ? 'active':''}"><g:message code="label.edit"/></g:link></li>
 								</n:hasPermission>
 								<n:hasPermission target="descriptor:${entity.id}:archive">
-									<g:if test="${(entity.holdsIDPOnly() || entity.holdsSPOnly()) && !entity.archived}">
+									<g:if test="${(entity.holdsIDPOnly() || entity.holdsSPOnly() || entity.empty()) && !entity.archived}">
 										<li>
 											<n:confirmaction action="\$('#edarchive').submit();" title="${message(code: 'fedreg.templates.entitydescriptor.archive.confirm.title')}" msg="${message(code: 'fedreg.templates.entitydescriptor.archive.confirm.descriptive')}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" label="${message(code: 'label.archive')}" plain="true"/>
 										</li>
