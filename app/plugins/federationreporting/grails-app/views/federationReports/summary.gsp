@@ -61,7 +61,7 @@
 								/* Sizing and scales. */
 								var w = 800,
 									h = 300,
-									x = pv.Scale.linear(2010, 2011).range(0, w),
+									x = pv.Scale.linear(data[0], function(d) d.t).range(0, w),
 									y = pv.Scale.linear(0, maxVal + 20).range(0, h),
 									c = pv.Colors.category20(),
 									i = -1;
