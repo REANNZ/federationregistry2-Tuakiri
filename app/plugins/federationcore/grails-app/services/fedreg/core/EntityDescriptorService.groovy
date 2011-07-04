@@ -26,8 +26,6 @@ class EntityDescriptorService {
 	
 		// Entity Descriptor
 		def entityDescriptor = new EntityDescriptor(approved:false, active: params.active, entityID: params.entity?.identifier, organization: organization)
-		def entContactPerson = new ContactPerson(contact:contact, type:ContactType.findByName(ct))
-		entityDescriptor.addToContacts(entContactPerson)
 
 		if(!entityDescriptor.validate()) {			
 			entityDescriptor.errors.each {log.warn it}
