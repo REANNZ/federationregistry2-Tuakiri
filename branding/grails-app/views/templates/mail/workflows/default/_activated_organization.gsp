@@ -12,7 +12,7 @@
 						<strong><g:message code="label.internalid" /></strong>: 
 					</td>
 					<td>
-						${fieldValue(bean: serviceProvider, field: "id")}
+						${fieldValue(bean: organization, field: "id")}
 					</td>
 				</tr>
 				<tr>
