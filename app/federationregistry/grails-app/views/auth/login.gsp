@@ -15,11 +15,11 @@
 						<p>UniqueID: https://idp.one.edu.au/idp/shibboleth!-!d2404817-6fb9-4165-90d8-1</p>
 						<p><strong><em>Federation Registry wide administrator</em></strong></p>
 					  	<g:form action="devauth" method="post">
-							<g:hiddenField name="uniqueID" value="https://vho.aaf.edu.au/idp/shibboleth!https://manager.aaf.edu.au/shibboleth!8698dde3-d9cd-4c44-928c-2b6836bcc4bb" />
+							<g:hiddenField name="uniqueID" value="https://idp.one.edu.au/idp/shibboleth!-!d2404817-6fb9-4165-90d8-1" />
 							<g:hiddenField name="givenName" value="Fred" />
 							<g:hiddenField name="surname" value="Bloggs" />
 							<g:hiddenField name="email" value="fredbloggs@one.edu.au" />
-							<g:hiddenField name="entityID" value="https://vho.aaf.edu.au/idp/shibboleth" />
+							<g:hiddenField name="entityID" value="https://idp.one.edu.au/idp/shibboleth" />
 							<g:hiddenField name="homeOrganization" value="one.edu.au" />
 							<g:hiddenField name="homeOrganizationType" value="university:australia" />
 							<g:submitButton name="Login" class="save-button"/>
@@ -31,11 +31,11 @@
 						<p>UniqueID: https://idp.one.edu.au/idp/shibboleth!-!d2404817-6fb9-4165-90d8-2</p>
 						<p><strong><em>Administrator of University Two SP</em></strong></p>
 					  	<g:form action="devauth" method="post">
-							<g:hiddenField name="uniqueID" value="https://vho.aaf.edu.au/idp/shibboleth!https://manager.aaf.edu.au/shibboleth!8698dde3-d9cd-4c44-928c-2b6836bcc4bb-2" />
+							<g:hiddenField name="uniqueID" value="https://idp.one.edu.au/idp/shibboleth!-!d2404817-6fb9-4165-90d8-2" />
 							<g:hiddenField name="givenName" value="Joe" />
 							<g:hiddenField name="surname" value="Schmoe" />
 							<g:hiddenField name="email" value="joeschmoe@one.edu.au" />
-							<g:hiddenField name="entityID" value="https://vho.aaf.edu.au/idp/shibboleth" />
+							<g:hiddenField name="entityID" value="https://idp.one.edu.au/idp/shibboleth" />
 							<g:hiddenField name="homeOrganization" value="one.edu.au" />
 							<g:hiddenField name="homeOrganizationType" value="university:australia" />
 							<g:submitButton name="Login" class="save-button"/>
