@@ -47,7 +47,7 @@
 				},
 				keyup: false
 		});
-		$('formz').formwizard({ 
+		$('form').formwizard({ 
 		 	formPluginEnabled: false,
 		 	validationEnabled: true,
 		 	focusFirstInput : true,
