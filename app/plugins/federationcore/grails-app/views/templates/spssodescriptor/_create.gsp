@@ -450,10 +450,10 @@
 								${fieldValue(bean: attr, field: "description")}
 							</td>
 							<td>
-								<g:checkBox name="sp.attributes.${attr.id}.requested" id="sp.attributes.${attr.id}.requested" onClick="\$('#spattributes${attr.id}reasoning').toggleClass('required');" checked="${ra}"/>
+								<g:checkBox name="sp.attributes.${attr.id}.requested" id="spattributes${attr.id}requested" onClick="\$('#spattributes${attr.id}reasoning').toggleClass('required');" checked="${ra}"/>
 							</td>
 							<td>
-								<g:checkBox name="sp.attributes.${attr.id}.required" checked="${ra?.isRequired}"/>
+								<g:checkBox name="sp.attributes.${attr.id}.required" checked="${ra?.isRequired}" onClick="if(\$(this).is(':checked')) {\$('#spattributes${attr.id}requested').click();}"/>
 							</td>
 							<td>
 								<input name="sp.attributes.${attr.id}.reasoning" id="spattributes${attr.id}reasoning" size="40" value="${ra?.reasoning}" class="tip" title="${g.message(code:'fedreg.help.serviceprovider.attribute.reason')}"/>
@@ -492,10 +492,10 @@
 								${fieldValue(bean: attr, field: "description")}
 							</td>
 							<td>
-								<g:checkBox name="sp.attributes.${attr.id}.requested" onClick="\$('#spattributes${attr.id}reasoning').toggleClass('required'); \$('#spattributes${attr.id}requestedvalues1').toggleClass('required');" checked="${ra}"/>
+								<g:checkBox name="sp.attributes.${attr.id}.requested" id="spattributes${attr.id}requested" onClick="\$('#spattributes${attr.id}reasoning').toggleClass('required'); \$('#spattributes${attr.id}requestedvalues1').toggleClass('required');" checked="${ra}"/>
 							</td>
 							<td>
-								<g:checkBox name="sp.attributes.${attr.id}.required" checked="${ra?.isRequired}"/>
+								<g:checkBox name="sp.attributes.${attr.id}.required" onClick="if(\$(this).is(':checked')) {\$('#spattributes${attr.id}requested').click();}" checked="${ra?.isRequired}"/>
 							</td>
 							<td>
 								<g:textField name="sp.attributes.${attr.id}.reasoning" id="spattributes${attr.id}reasoning" size="40" value="${ra?.reasoning}" class="tip" title="${g.message(code:'fedreg.help.serviceprovider.attribute.reason')}"/>
