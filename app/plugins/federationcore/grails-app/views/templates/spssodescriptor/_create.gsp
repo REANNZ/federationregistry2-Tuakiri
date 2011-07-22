@@ -47,7 +47,7 @@
 				},
 				keyup: false
 		});
-		$('form').formwizard({ 
+		$('formz').formwizard({ 
 		 	formPluginEnabled: false,
 		 	validationEnabled: true,
 		 	focusFirstInput : true,
@@ -191,6 +191,7 @@
 		<div id="samlbasicmode">
 			<h4><g:message code="fedreg.templates.serviceprovider.create.saml.known.heading" /></h4>
 			<p><g:message code="fedreg.templates.serviceprovider.create.saml.known.descriptive" /></p>
+			
 			<p><span style="float:right;"><a href="#" class="view-button" onClick="$('#samlbasicmode').hide(); $('#samladvancedmode').fadeIn(); return false;"><g:message code="fedreg.templates.serviceprovider.create.saml.known.switch" /></a></span></p>
 			<table>
 				<tr>
@@ -198,7 +199,9 @@
 						<label for="knownimpl"><g:message code="label.implementation" /></label>
 					</td>
 					<td>
-						<span id="knownimpl"></span>
+						<span id="knownimpl">
+							<input type="radio" DISABLED> <span><strong><g:message code="fedreg.templates.serviceprovider.create.saml.known.shib13" /></strong> - <span style="color:red;"><g:message code="fedreg.templates.serviceprovider.create.saml.known.shib13.descriptive" /></span></span><br>
+						</span>
 					</td>
 				</tr>
 				<tr>
