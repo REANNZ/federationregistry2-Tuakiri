@@ -58,6 +58,18 @@ fedreg {
 		identityproviders {
 			shib22 {
 				displayName = 'Shibboleth Identity Provider (2.2.x)'
+				selected = false
+				entitydescriptor = '$host/idp/shibboleth'
+				post.uri = '$host/idp/profile/SAML2/POST/SSO'
+				redirect.uri = '$host/idp/profile/SAML2/Redirect/SSO'
+				artifact {
+					uri = '$host:8443/idp/profile/SAML2/SOAP/ArtifactResolution'
+					index = 2
+				}
+				attributeservice.uri = '$host:8443/idp/profile/SAML2/SOAP/AttributeQuery'
+			}
+			shib23 {
+				displayName = 'Shibboleth Identity Provider (2.3.x)'
 				selected = true
 				entitydescriptor = '$host/idp/shibboleth'
 				post.uri = '$host/idp/profile/SAML2/POST/SSO'
