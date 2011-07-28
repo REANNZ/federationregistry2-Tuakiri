@@ -49,7 +49,7 @@ class AttributeFiltersAPIv1Controller {
 		
 		def federation = grailsApplication.config.fedreg.metadata.federation
 		
-		attributeFilterGenerationService.generate(builder, "$federation:generatedpolicy", federation, identityProvider.id)
+		attributeFilterGenerationService.generate(builder, federation, identityProvider.id)
 		def xml = writer.toString()
 		
 		render(text:"${xml}\n\n<!-- Exported automatically from Federation Registry at ${new Date()}-->\n\n", contentType:"text/xml", encoding:"UTF-8")		

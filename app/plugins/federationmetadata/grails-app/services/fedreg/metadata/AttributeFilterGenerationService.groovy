@@ -1,5 +1,7 @@
 package fedreg.metadata
 
+import java.text.SimpleDateFormat
+
 import fedreg.core.*
 
 /**
@@ -9,13 +11,18 @@ import fedreg.core.*
  */
 class AttributeFilterGenerationService {
 
-	def generate(builder, id, groupID, idp) {
+	def generate(builder, groupID, idp) {
 		builder.mkp.xmlDeclaration(version:'1.0')
-		attributeFilterPolicyGroup(builder, id, groupID, idp)
+		attributeFilterPolicyGroup(builder, groupID, idp)
 	}
 	
-	def attributeFilterPolicyGroup(builder, id, groupID, idp) {
-		builder.AttributeFilterPolicyGroup(id:"_$id",
+	def attributeFilterPolicyGroup(builder, groupID, idp) {
+		SimpleDateFormat idf = new SimpleDateFormat("_yyyyMMdd'T'HHmmss'Z'")
+		def currently = new Date()
+		
+		// id is lower case in these polices per AF 2.0 schema and is of type String not ID.
+		
+		builder.AttributeFilterPolicyGroup(id: idf.format(currently),
 			"xmlns":"urn:mace:shibboleth:2.0:afp",
 			"xmlns:basic":"urn:mace:shibboleth:2.0:afp:mf:basic",
 			"xmlns:saml":"urn:mace:shibboleth:2.0:afp:mf:saml",
@@ -25,7 +32,7 @@ class AttributeFilterGenerationService {
 				// Process all our services
 				def identityProvider = IDPSSODescriptor.get(idp)
 				if(!identityProvider)
-					throw new ErronousStateException("Identity Provider specifed ($idp) for Attribute Filter creation does not exist.")
+					throw new ErronousStateException("Identity Provider specified ($idp) for Attribute Filter creation does not exist.")
 					
 				builder.mkp.yield "\n"
 				comment builder, "Custom generated attribute filter for IDP: ${identityProvider.displayName}, EntityID: ${identityProvider.entityDescriptor.entityID}"

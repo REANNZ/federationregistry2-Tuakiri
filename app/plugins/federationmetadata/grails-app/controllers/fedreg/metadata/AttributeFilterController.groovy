@@ -34,7 +34,7 @@ class AttributeFilterController {
 		
 		def federation = grailsApplication.config.fedreg.metadata.federation
 		
-		attributeFilterGenerationService.generate(builder, "$federation:generatedpolicy", federation, identityProvider.id)
+		attributeFilterGenerationService.generate(builder, federation, identityProvider.id)
 		def xml = writer.toString()
 		
 		render(text:xml, encoding:"UTF-8")
