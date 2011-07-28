@@ -8,6 +8,9 @@ fr-config.groovy
 FedRegConfig.groovy
 NimbleConfig.groovy
 
+# Ignore the login page incase we test with non standard DB
+grails-app/views/auth/login.gsp
+
 *~
 *.ipr
 *.iml

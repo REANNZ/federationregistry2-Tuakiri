@@ -106,8 +106,12 @@ class MetadataGenerationService {
 	def entitiesDescriptor(builder, all, minimal, roleExtensions, entitiesDescriptor, validUntil, certificateAuthorities) {
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+		SimpleDateFormat idf = new SimpleDateFormat("_yyyyMMdd'T'HHmmss'Z'")
+		def currently = new Date()
+		
 		def params = [:]
 		params.putAll(populateSchema())
+		params.ID =  idf.format(currently)
 		params.validUntil = sdf.format(validUntil)
 		params.Name = entitiesDescriptor.name
 			
