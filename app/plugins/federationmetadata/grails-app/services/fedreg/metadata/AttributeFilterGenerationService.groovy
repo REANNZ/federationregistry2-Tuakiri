@@ -15,19 +15,23 @@ class AttributeFilterGenerationService {
 	}
 	
 	def attributeFilterPolicyGroup(builder, id, groupID, idp) {
-		builder.AttributeFilterPolicyGroup(id:id,
+		builder.AttributeFilterPolicyGroup(id:"_$id",
 			"xmlns":"urn:mace:shibboleth:2.0:afp",
 			"xmlns:basic":"urn:mace:shibboleth:2.0:afp:mf:basic",
 			"xmlns:saml":"urn:mace:shibboleth:2.0:afp:mf:saml",
 			"xmlns:xsi":"http://www.w3.org/2001/XMLSchema-instance",
 			"xsi:schemaLocation":"urn:mace:shibboleth:2.0:afp classpath:/schema/shibboleth-2.0-afp.xsd urn:mace:shibboleth:2.0:afp:mf:basic classpath:/schema/shibboleth-2.0-afp-mf-basic.xsd urn:mace:shibboleth:2.0:afp:mf:saml classpath:/schema/shibboleth-2.0-afp-mf-saml.xsd") 
-			{
-				defaultReleasePolicy(builder, groupID)
+			{	
 				// Process all our services
 				def identityProvider = IDPSSODescriptor.get(idp)
 				if(!identityProvider)
 					throw new ErronousStateException("Identity Provider specifed ($idp) for Attribute Filter creation does not exist.")
 					
+				builder.mkp.yield "\n"
+				comment builder, "Custom generated attribute filter for IDP: ${identityProvider.displayName}, EntityID: ${identityProvider.entityDescriptor.entityID}"
+				comment builder, "This version exported from Federation Registry at ${new Date()}"
+				
+				defaultReleasePolicy(builder, groupID)
 				def serviceProviders = SPSSODescriptor.list().findAll { sp -> sp.functioning() }
 				serviceProviders?.each { serviceProvider ->
 					servicePolicy(builder, identityProvider, serviceProvider, groupID)
