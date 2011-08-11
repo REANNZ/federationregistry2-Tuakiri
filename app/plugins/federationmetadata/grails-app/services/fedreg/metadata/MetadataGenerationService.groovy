@@ -161,6 +161,8 @@ class MetadataGenerationService {
 					entityDescriptor.idpDescriptors?.sort{it.id}?.each { idp -> idpSSODescriptor(builder, all, minimal, roleExtensions, idp) }
 					entityDescriptor.spDescriptors?.sort{it.id}?.each { sp -> spSSODescriptor(builder, all, minimal, roleExtensions, sp) }
 					entityDescriptor.attributeAuthorityDescriptors?.sort{it.id}?.each { aa -> attributeAuthorityDescriptor(builder, all, minimal, roleExtensions, aa)}
+
+					organization(builder, entityDescriptor.organization)
 				}
 			}
 		}
@@ -250,7 +252,6 @@ class MetadataGenerationService {
 			"${roleDescriptor.class.name.split('\\.').last()}Extensions"(builder, all, roleDescriptor)
 		roleDescriptor.keyDescriptors?.sort{it.id}.each{keyDescriptor(builder, it)}		
 		if(!minimal) {
-			organization(builder, roleDescriptor.organization)
 			roleDescriptor.contacts?.sort{it.id}.each{cp -> contactPerson(builder, cp)}
 		}
 	}
