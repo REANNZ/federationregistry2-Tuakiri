@@ -47,11 +47,20 @@
 					
 						<script type="text/javascript+protovis">
 							fedreg.renderCreationSummary = function(data) {	
-								fedreg.renderSummaryGraph($('#sessioncreationgraph'), data.sessionvalues, data.sessionmax, "rgba(225,187,120,.7)", "rgb(255,127,14)", "Established");							
-								fedreg.renderSummaryGraph($('#orgcreationgraph'), data.orgvalues, data.orgmax, "rgba(152,223,138,.7)", "rgb(44,160,44)", "Created");
-								fedreg.renderSummaryGraph($('#idpcreationgraph'), data.idpvalues, data.idpmax, "rgba(121,173,210,.7)", "rgb(31,119,180)", "Created");
-								fedreg.renderSummaryGraph($('#spcreationgraph'), data.spvalues, data.spmax, "rgba(197,176,213,.7)", "rgb(148,103,189)", "Created");
-								fedreg.renderStackedGraph($('#subscriberstackgraph'), data.subscribers, data.subscribersMax, data.subscriberlabels, "rgb(197,176,213)", "rgb(148,103,189)", "Created");
+								if (data.sessionvalues)
+									fedreg.renderSummaryGraph($('#sessioncreationgraph'), data.sessionvalues, data.sessionmax, "rgba(225,187,120,.7)", "rgb(255,127,14)", "Established");	
+								
+								if (data.orgvalues)						
+									fedreg.renderSummaryGraph($('#orgcreationgraph'), data.orgvalues, data.orgmax, "rgba(152,223,138,.7)", "rgb(44,160,44)", "Created");
+								
+								if (data.idpvalues)	
+									fedreg.renderSummaryGraph($('#idpcreationgraph'), data.idpvalues, data.idpmax, "rgba(121,173,210,.7)", "rgb(31,119,180)", "Created");
+								
+								if (data.spvalues)	
+									fedreg.renderSummaryGraph($('#spcreationgraph'), data.spvalues, data.spmax, "rgba(197,176,213,.7)", "rgb(148,103,189)", "Created");
+								
+								if (data.subscribers)
+									fedreg.renderStackedGraph($('#subscriberstackgraph'), data.subscribers, data.subscribersMax, data.subscriberlabels, "rgb(197,176,213)", "rgb(148,103,189)", "Created");
 							};
 							
 							fedreg.renderStackedGraph = function(element, data, maxVal, labels, fillColor, strokeColor) {
