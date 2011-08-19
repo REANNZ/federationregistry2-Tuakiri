@@ -39,8 +39,14 @@ class SPSSODescriptorController {
 			return
 		}
 		
-		def attributes = AttributeBase.list()
-		def specAttr = AttributeBase.findAllWhere(specificationRequired:true)
+		def attributes, specAttr
+		if(SecurityUtils.subject.isPermitted("modify:restricted:attributes")) {
+			attributes = AttributeBase.list()
+			specAttr = AttributeBase.findAllWhere(specificationRequired:true)
+		} else {
+			attributes = AttributeBase.findAllWhere(adminRestricted:false)
+			specAttr = AttributeBase.findAllWhere(adminRestricted:false, specificationRequired:true)	
+		}
 		
 		def adminRole = Role.findByName("descriptor-${serviceProvider.id}-administrators")
 		[serviceProvider: serviceProvider, contactTypes:ContactType.list(), availableAttributes:attributes, specificationAttributes: specAttr, administrators:adminRole?.users]

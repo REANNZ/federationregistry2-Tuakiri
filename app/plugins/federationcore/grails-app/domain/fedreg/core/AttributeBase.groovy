@@ -39,6 +39,7 @@ class AttributeBase  {
 	
 	AttributeCategory category
 	
+	boolean adminRestricted = false		// Only provided to administrative users for registration into SP request
 	boolean specificationRequired = false	// Generally used for something like Entitlement where values are potentially huge and privacy leaking. 
 											// This will force service providers to manually specify the set of values they require to operate 
 											// Potentially future extented to IDPSSODescriptor management to indicate the set supported
@@ -54,6 +55,7 @@ class AttributeBase  {
 		name(nullable: false, blank: false, unique: true)
 		nameFormat(nullable: true)
 		friendlyName(nullable: false, blank: false)
+		adminRestricted(nullable:false)
 		oid (nullable: true, blank:false)
 		headerName (nullable: true, blank:false)
 		alias (nullable: true, blank:false)
