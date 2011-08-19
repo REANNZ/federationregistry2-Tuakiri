@@ -66,6 +66,9 @@
 		$('#samladvancedmode').hide();
 		
 		$('#hostname').bind('blur',  function() {
+			if( $(this).val().indexOf('/', $(this).val().length - 1) !== -1 && $(this).val().length > 9)
+				$(this).val($(this).val().substring(0, $(this).val().length - 1));
+
 			fedreg.configureIdentityProviderSAML($(this).val());
 		});
 	});
