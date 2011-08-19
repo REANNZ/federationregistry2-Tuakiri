@@ -22,8 +22,9 @@ class InvitationController {
 		}
 		else {
 			log.info "The account $authenticatedUser tried to claim ${params.code} which was previously used, denying."
-			response.sendError(403)
-			return
+			redirect action: invalidcode
 		}
 	}
+
+	def invalidcode = {}
 }
