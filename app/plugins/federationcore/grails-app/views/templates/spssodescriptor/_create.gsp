@@ -200,7 +200,7 @@
 					</td>
 					<td>
 						<span id="knownimpl">
-							<input type="radio" DISABLED> <span><strong><g:message code="fedreg.templates.serviceprovider.create.saml.known.shib13" /></strong> - <span style="color:red;"><g:message code="fedreg.templates.serviceprovider.create.saml.known.shib13.descriptive" /></span></span><br>
+							<span style="margin-left: 28px;"><strong><g:message code="fedreg.templates.serviceprovider.create.saml.known.shib13" /></strong> - <span style="color:red;"><g:message code="fedreg.templates.serviceprovider.create.saml.known.shib13.descriptive" /></span></span><br>
 						</span>
 					</td>
 				</tr>
