@@ -106,7 +106,11 @@ class MetadataGenerationService {
 	def entitiesDescriptor(builder, all, minimal, roleExtensions, entitiesDescriptor, validUntil, certificateAuthorities) {
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+		sdf.setTimeZone(TimeZone.getTimeZone("UTC"))
+
 		SimpleDateFormat idf = new SimpleDateFormat("_yyyyMMdd'T'HHmmss'Z'")
+		idf.setTimeZone(TimeZone.getTimeZone("UTC"))
+
 		def currently = new Date()
 		
 		def params = [:]
