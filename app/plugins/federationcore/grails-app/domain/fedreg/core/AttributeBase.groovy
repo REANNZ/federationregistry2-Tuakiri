@@ -56,7 +56,7 @@ class AttributeBase  {
 		nameFormat(nullable: true)
 		friendlyName(nullable: false, blank: false)
 		adminRestricted(nullable:false)
-		oid (nullable: true, blank:false)
+		oid (nullable: false, blank:false)
 		headerName (nullable: true, blank:false)
 		alias (nullable: true, blank:false)
 		description (nullable: true, blank:false)
