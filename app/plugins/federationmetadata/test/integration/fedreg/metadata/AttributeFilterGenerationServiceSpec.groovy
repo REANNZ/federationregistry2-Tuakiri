@@ -146,9 +146,9 @@ class AttributeFilterGenerationServiceSpec extends IntegrationSpec {
 			throw new Exception("SP save failed")
 		}
 		
-		def ba1 =  new AttributeBase(oid:'2.5.4.3', nameFormat: attrUri, name:'urn:mace:dir:attribute-def:cn', friendlyName:'cn', alias:'cn', description:'An individuals common name, typically their full name. This attribute should not be used in transactions where it is desirable to maintain user anonymity.', category:coreCategory, specificationRequired:false).save()
-		def ba2 =  new AttributeBase(oid:'2.5.4.4', nameFormat: attrUri, name:'urn:mace:dir:attribute-def:sn', friendlyName:'Surname', alias:'surname', description:'Surname or family name', category:optionalCategory, specificationRequired:false).save()
-		def ba3 =  new AttributeBase(oid:'2.5.4.42', nameFormat: attrUri, name:'urn:mace:dir:attribute-def:givenName', friendlyName:'Given name', alias:'givenName', description:'Given name of a person', category:optionalCategory, specificationRequired:false).save()
+		def ba1 =  new AttributeBase(oid:'2.5.4.3', nameFormat: attrUri, name:'urn:mace:dir:attribute-def:cn', name:'cn', alias:'cn', description:'An individuals common name, typically their full name. This attribute should not be used in transactions where it is desirable to maintain user anonymity.', category:coreCategory, specificationRequired:false).save()
+		def ba2 =  new AttributeBase(oid:'2.5.4.4', nameFormat: attrUri, name:'urn:mace:dir:attribute-def:sn', name:'Surname', alias:'surname', description:'Surname or family name', category:optionalCategory, specificationRequired:false).save()
+		def ba3 =  new AttributeBase(oid:'2.5.4.42', nameFormat: attrUri, name:'urn:mace:dir:attribute-def:givenName', name:'Given name', alias:'givenName', description:'Given name of a person', category:optionalCategory, specificationRequired:false).save()
 		
 		
 		def a1 = new Attribute(base:ba1).save()
@@ -187,9 +187,9 @@ class AttributeFilterGenerationServiceSpec extends IntegrationSpec {
 		if(!idp)
 			throw new Exception("IDP save failed")
 		
-		def ba1 =  new AttributeBase(oid:'2.5.4.3', nameFormat: attrUri, name:'urn:mace:dir:attribute-def:cn', friendlyName:'cn', alias:'cn', description:'An individuals common name, typically their full name. This attribute should not be used in transactions where it is desirable to maintain user anonymity.', category:coreCategory, specificationRequired:false).save()
-		def ba2 =  new AttributeBase(oid:'2.5.4.4', nameFormat: attrUri, name:'urn:mace:dir:attribute-def:sn', friendlyName:'Surname', alias:'surname', description:'Surname or family name', category:optionalCategory, specificationRequired:false).save()
-		def ba3 =  new AttributeBase(oid:'2.5.4.42', nameFormat: attrUri, name:'urn:mace:dir:attribute-def:givenName', friendlyName:'Given name', alias:'givenName', description:'Given name of a person', category:optionalCategory, specificationRequired:false).save()
+		def ba1 =  new AttributeBase(oid:'2.5.4.3', nameFormat: attrUri, name:'urn:mace:dir:attribute-def:cn', name:'cn', alias:'cn', description:'An individuals common name, typically their full name. This attribute should not be used in transactions where it is desirable to maintain user anonymity.', category:coreCategory, specificationRequired:false).save()
+		def ba2 =  new AttributeBase(oid:'2.5.4.4', nameFormat: attrUri, name:'urn:mace:dir:attribute-def:sn', name:'Surname', alias:'surname', description:'Surname or family name', category:optionalCategory, specificationRequired:false).save()
+		def ba3 =  new AttributeBase(oid:'2.5.4.42', nameFormat: attrUri, name:'urn:mace:dir:attribute-def:givenName', name:'Given name', alias:'givenName', description:'Given name of a person', category:optionalCategory, specificationRequired:false).save()
 		
 		
 		def a1 = new Attribute(base:ba1).save()
@@ -244,9 +244,9 @@ class AttributeFilterGenerationServiceSpec extends IntegrationSpec {
 			throw new Exception("SP save failed")
 		}
 		
-		def ba1 =  new AttributeBase(oid:'2.5.4.3', nameFormat: attrUri, name:'urn:mace:dir:attribute-def:cn', friendlyName:'cn', alias:'cn', description:'An individuals common name, typically their full name. This attribute should not be used in transactions where it is desirable to maintain user anonymity.', category:coreCategory, specificationRequired:false).save()
-		def ba2 =  new AttributeBase(oid:'2.5.4.4', nameFormat: attrUri, name:'urn:mace:dir:attribute-def:sn', friendlyName:'Surname', alias:'surname', description:'Surname or family name', category:optionalCategory, specificationRequired:false).save()
-		def ba3 =  new AttributeBase(oid:'2.5.4.42', nameFormat: attrUri, name:'urn:mace:dir:attribute-def:givenName', friendlyName:'Given name', alias:'givenName', description:'Given name of a person', category:optionalCategory, specificationRequired:false).save()
+		def ba1 =  new AttributeBase(oid:'2.5.4.3', nameFormat: attrUri, name:'urn:mace:dir:attribute-def:cn', name:'cn', alias:'cn', description:'An individuals common name, typically their full name. This attribute should not be used in transactions where it is desirable to maintain user anonymity.', category:coreCategory, specificationRequired:false).save()
+		def ba2 =  new AttributeBase(oid:'2.5.4.4', nameFormat: attrUri, name:'urn:mace:dir:attribute-def:sn', name:'Surname', alias:'surname', description:'Surname or family name', category:optionalCategory, specificationRequired:false).save()
+		def ba3 =  new AttributeBase(oid:'2.5.4.42', nameFormat: attrUri, name:'urn:mace:dir:attribute-def:givenName', name:'Given name', alias:'givenName', description:'Given name of a person', category:optionalCategory, specificationRequired:false).save()
 		
 		
 		def a1 = new Attribute(base:ba3).save()
@@ -279,9 +279,9 @@ class AttributeFilterGenerationServiceSpec extends IntegrationSpec {
 		if(!idp)
 			throw new Exception("IDP save failed")
 		
-		def ba1 =  new AttributeBase(oid:'2.5.4.3', nameFormat: attrUri, name:'urn:mace:dir:attribute-def:cn', friendlyName:'cn', alias:'cn', description:'An individuals common name, typically their full name. This attribute should not be used in transactions where it is desirable to maintain user anonymity.', category:coreCategory, specificationRequired:false).save()
-		def ba2 =  new AttributeBase(oid:'2.5.4.4', nameFormat: attrUri, name:'urn:mace:dir:attribute-def:sn', friendlyName:'Surname', alias:'surname', description:'Surname or family name', category:optionalCategory, specificationRequired:false).save()
-		def ba3 =  new AttributeBase(oid:'2.5.4.42', nameFormat: attrUri, name:'urn:mace:dir:attribute-def:givenName', friendlyName:'Given name', alias:'givenName', description:'Given name of a person', category:optionalCategory, specificationRequired:false).save()
+		def ba1 =  new AttributeBase(oid:'2.5.4.3', nameFormat: attrUri, name:'urn:mace:dir:attribute-def:cn', name:'cn', alias:'cn', description:'An individuals common name, typically their full name. This attribute should not be used in transactions where it is desirable to maintain user anonymity.', category:coreCategory, specificationRequired:false).save()
+		def ba2 =  new AttributeBase(oid:'2.5.4.4', nameFormat: attrUri, name:'urn:mace:dir:attribute-def:sn', name:'Surname', alias:'surname', description:'Surname or family name', category:optionalCategory, specificationRequired:false).save()
+		def ba3 =  new AttributeBase(oid:'2.5.4.42', nameFormat: attrUri, name:'urn:mace:dir:attribute-def:givenName', name:'Given name', alias:'givenName', description:'Given name of a person', category:optionalCategory, specificationRequired:false).save()
 		
 		
 		def a1 = new Attribute(base:ba3).save()
@@ -330,10 +330,10 @@ class AttributeFilterGenerationServiceSpec extends IntegrationSpec {
 			throw new Exception("SP save failed")
 		}
 		
-		def ba1 =  new AttributeBase(oid:'2.5.4.3', nameFormat: attrUri, name:'urn:mace:dir:attribute-def:cn', friendlyName:'cn', alias:'cn', description:'An individuals common name, typically their full name. This attribute should not be used in transactions where it is desirable to maintain user anonymity.', category:coreCategory, specificationRequired:false).save()
-		def ba2 =  new AttributeBase(oid:'2.5.4.4', nameFormat: attrUri, name:'urn:mace:dir:attribute-def:sn', friendlyName:'Surname', alias:'surname', description:'Surname or family name', category:optionalCategory, specificationRequired:false).save()
-		def ba3 =  new AttributeBase(oid:'2.5.4.42', nameFormat: attrUri, name:'urn:mace:dir:attribute-def:givenName', friendlyName:'Given name', alias:'givenName', description:'Given name of a person', category:optionalCategory, specificationRequired:false).save()
-		def ba4 =  new AttributeBase(oid:'1.3.6.1.4.1.5923.1.1.1.7', nameFormat: attrUri, name:'urn:mace:dir:attribute-def:eduPersonEntitlement', friendlyName:'Entitlement', alias:'entitlement', description:'Member of: URI (either URL or URN) that indicates a set of rights to specific resources based on an agreement across the releavant community', category:coreCategory, specificationRequired:true).save()
+		def ba1 =  new AttributeBase(oid:'2.5.4.3', nameFormat: attrUri, name:'urn:mace:dir:attribute-def:cn', name:'cn', alias:'cn', description:'An individuals common name, typically their full name. This attribute should not be used in transactions where it is desirable to maintain user anonymity.', category:coreCategory, specificationRequired:false).save()
+		def ba2 =  new AttributeBase(oid:'2.5.4.4', nameFormat: attrUri, name:'urn:mace:dir:attribute-def:sn', name:'Surname', alias:'surname', description:'Surname or family name', category:optionalCategory, specificationRequired:false).save()
+		def ba3 =  new AttributeBase(oid:'2.5.4.42', nameFormat: attrUri, name:'urn:mace:dir:attribute-def:givenName', name:'Given name', alias:'givenName', description:'Given name of a person', category:optionalCategory, specificationRequired:false).save()
+		def ba4 =  new AttributeBase(oid:'1.3.6.1.4.1.5923.1.1.1.7', nameFormat: attrUri, name:'urn:mace:dir:attribute-def:eduPersonEntitlement', name:'Entitlement', alias:'entitlement', description:'Member of: URI (either URL or URN) that indicates a set of rights to specific resources based on an agreement across the releavant community', category:coreCategory, specificationRequired:true).save()
 		
 		def a1 = new Attribute(base:ba1).save()
 		def a2 = new Attribute(base:ba2).save()
@@ -386,6 +386,6 @@ class AttributeFilterGenerationServiceSpec extends IntegrationSpec {
 	}
 	
 	def baseAttr(unique) {
-		new AttributeBase(name:"test attr $unique", nameFormat:new SamlURI(uri:'test:attr:format'), friendlyName:"test attr friendly $unique")
+		new AttributeBase(name:"test attr $unique", nameFormat:new SamlURI(uri:'test:attr:format'), name:"test attr friendly $unique")
 	}
 }

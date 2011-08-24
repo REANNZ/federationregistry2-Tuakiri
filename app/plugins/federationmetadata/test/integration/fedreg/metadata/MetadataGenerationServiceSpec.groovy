@@ -471,8 +471,8 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def nidms = NameIDMappingService.build(active:true, approved:true, binding:httpRedirect, location:UrlURI.build(uri:"https://test.example.com/nameidmappingserivce/REDIRECT"))
 		def aidrs = new AssertionIDRequestService(active:true, approved:true, binding:httpRedirect, location:UrlURI.build(uri:"https://test.example.com/assertionidrequestservice/REDIRECT"))
 		
-		def base1 = new AttributeBase(name:'test attr', nameFormat:new SamlURI(uri:'test:attr:format'), friendlyName:'test attr friendly')
-		def base2 = new AttributeBase(name:'test attr2', friendlyName:'test attr friendly 2')
+		def base1 = new AttributeBase(name:'test attr', nameFormat:new SamlURI(uri:'test:attr:format'), name:'test attr friendly')
+		def base2 = new AttributeBase(name:'test attr2', name:'test attr friendly 2')
 		def base3 = new AttributeBase(name:'test attr3', nameFormat:new SamlURI(uri:'test:attr:format'))
 		
 		def attr1 = new Attribute(idpSSODescriptor:idp, base:base1)
@@ -570,8 +570,8 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def acs = AssertionConsumerService.build(index:300, active:true, approved:true, binding:httpArtifact, location:new UrlURI(uri:"https://test.example.com/acs/ART"))
 		
 		def nf = SamlURI.build(uri:'test:attr:format')
-		def base1 = AttributeBase.build(name:'test attr', nameFormat:nf , friendlyName:'test attr friendly')
-		def base2 = AttributeBase.build(name:'test attr2', friendlyName:'test attr friendly 2')
+		def base1 = AttributeBase.build(name:'test attr', nameFormat:nf , name:'test attr friendly')
+		def base2 = AttributeBase.build(name:'test attr2', name:'test attr friendly 2')
 		def base3 = AttributeBase.build(name:'test attr3', nameFormat:nf)
 		def base4 = AttributeBase.build(name:'test attr4', nameFormat:nf)
 		
@@ -670,8 +670,8 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def nidf = new SamlURI(uri:"supported:nameid:format:urn")
 		def aidrs = new AssertionIDRequestService(active:true, approved:true, binding:httpRedirect, location:new UrlURI(uri:"https://test.example.com/assertionidrequestservice/REDIRECT"))
 		
-		def base1 = new AttributeBase(name:'test attr', nameFormat:new SamlURI(uri:'test:attr:format'), friendlyName:'test attr friendly')
-		def base2 = new AttributeBase(name:'test attr2', friendlyName:'test attr friendly 2')
+		def base1 = new AttributeBase(name:'test attr', nameFormat:new SamlURI(uri:'test:attr:format'), name:'test attr friendly')
+		def base2 = new AttributeBase(name:'test attr2', name:'test attr friendly 2')
 		def base3 = new AttributeBase(name:'test attr3', nameFormat:new SamlURI(uri:'test:attr:format'))
 		
 		def attr1 = new Attribute(base:base1)
@@ -742,8 +742,8 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def nidf = new SamlURI(uri:"supported:nameid:format:urn")
 		def aidrs = new AssertionIDRequestService(active:true, approved:true, binding:httpRedirect, location:new UrlURI(uri:"https://test.example.com/assertionidrequestservice/REDIRECT"))
 		
-		def base1 = new AttributeBase(name:'test attr', nameFormat:new SamlURI(uri:'test:attr:format'), friendlyName:'test attr friendly')
-		def base2 = new AttributeBase(name:'test attr2', friendlyName:'test attr friendly 2')
+		def base1 = new AttributeBase(name:'test attr', nameFormat:new SamlURI(uri:'test:attr:format'), name:'test attr friendly')
+		def base2 = new AttributeBase(name:'test attr2', name:'test attr friendly 2')
 		def base3 = new AttributeBase(name:'test attr3', nameFormat:new SamlURI(uri:'test:attr:format'))
 		
 		def attr1 = new Attribute(base:base1)

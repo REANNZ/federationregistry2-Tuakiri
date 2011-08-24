@@ -80,6 +80,6 @@ wU7I1/N110XAqdxIAZo7giAij4IKE122u7bPYs8YlQ8JoMb4hPJY5g==
       <saml:AttributeValue>val2</saml:AttributeValue>
     </RequestedAttribute>
     <RequestedAttribute Name='test attr2' FriendlyName='test attr friendly 2' isRequired='true' NameFormat='urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified' />
-    <RequestedAttribute Name='test attr3' FriendlyName='friendlyName' isRequired='false' NameFormat='test:attr:format' />
+    <RequestedAttribute Name='test attr3' FriendlyName='name' isRequired='false' NameFormat='test:attr:format' />
   </AttributeConsumingService>
 </SPSSODescriptor>

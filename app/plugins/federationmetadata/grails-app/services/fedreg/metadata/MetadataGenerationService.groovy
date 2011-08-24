@@ -192,14 +192,14 @@ class MetadataGenerationService {
 	
 	def attribute(builder, attr) {
 		if(attr.base.nameFormat?.uri) {
-			builder.'saml:Attribute'(Name: attr.base.name, FriendlyName:attr.base.friendlyName, NameFormat:attr.base.nameFormat?.uri) {
+			builder.'saml:Attribute'(NameFormat:attr.base.nameFormat?.uri, Name: "urn:oid:${attr.base.oid}", FriendlyName:attr.base.name) {
 				attr.values?.sort{it?.value}.each {
 					'saml:AttributeValue'(it.value)
 				}
 			}
 		}
 		else {
-			builder.'saml:Attribute'(Name: attr.base.name, FriendlyName:attr.base.friendlyName, NameFormat: 'urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified') {
+			builder.'saml:Attribute'(NameFormat: 'urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified', Name: "urn:oid:${attr.base.oid}", FriendlyName:attr.base.name) {
 				attr.values?.sort{it?.value}.each {
 					'saml:AttributeValue'(it.value)
 				}
@@ -211,13 +211,13 @@ class MetadataGenerationService {
 		if(all || attr.approved) {
 			if(!attr.base.specificationRequired || (attr.base.specificationRequired && attr.values.size() > 0)) {
 				if(attr.base.nameFormat?.uri) {
-					builder.RequestedAttribute(Name: attr.base.name, FriendlyName:attr.base.friendlyName, isRequired:attr.isRequired, NameFormat:attr.base.nameFormat?.uri) {
+					builder.RequestedAttribute(NameFormat:attr.base.nameFormat?.uri, Name: "urn:oid:${attr.base.oid}", FriendlyName:attr.base.name, isRequired:attr.isRequired) {
 						attr.values?.sort{it?.value}.each {
 							'saml:AttributeValue'(it.value)
 						}
 					}
 				} else {
-					builder.RequestedAttribute(Name: attr.base.name, FriendlyName:attr.base.friendlyName, isRequired:attr.isRequired, NameFormat: 'urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified') {
+					builder.RequestedAttribute(NameFormat: 'urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified', Name: "urn:oid:${attr.base.oid}", FriendlyName:attr.base.name, isRequired:attr.isRequired) {
 						attr.values?.sort{it?.value}.each {
 							'saml:AttributeValue'(it.value)
 						}

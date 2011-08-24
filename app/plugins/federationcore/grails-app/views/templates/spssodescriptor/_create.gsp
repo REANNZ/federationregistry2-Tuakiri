@@ -440,7 +440,7 @@
 						<g:set var="ra" value="${supportedAttributes.find {it.base == attr}}" />
 						<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 							<td>
-								${fieldValue(bean: attr, field: "friendlyName")}<br>
+								${fieldValue(bean: attr, field: "name")}<br>
 								<pre>OID: ${fieldValue(bean: attr, field: "oid")}</pre>
 							</td>
 							<td>
@@ -480,12 +480,12 @@
 					<th><g:message code="label.required" /></th>
 					<th><g:message code="label.reasonrequested" /></th>
 				</tr>
-				<g:each in="${attributeList.sort{it.friendlyName}}" var="attr" status="i">
+				<g:each in="${attributeList.sort{it.name}}" var="attr" status="i">
 					<g:if test="${attr.specificationRequired}">
 						<g:set var="ra" value="${supportedAttributes.find {it.base == attr}}" />
 						<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 							<td>
-								${fieldValue(bean: attr, field: "friendlyName")}<br>
+								${fieldValue(bean: attr, field: "name")}<br>
 								<pre>OID: ${fieldValue(bean: attr, field: "oid")}</pre>
 							</td>
 							<td  style="width: 300px;">

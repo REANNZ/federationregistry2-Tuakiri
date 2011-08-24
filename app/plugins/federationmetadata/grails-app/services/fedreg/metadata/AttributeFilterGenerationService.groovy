@@ -71,12 +71,12 @@ class AttributeFilterGenerationService {
 				"basic:Rule"("xsi:type":"saml:AttributeRequesterInEntityGroup", groupID:groupID)
 			}
 			serviceProvider.attributeConsumingServices.each { acs ->
-				acs.requestedAttributes.sort{it.base.alias}.each { ra ->
+				acs.requestedAttributes.sort{it.base.name}.each { ra ->
 					if(ra.approved) {
 						if(identityProvider.attributes.findAll{it.base == ra.base}.size() == 1) {
 							if(ra.base.specificationRequired) {
 								if(ra.values?.size() > 0) {
-									AttributeRule(attributeID:ra.base.alias){
+									AttributeRule(attributeID:ra.base.name){
 										PermitValueRule("xsi:type":"basic:OR") {
 											if(ra.values.size() == 1) {
 												def v = ra.values.toList().get(0)	// OR requires min 2 rules. We add this here to be schema compliant even when only a single value is requested
@@ -92,15 +92,15 @@ class AttributeFilterGenerationService {
 									}
 								}
 							} else {
-								AttributeRule(attributeID:ra.base.alias){
+								AttributeRule(attributeID:ra.base.name){
 									PermitValueRule("xsi:type":"basic:ANY")
 								}
 							}
 						}
 						else{
-							comment builder, "Attribute ${ra.base.alias} is not supported by this Identity Provider. Please configure your Attribute Resolver accordingly and indicate your support using Federation Registry"
+							comment builder, "Attribute ${ra.base.name} is not supported by this Identity Provider. Please configure your Attribute Resolver accordingly and indicate your support using Federation Registry"
 							if(ra.isRequired)
-								comment builder, "Additionally the attribute ${ra.base.alias} is required by this service provider. User access to this service will fail."
+								comment builder, "Additionally the attribute ${ra.base.name} is required by this service provider. User access to this service will fail."
 						}
 					}
 				}

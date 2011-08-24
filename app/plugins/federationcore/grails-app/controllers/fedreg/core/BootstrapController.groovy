@@ -18,7 +18,7 @@ class BootstrapController {
 		def c = AttributeBase.createCriteria()
 		def attributeList = c.list {
 			order("category", "asc")
-			order("friendlyName", "asc")
+			order("name", "asc")
 		}
 		[identityProvider: identityProvider, organizationList: Organization.findAllWhere(active:true, approved:true), attributeList: attributeList, nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)]
 	}
@@ -36,7 +36,7 @@ class BootstrapController {
 			def c = AttributeBase.createCriteria()
 			def attributeList = c.list {
 				order("category", "asc")
-				order("friendlyName", "asc")
+				order("name", "asc")
 			}
 			render (view:'idp', model:ret + [organizationList: Organization.findAllWhere(active:true, approved:true), attributeList: attributeList, nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)])
 		}
@@ -67,7 +67,7 @@ class BootstrapController {
 		def c = AttributeBase.createCriteria()
 		def attributeList = c.list {
 			order("category", "asc")
-			order("friendlyName", "asc")
+			order("name", "asc")
 		}
 		[serviceProvider: serviceProvider, organizationList: Organization.findAllWhere(active:true, approved:true), attributeList: attributeList, nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)]
 	}
@@ -85,7 +85,7 @@ class BootstrapController {
 			def c = AttributeBase.createCriteria()
 			def attributeList = c.list {
 				order("category", "asc")
-				order("friendlyName", "asc")
+				order("name", "asc")
 			}
 			render (view:'sp', model:ret + [organizationList: Organization.findAllWhere(active:true, approved:true), attributeList: attributeList, nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)])
 		}

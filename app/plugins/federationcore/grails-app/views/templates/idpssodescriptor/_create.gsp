@@ -355,7 +355,7 @@
 			<g:each in="${attributeList.sort{it.category.name}}" var="attr" status="i">
 			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 				<td>
-					${fieldValue(bean: attr, field: "friendlyName")}<br>
+					${fieldValue(bean: attr, field: "name")}<br>
 					<pre>OID: ${fieldValue(bean: attr, field: "oid")}</pre>
 				</td>
 				<td>

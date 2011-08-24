@@ -57,7 +57,7 @@ class AttributeConsumingServiceControllerSpec extends IntegrationSpec {
 		
 		then:
 		acs.requestedAttributes.size() == 1
-		wfDescription == "Approval for addition of the attribute '${attr.friendlyName}' (OID: ${attr.oid}) to the service '${acs?.descriptor?.displayName}'"
+		wfDescription == "Approval for addition of the attribute '${attr.name}' (OID: ${attr.oid}) to the service '${acs?.descriptor?.displayName}'"
 		controller.response.contentAsString == "fedreg.attributeconsumingservice.requestedattribute.add.success"
 	}
 	

@@ -12,14 +12,14 @@
 	<g:each in="${attrs}" status="i" var="attr">
 		<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 			<td>
-				${attr.base.friendlyName.encodeAsHTML()}
+				${attr.base.name.encodeAsHTML()}
 				<pre>OID: ${attr.base.oid?.encodeAsHTML()}</pre>
 			</td>
 			<td>${attr.base.category.name.encodeAsHTML()}</td>
 			<td> ${attr.base.description.encodeAsHTML()}</td>
 			<td>
 				<n:hasPermission target="descriptor:${descriptor.id}:attribute:remove">
-					<n:confirmaction action="fedreg.attribute_remove(${attr.id}, '${containerID}' );" title="${message(code: 'fedreg.templates.attributes.remove.confirm.title')}" msg="${message(code: 'fedreg.templates.attributes.remove.confirm.descriptive', args:[attr.base.friendlyName.encodeAsHTML()])}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" class="delete-button" label="label.remove" />
+					<n:confirmaction action="fedreg.attribute_remove(${attr.id}, '${containerID}' );" title="${message(code: 'fedreg.templates.attributes.remove.confirm.title')}" msg="${message(code: 'fedreg.templates.attributes.remove.confirm.descriptive', args:[attr.base.name.encodeAsHTML()])}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" class="delete-button" label="label.remove" />
 				</n:hasPermission>
 			</td>
 		</tr>

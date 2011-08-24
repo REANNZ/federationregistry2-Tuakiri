@@ -20,7 +20,7 @@
 			<g:each in="${requestedAttributes}" status="j" var="ra">
 				<tr id="ra-${ra.id}">
 					<td>
-						${ra.base.friendlyName.encodeAsHTML()}
+						${ra.base.name.encodeAsHTML()}
 						<pre>OID: ${ra.base.oid?.encodeAsHTML()}</pre>
 					</td>
 					<td>${ra.base.category.name.encodeAsHTML()}</td>
@@ -50,13 +50,13 @@
 							<n:button onclick="\$('#ra-${ra.id}').hide(); \$('#ra-edit-${ra.id}').fadeIn(); return false;" label="label.edit" class="edit-button"/>
 						</n:hasPermission>
 						<n:hasPermission target="descriptor:${ra.attributeConsumingService.descriptor.id}:attribute:remove">
-								<n:confirmaction action="fedreg.acs_reqattribute_remove(${ra.id}, ${ra.attributeConsumingService.id}, '${containerID}' );" title="${message(code: 'fedreg.templates.acs.reqattributes.remove.confirm.title')}" msg="${message(code: 'fedreg.templates.acs.reqattributes.remove.confirm.descriptive', args:[ra.base.friendlyName.encodeAsHTML()])}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" class="delete-button" label="label.remove" />
+								<n:confirmaction action="fedreg.acs_reqattribute_remove(${ra.id}, ${ra.attributeConsumingService.id}, '${containerID}' );" title="${message(code: 'fedreg.templates.acs.reqattributes.remove.confirm.title')}" msg="${message(code: 'fedreg.templates.acs.reqattributes.remove.confirm.descriptive', args:[ra.base.name.encodeAsHTML()])}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" class="delete-button" label="label.remove" />
 						</n:hasPermission>
 					</td>
 				</tr>
 				<tr id="ra-edit-${ra.id}" class="editablerow">
 					<td>
-						${ra.base.friendlyName.encodeAsHTML()}
+						${ra.base.name.encodeAsHTML()}
 						<pre>OID: ${ra.base.oid?.encodeAsHTML()}</pre>
 					</td>
 					<td>${ra.base.category.name.encodeAsHTML()}</td>

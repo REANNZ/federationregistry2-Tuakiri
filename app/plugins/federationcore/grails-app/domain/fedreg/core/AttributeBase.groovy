@@ -29,12 +29,10 @@ class AttributeBase  {
 	static auditable = true
 
 	String name
+	String legacyName
 	SamlURI nameFormat
-	String friendlyName
 	
 	String oid
-	String headerName
-	String alias
 	String description
 	
 	AttributeCategory category
@@ -53,8 +51,9 @@ class AttributeBase  {
 
 	static constraints = {
 		name(nullable: false, blank: false, unique: true)
+		legacyName(nullable:true, blank:false)
 		nameFormat(nullable: true)
-		friendlyName(nullable: false, blank: false)
+		name(nullable: false, blank: false)
 		adminRestricted(nullable:false)
 		oid (nullable: false, blank:false)
 		headerName (nullable: true, blank:false)
@@ -64,7 +63,7 @@ class AttributeBase  {
 		lastUpdated(nullable:true)
 	}
 	
-	public String toString() {	"attributebase:[id:$id, name: $name, friendlyName: $friendlyName]" }
+	public String toString() {	"attributebase:[id:$id, name: $name, name: $name]" }
 	
 	public boolean equals(Object obj) {
 		if( this.is(obj) ) return true
