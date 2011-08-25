@@ -17,7 +17,7 @@
       <basic:Rule xsi:type="basic:AttributeRequesterString" value="https://server1.test.example.com/saml" />
       <basic:Rule xsi:type="saml:AttributeRequesterInEntityGroup" groupID="test.aaf.edu.au" />
     </PolicyRequirementRule>
-    <AttributeRule attributeID="cn">
+    <AttributeRule attributeID="commonName">
       <PermitValueRule xsi:type="basic:ANY" />
     </AttributeRule>
     <AttributeRule attributeID="givenName">
@@ -34,7 +34,7 @@
       <basic:Rule xsi:type="basic:AttributeRequesterString" value="https://server2.test.example.com/saml" />
       <basic:Rule xsi:type="saml:AttributeRequesterInEntityGroup" groupID="test.aaf.edu.au" />
     </PolicyRequirementRule>
-    <AttributeRule attributeID="cn">
+    <AttributeRule attributeID="commonName">
       <PermitValueRule xsi:type="basic:ANY" />
     </AttributeRule>
     <AttributeRule attributeID="surname">
@@ -48,7 +48,7 @@
       <basic:Rule xsi:type="basic:AttributeRequesterString" value="https://server3.test.example.com/saml" />
       <basic:Rule xsi:type="saml:AttributeRequesterInEntityGroup" groupID="test.aaf.edu.au" />
     </PolicyRequirementRule>
-    <AttributeRule attributeID="cn">
+    <AttributeRule attributeID="commonName">
       <PermitValueRule xsi:type="basic:ANY" />
     </AttributeRule>
     <AttributeRule attributeID="givenName">
@@ -62,7 +62,7 @@
       <basic:Rule xsi:type="basic:AttributeRequesterString" value="https://server4.test.example.com/saml" />
       <basic:Rule xsi:type="saml:AttributeRequesterInEntityGroup" groupID="test.aaf.edu.au" />
     </PolicyRequirementRule>
-    <AttributeRule attributeID="cn">
+    <AttributeRule attributeID="commonName">
       <PermitValueRule xsi:type="basic:ANY" />
     </AttributeRule>
     <AttributeRule attributeID="surname">
@@ -76,7 +76,7 @@
       <basic:Rule xsi:type="basic:AttributeRequesterString" value="https://server5.test.example.com/saml" />
       <basic:Rule xsi:type="saml:AttributeRequesterInEntityGroup" groupID="test.aaf.edu.au" />
     </PolicyRequirementRule>
-    <AttributeRule attributeID="cn">
+    <AttributeRule attributeID="commonName">
       <PermitValueRule xsi:type="basic:ANY" />
     </AttributeRule>
     <AttributeRule attributeID="givenName">
