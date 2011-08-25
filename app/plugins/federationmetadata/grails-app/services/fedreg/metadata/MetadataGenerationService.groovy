@@ -242,6 +242,10 @@ class MetadataGenerationService {
 			log.warn "Attribute Consuming Service with no requested attributes can't be populated to metadata"
 			return
 		}
+		if(acs.requestedAttributes.findAll{ it.approved }.size() < 1 ) {
+			log.warn "Attribute Consuming Service with no approved requested attributes can't be populated to metadata"
+			return
+		}
 		
 		builder.AttributeConsumingService(index:index, isDefault:acs.isDefault) {
 			acs.serviceNames?.sort{it}.each {
