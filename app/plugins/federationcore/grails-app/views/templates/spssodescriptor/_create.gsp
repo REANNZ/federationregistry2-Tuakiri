@@ -453,7 +453,7 @@
 								<g:checkBox name="sp.attributes.${attr.id}.requested" id="spattributes${attr.id}requested" onClick="\$('#spattributes${attr.id}reasoning').toggleClass('required');" checked="${ra}"/>
 							</td>
 							<td>
-								<g:checkBox name="sp.attributes.${attr.id}.required" checked="${ra?.isRequired}" onClick="if(\$(this).is(':checked')) {\$('#spattributes${attr.id}requested').click();}"/>
+								<g:checkBox name="sp.attributes.${attr.id}.required" checked="${ra?.isRequired}" onClick="if(\$(this).is(':checked') && !\$('#spattributes${attr.id}requested').is(':checked')) {\$('#spattributes${attr.id}requested').click();}"/>
 							</td>
 							<td>
 								<input name="sp.attributes.${attr.id}.reasoning" id="spattributes${attr.id}reasoning" size="40" value="${ra?.reasoning}" class="tip" title="${g.message(code:'fedreg.help.serviceprovider.attribute.reason')}"/>
