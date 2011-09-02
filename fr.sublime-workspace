@@ -1,0 +1,241 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 0,
+		"selected_items":
+		[
+		],
+		"width": 0
+	},
+	"console":
+	{
+		"height": 0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_tabs": false,
+		"side_bar_visible": true,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationcore/grails-app/views/templates/spssodescriptor/_create.gsp",
+		"/Volumes/grails.dev/development/federationregistrymaster/scripts/adhoc/hotfix/1.2/migrateattributebase-hotfix.sql",
+		"/Users/bradleybeddoes/Documents/complete.xml.gz",
+		"/Users/bradleybeddoes/Documents/complete.xml",
+		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationmetadata/test/data/metadatagenerationservicespec/testvalidaadescriptor.xml",
+		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationcore/grails-app/domain/fedreg/core/Attribute.groovy",
+		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationcore/grails-app/domain/fedreg/core/RequestedAttribute.groovy",
+		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationmetadata/test/data/metadatagenerationservicespec/testvalididpssodescriptor.xml",
+		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationmetadata/grails-app/services/fedreg/metadata/MetadataGenerationService.groovy",
+		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationmetadata/test/integration/fedreg/metadata/MetadataGenerationServiceSpec.groovy",
+		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationmetadata/test/data/metadatagenerationservicespec/testvalidspssodescriptor.xml",
+		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationmetadata/test/data/metadatagenerationservicespec/testvalidspssodescriptornoapprovals.xml",
+		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationmetadata/test/data/metadatagenerationservicespec/testvalidentitydescriptorschema.xml",
+		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationmetadata/test/data/metadatagenerationservicespec/testvalidentitiesdescriptorembedded.xml",
+		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationmetadata/test/data/metadatagenerationservicespec/testvalidentitiesdescriptor.xml",
+		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationmetadata/grails-app/services/fedreg/metadata/AttributeFilterGenerationService.groovy",
+		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationmetadata/test/data/metadatagenerationservicespec/testvalidentitydescriptorschema",
+		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationmetadata/test/integration/fedreg/metadata/AttributeFilterGenerationServiceSpec.groovy",
+		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationcore/grails-app/domain/fedreg/core/AttributeBase.groovy",
+		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationmetadata/test/data/attributefiltergenerationspec/testsinglespusingentitlement.xml",
+		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationmetadata/test/data/attributefiltergenerationspec/testmultiplesp.xml",
+		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationmetadata/grails-app/controllers/fedreg/metadata/MetadataController.groovy",
+		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationreporting/grails-app/controllers/fedreg/reporting/SpReportsController.groovy",
+		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationreporting/grails-app/controllers/fedreg/reporting/FederationReportsController.groovy",
+		"/Volumes/grails.dev/development/federationregistrymaster/scripts/reports/boxreports.groovy",
+		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationcore/grails-app/views/templates/idpssodescriptor/_create.gsp",
+		"/Volumes/grails.dev/development/federationregistrymaster/app/federationregistry/grails-app/i18n/messages.properties",
+		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationcore/grails-app/views/templates/acs/_listrequestedattributes.gsp",
+		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationcore/grails-app/controllers/fedreg/core/SPSSODescriptorController.groovy",
+		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationcore/grails-app/views/templates/attributes/_add.gsp",
+		"/Volumes/grails.dev/development/federationregistrymaster/app/federationregistry/grails-app/conf/UrlMappings.groovy",
+		"/Volumes/grails.dev/development/federationregistrymaster/app/federationregistry/grails-app/views/invitation/invalidcode.gsp",
+		"/Volumes/grails.dev/development/federationregistrymaster/app/federationregistry/grails-app/controllers/fedreg/host/InvitationController.groovy",
+		"/Volumes/grails.dev/development/federationregistrymaster/app/federationregistry/fr-config.groovy",
+		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationworkflow/grails-app/domain/fedreg/workflow/TaskInstance.groovy",
+		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationworkflow/grails-app/views/workflowApproval/list.gsp",
+		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationworkflow/grails-app/views/workflowApproval/administrative.gsp",
+		"/Volumes/grails.dev/development/federationregistrymaster/app/federationregistry/grails-app/views/auth/login.gsp",
+		"/Volumes/grails.dev/development/federationregistrymaster/README",
+		"/Volumes/rails.dev/development/spintegrator-ruby/rack/warden/sprubyintegrator/app/views/sp_ruby_integrator/auth/_loginerror.html.erb",
+		"/Volumes/rails.dev/development/spintegrator-ruby/rack/warden/sprubyintegrator/lib/generators/sprubyintegrator/install/install_generator.rb",
+		"/Volumes/rails.dev/development/spintegrator-ruby/rack/warden/wardenexample/config/initializers/provisioning_manager.rb",
+		"/Volumes/rails.dev/development/spintegrator-ruby/rack/warden/sprubyintegrator/lib/sprubyintegrator/federation_strategy.rb",
+		"/Volumes/rails.dev/development/spintegrator-ruby/rack/warden/sprubyintegrator/lib/sprubyintegrator/development_strategy.rb",
+		"/Volumes/rails.dev/development/spintegrator-ruby/rack/warden/sprubyintegrator/lib/sprubyintegrator/subject_manager.rb",
+		"/Volumes/rails.dev/development/spintegrator-ruby/rack/warden/sprubyintegrator/lib/generators/sprubyintegrator/templates/subject_manager.rb.erb",
+		"/Volumes/rails.dev/development/spintegrator-ruby/rack/warden/sprubyintegrator/lib/generators/sprubyintegrator/templates/create_session_records.rb.erb",
+		"/Volumes/rails.dev/development/spintegrator-ruby/rack/warden/wardenexample/app/views/example/index.html.erb",
+		"/Volumes/rails.dev/development/spintegrator-ruby/rack/warden/wardenexample/app/controllers/example_controller.rb",
+		"/Volumes/rails.dev/development/spintegrator-ruby/rack/warden/wardenexample/app/models/zing.rb",
+		"/Volumes/rails.dev/development/spintegrator-ruby/rack/warden/wardenexample/config/initializers/subject_manager.rb",
+		"/Volumes/rails.dev/development/spintegrator-ruby/rack/warden/sprubyintegrator/lib/generators/sprubyintegrator/templates/subject.rb.erb",
+		"/Volumes/rails.dev/development/spintegrator-ruby/rack/warden/wardenexample/config/initializers/federation.rb",
+		"/Volumes/rails.dev/development/spintegrator-ruby/rack/warden/sprubyintegrator/lib/generators/sprubyintegrator/templates/security_manager.rb.erb",
+		"/Volumes/rails.dev/development/spintegrator-ruby/rack/warden/sprubyintegrator/lib/generators/sprubyintegrator/templates/subject_manager.rb",
+		"/Volumes/rails.dev/development/spintegrator-ruby/rack/warden/wardenexample/db/migrate/20110818011650_create_zings.rb",
+		"/Volumes/rails.dev/development/spintegrator-ruby/rack/warden/wardenexample/db/migrate/20110818011650_create_session_records.rb",
+		"/Volumes/rails.dev/development/spintegrator-ruby/rack/warden/wardenexample/config/initializers/warden.rb",
+		"/Volumes/rails.dev/development/spintegrator-ruby/rack/warden/wardenexample/config/initializers/security_manager.rb",
+		"/Volumes/rails.dev/development/spintegrator-ruby/rack/warden/wardenexample/app/models/session_record.rb.erb",
+		"/Volumes/rails.dev/development/spintegrator-ruby/rack/warden/wardenexample/app/models/<%= model_name.downcase %>.rb",
+		"/Volumes/rails.dev/development/spintegrator-ruby/rack/warden/sprubyintegrator/lib/sprubyintegrator/security_manager.rb",
+		"/Volumes/rails.dev/development/spintegrator-ruby/rack/warden/sprubyintegrator/lib/generators/sprubyintegrator/templates/create_subjects.rb.erb",
+		"/Volumes/rails.dev/development/spintegrator-ruby/rack/warden/sprubyintegrator/lib/generators/sprubyintegrator/templates/session_record.rb.erb",
+		"/Volumes/rails.dev/development/spintegrator-ruby/rack/warden/sprubyintegrator/lib/generators/sprubyintegrator/templates/create_subjects.rb",
+		"/Volumes/rails.dev/development/spintegrator-ruby/rack/warden/sprubyintegrator/lib/generators/sprubyintegrator/templates/federation.rb.erb",
+		"/Volumes/rails.dev/development/spintegrator-ruby/rack/warden/sprubyintegrator/lib/generators/sprubyintegrator/templates/warden.rb.erb",
+		"/Volumes/rails.dev/development/spintegrator-ruby/rack/warden/sprubyintegrator/lib/generators/sprubyintegrator/templates/test.rb",
+		"/Volumes/rails.dev/development/spintegrator-ruby/rack/warden/sprubyintegrator/app/contollers/sp_ruby_integrator/auth_controller.rb",
+		"/Volumes/rails.dev/development/spintegrator-ruby/rack/warden/sprubyintegrator/lib/sprubyintegrator.rb",
+		"/Volumes/rails.dev/development/spintegrator-ruby/rack/warden/sprubyintegrator/lib/sprubyintegrator/acts_as_federated.rb",
+		"/Volumes/rails.dev/development/spintegrator-ruby/rack/warden/sprubyintegrator/lib/sprubyintegrator/authentication_controller_extension.rb",
+		"/Volumes/rails.dev/development/spintegrator-ruby/rack/warden/sprubyintegrator/lib/sprubyintegrator/railtie.rb",
+		"/Volumes/rails.dev/development/spintegrator-ruby/rack/warden/wardenexample/app/controllers/application_controller.rb",
+		"/Volumes/rails.dev/development/spintegrator-ruby/rack/warden/wardenexample/public/index.html",
+		"/Volumes/rails.dev/development/spintegrator-ruby/rack/warden/wardenexample/config/routes.rb",
+		"/Volumes/rails.dev/development/spintegrator-ruby/rack/warden/sprubyintegrator/config/routes.rb",
+		"/Volumes/rails.dev/development/spintegrator-ruby/rack/warden/sprubyintegrator/config/initializers/warden.rb",
+		"/Volumes/rails.dev/development/spintegrator-ruby/rack/warden/sprubyintegrator/app/views/auth/login.html.erb",
+		"/Volumes/rails.dev/development/spintegrator-ruby/rack/warden/sprubyintegrator/app/contollers/auth_controller.rb",
+		"/Volumes/rails.dev/development/spintegrator-ruby/rack/warden/wardenexample/config/initializers/subject_extender.rb",
+		"/Volumes/rails.dev/development/spintegrator-ruby/rack/warden/sprubyintegrator/lib/sprubyintegrator/attribute_handler.rb",
+		"/Volumes/rails.dev/development/spintegrator-ruby/rack/warden/wardenexample/app/models/subject.rb",
+		"/Volumes/rails.dev/development/spintegrator-ruby/rack/warden/sprubyintegrator/lib/sprubyintegrator/subject_enhancement.rb",
+		"/Volumes/rails.dev/development/spintegrator-ruby/rack/warden/sprubyintegrator/app/views/auth/unauthenticated.html.erb",
+		"/Users/bradleybeddoes/Library/Application Support/Sublime Text 2/Packages/Default/Base File.sublime-settings",
+		"/Volumes/rails.dev/development/spintegrator-ruby/rack/warden/sprubyintegrator/lib/sprubyintegrator/strategies_support.rb",
+		"/Users/bradleybeddoes/Library/Application Support/Sublime Text 2/Packages/User/Base File.sublime-settings",
+		"/Users/bradleybeddoes/Library/Application Support/Sublime Text 2/Packages/Default/Global.sublime-settings",
+		"/Users/bradleybeddoes/Library/Application Support/Sublime Text 2/Packages/User/Global.sublime-settings"
+	],
+	"find":
+	{
+		"height": 33
+	},
+	"find_in_files":
+	{
+		"height": 85,
+		"include_history":
+		[
+		],
+		"location_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": true,
+		"find_history":
+		[
+			"Cont",
+			"saml:",
+			"xml == result",
+			"loadResult",
+			"result = loadResult",
+			"\"Test Filter Policy\", \"test.aaf.edu.au\",",
+			"baseAttr",
+			"\"cn\"",
+			"urn:mace",
+			"SimpleDateFormat",
+			"hostname",
+			"AuthController"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": true,
+		"regex": false,
+		"replace_history":
+		[
+			"",
+			"xml == expected",
+			"loadExpected",
+			"expected = loadResult",
+			"\"test.aaf.edu.au\",",
+			"\"commonName\""
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0
+	},
+	"input":
+	{
+		"height": 27
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0,
+			1
+		],
+		"rows":
+		[
+			0,
+			1
+		]
+	},
+	"menu_visible": true,
+	"replace":
+	{
+		"height": 62
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0,
+		"selected_items":
+		[
+		],
+		"width": 0
+	},
+	"select_project":
+	{
+		"height": 0,
+		"selected_items":
+		[
+		],
+		"width": 0
+	},
+	"show_minimap": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 329.80859375,
+	"status_bar_visible": true
+}
