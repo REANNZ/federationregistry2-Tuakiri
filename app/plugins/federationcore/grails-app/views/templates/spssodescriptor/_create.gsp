@@ -450,10 +450,10 @@
 								${fieldValue(bean: attr, field: "description")}
 							</td>
 							<td>
-								<g:checkBox name="sp.attributes.${attr.id}.requested" id="spattributes${attr.id}requested" onClick="\$('#spattributes${attr.id}reasoning').toggleClass('required');" checked="${ra}"/>
+								<g:checkBox name="sp.attributes.${attr.id}.requested" id="spattributes${attr.id}requested" onClick="\$('#spattributes${attr.id}reasoning').toggleClass('required'); if(!\$(this).is(':checked') && \$('#spattributes${attr.id}required').is(':checked')) {\$('#spattributes${attr.id}required').attr('checked', false);}" checked="${ra}"/>
 							</td>
 							<td>
-								<g:checkBox name="sp.attributes.${attr.id}.required" checked="${ra?.isRequired}" onClick="if(\$(this).is(':checked') && !\$('#spattributes${attr.id}requested').is(':checked')) {\$('#spattributes${attr.id}requested').click();}"/>
+								<g:checkBox name="sp.attributes.${attr.id}.required" id="spattributes${attr.id}required" checked="${ra?.isRequired}" onClick="if(\$(this).is(':checked') && !\$('#spattributes${attr.id}requested').is(':checked')) {\$('#spattributes${attr.id}requested').attr('checked', true);}"/>
 							</td>
 							<td>
 								<input name="sp.attributes.${attr.id}.reasoning" id="spattributes${attr.id}reasoning" size="40" value="${ra?.reasoning}" class="tip" title="${g.message(code:'fedreg.help.serviceprovider.attribute.reason')}"/>
@@ -492,10 +492,10 @@
 								${fieldValue(bean: attr, field: "description")}
 							</td>
 							<td>
-								<g:checkBox name="sp.attributes.${attr.id}.requested" id="spattributes${attr.id}requested" onClick="\$('#spattributes${attr.id}reasoning').toggleClass('required'); \$('#spattributes${attr.id}requestedvalues1').toggleClass('required');" checked="${ra}"/>
+								<g:checkBox name="sp.attributes.${attr.id}.requested" id="spattributes${attr.id}requested" onClick="\$('#spattributes${attr.id}reasoning').toggleClass('required'); \$('#spattributes${attr.id}requestedvalues1').toggleClass('required'); if(!\$(this).is(':checked') && \$('#spattributes${attr.id}required').is(':checked')) {\$('#spattributes${attr.id}required').attr('checked', false) };" checked="${ra}"/>
 							</td>
 							<td>
-								<g:checkBox name="sp.attributes.${attr.id}.required" onClick="if(\$(this).is(':checked')) {\$('#spattributes${attr.id}requested').click();}" checked="${ra?.isRequired}"/>
+								<g:checkBox name="sp.attributes.${attr.id}.required" id="spattributes${attr.id}required" onClick="if(\$(this).is(':checked')) {\$('#spattributes${attr.id}requested').attr('checked', true);}" checked="${ra?.isRequired}"/>
 							</td>
 							<td>
 								<g:textField name="sp.attributes.${attr.id}.reasoning" id="spattributes${attr.id}reasoning" size="40" value="${ra?.reasoning}" class="tip" title="${g.message(code:'fedreg.help.serviceprovider.attribute.reason')}"/>
