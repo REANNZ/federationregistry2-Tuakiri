@@ -7,6 +7,22 @@
 	},
 	"buffers":
 	[
+		{
+			"file": "/Volumes/grails.dev/development/federationregistrymaster/scripts/reports/shibbolethDS/parse-apache-logs.pl",
+			"settings":
+			{
+				"buffer_size": 7787,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Volumes/grails.dev/development/federationregistrymaster/scripts/reports/shibbolethDS/README.md",
+			"settings":
+			{
+				"buffer_size": 248,
+				"line_ending": "Unix"
+			}
+		}
 	],
 	"build_system": "",
 	"command_palette":
@@ -25,6 +41,7 @@
 	{
 		"menu_visible": true,
 		"show_minimap": false,
+		"show_open_files": true,
 		"show_tabs": false,
 		"side_bar_visible": true,
 		"status_bar_visible": false
@@ -176,8 +193,61 @@
 	"groups":
 	[
 		{
+			"selected": 1,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "/Volumes/grails.dev/development/federationregistrymaster/scripts/reports/shibbolethDS/parse-apache-logs.pl",
+					"settings":
+					{
+						"buffer_size": 7787,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2817,
+								2817
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Perl/Perl.tmLanguage"
+						},
+						"translation.x": 0,
+						"translation.y": 1588,
+						"zoom_level": 1
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/Volumes/grails.dev/development/federationregistrymaster/scripts/reports/shibbolethDS/README.md",
+					"settings":
+					{
+						"buffer_size": 248,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								248,
+								248
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Markdown/Markdown.tmLanguage"
+						},
+						"translation.x": 0,
+						"translation.y": 0,
+						"zoom_level": 1
+					},
+					"type": "text"
+				}
 			]
 		}
 	],
@@ -234,6 +304,7 @@
 		"width": 0
 	},
 	"show_minimap": true,
+	"show_open_files": true,
 	"show_tabs": true,
 	"side_bar_visible": true,
 	"side_bar_width": 329.80859375,
