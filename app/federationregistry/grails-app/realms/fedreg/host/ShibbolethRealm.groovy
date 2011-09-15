@@ -46,8 +46,8 @@ class ShibbolethRealm {
 			throw new UnknownAccountException("Authentication attempt for Shibboleth provider, denying attempt as no homeOrganization (ShibbolethToken.homeOrganization) was provided")
 		}
 		
-		if(authToken.displayName == null) {
-			if (authToken.givenName == null || authToken.surname == null) {
+		if( !authToken.displayName ) {
+			if ( !authToken.givenName || !authToken.surname ) {
 				log.error("Authentication attempt for Shibboleth provider, denying attempt as no name details (either givenName + surname or displayName) provided")
 				throw new UnknownAccountException("Authentication attempt for Shibboleth provider, denying attempt as no name details (either givenName + surname or displayName) provided")
 			}

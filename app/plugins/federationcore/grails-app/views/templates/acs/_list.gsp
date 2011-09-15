@@ -39,7 +39,7 @@
 									<tr>
 										<th><g:message code="label.attribute"/><th>
 										<td>
-											<g:select name="attrid" from="${availableAttributes.sort{it.friendlyName}}" optionKey="id" optionValue="${{ it.friendlyName + ' ( ' + it.oid + ' )' }}" class="required"/>
+											<g:select name="attrid" from="${availableAttributes.sort{it.name}}" optionKey="id" optionValue="${{ it.name + ' ( ' + it.oid + ' )' }}" class="required"/>
 										</td>
 									</tr>
 									<tr>

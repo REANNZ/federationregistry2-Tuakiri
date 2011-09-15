@@ -49,7 +49,7 @@ class IDPSSODescriptorController {
 		def c = AttributeBase.createCriteria()
 		def attributeList = c.list {
 			order("category", "asc")
-			order("friendlyName", "asc")
+			order("name", "asc")
 		}
 		[identityProvider: identityProvider, organizationList: Organization.findAllWhere(active:true, approved:true), attributeList: attributeList, nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)]
 	}
@@ -67,7 +67,7 @@ class IDPSSODescriptorController {
 			def c = AttributeBase.createCriteria()
 			def attributeList = c.list {
 				order("category", "asc")
-				order("friendlyName", "asc")
+				order("name", "asc")
 			}
 			render (view:'create', model:ret + [organizationList: Organization.findAllWhere(active:true, approved:true), attributeList: attributeList, nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)])
 		}

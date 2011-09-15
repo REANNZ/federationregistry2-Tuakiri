@@ -215,7 +215,7 @@ log4j = {
 	}
 	
 	info	'fr-md':    ['grails.app.controller.fedreg.metadata.MetadataController',
-						 'grails.app.service.fedreg.metadata.MetadataService'], additivity: false
+						 'grails.app.service.fedreg.metadata.MetadataGenerationService'], additivity: false
 						
     warn 	'fr-app': 	['org.codehaus.groovy.grails.web.servlet',
 						 'org.codehaus.groovy.grails.web.pages',

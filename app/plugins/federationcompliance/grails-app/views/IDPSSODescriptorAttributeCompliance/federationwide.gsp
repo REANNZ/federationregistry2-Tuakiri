@@ -7,7 +7,7 @@
 	</head>
 	<body>
 		<section>
-			<h2><g:message code="fedreg.view.compliance.attribute.heading" args="${[attribute?.friendlyName]}" /> (${supportingIdentityProviderList.size().encodeAsHTML()}<span class="total"> / ${identityProviderList.size().encodeAsHTML()})</h2>
+			<h2><g:message code="fedreg.view.compliance.attribute.heading" args="${[attribute?.name]}" /> (${supportingIdentityProviderList.size().encodeAsHTML()}<span class="total"> / ${identityProviderList.size().encodeAsHTML()})</h2>
 
 			<table>
 				<thead>

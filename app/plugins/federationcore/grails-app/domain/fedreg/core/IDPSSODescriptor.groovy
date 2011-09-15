@@ -68,7 +68,7 @@ class IDPSSODescriptor extends SSODescriptor  {
 			eq("idpSSODescriptor", this)
 			createAlias("base","_base")
 			order("_base.category", "asc")
-			order("_base.friendlyName", "asc")
+			order("_base.name", "asc")
 		}
 	}
 	

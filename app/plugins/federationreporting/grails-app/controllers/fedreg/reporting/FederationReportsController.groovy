@@ -28,10 +28,12 @@ class FederationReportsController {
 		if(SecurityUtils.subject.isPermitted("federation:reporting")) {
 			def results = [:]
 			def robot = params.robot ? params.robot.toBoolean() : false
+
+			def currentCal = new GregorianCalendar()
 			
 			// Key object creations
-			def minYear = WayfAccessRecord.executeQuery("select min(year(dateCreated)) from WayfAccessRecord")[0] 
-			def maxYear = WayfAccessRecord.executeQuery("select max(year(dateCreated)) from WayfAccessRecord")[0] 
+			def minYear = Organization.executeQuery("select min(year(dateCreated)) from fedreg.core.Organization")[0] ?: 2010
+			def maxYear = currentCal.get(Calendar.YEAR)
 			
 			if(minYear && maxYear) {
 				def sessionValues=[], orgValues =[], idpValues = [], spValues = []

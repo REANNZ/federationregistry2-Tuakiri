@@ -106,8 +106,16 @@ class MetadataGenerationService {
 	def entitiesDescriptor(builder, all, minimal, roleExtensions, entitiesDescriptor, validUntil, certificateAuthorities) {
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+		sdf.setTimeZone(TimeZone.getTimeZone("UTC"))
+
+		SimpleDateFormat idf = new SimpleDateFormat("_yyyyMMdd'T'HHmmss'Z'")
+		idf.setTimeZone(TimeZone.getTimeZone("UTC"))
+
+		def currently = new Date()
+		
 		def params = [:]
 		params.putAll(populateSchema())
+		params.ID =  idf.format(currently)
 		params.validUntil = sdf.format(validUntil)
 		params.Name = entitiesDescriptor.name
 			
@@ -157,6 +165,8 @@ class MetadataGenerationService {
 					entityDescriptor.idpDescriptors?.sort{it.id}?.each { idp -> idpSSODescriptor(builder, all, minimal, roleExtensions, idp) }
 					entityDescriptor.spDescriptors?.sort{it.id}?.each { sp -> spSSODescriptor(builder, all, minimal, roleExtensions, sp) }
 					entityDescriptor.attributeAuthorityDescriptors?.sort{it.id}?.each { aa -> attributeAuthorityDescriptor(builder, all, minimal, roleExtensions, aa)}
+
+					organization(builder, entityDescriptor.organization)
 				}
 			}
 		}
@@ -186,14 +196,14 @@ class MetadataGenerationService {
 	
 	def attribute(builder, attr) {
 		if(attr.base.nameFormat?.uri) {
-			builder.'saml:Attribute'(Name: attr.base.name, FriendlyName:attr.base.friendlyName, NameFormat:attr.base.nameFormat?.uri) {
+			builder.'saml:Attribute'(NameFormat:attr.base.nameFormat?.uri, Name: "urn:oid:${attr.base.oid}", FriendlyName:attr.base.name) {
 				attr.values?.sort{it?.value}.each {
 					'saml:AttributeValue'(it.value)
 				}
 			}
 		}
 		else {
-			builder.'saml:Attribute'(Name: attr.base.name, FriendlyName:attr.base.friendlyName, NameFormat: 'urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified') {
+			builder.'saml:Attribute'(NameFormat: 'urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified', Name: "urn:oid:${attr.base.oid}", FriendlyName:attr.base.name) {
 				attr.values?.sort{it?.value}.each {
 					'saml:AttributeValue'(it.value)
 				}
@@ -205,13 +215,13 @@ class MetadataGenerationService {
 		if(all || attr.approved) {
 			if(!attr.base.specificationRequired || (attr.base.specificationRequired && attr.values.size() > 0)) {
 				if(attr.base.nameFormat?.uri) {
-					builder.RequestedAttribute(Name: attr.base.name, FriendlyName:attr.base.friendlyName, isRequired:attr.isRequired, NameFormat:attr.base.nameFormat?.uri) {
+					builder.RequestedAttribute(NameFormat:attr.base.nameFormat?.uri, Name: "urn:oid:${attr.base.oid}", FriendlyName:attr.base.name, isRequired:attr.isRequired) {
 						attr.values?.sort{it?.value}.each {
 							'saml:AttributeValue'(it.value)
 						}
 					}
 				} else {
-					builder.RequestedAttribute(Name: attr.base.name, FriendlyName:attr.base.friendlyName, isRequired:attr.isRequired, NameFormat: 'urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified') {
+					builder.RequestedAttribute(NameFormat: 'urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified', Name: "urn:oid:${attr.base.oid}", FriendlyName:attr.base.name, isRequired:attr.isRequired) {
 						attr.values?.sort{it?.value}.each {
 							'saml:AttributeValue'(it.value)
 						}
@@ -232,6 +242,10 @@ class MetadataGenerationService {
 			log.warn "Attribute Consuming Service with no requested attributes can't be populated to metadata"
 			return
 		}
+		if(acs.requestedAttributes.findAll{ it.approved }.size() < 1 ) {
+			log.warn "Attribute Consuming Service with no approved requested attributes can't be populated to metadata"
+			return
+		}
 		
 		builder.AttributeConsumingService(index:index, isDefault:acs.isDefault) {
 			acs.serviceNames?.sort{it}.each {
@@ -246,7 +260,6 @@ class MetadataGenerationService {
 			"${roleDescriptor.class.name.split('\\.').last()}Extensions"(builder, all, roleDescriptor)
 		roleDescriptor.keyDescriptors?.sort{it.id}.each{keyDescriptor(builder, it)}		
 		if(!minimal) {
-			organization(builder, roleDescriptor.organization)
 			roleDescriptor.contacts?.sort{it.id}.each{cp -> contactPerson(builder, cp)}
 		}
 	}

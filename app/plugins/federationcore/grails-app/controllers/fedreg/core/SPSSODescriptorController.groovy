@@ -39,8 +39,14 @@ class SPSSODescriptorController {
 			return
 		}
 		
-		def attributes = AttributeBase.list()
-		def specAttr = AttributeBase.findAllWhere(specificationRequired:true)
+		def attributes, specAttr
+		if(SecurityUtils.subject.isPermitted("modify:restricted:attributes")) {
+			attributes = AttributeBase.list()
+			specAttr = AttributeBase.findAllWhere(specificationRequired:true)
+		} else {
+			attributes = AttributeBase.findAllWhere(adminRestricted:false)
+			specAttr = AttributeBase.findAllWhere(adminRestricted:false, specificationRequired:true)	
+		}
 		
 		def adminRole = Role.findByName("descriptor-${serviceProvider.id}-administrators")
 		[serviceProvider: serviceProvider, contactTypes:ContactType.list(), availableAttributes:attributes, specificationAttributes: specAttr, administrators:adminRole?.users]
@@ -51,7 +57,7 @@ class SPSSODescriptorController {
 		def c = AttributeBase.createCriteria()
 		def attributeList = c.list {
 			order("category", "asc")
-			order("friendlyName", "asc")
+			order("name", "asc")
 		}
 		[serviceProvider:serviceProvider, organizationList: Organization.findAllWhere(active:true, approved:true), attributeList: attributeList, nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)]
 	}
@@ -72,7 +78,7 @@ class SPSSODescriptorController {
 			def c = AttributeBase.createCriteria()
 			def attributeList = c.list {
 				order("category", "asc")
-				order("friendlyName", "asc")
+				order("name", "asc")
 			}
 			render (view:'create', model: ret + [organizationList: Organization.findAllWhere(active:true, approved:true), attributeList: attributeList, nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)])
 		}

@@ -4,7 +4,7 @@
 			<g:each in="${requestedAttributes}" status="k" var="ra">
 				<g:if test="${ra.base == specAttr}">
 					<tr>
-						<th><g:message code="label.requestedvaluesfor" args="[specAttr.friendlyName]"/></th>
+						<th><g:message code="label.requestedvaluesfor" args="[specAttr.name]"/></th>
 						<td colspan="2">
 							<div id="acsspecattr${j}">
 								<table>

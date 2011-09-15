@@ -14,6 +14,7 @@
 					<thead>
 						<tr>
 							<th><g:message code="label.name" /></th>
+							<th><g:message code="label.created" /></th>
 							<th><g:message code="label.description" /></th>
 							<th><g:message code="label.processinstance" /></th>
 							<th><g:message code="label.waitingon" /></th>
@@ -24,6 +25,7 @@
 						<g:each in="${tasks}" status="i" var="instance">
 							<tr>
 								<td>${fieldValue(bean: instance, field: "task.name")}</td>
+								<td>${fieldValue(bean: instance, field: "dateCreated")}</td>
 								<td>${fieldValue(bean: instance, field: "task.description")}</td>
 								<td>
 									${fieldValue(bean: instance, field: "processInstance.description")}
