@@ -56,6 +56,11 @@
 			var monitorCreateEndpoint = "${createLink(controller:'roleDescriptorMonitor', action:'create', id:serviceProvider.id )}";
 			
 			var descriptorMetadataEndpoint = "${createLink(controller:'metadata', action:'entity', id:serviceProvider.entityDescriptor.id )}";
+
+			var spReportsSessionsEndpoint = "${createLink(controller:'spReports', action:'sessionsjson', id:serviceProvider.id)}"
+			var spReportsLoginsEndpoint = "${createLink(controller:'spReports', action:'loginsjson', id:serviceProvider.id)}"
+			var spReportsTotalsEndpoint = "${createLink(controller:'spReports', action:'totalsjson', id:serviceProvider.id)}"
+			var spReportsConnectivityEndpoint = "${createLink(controller:'spReports', action:'connectivityjson', id:serviceProvider.id)}"
 			
 			$(function() {
 				fedreg.descriptor_metadata();
@@ -113,6 +118,17 @@
 					</td>
 				</tr>
 				<tr>
+					<th><g:message code="label.archived"/></th>
+					<td>
+						<g:if test="${serviceProvider.archived}"> 
+							<g:message code="label.yes" /> <div class="warning"><g:message code="label.warningmetadataarchived" /></div>
+						</g:if>
+						<g:else>
+							<g:message code="label.no" /> 
+						</g:else>
+					</td>
+				</tr>
+				<tr>
 					<th><g:message code="label.approved"/></th>
 					<td>
 						<g:if test="${serviceProvider.approved}">
@@ -139,6 +155,9 @@
 					<li><a href="#tab-endpoints"><g:message code="label.endpoints" /></a></li>
 					<li><a href="#tab-attributes"><g:message code="label.attributeconsumingservices" /></a></li>
 					<li><a href="#tab-nameidformats"><g:message code="label.supportednameidformats" /></a></li>
+					<n:hasAnyPermission in='["descriptor:${serviceProvider.id}:reporting:logins" , "federation:reporting"]'>
+						<li><a href="#tab-reports" ><g:message code="label.reporting" /></a></li>
+					</n:hasAnyPermission>
 					<li><a href="#tab-monitors" class="icon icon_database_key"><g:message code="label.monitoring" /></a></li>
 					<li><a href="#tab-metadata" ><g:message code="label.metadata" /></a></li>
 					<g:if test="${serviceProvider.approved}">
@@ -235,6 +254,13 @@
 					
 					<g:render template="/templates/nameidformats/add" plugin="federationcore" model="[descriptor:serviceProvider, containerID:'nameidformats']"/>
 				</div>
+				<n:hasAnyPermission in='["descriptor:${serviceProvider.id}:reporting:logins" , "federation:reporting"]'>
+					<div id="tab-reports" class="tabcontent">
+						<div id="reporting">
+							<g:render template="/templates/reporting/sp/reports" plugin="federationreporting" model="[id:serviceProvider.id]" />
+						</div>
+					</div>
+				</n:hasAnyPermission>
 				<div id="tab-metadata">
 					<h3><g:message code="label.metadata" /></h3>
 					<p><g:message code="fedreg.view.members.serviceprovider.show.metadata.details" />

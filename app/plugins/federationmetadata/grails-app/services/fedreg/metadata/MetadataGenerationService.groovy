@@ -11,6 +11,11 @@ import fedreg.core.*
  */
 class MetadataGenerationService {
 	
+	def populateSchema() {
+		["xmlns":"urn:oasis:names:tc:SAML:2.0:metadata", "xmlns:xsi":"http://www.w3.org/2001/XMLSchema-instance", 'xmlns:saml':'urn:oasis:names:tc:SAML:2.0:assertion', 'xmlns:shibmd':'urn:mace:shibboleth:metadata:1.0',
+			'xmlns:ds':'http://www.w3.org/2000/09/xmldsig#', "xsi:schemaLocation":"urn:oasis:names:tc:SAML:2.0:metadata saml-schema-metadata-2.0.xsd urn:mace:shibboleth:metadata:1.0 shibboleth-metadata-1.0.xsd http://www.w3.org/2000/09/xmldsig# xmldsig-core-schema.xsd"]
+	}
+	
 	def localizedName(builder, type, lang, content) {
 		builder."$type"('xml:lang':lang, content)
 	}
@@ -101,12 +106,20 @@ class MetadataGenerationService {
 	def entitiesDescriptor(builder, all, minimal, roleExtensions, entitiesDescriptor, validUntil, certificateAuthorities) {
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+		sdf.setTimeZone(TimeZone.getTimeZone("UTC"))
+
+		SimpleDateFormat idf = new SimpleDateFormat("_yyyyMMdd'T'HHmmss'Z'")
+		idf.setTimeZone(TimeZone.getTimeZone("UTC"))
+
+		def currently = new Date()
 		
-		builder.EntitiesDescriptor("xmlns":"urn:oasis:names:tc:SAML:2.0:metadata", "xmlns:xsi":"http://www.w3.org/2001/XMLSchema-instance", 'xmlns:saml':'urn:oasis:names:tc:SAML:2.0:assertion', 'xmlns:shibmd':'urn:mace:shibboleth:metadata:1.0',
-			'xmlns:ds':'http://www.w3.org/2000/09/xmldsig#',
-			"xsi:schemaLocation":"urn:oasis:names:tc:SAML:2.0:metadata saml-schema-metadata-2.0.xsd urn:mace:shibboleth:metadata:1.0 shibboleth-metadata-1.0.xsd http://www.w3.org/2000/09/xmldsig# xmldsig-core-schema.xsd",
-			validUntil:sdf.format(validUntil), Name:entitiesDescriptor.name) {
+		def params = [:]
+		params.putAll(populateSchema())
+		params.ID =  idf.format(currently)
+		params.validUntil = sdf.format(validUntil)
+		params.Name = entitiesDescriptor.name
 			
+		builder.EntitiesDescriptor(params) {
 			if(certificateAuthorities && certificateAuthorities.size() != 0) {
 				builder.Extensions() {
 					builder."shibmd:KeyAuthority"("xmlns:shibmd":"urn:mace:shibboleth:metadata:1.0", VerifyDepth: 5) {
@@ -120,7 +133,7 @@ class MetadataGenerationService {
 				this.entitiesDescriptor(builder, all, minimal, roleExtensions, eds)
 			}
 			entitiesDescriptor.entityDescriptors?.sort{it.entityID}.each { ed ->
-				entityDescriptor(builder, all, minimal, roleExtensions, ed)
+				entityDescriptor(builder, all, minimal, roleExtensions, ed, false)
 			}
 		}
 	}
@@ -132,25 +145,28 @@ class MetadataGenerationService {
 				this.entitiesDescriptor(builder, all, minimal, roleExtensions, eds)
 			}
 			entitiesDescriptor.entityDescriptors?.sort{it.entityID}.each { ed ->
-				entityDescriptor(builder, all, minimal, roleExtensions, ed)
+				entityDescriptor(builder, all, minimal, roleExtensions, ed, false)
 			}
 		}
 	}
 	
 	@Transactional(readOnly = true)
-	def entityDescriptor(builder, all, minimal, roleExtensions, entityDescriptor) {
+	def entityDescriptor(builder, all, minimal, roleExtensions, entityDescriptor, schema) {
 		if(all || entityDescriptor.functioning() ) {
 			if(entityDescriptor.empty()) {
 				log.warn "Not rendering $entityDescriptor no children nodes detected"
 			}
 			else {
-				builder.EntityDescriptor(entityID:entityDescriptor.entityID) {
+				def params = [:]
+				params.entityID = entityDescriptor.entityID
+				if(schema) params.putAll(populateSchema()) 
+					
+				builder.EntityDescriptor(params) {
 					entityDescriptor.idpDescriptors?.sort{it.id}?.each { idp -> idpSSODescriptor(builder, all, minimal, roleExtensions, idp) }
 					entityDescriptor.spDescriptors?.sort{it.id}?.each { sp -> spSSODescriptor(builder, all, minimal, roleExtensions, sp) }
 					entityDescriptor.attributeAuthorityDescriptors?.sort{it.id}?.each { aa -> attributeAuthorityDescriptor(builder, all, minimal, roleExtensions, aa)}
 
 					organization(builder, entityDescriptor.organization)
-					entityDescriptor.contacts?.sort{it.id}.each{cp -> contactPerson(builder, cp)}
 				}
 			}
 		}
@@ -180,14 +196,14 @@ class MetadataGenerationService {
 	
 	def attribute(builder, attr) {
 		if(attr.base.nameFormat?.uri) {
-			builder.'saml:Attribute'(Name: attr.base.name, FriendlyName:attr.base.friendlyName, NameFormat:attr.base.nameFormat?.uri) {
+			builder.'saml:Attribute'(NameFormat:attr.base.nameFormat?.uri, Name: "urn:oid:${attr.base.oid}", FriendlyName:attr.base.name) {
 				attr.values?.sort{it?.value}.each {
 					'saml:AttributeValue'(it.value)
 				}
 			}
 		}
 		else {
-			builder.'saml:Attribute'(Name: attr.base.name, FriendlyName:attr.base.friendlyName, NameFormat: 'urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified') {
+			builder.'saml:Attribute'(NameFormat: 'urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified', Name: "urn:oid:${attr.base.oid}", FriendlyName:attr.base.name) {
 				attr.values?.sort{it?.value}.each {
 					'saml:AttributeValue'(it.value)
 				}
@@ -199,13 +215,13 @@ class MetadataGenerationService {
 		if(all || attr.approved) {
 			if(!attr.base.specificationRequired || (attr.base.specificationRequired && attr.values.size() > 0)) {
 				if(attr.base.nameFormat?.uri) {
-					builder.RequestedAttribute(Name: attr.base.name, FriendlyName:attr.base.friendlyName, isRequired:attr.isRequired, NameFormat:attr.base.nameFormat?.uri) {
+					builder.RequestedAttribute(NameFormat:attr.base.nameFormat?.uri, Name: "urn:oid:${attr.base.oid}", FriendlyName:attr.base.name, isRequired:attr.isRequired) {
 						attr.values?.sort{it?.value}.each {
 							'saml:AttributeValue'(it.value)
 						}
 					}
 				} else {
-					builder.RequestedAttribute(Name: attr.base.name, FriendlyName:attr.base.friendlyName, isRequired:attr.isRequired, NameFormat: 'urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified') {
+					builder.RequestedAttribute(NameFormat: 'urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified', Name: "urn:oid:${attr.base.oid}", FriendlyName:attr.base.name, isRequired:attr.isRequired) {
 						attr.values?.sort{it?.value}.each {
 							'saml:AttributeValue'(it.value)
 						}
@@ -226,24 +242,24 @@ class MetadataGenerationService {
 			log.warn "Attribute Consuming Service with no requested attributes can't be populated to metadata"
 			return
 		}
+		if(acs.requestedAttributes.findAll{ it.approved }.size() < 1 ) {
+			log.warn "Attribute Consuming Service with no approved requested attributes can't be populated to metadata"
+			return
+		}
 		
 		builder.AttributeConsumingService(index:index, isDefault:acs.isDefault) {
 			acs.serviceNames?.sort{it}.each {
 				localizedName(builder, "ServiceName", acs.lang, it)
 			}
-			acs.serviceDescriptions?.sort{it}.each {
-				localizedName(builder, "ServiceDescription", acs.lang, it)
-			}
 			acs.requestedAttributes?.sort{it.base.name}.each{ attr -> requestedAttribute(builder, all, minimal, attr)}
 		}
 	}
 	
-	def roleDescriptor(builder, minimal, roleExtensions, roleDescriptor) {
+	def roleDescriptor(builder, all, minimal, roleExtensions, roleDescriptor) {
 		if(roleExtensions)
-			"${roleDescriptor.class.name.split('\\.').last()}Extensions"(builder, roleDescriptor)
+			"${roleDescriptor.class.name.split('\\.').last()}Extensions"(builder, all, roleDescriptor)
 		roleDescriptor.keyDescriptors?.sort{it.id}.each{keyDescriptor(builder, it)}		
 		if(!minimal) {
-			organization(builder, roleDescriptor.organization)
 			roleDescriptor.contacts?.sort{it.id}.each{cp -> contactPerson(builder, cp)}
 		}
 	}
@@ -258,7 +274,7 @@ class MetadataGenerationService {
 	def idpSSODescriptor(builder, all, minimal, roleExtensions, idpSSODescriptor) {
 		if(all || idpSSODescriptor.functioning() ) {
 			builder.IDPSSODescriptor(protocolSupportEnumeration: idpSSODescriptor.protocolSupportEnumerations.sort{it.uri}.collect({it.uri}).join(' ')) {
-			roleDescriptor(builder, minimal, roleExtensions, idpSSODescriptor)
+			roleDescriptor(builder, all, minimal, roleExtensions, idpSSODescriptor)
 			ssoDescriptor(builder, all, minimal, idpSSODescriptor)
 			
 			idpSSODescriptor.singleSignOnServices?.sort{it.id}.each{ sso -> endpoint(builder, all, minimal, "SingleSignOnService", sso) }
@@ -274,7 +290,7 @@ class MetadataGenerationService {
 	def spSSODescriptor(builder, all, minimal, roleExtensions, spSSODescriptor) {
 		if(all || spSSODescriptor.functioning() ) {
 			builder.SPSSODescriptor(protocolSupportEnumeration: spSSODescriptor.protocolSupportEnumerations.sort{it.uri}.collect({it.uri}).join(' ')) {
-				roleDescriptor(builder, minimal, roleExtensions, spSSODescriptor)
+				roleDescriptor(builder, all, minimal, roleExtensions, spSSODescriptor)
 				ssoDescriptor(builder, all, minimal, spSSODescriptor)
 			
 				spSSODescriptor.assertionConsumerServices?.sort{it.id}.eachWithIndex{ ars, i -> indexedEndpoint(builder, all, minimal, "AssertionConsumerService", ars) }
@@ -296,7 +312,7 @@ class MetadataGenerationService {
 						// We don't currently provide direct AA manipulation to reduce general end user complexity.
 						// So where a collaborative relationship exists we use all common data from the IDP to render the AA
 						// If it isn't collaborative we'll assume manual DB intervention and render direct ;-).
-						roleDescriptor(builder, minimal, roleExtensions, aaDescriptor.collaborator)	
+						roleDescriptor(builder, all, minimal, roleExtensions, aaDescriptor.collaborator)	
 						aaDescriptor.attributeServices?.sort{it.id}.each{ attrserv -> endpoint(builder, all, minimal, "AttributeService", attrserv) }
 						aaDescriptor.collaborator.assertionIDRequestServices?.sort{it.id}.each{ aidrs -> endpoint(builder, all, minimal, "AssertionIDRequestService", aidrs) }
 						aaDescriptor.collaborator.nameIDFormats?.sort{it.uri}.each{ nidf -> samlURI(builder, "NameIDFormat", nidf) }
@@ -308,7 +324,7 @@ class MetadataGenerationService {
 			}
 			else {
 				builder.AttributeAuthorityDescriptor(protocolSupportEnumeration: aaDescriptor.protocolSupportEnumerations.sort{it.uri}.collect({it.uri}).join(' ')) {
-					roleDescriptor(builder, minimal, roleExtensions, aaDescriptor)	
+					roleDescriptor(builder, all, minimal, roleExtensions, aaDescriptor)	
 					aaDescriptor.attributeServices?.sort{it.id}.each{ attrserv -> endpoint(builder, all, minimal, "AttributeService", attrserv) }
 					aaDescriptor.assertionIDRequestServices?.sort{it.id}.each{ aidrs -> endpoint(builder, all, minimal, "AssertionIDRequestService", aidrs) }
 					aaDescriptor.nameIDFormats?.sort{it.id}.each{ nidf -> samlURI(builder, "NameIDFormat", nidf) }
@@ -319,26 +335,28 @@ class MetadataGenerationService {
 		}
 	}
 	
-	def IDPSSODescriptorExtensions(builder, roleDescriptor) {
+	def IDPSSODescriptorExtensions(builder, all, roleDescriptor) {
 		builder.Extensions() {
 			builder."shibmd:Scope" (regexp:false, roleDescriptor.scope)
 		}
 	}
 	
-	def SPSSODescriptorExtensions(builder, spSSODescriptor) {
+	def SPSSODescriptorExtensions(builder, all, spSSODescriptor) {
 		if(spSSODescriptor.discoveryResponseServices) {
 			builder.Extensions() {
-				spSSODescriptor.discoveryResponseServices.each { endpoint ->
-					builder."dsr:DiscoveryResponse"("xmlns:dsr":"urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol", Binding: endpoint.binding.uri, Location:endpoint.location.uri, index:endpoint.index, isDefault:endpoint.isDefault)
+				spSSODescriptor.discoveryResponseServices?.sort{it.id}.each { endpoint ->
+					if(all || endpoint.functioning() ) {
+						builder."dsr:DiscoveryResponse"("xmlns:dsr":"urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol", Binding: endpoint.binding.uri, Location:endpoint.location.uri, index:endpoint.index, isDefault:endpoint.isDefault)
+					}
 				}
 			}
 		}
 	}
 	
-	def AttributeAuthorityDescriptorExtensions(builder, roleDescriptor) {
+	def AttributeAuthorityDescriptorExtensions(builder, all, roleDescriptor) {
 		builder.Extensions() {
 			builder."shibmd:Scope" (regexp:false, roleDescriptor.scope)
-		}
+		} 
 	}
 	
 }

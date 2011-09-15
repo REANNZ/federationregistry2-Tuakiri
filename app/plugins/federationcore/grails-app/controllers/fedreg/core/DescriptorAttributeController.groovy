@@ -45,7 +45,7 @@ class DescriptorAttributeController {
 			if(!descriptor.attributes.contains(attribute)) {
 				log.warn "${attribute} isn't supported by descriptor ${params.id}"
 				response.setStatus(500)
-				render message(code: 'fedreg.attribute.remove.notsupported', args:[attribute.base.friendlyName])
+				render message(code: 'fedreg.attribute.remove.notsupported', args:[attribute.base.name])
 				return
 			}
 		
@@ -56,12 +56,12 @@ class DescriptorAttributeController {
 				descriptor.errors.each {
 					log.debug it
 				}
-				render message(code: 'fedreg.attribute.remove.failed', args:[attribute.base.friendlyName])
+				render message(code: 'fedreg.attribute.remove.failed', args:[attribute.base.name])
 				response.setStatus(500)
 				return
 			}else {
 				log.info "$authenticatedUser removed $attribute from descriptor ${params.id}"
-				render message(code: 'fedreg.attribute.remove.success', args:[attribute.base.friendlyName])
+				render message(code: 'fedreg.attribute.remove.success', args:[attribute.base.name])
 			}
 		}
 		else {
@@ -132,7 +132,7 @@ class DescriptorAttributeController {
 				if(a.base == base) {
 					log.warn "${base} is already supported by descriptor ${params.id}"
 					response.setStatus(500)
-					render message(code: 'fedreg.attribute.add.alreadysupported', args:[base.friendlyName])
+					render message(code: 'fedreg.attribute.add.alreadysupported', args:[base.name])
 					return
 				}
 			}
@@ -145,12 +145,12 @@ class DescriptorAttributeController {
 				descriptor.errors.each {
 					log.debug it
 				}
-				render message(code: 'fedreg.attribute.add.failed', args:[base.friendlyName])
+				render message(code: 'fedreg.attribute.add.failed', args:[base.name])
 				response.setStatus(500)
 				return
 			} else {
 				log.info "$authenticatedUser added $base to $descriptor"
-				render message(code: 'fedreg.attribute.add.success', args:[base.friendlyName])
+				render message(code: 'fedreg.attribute.add.success', args:[base.name])
 			}
 		}
 		else {

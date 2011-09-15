@@ -4,7 +4,7 @@
 		<tr>
 			<th><g:message code="label.provider" /></th>
 			<td valign="top">
-			<a href="${user.federationProvider.details?.url?.location}" alt="${user.federationProvider.details?.url?.altText}"><g:message code="${user?.federationProvider?.details?.displayName}"/></a>
+			<a href="${user?.federationProvider?.details?.url?.location}" alt="${user?.federationProvider?.details?.url?.altText}"><g:message code="${user?.federationProvider?.details?.displayName}"/></a>
 		</td>
 		</tr>
 		<tr>

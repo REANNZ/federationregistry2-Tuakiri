@@ -3,7 +3,7 @@
 <html>
 	<head>
 		<title><g:message code="fedreg.title.${grailsApplication.config.fedreg.deployment.environment}" /> | <g:layoutTitle /></title>
-		<r:use modules="html5, tiptip, jgrowl, zenbox, app"/>
+		<r:use modules="html5, tiptip, blockui, jgrowl, zenbox, app"/>
 		<r:layoutResources/>
 		<g:layoutHead />
 	</head>
@@ -28,8 +28,6 @@
 			</n:isLoggedIn>
 		</nav>
 		<section>
-			<fr:working/>
-
 			<g:layoutBody/>
 	    </section>
 

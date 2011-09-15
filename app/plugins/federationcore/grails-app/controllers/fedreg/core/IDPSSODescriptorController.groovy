@@ -15,7 +15,11 @@ class IDPSSODescriptorController {
 	def IDPSSODescriptorService
 	
 	def list = {
-		[identityProviderList: IDPSSODescriptor.list(params), identityProviderTotal: IDPSSODescriptor.count()]
+		[identityProviderList: IDPSSODescriptor.findAllWhere(archived:false), identityProviderTotal: IDPSSODescriptor.count()]
+	}
+	
+	def listarchived = {
+		[identityProviderList: IDPSSODescriptor.findAllWhere(archived:true), identityProviderTotal: IDPSSODescriptor.count()]
 	}
 
 	def show = {
@@ -45,7 +49,7 @@ class IDPSSODescriptorController {
 		def c = AttributeBase.createCriteria()
 		def attributeList = c.list {
 			order("category", "asc")
-			order("friendlyName", "asc")
+			order("name", "asc")
 		}
 		[identityProvider: identityProvider, organizationList: Organization.findAllWhere(active:true, approved:true), attributeList: attributeList, nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)]
 	}
@@ -63,7 +67,7 @@ class IDPSSODescriptorController {
 			def c = AttributeBase.createCriteria()
 			def attributeList = c.list {
 				order("category", "asc")
-				order("friendlyName", "asc")
+				order("name", "asc")
 			}
 			render (view:'create', model:ret + [organizationList: Organization.findAllWhere(active:true, approved:true), attributeList: attributeList, nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)])
 		}

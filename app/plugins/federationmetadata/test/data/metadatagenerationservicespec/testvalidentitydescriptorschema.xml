@@ -1,0 +1,25 @@
+<EntityDescriptor entityID='https://test.example.com/myuniqueID' xmlns='urn:oasis:names:tc:SAML:2.0:metadata' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:saml='urn:oasis:names:tc:SAML:2.0:assertion' xmlns:shibmd='urn:mace:shibboleth:metadata:1.0' xmlns:ds='http://www.w3.org/2000/09/xmldsig#' xsi:schemaLocation='urn:oasis:names:tc:SAML:2.0:metadata saml-schema-metadata-2.0.xsd urn:mace:shibboleth:metadata:1.0 shibboleth-metadata-1.0.xsd http://www.w3.org/2000/09/xmldsig# xmldsig-core-schema.xsd'>
+  <IDPSSODescriptor protocolSupportEnumeration='uri'>
+    <Extensions>
+      <shibmd:Scope regexp='false'>scope</shibmd:Scope>
+    </Extensions>
+  </IDPSSODescriptor>
+  <IDPSSODescriptor protocolSupportEnumeration='uri'>
+    <Extensions>
+      <shibmd:Scope regexp='false'>scope</shibmd:Scope>
+    </Extensions>
+  </IDPSSODescriptor>
+  <SPSSODescriptor protocolSupportEnumeration='uri' />
+  <SPSSODescriptor protocolSupportEnumeration='uri' />
+  <SPSSODescriptor protocolSupportEnumeration='uri' />
+  <AttributeAuthorityDescriptor protocolSupportEnumeration='uri'>
+    <Extensions>
+      <shibmd:Scope regexp='false'>scope</shibmd:Scope>
+    </Extensions>
+  </AttributeAuthorityDescriptor>
+  <Organization>
+    <OrganizationName xml:lang='en'>Test Organization</OrganizationName>
+    <OrganizationDisplayName xml:lang='en'>Test Organization Display</OrganizationDisplayName>
+    <OrganizationURL xml:lang='en'>http://example.com</OrganizationURL>
+  </Organization>
+</EntityDescriptor>

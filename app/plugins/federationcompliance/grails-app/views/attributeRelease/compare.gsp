@@ -21,10 +21,10 @@
 </tr>
 
 <g:if test="${requiredAttributes.size() > 0}">
-	<g:each in="${requiredAttributes.sort{it.friendlyName}}" status="i" var="requiredAttribute">
+	<g:each in="${requiredAttributes.sort{it.name}}" status="i" var="requiredAttribute">
 		<tr class="dynamicrow">
 			<td>
-				${fieldValue(bean: requiredAttribute, field: "friendlyName")}
+				${fieldValue(bean: requiredAttribute, field: "name")}
 			</td>
 			<td />
 			<td>
@@ -53,10 +53,10 @@
 </tr>
 
 <g:if test="${optionalAttributes.size() > 0}">
-	<g:each in="${optionalAttributes.sort{it.friendlyName}}" status="i" var="optionalAttribute">
+	<g:each in="${optionalAttributes.sort{it.name}}" status="i" var="optionalAttribute">
 		<tr class="dynamicrow">
 			<td>
-				${fieldValue(bean: optionalAttribute, field: "friendlyName")}
+				${fieldValue(bean: optionalAttribute, field: "name")}
 			</td>
 			<td />
 			<td>

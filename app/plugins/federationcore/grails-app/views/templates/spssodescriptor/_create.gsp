@@ -38,13 +38,6 @@
 		
 		$('form').validate({
 				ignore: ":disabled",
-				rules: {
-					'hostname': {
-						required: function() {
-							return ($("#entity\\.identifier").val() == "");
-						}
-					}
-				},
 				keyup: false
 		});
 		$('form').formwizard({ 
@@ -53,6 +46,7 @@
 		 	focusFirstInput : true,
 			disableUIStyles: true
 		});
+
 		jQuery.validator.addMethod("validcert", function(value, element, params) { 
 			fedreg.validateCertificate();
 			return newCertificateValid == true; 
@@ -66,6 +60,9 @@
 		$('#samladvancedmode').hide();
 		
 		$('#hostname').bind('blur',  function() {
+			if( $(this).val().indexOf('/', $(this).val().length - 1) !== -1 && $(this).val().length > 9)
+				$(this).val($(this).val().substring(0, $(this).val().length - 1));
+			
 			fedreg.configureServiceProviderSAML( $(this).val() );
 		});
 	});
@@ -191,6 +188,7 @@
 		<div id="samlbasicmode">
 			<h4><g:message code="fedreg.templates.serviceprovider.create.saml.known.heading" /></h4>
 			<p><g:message code="fedreg.templates.serviceprovider.create.saml.known.descriptive" /></p>
+			
 			<p><span style="float:right;"><a href="#" class="view-button" onClick="$('#samlbasicmode').hide(); $('#samladvancedmode').fadeIn(); return false;"><g:message code="fedreg.templates.serviceprovider.create.saml.known.switch" /></a></span></p>
 			<table>
 				<tr>
@@ -198,7 +196,9 @@
 						<label for="knownimpl"><g:message code="label.implementation" /></label>
 					</td>
 					<td>
-						<span id="knownimpl"></span>
+						<span id="knownimpl">
+							<span style="margin-left: 28px;"><strong><g:message code="fedreg.templates.serviceprovider.create.saml.known.shib13" /></strong> - <span style="color:red;"><g:message code="fedreg.templates.serviceprovider.create.saml.known.shib13.descriptive" /></span></span><br>
+						</span>
 					</td>
 				</tr>
 				<tr>
@@ -209,7 +209,7 @@
 						<g:hasErrors bean="${entityDescriptor}">
 							<div class="error"><g:renderErrors bean="${entityDescriptor}"as="list"/></div>
 						</g:hasErrors>
-						<g:textField name="hostname" size="50" class="url"  value="${hostname}"/>
+						<g:textField name="hostname" id="hostname" size="50" class="url"  value="${hostname}"/>
 						<fr:tooltip code='fedreg.help.serviceprovider.hostname' />
 					</td>
 				</tr>
@@ -440,7 +440,7 @@
 						<g:set var="ra" value="${supportedAttributes.find {it.base == attr}}" />
 						<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 							<td>
-								${fieldValue(bean: attr, field: "friendlyName")}<br>
+								${fieldValue(bean: attr, field: "name")}<br>
 								<pre>OID: ${fieldValue(bean: attr, field: "oid")}</pre>
 							</td>
 							<td>
@@ -450,10 +450,10 @@
 								${fieldValue(bean: attr, field: "description")}
 							</td>
 							<td>
-								<g:checkBox name="sp.attributes.${attr.id}.requested" id="sp.attributes.${attr.id}.requested" onClick="\$('#spattributes${attr.id}reasoning').toggleClass('required');" checked="${ra}"/>
+								<g:checkBox name="sp.attributes.${attr.id}.requested" id="spattributes${attr.id}requested" onClick="\$('#spattributes${attr.id}reasoning').toggleClass('required'); if(!\$(this).is(':checked') && \$('#spattributes${attr.id}required').is(':checked')) {\$('#spattributes${attr.id}required').attr('checked', false);}" checked="${ra}"/>
 							</td>
 							<td>
-								<g:checkBox name="sp.attributes.${attr.id}.required" checked="${ra?.isRequired}"/>
+								<g:checkBox name="sp.attributes.${attr.id}.required" id="spattributes${attr.id}required" checked="${ra?.isRequired}" onClick="if(\$(this).is(':checked') && !\$('#spattributes${attr.id}requested').is(':checked')) {\$('#spattributes${attr.id}requested').attr('checked', true);}"/>
 							</td>
 							<td>
 								<input name="sp.attributes.${attr.id}.reasoning" id="spattributes${attr.id}reasoning" size="40" value="${ra?.reasoning}" class="tip" title="${g.message(code:'fedreg.help.serviceprovider.attribute.reason')}"/>
@@ -480,22 +480,22 @@
 					<th><g:message code="label.required" /></th>
 					<th><g:message code="label.reasonrequested" /></th>
 				</tr>
-				<g:each in="${attributeList.sort{it.friendlyName}}" var="attr" status="i">
+				<g:each in="${attributeList.sort{it.name}}" var="attr" status="i">
 					<g:if test="${attr.specificationRequired}">
 						<g:set var="ra" value="${supportedAttributes.find {it.base == attr}}" />
 						<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 							<td>
-								${fieldValue(bean: attr, field: "friendlyName")}<br>
+								${fieldValue(bean: attr, field: "name")}<br>
 								<pre>OID: ${fieldValue(bean: attr, field: "oid")}</pre>
 							</td>
 							<td  style="width: 300px;">
 								${fieldValue(bean: attr, field: "description")}
 							</td>
 							<td>
-								<g:checkBox name="sp.attributes.${attr.id}.requested" onClick="\$('#spattributes${attr.id}reasoning').toggleClass('required'); \$('#spattributes${attr.id}requestedvalues1').toggleClass('required');" checked="${ra}"/>
+								<g:checkBox name="sp.attributes.${attr.id}.requested" id="spattributes${attr.id}requested" onClick="\$('#spattributes${attr.id}reasoning').toggleClass('required'); \$('#spattributes${attr.id}requestedvalues1').toggleClass('required'); if(!\$(this).is(':checked') && \$('#spattributes${attr.id}required').is(':checked')) {\$('#spattributes${attr.id}required').attr('checked', false) };" checked="${ra}"/>
 							</td>
 							<td>
-								<g:checkBox name="sp.attributes.${attr.id}.required" checked="${ra?.isRequired}"/>
+								<g:checkBox name="sp.attributes.${attr.id}.required" id="spattributes${attr.id}required" onClick="if(\$(this).is(':checked')) {\$('#spattributes${attr.id}requested').attr('checked', true);}" checked="${ra?.isRequired}"/>
 							</td>
 							<td>
 								<g:textField name="sp.attributes.${attr.id}.reasoning" id="spattributes${attr.id}reasoning" size="40" value="${ra?.reasoning}" class="tip" title="${g.message(code:'fedreg.help.serviceprovider.attribute.reason')}"/>

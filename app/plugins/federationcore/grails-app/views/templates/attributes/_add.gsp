@@ -24,7 +24,7 @@
 				<tr>
 					<th><g:message code="label.attribute"/><th>
 					<td>
-						<g:select name="attributeID" from="${AttributeBase.list().sort{it.friendlyName}}" optionKey="id" optionValue="${{ it.friendlyName + ' ( ' + it.oid + ' )' }}" />
+						<g:select name="attributeID" from="${AttributeBase.list().sort{it.name}}" optionKey="id" optionValue="${{ it.name + ' ( ' + it.oid + ' )' }}" />
 					</td>
 				</tr>
 			</tbody>

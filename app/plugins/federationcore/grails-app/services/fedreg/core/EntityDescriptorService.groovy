@@ -23,25 +23,9 @@ class EntityDescriptorService {
 	def createNoSave(def params) {
 		// Organization
 		def organization = Organization.get(params.organization?.id)
-
-		// Contact
-		def contact 
-		if(params.contact.id)
-			contact = Contact.get(params.contact?.id)
-		
-		if(!contact) {
-			if(params.contact?.email)
-				contact = MailURI.findByUri(params.contact?.email)?.contact		// We may already have them referenced by email address and user doesn't realize
-			if(!contact)
-				contact = new Contact(givenName: params.contact?.givenName, surname: params.contact?.surname, email: new MailURI(uri:params.contact?.email), organization:organization)
-				contact.save()
-		}
-		def ct = params.contact?.type ?: 'administrative'
 	
 		// Entity Descriptor
 		def entityDescriptor = new EntityDescriptor(approved:false, active: params.active, entityID: params.entity?.identifier, organization: organization)
-		def entContactPerson = new ContactPerson(contact:contact, type:ContactType.findByName(ct))
-		entityDescriptor.addToContacts(entContactPerson)
 
 		if(!entityDescriptor.validate()) {			
 			entityDescriptor.errors.each {log.warn it}
@@ -128,6 +112,76 @@ class EntityDescriptorService {
 		}
 		
 		log.info "$authenticatedUser deleted $ed"
+	}
+	
+	def archive (def id) {
+		def ed = EntityDescriptor.get(id)
+		if(!ed)
+			throw new ErronousStateException("Unable to find EntityDescriptor with id $id")
+			
+		def idpService = grailsApplication.mainContext.IDPSSODescriptorService
+		def spService = grailsApplication.mainContext.SPSSODescriptorService
+		def aaService = grailsApplication.mainContext.attributeAuthorityDescriptorService
+			
+		ed.idpDescriptors?.each { idpService.archive(it.id) }
+		ed.spDescriptors?.each { spService.archive(it.id) }
+		ed.attributeAuthorityDescriptors?.each { aaService.archive(it.id) }
+		
+		ed.archived = true
+		ed.active = false
+		if(!ed.save()) {
+			log.error "Unable to archive $ed"
+			ed.errors.each { log.error it }
+			throw new ErronousStateException("Unable to archive EntityDescriptor with id $id")
+		}
+		
+		log.info "$authenticatedUser successfully archived $ed"
+	}
+	
+	def unarchive (def id) {
+		def ed = EntityDescriptor.get(id)
+		if(!ed)
+			throw new ErronousStateException("Unable to find EntityDescriptor with id $id")
+			
+		def idpService = grailsApplication.mainContext.IDPSSODescriptorService
+		def spService = grailsApplication.mainContext.SPSSODescriptorService
+		def aaService = grailsApplication.mainContext.attributeAuthorityDescriptorService
+			
+		ed.idpDescriptors?.each { idpService.unarchive(it.id) }
+		ed.spDescriptors?.each { spService.unarchive(it.id) }
+		ed.attributeAuthorityDescriptors?.each { aaService.unarchive(it.id) }
+		
+		ed.archived = false
+		if(!ed.save()) {
+			log.error "Unable to unarchive $ed"
+			ed.errors.each { log.error it }
+			throw new ErronousStateException("Unable to unarchive EntityDescriptor with id $id")
+		}
+		
+		log.info "$authenticatedUser successfully unarchived $ed"
+	}
+	
+	def activate (def id) {
+		def ed = EntityDescriptor.get(id)
+		if(!ed)
+			throw new ErronousStateException("Unable to find EntityDescriptor with id $id")
+			
+		def idpService = grailsApplication.mainContext.IDPSSODescriptorService
+		def spService = grailsApplication.mainContext.SPSSODescriptorService
+		def aaService = grailsApplication.mainContext.attributeAuthorityDescriptorService
+			
+		ed.idpDescriptors?.each { idpService.activate(it.id) }
+		ed.spDescriptors?.each { spService.activate(it.id) }
+		ed.attributeAuthorityDescriptors?.each { aaService.activate(it.id) }
+		
+		ed.active = true
+		if(!ed.save()) {
+			log.error "Unable to activate $ed"
+			ed.errors.each { log.error it }
+			throw new ErronousStateException("Unable to activate EntityDescriptor with id $id")
+		}
+		
+		log.info "$authenticatedUser successfully activated $ed"
 	}
 
 }

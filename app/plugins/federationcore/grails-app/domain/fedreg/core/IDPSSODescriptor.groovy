@@ -59,7 +59,7 @@ class IDPSSODescriptor extends SSODescriptor  {
 	public String toString() {	"idpssodescriptor:[id:$id, displayName: $displayName]" }
 	
 	public boolean functioning() {
-		( active && approved && entityDescriptor.functioning() )
+		( !archived && active && approved && entityDescriptor.functioning() )
 	}
 	
 	public List sortedAttributes() {
@@ -68,7 +68,7 @@ class IDPSSODescriptor extends SSODescriptor  {
 			eq("idpSSODescriptor", this)
 			createAlias("base","_base")
 			order("_base.category", "asc")
-			order("_base.friendlyName", "asc")
+			order("_base.name", "asc")
 		}
 	}
 	

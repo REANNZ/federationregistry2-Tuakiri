@@ -30,20 +30,20 @@ class DashboardController {
 		// Find all additional orgs this user can admin
 		def orgs = Organization.list()
 		orgs.each {
-			if(SecurityUtils.subject.hasRole("organization-${it.id}-administrators"))
+			if(!it.archived && SecurityUtils.subject.hasRole("organization-${it.id}-administrators"))
 				if(it.id != authenticatedUser?.entityDescriptor?.organization?.id)
 					organizations.add(it)
 		}
 		
 		def idps = IDPSSODescriptor.list()
 		idps.each {
-			if(SecurityUtils.subject.hasRole("descriptor-${it.id}-administrators"))
+			if(!it.archived && SecurityUtils.subject.hasRole("descriptor-${it.id}-administrators"))
 				identityProviders.add(it)
 		}
 		
 		def sps = SPSSODescriptor.list()
 		sps.each {
-			if(SecurityUtils.subject.hasRole("descriptor-${it.id}-administrators"))
+			if(!it.archived && SecurityUtils.subject.hasRole("descriptor-${it.id}-administrators"))
 				serviceProviders.add(it)
 		}
 		

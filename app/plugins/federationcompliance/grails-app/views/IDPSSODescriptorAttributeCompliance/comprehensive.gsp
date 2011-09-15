@@ -1,7 +1,7 @@
 
 <html>
     <head>
-        <meta name="layout" content="compliance" />
+        <meta name="layout" content="reporting" />
         <g:set var="entityName" value="${message(code: 'identityProviderAttributeCompliance.label')}" />
         <title><g:message code="fedreg.view.compliance.identityprovider.title"/></title>
     </head>
@@ -22,7 +22,7 @@
                     <tbody>
                     <g:each in="${currentStatus.available}" status="j" var="attr">
                         <tr class="${(j % 2) == 0 ? 'odd' : 'even'}">
-                            <td style="width:300px;">${attr.friendlyName.encodeAsHTML()}</td>
+                            <td style="width:300px;">${attr.name.encodeAsHTML()}</td>
                             <td style="width:200px;"> 
 								<g:if test="${currentStatus.supported.find{it.base == attr}}">
 									<span class="success"><g:message code="label.supported"/></span>

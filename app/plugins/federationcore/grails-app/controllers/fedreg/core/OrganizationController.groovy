@@ -16,7 +16,11 @@ class OrganizationController {
 	def organizationService
 
 	def list = {
-		[organizationList: Organization.list(params), organizationTotal: Organization.count()]
+		[organizationList: Organization.findAllWhere(archived:false), organizationTotal: Organization.count()]
+	}
+	
+	def listarchived = {
+		[organizationList: Organization.findAllWhere(archived:true), organizationTotal: Organization.count()]
 	}
 
 	def show = {

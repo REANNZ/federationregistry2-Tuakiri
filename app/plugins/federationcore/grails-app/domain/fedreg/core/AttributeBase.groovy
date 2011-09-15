@@ -29,16 +29,15 @@ class AttributeBase  {
 	static auditable = true
 
 	String name
+	String legacyName
 	SamlURI nameFormat
-	String friendlyName
 	
 	String oid
-	String headerName
-	String alias
 	String description
 	
 	AttributeCategory category
 	
+	boolean adminRestricted = false		// Only provided to administrative users for registration into SP request
 	boolean specificationRequired = false	// Generally used for something like Entitlement where values are potentially huge and privacy leaking. 
 											// This will force service providers to manually specify the set of values they require to operate 
 											// Potentially future extented to IDPSSODescriptor management to indicate the set supported
@@ -52,17 +51,16 @@ class AttributeBase  {
 
 	static constraints = {
 		name(nullable: false, blank: false, unique: true)
+		legacyName(nullable:true, blank:false)
 		nameFormat(nullable: true)
-		friendlyName(nullable: false, blank: false)
-		oid (nullable: true, blank:false)
-		headerName (nullable: true, blank:false)
-		alias (nullable: true, blank:false)
+		adminRestricted(nullable:false)
+		oid (nullable: false, blank:false)
 		description (nullable: true, blank:false)
 		dateCreated(nullable:true)
 		lastUpdated(nullable:true)
 	}
 	
-	public String toString() {	"attributebase:[id:$id, name: $name, friendlyName: $friendlyName]" }
+	public String toString() {	"attributebase:[id:$id, name: $name, name: $name]" }
 	
 	public boolean equals(Object obj) {
 		if( this.is(obj) ) return true

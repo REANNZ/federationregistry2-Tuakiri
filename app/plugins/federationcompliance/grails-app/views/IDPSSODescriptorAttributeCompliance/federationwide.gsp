@@ -1,13 +1,13 @@
 <html>
 	<head>
 		
-		<meta name="layout" content="compliance" />
+		<meta name="layout" content="reporting" />
 		<g:set var="entityName" value="${message(code: 'identityProviderAttributeCompliance.label')}" />
 		<title><g:message code="fedreg.view.compliance.attribute.title"/></title>
 	</head>
 	<body>
 		<section>
-			<h2><g:message code="fedreg.view.compliance.attribute.heading" args="${[attribute?.friendlyName]}" /> (${supportingIdentityProviderList.size().encodeAsHTML()}<span class="total"> / ${identityProviderList.size().encodeAsHTML()})</h2>
+			<h2><g:message code="fedreg.view.compliance.attribute.heading" args="${[attribute?.name]}" /> (${supportingIdentityProviderList.size().encodeAsHTML()}<span class="total"> / ${identityProviderList.size().encodeAsHTML()})</h2>
 
 			<table>
 				<thead>

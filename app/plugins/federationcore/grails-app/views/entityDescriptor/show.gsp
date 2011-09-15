@@ -40,7 +40,18 @@
 								<g:message code="label.active" />
 							</g:if>
 							<g:else>
-								<g:message code="label.inactive" />
+								<g:message code="label.inactive" /> <div class="error"><g:message code="label.warningmetadata" /></div>
+							</g:else>
+						</td>
+					</tr>
+					<tr>
+						<th><g:message code="label.archived"/></th>
+						<td>
+							<g:if test="${entity.archived}"> 
+								<g:message code="label.yes" /> <div class="warning"><g:message code="label.warningmetadataarchived" /></div>
+							</g:if>
+							<g:else>
+								<g:message code="label.no" /> 
 							</g:else>
 						</td>
 					</tr>
@@ -63,10 +74,10 @@
 			</table>
 		
 			<div class="tabs">
-				<ul>
-					<li><a href="#tab-contacts" class="icon icon_user_comment"><g:message code="label.contacts" /></a></li>
+				<ul>				
 					<li><a href="#tab-idp" class="icon icon_cog"><g:message code="label.identityproviders" /></a></li>
 					<li><a href="#tab-sp" class="icon icon_cog"><g:message code="label.serviceproviders" /></a></li>
+					<li><a href="#tab-contacts" class="icon icon_user_comment"><g:message code="label.contacts" /></a></li>
 					<li><a href="#tab-admins" class="icon icon_database_key"><g:message code="label.administrators" /></a></li>
 					<g:if test="${entity.extensions}">
 					<li><a href="#tab-ext" class="icon icon_cog"><g:message code="label.extensions" /></a></li>

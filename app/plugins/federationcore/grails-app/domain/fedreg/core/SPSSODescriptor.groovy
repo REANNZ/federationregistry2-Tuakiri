@@ -50,7 +50,7 @@ class SPSSODescriptor extends SSODescriptor {
 	public String toString() {	"spssodescriptor:[id:$id, displayName: $displayName]" }
 	
 	public boolean functioning() {
-		( active && approved && entityDescriptor.functioning() )
+		( !archived && active && approved && entityDescriptor.functioning() )
 	}
 	
 	public boolean equals(Object obj) {
@@ -58,7 +58,7 @@ class SPSSODescriptor extends SSODescriptor {
 		if ( obj == null ) return false
 		if ( !obj.instanceOf(IDPSSODescriptor) ) return false
 		
-		IDPSSODescriptor rhs = (IDPSSODescriptor) obj
+		SPSSODescriptor rhs = (SPSSODescriptor) obj
 		return new EqualsBuilder()
 			.append(this.id, rhs.id)
 			.append(this.displayName, rhs.displayName)

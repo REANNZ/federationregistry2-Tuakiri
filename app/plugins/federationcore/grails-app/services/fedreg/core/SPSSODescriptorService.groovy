@@ -330,4 +330,50 @@ class SPSSODescriptorService {
 		
 		log.info "$authenticatedUser deleted $serviceProvider"
 	}
+	
+	def archive(long id) {
+		def serviceProvider = SPSSODescriptor.get(id)
+		if(!serviceProvider)
+			throw new ErronousStateException("Unable to find SPSSODescriptor with id $id")
+
+		serviceProvider.archived = true
+		serviceProvider.active = false
+		if(!serviceProvider.save()) {
+			log.error "Unable to archive $serviceProvider"
+			serviceProvider.errors.each { log.error it }
+			throw new ErronousStateException("Unable to archive SPSSODescriptor with id $id")
+		}
+		
+		log.info "$authenticatedUser successfully archived $serviceProvider"
+	}
+	
+	def unarchive(long id) {
+		def serviceProvider = SPSSODescriptor.get(id)
+		if(!serviceProvider)
+			throw new ErronousStateException("Unable to find SPSSODescriptor with id $id")
+
+		serviceProvider.archived = false
+		if(!serviceProvider.save()) {
+			log.error "Unable to unarchive $serviceProvider"
+			serviceProvider.errors.each { log.error it }
+			throw new ErronousStateException("Unable to unarchive SPSSODescriptor with id $id")
+		}
+		
+		log.info "$authenticatedUser successfully unarchived $serviceProvider"
+	}
+	
+	def activate(long id) {
+		def serviceProvider = SPSSODescriptor.get(id)
+		if(!serviceProvider)
+			throw new ErronousStateException("Unable to find SPSSODescriptor with id $id")
+
+		serviceProvider.active = true
+		if(!serviceProvider.save()) {
+			log.error "Unable to activate $serviceProvider"
+			serviceProvider.errors.each { log.error it }
+			throw new ErronousStateException("Unable to activate SPSSODescriptor with id $id")
+		}
+		
+		log.info "$authenticatedUser successfully activate $serviceProvider"
+	}
 }

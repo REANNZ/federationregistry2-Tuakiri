@@ -66,6 +66,9 @@
 		$('#samladvancedmode').hide();
 		
 		$('#hostname').bind('blur',  function() {
+			if( $(this).val().indexOf('/', $(this).val().length - 1) !== -1 && $(this).val().length > 9)
+				$(this).val($(this).val().substring(0, $(this).val().length - 1));
+
 			fedreg.configureIdentityProviderSAML($(this).val());
 		});
 	});
@@ -352,7 +355,7 @@
 			<g:each in="${attributeList.sort{it.category.name}}" var="attr" status="i">
 			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 				<td>
-					${fieldValue(bean: attr, field: "friendlyName")}<br>
+					${fieldValue(bean: attr, field: "name")}<br>
 					<pre>OID: ${fieldValue(bean: attr, field: "oid")}</pre>
 				</td>
 				<td>

@@ -100,7 +100,7 @@ class MetadataController {
 		def builder = new MarkupBuilder(writer)
 		builder.doubleQuotes = true
 		
-		metadataGenerationService.entityDescriptor(builder, false, false, true, entity)
+		metadataGenerationService.entityDescriptor(builder, false, false, true, entity, true)
 		writer.toString()
 	}
 		

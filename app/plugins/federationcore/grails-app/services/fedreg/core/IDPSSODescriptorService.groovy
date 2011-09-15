@@ -300,4 +300,50 @@ class IDPSSODescriptorService {
 		log.info "$authenticatedUser deleted $identityProvider"
 	}
 	
+	def archive(long id) {
+		def identityProvider = IDPSSODescriptor.get(id)
+		if(!identityProvider)
+			throw new ErronousStateException("Unable to find IDPSSODescriptor with id $id")
+
+		identityProvider.archived = true
+		identityProvider.active = false
+		if(!identityProvider.save()) {
+			log.error "Unable to archive $identityProvider"
+			identityProvider.errors.each { log.error it }
+			throw new ErronousStateException("Unable to archive IDPSSODescriptor with id $id")
+		}
+		
+		log.info "$authenticatedUser successfully archived $identityProvider"
+	}
+	
+	def unarchive(long id) {
+		def identityProvider = IDPSSODescriptor.get(id)
+		if(!identityProvider)
+			throw new ErronousStateException("Unable to find IDPSSODescriptor with id $id")
+
+		identityProvider.archived = false
+		if(!identityProvider.save()) {
+			log.error "Unable to unarchive $identityProvider"
+			identityProvider.errors.each { log.error it }
+			throw new ErronousStateException("Unable to unarchive IDPSSODescriptor with id $id")
+		}
+		
+		log.info "$authenticatedUser successfully unarchived $identityProvider"
+	}
+	
+	def activate(long id) {
+		def identityProvider = IDPSSODescriptor.get(id)
+		if(!identityProvider)
+			throw new ErronousStateException("Unable to find IDPSSODescriptor with id $id")
+
+		identityProvider.active = true
+		if(!identityProvider.save()) {
+			log.error "Unable to activate $identityProvider"
+			identityProvider.errors.each { log.error it }
+			throw new ErronousStateException("Unable to activate IDPSSODescriptor with id $id")
+		}
+		
+		log.info "$authenticatedUser successfully activate $identityProvider"
+	}
+	
 }

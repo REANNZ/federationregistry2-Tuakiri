@@ -46,7 +46,7 @@
 									<label for="organization.id"><g:message code="label.organization" /></label>
 								</td>
 								<td>
-									<g:select name="organization.id" from="${organizationList}" optionKey="id" optionValue="displayName" />
+									<g:select name="organization.id" from="${organizationList.sort{it.displayName}}" optionKey="id" optionValue="displayName" />
 								</td>
 							</tr>
 							<tr>

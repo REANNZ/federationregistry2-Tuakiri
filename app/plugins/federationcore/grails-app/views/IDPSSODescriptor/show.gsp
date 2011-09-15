@@ -46,6 +46,11 @@
 			
 			var descriptorMetadataEndpoint = "${createLink(controller:'metadata', action:'entity', id:identityProvider.entityDescriptor.id )}";
 			
+			var idpReportsConnectivityEndpoint = "${createLink(controller:'idPReports', action:'connectivityjson', id:identityProvider.id)}"
+			var idpReportsSessionsEndpoint = "${createLink(controller:'idPReports', action:'sessionsjson', id:identityProvider.id)}"
+			var idpReportsTotalsEndpoint = "${createLink(controller:'idPReports', action:'totalsjson', id:identityProvider.id)}"
+			var idpReportsLoginsEndpoint = "${createLink(controller:'idPReports', action:'loginsjson', id:identityProvider.id)}"
+			
 			$(function() {
 				$("#attrfilpolood").hide();
 				fedreg.descriptor_metadata();
@@ -111,6 +116,17 @@
 					</td>
 				</tr>
 				<tr>
+					<th><g:message code="label.archived"/></th>
+					<td>
+						<g:if test="${identityProvider.archived}"> 
+							<g:message code="label.yes" /> <div class="warning"><g:message code="label.warningmetadataarchived" /></div>
+						</g:if>
+						<g:else>
+							<g:message code="label.no" /> 
+						</g:else>
+					</td>
+				</tr>
+				<tr>
 					<th><g:message code="label.approved"/></th>
 					<td>
 						<g:if test="${identityProvider.approved}">
@@ -146,6 +162,9 @@
 					<li><a href="#tab-endpoints" ><g:message code="label.endpoints" /></a></li>
 					<li><a href="#tab-attributes" ><g:message code="label.supportedattributes" /></a></li>
 					<li><a href="#tab-nameidformats" ><g:message code="label.supportednameidformats" /></a></li>
+					<n:hasAnyPermission in='["descriptor:${identityProvider.id}:reporting" , "federation:reporting"]'>
+						<li><a href="#tab-reports" ><g:message code="label.reporting" /></a></li>
+					</n:hasAnyPermission>
 					<li><a href="#tab-monitors" ><g:message code="label.monitoring" /></a></li>
 					<li><a href="#tab-metadata" ><g:message code="label.metadata" /></a></li>
 					<li><a href="#tab-attrfilpol" ><g:message code="label.attributefilter" /></a></li>
@@ -229,6 +248,13 @@
 					
 					<g:render template="/templates/nameidformats/add" plugin="federationcore" model="[descriptor:identityProvider, containerID:'nameidformats']"/>
 				</div>
+				<n:hasAnyPermission in='["descriptor:${identityProvider.id}:reporting" , "federation:reporting"]'>
+					<div id="tab-reports" class="tabcontent">
+						<div id="reporting">
+							<g:render template="/templates/reporting/idp/reports" plugin="federationreporting" model="[id:identityProvider.id]" />
+						</div>
+					</div>
+				</n:hasAnyPermission>
 				<div id="tab-attrfilpol">
 					<h3><g:message code="label.attributefilter"/></h3>
 					

@@ -58,6 +58,18 @@ fedreg {
 		identityproviders {
 			shib22 {
 				displayName = 'Shibboleth Identity Provider (2.2.x)'
+				selected = false
+				entitydescriptor = '$host/idp/shibboleth'
+				post.uri = '$host/idp/profile/SAML2/POST/SSO'
+				redirect.uri = '$host/idp/profile/SAML2/Redirect/SSO'
+				artifact {
+					uri = '$host:8443/idp/profile/SAML2/SOAP/ArtifactResolution'
+					index = 2
+				}
+				attributeservice.uri = '$host:8443/idp/profile/SAML2/SOAP/AttributeQuery'
+			}
+			shib23 {
+				displayName = 'Shibboleth Identity Provider (2.3.x)'
 				selected = true
 				entitydescriptor = '$host/idp/shibboleth'
 				post.uri = '$host/idp/profile/SAML2/POST/SSO'
@@ -140,7 +152,6 @@ fedreg {
 security.shiro.authc.required = false
 
 // Nimble internal configuration
-
 nimble {
 	layout {
         administration = 'access'
@@ -173,9 +184,7 @@ nimble {
 }
 
 //Data repository
-/**
-USE FOR DEVELOPMENT - NON JNDI
-
+/** - USE FOR DEVELOPMENT - NON JNDI
 dataSource {
 	pooled = true
 	driverClassName = "com.mysql.jdbc.Driver"
@@ -189,8 +198,7 @@ dataSource {
 }
 **/
 
-/**
-USE FOR PRODUCTION - JNDI Datasource
+/** - USE FOR PRODUCTION - JNDI Datasource
 dataSource {
 	dbCreate = "update"
 	dialect= org.hibernate.dialect.MySQL5InnoDBDialect
@@ -202,20 +210,25 @@ dataSource {
 log4j = {
 	appenders {
 		appender new DailyRollingFileAppender(name:"fr-app", layout:pattern(conversionPattern: "%d{[ dd.MM.yy HH:mm:ss.SSS]} %-5p %c %x - %m%n"), file:"/tmp/fr-app.log", datePattern:"'.'yyyy-MM-dd")
+		appender new DailyRollingFileAppender(name:"fr-md", layout:pattern(conversionPattern: "%d{[ dd.MM.yy HH:mm:ss.SSS]} %-5p %c %x - %m%n"), file:"/tmp/fr-md.log", datePattern:"'.'yyyy-MM-dd")
 		appender new DailyRollingFileAppender(name:"stacktrace", layout:pattern(conversionPattern: "%d{[ dd.MM.yy HH:mm:ss.SSS]} %-5p %c %x - %m%n"), file:"/tmp/stacktrace.log", datePattern:"'.'yyyy-MM-dd")
 	}
 	
-    warn 	'fr-app': 	'org.codehaus.groovy.grails.web.servlet',
-						'org.codehaus.groovy.grails.web.pages',
-						'org.codehaus.groovy.grails.web.sitemesh',
-						'org.codehaus.groovy.grails.web.mapping.filter',
-						'org.codehaus.groovy.grails.web.mapping',
-						'org.codehaus.groovy.grails.commons',
-						'org.codehaus.groovy.grails.plugins',
-						'org.apache.shiro'
-
-    info 	'fr-app': 	'grails.plugins.nimble',
-						'grails.app.controller',
-						'grails.app.domain',
-						'grails.app.service'
+	info	'fr-md':    ['grails.app.controller.fedreg.metadata.MetadataController',
+						 'grails.app.service.fedreg.metadata.MetadataGenerationService'], additivity: false
+						
+    warn 	'fr-app': 	['org.codehaus.groovy.grails.web.servlet',
+						 'org.codehaus.groovy.grails.web.pages',
+						 'org.codehaus.groovy.grails.web.sitemesh',
+						 'org.codehaus.groovy.grails.web.mapping.filter',
+						 'org.codehaus.groovy.grails.web.mapping',
+						 'org.codehaus.groovy.grails.commons',
+						 'org.codehaus.groovy.grails.plugins',												
+						 'org.apache.shiro']
+ 
+    info 	'fr-app': 	['grails.plugins.nimble', 
+						 'grails.app.controller',
+						 'grails.app.domain',
+						 'grails.app.service',
+						 'grails.app.realm']
 }

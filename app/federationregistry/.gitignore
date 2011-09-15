@@ -8,6 +8,9 @@ fr-config.groovy
 FedRegConfig.groovy
 NimbleConfig.groovy
 
+# Ignore the login page incase we test with non standard DB
+grails-app/views/auth/login.gsp
+
 *~
 *.ipr
 *.iml
@@ -37,6 +40,7 @@ web-app/images/leftnav_midstretch.png
 web-app/WEB-INF/tld/c.tld
 web-app/WEB-INF/tld/fmt.tld
 web-app/css/main.css
+web-app/css/application.css
 web-app/js/prototype/
 
 # These are important files but supplied externally to allow other federations to customize

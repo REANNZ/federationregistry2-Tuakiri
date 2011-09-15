@@ -1,0 +1,11 @@
+130.216.67.73 - - [19/Aug/2011:12:53:29 +1200] "GET /ds/DS?entityID=https%3A%2F%2Fregistry.test.tuakiri.ac.nz%2Fshibboleth&return=https%3A%2F%2Fregistry.test.tuakiri.ac.nz%2FShibboleth.sso%2FLogin%3FSAMLDS%3D1%26target%3Dss%253Amem%253Afeba49dbfb4fb0a05556eb12613cfe6103d58be6 HTTP/1.1" 200 9693
+130.216.67.73 - - [19/Aug/2011:12:53:30 +1200] "GET /ds/wayf.css HTTP/1.1" 200 4340
+130.216.67.73 - - [19/Aug/2011:12:53:30 +1200] "GET /ds/images/tuakiri.png HTTP/1.1" 200 6725
+130.216.67.73 - - [19/Aug/2011:12:53:30 +1200] "GET /ds/images/DS_background_top.png HTTP/1.1" 200 1080
+130.216.67.73 - - [19/Aug/2011:12:53:31 +1200] "GET /ds/images/DS_button.png HTTP/1.1" 200 643
+130.216.67.73 - - [19/Aug/2011:12:53:31 +1200] "GET /ds/images/DS_background_mid.png HTTP/1.1" 200 200
+130.216.67.73 - - [19/Aug/2011:12:53:31 +1200] "GET /ds/images/DS_background_bottom.png HTTP/1.1" 200 3987
+130.216.161.20 - - [19/Aug/2011:14:00:51 +1200] "GET /metadata/tuakiri-test-metadata-signed.xml HTTP/1.1" 200 102482
+132.181.65.178 - - [19/Aug/2011:14:02:02 +1200] "GET /ds/DS?entityID=https%3A%2F%2Fregistry.test.tuakiri.ac.nz%2Fshibboleth&return=https%3A%2F%2Fregistry.test.tuakiri.ac.nz%2FShibboleth.sso%2FLogin%3FSAMLDS%3D1%26target%3Dss%253Amem%253A713c2c30c04d77baa0b295fcf6d1791f003740fe HTTP/1.1" 200 8451
+132.181.65.178 - - [19/Aug/2011:14:02:17 +1200] "GET /ds/DS?entityID=https%3A%2F%2Fregistry.test.tuakiri.ac.nz%2Fshibboleth&returnX=https%3A%2F%2Fregistry.test.tuakiri.ac.nz%2FShibboleth.sso%2FLogin%3FSAMLDS%3D1%26target%3Dss%253Amem%253A713c2c30c04d77baa0b295fcf6d1791f003740fe&returnIDParam=entityID&FedSelector=Tuakiri+TEST+Federation&action=selection&origin=https%3A%2F%2Fidp20test.canterbury.ac.nz%2Fidp%2Fshibboleth&cache=perm HTTP/1.1" 302 -
+132.181.65.178 - - [19/Aug/2011:15:03:06 +1200] "GET /ds/DS?target=cookie&shire=https%3A%2F%2Fvirtualhome.test.tuakiri.ac.nz%2FShibboleth.sso%2FSAML%2FPOST&providerId=https%3A%2F%2Fvirtualhome.test.tuakiri.ac.nz%2Fshibboleth&time=1313722980&cache=perm&action=selection&origin=https://idp20test.canterbury.ac.nz/idp/shibboleth HTTP/1.1" 302 -

@@ -230,7 +230,6 @@ class DescriptorEndpointController {
 			}
 		
 			if(allowedEndpoints.containsKey(endpointType) && descriptor.hasProperty(endpointType)) {
-				println params
 				endpointService.create(descriptor, allowedEndpoints.get(endpointType), endpointType, binding, params.location, params.int('samlindex'), params.active ? true:false)
 				endpointService.determineDescriptorProtocolSupport(descriptor)
 				

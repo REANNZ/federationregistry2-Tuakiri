@@ -41,6 +41,6 @@ class PDPDescriptor extends RoleDescriptor {
 	public String toString() {	"pdpdescriptor:[id:$id, displayName: $displayName]" }
 	
 	public boolean functioning() {
-		( active && approved && entityDescriptor.functioning() )
+		( !archived && active && approved && entityDescriptor.functioning() )
 	}
 }

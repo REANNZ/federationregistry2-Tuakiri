@@ -18,6 +18,7 @@
 					<thead>
 						<tr>
 							<th><g:message code="label.name" /></th>
+							<th><g:message code="label.created" /></th>
 							<th><g:message code="label.description" /></th>
 							<th><g:message code="label.creator" /></th>
 							<th><g:message code="label.processinstance" /></th>
@@ -28,6 +29,7 @@
 						<g:each in="${tasks}" status="i" var="instance">
 							<tr>
 								<td>${fieldValue(bean: instance, field: "task.name")}</td>
+								<td>${fieldValue(bean: instance, field: "dateCreated")}</td>
 								<td style="width:300px;">${fieldValue(bean: instance, field: "task.description")}</td>
 								<td>
 									<g:if test="${instance.processInstance.params.creator}">

@@ -10,12 +10,16 @@ import grails.plugins.nimble.core.Role
  */
 class EntityDescriptorController {
 	static defaultAction = "list"
-	def allowedMethods = [save: 'POST', update: 'PUT', delete: 'DELETE']
+	def allowedMethods = [save: 'POST', update: 'PUT', archive: 'DELETE']
 		
 	def entityDescriptorService
 	
 	def list = {
-		[entityList: EntityDescriptor.list(params), entityTotal: EntityDescriptor.count()]
+		[entityList: EntityDescriptor.findAllWhere(archived:false), entityTotal: EntityDescriptor.count()]
+	}
+	
+	def listarchived = {
+		[entityList: EntityDescriptor.findAllWhere(archived:true), entityTotal: EntityDescriptor.count()]
 	}
 
 	def show = {
@@ -120,7 +124,7 @@ class EntityDescriptorController {
 		}
 	}
 	
-	def delete = {
+	def archive = {
 		if(!params.id) {
 			log.warn "EntityDescriptor ID was not present"
 			flash.type="error"
@@ -144,14 +148,14 @@ class EntityDescriptorController {
 			return
 		}
 		
-		if(SecurityUtils.subject.isPermitted("descriptor:${entityDescriptor.id}:delete")) {
-			entityDescriptorService.delete(entityDescriptor.id)
+		if(SecurityUtils.subject.isPermitted("descriptor:${entityDescriptor.id}:archive")) {
+			entityDescriptorService.archive(entityDescriptor.id)
 			
 			flash.type="success"
 			flash.message = message(code: 'fedreg.core.entitydescriptor.deleted')
 			log.info "$authenticatedUser deleted $entityDescriptor"
 			
-			redirect(action: "list")
+			redirect (action: "show", id: entityDescriptor.id)
 		}
 		else {
 			log.warn("Attempt to delete $entityDescriptor by $authenticatedUser was denied, incorrect permission set")
