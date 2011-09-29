@@ -27,8 +27,14 @@ class WayfAccessRecord {
 	String source
 	String requestType
 	String dsHost
+
+    // Logs provide us an odd format of idpEntity and SP sessioninitiator endpoint.
+    // We store these for when things go weird for manual intervention.
+    String idpEntity
+    String spEndpoint
 	
-	long idpID	// We use ID instead of direct links to allow for descriptors to be deleted without impacting reporting
+    // We use ID instead of direct links to allow for descriptors to be deleted without impacting reporting
+	long idpID	
 	long spID
 	
 	boolean robot = false
