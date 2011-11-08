@@ -12,5 +12,6 @@ Bradley Beddoes
 alter table attribute_base change name legacy_name varchar(255);
 alter table attribute_base change alias name varchar(255);
 alter table attribute_base drop header_name;
+alter table attribute_base drop friendly_name;
 alter table attribute_base add admin_restricted bit not null;
 update attribute_base set admin_restricted = false;
