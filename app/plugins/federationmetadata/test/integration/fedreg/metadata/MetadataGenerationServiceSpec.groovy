@@ -72,6 +72,10 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		new File('./test/data/selfsigned.pem').text
 	}
 
+    def String loadPK2() {
+        new File('./test/data/selfsigned.pem').text
+    }
+
 	def "Test valid endpoint generation"() {
 		setup:
 		setupBindings()
@@ -321,7 +325,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		
 		def keyInfo = new CAKeyInfo(certificate:new CACertificate(data:loadPK()))
 		def certificate2 = Certificate.build(data:loadPK())
-		def keyInfo2 = new CAKeyInfo(certificate:new CACertificate(data:loadPK()))
+		def keyInfo2 = new CAKeyInfo(certificate:new CACertificate(data:loadPK2()))
 		def certificateAuthorities = []
 		certificateAuthorities.add(keyInfo)
 		certificateAuthorities.add(keyInfo2)
@@ -339,7 +343,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		similarExcludingID(diff)
 	}
 	
-	def "Test valid EntitiesDescriptor generation with embedded entitiesdescriptors"() {
+	def "Test valid EntitiesDescriptor generation with embedded entitiesdescriptors and no CA"() {
 		setup:
 		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
 		def email = MailURI.build(uri:"test@example.com")
@@ -363,12 +367,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 			entitiesDescriptor1.addToEntityDescriptors(entityDescriptor)
 		}
 		
-		def keyInfo = new CAKeyInfo(certificate:new CACertificate(data:loadPK()))
-		def certificate2 = Certificate.build(data:loadPK())
-		def keyInfo2 = new CAKeyInfo(certificate:new CACertificate(data:loadPK()))
 		def certificateAuthorities = []
-		certificateAuthorities.add(keyInfo)
-		certificateAuthorities.add(keyInfo2)
 		
 		def validUntil = new GregorianCalendar(2009, Calendar.JULY, 22)
 			
@@ -500,9 +499,13 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def encryptionMethod = EncryptionMethod.build(algorithm:"http://www.w3.org/2001/04/xmlenc#tripledes-cbc")
 		def keyDescriptor = KeyDescriptor.build(keyInfo:keyInfo, encryptionMethod:encryptionMethod, keyType:KeyTypes.encryption)
 		
-		def certificate2 = Certificate.build(data:loadPK())
-		def keyInfo2 = KeyInfo.build(keyName:"key2", certificate:certificate)
+		def certificate2 = Certificate.build(data:loadPK2())
+		def keyInfo2 = KeyInfo.build(certificate:certificate2)
 		def keyDescriptor2 = KeyDescriptor.build(keyInfo:keyInfo2, keyType:KeyTypes.signing)
+
+        def certificate3 = Certificate.build(data:loadPK2())
+        def keyInfo3 = KeyInfo.build(certificate:certificate3)
+        def keyDescriptor3 = KeyDescriptor.build(keyInfo:keyInfo3, keyType:KeyTypes.signing, disabled:true)
 		
 		def ars = ArtifactResolutionService.build(index:100, active:true, approved:true, isDefault:true, binding:soap, location:UrlURI.build(uri:"https://test.example.com/ars/artifact"))
 		def ars2 = ArtifactResolutionService.build(index:101, active:true, approved:true, isDefault:false, binding:soap, location:UrlURI.build(uri:"https://test.example.com/ars/artifact2"))
@@ -530,6 +533,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		
 		idp.addToKeyDescriptors(keyDescriptor)
 		idp.addToKeyDescriptors(keyDescriptor2)
+        idp.addToKeyDescriptors(keyDescriptor3)
 		idp.addToContacts(contactPerson)
 		
 		idp.addToArtifactResolutionServices(ars)
