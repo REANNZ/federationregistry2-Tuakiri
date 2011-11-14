@@ -35,3 +35,9 @@ grails.project.dependency.resolution = {
         // runtime 'mysql:mysql-connector-java:5.1.5'
     }
 }
+
+clover {
+ on = true
+ debug = false // a boolean to toggle debugging on or off
+ excludes = ["*Spec.groovy"] // an array of String Ant Glob Patterns to exclude for instrumentation
+}
