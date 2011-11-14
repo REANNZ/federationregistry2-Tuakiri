@@ -628,6 +628,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def ba2 =  new AttributeBase(oid:'2.5.4.4', nameFormat: attrUri, legacyName:'urn:mace:dir:attribute-def:sn', name:'surname', description:'Surname or family name', category:optionalCategory, specificationRequired:false).save()
 		def ba3 =  new AttributeBase(oid:'2.5.4.42', nameFormat: attrUri, legacyName:'urn:mace:dir:attribute-def:givenName', name:'givenName', description:'Given name of a person', category:optionalCategory, specificationRequired:false).save()
 		def ba4 =  new AttributeBase(oid:'1.3.6.1.4.1.5923.1.1.1.7', nameFormat: attrUri, legacyName:'urn:mace:dir:attribute-def:eduPersonEntitlement', name:'eduPersonEntitlement', description:'Member of: URI (either URL or URN) that indicates a set of rights to specific resources based on an agreement across the releavant community', category:coreCategory, specificationRequired:true).save()
+        def ba5 =  new AttributeBase(oid:'1.3.6.1.4.1.5923.1.1.1.7', nameFormat: attrUri, legacyName:'urn:mace:dir:attribute-def:eduPersonEntitlement', name:'eduPersonEntitlement2', description:'Member of: URI (either URL or URN) that indicates a set of rights to specific resources based on an agreement across the releavant community', category:coreCategory, specificationRequired:true).save()
 		
 		def attrService = AttributeConsumingService.build(lang:'en')
 		attrService.addToServiceNames("Test Name 1")
@@ -638,14 +639,16 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def attr2 = new RequestedAttribute(attributeConsumingService: attrService, base:ba2, approved:true)
 		def attr3 = new RequestedAttribute(attributeConsumingService: attrService, base:ba3, approved:true)
 		def attr4 = new RequestedAttribute(attributeConsumingService: attrService, base:ba4, approved:true)
-		attr4.addToValues(new AttributeValue(value:'urn:mace:test:attr:value:1'))
-		attr4.addToValues(new AttributeValue(value:'urn:mace:test:attr:value:2'))
-		attr4.addToValues(new AttributeValue(value:'urn:mace:test:attr:value:3'))
+        attr4.addToValues(new AttributeValue(value:'urn:mace:test:attr:value:1'))
+        attr4.addToValues(new AttributeValue(value:'urn:mace:test:attr:value:2'))
+        attr4.addToValues(new AttributeValue(value:'urn:mace:test:attr:value:3'))
 
+        def attr5 = new RequestedAttribute(attributeConsumingService: attrService, base:ba5, approved:true)
 		attrService.addToRequestedAttributes(attr1)
 		attrService.addToRequestedAttributes(attr2)
 		attrService.addToRequestedAttributes(attr3)
 		attrService.addToRequestedAttributes(attr4)
+        attrService.addToRequestedAttributes(attr5) // should not appear - spec required but no values
 		
 		def sp = SPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, organization:organization, entityDescriptor:entityDescriptor, approved:true, active:true)
 		sp.addToKeyDescriptors(keyDescriptor)
