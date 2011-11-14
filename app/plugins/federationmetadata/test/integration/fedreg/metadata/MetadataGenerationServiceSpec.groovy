@@ -73,7 +73,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 	}
 
     def String loadPK2() {
-        new File('./test/data/selfsigned.pem').text
+        new File('./test/data/selfsigned2.pem').text
     }
 
 	def "Test valid endpoint generation"() {
