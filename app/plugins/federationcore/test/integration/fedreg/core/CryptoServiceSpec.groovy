@@ -5,14 +5,9 @@ import java.security.cert.*
 
 import grails.plugin.spock.*
 
-class CryptoServiceSpecification extends IntegrationSpec {
+class CryptoServiceSpec extends IntegrationSpec {
 	
 	def cryptoService
-	
-	def setup () {
-		KeyDescriptor.findAll()*.delete(flush:true)
-		CACertificate.findAll()*.delete(flush:true)
-	}
 	
 	def 'validate signing certificate association with role descriptor'() {
 		setup:
@@ -29,7 +24,6 @@ class CryptoServiceSpecification extends IntegrationSpec {
 		
 		then:
 		created
-		KeyDescriptor.count() == 1
 		idp.keyDescriptors.size() == 1
 		def kd = idp.keyDescriptors.toArray()[0]
 		kd.keyType == KeyTypes.signing
@@ -53,7 +47,6 @@ class CryptoServiceSpecification extends IntegrationSpec {
 		
 		then:
 		created
-		KeyDescriptor.count() == 1
 		idp.keyDescriptors.size() == 1
 		def kd = idp.keyDescriptors.toArray()[0]
 		kd.keyType == KeyTypes.encryption
@@ -78,7 +71,6 @@ class CryptoServiceSpecification extends IntegrationSpec {
 		
 		then:
 		created
-		KeyDescriptor.count() == 2
 		idp.keyDescriptors.size() == 2
 	}
 	
@@ -97,7 +89,6 @@ class CryptoServiceSpecification extends IntegrationSpec {
 		
 		then:
 		!created
-		KeyDescriptor.count() == 0
 		idp.keyDescriptors == null
 	}
 	
@@ -117,7 +108,6 @@ class CryptoServiceSpecification extends IntegrationSpec {
 		
 		then:
 		created
-		KeyDescriptor.count() == 1
 		idp.keyDescriptors.size() == 1
 		def kd = idp.keyDescriptors.toArray()[0]
 		kd.keyType == KeyTypes.signing
@@ -137,7 +127,6 @@ class CryptoServiceSpecification extends IntegrationSpec {
 		def testCert = new Certificate(data:pk)
 		
 		expect:
-		CACertificate.count() == 1
 		cryptoService.validateCertificate(testCert) == true
 	}
 	
@@ -152,7 +141,6 @@ class CryptoServiceSpecification extends IntegrationSpec {
 		def testCert = new Certificate(data:pk)
 		
 		expect:
-		CACertificate.count() == 1
 		!cryptoService.validateCertificate(testCert, true)
 	}
 	
@@ -170,7 +158,6 @@ class CryptoServiceSpecification extends IntegrationSpec {
 		caKeyInfo2.save()
 		
 		expect:
-		CACertificate.count() == 2
 		cryptoService.validateCertificate(cert) == true
 		
 		where:
