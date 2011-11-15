@@ -76,12 +76,12 @@ class WorkflowProcessServiceSpec extends IntegrationSpec {
 		def process = Process.findByName('Minimal Test Process')
 		
 		when:		
-		def(created, processInstance_) = workflowProcessService.initiate(process.name, "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
+		def(created, processInstance) = workflowProcessService.initiate(process.name, "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
 		
 		then:
 		created
-		def processInstance = ProcessInstance.get(1)
-		processInstance == processInstance_
+		!processInstance.hasErrors()
+        processInstance.id > 0
 		processInstance.process == process
 		processInstance.description == "Approving XYZ Widget"
 
