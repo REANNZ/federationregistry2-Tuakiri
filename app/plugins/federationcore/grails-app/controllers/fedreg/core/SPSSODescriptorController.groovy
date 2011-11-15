@@ -118,7 +118,6 @@ class SPSSODescriptorController {
 			redirect(action: "list")
 			return
 		}
-		
 		def serviceProvider_ = SPSSODescriptor.get(params.id)
 		if (!serviceProvider_) {
 			flash.type="error"
@@ -140,7 +139,7 @@ class SPSSODescriptorController {
 			}
 		}
 		else {
-			log.warn("Attempt to update $serviceProvider by $authenticatedUser was denied, incorrect permission set")
+			log.warn("Attempt to update $serviceProvider_ by $authenticatedUser was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}	
