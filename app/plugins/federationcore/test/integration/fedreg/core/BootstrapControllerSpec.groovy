@@ -30,7 +30,7 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		}
 		
 		(1..11).each { i ->
-			AttributeBase.build(name: "attr$i")
+			AttributeBase.build()
 		}
 		
 		(1..12).each { i ->
