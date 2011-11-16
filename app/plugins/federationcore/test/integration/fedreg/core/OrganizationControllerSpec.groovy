@@ -8,33 +8,22 @@ import grails.plugins.nimble.core.*
 
 class OrganizationControllerSpec extends IntegrationSpec {
 	
-	def controller
-	def savedMetaClasses
-	def organizationService = new OrganizationService()
+	def controller, organizationService, user
 	
 	def cleanup() {
-		SpecHelpers.resetMetaClasses(savedMetaClasses)
-		organizationService.metaClass = OrganizationService.metaClass
+        user.perms = []
 	}
 	
 	def setup () {
-		savedMetaClasses = [:]
-		
-		SpecHelpers.registerMetaClass(OrganizationService, savedMetaClasses)
-		organizationService.metaClass = OrganizationService.metaClass
-		
+		organizationService = new OrganizationService()		
 		controller = new OrganizationController(organizationService:organizationService)
-		def user = UserBase.build()
+
+		user = UserBase.build()
 		SpecHelpers.setupShiroEnv(user)
-		
-		// Clear storage - odd issue with 1.3.6 have not yet confirmed where bug lies
-		EntityDescriptor.findAll()*.delete(flush:true)
-		Organization.findAll()*.delete(flush:true)
 	}
 	
 	def "Validate list"() {
-		setup:
-		
+		setup:		
 		(1..25).each { i ->
 			def org = Organization.build()
 			org.save()
@@ -44,42 +33,7 @@ class OrganizationControllerSpec extends IntegrationSpec {
 		def model = controller.list()
 
 		then:
-		model.organizationList.size() == 20
-	}
-	
-	def "Validate list with max set"() {
-		setup:
-		(1..25).each { i ->
-			def org = Organization.build()
-			org.save()
-		}
-		controller.params.max = 10
-		
-		when:
-		def model = controller.list()
-
-		then:
-		model.organizationList.size() == 10
-		model.organizationList.get(0) == Organization.list().get(0)
-		model.organizationList.get(9) == Organization.list().get(9)
-	}
-	
-	def "Validate list with max and offset set"() {
-		setup:
-		(1..25).each { i->
-			def org = Organization.build()
-			org.save()
-		}
-		controller.params.max = 10
-		controller.params.offset = 5
-		
-		when:
-		def model = controller.list()
-
-		then:
-		model.organizationList.size() == 10
-		model.organizationList.get(0) == Organization.list().get(5)
-		model.organizationList.get(9) == Organization.list().get(14)
+		model.organizationList.size() == 25
 	}
 	
 	def "Show with no ID"() {		
@@ -94,7 +48,7 @@ class OrganizationControllerSpec extends IntegrationSpec {
 	
 	def "Show with invalid Organization ID"() {
 		setup:
-		controller.params.id = 2
+		controller.params.id = 20000000
 			
 		when:
 		controller.show()
@@ -117,7 +71,6 @@ class OrganizationControllerSpec extends IntegrationSpec {
 		then:
 		model.organization != null
 		model.organization instanceof Organization
-		model.organizationTypes.size() == 10
 	}
 	
 	def "Validate successful save"() {
@@ -138,10 +91,11 @@ class OrganizationControllerSpec extends IntegrationSpec {
 		setup:
 		def organization = Organization.build().save()
 		
+        organizationService.metaClass.create = { def p -> 
+            return [false, organization]
+        } 
+
 		when:
-		organizationService.metaClass.create = { def p -> 
-			return [false, organization]
-		} 
 		def model = controller.save()
 		
 		then:
@@ -154,20 +108,35 @@ class OrganizationControllerSpec extends IntegrationSpec {
 		def organization = Organization.build().save()
 		
 		controller.params.id = organization.id
-		
-		when:
+        user.perms.add("organization:${organization.id}:update")
 		organizationService.metaClass.update = { def p -> 
-			return [true, organization]
-		} 
-		def model = controller.update()
+            return [true, organization]
+        } 
+
+		when:
+		controller.update()
 		
 		then:
 		controller.response.redirectedUrl == "/organization/show/${organization.id}"	
 	}
+
+    def "Validate update with incorrect perms"() {
+        setup:
+        def organization = Organization.build().save()
+        
+        controller.params.id = organization.id
+        user.perms.add("organization:-1:update")
+
+        when:
+        controller.update()
+        
+        then:
+        controller.response.status == 403   
+    }
 	
 	def "Invalid or non existing Organization fails update"() {
 		setup:		
-		controller.params.id = 1
+		controller.params.id = 2000000
 		
 		when:
 		def model = controller.update()
@@ -183,7 +152,8 @@ class OrganizationControllerSpec extends IntegrationSpec {
 		def organization = Organization.build().save()
 		
 		controller.params.id = organization.id
-		
+		user.perms.add("organization:${organization.id}:update")
+
 		when:
 		organizationService.metaClass.update = { def p -> 
 			return [false, organization]
