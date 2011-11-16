@@ -6,14 +6,17 @@ import fedreg.core.*
 import grails.plugins.nimble.core.*
 
 class OrganizationContactControllerSpec extends IntegrationSpec {
-	def user
+	
+    def user, controller, renderMap
 	
 	def setup () {
+        OrganizationContactController.metaClass.render = { Map map ->
+            renderMap = map
+        }
+        controller = new OrganizationContactController()
+
 		user = new UserBase(username:"testuser", profile:new ProfileBase())
 		SpecHelpers.setupShiroEnv(user)
-		
-		controller.metaClass.message = { Map map -> return "" }
-		controller.metaClass.pluginContextPath = ""
 	}
 	
 	def "Test contact search"() {
@@ -32,7 +35,7 @@ class OrganizationContactControllerSpec extends IntegrationSpec {
 		controller.search()
 		
 		then:
-		controller.renderArgs.model.contacts.size() == x
+		renderMap.model.contacts.size() == x
 		
 		where:
 		x << [2, 1, 1, 0, 3]
@@ -43,7 +46,7 @@ class OrganizationContactControllerSpec extends IntegrationSpec {
 	
 	def "Test contact addition"() {
 		setup:		
-		def c1 = new Contact(givenName:'fred', surname:'bloggs', email:new MailURI(uri:'fbloggs@test.com'))
+		def c1 = new Contact(givenName:'fred', surname:'bloggs', email:new MailURI(uri:'fbloggs@testing.com'))
 		c1.save()
 		c1.errors.each { println it }
 		def ct = new ContactType(name:"technical",displayName:"technical",description:"technical contacts").save()
@@ -51,8 +54,7 @@ class OrganizationContactControllerSpec extends IntegrationSpec {
 		ot.save()
 		ot.errors.each { println it }
 		
-		def o = new Organization(name:"o.test.com", displayName:"organization", lang:"en", url:new UrlURI(uri:"http://o.test.com"), primary:ot)
-		o.save()
+		def o = new Organization(name:"o.test.com", displayName:"organization", lang:"en", url:new UrlURI(uri:"http://o.test.com"), primary:ot).save()
 		
 		o.errors.each { println it }
 		
@@ -63,9 +65,10 @@ class OrganizationContactControllerSpec extends IntegrationSpec {
 		
 		when:
 		controller.create()
-		
+		o.refresh()
+
 		then:
-		o.contacts.size() == 1
+        o.contacts.size() == 1
 	}
 
 }
