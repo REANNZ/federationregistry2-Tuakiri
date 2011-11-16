@@ -68,7 +68,7 @@ class OrganizationController {
 			log.info "$authenticatedUser failed to create $organization"
 			
 			flash.type="error"
-			flash.message = message(code: 'fedreg.core.organization.nonexistant')
+			flash.message = message(code: 'fedreg.core.organization.save.validation.error')
 			render (view:'create', model:[organization:organization, contact:contact, organizationTypes: OrganizationType.list()])
 		}
 	}
