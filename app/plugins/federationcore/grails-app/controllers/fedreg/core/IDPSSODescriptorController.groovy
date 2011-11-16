@@ -128,7 +128,7 @@ class IDPSSODescriptorController {
 			}
 		}
 		else {
-			log.warn("Attempt to update $identityProvider by $authenticatedUser was denied, incorrect permission set")
+			log.warn("Attempt to update $identityProvider_ by $authenticatedUser was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}
