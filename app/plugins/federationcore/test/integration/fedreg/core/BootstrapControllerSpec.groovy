@@ -8,31 +8,18 @@ import grails.plugins.nimble.core.*
 import com.icegreen.greenmail.util.*
 
 class BootstrapControllerSpec extends IntegrationSpec {	
-	def controller
-	def savedMetaClasses
-	def IDPSSODescriptorService
-	def SPSSODescriptorService
-	def organizationService
+	def controller, idpService, spService, organizationService, user
 	
 	def cleanup() {
-		SpecHelpers.resetMetaClasses(savedMetaClasses)
-		IDPSSODescriptorService.metaClass = fedreg.core.IDPSSODescriptorService.metaClass
-		SPSSODescriptorService.metaClass = fedreg.core.SPSSODescriptorService.metaClass
-		organizationService.metaClass = fedreg.core.OrganizationService.metaClass
 	}
 	
 	def setup () {
-		savedMetaClasses = [:]
+        idpService = new IDPSSODescriptorService()
+        spService = new SPSSODescriptorService()
+        organizationService = new OrganizationService()
+		controller = new BootstrapController(IDPSSODescriptorService:idpService, SPSSODescriptorService:spService, organizationService: organizationService)
 		
-		SpecHelpers.registerMetaClass(fedreg.core.IDPSSODescriptorService, savedMetaClasses)
-		SpecHelpers.registerMetaClass(fedreg.core.SPSSODescriptorService, savedMetaClasses)
-		SpecHelpers.registerMetaClass(fedreg.core.OrganizationService, savedMetaClasses)
-		this.IDPSSODescriptorService.metaClass = fedreg.core.IDPSSODescriptorService.metaClass
-		this.SPSSODescriptorService.metaClass = fedreg.core.SPSSODescriptorService.metaClass
-		this.organizationService.metaClass = fedreg.core.OrganizationService.metaClass
-		
-		controller = new BootstrapController(IDPSSODescriptorService:IDPSSODescriptorService, SPSSODescriptorService:SPSSODescriptorService, organizationService:organizationService)
-		def user = UserBase.build()
+        def user = UserBase.build()
 		SpecHelpers.setupShiroEnv(user)
 	}
 	
@@ -82,7 +69,7 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		ret.contact = contact
 		
 		when:
-		IDPSSODescriptorService.metaClass.create = { def p -> 
+		idpService.metaClass.create = { def p -> 
 			return [true, ret]
 		} 
 		def model = controller.saveidp()
@@ -115,7 +102,7 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		ret.contact = contact
 		
 		when:
-		IDPSSODescriptorService.metaClass.create = { def p -> 
+		this.idpService.metaClass.create = { def p -> 
 			return [false, ret]
 		} 
 		def model = controller.saveidp()
@@ -183,7 +170,7 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		ret.serviceProvider = serviceProvider
 		
 		when:
-		SPSSODescriptorService.metaClass.create = { def p -> 
+		spService.metaClass.create = { def p -> 
 			return [true, ret]
 		} 
 		def model = controller.savesp()
@@ -202,7 +189,7 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		ret.organization = organization
 		ret.entityDescriptor = entityDescriptor
 		ret.serviceProvider = serviceProvider
-		SPSSODescriptorService.metaClass.create = { def p -> 
+		spService.metaClass.create = { def p -> 
 			return [false, ret]	//.. deliberately leaving out other return vals here
 		}
 		
@@ -271,7 +258,7 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		def organization = Organization.build(active:true, approved:true)
 		
 		when:
-		OrganizationService.metaClass.create = { def p -> 
+		organizationService.metaClass.create = { def p -> 
 			return [false, organization]
 		} 
 		def model = controller.saveorganization()
