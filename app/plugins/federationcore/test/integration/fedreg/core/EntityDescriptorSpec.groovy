@@ -51,8 +51,9 @@ class EntityDescriptorSpec extends IntegrationSpec {
 	
 	def "Ensure EntityDescriptor not empty with IDP child"() {
 		when:
-		def ed = new EntityDescriptor()
-		def idp = new IDPSSODescriptor()
+        def o = Organization.build(active:true, approved:true)
+		def ed = EntityDescriptor.build(active:true, approved:true, organization:o)
+		def idp = new IDPSSODescriptor(active:true, approved:true, entityDescriptor:ed)
 		ed.addToIdpDescriptors(idp)
 		
 		then:
@@ -60,10 +61,11 @@ class EntityDescriptorSpec extends IntegrationSpec {
 	}
 	
 	def "Ensure EntityDescriptor not empty with SP child"() {
-		when:
-		def ed = new EntityDescriptor()
-		def sp = new SPSSODescriptor()
-		ed.addToSpDescriptors(idp)
+		when:	
+        def o = Organization.build(active:true, approved:true)
+        def ed = EntityDescriptor.build(active:true, approved:true, organization:o)
+		def sp = new SPSSODescriptor(active:true, approved:true, entityDescriptor:ed)
+		ed.addToSpDescriptors(sp)
 		
 		then:
 		!ed.empty()
@@ -71,8 +73,9 @@ class EntityDescriptorSpec extends IntegrationSpec {
 	
 	def "Ensure EntityDescriptor not empty with AA child"() {
 		when:
-		def ed = new EntityDescriptor()
-		def aa = new AttributeAuthorityDescriptor()
+        def o = Organization.build(active:true, approved:true)
+        def ed = EntityDescriptor.build(active:true, approved:true, organization:o)
+		def aa = new AttributeAuthorityDescriptor(active:true, approved:true, entityDescriptor:ed)
 		ed.addToAttributeAuthorityDescriptors(aa)
 		
 		then:
@@ -81,23 +84,36 @@ class EntityDescriptorSpec extends IntegrationSpec {
 	
 	def "Ensure EntityDescriptor not empty with IDP and AA child"() {
 		when:
-		def ed = new EntityDescriptor()
-		def idp = new IDPSSODescriptor()
+        def o = Organization.build(active:true, approved:true)
+        def ed = EntityDescriptor.build(active:true, approved:true, organization:o)
+		def idp = new IDPSSODescriptor(active:true, approved:true, entityDescriptor:ed)
 		ed.addToIdpDescriptors(idp)
 		
-		def aa = new AttributeAuthorityDescriptor()
+		def aa = new AttributeAuthorityDescriptor(active:true, approved:true, entityDescriptor:ed)
 		ed.addToAttributeAuthorityDescriptors(aa)
 		
 		then:
 		!ed.empty()
 	}
 	
-	def "Ensure EntityDescriptor empty no child nodes"() {
+	def "Ensure EntityDescriptor empty when no child nodes"() {
 		when:
 		def ed = new EntityDescriptor()
 		
 		then:
 		ed.empty()
 	}
+
+    def "Ensure EntityDescriptor empty no functioning child nodes"() {
+                when:
+        def ed = new EntityDescriptor(active:true, approved:true)
+        def idp = new IDPSSODescriptor(archived:true)
+        ed.addToIdpDescriptors(idp)
+        def sp = new SPSSODescriptor(active:false, approved:false)
+        ed.addToSpDescriptors(sp)
+        
+        then:
+        ed.empty()
+    }
 
 }
