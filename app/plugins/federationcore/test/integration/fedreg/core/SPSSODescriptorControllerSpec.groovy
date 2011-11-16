@@ -153,7 +153,7 @@ class SPSSODescriptorControllerSpec extends IntegrationSpec {
 		controller.response.redirectedUrl == "/SPSSODescriptor/show/${serviceProvider.id}"	
 	}
 
-    def "Validate unsuccessful update with incorrect perms"() {
+    def "Validate update with incorrect perms"() {
         setup:
         def organization = Organization.build()
         def entityDescriptor = EntityDescriptor.build(organization:organization)
