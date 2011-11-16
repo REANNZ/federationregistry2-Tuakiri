@@ -7,31 +7,27 @@ import fedreg.workflow.*
 import grails.plugins.nimble.core.*
 
 class AttributeConsumingServiceControllerSpec extends IntegrationSpec {
-	def savedMetaClasses
-	def user
+
+	def user, controller, renderMap
 	
 	def setup () {
-		savedMetaClasses = [:]
-		
-		SpecHelpers.registerMetaClass(WorkflowProcessService, savedMetaClasses)
-		UserBase.metaClass.contact = [ getId: 1 ]
+        UserBase.metaClass.contact = [ getId: 1 ]
 		user = UserBase.build()
 		SpecHelpers.setupShiroEnv(user)
-		
-		// Clear storage - odd issue with 1.3.6 have not yet confirmed where bug lies
-		EntityDescriptor.findAll()*.delete(flush:true)
-		Organization.findAll()*.delete(flush:true)
-		AttributeConsumingService.findAll()*.delete(flush:true)
-		RequestedAttribute.findAll()*.delete(flush:true)
+
+        AttributeConsumingServiceController.metaClass.render = { Map map ->
+            renderMap = map
+        }
+        controller = new AttributeConsumingServiceController()
+
 	}
 	
 	def cleanup() {
-		SpecHelpers.resetMetaClasses(savedMetaClasses)
+		user.perms = []
 	}
 	
 	def "Add new requested attribute with correct perms"() {
 		setup:
-		def controller = new AttributeConsumingServiceController()
 		def acs = AttributeConsumingService.build().save()
 		def attr = AttributeBase.build().save()
 		
@@ -63,7 +59,6 @@ class AttributeConsumingServiceControllerSpec extends IntegrationSpec {
 	
 	def "Add new requested attribute with incorrect permissions"() {
 		setup:
-		def controller = new AttributeConsumingServiceController()
 		def acs = AttributeConsumingService.build().save()
 		def attr = AttributeBase.build().save()
 		
@@ -81,7 +76,6 @@ class AttributeConsumingServiceControllerSpec extends IntegrationSpec {
 	
 	def "Adding duplicate requested attribute fails"() {
 		setup:
-		def controller = new AttributeConsumingServiceController()
 		def acs = AttributeConsumingService.build().save()
 		def ra1 = RequestedAttribute.build().save()
 		acs.addToRequestedAttributes(ra1)
@@ -111,7 +105,6 @@ class AttributeConsumingServiceControllerSpec extends IntegrationSpec {
 	
 	def "Add new requested attribute fails without reason"() {
 		setup:
-		def controller = new AttributeConsumingServiceController()
 		def acs = AttributeConsumingService.build().save()
 		def attr = Attribute.build()
 		
@@ -127,7 +120,6 @@ class AttributeConsumingServiceControllerSpec extends IntegrationSpec {
 	
 	def "Delete requested attribute succeeds"() {
 		setup:
-		def controller = new AttributeConsumingServiceController()
 		def acs = AttributeConsumingService.build().save()
 		def attr = AttributeBase.build().save()
 		def ra1 = RequestedAttribute.build(base:attr).save()
@@ -147,7 +139,6 @@ class AttributeConsumingServiceControllerSpec extends IntegrationSpec {
 	
 	def "Delete requested attribute fails with wrong permissions"() {
 		setup:
-		def controller = new AttributeConsumingServiceController()
 		def acs = AttributeConsumingService.build().save()
 		def attr = AttributeBase.build().save()
 		def ra1 = RequestedAttribute.build(base:attr).save()
@@ -166,7 +157,6 @@ class AttributeConsumingServiceControllerSpec extends IntegrationSpec {
 	
 	def "List requested attributes functions correctly"() {
 		setup:
-		def controller = new AttributeConsumingServiceController()
 		def ed = EntityDescriptor.build(entityID:'http://unique.com')
 		def sp = SPSSODescriptor.build(entityDescriptor:ed)
 		def acs = AttributeConsumingService.build(descriptor:sp)
@@ -178,12 +168,14 @@ class AttributeConsumingServiceControllerSpec extends IntegrationSpec {
 		acs.save()
 		
 		controller.params.id = acs.id
+        controller.params.containerID = 'ra'
 		
 		when:
 		controller.listRequestedAttributes()
 		
 		then:
-		controller.modelAndView.model.requestedAttributes.size() == 2
+		renderMap.model.requestedAttributes.size() == 2
+        renderMap.template == "/templates/acs/listrequestedattributes"
 	}
 
 }
