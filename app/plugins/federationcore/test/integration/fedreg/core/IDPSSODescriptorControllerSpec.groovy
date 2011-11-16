@@ -8,29 +8,19 @@ import grails.plugins.nimble.core.*
 
 class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 	
-	def controller
-	def savedMetaClasses
-	def idpssoDescriptorService = new IDPSSODescriptorService()
+	def controller, idpssoDescriptorService, user
 	
 	def cleanup() {
-		SpecHelpers.resetMetaClasses(savedMetaClasses)
-		idpssoDescriptorService.metaClass = IDPSSODescriptorService.metaClass
+		
 	}
 	
 	def setup () {
-		savedMetaClasses = [:]
-		
-		SpecHelpers.registerMetaClass(IDPSSODescriptorService, savedMetaClasses)
-		idpssoDescriptorService.metaClass = IDPSSODescriptorService.metaClass
+		idpssoDescriptorService = new IDPSSODescriptorService()
 		
 		controller = new IDPSSODescriptorController(IDPSSODescriptorService:idpssoDescriptorService)
-		def user = UserBase.build()
-		SpecHelpers.setupShiroEnv(user)
 		
-		// Clear storage - odd issue with 1.3.6 have not yet confirmed where bug lies
-		IDPSSODescriptor.findAll()*.delete(flush:true)
-		EntityDescriptor.findAll()*.delete(flush:true)
-		Organization.findAll()*.delete(flush:true)
+        user = UserBase.build()
+		SpecHelpers.setupShiroEnv(user)
 	}
 	
 	def setupBindings() {
@@ -66,44 +56,7 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		def model = controller.list()
 
 		then:
-		model.identityProviderList.size() == 20
-	}
-	
-	def "Validate list with max set"() {
-		setup:
-		(1..25).each { i ->
-			def ed = EntityDescriptor.build(entityID:"http://idp.test.com/$i")
-			def idp = IDPSSODescriptor.build(entityDescriptor: ed)
-			idp.save()
-		}
-		controller.params.max = 10
-		
-		when:
-		def model = controller.list()
-
-		then:
-		model.identityProviderList.size() == 10
-		model.identityProviderList.get(0) == IDPSSODescriptor.list().get(0)
-		model.identityProviderList.get(9) == IDPSSODescriptor.list().get(9)
-	}
-	
-	def "Validate list with max and offset set"() {
-		setup:
-		(1..25).each { i->
-			def ed = EntityDescriptor.build(entityID:"http://idp.test.com/$i")
-			def idp = IDPSSODescriptor.build(entityDescriptor: ed)
-			idp.save()
-		}
-		controller.params.max = 10
-		controller.params.offset = 5
-		
-		when:
-		def model = controller.list()
-
-		then:
-		model.identityProviderList.size() == 10
-		model.identityProviderList.get(0) == IDPSSODescriptor.list().get(5)
-		model.identityProviderList.get(9) == IDPSSODescriptor.list().get(14)
+		model.identityProviderList.size() == 25
 	}
 	
 	def "Show with no ID"() {		
@@ -118,7 +71,7 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 	
 	def "Show with invalid IDPSSODescriptor ID"() {
 		setup:
-		controller.params.id = 2
+		controller.params.id = 200000000
 			
 		when:
 		controller.show()
@@ -132,7 +85,7 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 	def "Validate create"() {
 		setup:
 		(1..10).each {
-			Organization.build().save()
+			Organization.build(active:true, approved:true).save()
 		}
 		
 		(1..11).each { i ->
@@ -147,11 +100,12 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		def model = controller.create()
 
 		then:
+        println model
 		model.identityProvider != null
 		model.identityProvider instanceof IDPSSODescriptor
-		model.organizationList.size() == 10
-		model.attributeList.size() == 11
-		model.nameIDFormatList.size() == 12
+		model.organizationList.size() > 0
+		model.attributeList.size() > 0
+		model.nameIDFormatList.size() > 0
 	}
 	
 	def "Validate successful save"() {
@@ -171,7 +125,7 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		
 		when:
 		idpssoDescriptorService.metaClass.create = { def p -> 
-			return [true, organization, entityDescriptor, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact]
+			return [true, [organization:organization, entityDescriptor:entityDescriptor, identityProvider:identityProvider, attributeAuthority:attributeAuthority, httpPost:httpPost, httpRedirect:httpRedirect, soapArtifact:soapArtifact, organizationList:organizationList, attributeList:attributeList, nameIDFormatList:nameIDFormatList, contact:contact]]
 		} 
 		def model = controller.save()
 		
@@ -196,7 +150,7 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		
 		when:
 		idpssoDescriptorService.metaClass.create = { def p -> 
-			return [false, organization, entityDescriptor, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact]
+			return [false, [organization:organization, entityDescriptor:entityDescriptor, identityProvider:identityProvider, attributeAuthority:attributeAuthority, httpPost:httpPost, httpRedirect:httpRedirect, soapArtifact:soapArtifact, organizationList:organizationList, attributeList:attributeList, nameIDFormatList:nameIDFormatList, contact:contact]]
 		} 
 		def model = controller.save()
 		
@@ -217,16 +171,33 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		def identityProvider = IDPSSODescriptor.build(entityDescriptor:entityDescriptor).save()
 		
 		controller.params.id = identityProvider.id
-		
+		user.perms.add("descriptor:${identityProvider.id}:update")
+        idpssoDescriptorService.metaClass.update = { def p -> 
+            return [true, identityProvider]
+        } 
+
 		when:
-		idpssoDescriptorService.metaClass.update = { def p -> 
-			return [true, identityProvider]
-		} 
-		def model = controller.update()
+		controller.update()
 		
 		then:
 		controller.response.redirectedUrl == "/IDPSSODescriptor/show/${identityProvider.id}"	
 	}
+
+    def "Validate update with incorrect perms"() {
+        setup:
+        def organization = Organization.build().save()
+        def entityDescriptor = EntityDescriptor.build(organization:organization).save()
+        def identityProvider = IDPSSODescriptor.build(entityDescriptor:entityDescriptor).save()
+        
+        controller.params.id = identityProvider.id
+        user.perms.add("descriptor:-1:update")
+
+        when:
+        controller.update()
+        
+        then:
+        controller.response.status == 403 
+    }
 	
 	def "Validate failed update"() {
 		setup:
@@ -235,11 +206,12 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		def identityProvider = IDPSSODescriptor.build(entityDescriptor:entityDescriptor).save()
 		
 		controller.params.id = identityProvider.id
-		
-		when:
+        user.perms.add("descriptor:${identityProvider.id}:update")
 		idpssoDescriptorService.metaClass.update = { def p -> 
-			return [false, identityProvider]
-		} 
+            return [false, identityProvider]
+        } 
+
+		when:
 		def model = controller.update()
 		
 		then:
