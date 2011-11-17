@@ -8,36 +8,28 @@ import grails.plugins.nimble.core.*
 
 class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 	
-	static transactional = true
-	
 	def cryptoService
 	def savedMetaClasses
 	def workflowProcessService
 	def entityDescriptorService
 	def IDPSSODescriptorService
-	def params
+	def params, user, svedMetaClasses
 	
 	def setup () {
-		savedMetaClasses = [:]
-		
-		SpecHelpers.registerMetaClass(WorkflowProcessService, savedMetaClasses)
-		workflowProcessService.metaClass = WorkflowProcessService.metaClass
-		def user = UserBase.build()
+        params = [:]
+
+        user = UserBase.build()
 		SpecHelpers.setupShiroEnv(user)
-		
-		params = [:]
-		
-		// Clear storage - odd issue with 1.3.6 have not yet confirmed where bug lies		
-		IDPSSODescriptor.list().each { IDPSSODescriptorService.delete(it.id) }
-		Attribute.findAll()*.delete(flush:true)
-		AttributeBase.findAll()*.delete(flush:true)
-		Contact.findAll()*.delete(flush:true)
-		Organization.findAll()*.delete(flush:true)
+
+        savedMetaClasses = [:]
+
+        SpecHelpers.registerMetaClass(WorkflowProcessService, savedMetaClasses)
+        workflowProcessService.metaClass = WorkflowProcessService.metaClass
 	}
 	
 	def cleanup() {
-		SpecHelpers.resetMetaClasses(savedMetaClasses)
-		workflowProcessService.metaClass = WorkflowProcessService.metaClass
+       SpecHelpers.resetMetaClasses(savedMetaClasses)
+        workflowProcessService.metaClass = WorkflowProcessService.metaClass
 	}
 	
 	def setupBindings() {
@@ -65,8 +57,8 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 
 		def saml2Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:2.0:protocol')
 		def organization = Organization.build()
-		def attr1 = AttributeBase.build(name: "attr1")
-		def attr2 = AttributeBase.build(name: "attr2")
+		def attr1 = AttributeBase.build()
+		def attr2 = AttributeBase.build()
 		def nameID1 = SamlURI.build()
 		def nameID2 = SamlURI.build()
 		def pk = loadPK()
@@ -78,13 +70,14 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		params.entity = [identifier:"http://identityProvider.test.com"]
 		params.idp = [displayName:"test name", description:"test desc", scope: "test.com", attributes:[(attr1.id):'on', (attr2.id):'on'], nameidformats:[(nameID1.id):'on', (nameID2.id):'on'], crypto:[sig: true, enc:true], post:[uri:"http://identityProvider.test.com/SAML2/POST/SSO"], 
 								redirect:[uri:"http://identityProvider.test.com/SAML2/Redirect/SSO"], artifact:[uri:"http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution"]]
-		params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, enc:true], attributeservice:[uri:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"], attributes:[(attr1.id):'on', (attr2.id):'on']]
+		params.aa = [create: true, displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], attributeservice:[uri:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"], attributes:[(attr1.id):'on', (attr2.id):'on']]
 		params.contact = [givenName:"Fred", surname:"Bloggs", email:"fredbloggs@test.com", type:ct.name]
 		
 		def wfProcessName, wfDescription, wfPriority, wfParams
 		
 		when:
 		WorkflowProcessService.metaClass.initiate =  { String processName, String instanceDescription, ProcessPriority priority, Map params ->
+            println "73"
 			wfProcessName = processName
 			wfDescription = instanceDescription
 			wfPriority = priority
@@ -169,8 +162,8 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 
 		def saml2Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:2.0:protocol')
 		def organization = Organization.build()
-		def attr1 = AttributeBase.build(name: "attr1")
-		def attr2 = AttributeBase.build(name: "attr2")
+		def attr1 = AttributeBase.build()
+		def attr2 = AttributeBase.build()
 		def nameID1 = SamlURI.build()
 		def nameID2 = SamlURI.build()
 		def pk = loadPK()
@@ -180,16 +173,17 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		params.organization = [id: organization.id]
 		params.active = true
 		params.cert = pk
-		params.entity = [identifier:"http://identityProvider.test.com"]
-		params.idp = [displayName:"test name", description:"test desc", attributes:[(attr1.id):'on', (attr2.id):'on'], nameidformats:[(nameID1.id):'on', (nameID2.id):'on'], crypto:[sig: true, enc:true], post:[uri:"http://identityProvider.test.com/SAML2/POST/SSO"], 
+		params.entity = [identifier:"http://identityProvider2.test.com"]
+		params.idp = [displayName:"test name", description:"test desc", scope:"test.com", attributes:[(attr1.id):'on', (attr2.id):'on'], nameidformats:[(nameID1.id):'on', (nameID2.id):'on'], crypto:[sig: true, enc:true], post:[uri:"http://identityProvider.test.com/SAML2/POST/SSO"], 
 								redirect:[uri:"http://identityProvider.test.com/SAML2/Redirect/SSO"], artifact:[uri:"http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution"]]
-		params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, enc:true], attributeservice:[uri:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"], attributes:[(attr1.id):'on', (attr2.id):'on']]
+		params.aa = [create: true, displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], attributeservice:[uri:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"], attributes:[(attr1.id):'on', (attr2.id):'on']]
 		params.contact = [id: contact.id, type: ct.name]
 		
 		def wfProcessName, wfDescription, wfPriority, wfParams
 		
 		when:
 		WorkflowProcessService.metaClass.initiate =  { String processName, String instanceDescription, ProcessPriority priority, Map params ->
+            println "178"
 			wfProcessName = processName
 			wfDescription = instanceDescription
 			wfPriority = priority
@@ -202,14 +196,8 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		then:
 		created
 		
-		Organization.count() == 1
-		SamlURI.count() == 7
-		EntityDescriptor.count() == 1
-		IDPSSODescriptor.count() == 1
-		AttributeAuthorityDescriptor.count() == 1
-		
 		def entityDescriptor = ret.entityDescriptor
-		entityDescriptor.entityID == "http://identityProvider.test.com"
+		entityDescriptor.entityID == "http://identityProvider2.test.com"
 		
 		def identityProvider = ret.identityProvider
 		identityProvider.organization == organization
@@ -262,12 +250,12 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		wfProcessName == "idpssodescriptor_create"
 		
 		wfPriority == ProcessPriority.MEDIUM
-		wfParams.size() == 4
+		wfParams.size() == 5
 		wfParams.creator == "${contact.id}"
 		wfParams.identityProvider == "${identityProvider.id}"
-		wfParams.organization == organization.name
+		wfParams.organization == "${organization.id}"
 	}
-	/*
+	
 	def "Create succeeds when valid initial IDPSSODescriptor and AttributeAuthorityDescriptor data are provided (with existing EntityDescriptor)"() {
 		setup:
 		setupBindings()
@@ -276,8 +264,8 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		def saml2Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:2.0:protocol')
 		def organization = Organization.build()
 		def entityDescriptor = EntityDescriptor.build(organization:organization)
-		def attr1 = AttributeBase.build(name: "attr1")
-		def attr2 = AttributeBase.build(name: "attr2")
+		def attr1 = AttributeBase.build()
+		def attr2 = AttributeBase.build()
 		def pk = loadPK()
 		def contact = Contact.build(organization: organization)
 		def ct = ContactType.build()
@@ -286,9 +274,9 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		params.active = true
 		params.cert = pk
 		params.entity = [id: entityDescriptor.id]
-		params.idp = [displayName:"test name", description:"test desc", attributes:[(attr1.id):'on', (attr2.id):'on'], crypto:[sig: true, enc:true], post:[uri:"http://identityProvider.test.com/SAML2/POST/SSO"], 
+		params.idp = [displayName:"test name", description:"test desc", scope:"test.com", attributes:[(attr1.id):'on', (attr2.id):'on'], crypto:[sig: true, enc:true], post:[uri:"http://identityProvider.test.com/SAML2/POST/SSO"], 
 								redirect:[uri:"http://identityProvider.test.com/SAML2/Redirect/SSO"], artifact:[uri:"http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution"]]
-		params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, enc:true], attributeservice:[uri:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"], attributes:[(attr1.id):'on', (attr2.id):'on']]
+		params.aa = [create: true, displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], attributeservice:[uri:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"], attributes:[(attr1.id):'on', (attr2.id):'on']]
 		params.contact = [id: contact.id, type: ct.name]
 		
 		def wfProcessName, wfDescription, wfPriority, wfParams
@@ -302,18 +290,14 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 			[true, [:]]
 		}
 		WorkflowProcessService.metaClass.run = { def processInstance -> }
-		def (created, org, entityDescriptor_, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact_) = IDPSSODescriptorService.create(params)
+		def (created, ret) = IDPSSODescriptorService.create(params)
 		
 		then:
 		created
-		
-		Organization.count() == 1
-		SamlURI.count() == 5
-		EntityDescriptor.count() == 1
-		IDPSSODescriptor.count() == 1
-		AttributeAuthorityDescriptor.count() == 1
 
-		def idp = IDPSSODescriptor.list().get(0)
+        def identityProvider = ret.identityProvider
+        def attributeAuthority = ret.attributeAuthority
+
 		identityProvider.organization == organization
 		identityProvider.entityDescriptor == entityDescriptor
 		identityProvider.entityDescriptor.organization == organization
@@ -350,7 +334,6 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		identityProvider.contacts.toList().get(0).contact.surname == contact.surname
 		identityProvider.contacts.toList().get(0).contact.email.uri == contact.email.uri
 		
-		def aa = AttributeAuthorityDescriptor.list().get(0)
 		attributeAuthority.organization == organization
 		attributeAuthority.entityDescriptor == entityDescriptor
 		attributeAuthority.collaborator == identityProvider
@@ -365,10 +348,10 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		wfProcessName == "idpssodescriptor_create"
 		
 		wfPriority == ProcessPriority.MEDIUM
-		wfParams.size() == 4
+		wfParams.size() == 5
 		wfParams.creator == "${contact.id}"
 		wfParams.identityProvider == "${identityProvider.id}"
-		wfParams.organization == organization.name
+		wfParams.organization == "${organization.id}"
 	}
 	
 	def "Create fails when IDPSSODescriptor fails constraints even though a valid AttributeAuthorityDescriptor is provided"() {
@@ -389,22 +372,19 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		params.active = true
 		params.cert = pk
 		params.entity = [id: entityDescriptor.id]
-		params.idp = [description:"test desc", crypto:[sig: true, enc:true], post:[uri:"http://identityProvider.test.com/SAML2/POST/SSO"], 
+		params.idp = [description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], post:[uri:"http://identityProvider.test.com/SAML2/POST/SSO"], 
 								redirect:[uri:"http://identityProvider.test.com/SAML2/Redirect/SSO"], artifact:[uri:"http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution"]]
-		params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, enc:true], attributeservice:[uri:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
+		params.aa = [create: true, displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], attributeservice:[uri:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
 		params.contact = [id: contact.id, type: ct.name]
 		
 		when:
-		def (created, org, entityDescriptor_, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact_) = IDPSSODescriptorService.create(params)
+		def (created, ret) = IDPSSODescriptorService.create(params)
 		
 		then:
 		!created
-		
-		Organization.count() == 1
-		SamlURI.count() == 5
-		EntityDescriptor.count() == 1
-		IDPSSODescriptor.count() == 0
-		AttributeAuthorityDescriptor.count() == 0
+
+        def identityProvider = ret.identityProvider
+        def attributeAuthority = ret.attributeAuthority
 
 		identityProvider.organization == organization
 		identityProvider.entityDescriptor == entityDescriptor
@@ -418,17 +398,17 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		identityProvider.singleSignOnServices.size() == 2
 		
-		identityProvider.singleSignOnServices.contains(httpPost)
-		httpPost.location.uri == "http://identityProvider.test.com/SAML2/POST/SSO"
+		identityProvider.singleSignOnServices.contains(ret.httpPost)
+		ret.httpPost.location.uri == "http://identityProvider.test.com/SAML2/POST/SSO"
 		
 		
-		identityProvider.singleSignOnServices.contains(httpRedirect)
-		httpRedirect.location.uri == "http://identityProvider.test.com/SAML2/Redirect/SSO"
+		identityProvider.singleSignOnServices.contains(ret.httpRedirect)
+		ret.httpRedirect.location.uri == "http://identityProvider.test.com/SAML2/Redirect/SSO"
 		
 		identityProvider.artifactResolutionServices.size() == 1
 		
-		identityProvider.artifactResolutionServices.contains(soapArtifact)
-		soapArtifact.location.uri == "http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution"
+		identityProvider.artifactResolutionServices.contains(ret.soapArtifact)
+		ret.soapArtifact.location.uri == "http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution"
 		
 		identityProvider.contacts.size() == 1
 		identityProvider.contacts.toList().get(0).id == null
@@ -458,24 +438,19 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		params.active = true
 		params.cert = pk
 		params.entity = [id: entityDescriptor.id]
-		params.idp = [displayName: "test name", description:"test desc", crypto:[sig: true, enc:true], post:[uri:"/SAML2/POST/SSO"], 
+		params.idp = [displayName: "test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], post:[uri:"/SAML2/POST/SSO"], 
 								redirect:[uri:"http://identityProvider.test.com/SAML2/Redirect/SSO"], artifact:[uri:"http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution"]]
-		params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, enc:true], attributeservice:[uri:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
+		params.aa = [create: true, displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], attributeservice:[uri:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
 		params.contact = [id: contact.id, type: ct.name]
 		
 		when:
-		def (created, org, entityDescriptor_, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact_) = IDPSSODescriptorService.create(params)
+		def (created, ret) = IDPSSODescriptorService.create(params)
 		
 		then:
 		!created
-		
-		println "ID IS -- " + identityProvider.id
-		
-		Organization.count() == 1
-		SamlURI.count() == 5
-		EntityDescriptor.count() == 1
-		IDPSSODescriptor.count() == 0
-		AttributeAuthorityDescriptor.count() == 0
+
+        def identityProvider = ret.identityProvider
+        def attributeAuthority = ret.attributeAuthority
 
 		identityProvider.organization == organization
 		identityProvider.entityDescriptor == entityDescriptor
@@ -489,19 +464,19 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		identityProvider.singleSignOnServices.size() == 2
 		
-		identityProvider.singleSignOnServices.contains(httpPost)
-		httpPost.location.uri == "/SAML2/POST/SSO"
-		httpPost.errors.getErrorCount() == 1
-		httpPost.errors.getFieldError('location.uri').code == 'url.invalid'
+		identityProvider.singleSignOnServices.contains(ret.httpPost)
+		ret.httpPost.location.uri == "/SAML2/POST/SSO"
+		ret.httpPost.errors.getErrorCount() == 1
+		ret.httpPost.errors.getFieldError('location.uri').code == 'url.invalid'
 		
 		
-		identityProvider.singleSignOnServices.contains(httpRedirect)
-		httpRedirect.location.uri == "http://identityProvider.test.com/SAML2/Redirect/SSO"
+		identityProvider.singleSignOnServices.contains(ret.httpRedirect)
+		ret.httpRedirect.location.uri == "http://identityProvider.test.com/SAML2/Redirect/SSO"
 		
 		identityProvider.artifactResolutionServices.size() == 1
 		
-		identityProvider.artifactResolutionServices.contains(soapArtifact)
-		soapArtifact.location.uri == "http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution"
+		identityProvider.artifactResolutionServices.contains(ret.soapArtifact)
+		ret.soapArtifact.location.uri == "http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution"
 		
 		
 		attributeAuthority.organization == organization
@@ -528,23 +503,19 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		params.active = true
 		params.cert = pk
 		params.entity = [id: entityDescriptor.id]
-		params.idp = [displayName: "test name", description:"test desc", crypto:[sig: true, enc:true], 
+		params.idp = [displayName: "test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], 
 								redirect:[uri:"http://identityProvider.test.com/SAML2/Redirect/SSO"], artifact:[uri:"http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution"]]
-		params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, enc:true], attributeservice:[uri:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
+		params.aa = [create: true, displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], attributeservice:[uri:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
 		params.contact = [id: contact.id, type: ct.name]
 		
 		when:
-		def (created, org, entityDescriptor_, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact_) = IDPSSODescriptorService.create(params)
+		def (created, ret) = IDPSSODescriptorService.create(params)
 		
 		then:
 		!created
-		
-		Organization.count() == 1
-		SamlURI.count() == 5
-		EntityDescriptor.count() == 1
-		IDPSSODescriptor.count() == 0
-		AttributeAuthorityDescriptor.count() == 0
 
+        def identityProvider = ret.identityProvider
+        def attributeAuthority = ret.attributeAuthority
 		
 		identityProvider.organization == organization
 		identityProvider.entityDescriptor == entityDescriptor
@@ -558,21 +529,21 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		identityProvider.singleSignOnServices.size() == 2
 		
-		identityProvider.singleSignOnServices.contains(httpPost)
-		httpPost.location.uri == null
-		httpPost.errors.getErrorCount() == 1
-		httpPost.errors.getFieldError('location.uri').code == 'nullable'
+		identityProvider.singleSignOnServices.contains(ret.httpPost)
+		ret.httpPost.location.uri == null
+		ret.httpPost.errors.getErrorCount() == 1
+		ret.httpPost.errors.getFieldError('location.uri').code == 'nullable'
 		identityProvider.errors.getErrorCount() == 1
 		identityProvider.errors.getFieldError('singleSignOnServices.location.uri').code == 'nullable'
 		
 		
-		identityProvider.singleSignOnServices.contains(httpRedirect)
-		httpRedirect.location.uri == "http://identityProvider.test.com/SAML2/Redirect/SSO"
+		identityProvider.singleSignOnServices.contains(ret.httpRedirect)
+		ret.httpRedirect.location.uri == "http://identityProvider.test.com/SAML2/Redirect/SSO"
 		
 		identityProvider.artifactResolutionServices.size() == 1
 		
-		identityProvider.artifactResolutionServices.contains(soapArtifact)
-		soapArtifact.location.uri == "http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution"
+		identityProvider.artifactResolutionServices.contains(ret.soapArtifact)
+		ret.soapArtifact.location.uri == "http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution"
 		
 		
 		attributeAuthority.organization == organization
@@ -599,23 +570,19 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		params.active = true
 		params.cert = pk
 		params.entity = [id: entityDescriptor.id]
-		params.idp = [displayName: "test name", description:"test desc", crypto:[sig: true, enc:true], post:[uri:"http://identityProvider.test.com/SAML2/POST/SSO"], 
+		params.idp = [displayName: "test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], post:[uri:"http://identityProvider.test.com/SAML2/POST/SSO"], 
 								redirect:[uri:"asdfasdasdf"], artifact:[uri:"http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution"]]
-		params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, enc:true], attributeservice:[uri:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
+		params.aa = [create: true, displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], attributeservice:[uri:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
 		params.contact = [id: contact.id, type: ct.name]
 		
 		when:
-		def (created, org, entityDescriptor_, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact_) = IDPSSODescriptorService.create(params)
+		def (created, ret) = IDPSSODescriptorService.create(params)
 		
 		then:
 		!created
-		
-		Organization.count() == 1
-		SamlURI.count() == 5
-		EntityDescriptor.count() == 1
-		IDPSSODescriptor.count() == 0
-		AttributeAuthorityDescriptor.count() == 0
 
+        def identityProvider = ret.identityProvider
+        def attributeAuthority = ret.attributeAuthority
 		
 		identityProvider.organization == organization
 		identityProvider.entityDescriptor == entityDescriptor
@@ -629,20 +596,19 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		identityProvider.singleSignOnServices.size() == 2
 		
-		identityProvider.singleSignOnServices.contains(httpPost)
-		httpPost.location.uri == "http://identityProvider.test.com/SAML2/POST/SSO"
+		identityProvider.singleSignOnServices.contains(ret.httpPost)
+		ret.httpPost.location.uri == "http://identityProvider.test.com/SAML2/POST/SSO"
 
 		
-		identityProvider.singleSignOnServices.contains(httpRedirect)
-		httpRedirect.location.uri == "asdfasdasdf"
-		httpRedirect.errors.getErrorCount() == 1
-		httpRedirect.errors.getFieldError('location.uri').code == 'url.invalid'
+		identityProvider.singleSignOnServices.contains(ret.httpRedirect)
+		ret.httpRedirect.location.uri == "asdfasdasdf"
+		ret.httpRedirect.errors.getErrorCount() == 1
+		ret.httpRedirect.errors.getFieldError('location.uri').code == 'url.invalid'
 		
 		identityProvider.artifactResolutionServices.size() == 1
 		
-		identityProvider.artifactResolutionServices.contains(soapArtifact)
-		soapArtifact.location.uri == "http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution"
-		
+		identityProvider.artifactResolutionServices.contains(ret.soapArtifact)
+		ret.soapArtifact.location.uri == "http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution"		
 		
 		attributeAuthority.organization == organization
 		attributeAuthority.entityDescriptor == entityDescriptor
@@ -668,23 +634,19 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		params.active = true
 		params.cert = pk
 		params.entity = [id: entityDescriptor.id]
-		params.idp = [displayName: "test name", description:"test desc", crypto:[sig: true, enc:true], post:[uri:"http://identityProvider.test.com/SAML2/POST/SSO"],
+		params.idp = [displayName: "test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], post:[uri:"http://identityProvider.test.com/SAML2/POST/SSO"],
 								artifact:[uri:"http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution"]]
-		params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, enc:true], attributeservice:[uri:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
+		params.aa = [create: true, displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], attributeservice:[uri:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
 		params.contact = [id: contact.id, type: ct.name]
 		
 		when:
-		def (created, org, entityDescriptor_, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact_) = IDPSSODescriptorService.create(params)
+		def (created, ret) = IDPSSODescriptorService.create(params)
 		
 		then:
 		!created
-		
-		Organization.count() == 1
-		SamlURI.count() == 5
-		EntityDescriptor.count() == 1
-		IDPSSODescriptor.count() == 0
-		AttributeAuthorityDescriptor.count() == 0
 
+        def identityProvider = ret.identityProvider
+        def attributeAuthority = ret.attributeAuthority
 		
 		identityProvider.organization == organization
 		identityProvider.entityDescriptor == entityDescriptor
@@ -698,22 +660,21 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		identityProvider.singleSignOnServices.size() == 2
 		
-		identityProvider.singleSignOnServices.contains(httpPost)
-		httpPost.location.uri == "http://identityProvider.test.com/SAML2/POST/SSO"
+		identityProvider.singleSignOnServices.contains(ret.httpPost)
+		ret.httpPost.location.uri == "http://identityProvider.test.com/SAML2/POST/SSO"
 
 		
-		identityProvider.singleSignOnServices.contains(httpRedirect)
-		httpRedirect.location.uri == null
-		httpRedirect.errors.getErrorCount() == 1
-		httpRedirect.errors.getFieldError('location.uri').code == 'nullable'
+		identityProvider.singleSignOnServices.contains(ret.httpRedirect)
+		ret.httpRedirect.location.uri == null
+		ret.httpRedirect.errors.getErrorCount() == 1
+		ret.httpRedirect.errors.getFieldError('location.uri').code == 'nullable'
 		identityProvider.errors.getErrorCount() == 1
 		identityProvider.errors.getFieldError('singleSignOnServices.location.uri').code == 'nullable'
 		
 		identityProvider.artifactResolutionServices.size() == 1
 		
-		identityProvider.artifactResolutionServices.contains(soapArtifact)
-		soapArtifact.location.uri == "http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution"
-		
+		identityProvider.artifactResolutionServices.contains(ret.soapArtifact)
+		ret.soapArtifact.location.uri == "http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution"	
 		
 		attributeAuthority.organization == organization
 		attributeAuthority.entityDescriptor == entityDescriptor
@@ -739,23 +700,19 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		params.active = true
 		params.cert = pk
 		params.entity = [id: entityDescriptor.id]
-		params.idp = [displayName: "test name", description:"test desc", crypto:[sig: true, enc:true], post:[uri:"http://identityProvider.test.com/SAML2/POST/SSO"], 
-								redirect:[uri:"http://identityProvider.test.com/SAML2/Redirect/SSO"], artifact:[uri:"/SAML2/SOAP/ArtifactResolution"]]
-		params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, enc:true], attributeservice:[uri:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
+		params.idp = [displayName: "test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], post:[uri:"http://identityProvider.test.com/SAML2/POST/SSO"], 
+								redirect:[uri:"http://identityProvider.test.com/SAML2/Redirect/SSO"], artifact:[uri:"/SAML2/SOAP/ArtifactResolution", index:1]]
+		params.aa = [create: true, displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], attributeservice:[uri:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
 		params.contact = [id: contact.id, type: ct.name]
 		
 		when:
-		def (created, org, entityDescriptor_, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact_) = IDPSSODescriptorService.create(params)
+		def (created, ret) = IDPSSODescriptorService.create(params)
 		
 		then:
 		!created
-		
-		Organization.count() == 1
-		SamlURI.count() == 5
-		EntityDescriptor.count() == 1
-		IDPSSODescriptor.count() == 0
-		AttributeAuthorityDescriptor.count() == 0
 
+        def identityProvider = ret.identityProvider
+        def attributeAuthority = ret.attributeAuthority
 		
 		identityProvider.organization == organization
 		identityProvider.entityDescriptor == entityDescriptor
@@ -769,19 +726,19 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		identityProvider.singleSignOnServices.size() == 2
 		
-		identityProvider.singleSignOnServices.contains(httpPost)
-		httpPost.location.uri == "http://identityProvider.test.com/SAML2/POST/SSO"
+		identityProvider.singleSignOnServices.contains(ret.httpPost)
+		ret.httpPost.location.uri == "http://identityProvider.test.com/SAML2/POST/SSO"
 
 		
-		identityProvider.singleSignOnServices.contains(httpRedirect)
-		httpRedirect.location.uri == "http://identityProvider.test.com/SAML2/Redirect/SSO"
+		identityProvider.singleSignOnServices.contains(ret.httpRedirect)
+		ret.httpRedirect.location.uri == "http://identityProvider.test.com/SAML2/Redirect/SSO"
 		
 		identityProvider.artifactResolutionServices.size() == 1
 		
-		identityProvider.artifactResolutionServices.contains(soapArtifact)
-		soapArtifact.location.uri == "/SAML2/SOAP/ArtifactResolution"
-		soapArtifact.errors.getErrorCount() == 1
-		soapArtifact.errors.getFieldError('location.uri').code == 'url.invalid'
+		identityProvider.artifactResolutionServices.contains(ret.soapArtifact)
+		ret.soapArtifact.location.uri == "/SAML2/SOAP/ArtifactResolution"
+		ret.soapArtifact.errors.getErrorCount() == 1
+		ret.soapArtifact.errors.getFieldError('location.uri').code == 'url.invalid'
 		
 		
 		attributeAuthority.organization == organization
@@ -808,23 +765,19 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		params.active = true
 		params.cert = pk
 		params.entity = [id: entityDescriptor.id]
-		params.idp = [displayName: "test name", description:"test desc", crypto:[sig: true, enc:true], post:[uri:"http://identityProvider.test.com/SAML2/POST/SSO"],
+		params.idp = [displayName: "test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], post:[uri:"http://identityProvider.test.com/SAML2/POST/SSO"],
 								redirect:[uri:"http://identityProvider.test.com/SAML2/Redirect/SSO"]]
-		params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, enc:true], attributeservice:[uri:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
+		params.aa = [create: true, displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], attributeservice:[uri:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
 		params.contact = [id: contact.id, type: ct.name]
 		
 		when:
-		def (created, org, entityDescriptor_, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact_) = IDPSSODescriptorService.create(params)
+		def (created, ret) = IDPSSODescriptorService.create(params)
 		
 		then:
 		!created
-		
-		Organization.count() == 1
-		SamlURI.count() == 5
-		EntityDescriptor.count() == 1
-		IDPSSODescriptor.count() == 0
-		AttributeAuthorityDescriptor.count() == 0
 
+        def identityProvider = ret.identityProvider
+        def attributeAuthority = ret.attributeAuthority
 		
 		identityProvider.organization == organization
 		identityProvider.entityDescriptor == entityDescriptor
@@ -838,22 +791,21 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		identityProvider.singleSignOnServices.size() == 2
 		
-		identityProvider.singleSignOnServices.contains(httpPost)
-		httpPost.location.uri == "http://identityProvider.test.com/SAML2/POST/SSO"
+		identityProvider.singleSignOnServices.contains(ret.httpPost)
+		ret.httpPost.location.uri == "http://identityProvider.test.com/SAML2/POST/SSO"
 
 		
-		identityProvider.singleSignOnServices.contains(httpRedirect)
-		httpRedirect.location.uri == "http://identityProvider.test.com/SAML2/Redirect/SSO"
+		identityProvider.singleSignOnServices.contains(ret.httpRedirect)
+		ret.httpRedirect.location.uri == "http://identityProvider.test.com/SAML2/Redirect/SSO"
 		
 		identityProvider.artifactResolutionServices.size() == 1
 		
-		identityProvider.artifactResolutionServices.contains(soapArtifact)
-		soapArtifact.location.uri == null
-		soapArtifact.errors.getErrorCount() == 1
-		soapArtifact.errors.getFieldError('location.uri').code == 'nullable'
+		identityProvider.artifactResolutionServices.contains(ret.soapArtifact)
+		ret.soapArtifact.location.uri == null
+		ret.soapArtifact.errors.getErrorCount() == 2
+		ret.soapArtifact.errors.getFieldError('location.uri').code == 'nullable'
 		identityProvider.errors.getErrorCount() == 1
-		identityProvider.errors.getFieldError('artifactResolutionServices.location.uri').code == 'nullable'
-		
+		identityProvider.errors.getFieldError('artifactResolutionServices.location.uri').code == 'nullable'		
 		
 		attributeAuthority.organization == organization
 		attributeAuthority.entityDescriptor == entityDescriptor
@@ -879,9 +831,9 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		params.active = true
 		params.cert = pk
 		params.entity = [id: entityDescriptor.id]
-		params.idp = [displayName: "test name", description:"test desc",  post:[uri:"http://identityProvider.test.com/SAML2/POST/SSO"],
+		params.idp = [displayName: "test name", description:"test desc", scope:"test.com", post:[uri:"http://identityProvider.test.com/SAML2/POST/SSO"],
 								redirect:[uri:"http://identityProvider.test.com/SAML2/Redirect/SSO"], artifact:[uri:"http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution"]]
-		params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, enc:true], attributeservice:[uri:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
+		params.aa = [create: true, displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], attributeservice:[uri:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
 		params.contact = [id: contact.id, type: ct.name]
 		
 		def wfProcessName, wfDescription, wfPriority, wfParams
@@ -895,19 +847,13 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 			[true, [:]]
 		}
 		WorkflowProcessService.metaClass.run = { def processInstance -> }
-		def (created, org, entityDescriptor_, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact_) = IDPSSODescriptorService.create(params)
+		def (created, ret) = IDPSSODescriptorService.create(params)
 		
 		then:
 		created
-		
-		Organization.count() == 1
-		SamlURI.count() == 5
-		EntityDescriptor.count() == 1
-		IDPSSODescriptor.count() == 1
-		AttributeAuthorityDescriptor.count() == 1
 
-		def idp = IDPSSODescriptor.list().get(0)
-		def aa = AttributeAuthorityDescriptor.list().get(0)
+        def identityProvider = ret.identityProvider
+        def attributeAuthority = ret.attributeAuthority
 		
 		identityProvider.organization == organization
 		identityProvider.entityDescriptor == entityDescriptor
@@ -935,10 +881,10 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		wfProcessName == "idpssodescriptor_create"
 		
 		wfPriority == ProcessPriority.MEDIUM
-		wfParams.size() == 4
+		wfParams.size() == 5
 		wfParams.creator == "${contact.id}"
 		wfParams.identityProvider == "${identityProvider.id}"
-		wfParams.organization == organization.name
+		wfParams.organization == "${organization.id}"
 	}
 	
 	def "Create succeeds when AttributeAuthorityDescriptor not required"() {
@@ -959,7 +905,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		params.active = true
 		params.cert = pk
 		params.entity = [id: entityDescriptor.id]
-		params.idp = [displayName:"test name", description:"test desc", crypto:[sig: true, enc:true], post:[uri:"http://identityProvider.test.com/SAML2/POST/SSO"], 
+		params.idp = [displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], post:[uri:"http://identityProvider.test.com/SAML2/POST/SSO"], 
 								redirect:[uri:"http://identityProvider.test.com/SAML2/Redirect/SSO"], artifact:[uri:"http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution"]]
 		params.aa = [create: false]
 		params.contact = [id: contact.id, type: ct.name]
@@ -975,18 +921,14 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 			[true, [:]]
 		}
 		WorkflowProcessService.metaClass.run = { def processInstance -> }
-		def (created, org, entityDescriptor_, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact_) = IDPSSODescriptorService.create(params)
+		def (created, ret) = IDPSSODescriptorService.create(params)
 		
 		then:
 		created
-		
-		Organization.count() == 1
-		SamlURI.count() == 5
-		EntityDescriptor.count() == 1
-		IDPSSODescriptor.count() == 1
-		AttributeAuthorityDescriptor.count() == 0
 
-		def idp = IDPSSODescriptor.list().get(0)
+        def identityProvider = ret.identityProvider
+        def attributeAuthority = ret.attributeAuthority
+		
 		identityProvider.organization == organization
 		identityProvider.entityDescriptor == entityDescriptor
 		identityProvider.entityDescriptor.organization == organization
@@ -1013,10 +955,10 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		wfProcessName == "idpssodescriptor_create"
 		
 		wfPriority == ProcessPriority.MEDIUM
-		wfParams.size() == 4
+		wfParams.size() == 5
 		wfParams.creator == "${contact.id}"
 		wfParams.identityProvider == "${identityProvider.id}"
-		wfParams.organization == organization.name
+		wfParams.organization == "${organization.id}"
 	}
 	
 	def "Create succeeds when AttributeAuthorityDescriptor data not presented"() {
@@ -1037,7 +979,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		params.active = true
 		params.cert = pk
 		params.entity = [id: entityDescriptor.id]
-		params.idp = [displayName:"test name", description:"test desc", crypto:[sig: true, enc:true], post:[uri:"http://identityProvider.test.com/SAML2/POST/SSO"], 
+		params.idp = [displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], post:[uri:"http://identityProvider.test.com/SAML2/POST/SSO"], 
 								redirect:[uri:"http://identityProvider.test.com/SAML2/Redirect/SSO"], artifact:[uri:"http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution"]]
 		params.contact = [id: contact.id, type: ct.name]
 		
@@ -1052,18 +994,14 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 			[true, [:]]
 		}
 		WorkflowProcessService.metaClass.run = { def processInstance -> }
-		def (created, org, entityDescriptor_, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact_) = IDPSSODescriptorService.create(params)
+		def (created, ret) = IDPSSODescriptorService.create(params)
 		
 		then:
 		created
-		
-		Organization.count() == 1
-		SamlURI.count() == 5
-		EntityDescriptor.count() == 1
-		IDPSSODescriptor.count() == 1
-		AttributeAuthorityDescriptor.count() == 0
 
-		def idp = IDPSSODescriptor.list().get(0)
+        def identityProvider = ret.identityProvider
+        def attributeAuthority = ret.attributeAuthority
+		
 		identityProvider.organization == organization
 		identityProvider.entityDescriptor == entityDescriptor
 		identityProvider.entityDescriptor.organization == organization
@@ -1090,10 +1028,10 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		wfProcessName == "idpssodescriptor_create"
 		
 		wfPriority == ProcessPriority.MEDIUM
-		wfParams.size() == 4
+		wfParams.size() == 5
 		wfParams.creator == "${contact.id}"
 		wfParams.identityProvider == "${identityProvider.id}"
-		wfParams.organization == organization.name
+		wfParams.organization == "${organization.id}"
 	}
 	
 	def "Create fails when AttributeAuthorityDescriptor fails to meet constraints"() {
@@ -1114,23 +1052,19 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		params.active = true
 		params.cert = pk
 		params.entity = [id: entityDescriptor.id]
-		params.idp = [displayName:"test name", description:"test desc", crypto:[sig: true, enc:true], post:[uri:"http://identityProvider.test.com/SAML2/POST/SSO"], 
+		params.idp = [displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], post:[uri:"http://identityProvider.test.com/SAML2/POST/SSO"], 
 								redirect:[uri:"http://identityProvider.test.com/SAML2/Redirect/SSO"], artifact:[uri:"http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution"]]
-		params.aa = [create: true, description:"test desc", crypto:[sig: true, enc:true], attributeservice:[uri:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
+		params.aa = [create: true, crypto:[sig: true, enc:true], attributeservice:[uri:"abcd"], attributes:[1, 2]]
 		params.contact = [id: contact.id, type: ct.name]
 		
 		when:
-		def (created, org, entityDescriptor_, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact_) = IDPSSODescriptorService.create(params)
+		def (created, ret) = IDPSSODescriptorService.create(params)
 		
 		then:
 		!created
-		
-		Organization.count() == 1
-		SamlURI.count() == 5
-		EntityDescriptor.count() == 1
-		IDPSSODescriptor.count() == 0
-		AttributeAuthorityDescriptor.count() == 0
 
+        def identityProvider = ret.identityProvider
+        def attributeAuthority = ret.attributeAuthority
 		
 		identityProvider.organization == organization
 		identityProvider.entityDescriptor == entityDescriptor
@@ -1144,20 +1078,19 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		identityProvider.singleSignOnServices.size() == 2
 		
-		identityProvider.singleSignOnServices.contains(httpPost)
-		httpPost.location.uri == "http://identityProvider.test.com/SAML2/POST/SSO"
+		identityProvider.singleSignOnServices.contains(ret.httpPost)
+		ret.httpPost.location.uri == "http://identityProvider.test.com/SAML2/POST/SSO"
 
 		
-		identityProvider.singleSignOnServices.contains(httpRedirect)
-		httpRedirect.location.uri == "http://identityProvider.test.com/SAML2/Redirect/SSO"
+		identityProvider.singleSignOnServices.contains(ret.httpRedirect)
+		ret.httpRedirect.location.uri == "http://identityProvider.test.com/SAML2/Redirect/SSO"
 		
 		identityProvider.artifactResolutionServices.size() == 1
 		
-		identityProvider.artifactResolutionServices.contains(soapArtifact)
-		soapArtifact.location.uri == "http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution"
-		
-		
-		attributeAuthority.displayName == null
+		identityProvider.artifactResolutionServices.contains(ret.soapArtifact)
+		ret.soapArtifact.location.uri == "http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution"
+			
+		attributeAuthority.displayName == "test name"
 	}
 	
 	def "Create fails when invalid existing EnityDescriptor provided"() {
@@ -1178,26 +1111,19 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		params.active = true
 		params.cert = pk
 		params.entity = [id: entityDescriptor.id + 5]
-		params.idp = [displayName:"test name", description:"test desc", crypto:[sig: true, enc:true], post:[uri:"http://identityProvider.test.com/SAML2/POST/SSO"], 
+		params.idp = [displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], post:[uri:"http://identityProvider.test.com/SAML2/POST/SSO"], 
 								redirect:[uri:"http://identityProvider.test.com/SAML2/Redirect/SSO"], artifact:[uri:"http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution"]]
-		params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, enc:true], attributeservice:[uri:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
+		params.aa = [create: true, displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], attributeservice:[uri:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
 		params.contact = [id: contact.id, type: ct.name]
 		
 		when:
-		def (created, org, entityDescriptor_, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact_) = IDPSSODescriptorService.create(params)
+		def (created, ret) = IDPSSODescriptorService.create(params)
 		
 		then:
 		!created
-		
-		Organization.count() == 1
-		SamlURI.count() == 5
-		EntityDescriptor.count() == 1
-		IDPSSODescriptor.count() == 0
-		AttributeAuthorityDescriptor.count() == 0
 
-		IDPSSODescriptor.count() == 0
-		AttributeAuthorityDescriptor.count() == 0
-
+        def identityProvider = ret.identityProvider
+        def attributeAuthority = ret.attributeAuthority
 		
 		identityProvider.organization == organization
 		identityProvider.entityDescriptor == null
@@ -1210,18 +1136,17 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		identityProvider.singleSignOnServices.size() == 2
 		
-		identityProvider.singleSignOnServices.contains(httpPost)
-		httpPost.location.uri == "http://identityProvider.test.com/SAML2/POST/SSO"
+		identityProvider.singleSignOnServices.contains(ret.httpPost)
+		ret.httpPost.location.uri == "http://identityProvider.test.com/SAML2/POST/SSO"
 
 		
-		identityProvider.singleSignOnServices.contains(httpRedirect)
-		httpRedirect.location.uri == "http://identityProvider.test.com/SAML2/Redirect/SSO"
+		identityProvider.singleSignOnServices.contains(ret.httpRedirect)
+		ret.httpRedirect.location.uri == "http://identityProvider.test.com/SAML2/Redirect/SSO"
 		
 		identityProvider.artifactResolutionServices.size() == 1
 		
-		identityProvider.artifactResolutionServices.contains(soapArtifact)
-		soapArtifact.location.uri == "http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution"
-		
+		identityProvider.artifactResolutionServices.contains(ret.soapArtifact)
+		ret.soapArtifact.location.uri == "http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution"		
 		
 		attributeAuthority.organization == organization
 		attributeAuthority.entityDescriptor == null
@@ -1246,26 +1171,19 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		params.active = true
 		params.cert = pk
 		params.entity = [identifier:""]
-		params.idp = [displayName:"test name", description:"test desc", crypto:[sig: true, enc:true], post:[uri:"http://identityProvider.test.com/SAML2/POST/SSO"], 
+		params.idp = [displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], post:[uri:"http://identityProvider.test.com/SAML2/POST/SSO"], 
 								redirect:[uri:"http://identityProvider.test.com/SAML2/Redirect/SSO"], artifact:[uri:"http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution"]]
-		params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, enc:true], attributeservice:[uri:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
+		params.aa = [create: true, displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], attributeservice:[uri:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
 		params.contact = [id: contact.id, type: ct.name]
 		
 		when:
-		def (created, org, entityDescriptor_, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact_) = IDPSSODescriptorService.create(params)
+		def (created, ret) = IDPSSODescriptorService.create(params)
 		
 		then:
 		!created
-		
-		Organization.count() == 1
-		SamlURI.count() == 5
-		EntityDescriptor.count() == 0
-		IDPSSODescriptor.count() == 0
-		AttributeAuthorityDescriptor.count() == 0
 
-		IDPSSODescriptor.count() == 0
-		AttributeAuthorityDescriptor.count() == 0
-
+        def identityProvider = ret.identityProvider
+        def attributeAuthority = ret.attributeAuthority
 		
 		identityProvider.organization == organization
 		identityProvider.entityDescriptor == null
@@ -1278,18 +1196,17 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		identityProvider.singleSignOnServices.size() == 2
 		
-		identityProvider.singleSignOnServices.contains(httpPost)
-		httpPost.location.uri == "http://identityProvider.test.com/SAML2/POST/SSO"
+		identityProvider.singleSignOnServices.contains(ret.httpPost)
+		ret.httpPost.location.uri == "http://identityProvider.test.com/SAML2/POST/SSO"
 
 		
-		identityProvider.singleSignOnServices.contains(httpRedirect)
-		httpRedirect.location.uri == "http://identityProvider.test.com/SAML2/Redirect/SSO"
+		identityProvider.singleSignOnServices.contains(ret.httpRedirect)
+		ret.httpRedirect.location.uri == "http://identityProvider.test.com/SAML2/Redirect/SSO"
 		
 		identityProvider.artifactResolutionServices.size() == 1
 		
-		identityProvider.artifactResolutionServices.contains(soapArtifact)
-		soapArtifact.location.uri == "http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution"
-		
+		identityProvider.artifactResolutionServices.contains(ret.soapArtifact)
+		ret.soapArtifact.location.uri == "http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution"		
 		
 		attributeAuthority.organization == organization
 		attributeAuthority.entityDescriptor == null
@@ -1314,26 +1231,19 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		params.active = true
 		params.cert = pk
 		params.entity = [identifier: "http://test.example.com"]
-		params.idp = [displayName:"test name", description:"test desc", crypto:[sig: true, enc:true], post:[uri:"http://identityProvider.test.com/SAML2/POST/SSO"], 
+		params.idp = [displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], post:[uri:"http://identityProvider.test.com/SAML2/POST/SSO"], 
 								redirect:[uri:"http://identityProvider.test.com/SAML2/Redirect/SSO"], artifact:[uri:"http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution"]]
-		params.aa = [create: true, displayName:"test name", description:"test desc", crypto:[sig: true, enc:true], attributeservice:[uri:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
+		params.aa = [create: true, displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], attributeservice:[uri:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
 		params.contact = [id: contact.id, type: ct.name]
 		
 		when:
-		def (created, org, entityDescriptor_, identityProvider, attributeAuthority, httpPost, httpRedirect, soapArtifact, organizationList, attributeList, nameIDFormatList, contact_) = IDPSSODescriptorService.create(params)
+		def (created, ret) = IDPSSODescriptorService.create(params)
 		
 		then:
 		!created
-		
-		Organization.count() == 1
-		SamlURI.count() == 5
-		EntityDescriptor.count() == 0
-		IDPSSODescriptor.count() == 0
-		AttributeAuthorityDescriptor.count() == 0
 
-		IDPSSODescriptor.count() == 0
-		AttributeAuthorityDescriptor.count() == 0
-
+        def identityProvider = ret.identityProvider
+        def attributeAuthority = ret.attributeAuthority
 		
 		identityProvider.organization == null
 		identityProvider.entityDescriptor == null
@@ -1346,18 +1256,17 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		identityProvider.singleSignOnServices.size() == 2
 		
-		identityProvider.singleSignOnServices.contains(httpPost)
-		httpPost.location.uri == "http://identityProvider.test.com/SAML2/POST/SSO"
+		identityProvider.singleSignOnServices.contains(ret.httpPost)
+		ret.httpPost.location.uri == "http://identityProvider.test.com/SAML2/POST/SSO"
 
 		
-		identityProvider.singleSignOnServices.contains(httpRedirect)
-		httpRedirect.location.uri == "http://identityProvider.test.com/SAML2/Redirect/SSO"
+		identityProvider.singleSignOnServices.contains(ret.httpRedirect)
+		ret.httpRedirect.location.uri == "http://identityProvider.test.com/SAML2/Redirect/SSO"
 		
 		identityProvider.artifactResolutionServices.size() == 1
 		
-		identityProvider.artifactResolutionServices.contains(soapArtifact)
-		soapArtifact.location.uri == "http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution"
-		
+		identityProvider.artifactResolutionServices.contains(ret.soapArtifact)
+		ret.soapArtifact.location.uri == "http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution"	
 		
 		attributeAuthority.organization == null
 		attributeAuthority.entityDescriptor == null
@@ -1371,7 +1280,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		def entityDescriptor = EntityDescriptor.build(organization:organization)
 		def idp = IDPSSODescriptor.build(entityDescriptor:entityDescriptor, active:false, wantAuthnRequestsSigned:false)
 		params.id = idp.id
-		params.idp = [displayName:"new displayName", description:"new description", status:'true', wantauthnrequestssigned:'true']
+		params.idp = [displayName:"new displayName", description:"new description", scope:"test.com", status:'true', wantauthnrequestssigned:true]
 		
 		when:
 		def (updated, identityProvider_) = IDPSSODescriptorService.update(params)
@@ -1391,7 +1300,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		def entityDescriptor = EntityDescriptor.build(organization:organization)
 		def idp = IDPSSODescriptor.build(entityDescriptor:entityDescriptor, active:false, wantAuthnRequestsSigned:false)
 		params.id = idp.id
-		params.idp = [displayName:"", description:"new description", status:'true', wantauthnrequestssigned:'true']
+		params.idp = [displayName:"", description:"new description", status:'true', wantauthnrequestssigned:false]
 		
 		when:
 		def (updated, identityProvider_) = IDPSSODescriptorService.update(params)
@@ -1404,5 +1313,5 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		identityProvider_.active
 		!identityProvider_.wantAuthnRequestsSigned
 	}
-	*/
+
 }
