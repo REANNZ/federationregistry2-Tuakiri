@@ -67,7 +67,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		params.organization = [id: organization.id]
 		params.active = true
 		params.cert = pk
-		params.entity = [identifier:"http://identityProvider.test.com"]
+		params.entity = [identifier:"http://identityProvider1.test.com"]
 		params.idp = [displayName:"test name", description:"test desc", scope: "test.com", attributes:[(attr1.id):'on', (attr2.id):'on'], nameidformats:[(nameID1.id):'on', (nameID2.id):'on'], crypto:[sig: true, enc:true], post:[uri:"http://identityProvider.test.com/SAML2/POST/SSO"], 
 								redirect:[uri:"http://identityProvider.test.com/SAML2/Redirect/SSO"], artifact:[uri:"http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution"]]
 		params.aa = [create: true, displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], attributeservice:[uri:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"], attributes:[(attr1.id):'on', (attr2.id):'on']]
@@ -90,14 +90,8 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		then:
 		created
 		
-		Organization.count() == 1
-		SamlURI.count() == 7
-		EntityDescriptor.count() == 1
-		IDPSSODescriptor.count() == 1
-		AttributeAuthorityDescriptor.count() == 1
-		
 		def entityDescriptor = ret.entityDescriptor
-		entityDescriptor.entityID == "http://identityProvider.test.com"
+		entityDescriptor.entityID == "http://identityProvider1.test.com"
 		
 		def identityProvider = ret.identityProvider
 		identityProvider.organization == organization
