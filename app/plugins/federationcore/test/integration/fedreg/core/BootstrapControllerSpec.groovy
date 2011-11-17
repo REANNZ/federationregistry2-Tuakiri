@@ -244,7 +244,7 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		def contact = Contact.build()
 		
 		when:
-		OrganizationService.metaClass.create = { def p -> 
+		organizationService.metaClass.create = { def p -> 
 			return [true, organization, contact]
 		} 
 		def model = controller.saveorganization()

@@ -33,7 +33,7 @@ class OrganizationControllerSpec extends IntegrationSpec {
 		def model = controller.list()
 
 		then:
-		model.organizationList.size() == 25
+		model.organizationList.size() >= 25
 	}
 	
 	def "Show with no ID"() {		
