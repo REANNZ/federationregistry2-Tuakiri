@@ -183,7 +183,7 @@ class IDPSSODescriptorService {
 			return [false, ret]
 		}
 
-		if(params.aa?.create)
+		if(params.aa?.create){
 			if(!attributeAuthority.validate()) {
 				log.error "Error when attempting to validate new AttributeAuthority"
 				attributeAuthority.errors.each {log.debug it}
@@ -191,6 +191,7 @@ class IDPSSODescriptorService {
 				entityDescriptor.delete()
 				return [false, ret]
 			}
+        }
 			
 		if(!entityDescriptor.save()) {
 			entityDescriptor.errors.each {log.debug it}
@@ -223,6 +224,14 @@ class IDPSSODescriptorService {
 		identityProvider.displayName = params.idp.displayName
 		identityProvider.description = params.idp.description
 		identityProvider.scope = params.idp.scope
+        identityProvider.wantAuthnRequestsSigned = params.idp.wantauthnrequestssigned
+
+        if(identityProvider.collaborator) {
+            identityProvider.collaborator.displayName = params.idp.displayName
+            identityProvider.collaborator.description = params.idp.description
+            identityProvider.collaborator.scope = params.idp.scope    
+        }
+
 		if(params.idp.status == 'true') {
 			identityProvider.active = true
 			identityProvider.collaborator?.active = true
@@ -237,11 +246,6 @@ class IDPSSODescriptorService {
 			}
 		}
 		identityProvider.autoAcceptServices = params.idp.autoacceptservices == 'true'
-		
-		// Ensure AA stays synced with scope
-		if(identityProvider.collaborator) {
-			identityProvider.collaborator.scope = params.idp.scope
-		}
 		
 		log.debug "Updating $identityProvider active: ${identityProvider.active}, requestSigned: ${identityProvider.wantAuthnRequestsSigned}"
 		
