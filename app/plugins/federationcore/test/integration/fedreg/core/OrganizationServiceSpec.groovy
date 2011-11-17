@@ -25,8 +25,6 @@ class OrganizationServiceSpec extends IntegrationSpec {
 		SpecHelpers.setupShiroEnv(user)
 		
 		params = [:]
-		
-		Organization.findAll()*.delete(flush:true)
 	}
 	
 	def cleanup() {
@@ -56,9 +54,6 @@ class OrganizationServiceSpec extends IntegrationSpec {
 		def (created, organization_, contact_) = organizationService.create(params)
 		
 		then:
-		Organization.count() == 1
-		Contact.count() == 1
-		
 		organization_.name == "test org"
 		organization_.displayName ==  "Test Org Pty Ltd"
 		organization_.url.uri == "http://test.org"
@@ -71,9 +66,9 @@ class OrganizationServiceSpec extends IntegrationSpec {
 		wfProcessName == "organization_create"
 		wfDescription == "Approval for creation of Organization Test Org Pty Ltd"
 		wfPriority == ProcessPriority.MEDIUM
-		wfParams.size() == 2
+		wfParams.size() == 3
 		wfParams.organization == "${organization_.id}"
-		wfParams.creator == contact_.id
+		wfParams.creator == "${contact_.id}"
 	}
 	
 	def "Create succeeds when valid organization data and existing contact is provided"() {
@@ -82,7 +77,7 @@ class OrganizationServiceSpec extends IntegrationSpec {
 		def contact = Contact.build().save()
 		
 		params.active = true
-		params.organization = [name:"test org", displayName:"Test Org Pty Ltd", url:"http://test.org", primary:ot.id, lang:'en']
+		params.organization = [name:"test org2", displayName:"Test Org2 Pty Ltd", url:"http://test.org", primary:ot.id, lang:'en']
 		params.contact = [id:contact.id]
 		
 		def wfProcessName, wfDescription, wfPriority, wfParams
@@ -99,13 +94,10 @@ class OrganizationServiceSpec extends IntegrationSpec {
 		def (created, organization_, contact_) = organizationService.create(params)
 		
 		then:
-		Organization.count() == 1
-		Contact.count() == 1
-		
 		created
 		
-		organization_.name == "test org"
-		organization_.displayName ==  "Test Org Pty Ltd"
+		organization_.name == "test org2"
+		organization_.displayName ==  "Test Org2 Pty Ltd"
 		organization_.url.uri == "http://test.org"
 		organization_.primary == ot
 		
@@ -114,11 +106,11 @@ class OrganizationServiceSpec extends IntegrationSpec {
 		contact_.email.uri == contact.email.uri
 		
 		wfProcessName == "organization_create"
-		wfDescription == "Approval for creation of Organization Test Org Pty Ltd"
+		wfDescription == "Approval for creation of Organization Test Org2 Pty Ltd"
 		wfPriority == ProcessPriority.MEDIUM
-		wfParams.size() == 2
+		wfParams.size() == 3
 		wfParams.organization == "${organization_.id}"
-		wfParams.creator == contact_.id
+		wfParams.creator == "${contact_.id}"
 	}
 	
 	def "Create fails when invalid organization data and existing contact is provided"() {
@@ -127,20 +119,17 @@ class OrganizationServiceSpec extends IntegrationSpec {
 		def contact = Contact.build().save()
 		
 		params.active = true
-		params.organization = [displayName:"Test Org Pty Ltd", url:"http://test.org", primary:ot.id, lang:'en']
+		params.organization = [displayName:"Test Org3 Pty Ltd", url:"http://test.org", primary:ot.id, lang:'en']
 		params.contact = [id:contact.id]
 		
 		when:
 		def (created, organization_, contact_) = organizationService.create(params)
 		
 		then:
-		Organization.count() == 0
-		Contact.count() == 1
-		
 		!created
 		
 		organization_.name == null
-		organization_.displayName ==  "Test Org Pty Ltd"
+		organization_.displayName ==  "Test Org3 Pty Ltd"
 		organization_.url.uri == "http://test.org"
 		organization_.primary == ot
 		
@@ -154,20 +143,17 @@ class OrganizationServiceSpec extends IntegrationSpec {
 		def ot = OrganizationType.build().save()
 		
 		params.active = true
-		params.organization = [displayName:"Test Org Pty Ltd", url:"http://test.org", primary:ot.id, lang:'en']
+		params.organization = [displayName:"Test Org4 Pty Ltd", url:"http://test.org", primary:ot.id, lang:'en']
 		params.contact = [givenName:"Bradley", surname:"Beddoes", email:"zzz"]
 		
 		when:
 		def (created, organization_, contact_) = organizationService.create(params)
 		
 		then:
-		Organization.count() == 0
-		Contact.count() == 0
-		
 		!created
 		
 		organization_.name == null
-		organization_.displayName ==  "Test Org Pty Ltd"
+		organization_.displayName ==  "Test Org4 Pty Ltd"
 		organization_.url.uri == "http://test.org"
 		organization_.primary == ot
 		
@@ -185,15 +171,15 @@ class OrganizationServiceSpec extends IntegrationSpec {
 		def organization = Organization.build(primary: ot).save();
 		
 		params.id = organization.id
-		params.organization = [name: "Test Org", displayName:"Test Org Pty Ltd", url:"http://test.org", primary:ot2.id, lang:'en', active:'true', types:[(ot3.id):'on', (ot4.id):'on']]
+		params.organization = [name: "Test Org5", displayName:"Test Org5 Pty Ltd", url:"http://test.org", primary:ot2.id, lang:'en', active:'true', types:[(ot3.id):'on', (ot4.id):'on']]
 		
 		when:
 		def (updated, organization_) = organizationService.update(params)
 		
 		then:
 		updated
-		organization_.name == "Test Org"
-		organization_.displayName == "Test Org Pty Ltd"
+		organization_.name == "Test Org5"
+		organization_.displayName == "Test Org5 Pty Ltd"
 		organization_.primary == ot2
 		organization_.url.uri == "http://test.org"
 		organization_.types.contains(ot3)
@@ -202,14 +188,14 @@ class OrganizationServiceSpec extends IntegrationSpec {
 	
 	def "Update fails when providing invalid data"() {
 		setup:
-		def ot = OrganizationType.build(name:'ot1').save()
-		def ot2 = OrganizationType.build(name:'ot2').save()
-		def ot3 = OrganizationType.build(name:'ot3').save()
-		def ot4 = OrganizationType.build(name:'ot4').save()
+		def ot = OrganizationType.build().save()
+		def ot2 = OrganizationType.build().save()
+		def ot3 = OrganizationType.build().save()
+		def ot4 = OrganizationType.build().save()
 		def organization = Organization.build(primary: ot).save();
 		
 		params.id = organization.id
-		params.organization = [name: "", displayName:"Test Org Pty Ltd", url:"http://test.org", primary:ot2.id, lang:'en', active:'true', types:[(ot3.id):'on', (ot4.id):'on']]
+		params.organization = [name: "", displayName:"Test Org6 Pty Ltd", url:"http://test.org", primary:ot2.id, lang:'en', active:'true', types:[(ot3.id):'on', (ot4.id):'on']]
 		
 		when:
 		def (updated, organization_) = organizationService.update(params)
@@ -217,7 +203,7 @@ class OrganizationServiceSpec extends IntegrationSpec {
 		then:
 		!updated
 		organization_.name == ""
-		organization_.displayName == "Test Org Pty Ltd"
+		organization_.displayName == "Test Org6 Pty Ltd"
 		organization_.primary == ot2
 		organization_.url.uri == "http://test.org"
 		organization_.types.contains(ot3)
