@@ -21,8 +21,8 @@ class OrganizationContactControllerSpec extends IntegrationSpec {
 	
 	def "Test contact search"() {
 		setup:		
-		def c1 = new Contact(givenName:'fred', surname:'bloggs', email:new MailURI(uri:'fbloggs@test.com')).save()
-		def c2 = new Contact(givenName:'joe', surname:'schmoe', email:new MailURI(uri:'jschmoe@test.com')).save()
+		def c1 = new Contact(givenName:'fred', surname:'bloggs', email:new MailURI(uri:'fbloggs@abc.test.com')).save()
+		def c2 = new Contact(givenName:'joe', surname:'schmoe', email:new MailURI(uri:'jschmoe@abc.test.com')).save()
 		def c3 = new Contact(givenName:'max', surname:'mustermaan', email:new MailURI(uri:'mmann@test2.com')).save()
 		
 		println MailURI.findAllByUriLike("%test.com%")
@@ -38,10 +38,10 @@ class OrganizationContactControllerSpec extends IntegrationSpec {
 		renderMap.model.contacts.size() == x
 		
 		where:
-		x << [2, 1, 1, 0, 3]
-		email << ["test.com", "", "", "mmann@test.com", null]		// spelling error on 4th for example
-		givenName << ["", "joe", "", "", null]
-		surname << ["", "", "bloggs", "", null]
+		x << [2, 1, 1, 0]
+		email << ["abc.test.com", "", "", "doesntexist@test.com"]		// spelling error on 4th for example
+		givenName << ["", "joe", "", ""]
+		surname << ["", "", "bloggs", ""]
 	}
 	
 	def "Test contact addition"() {

@@ -11,7 +11,8 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 	def cryptoService
 	def savedMetaClasses
 	def workflowProcessService
-	def spssoDescriptorService
+    def entityDescriptorService
+	def SPSSODescriptorService
 	def params
 	
 	def setup () {
@@ -20,7 +21,6 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 		SpecHelpers.registerMetaClass(WorkflowProcessService, savedMetaClasses)
 		workflowProcessService.metaClass = WorkflowProcessService.metaClass
 		
-		spssoDescriptorService = new SPSSODescriptorService(cryptoService:cryptoService, workflowProcessService:workflowProcessService)
 		def user = UserBase.build()
 		SpecHelpers.setupShiroEnv(user)
 		
@@ -57,8 +57,8 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 
 		def saml2Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:2.0:protocol').save()
 		def organization = Organization.build().save()
-		def attr1 = AttributeBase.build(name: "attr1").save()
-		def attr2 = AttributeBase.build(name: "attr2").save()
+		def attr1 = AttributeBase.build().save()
+		def attr2 = AttributeBase.build().save()
 		def nameID1 = SamlURI.build().save()
 		def nameID2 = SamlURI.build().save()
 		def pk = loadPK()
@@ -67,7 +67,8 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 		params.organization = [id: organization.id]
 		params.active = true
 		params.entity = [identifier:"https://service.test.com"]
-		params.sp = [displayName:"test service name", description:"test desc", attributes:[(attr1.id):[requested: 'on', reasoning:'reason for request', required:'on'], (attr2.id):[requested: 'on', reasoning:'reason for request2', required:'off']], nameidformats:[(nameID1.id):'on', (nameID2.id):'on'], crypto:[sig: true, sigdata:pk, enc:true, encdata:pk],
+        params.cert = pk
+		params.sp = [displayName:"test service name", description:"test desc", attributes:[(attr1.id):[requested: 'on', reasoning:'reason for request', required:'on'], (attr2.id):[requested: 'on', reasoning:'reason for request2', required:'off']], nameidformats:[(nameID1.id):'on', (nameID2.id):'on'], crypto:[sig: true, enc:true],
 					  acs:[ post:[uri: 'https://service.test.com/Shibboleth.sso/SAML2/POST'], artifact:[uri: 'https://service.test.com/Shibboleth.sso/SAML2/Artifact'] ], 
 					  slo:[post:[uri: 'https://service.test.com/Shibboleth.sso/SLO/Post'], soap:[uri: 'https://service.test.com/Shibboleth.sso/SLO/SOAP'], redirect:[uri: 'https://service.test.com/Shibboleth.sso/SLO/Redirect'], artifact:[uri: 'https://service.test.com/Shibboleth.sso/SLO/Artifact'] ] ]
 								
@@ -84,19 +85,17 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 			[true, [:]]
 		}
 		WorkflowProcessService.metaClass.run = { def processInstance -> }
-		def (created, organization_, entityDescriptor_, serviceProvider_, httpPostACS_, soapArtifactACS_, sloArtifact_, sloRedirect_, sloSOAP_, sloPost_, organizationList_, attributeList_, nameIDFormatList_, contact_) = spssoDescriptorService.create(params)
+		def (created, ret) = SPSSODescriptorService.create(params)
 		
 		then:
-		Organization.count() == 1
-		EntityDescriptor.count() == 1
-		SPSSODescriptor.count() == 1
+        created
 		
-		serviceProvider_.displayName == "test service name"
-		serviceProvider_.description == "test desc"
-		serviceProvider_.protocolSupportEnumerations.size() == 1
-		serviceProvider_.nameIDFormats.size() == 2
-		serviceProvider_.attributeConsumingServices.size() == 1
-		def acs = serviceProvider_.attributeConsumingServices.toList().get(0)
+		ret.serviceProvider.displayName == "test service name"
+		ret.serviceProvider.description == "test desc"
+		ret.serviceProvider.protocolSupportEnumerations.size() == 1
+		ret.serviceProvider.nameIDFormats.size() == 2
+		ret.serviceProvider.attributeConsumingServices.size() == 1
+		def acs = ret.serviceProvider.attributeConsumingServices.toList().get(0)
 		acs.requestedAttributes.size() == 2
 		acs.requestedAttributes.each {
 			if(it.base.id == attr1.id) {
@@ -108,22 +107,22 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 				it.reasoning == "reason for request2"
 			}
 		}
-		serviceProvider_.assertionConsumerServices.size() == 2
-		serviceProvider_.singleLogoutServices.size() == 4
-		serviceProvider_.contacts.size() == 1
+		ret.serviceProvider.assertionConsumerServices.size() == 2
+		ret.serviceProvider.singleLogoutServices.size() == 4
+		ret.serviceProvider.contacts.size() == 1
 		
 		wfProcessName == "spssodescriptor_create"
 		wfPriority == ProcessPriority.MEDIUM
-		wfParams.size() == 3
-		wfParams.serviceProvider == "${serviceProvider_.id}"
-		wfParams.organization == organization_.name
+		wfParams.size() == 4
+		wfParams.serviceProvider == "${ret.serviceProvider.id}"
+		wfParams.organization == "${ret.organization.id}"
 		
-		httpPostACS_.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/POST"
-		soapArtifactACS_.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/Artifact"
-		sloArtifact_.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/Artifact"
-		sloRedirect_.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/Redirect"
-		sloSOAP_.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/SOAP"
-		sloPost_.location.uri == "https://service.test.com/Shibboleth.sso/SLO/Post"
+		ret.httpPostACS.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/POST"
+		ret.httpArtifactACS.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/Artifact"
+		ret.sloArtifact.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/Artifact"
+		ret.sloRedirect.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/Redirect"
+		ret.sloSOAP.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/SOAP"
+		ret.sloPost.location.uri == "https://service.test.com/Shibboleth.sso/SLO/Post"
 	}
 	
 	def "Create succeeds when valid initial SPSSODescriptor data is provided (with existing EntityDescriptor and contact)"() {
@@ -134,8 +133,8 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 		def saml2Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:2.0:protocol').save()
 		def organization = Organization.build().save()
 		def ed = EntityDescriptor.build(organization: organization).save()
-		def attr1 = AttributeBase.build(name: "attr1").save()
-		def attr2 = AttributeBase.build(name: "attr2").save()
+		def attr1 = AttributeBase.build().save()
+		def attr2 = AttributeBase.build().save()
 		def nameID1 = SamlURI.build().save()
 		def nameID2 = SamlURI.build().save()
 		def pk = loadPK()
@@ -145,7 +144,8 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 		params.organization = [id: organization.id]
 		params.active = true
 		params.entity = [id: ed.id]
-		params.sp = [displayName:"test service name", description:"test desc", attributes:[(attr1.id):[requested: 'on', reasoning:'reason for request', required:'on'], (attr2.id):[requested: 'on', reasoning:'reason for request2', required:'off']], nameidformats:[(nameID1.id):'on', (nameID2.id):'on'], crypto:[sig: true, sigdata:pk, enc:true, encdata:pk],
+        params.cert = pk
+		params.sp = [displayName:"test service name", description:"test desc", attributes:[(attr1.id):[requested: 'on', reasoning:'reason for request', required:'on'], (attr2.id):[requested: 'on', reasoning:'reason for request2', required:'off']], nameidformats:[(nameID1.id):'on', (nameID2.id):'on'], crypto:[sig: true, enc:true],
 					  acs:[ post:[uri: 'https://service.test.com/Shibboleth.sso/SAML2/POST'], artifact:[uri: 'https://service.test.com/Shibboleth.sso/SAML2/Artifact'] ], 
 					  slo:[post:[uri: 'https://service.test.com/Shibboleth.sso/SLO/Post'], soap:[uri: 'https://service.test.com/Shibboleth.sso/SLO/SOAP'], redirect:[uri: 'https://service.test.com/Shibboleth.sso/SLO/Redirect'], artifact:[uri: 'https://service.test.com/Shibboleth.sso/SLO/Artifact'] ] ]
 								
@@ -162,20 +162,17 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 			[true, [:]]
 		}
 		WorkflowProcessService.metaClass.run = { def processInstance -> }
-		def (created, organization_, entityDescriptor_, serviceProvider_, httpPostACS_, soapArtifactACS_, sloArtifact_, sloRedirect_, sloSOAP_, sloPost_, organizationList_, attributeList_, nameIDFormatList_, contact_) = spssoDescriptorService.create(params)
+		def (created, ret) = SPSSODescriptorService.create(params)
 		
 		then:
-		Organization.count() == 1
-		EntityDescriptor.count() == 1
-		Contact.count() == 1
-		SPSSODescriptor.count() == 1
-		
-		serviceProvider_.displayName == "test service name"
-		serviceProvider_.description == "test desc"
-		serviceProvider_.protocolSupportEnumerations.size() == 1
-		serviceProvider_.nameIDFormats.size() == 2
-		serviceProvider_.attributeConsumingServices.size() == 1
-		def acs = serviceProvider_.attributeConsumingServices.toList().get(0)
+        created
+        		
+		ret.serviceProvider.displayName == "test service name"
+		ret.serviceProvider.description == "test desc"
+		ret.serviceProvider.protocolSupportEnumerations.size() == 1
+		ret.serviceProvider.nameIDFormats.size() == 2
+		ret.serviceProvider.attributeConsumingServices.size() == 1
+		def acs = ret.serviceProvider.attributeConsumingServices.toList().get(0)
 		acs.requestedAttributes.size() == 2
 		acs.requestedAttributes.each {
 			if(it.base.id == attr1.id) {
@@ -187,22 +184,22 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 				it.reasoning == "reason for request2"
 			}
 		}
-		serviceProvider_.assertionConsumerServices.size() == 2
-		serviceProvider_.singleLogoutServices.size() == 4
-		serviceProvider_.contacts.size() == 1
+		ret.serviceProvider.assertionConsumerServices.size() == 2
+		ret.serviceProvider.singleLogoutServices.size() == 4
+		ret.serviceProvider.contacts.size() == 1
 		
 		wfProcessName == "spssodescriptor_create"
 		wfPriority == ProcessPriority.MEDIUM
-		wfParams.size() == 3
-		wfParams.serviceProvider == "${serviceProvider_.id}"
-		wfParams.organization == organization_.name
+		wfParams.size() == 4
+		wfParams.serviceProvider == "${ret.serviceProvider.id}"
+		wfParams.organization == "${ret.organization.id}"
 		
-		httpPostACS_.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/POST"
-		soapArtifactACS_.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/Artifact"
-		sloArtifact_.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/Artifact"
-		sloRedirect_.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/Redirect"
-		sloSOAP_.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/SOAP"
-		sloPost_.location.uri == "https://service.test.com/Shibboleth.sso/SLO/Post"
+		ret.httpPostACS.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/POST"
+		ret.httpArtifactACS.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/Artifact"
+		ret.sloArtifact.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/Artifact"
+		ret.sloRedirect.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/Redirect"
+		ret.sloSOAP.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/SOAP"
+		ret.sloPost.location.uri == "https://service.test.com/Shibboleth.sso/SLO/Post"
 	}
 	
 	def "Create succeeds when valid initial SPSSODescriptor data is provided even though not all known SLO endpoints are supplied"() {
@@ -212,8 +209,8 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 
 		def saml2Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:2.0:protocol').save()
 		def organization = Organization.build().save()
-		def attr1 = AttributeBase.build(name: "attr1").save()
-		def attr2 = AttributeBase.build(name: "attr2").save()
+		def attr1 = AttributeBase.build().save()
+		def attr2 = AttributeBase.build().save()
 		def nameID1 = SamlURI.build().save()
 		def nameID2 = SamlURI.build().save()
 		def pk = loadPK()
@@ -221,8 +218,9 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 
 		params.organization = [id: organization.id]
 		params.active = true
-		params.entity = [identifier:"https://service.test.com"]
-		params.sp = [displayName:"test service name", description:"test desc", attributes:[(attr1.id):[requested: 'on', reasoning:'reason for request', required:'on'], (attr2.id):[requested: 'on', reasoning:'reason for request2', required:'off']], nameidformats:[(nameID1.id):'on', (nameID2.id):'on'], crypto:[sig: true, sigdata:pk, enc:true, encdata:pk],
+		params.entity = [identifier:"https://service2.test.com"]
+        params.cert = pk
+		params.sp = [displayName:"test service name", description:"test desc", attributes:[(attr1.id):[requested: 'on', reasoning:'reason for request', required:'on'], (attr2.id):[requested: 'on', reasoning:'reason for request2', required:'off']], nameidformats:[(nameID1.id):'on', (nameID2.id):'on'], crypto:[sig: true, enc:true],
 					  acs:[ post:[uri: 'https://service.test.com/Shibboleth.sso/SAML2/POST'], artifact:[uri: 'https://service.test.com/Shibboleth.sso/SAML2/Artifact'] ], 
 					  slo:[post:[uri: 'https://service.test.com/Shibboleth.sso/SLO/Post'], redirect:[uri: 'https://service.test.com/Shibboleth.sso/SLO/Redirect'] ] ]
 								
@@ -239,19 +237,20 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 			[true, [:]]
 		}
 		WorkflowProcessService.metaClass.run = { def processInstance -> }
-		def (created, organization_, entityDescriptor_, serviceProvider_, httpPostACS_, soapArtifactACS_, sloArtifact_, sloRedirect_, sloSOAP_, sloPost_, organizationList_, attributeList_, nameIDFormatList_, contact_) = spssoDescriptorService.create(params)
+		def (created, ret) = SPSSODescriptorService.create(params)
+
+        ret.serviceProvider.validate()
+        ret.serviceProvider.errors?.each { println it }
 		
 		then:
-		Organization.count() == 1
-		EntityDescriptor.count() == 1
-		SPSSODescriptor.count() == 1
+		created
 		
-		serviceProvider_.displayName == "test service name"
-		serviceProvider_.description == "test desc"
-		serviceProvider_.protocolSupportEnumerations.size() == 1
-		serviceProvider_.nameIDFormats.size() == 2
-		serviceProvider_.attributeConsumingServices.size() == 1
-		def acs = serviceProvider_.attributeConsumingServices.toList().get(0)
+		ret.serviceProvider.displayName == "test service name"
+		ret.serviceProvider.description == "test desc"
+		ret.serviceProvider.protocolSupportEnumerations.size() == 1
+		ret.serviceProvider.nameIDFormats.size() == 2
+		ret.serviceProvider.attributeConsumingServices.size() == 1
+		def acs = ret.serviceProvider.attributeConsumingServices.toList().get(0)
 		acs.requestedAttributes.size() == 2
 		acs.requestedAttributes.each {
 			if(it.base.id == attr1.id) {
@@ -263,22 +262,22 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 				it.reasoning == "reason for request2"
 			}
 		}
-		serviceProvider_.assertionConsumerServices.size() == 2
-		serviceProvider_.singleLogoutServices.size() == 2
-		serviceProvider_.contacts.size() == 1
+		ret.serviceProvider.assertionConsumerServices.size() == 2
+		ret.serviceProvider.singleLogoutServices.size() == 2
+		ret.serviceProvider.contacts.size() == 1
 		
 		wfProcessName == "spssodescriptor_create"
 		wfPriority == ProcessPriority.MEDIUM
-		wfParams.size() == 3
+		wfParams.size() == 4
 		[true, [:]]
-		wfParams.organization == organization_.name
+		wfParams.organization == "${ret.organization.id}"
 		
-		httpPostACS_.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/POST"
-		soapArtifactACS_.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/Artifact"
-		sloArtifact_ == null
-		sloRedirect_.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/Redirect"
-		sloSOAP_ == null
-		sloPost_.location.uri == "https://service.test.com/Shibboleth.sso/SLO/Post"
+		ret.httpPostACS.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/POST"
+		ret.httpArtifactACS.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/Artifact"
+		ret.sloArtifact == null
+		ret.sloRedirect.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/Redirect"
+		ret.sloSOAP == null
+		ret.sloPost.location.uri == "https://service.test.com/Shibboleth.sso/SLO/Post"
 	}
 	
 	def "Create fails if both required assertion consumer endpoint types aren't supplied"() {
@@ -288,8 +287,8 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 
 		def saml2Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:2.0:protocol').save()
 		def organization = Organization.build().save()
-		def attr1 = AttributeBase.build(name: "attr1").save()
-		def attr2 = AttributeBase.build(name: "attr2").save()
+		def attr1 = AttributeBase.build().save()
+		def attr2 = AttributeBase.build().save()
 		def nameID1 = SamlURI.build().save()
 		def nameID2 = SamlURI.build().save()
 		def pk = loadPK()
@@ -298,7 +297,8 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 		params.organization = [id: organization.id]
 		params.active = true
 		params.entity = [identifier:"https://service.test.com"]
-		params.sp = [displayName:"test service name", description:"test desc", attributes:[(attr1.id):[requested: 'on', reasoning:'reason for request', required:'on'], (attr2.id):[requested: 'on', reasoning:'reason for request2', required:'off']], nameidformats:[(nameID1.id):'on', (nameID2.id):'on'], crypto:[sig: true, sigdata:pk, enc:true, encdata:pk],
+        params.cert = pk
+		params.sp = [displayName:"test service name", description:"test desc", attributes:[(attr1.id):[requested: 'on', reasoning:'reason for request', required:'on'], (attr2.id):[requested: 'on', reasoning:'reason for request2', required:'off']], nameidformats:[(nameID1.id):'on', (nameID2.id):'on'], crypto:[sig: true, enc:true],
 					  acs:[ artifact:[uri: 'https://service.test.com/Shibboleth.sso/SAML2/Artifact'] ], 
 					  slo:[post:[uri: 'https://service.test.com/Shibboleth.sso/SLO/Post'], soap:[uri: 'https://service.test.com/Shibboleth.sso/SLO/SOAP'], redirect:[uri: 'https://service.test.com/Shibboleth.sso/SLO/Redirect'], artifact:[uri: 'https://service.test.com/Shibboleth.sso/SLO/Artifact'] ] ]
 								
@@ -315,19 +315,17 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 			[true, [:]]
 		}
 		WorkflowProcessService.metaClass.run = { def processInstance -> }
-		def (created, organization_, entityDescriptor_, serviceProvider_, httpPostACS_, soapArtifactACS_, sloArtifact_, sloRedirect_, sloSOAP_, sloPost_, organizationList_, attributeList_, nameIDFormatList_, contact_) = spssoDescriptorService.create(params)
+		def (created, ret) = SPSSODescriptorService.create(params)
 		
 		then:
-		Organization.count() == 1
-		EntityDescriptor.count() == 1
-		SPSSODescriptor.count() == 0
+        !created
 		
-		serviceProvider_.displayName == "test service name"
-		serviceProvider_.description == "test desc"
-		serviceProvider_.protocolSupportEnumerations.size() == 1
-		serviceProvider_.nameIDFormats.size() == 2
-		serviceProvider_.attributeConsumingServices.size() == 1
-		def acs = serviceProvider_.attributeConsumingServices.toList().get(0)
+		ret.serviceProvider.displayName == "test service name"
+		ret.serviceProvider.description == "test desc"
+		ret.serviceProvider.protocolSupportEnumerations.size() == 1
+		ret.serviceProvider.nameIDFormats.size() == 2
+		ret.serviceProvider.attributeConsumingServices.size() == 1
+		def acs = ret.serviceProvider.attributeConsumingServices.toList().get(0)
 		acs.requestedAttributes.size() == 2
 		acs.requestedAttributes.each {
 			if(it.base.id == attr1.id) {
@@ -339,19 +337,19 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 				it.reasoning == "reason for request2"
 			}
 		}
-		serviceProvider_.assertionConsumerServices.size() == 2
-		serviceProvider_.singleLogoutServices.size() == 4
-		serviceProvider_.contacts.size() == 1
+		ret.serviceProvider.assertionConsumerServices.size() == 2
+		ret.serviceProvider.singleLogoutServices.size() == 4
+		ret.serviceProvider.contacts.size() == 1
 		
-		httpPostACS_.hasErrors() == true
+		ret.httpPostACS.hasErrors() == true
 		wfProcessName == null
 		
-		httpPostACS_.location.uri == null
-		soapArtifactACS_.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/Artifact"
-		sloArtifact_.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/Artifact"
-		sloRedirect_.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/Redirect"
-		sloSOAP_.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/SOAP"
-		sloPost_.location.uri == "https://service.test.com/Shibboleth.sso/SLO/Post"
+		ret.httpPostACS.location.uri == null
+		ret.httpArtifactACS.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/Artifact"
+		ret.sloArtifact.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/Artifact"
+		ret.sloRedirect.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/Redirect"
+		ret.sloSOAP.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/SOAP"
+		ret.sloPost.location.uri == "https://service.test.com/Shibboleth.sso/SLO/Post"
 	}
 	
 	def "Create fails when reasoning for attribute request isn't supplied"() {
@@ -361,8 +359,8 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 
 		def saml2Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:2.0:protocol').save()
 		def organization = Organization.build().save()
-		def attr1 = AttributeBase.build(name: "attr1").save()
-		def attr2 = AttributeBase.build(name: "attr2").save()
+		def attr1 = AttributeBase.build().save()
+		def attr2 = AttributeBase.build().save()
 		def nameID1 = SamlURI.build().save()
 		def nameID2 = SamlURI.build().save()
 		def pk = loadPK()
@@ -371,7 +369,8 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 		params.organization = [id: organization.id]
 		params.active = true
 		params.entity = [identifier:"https://service.test.com"]
-		params.sp = [displayName:"test service name", description:"test desc", attributes:[(attr1.id):[requested: 'on', required:'on'], (attr2.id):[requested: 'on', reasoning:'', required:'off']], nameidformats:[(nameID1.id):'on', (nameID2.id):'on'], crypto:[sig: true, sigdata:pk, enc:true, encdata:pk],
+        params.cert = pk
+		params.sp = [displayName:"test service name", description:"test desc", attributes:[(attr1.id):[requested: 'on', required:'on'], (attr2.id):[requested: 'on', reasoning:'', required:'off']], nameidformats:[(nameID1.id):'on', (nameID2.id):'on'], crypto:[sig: true, enc:true],
 					  acs:[ post:[uri: 'https://service.test.com/Shibboleth.sso/SAML2/POST'], artifact:[uri: 'https://service.test.com/Shibboleth.sso/SAML2/Artifact'] ], 
 					  slo:[post:[uri: 'https://service.test.com/Shibboleth.sso/SLO/Post'], soap:[uri: 'https://service.test.com/Shibboleth.sso/SLO/SOAP'], redirect:[uri: 'https://service.test.com/Shibboleth.sso/SLO/Redirect'], artifact:[uri: 'https://service.test.com/Shibboleth.sso/SLO/Artifact'] ] ]
 								
@@ -388,19 +387,17 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 			[true, [:]]
 		}
 		WorkflowProcessService.metaClass.run = { def processInstance -> }
-		def (created, organization_, entityDescriptor_, serviceProvider_, httpPostACS_, soapArtifactACS_, sloArtifact_, sloRedirect_, sloSOAP_, sloPost_, organizationList_, attributeList_, nameIDFormatList_, contact_) = spssoDescriptorService.create(params)
+		def (created, ret) = SPSSODescriptorService.create(params)
 		
 		then:
-		Organization.count() == 1
-		EntityDescriptor.count() == 1
-		SPSSODescriptor.count() == 0
+		!created
 		
-		serviceProvider_.displayName == "test service name"
-		serviceProvider_.description == "test desc"
-		serviceProvider_.protocolSupportEnumerations.size() == 1
-		serviceProvider_.nameIDFormats.size() == 2
-		serviceProvider_.attributeConsumingServices.size() == 1
-		def acs = serviceProvider_.attributeConsumingServices.toList().get(0)
+		ret.serviceProvider.displayName == "test service name"
+		ret.serviceProvider.description == "test desc"
+		ret.serviceProvider.protocolSupportEnumerations.size() == 1
+		ret.serviceProvider.nameIDFormats.size() == 2
+		ret.serviceProvider.attributeConsumingServices.size() == 1
+		def acs = ret.serviceProvider.attributeConsumingServices.toList().get(0)
 		acs.requestedAttributes.size() == 2
 		acs.requestedAttributes.each {
 			it.hasErrors() == true
@@ -413,18 +410,18 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 				it.reasoning == ''
 			}
 		}
-		serviceProvider_.assertionConsumerServices.size() == 2
-		serviceProvider_.singleLogoutServices.size() == 4
-		serviceProvider_.contacts.size() == 1
+		ret.serviceProvider.assertionConsumerServices.size() == 2
+		ret.serviceProvider.singleLogoutServices.size() == 4
+		ret.serviceProvider.contacts.size() == 1
 		
 		wfProcessName == null
 		
-		httpPostACS_.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/POST"
-		soapArtifactACS_.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/Artifact"
-		sloArtifact_.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/Artifact"
-		sloRedirect_.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/Redirect"
-		sloSOAP_.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/SOAP"
-		sloPost_.location.uri == "https://service.test.com/Shibboleth.sso/SLO/Post"
+		ret.httpPostACS.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/POST"
+		ret.httpArtifactACS.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/Artifact"
+		ret.sloArtifact.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/Artifact"
+		ret.sloRedirect.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/Redirect"
+		ret.sloSOAP.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/SOAP"
+		ret.sloPost.location.uri == "https://service.test.com/Shibboleth.sso/SLO/Post"
 	}
 	
 	def "Create fails when valid contact details aren't provided"() {
@@ -434,8 +431,8 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 
 		def saml2Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:2.0:protocol').save()
 		def organization = Organization.build().save()
-		def attr1 = AttributeBase.build(name: "attr1").save()
-		def attr2 = AttributeBase.build(name: "attr2").save()
+		def attr1 = AttributeBase.build().save()
+		def attr2 = AttributeBase.build().save()
 		def nameID1 = SamlURI.build().save()
 		def nameID2 = SamlURI.build().save()
 		def pk = loadPK()
@@ -444,7 +441,8 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 		params.organization = [id: organization.id]
 		params.active = true
 		params.entity = [identifier:"https://service.test.com"]
-		params.sp = [displayName:"test service name", description:"test desc", attributes:[(attr1.id):[requested: 'on', reasoning:'reason for request', required:'on'], (attr2.id):[requested: 'on', reasoning:'reason for request2', required:'off']], nameidformats:[(nameID1.id):'on', (nameID2.id):'on'], crypto:[sig: true, sigdata:pk, enc:true, encdata:pk],
+        params.cert = pk
+		params.sp = [displayName:"test service name", description:"test desc", attributes:[(attr1.id):[requested: 'on', reasoning:'reason for request', required:'on'], (attr2.id):[requested: 'on', reasoning:'reason for request2', required:'off']], nameidformats:[(nameID1.id):'on', (nameID2.id):'on'], crypto:[sig: true, enc:true],
 					  acs:[ post:[uri: 'https://service.test.com/Shibboleth.sso/SAML2/POST'], artifact:[uri: 'https://service.test.com/Shibboleth.sso/SAML2/Artifact'] ], 
 					  slo:[post:[uri: 'https://service.test.com/Shibboleth.sso/SLO/Post'], soap:[uri: 'https://service.test.com/Shibboleth.sso/SLO/SOAP'], redirect:[uri: 'https://service.test.com/Shibboleth.sso/SLO/Redirect'], artifact:[uri: 'https://service.test.com/Shibboleth.sso/SLO/Artifact'] ] ]
 		
@@ -459,33 +457,31 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 			[true, [:]]
 		}
 		WorkflowProcessService.metaClass.run = { def processInstance -> }
-		def (created, organization_, entityDescriptor_, serviceProvider_, httpPostACS_, soapArtifactACS_, sloArtifact_, sloRedirect_, sloSOAP_, sloPost_, organizationList_, attributeList_, nameIDFormatList_, contact_) = spssoDescriptorService.create(params)
+		def (created, ret) = SPSSODescriptorService.create(params)
 		
 		then:
-		Organization.count() == 1
-		EntityDescriptor.count() == 0
-		SPSSODescriptor.count() == 0
+		!created
 		
-		serviceProvider_.displayName == "test service name"
-		serviceProvider_.description == "test desc"
-		serviceProvider_.protocolSupportEnumerations.size() == 1
-		serviceProvider_.nameIDFormats.size() == 2
-		serviceProvider_.attributeConsumingServices.size() == 1
-		def acs = serviceProvider_.attributeConsumingServices.toList().get(0)
+		ret.serviceProvider.displayName == "test service name"
+		ret.serviceProvider.description == "test desc"
+		ret.serviceProvider.protocolSupportEnumerations.size() == 1
+		ret.serviceProvider.nameIDFormats.size() == 2
+		ret.serviceProvider.attributeConsumingServices.size() == 1
+		def acs = ret.serviceProvider.attributeConsumingServices.toList().get(0)
 		acs.requestedAttributes.size() == 2
-		serviceProvider_.assertionConsumerServices.size() == 2
-		serviceProvider_.singleLogoutServices.size() == 4
-		serviceProvider_.contacts.size() == 1
-		contact_.hasErrors() == true
+		ret.serviceProvider.assertionConsumerServices.size() == 2
+		ret.serviceProvider.singleLogoutServices.size() == 4
+		ret.serviceProvider.contacts.size() == 1
+		ret.contact.hasErrors() == true
 		
 		wfProcessName == null
 		
-		httpPostACS_.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/POST"
-		soapArtifactACS_.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/Artifact"
-		sloArtifact_.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/Artifact"
-		sloRedirect_.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/Redirect"
-		sloSOAP_.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/SOAP"
-		sloPost_.location.uri == "https://service.test.com/Shibboleth.sso/SLO/Post"
+		ret.httpPostACS.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/POST"
+		ret.httpArtifactACS.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/Artifact"
+		ret.sloArtifact.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/Artifact"
+		ret.sloRedirect.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/Redirect"
+		ret.sloSOAP.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/SOAP"
+		ret.sloPost.location.uri == "https://service.test.com/Shibboleth.sso/SLO/Post"
 	}
 	
 	def "Create fails when invalid description"() {
@@ -495,8 +491,8 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 
 		def saml2Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:2.0:protocol').save()
 		def organization = Organization.build().save()
-		def attr1 = AttributeBase.build(name: "attr1").save()
-		def attr2 = AttributeBase.build(name: "attr2").save()
+		def attr1 = AttributeBase.build().save()
+		def attr2 = AttributeBase.build().save()
 		def nameID1 = SamlURI.build().save()
 		def nameID2 = SamlURI.build().save()
 		def pk = loadPK()
@@ -505,7 +501,8 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 		params.organization = [id: organization.id]
 		params.active = true
 		params.entity = [identifier:"https://service.test.com"]
-		params.sp = [displayName:"test service name", attributes:[(attr1.id):[requested: 'on', reasoning:'reason for request', required:'on'], (attr2.id):[requested: 'on', reasoning:'reason for request2', required:'off']], nameidformats:[(nameID1.id):'on', (nameID2.id):'on'], crypto:[sig: true, sigdata:pk, enc:true, encdata:pk],
+        params.cert = pk
+		params.sp = [displayName:"test service name", description: null, attributes:[(attr1.id):[requested: 'on', reasoning:'reason for request', required:'on'], (attr2.id):[requested: 'on', reasoning:'reason for request2', required:'off']], nameidformats:[(nameID1.id):'on', (nameID2.id):'on'], crypto:[sig: true, enc:true],
 					  acs:[ post:[uri: 'https://service.test.com/Shibboleth.sso/SAML2/POST'], artifact:[uri: 'https://service.test.com/Shibboleth.sso/SAML2/Artifact'] ], 
 					  slo:[post:[uri: 'https://service.test.com/Shibboleth.sso/SLO/Post'], soap:[uri: 'https://service.test.com/Shibboleth.sso/SLO/SOAP'], redirect:[uri: 'https://service.test.com/Shibboleth.sso/SLO/Redirect'], artifact:[uri: 'https://service.test.com/Shibboleth.sso/SLO/Artifact'] ] ]
 								
@@ -522,33 +519,32 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 			[true, [:]]
 		}
 		WorkflowProcessService.metaClass.run = { def processInstance -> }
-		def (created, organization_, entityDescriptor_, serviceProvider_, httpPostACS_, soapArtifactACS_, sloArtifact_, sloRedirect_, sloSOAP_, sloPost_, organizationList_, attributeList_, nameIDFormatList_, contact_) = spssoDescriptorService.create(params)
+		def (created, ret) = SPSSODescriptorService.create(params)
 		
 		then:
-		Organization.count() == 1
-		EntityDescriptor.count() == 1
-		SPSSODescriptor.count() == 0
-		
-		serviceProvider_.displayName == "test service name"
-		serviceProvider_.description == null
-		serviceProvider_.hasErrors() == true
-		serviceProvider_.protocolSupportEnumerations.size() == 1
-		serviceProvider_.nameIDFormats.size() == 2
-		serviceProvider_.attributeConsumingServices.size() == 1
-		def acs = serviceProvider_.attributeConsumingServices.toList().get(0)
+		!created
+
+        !ret.serviceProvider.validate()
+		ret.serviceProvider.displayName == "test service name"
+		ret.serviceProvider.description == null
+		ret.serviceProvider.hasErrors() == true
+		ret.serviceProvider.protocolSupportEnumerations.size() == 1
+		ret.serviceProvider.nameIDFormats.size() == 2
+		ret.serviceProvider.attributeConsumingServices.size() == 1
+		def acs = ret.serviceProvider.attributeConsumingServices.toList().get(0)
 		acs.requestedAttributes.size() == 2
-		serviceProvider_.assertionConsumerServices.size() == 2
-		serviceProvider_.singleLogoutServices.size() == 4
-		serviceProvider_.contacts.size() == 1
+		ret.serviceProvider.assertionConsumerServices.size() == 2
+		ret.serviceProvider.singleLogoutServices.size() == 4
+		ret.serviceProvider.contacts.size() == 1
 		
 		wfProcessName == null
 		
-		httpPostACS_.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/POST"
-		soapArtifactACS_.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/Artifact"
-		sloArtifact_.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/Artifact"
-		sloRedirect_.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/Redirect"
-		sloSOAP_.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/SOAP"
-		sloPost_.location.uri == "https://service.test.com/Shibboleth.sso/SLO/Post"
+		ret.httpPostACS.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/POST"
+		ret.httpArtifactACS.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/Artifact"
+		ret.sloArtifact.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/Artifact"
+		ret.sloRedirect.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/Redirect"
+		ret.sloSOAP.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/SOAP"
+		ret.sloPost.location.uri == "https://service.test.com/Shibboleth.sso/SLO/Post"
 	}
 	
 	def "Create fails when invalid display name"() {
@@ -558,8 +554,8 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 
 		def saml2Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:2.0:protocol').save()
 		def organization = Organization.build().save()
-		def attr1 = AttributeBase.build(name: "attr1").save()
-		def attr2 = AttributeBase.build(name: "attr2").save()
+		def attr1 = AttributeBase.build().save()
+		def attr2 = AttributeBase.build().save()
 		def nameID1 = SamlURI.build().save()
 		def nameID2 = SamlURI.build().save()
 		def pk = loadPK()
@@ -568,7 +564,8 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 		params.organization = [id: organization.id]
 		params.active = true
 		params.entity = [identifier:"https://service.test.com"]
-		params.sp = [description:"test desc", attributes:[(attr1.id):[requested: 'on', reasoning:'reason for request', required:'on'], (attr2.id):[requested: 'on', reasoning:'reason for request2', required:'off']], nameidformats:[(nameID1.id):'on', (nameID2.id):'on'], crypto:[sig: true, sigdata:pk, enc:true, encdata:pk],
+        params.cert = pk
+		params.sp = [description:"test desc", attributes:[(attr1.id):[requested: 'on', reasoning:'reason for request', required:'on'], (attr2.id):[requested: 'on', reasoning:'reason for request2', required:'off']], nameidformats:[(nameID1.id):'on', (nameID2.id):'on'], crypto:[sig: true, enc:true],
 					  acs:[ post:[uri: 'https://service.test.com/Shibboleth.sso/SAML2/POST'], artifact:[uri: 'https://service.test.com/Shibboleth.sso/SAML2/Artifact'] ], 
 					  slo:[post:[uri: 'https://service.test.com/Shibboleth.sso/SLO/Post'], soap:[uri: 'https://service.test.com/Shibboleth.sso/SLO/SOAP'], redirect:[uri: 'https://service.test.com/Shibboleth.sso/SLO/Redirect'], artifact:[uri: 'https://service.test.com/Shibboleth.sso/SLO/Artifact'] ] ]
 								
@@ -585,33 +582,32 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 			[true, [:]]
 		}
 		WorkflowProcessService.metaClass.run = { def processInstance -> }
-		def (created, organization_, entityDescriptor_, serviceProvider_, httpPostACS_, soapArtifactACS_, sloArtifact_, sloRedirect_, sloSOAP_, sloPost_, organizationList_, attributeList_, nameIDFormatList_, contact_) = spssoDescriptorService.create(params)
+		def (created, ret) = SPSSODescriptorService.create(params)
 		
 		then:
-		Organization.count() == 1
-		EntityDescriptor.count() == 1
-		SPSSODescriptor.count() == 0
-		
-		serviceProvider_.displayName == null
-		serviceProvider_.hasErrors() == true
-		serviceProvider_.description == "test desc"
-		serviceProvider_.protocolSupportEnumerations.size() == 1
-		serviceProvider_.nameIDFormats.size() == 2
-		serviceProvider_.attributeConsumingServices.size() == 1
-		def acs = serviceProvider_.attributeConsumingServices.toList().get(0)
+		!created
+
+		!ret.serviceProvider.validate()
+		ret.serviceProvider.displayName == null
+		ret.serviceProvider.hasErrors() == true
+		ret.serviceProvider.description == "test desc"
+		ret.serviceProvider.protocolSupportEnumerations.size() == 1
+		ret.serviceProvider.nameIDFormats.size() == 2
+		ret.serviceProvider.attributeConsumingServices.size() == 1
+		def acs = ret.serviceProvider.attributeConsumingServices.toList().get(0)
 		acs.requestedAttributes.size() == 2
-		serviceProvider_.assertionConsumerServices.size() == 2
-		serviceProvider_.singleLogoutServices.size() == 4
-		serviceProvider_.contacts.size() == 1
+		ret.serviceProvider.assertionConsumerServices.size() == 2
+		ret.serviceProvider.singleLogoutServices.size() == 4
+		ret.serviceProvider.contacts.size() == 1
 		
 		wfProcessName == null
 		
-		httpPostACS_.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/POST"
-		soapArtifactACS_.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/Artifact"
-		sloArtifact_.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/Artifact"
-		sloRedirect_.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/Redirect"
-		sloSOAP_.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/SOAP"
-		sloPost_.location.uri == "https://service.test.com/Shibboleth.sso/SLO/Post"
+		ret.httpPostACS.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/POST"
+		ret.httpArtifactACS.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/Artifact"
+		ret.sloArtifact.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/Artifact"
+		ret.sloRedirect.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/Redirect"
+		ret.sloSOAP.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/SOAP"
+		ret.sloPost.location.uri == "https://service.test.com/Shibboleth.sso/SLO/Post"
 	}
 	
 	def "Attempt to update non existant service provider fails"() {
@@ -619,7 +615,7 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 		params.id = 1
 		
 		when: 
-		def (updated, serviceProvider_) = spssoDescriptorService.update(params)
+		def (updated, serviceProvider_) = SPSSODescriptorService.update(params)
 		
 		then:
 		!updated
@@ -628,8 +624,8 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 	
 	def "Updating an existing service provider with valid changed content succeeds"() {
 		setup:
-		def orgType = new OrganizationType(name:"test", displayName:"test")
-		def organization = Organization.build(name:"test org", primary: orgType).save()
+		def orgType = OrganizationType.build()
+		def organization = Organization.build(primary: orgType).save()
 		def ed = EntityDescriptor.build(organization: organization).save()
 		def sd = ServiceDescription.build(connectURL: "http://connecturl.com", furtherInfo:"this is further info")
 		def sp = SPSSODescriptor.build(entityDescriptor:ed, serviceDescription:sd).save()
@@ -638,20 +634,20 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 		params.sp.servicedescription = [connecturl: "http://newconnecturl.com", furtherinfo:"this is new further info"]
 		
 		when:
-		def (updated, serviceProvider_) = spssoDescriptorService.update(params)
+		def (updated, serviceProvider) = SPSSODescriptorService.update(params)
 		
 		then:
 		updated
-		serviceProvider_.displayName == "new displayName"
-		serviceProvider_.description == "new description"
-		serviceProvider_.serviceDescription.connectURL == "http://newconnecturl.com"
-		serviceProvider_.serviceDescription.furtherInfo == "this is new further info"
+		serviceProvider.displayName == "new displayName"
+		serviceProvider.description == "new description"
+		serviceProvider.serviceDescription.connectURL == "http://newconnecturl.com"
+		serviceProvider.serviceDescription.furtherInfo == "this is new further info"
 	}
 
 	def "Updating an existing service provider with invalid changed content fails"() {
 		setup:
-		def orgType = new OrganizationType(name:"test", displayName:"test")
-		def organization = Organization.build(name:"test org", primary: orgType).save()
+		def orgType = OrganizationType.build()
+		def organization = Organization.build(primary: orgType).save()
 		def ed = EntityDescriptor.build(organization: organization).save()
 		def sd = ServiceDescription.build(connectURL: "http://connecturl.com", furtherInfo:"this is further info")
 		def sp = SPSSODescriptor.build(entityDescriptor:ed, serviceDescription:sd).save()
@@ -660,14 +656,16 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 		params.sp.servicedescription = [connecturl: "http://newconnecturl.com", furtherinfo:"this is new further info"]
 		
 		when:
-		def (updated, serviceProvider_) = spssoDescriptorService.update(params)
+		def (updated, serviceProvider) = SPSSODescriptorService.update(params)
 		
 		then:
 		!updated
-		serviceProvider_.hasErrors()
-		serviceProvider_.displayName == ""
-		serviceProvider_.description == "new description"
-		serviceProvider_.serviceDescription.connectURL == "http://newconnecturl.com"
-		serviceProvider_.serviceDescription.furtherInfo == "this is new further info"
+
+        !serviceProvider.validate()
+		serviceProvider.hasErrors()
+		serviceProvider.displayName == ""
+		serviceProvider.description == "new description"
+		serviceProvider.serviceDescription.connectURL == "http://newconnecturl.com"
+		serviceProvider.serviceDescription.furtherInfo == "this is new further info"
 	}
 }

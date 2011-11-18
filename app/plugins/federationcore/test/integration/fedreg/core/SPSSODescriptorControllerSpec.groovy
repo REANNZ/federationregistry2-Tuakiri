@@ -42,7 +42,7 @@ class SPSSODescriptorControllerSpec extends IntegrationSpec {
 		def model = controller.list()
 
 		then:
-		model.serviceProviderList.size() == 25
+		model.serviceProviderList.size() >= 25
 	}
 	
 	def "Show with no ID"() {		
@@ -75,7 +75,7 @@ class SPSSODescriptorControllerSpec extends IntegrationSpec {
 		}
 		
 		(1..11).each { i ->
-			AttributeBase.build(name: "attr$i").save()
+			AttributeBase.build().save()
 		}
 		
 		(1..12).each { i ->
@@ -88,9 +88,9 @@ class SPSSODescriptorControllerSpec extends IntegrationSpec {
 		then:
 		model.serviceProvider != null
 		model.serviceProvider instanceof SPSSODescriptor
-		model.organizationList.size() == 10
-		model.attributeList.size() == 11
-		model.nameIDFormatList.size() == 12
+		model.organizationList.size() >= 10
+		model.attributeList.size() >= 11
+		model.nameIDFormatList.size() >= 12
 	}
 	
 	def "Validate successful save"() {
