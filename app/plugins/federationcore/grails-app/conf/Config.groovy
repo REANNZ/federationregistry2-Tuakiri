@@ -5,7 +5,7 @@ environments {
 
     test {
 		log4j = {
-			debug	'fedreg.workflow',
+			info	'fedreg.workflow',
 					'grails.app.controller',
 					'grails.app.service',
 					'grails.app.domain'
