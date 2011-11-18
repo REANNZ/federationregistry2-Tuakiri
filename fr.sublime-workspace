@@ -7,35 +7,19 @@
 	},
 	"buffers":
 	[
-		{
-			"file": "/Volumes/grails.dev/development/federationregistrymaster/scripts/reports/shibbolethDS/parse-apache-logs.pl",
-			"settings":
-			{
-				"buffer_size": 7787,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Volumes/grails.dev/development/federationregistrymaster/scripts/reports/shibbolethDS/README.md",
-			"settings":
-			{
-				"buffer_size": 248,
-				"line_ending": "Unix"
-			}
-		}
 	],
 	"build_system": "",
 	"command_palette":
 	{
-		"height": 0,
+		"height": 0.0,
 		"selected_items":
 		[
 		],
-		"width": 0
+		"width": 0.0
 	},
 	"console":
 	{
-		"height": 0
+		"height": 0.0
 	},
 	"distraction_free":
 	{
@@ -48,6 +32,20 @@
 	},
 	"file_history":
 	[
+		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationmetadata/test/data/metadatagenerationservicespec/testvalidspssodescriptornora.xml",
+		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationmetadata/test/data/metadatagenerationservicespec/testvalidspssodescriptornoservicename.xml",
+		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationmetadata/grails-app/services/fedreg/metadata/MetadataGenerationService.groovy",
+		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationmetadata/test/integration/fedreg/metadata/MetadataGenerationServiceSpec.groovy",
+		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationmetadata/grails-app/conf/BuildConfig.groovy",
+		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationmetadata/test/unit/fedreg/metadata/MetadataGenerationServiceSpec.groovy",
+		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationmetadata/test/data/metadatagenerationservicespec/testvalidentitiesdescriptorembedded.xml",
+		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationmetadata/test/data/metadatagenerationservicespec/testvalididpssodescriptor.xml",
+		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationmetadata/test/data/metadatagenerationservicespec/testvalidcontact.xml",
+		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationmetadata/test/data/metadatagenerationservicespec/testvalidcontactnonsaml.xml",
+		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationmetadata/test/data/selfsigned2.pem",
+		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationmetadata/test/data/selfsigned.pem",
+		"/Volumes/grails.dev/development/federationregistrymaster/scripts/reports/shibbolethDS/parse-apache-logs.pl",
+		"/Volumes/grails.dev/development/federationregistrymaster/scripts/reports/shibbolethDS/README.md",
 		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationcore/grails-app/views/templates/spssodescriptor/_create.gsp",
 		"/Volumes/grails.dev/development/federationregistrymaster/scripts/adhoc/hotfix/1.2/migrateattributebase-hotfix.sql",
 		"/Users/bradleybeddoes/Documents/complete.xml.gz",
@@ -55,13 +53,9 @@
 		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationmetadata/test/data/metadatagenerationservicespec/testvalidaadescriptor.xml",
 		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationcore/grails-app/domain/fedreg/core/Attribute.groovy",
 		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationcore/grails-app/domain/fedreg/core/RequestedAttribute.groovy",
-		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationmetadata/test/data/metadatagenerationservicespec/testvalididpssodescriptor.xml",
-		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationmetadata/grails-app/services/fedreg/metadata/MetadataGenerationService.groovy",
-		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationmetadata/test/integration/fedreg/metadata/MetadataGenerationServiceSpec.groovy",
 		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationmetadata/test/data/metadatagenerationservicespec/testvalidspssodescriptor.xml",
 		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationmetadata/test/data/metadatagenerationservicespec/testvalidspssodescriptornoapprovals.xml",
 		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationmetadata/test/data/metadatagenerationservicespec/testvalidentitydescriptorschema.xml",
-		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationmetadata/test/data/metadatagenerationservicespec/testvalidentitiesdescriptorembedded.xml",
 		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationmetadata/test/data/metadatagenerationservicespec/testvalidentitiesdescriptor.xml",
 		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationmetadata/grails-app/services/fedreg/metadata/AttributeFilterGenerationService.groovy",
 		"/Volumes/grails.dev/development/federationregistrymaster/app/plugins/federationmetadata/test/data/metadatagenerationservicespec/testvalidentitydescriptorschema",
@@ -141,15 +135,12 @@
 	],
 	"find":
 	{
-		"height": 33
+		"height": 33.0
 	},
 	"find_in_files":
 	{
-		"height": 85,
-		"include_history":
-		[
-		],
-		"location_history":
+		"height": 0.0,
+		"where_history":
 		[
 		]
 	},
@@ -158,6 +149,8 @@
 		"case_sensitive": true,
 		"find_history":
 		[
+			"caKeyInfo",
+			"keyName",
 			"Cont",
 			"saml:",
 			"xml == result",
@@ -186,78 +179,25 @@
 		],
 		"reverse": false,
 		"show_context": true,
-		"use_buffer": true,
+		"use_buffer2": true,
 		"whole_word": false,
 		"wrap": true
 	},
 	"groups":
 	[
 		{
-			"selected": 1,
 			"sheets":
 			[
-				{
-					"buffer": 0,
-					"file": "/Volumes/grails.dev/development/federationregistrymaster/scripts/reports/shibbolethDS/parse-apache-logs.pl",
-					"settings":
-					{
-						"buffer_size": 7787,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2817,
-								2817
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Perl/Perl.tmLanguage"
-						},
-						"translation.x": 0,
-						"translation.y": 1588,
-						"zoom_level": 1
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "/Volumes/grails.dev/development/federationregistrymaster/scripts/reports/shibbolethDS/README.md",
-					"settings":
-					{
-						"buffer_size": 248,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								248,
-								248
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Markdown/Markdown.tmLanguage"
-						},
-						"translation.x": 0,
-						"translation.y": 0,
-						"zoom_level": 1
-					},
-					"type": "text"
-				}
 			]
 		}
 	],
 	"incremental_find":
 	{
-		"height": 0
+		"height": 0.0
 	},
 	"input":
 	{
-		"height": 27
+		"height": 27.0
 	},
 	"layout":
 	{
@@ -272,36 +212,36 @@
 		],
 		"cols":
 		[
-			0,
-			1
+			0.0,
+			1.0
 		],
 		"rows":
 		[
-			0,
-			1
+			0.0,
+			1.0
 		]
 	},
 	"menu_visible": true,
 	"replace":
 	{
-		"height": 62
+		"height": 62.0
 	},
 	"save_all_on_build": true,
 	"select_file":
 	{
-		"height": 0,
+		"height": 0.0,
 		"selected_items":
 		[
 		],
-		"width": 0
+		"width": 0.0
 	},
 	"select_project":
 	{
-		"height": 0,
+		"height": 0.0,
 		"selected_items":
 		[
 		],
-		"width": 0
+		"width": 0.0
 	},
 	"show_minimap": true,
 	"show_open_files": true,
