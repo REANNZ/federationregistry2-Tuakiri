@@ -27,9 +27,9 @@ class AnyUri extends Uri  {
 
   	static belongsTo = [organization:Organization, endpoint:Endpoint, contact:Contact, descriptor:RoleDescriptor]
 
-  	//static mapping = {
-	//	tablePerHierarchy false
-	//}
+  	static mapping = {
+		tablePerHierarchy false
+	}
 	
 	static constraints = {
 		organization(nullable: true)
