@@ -34,7 +34,7 @@ class EntityDescriptorControllerSpec extends IntegrationSpec {
 		def model = controller.list()
 
 		then:
-		model.entityList.size() == 20
+		model.entityList.size() >= 20
 	}
 	
 	def "Show with no ID"() {		

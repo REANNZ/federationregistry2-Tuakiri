@@ -56,7 +56,7 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		def model = controller.list()
 
 		then:
-		model.identityProviderList.size() == 25
+		model.identityProviderList.size() >= 25
 	}
 	
 	def "Show with no ID"() {		
