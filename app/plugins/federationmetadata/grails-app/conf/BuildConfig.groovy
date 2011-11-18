@@ -37,7 +37,7 @@ grails.project.dependency.resolution = {
 }
 
 clover {
- on = true
+ on = false
  debug = false // a boolean to toggle debugging on or off
  excludes = ["**/*Spec.groovy"] // an array of String Ant Glob Patterns to exclude for instrumentation
 }
