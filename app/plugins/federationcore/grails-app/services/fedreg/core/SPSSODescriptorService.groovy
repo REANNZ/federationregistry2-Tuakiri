@@ -33,7 +33,6 @@ class SPSSODescriptorService {
 					contact.errors.each {
 						log.error it
 					}
-					throw new ErronousStateException("Unable to create new contact when attempting to create new SPSSODescriptor")
 				}
 		}
 		def ct = params.contact?.type ?: 'administrative'
@@ -56,7 +55,8 @@ class SPSSODescriptorService {
 		serviceProvider.addToProtocolSupportEnumerations(saml2Namespace)
 	
 		def acs = new AttributeConsumingService(approved:true, lang:params.lang ?:'en')
-		acs.addToServiceNames(params.sp?.displayName)
+		if(params.sp?.displayName)
+            acs.addToServiceNames(params.sp.displayName)
 		
 		def supportedAttributes = []
 		params.sp.attributes.each { a -> 
