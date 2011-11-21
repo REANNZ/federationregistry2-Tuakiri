@@ -33,3 +33,10 @@ grails.project.dependency.resolution = {
     }
 
 }
+
+codenarc.reports = {
+    HTMLReport('html') {
+        outputFile = 'target/test-reports/codenarc.html' 
+        title = 'CodeNarc' 
+    } 
+}
