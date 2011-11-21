@@ -25,11 +25,11 @@ grails.project.dependency.resolution = {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
         // runtime 'com.mysql:mysql-connector-java:5.1.5'
     }
-
 }
 
-clover {
- on = false
- debug = false // a boolean to toggle debugging on or off
- excludes = ["**/*Spec.groovy"] // an array of String Ant Glob Patterns to exclude for instrumentation
+codenarc.reports = {
+    HTMLReport('html') {
+        outputFile = 'target/test-reports/codenarc.html' 
+        title = 'CodeNarc' 
+    } 
 }

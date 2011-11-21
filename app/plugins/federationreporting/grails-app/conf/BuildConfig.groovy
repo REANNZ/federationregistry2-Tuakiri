@@ -33,3 +33,10 @@ grails.project.dependency.resolution = {
         // runtime 'mysql:mysql-connector-java:5.1.13'
     }
 }
+
+codenarc.reports = {
+    HTMLReport('html') {
+        outputFile = 'target/test-reports/codenarc.html' 
+        title = 'CodeNarc' 
+    } 
+}
