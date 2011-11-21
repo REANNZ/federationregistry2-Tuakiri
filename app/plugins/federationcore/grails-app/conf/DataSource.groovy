@@ -18,10 +18,17 @@ environments {
 		}
 	}
 	test {
-		dataSource {
-			dbCreate = "create-drop"
-			url = "jdbc:hsqldb:mem:testDb"
-		}
+        dataSource {
+            pooled = true
+            driverClassName = "com.mysql.jdbc.Driver"
+            dialect = org.hibernate.dialect.MySQL5InnoDBDialect
+            dbCreate = "create-drop"
+            loggingSql = false
+            
+            url = "jdbc:mysql://localhost/federationregistry_testapp_${System.getenv('fr_testdatabase')}"
+            username = "fr"
+            password =  "password"
+        }
 	}
 	production {
 		dataSource {
