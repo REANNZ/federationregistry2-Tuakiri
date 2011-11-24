@@ -28,16 +28,14 @@ class IDPSSODescriptorService {
 		// Contact
 		def contact = Contact.get(params.contact?.id)
 		if(!contact) {
-			if(params.contact?.email)
-				contact = MailURI.findByUri(params.contact?.email)?.contact		// We may already have them referenced by email address and user doesn't realize
+			//if(params.contact?.email)
+			//	contact = MailURI.findByUri(params.contact?.email)?.contact		// We may already have them referenced by email address and user doesn't realize
 			if(!contact)
-				contact = new Contact(givenName: params.contact?.givenName, surname: params.contact?.surname, email: new MailURI(uri:params.contact?.email), organization:organization)
+				contact = new Contact(givenName: params.contact?.givenName, surname: params.contact?.surname, email: params.contact?.email, organization:organization)
 				contact.save()
 				if(contact.hasErrors()) {
-					contact.errors.each {
-						log.error it
-					}
-					throw new ErronousStateException("Unable to create new contact when attempting to create new IDPSSODescriptor")
+                    log.info "$authenticatedUser attempted to create identityProvider but contact details supplied were invalid"
+					contact.errors.each { log.debug it }
 				}
 		}
 		def ct = params.contact?.type ?: 'administrative'
@@ -50,7 +48,7 @@ class IDPSSODescriptorService {
 	
 		if(!entityDescriptor) {
 			def created
-			(created, entityDescriptor) = entityDescriptorService.createNoSave(params)	// Odd issues with transactions cross services not rolling back so we save locally
+			(created, entityDescriptor) = entityDescriptorService.createNoSave(params)	// Odd issues with transactions cross services not rolling back
 		}
 	
 		// IDP
@@ -84,19 +82,19 @@ class IDPSSODescriptorService {
 	
 		// Initial endpoints
 		def postBinding = SamlURI.findByUri(SamlConstants.httpPost)
-		def postLocation = new UrlURI(uri: params.idp?.post?.uri)
+		def postLocation = params.idp?.post?.uri
 		def httpPost = new SingleSignOnService(approved: true, binding: postBinding, location:postLocation, active:params.active)
 		identityProvider.addToSingleSignOnServices(httpPost)
 		httpPost.validate()
 
 		def redirectBinding = SamlURI.findByUri(SamlConstants.httpRedirect)
-		def redirectLocation = new UrlURI(uri: params.idp?.redirect?.uri)
+		def redirectLocation = params.idp?.redirect?.uri
 		def httpRedirect = new SingleSignOnService(approved: true, binding: redirectBinding, location:redirectLocation, active:params.active)
 		identityProvider.addToSingleSignOnServices(httpRedirect)
 		httpRedirect.validate()
 
 		def artifactBinding = SamlURI.findByUri(SamlConstants.soap)
-		def artifactLocation = new UrlURI(uri: params.idp?.artifact?.uri)
+		def artifactLocation = params.idp?.artifact?.uri
 		def soapArtifact = new ArtifactResolutionService(approved: true, binding: artifactBinding, location:artifactLocation, index:params.idp?.artifact?.index, active:params.active, isDefault:true)
 		identityProvider.addToArtifactResolutionServices(soapArtifact)
 		soapArtifact.validate()
@@ -123,14 +121,15 @@ class IDPSSODescriptorService {
 		// Attribute Authority - collaborates with created IDP
 		def attributeAuthority, soapAttributeService
 		if(params.aa?.create) {
-			attributeAuthority = new AttributeAuthorityDescriptor(approved:false, active:params.active, displayName: params.idp?.displayName, description: params.idp?.description, scope: params.idp?.scope, collaborator: identityProvider, organization:organization)
+			attributeAuthority = new AttributeAuthorityDescriptor(approved:false, active:params.active, displayName: params.idp?.displayName, description: params.idp?.description, scope: params.idp?.scope, organization:organization)
 			attributeAuthority.addToProtocolSupportEnumerations(saml2Namespace)
-			identityProvider.collaborator = attributeAuthority
+			//identityProvider.collaborator = attributeAuthority
 		
 			def attributeServiceBinding = SamlURI.findByUri('urn:oasis:names:tc:SAML:2.0:bindings:SOAP')
-			def attributeServiceLocation = new UrlURI(uri: params.aa?.attributeservice?.uri)
+			def attributeServiceLocation = params.aa?.attributeservice?.uri
 			soapAttributeService = new AttributeService(approved: true, binding: attributeServiceBinding, location:attributeServiceLocation, active:params.active)
 			attributeAuthority.addToAttributeServices(soapAttributeService)
+            soapAttributeService.validate()
 		
 			params.aa.attributes.each { attrID -> 
 				if(attrID.value == "on") {
@@ -159,49 +158,37 @@ class IDPSSODescriptorService {
 		ret.supportedNameIDFormats = supportedNameIDFormats
 		ret.supportedAttributes = supportedAttributes
 	
-		// Submission validation
-		if(!entityDescriptor.validate()) {
-			log.info "$authenticatedUser attempted to create $identityProvider but failed EntityDescriptor validation"
-			entityDescriptor?.errors.each { log.error it }
-			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly() 
-			return [false, ret]
-		}
-	
-		identityProvider.entityDescriptor = entityDescriptor
-		entityDescriptor.addToIdpDescriptors(identityProvider)
 
+		entityDescriptor.addToIdpDescriptors(identityProvider)
 		if(params.aa?.create) {
-			attributeAuthority.entityDescriptor = entityDescriptor
 			entityDescriptor.addToAttributeAuthorityDescriptors(attributeAuthority)
 		}
 
-		if(!identityProvider.validate()) {
-			log.info "$authenticatedUser attempted to create $identityProvider but failed IDPSSODescriptor validation"
-			identityProvider.errors.each { log.error it }
-			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly()
-			entityDescriptor.delete()
-			return [false, ret]
+		identityProvider.validate()
+        if(params.aa?.create) {
+            attributeAuthority.validate()
+        }
+        
+        // Force flush as we need identifiers
+		if(!entityDescriptor.save(flush:true)) {
+            log.info "$authenticatedUser attempted to create $identityProvider but failed input validation"
+			entityDescriptor.errors.each {log.debug it}
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly() 
+            return [false, ret]
 		}
 
-		if(params.aa?.create){
-			if(!attributeAuthority.validate()) {
-				log.error "Error when attempting to validate new AttributeAuthority"
-				attributeAuthority.errors.each {log.debug it}
-				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly() 
-				entityDescriptor.delete()
-				return [false, ret]
-			}
+        if(params.aa?.create) {
+            // We have to establish this relationship after the initial save so everything is setup
+            identityProvider.collaborator = attributeAuthority
+            attributeAuthority.collaborator = identityProvider
+
+            if(!entityDescriptor.save()) {
+                log.info "$authenticatedUser attempted to create $identityProvider but failed collaborator establishment"
+                entityDescriptor.errors.each {log.debug it}
+                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly() 
+                return [false, ret]
+            }
         }
-			
-		if(!entityDescriptor.save()) {
-			entityDescriptor.errors.each {log.debug it}
-			throw new ErronousStateException("Unable to save when creating ${identityProvider}")
-		}
-		
-		if(!identityProvider.save(flush:true)) {
-			identityProvider.errors.each {log.debug it}
-			throw new ErronousStateException("Unable to save when creating ${identityProvider}")
-		}
 
 		def workflowParams = [ creator:contact?.id?.toString(), identityProvider:identityProvider?.id?.toString(), attributeAuthority:attributeAuthority?.id?.toString(), organization:organization.id?.toString(), locale:LCH.getLocale().getLanguage() ]
 
