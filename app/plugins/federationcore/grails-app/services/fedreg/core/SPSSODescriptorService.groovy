@@ -18,24 +18,24 @@ class SPSSODescriptorService {
 
 	def create(def params) {
 			
-		// Organization
-		def organization = Organization.lock(params.organization?.id)
+        // Organization
+        def organization = Organization.lock(params.organization?.id)
 
-		// Contact
-		def contact = Contact.get(params.contact?.id)
-		if(!contact) {
-			/*if(params.contact?.email)
-				contact = MailURI.findByUri(params.contact?.email)?.contact		// We may already have them referenced by email address and user doesn't realize*/
-			if(!contact)
-				contact = new Contact(givenName: params.contact?.givenName, surname: params.contact?.surname, email: params.contact?.email, organization:organization)
-				contact.save()
-				if(contact.hasErrors()) {
-					contact.errors.each {
-						log.error it
-					}
-				}
-		}
-		def ct = params.contact?.type ?: 'administrative'
+        // Contact
+        def contact = Contact.get(params.contact?.id)
+        if(!contact) {
+            if(params.contact?.email)
+                contact = Contact.findByEmail(params.contact?.email)       // We may already have them referenced by email
+            
+            if(!contact)
+                contact = new Contact(givenName: params.contact?.givenName, surname: params.contact?.surname, email: params.contact?.email, organization:organization)
+                contact.save()
+                if(contact.hasErrors()) {
+                    log.info "$authenticatedUser attempted to create serviceProvider but contact details supplied were invalid"
+                    contact.errors.each { log.debug it }
+                }
+        }
+        def ct = params.contact?.type ?: 'administrative'
 	
 		// Entity Descriptor
 		def entityDescriptor
@@ -45,7 +45,7 @@ class SPSSODescriptorService {
 	
 		if(!entityDescriptor) {
 			def created
-			(created, entityDescriptor) = entityDescriptorService.createNoSave(params)	// Odd issues with transactions cross services not rolling back so we save locally
+			(created, entityDescriptor) = entityDescriptorService.createNoSave(params)	// Odd issues with transactions cross services not rolling back
 		}
 	
 		// SP
@@ -63,7 +63,7 @@ class SPSSODescriptorService {
 			def attrID = a.key
 			def val = a.value
 		
-			if(!( val instanceof String )) {	// org.codehaus.groovy.grails.web.servlet.mvc.GrailsParameterMap oddities where vals are both in maps and individually presented as Strings
+			if(!( val instanceof String )) {
 				if(val.requested && val.requested == "on") {
 					def attr = AttributeBase.get(attrID)
 					if(attr) {
@@ -202,7 +202,7 @@ class SPSSODescriptorService {
 		}
 	
 		// Service Description
-		def serviceDescription = new ServiceDescription(connectURL: params.sp?.servicedescription?.connecturl, logo: params.sp?.servicedescription?.logourl)
+		def serviceDescription = new ServiceDescription(connectURL: params.sp?.servicedescription?.connecturl, logo: params.sp?.servicedescription?.logourl, descriptor: serviceProvider)
 		serviceProvider.serviceDescription = serviceDescription
 		
 		// Generate return map
@@ -226,28 +226,17 @@ class SPSSODescriptorService {
 		ret.certificate = params.cert
 		ret.supportedNameIDFormats = supportedNameIDFormats
 		ret.supportedAttributes = supportedAttributes
-	
-		// Submission validation
-		if(!entityDescriptor.save()) {
-			entityDescriptor?.errors.each { log.error it }
-			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly() 
-			return [false, ret]
-		}
-		serviceProvider.entityDescriptor = entityDescriptor
-		entityDescriptor.addToSpDescriptors(serviceProvider)
-	
-		if(!serviceProvider.validate()) {
-			log.info "$authenticatedUser attempted to create $serviceProvider but failed SPSSODescriptor validation"
-			serviceProvider.errors.each { log.warn it }
-			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly() 
-			return [false, ret]
-		}
-	
-		if(!serviceProvider.save(flush:true)) {
-			serviceProvider.errors.each {log.warn it; println it}
 
-			throw new ErronousStateException("Unable to save when creating ${serviceProvider}")
-		}
+		entityDescriptor.addToSpDescriptors(serviceProvider)
+        serviceProvider.validate()
+	
+		// Force flush as we need identifiers
+        if(!entityDescriptor.save(flush:true)) {
+            log.info "$authenticatedUser attempted to create $serviceProvider but failed input validation"
+            entityDescriptor.errors.each {log.debug it}
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly() 
+            return [false, ret]
+        }
 	
 		def workflowParams = [ creator:contact?.id?.toString(), serviceProvider:serviceProvider?.id?.toString(), organization:organization.id?.toString(), locale:LCH.getLocale().getLanguage() ]
 		def (initiated, processInstance) = workflowProcessService.initiate( "spssodescriptor_create", "Approval for creation of ${serviceProvider}", ProcessPriority.MEDIUM, workflowParams)

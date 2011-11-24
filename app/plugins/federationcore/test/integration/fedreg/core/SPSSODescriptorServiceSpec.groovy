@@ -55,24 +55,24 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 		setupBindings()
 		setupCrypto()
 
-		def saml2Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:2.0:protocol').save()
-		def organization = Organization.build().save()
-		def attr1 = AttributeBase.build().save()
-		def attr2 = AttributeBase.build().save()
-		def nameID1 = SamlURI.build().save()
-		def nameID2 = SamlURI.build().save()
+		def saml2Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:2.0:protocol')
+		def organization = Organization.build()
+		def attr1 = AttributeBase.build()
+		def attr2 = AttributeBase.build()
+		def nameID1 = SamlURI.build()
+		def nameID2 = SamlURI.build()
 		def pk = loadPK()
-		def ct = ContactType.build().save()
+		def ct = ContactType.build()
 
 		params.organization = [id: organization.id]
 		params.active = true
 		params.entity = [identifier:"https://service.test.com"]
         params.cert = pk
 		params.sp = [displayName:"test service name", description:"test desc", attributes:[(attr1.id):[requested: 'on', reasoning:'reason for request', required:'on'], (attr2.id):[requested: 'on', reasoning:'reason for request2', required:'off']], nameidformats:[(nameID1.id):'on', (nameID2.id):'on'], crypto:[sig: true, enc:true],
-					  acs:[ post:[uri: 'https://service.test.com/Shibboleth.sso/SAML2/POST'], artifact:[uri: 'https://service.test.com/Shibboleth.sso/SAML2/Artifact'] ], 
+					  acs:[ post:[uri: 'https://service.test.com/Shibboleth.sso/SAML2/POST', index:1], artifact:[uri: 'https://service.test.com/Shibboleth.sso/SAML2/Artifact', index:2] ], 
 					  slo:[post:[uri: 'https://service.test.com/Shibboleth.sso/SLO/Post'], soap:[uri: 'https://service.test.com/Shibboleth.sso/SLO/SOAP'], redirect:[uri: 'https://service.test.com/Shibboleth.sso/SLO/Redirect'], artifact:[uri: 'https://service.test.com/Shibboleth.sso/SLO/Artifact'] ] ]
 								
-		params.contact = [givenName:"Bradley", surname:"Beddoes", email:"bradleybeddoes@intient.com", type:ct.name]
+		params.contact = [givenName:"SP", surname:"Contact", email:"spcontact@spstest.com", type:ct.name]
 		
 		def wfProcessName, wfDescription, wfPriority, wfParams
 		
@@ -117,12 +117,12 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 		wfParams.serviceProvider == "${ret.serviceProvider.id}"
 		wfParams.organization == "${ret.organization.id}"
 		
-		ret.httpPostACS.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/POST"
-		ret.httpArtifactACS.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/Artifact"
-		ret.sloArtifact.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/Artifact"
-		ret.sloRedirect.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/Redirect"
-		ret.sloSOAP.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/SOAP"
-		ret.sloPost.location.uri == "https://service.test.com/Shibboleth.sso/SLO/Post"
+		ret.httpPostACS.location == "https://service.test.com/Shibboleth.sso/SAML2/POST"
+		ret.httpArtifactACS.location == "https://service.test.com/Shibboleth.sso/SAML2/Artifact"
+		ret.sloArtifact.location ==  "https://service.test.com/Shibboleth.sso/SLO/Artifact"
+		ret.sloRedirect.location ==  "https://service.test.com/Shibboleth.sso/SLO/Redirect"
+		ret.sloSOAP.location ==  "https://service.test.com/Shibboleth.sso/SLO/SOAP"
+		ret.sloPost.location == "https://service.test.com/Shibboleth.sso/SLO/Post"
 	}
 	
 	def "Create succeeds when valid initial SPSSODescriptor data is provided (with existing EntityDescriptor and contact)"() {
@@ -194,12 +194,12 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 		wfParams.serviceProvider == "${ret.serviceProvider.id}"
 		wfParams.organization == "${ret.organization.id}"
 		
-		ret.httpPostACS.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/POST"
-		ret.httpArtifactACS.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/Artifact"
-		ret.sloArtifact.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/Artifact"
-		ret.sloRedirect.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/Redirect"
-		ret.sloSOAP.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/SOAP"
-		ret.sloPost.location.uri == "https://service.test.com/Shibboleth.sso/SLO/Post"
+		ret.httpPostACS.location == "https://service.test.com/Shibboleth.sso/SAML2/POST"
+		ret.httpArtifactACS.location == "https://service.test.com/Shibboleth.sso/SAML2/Artifact"
+		ret.sloArtifact.location ==  "https://service.test.com/Shibboleth.sso/SLO/Artifact"
+		ret.sloRedirect.location ==  "https://service.test.com/Shibboleth.sso/SLO/Redirect"
+		ret.sloSOAP.location ==  "https://service.test.com/Shibboleth.sso/SLO/SOAP"
+		ret.sloPost.location == "https://service.test.com/Shibboleth.sso/SLO/Post"
 	}
 	
 	def "Create succeeds when valid initial SPSSODescriptor data is provided even though not all known SLO endpoints are supplied"() {
@@ -238,9 +238,6 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 		}
 		WorkflowProcessService.metaClass.run = { def processInstance -> }
 		def (created, ret) = SPSSODescriptorService.create(params)
-
-        ret.serviceProvider.validate()
-        ret.serviceProvider.errors?.each { println it }
 		
 		then:
 		created
@@ -272,12 +269,12 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 		[true, [:]]
 		wfParams.organization == "${ret.organization.id}"
 		
-		ret.httpPostACS.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/POST"
-		ret.httpArtifactACS.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/Artifact"
+		ret.httpPostACS.location == "https://service.test.com/Shibboleth.sso/SAML2/POST"
+		ret.httpArtifactACS.location == "https://service.test.com/Shibboleth.sso/SAML2/Artifact"
 		ret.sloArtifact == null
-		ret.sloRedirect.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/Redirect"
+		ret.sloRedirect.location ==  "https://service.test.com/Shibboleth.sso/SLO/Redirect"
 		ret.sloSOAP == null
-		ret.sloPost.location.uri == "https://service.test.com/Shibboleth.sso/SLO/Post"
+		ret.sloPost.location == "https://service.test.com/Shibboleth.sso/SLO/Post"
 	}
 	
 	def "Create fails if both required assertion consumer endpoint types aren't supplied"() {
@@ -344,12 +341,12 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 		ret.httpPostACS.hasErrors() == true
 		wfProcessName == null
 		
-		ret.httpPostACS.location.uri == null
-		ret.httpArtifactACS.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/Artifact"
-		ret.sloArtifact.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/Artifact"
-		ret.sloRedirect.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/Redirect"
-		ret.sloSOAP.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/SOAP"
-		ret.sloPost.location.uri == "https://service.test.com/Shibboleth.sso/SLO/Post"
+		ret.httpPostACS.location == null
+		ret.httpArtifactACS.location == "https://service.test.com/Shibboleth.sso/SAML2/Artifact"
+		ret.sloArtifact.location ==  "https://service.test.com/Shibboleth.sso/SLO/Artifact"
+		ret.sloRedirect.location ==  "https://service.test.com/Shibboleth.sso/SLO/Redirect"
+		ret.sloSOAP.location ==  "https://service.test.com/Shibboleth.sso/SLO/SOAP"
+		ret.sloPost.location == "https://service.test.com/Shibboleth.sso/SLO/Post"
 	}
 	
 	def "Create fails when reasoning for attribute request isn't supplied"() {
@@ -416,12 +413,12 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		wfProcessName == null
 		
-		ret.httpPostACS.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/POST"
-		ret.httpArtifactACS.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/Artifact"
-		ret.sloArtifact.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/Artifact"
-		ret.sloRedirect.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/Redirect"
-		ret.sloSOAP.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/SOAP"
-		ret.sloPost.location.uri == "https://service.test.com/Shibboleth.sso/SLO/Post"
+		ret.httpPostACS.location == "https://service.test.com/Shibboleth.sso/SAML2/POST"
+		ret.httpArtifactACS.location == "https://service.test.com/Shibboleth.sso/SAML2/Artifact"
+		ret.sloArtifact.location ==  "https://service.test.com/Shibboleth.sso/SLO/Artifact"
+		ret.sloRedirect.location ==  "https://service.test.com/Shibboleth.sso/SLO/Redirect"
+		ret.sloSOAP.location ==  "https://service.test.com/Shibboleth.sso/SLO/SOAP"
+		ret.sloPost.location == "https://service.test.com/Shibboleth.sso/SLO/Post"
 	}
 	
 	def "Create fails when valid contact details aren't provided"() {
@@ -476,12 +473,12 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		wfProcessName == null
 		
-		ret.httpPostACS.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/POST"
-		ret.httpArtifactACS.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/Artifact"
-		ret.sloArtifact.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/Artifact"
-		ret.sloRedirect.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/Redirect"
-		ret.sloSOAP.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/SOAP"
-		ret.sloPost.location.uri == "https://service.test.com/Shibboleth.sso/SLO/Post"
+		ret.httpPostACS.location == "https://service.test.com/Shibboleth.sso/SAML2/POST"
+		ret.httpArtifactACS.location == "https://service.test.com/Shibboleth.sso/SAML2/Artifact"
+		ret.sloArtifact.location ==  "https://service.test.com/Shibboleth.sso/SLO/Artifact"
+		ret.sloRedirect.location ==  "https://service.test.com/Shibboleth.sso/SLO/Redirect"
+		ret.sloSOAP.location ==  "https://service.test.com/Shibboleth.sso/SLO/SOAP"
+		ret.sloPost.location == "https://service.test.com/Shibboleth.sso/SLO/Post"
 	}
 	
 	def "Create fails when invalid description"() {
@@ -539,12 +536,12 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		wfProcessName == null
 		
-		ret.httpPostACS.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/POST"
-		ret.httpArtifactACS.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/Artifact"
-		ret.sloArtifact.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/Artifact"
-		ret.sloRedirect.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/Redirect"
-		ret.sloSOAP.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/SOAP"
-		ret.sloPost.location.uri == "https://service.test.com/Shibboleth.sso/SLO/Post"
+		ret.httpPostACS.location == "https://service.test.com/Shibboleth.sso/SAML2/POST"
+		ret.httpArtifactACS.location == "https://service.test.com/Shibboleth.sso/SAML2/Artifact"
+		ret.sloArtifact.location ==  "https://service.test.com/Shibboleth.sso/SLO/Artifact"
+		ret.sloRedirect.location ==  "https://service.test.com/Shibboleth.sso/SLO/Redirect"
+		ret.sloSOAP.location ==  "https://service.test.com/Shibboleth.sso/SLO/SOAP"
+		ret.sloPost.location == "https://service.test.com/Shibboleth.sso/SLO/Post"
 	}
 	
 	def "Create fails when invalid display name"() {
@@ -602,12 +599,12 @@ class SPSSODescriptorServiceSpec extends IntegrationSpec {
 		
 		wfProcessName == null
 		
-		ret.httpPostACS.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/POST"
-		ret.httpArtifactACS.location.uri == "https://service.test.com/Shibboleth.sso/SAML2/Artifact"
-		ret.sloArtifact.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/Artifact"
-		ret.sloRedirect.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/Redirect"
-		ret.sloSOAP.location.uri ==  "https://service.test.com/Shibboleth.sso/SLO/SOAP"
-		ret.sloPost.location.uri == "https://service.test.com/Shibboleth.sso/SLO/Post"
+		ret.httpPostACS.location == "https://service.test.com/Shibboleth.sso/SAML2/POST"
+		ret.httpArtifactACS.location == "https://service.test.com/Shibboleth.sso/SAML2/Artifact"
+		ret.sloArtifact.location ==  "https://service.test.com/Shibboleth.sso/SLO/Artifact"
+		ret.sloRedirect.location ==  "https://service.test.com/Shibboleth.sso/SLO/Redirect"
+		ret.sloSOAP.location ==  "https://service.test.com/Shibboleth.sso/SLO/SOAP"
+		ret.sloPost.location == "https://service.test.com/Shibboleth.sso/SLO/Post"
 	}
 	
 	def "Attempt to update non existant service provider fails"() {
