@@ -4,16 +4,16 @@ testDataConfig {
 	sampleData {
 		'fedreg.core.OrganizationType' {
 			def i = 1
-			name = {-> "name${i++}" } 
+			name = {-> "ot_name${i++}" } 
 		}
 		'fedreg.core.Organization' {
 			def i = 1
-			name = {-> "name${i++}" } 
-			url = { -> new UrlURI(uri:"http://www.name${i++}.com")}
+			name = {-> "org_name${i++}" } 
+			url = { -> "http://www.org-name${i++}.com"}
 		}
 		'fedreg.core.AttributeBase' {
 			def i = 1
-			name = {-> "name${i++}" } 
+			name = {-> "attributebase_name${i++}" } 
 		}
 		'fedreg.core.EntityDescriptor' {
 			def i = 1
@@ -23,13 +23,9 @@ testDataConfig {
 			def i = 1
 			username = {-> "username${i++}" } 
 		}
-		'fedreg.core.MailURI' {
+		'fedreg.core.Contact' {
 			def i = 1
-			uri = {-> "mail${i++}@test.com" }
-		}
-		'grails.plugins.nimble.core.UserBase' {
-			def i = 1
-			username = {-> "username${i++}" }
+			email = {-> "mailbox_${i++}@test.com" }
 		}
 	}
 }

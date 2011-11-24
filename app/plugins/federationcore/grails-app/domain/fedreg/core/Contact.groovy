@@ -47,7 +47,7 @@ class Contact {
 		surname(nullable:false, blank: false)
 		description(nullable:true, blank:true)
 		organization(nullable:true)
-		email(nullable:false, email:true)
+		email(nullable:false, email:true, unique:true)
 		secondaryEmail(nullable:true, email:true)
 		workPhone(nullable:true)
 		homePhone(nullable:true)
