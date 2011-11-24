@@ -54,7 +54,7 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		def httpPost = SingleSignOnService.build(descriptor:identityProvider)
 		def httpRedirect = SingleSignOnService.build(descriptor:identityProvider)
 		def soapArtifact = SingleSignOnService.build(descriptor:identityProvider)
-		def contact = Contact.build()
+		def contact = fedreg.core.Contact.build()
 		
 		def ret = [:]
 		ret.organization = organization
@@ -87,7 +87,7 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		def httpPost = SingleSignOnService.build(descriptor:identityProvider)
 		def httpRedirect = SingleSignOnService.build(descriptor:identityProvider)
 		def soapArtifact = SingleSignOnService.build(descriptor:identityProvider)
-		def contact = Contact.build()
+		def contact = fedreg.core.Contact.build()
 		
 		def ret = [:]
 		ret.organization = organization
