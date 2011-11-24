@@ -21,9 +21,9 @@ class OrganizationContactControllerSpec extends IntegrationSpec {
 	
 	def "Test contact search"() {
 		setup:		
-		def c1 = new Contact(givenName:'fred', surname:'bloggz', email:new MailURI(uri:'fbloggs@abc.test.com')).save()
-		def c2 = new Contact(givenName:'roe', surname:'schmoe', email:new MailURI(uri:'jschmoe@abc.test.com')).save()
-		def c3 = new Contact(givenName:'max', surname:'mustermaan', email:new MailURI(uri:'mmann@test2.com')).save()
+		def c1 = new Contact(givenName:'fred', surname:'bloggz', email:'fbloggs@abc.test.com').save()
+		def c2 = new Contact(givenName:'roe', surname:'schmoe', email:'jschmoe@abc.test.com').save()
+		def c3 = new Contact(givenName:'max', surname:'mustermaan', email:'mmann@test2.com').save()
 		
 		controller.params.givenName = givenName
 		controller.params.surname = surname
@@ -44,11 +44,11 @@ class OrganizationContactControllerSpec extends IntegrationSpec {
 	
 	def "Test contact addition"() {
 		setup:		
-		def c1 = new Contact(givenName:'fred', surname:'bloggs', email:new MailURI(uri:'fbloggs@testing.com')).save()
+		def c1 = new Contact(givenName:'fred', surname:'bloggs', email:'fbloggs@testing.com').save()
 		def ct = new ContactType(name:"technical",displayName:"technical",description:"technical contacts").save()
 		def ot = new OrganizationType(name:"test", displayName:"test").save()
 		
-		def o = new Organization(name:"o.test.com", displayName:"organization", lang:"en", url:new UrlURI(uri:"http://o.test.com"), primary:ot).save()
+		def o = new Organization(name:"o.test.com", displayName:"organization", lang:"en", url:"http://o.test.com", primary:ot).save()
 		
 		controller.params.id = o.id
 		controller.params.contactID = c1.id
