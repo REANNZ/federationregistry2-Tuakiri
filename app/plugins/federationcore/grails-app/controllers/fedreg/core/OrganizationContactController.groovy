@@ -16,16 +16,13 @@ class OrganizationContactController {
 		if(!params.givenName && !params.surname && !params.email)
 			contacts = Contact.list()
 		else {
-			def emails
-			if(params.email)
-				emails = MailURI.findAllByUriLike("%${params.email}%")
 			def c = Contact.createCriteria()
 			contacts = c.list {
 				or {
 					ilike("givenName", params.givenName)
 					ilike("surname", params.surname)
-					if(emails)
-						'in'("email", emails)
+                    if(params.email)
+					   ilike("email", "%${params.email}%".toString())
 				}
 			}
 		}
