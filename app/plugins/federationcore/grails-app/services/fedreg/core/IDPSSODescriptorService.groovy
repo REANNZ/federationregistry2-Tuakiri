@@ -29,7 +29,7 @@ class IDPSSODescriptorService {
 		def contact = Contact.get(params.contact?.id)
 		if(!contact) {
             if(params.contact?.email)
-                contact = Contact.findByEmail(params.contact?.email)?.contact		// We may already have them referenced by email
+                contact = Contact.findByEmail(params.contact?.email)		// We may already have them referenced by email
 			
             if(!contact)
 				contact = new Contact(givenName: params.contact?.givenName, surname: params.contact?.surname, email: params.contact?.email, organization:organization)
