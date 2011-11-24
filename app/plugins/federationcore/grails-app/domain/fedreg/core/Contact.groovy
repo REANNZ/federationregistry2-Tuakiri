@@ -28,12 +28,12 @@ class Contact {
 	
 	Organization organization
 	
-	MailURI email
-	MailURI secondaryEmail
+	String email
+	String secondaryEmail
 	
-	TelNumURI workPhone 
-	TelNumURI homePhone 
-	TelNumURI mobilePhone
+	String workPhone 
+	String homePhone 
+	String mobilePhone
 	
 	Date dateCreated
 	Date lastUpdated
@@ -47,8 +47,8 @@ class Contact {
 		surname(nullable:false, blank: false)
 		description(nullable:true, blank:true)
 		organization(nullable:true)
-		email(nullable:false)
-		secondaryEmail(nullable:true)
+		email(nullable:false, email:true)
+		secondaryEmail(nullable:true, email:true)
 		workPhone(nullable:true)
 		homePhone(nullable:true)
 		mobilePhone(nullable:true)

@@ -24,7 +24,7 @@ package fedreg.core
  *
  * @author Bradley Beddoes
  */
-class IndexedEndpoint extends Endpoint  {
+abstract class IndexedEndpoint extends Endpoint  {
 	static auditable = true
 
 	boolean isDefault = false

@@ -22,7 +22,7 @@ package fedreg.core
 /**
  * @author Bradley Beddoes
  */
-class SSODescriptor extends RoleDescriptor  {
+abstract class SSODescriptor extends RoleDescriptor  {
 	static auditable = true
 
   	static hasMany = [

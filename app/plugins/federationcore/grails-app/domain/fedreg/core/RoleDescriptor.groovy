@@ -24,13 +24,13 @@ package fedreg.core
  *
  * @author Bradley Beddoes
  */
-class RoleDescriptor extends Descriptor {
+abstract class RoleDescriptor extends Descriptor {
 	static auditable = true
 	
 	def cryptoService
 	
 	Organization organization
-	UrlURI errorURL
+	String errorURL
 	
 	String displayName
 	String description

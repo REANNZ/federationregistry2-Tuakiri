@@ -36,7 +36,7 @@ class Organization  {	// Also called a participant in AAF land
 	boolean archived = false
 	boolean approved = false
 	
-	UrlURI url
+	String url
 	
 	OrganizationType primary
 	

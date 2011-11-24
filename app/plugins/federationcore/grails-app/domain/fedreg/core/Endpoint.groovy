@@ -23,15 +23,15 @@ package fedreg.core
  *
  * @author Bradley Beddoes
  */
-class Endpoint	{
+abstract class Endpoint	{
 	static auditable = true
 	
 	boolean active = false
 	boolean approved = false
 	
 	SamlURI binding
-	UrlURI location
-	UrlURI responseLocation
+	String location
+	String responseLocation
 
 	Date dateCreated
 	Date lastUpdated
@@ -42,16 +42,15 @@ class Endpoint	{
 
 	static constraints = {
 		binding(nullable: false)
-		location(nullable: false)
-		responseLocation(nullable: true)
+		location(nullable: false, url:true)
+		responseLocation(nullable: true, url:true)
 		dateCreated(nullable:true)
 		lastUpdated(nullable:true)
 	}
 
 	public String toString() {	"endpoint:[id:$id, location: $location]" }
 	
-	// Endpoint is considered abstract but can't be marked as such due to GORM issues
-	// This method should be overlaoded by all subclasses
+	// This method must be overloaded by all subclasses
 	public boolean functioning() {
 		false
 	}

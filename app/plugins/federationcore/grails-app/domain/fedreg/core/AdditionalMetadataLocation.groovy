@@ -25,7 +25,7 @@ package fedreg.core
 class AdditionalMetadataLocation  {
 	static auditable = true
 
-	UrlURI uri
+	String uri
 	String namespace
 
 	Date dateCreated

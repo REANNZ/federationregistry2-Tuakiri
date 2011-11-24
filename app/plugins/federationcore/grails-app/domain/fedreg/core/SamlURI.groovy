@@ -22,10 +22,11 @@ package fedreg.core
 /**
  * @author Bradley Beddoes
  */
-class SamlURI extends Uri  {
+class SamlURI  {
 	static auditable = true
 	
 	SamlURIType type
+    String uri
 	
 	public String toString() {	"samluri:[id:$id, uri: $uri]" }
 }
