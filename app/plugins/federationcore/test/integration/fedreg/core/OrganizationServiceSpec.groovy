@@ -56,12 +56,12 @@ class OrganizationServiceSpec extends IntegrationSpec {
 		then:
 		organization_.name == "test org"
 		organization_.displayName ==  "Test Org Pty Ltd"
-		organization_.url.uri == "http://test.org"
+		organization_.url == "http://test.org"
 		organization_.primary == ot
 		
 		contact_.givenName == "Bradley"
 		contact_.surname == "Beddoes"
-		contact_.email.uri == "bradleybeddoes@intient.com"
+		contact_.email == "bradleybeddoes@intient.com"
 		
 		wfProcessName == "organization_create"
 		wfDescription == "Approval for creation of Organization Test Org Pty Ltd"
@@ -98,12 +98,12 @@ class OrganizationServiceSpec extends IntegrationSpec {
 		
 		organization_.name == "test org2"
 		organization_.displayName ==  "Test Org2 Pty Ltd"
-		organization_.url.uri == "http://test.org"
+		organization_.url == "http://test.org"
 		organization_.primary == ot
 		
 		contact_.givenName == contact.givenName
 		contact_.surname == contact.surname
-		contact_.email.uri == contact.email.uri
+		contact_.email == contact.email
 		
 		wfProcessName == "organization_create"
 		wfDescription == "Approval for creation of Organization Test Org2 Pty Ltd"
@@ -130,12 +130,12 @@ class OrganizationServiceSpec extends IntegrationSpec {
 		
 		organization_.name == null
 		organization_.displayName ==  "Test Org3 Pty Ltd"
-		organization_.url.uri == "http://test.org"
+		organization_.url == "http://test.org"
 		organization_.primary == ot
 		
 		contact_.givenName == contact.givenName
 		contact_.surname == contact.surname
-		contact_.email.uri == contact.email.uri
+		contact_.email == contact.email
 	}
 	
 	def "Create fails when invalid organization data and invalid contact data is provided"() {
@@ -154,12 +154,12 @@ class OrganizationServiceSpec extends IntegrationSpec {
 		
 		organization_.name == null
 		organization_.displayName ==  "Test Org4 Pty Ltd"
-		organization_.url.uri == "http://test.org"
+		organization_.url == "http://test.org"
 		organization_.primary == ot
 		
 		contact_.givenName == "Bradley"
 		contact_.surname == "Beddoes"
-		contact_.email.uri == "zzz"
+		contact_.email == "zzz"
 	}
 	
 	def "Update succeeds when providing valid data"() {
@@ -181,7 +181,7 @@ class OrganizationServiceSpec extends IntegrationSpec {
 		organization_.name == "Test Org5"
 		organization_.displayName == "Test Org5 Pty Ltd"
 		organization_.primary == ot2
-		organization_.url.uri == "http://test.org"
+		organization_.url == "http://test.org"
 		organization_.types.contains(ot3)
 		organization_.types.contains(ot4)
 	}
@@ -205,7 +205,7 @@ class OrganizationServiceSpec extends IntegrationSpec {
 		organization_.name == ""
 		organization_.displayName == "Test Org6 Pty Ltd"
 		organization_.primary == ot2
-		organization_.url.uri == "http://test.org"
+		organization_.url == "http://test.org"
 		organization_.types.contains(ot3)
 		organization_.types.contains(ot4)
 	}
