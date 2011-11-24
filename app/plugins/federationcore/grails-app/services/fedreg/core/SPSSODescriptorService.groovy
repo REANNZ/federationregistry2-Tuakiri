@@ -24,10 +24,10 @@ class SPSSODescriptorService {
 		// Contact
 		def contact = Contact.get(params.contact?.id)
 		if(!contact) {
-			if(params.contact?.email)
-				contact = MailURI.findByUri(params.contact?.email)?.contact		// We may already have them referenced by email address and user doesn't realize
+			/*if(params.contact?.email)
+				contact = MailURI.findByUri(params.contact?.email)?.contact		// We may already have them referenced by email address and user doesn't realize*/
 			if(!contact)
-				contact = new Contact(givenName: params.contact?.givenName, surname: params.contact?.surname, email: new MailURI(uri:params.contact?.email), organization:organization)
+				contact = new Contact(givenName: params.contact?.givenName, surname: params.contact?.surname, email: params.contact?.email, organization:organization)
 				contact.save()
 				if(contact.hasErrors()) {
 					contact.errors.each {
@@ -99,13 +99,13 @@ class SPSSODescriptorService {
 		// Initial endpoints
 		// Assertion Consumer Services
 		def postBinding = SamlURI.findByUri(SamlConstants.httpPost)
-		def postLocation = new UrlURI(uri: params.sp?.acs?.post?.uri)
+		def postLocation = params.sp?.acs?.post?.uri
 		def httpPostACS = new AssertionConsumerService(approved: true, binding: postBinding, location:postLocation, index:params.sp?.acs?.post?.index, active:params.active, isDefault:(params.sp?.acs?.post?.isdefault == 'true') ? true:false)
 		serviceProvider.addToAssertionConsumerServices(httpPostACS)
 		httpPostACS.validate()
 
 		def artifactBinding = SamlURI.findByUri(SamlConstants.httpArtifact)
-		def artifactLocation = new UrlURI(uri: params.sp?.acs?.artifact?.uri)
+		def artifactLocation = params.sp?.acs?.artifact?.uri
 		def httpArtifactACS = new AssertionConsumerService(approved: true, binding: artifactBinding, location:artifactLocation, index:params.sp?.acs?.artifact?.index, active:params.active, isDefault:(params.sp?.acs?.artifact?.isdefault == 'true') ? true:false)
 		serviceProvider.addToAssertionConsumerServices(httpArtifactACS)
 		httpArtifactACS.validate()
@@ -114,28 +114,28 @@ class SPSSODescriptorService {
 		def sloArtifact, sloRedirect, sloSOAP, sloPost
 		if(params.sp?.slo?.artifact?.uri){
 			def sloArtifactBinding = SamlURI.findByUri(SamlConstants.httpArtifact)
-			def sloArtifactLocation = new UrlURI(uri: params.sp?.slo?.artifact?.uri)
+			def sloArtifactLocation = params.sp?.slo?.artifact?.uri
 			sloArtifact = new SingleLogoutService(approved: true, binding: sloArtifactBinding, location:sloArtifactLocation, active:params.active)
 			serviceProvider.addToSingleLogoutServices(sloArtifact)
 			sloArtifact.validate()
 		}
 		if(params.sp?.slo?.redirect?.uri){
 			def sloRedirectBinding = SamlURI.findByUri(SamlConstants.httpRedirect)
-			def sloRedirectLocation = new UrlURI(uri: params.sp?.slo?.redirect?.uri)
+			def sloRedirectLocation = params.sp?.slo?.redirect?.uri
 			sloRedirect	= new SingleLogoutService(approved: true, binding: sloRedirectBinding, location:sloRedirectLocation, active:params.active)
 			serviceProvider.addToSingleLogoutServices(sloRedirect)
 			sloRedirect.validate()
 		}
 		if(params.sp?.slo?.soap?.uri){
 			def sloSOAPBinding = SamlURI.findByUri(SamlConstants.soap)
-			def sloSOAPLocation = new UrlURI(uri: params.sp?.slo?.soap?.uri)
+			def sloSOAPLocation = params.sp?.slo?.soap?.uri
 			sloSOAP = new SingleLogoutService(approved: true, binding: sloSOAPBinding, location:sloSOAPLocation, active:params.active)
 			serviceProvider.addToSingleLogoutServices(sloSOAP)
 			sloSOAP.validate()
 		}
 		if(params.sp?.slo?.post?.uri){
 			def sloPostBinding = SamlURI.findByUri(SamlConstants.httpPost)
-			def sloPostLocation = new UrlURI(uri: params.sp?.slo?.post?.uri)
+			def sloPostLocation = params.sp?.slo?.post?.uri
 			sloPost = new SingleLogoutService(approved: true, binding: sloPostBinding, location:sloPostLocation, active:params.active)
 			serviceProvider.addToSingleLogoutServices(sloPost)
 			sloPost.validate()
@@ -145,28 +145,28 @@ class SPSSODescriptorService {
 		def mnidArtifact, mnidRedirect, mnidSOAP, mnidPost
 		if(params.sp?.mnid?.artifact?.uri){
 			def mnidArtifactBinding = SamlURI.findByUri(SamlConstants.httpArtifact)
-			def mnidArtifactLocation = new UrlURI(uri: params.sp?.mnid?.artifact?.uri)
+			def mnidArtifactLocation = params.sp?.mnid?.artifact?.uri
 			mnidArtifact = new ManageNameIDService(approved: true, binding: mnidArtifactBinding, location:mnidArtifactLocation, active:params.active)
 			serviceProvider.addToManageNameIDServices(mnidArtifact)
 			mnidArtifact.validate()
 		}
 		if(params.sp?.mnid?.redirect?.uri){
 			def mnidRedirectBinding = SamlURI.findByUri(SamlConstants.httpRedirect)
-			def mnidRedirectLocation = new UrlURI(uri: params.sp?.mnid?.redirect?.uri)
+			def mnidRedirectLocation = params.sp?.mnid?.redirect?.uri
 			mnidRedirect	= new ManageNameIDService(approved: true, binding: mnidRedirectBinding, location:mnidRedirectLocation, active:params.active)
 			serviceProvider.addToManageNameIDServices(mnidRedirect)
 			mnidRedirect.validate()
 		}
 		if(params.sp?.mnid?.soap?.uri){
 			def mnidSOAPBinding = SamlURI.findByUri(SamlConstants.soap)
-			def mnidSOAPLocation = new UrlURI(uri: params.sp?.mnid?.soap?.uri)
+			def mnidSOAPLocation = params.sp?.mnid?.soap?.uri
 			mnidSOAP = new ManageNameIDService(approved: true, binding: mnidSOAPBinding, location:mnidSOAPLocation, active:params.active)
 			serviceProvider.addToManageNameIDServices(mnidSOAP)
 			mnidSOAP.validate()
 		}
 		if(params.sp?.mnid?.post?.uri){
 			def mnidPostBinding = SamlURI.findByUri(SamlConstants.httpPost)
-			def mnidPostLocation = new UrlURI(uri: params.sp?.mnid?.post?.uri)
+			def mnidPostLocation = params.sp?.mnid?.post?.uri
 			mnidPost = new ManageNameIDService(approved: true, binding: mnidPostBinding, location:mnidPostLocation, active:params.active)
 			serviceProvider.addToManageNameIDServices(mnidPost)
 			mnidPost.validate()
@@ -176,7 +176,7 @@ class SPSSODescriptorService {
 		def discoveryResponseService
 		if(params.sp?.drs?.uri){
 			def drsBinding = SamlURI.findByUri(SamlConstants.drs)
-			def drsLocation = new UrlURI(uri: params.sp?.drs?.uri)
+			def drsLocation = params.sp?.drs?.uri
 			discoveryResponseService = new DiscoveryResponseService(approved: true, binding: drsBinding, location:drsLocation, active:params.active, isDefault:true)
 			serviceProvider.addToDiscoveryResponseServices(discoveryResponseService)
 			discoveryResponseService.validate()
@@ -244,7 +244,8 @@ class SPSSODescriptorService {
 		}
 	
 		if(!serviceProvider.save(flush:true)) {
-			serviceProvider.errors.each {log.warn it}
+			serviceProvider.errors.each {log.warn it; println it}
+
 			throw new ErronousStateException("Unable to save when creating ${serviceProvider}")
 		}
 	

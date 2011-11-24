@@ -12,8 +12,7 @@ class EndpointService {
 	def grailsApplication
 
 	def create(def descriptor, def endpointClass, def endpointType, def binding, def loc, def index, def active) {
-		def location = new UrlURI(uri:loc)
-		def endpoint = grailsApplication.classLoader.loadClass(endpointClass).newInstance(descriptor:descriptor, binding: binding, location: location, active:active ? true:false, approved:true)
+		def endpoint = grailsApplication.classLoader.loadClass(endpointClass).newInstance(descriptor:descriptor, binding: binding, location: loc, active:active ? true:false, approved:true)
 		if(index)
 			endpoint.index = index
 		descriptor."addTo${capitalize(endpointType)}"(endpoint)

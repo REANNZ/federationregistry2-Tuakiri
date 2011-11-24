@@ -45,21 +45,21 @@ class ContactsController {
 
 		contact.givenName = params.givenname
 		contact.surname = params.surname
-		contact.email = new MailURI(uri:params.email)
+		contact.email = params.email
 		contact.description = params.description
 
 		if(params.secondaryEmail)
-			contact.secondaryEmail = new MailURI(uri:params.secondaryEmail)
+			contact.secondaryEmail = params.secondaryEmail
 
 		if(params.workPhone)
-			contact.workPhone = new TelNumURI(uri:params.workPhone)
+			contact.workPhone = params.workPhone
 
 		
 		if(params.mobilePhone)
-			contact.mobilePhone = new TelNumURI(uri:params.mobilePhone)
+			contact.mobilePhone = params.mobilePhone
 		
 		if(params.homePhone)
-			contact.homePhone = new TelNumURI(uri:params.homePhone)
+			contact.homePhone = params.homePhone
 			
 		if(params.organization) {
 			if(params.organization == "null") {
@@ -150,7 +150,7 @@ class ContactsController {
 	
 			if(params.secondaryEmail)
 				if(!contact.secondaryEmail)
-					contact.secondaryEmail = new MailURI(uri:params.secondaryEmail)
+					contact.secondaryEmail = params.secondaryEmail
 				else
 					contact.secondaryEmail.uri = params.secondaryEmail
 			else 
@@ -159,7 +159,7 @@ class ContactsController {
 	
 			if(params.workPhone)
 				if(!contact.workPhone)
-					contact.workPhone = new TelNumURI(uri:params.workPhone)
+					contact.workPhone = params.workPhone
 				else
 					contact.workPhone.uri = params.workPhone
 			else 
@@ -170,7 +170,7 @@ class ContactsController {
 			
 			if(params.mobilePhone)
 				if(!contact.mobilePhone)
-					contact.mobilePhone = new TelNumURI(uri:params.mobilePhone)
+					contact.mobilePhone = params.mobilePhone
 				else
 					contact.mobilePhone.uri = params.mobilePhone
 			else 
@@ -181,7 +181,7 @@ class ContactsController {
 			
 			if(params.homePhone)
 				if(!contact.homePhone)
-					contact.homePhone = new TelNumURI(uri:params.homePhone)
+					contact.homePhone = params.homePhone
 				else 
 					contact.homePhone.uri = params.homePhone
 			else 

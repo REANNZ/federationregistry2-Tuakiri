@@ -17,13 +17,13 @@ class OrganizationService {
 	def entityDescriptorService
 	
 	def create(def params) {
-		def organization = new Organization(approved:false, active:params.active, name:params.organization?.name, displayName:params.organization?.displayName, lang: params.organization?.lang, url: new UrlURI(uri:params.organization?.url), primary:OrganizationType.get(params.organization?.primary))
+		def organization = new Organization(approved:false, active:params.active, name:params.organization?.name, displayName:params.organization?.displayName, lang: params.organization?.lang, url: params.organization?.url, primary:OrganizationType.get(params.organization?.primary))
 		
 		def contact = Contact.get(params.contact?.id)
 		if(!contact) {
-			contact = MailURI.findByUri(params.contact?.email)?.contact		// We may already have them referenced by email address and user doesn't realize
+			//contact = MailURI.findByUri(params.contact?.email)?.contact		// We may already have them referenced by email address and user doesn't realize
 			if(!contact)
-				contact = new Contact(givenName: params.contact?.givenName, surname: params.contact?.surname, email: new MailURI(uri:params.contact?.email))
+				contact = new Contact(givenName: params.contact?.givenName, surname: params.contact?.surname, email: params.contact?.email)
 		}
 		
 		if(!organization.validate()) {
@@ -77,7 +77,7 @@ class OrganizationService {
 		organization.name = params.organization.name
 		organization.lang = params.organization.lang
 		organization.active = params.organization.active == 'true'
-		organization.url.uri = params.organization.url
+		organization.url = params.organization.url
 		organization.primary = OrganizationType.get(params.organization.primary)
 		organization.types = []
 		params.organization.types.each {
