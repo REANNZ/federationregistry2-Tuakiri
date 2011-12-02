@@ -28,7 +28,7 @@ class MetadataGenerationService {
 		builder.Organization() {
 			localizedName(builder, "OrganizationName", organization.lang, organization.name)
 			localizedName(builder, "OrganizationDisplayName", organization.lang, organization.displayName)
-			localizedUri(builder, "OrganizationURL", organization.lang, organization.url.uri)
+			localizedUri(builder, "OrganizationURL", organization.lang, organization.url)
 		}
 	}
 	
@@ -45,13 +45,13 @@ class MetadataGenerationService {
 				Company(contactPerson.contact.organization.displayName)
 			GivenName(contactPerson.contact.givenName)
 			SurName(contactPerson.contact.surname)
-			EmailAddress(contactPerson.contact.email.uri)
+			EmailAddress(contactPerson.contact.email)
 			if(contactPerson.contact.workPhone)
-				TelephoneNumber(contactPerson.contact.workPhone.uri)
+				TelephoneNumber(contactPerson.contact.workPhone)
 			if(contactPerson.contact.homePhone)
-				TelephoneNumber(contactPerson.contact.homePhone.uri)
+				TelephoneNumber(contactPerson.contact.homePhone)
 			if(contactPerson.contact.mobilePhone)
-				TelephoneNumber(contactPerson.contact.mobilePhone.uri)
+				TelephoneNumber(contactPerson.contact.mobilePhone)
 		}
 	}
 	
@@ -175,18 +175,18 @@ class MetadataGenerationService {
 	def endpoint(builder, all, minimal, type, endpoint) {
 		if(all || endpoint.functioning() ) {
 			if(!endpoint.responseLocation)
-				builder."$type"(Binding: endpoint.binding.uri, Location:endpoint.location.uri)
+				builder."$type"(Binding: endpoint.binding.uri, Location:endpoint.location)
 			else
-				builder."$type"(Binding: endpoint.binding.uri, Location:endpoint.location.uri, ResponseLocation: endpoint.responseLocation.uri)
+				builder."$type"(Binding: endpoint.binding.uri, Location:endpoint.location, ResponseLocation: endpoint.responseLocation)
 		}
 	}
 	
 	def indexedEndpoint(builder, all, minimal, type, endpoint) { 
 		if(all || endpoint.functioning() ) {
 			if(!endpoint.responseLocation)
-				builder."$type"(Binding: endpoint.binding.uri, Location:endpoint.location.uri, index:endpoint.index, isDefault:endpoint.isDefault)
+				builder."$type"(Binding: endpoint.binding.uri, Location:endpoint.location, index:endpoint.index, isDefault:endpoint.isDefault)
 			else
-				builder."$type"(Binding: endpoint.binding.uri, Location:endpoint.location.uri, ResponseLocation: endpoint.responseLocation.uri, index:endpoint.index, isDefault:endpoint.isDefault)
+				builder."$type"(Binding: endpoint.binding.uri, Location:endpoint.location, ResponseLocation: endpoint.responseLocation, index:endpoint.index, isDefault:endpoint.isDefault)
 		}
 	}
 	
@@ -265,10 +265,10 @@ class MetadataGenerationService {
 	}
 	
 	def ssoDescriptor(builder, all, minimal, ssoDescriptor) {
-		ssoDescriptor.artifactResolutionServices?.sort{it.id}.eachWithIndex{ars, i -> indexedEndpoint(builder, all, minimal, "ArtifactResolutionService", ars)}
+		ssoDescriptor.artifactResolutionServices?.sort{it.id}.each{ars -> indexedEndpoint(builder, all, minimal, "ArtifactResolutionService", ars)}
 		ssoDescriptor.singleLogoutServices?.sort{it.id}.each{sls -> endpoint(builder, all, minimal, "SingleLogoutService", sls)}
 		ssoDescriptor.manageNameIDServices?.sort{it.id}.each{mnids -> endpoint(builder, all, minimal, "ManageNameIDService", mnids)}
-		ssoDescriptor.nameIDFormats?.sort{it.uri}.each{nidf -> samlURI(builder, "NameIDFormat", nidf)}
+		ssoDescriptor.nameIDFormats?.sort{it}.each{nidf -> samlURI(builder, "NameIDFormat", nidf)}
 	}
 	
 	def idpSSODescriptor(builder, all, minimal, roleExtensions, idpSSODescriptor) {
@@ -293,7 +293,7 @@ class MetadataGenerationService {
 				roleDescriptor(builder, all, minimal, roleExtensions, spSSODescriptor)
 				ssoDescriptor(builder, all, minimal, spSSODescriptor)
 			
-				spSSODescriptor.assertionConsumerServices?.sort{it.id}.eachWithIndex{ ars, i -> indexedEndpoint(builder, all, minimal, "AssertionConsumerService", ars) }
+				spSSODescriptor.assertionConsumerServices?.sort{it.id}.each{ ars -> indexedEndpoint(builder, all, minimal, "AssertionConsumerService", ars) }
 				spSSODescriptor.attributeConsumingServices?.sort{it.id}.eachWithIndex{ acs, i -> 
 					if(acs.serviceNames?.size() > 0 && acs.requestedAttributes?.size() > 0 )
 						attributeConsumingService(builder, all, minimal, acs, i+1)
@@ -315,7 +315,7 @@ class MetadataGenerationService {
 						roleDescriptor(builder, all, minimal, roleExtensions, aaDescriptor.collaborator)	
 						aaDescriptor.attributeServices?.sort{it.id}.each{ attrserv -> endpoint(builder, all, minimal, "AttributeService", attrserv) }
 						aaDescriptor.collaborator.assertionIDRequestServices?.sort{it.id}.each{ aidrs -> endpoint(builder, all, minimal, "AssertionIDRequestService", aidrs) }
-						aaDescriptor.collaborator.nameIDFormats?.sort{it.uri}.each{ nidf -> samlURI(builder, "NameIDFormat", nidf) }
+						aaDescriptor.collaborator.nameIDFormats?.sort{it}.each{ nidf -> samlURI(builder, "NameIDFormat", nidf) }
 						aaDescriptor.collaborator.attributeProfiles?.sort{it.id}.each{ ap -> samlURI(builder, "AttributeProfile", ap) }
 						if(!minimal)
 							aaDescriptor.collaborator.attributes?.sort{it.base.name}.each{ attr -> attribute(builder, attr) }
@@ -328,7 +328,7 @@ class MetadataGenerationService {
 					aaDescriptor.attributeServices?.sort{it.id}.each{ attrserv -> endpoint(builder, all, minimal, "AttributeService", attrserv) }
 					aaDescriptor.assertionIDRequestServices?.sort{it.id}.each{ aidrs -> endpoint(builder, all, minimal, "AssertionIDRequestService", aidrs) }
 					aaDescriptor.nameIDFormats?.sort{it.id}.each{ nidf -> samlURI(builder, "NameIDFormat", nidf) }
-					aaDescriptor.attributeProfiles?.sort{it.uri}.each{ ap -> samlURI(builder, "AttributeProfile", ap) }
+					aaDescriptor.attributeProfiles?.sort{it}.each{ ap -> samlURI(builder, "AttributeProfile", ap) }
 					aaDescriptor.attributes?.sort{it.base.name}.each{ attr -> attribute(builder, attr) }
 				}
 			}
@@ -346,7 +346,7 @@ class MetadataGenerationService {
 			builder.Extensions() {
 				spSSODescriptor.discoveryResponseServices?.sort{it.id}.each { endpoint ->
 					if(all || endpoint.functioning() ) {
-						builder."dsr:DiscoveryResponse"("xmlns:dsr":"urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol", Binding: endpoint.binding.uri, Location:endpoint.location.uri, index:endpoint.index, isDefault:endpoint.isDefault)
+						builder."dsr:DiscoveryResponse"("xmlns:dsr":"urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol", Binding: endpoint.binding, Location:endpoint.location, index:endpoint.index, isDefault:endpoint.isDefault)
 					}
 				}
 			}
