@@ -71,7 +71,7 @@ class AttributeFilterGenerationServiceSpec extends IntegrationSpec {
 	def 'Test generation with no Service Providers'() {
 		setup:
 		def expected = loadResult("testnoserviceproviders")
-		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
+		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: "http://example.com")
 		def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.example.com/myuniqueID1", active:true, approved:true)
 		def idp = IDPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true).save()
 
@@ -92,7 +92,7 @@ class AttributeFilterGenerationServiceSpec extends IntegrationSpec {
 		setup:
 		setupSAML()
 		def expected = loadResult("testnoserviceproviders")
-		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
+		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: "http://example.com")
 		def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.example.com/myuniqueID1", active:true, approved:true)
 		def idp = IDPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true).save()
 
@@ -123,7 +123,7 @@ class AttributeFilterGenerationServiceSpec extends IntegrationSpec {
 		setup:
 		setupSAML()
 		def expected = loadResult("testnoserviceproviders")
-		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
+		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: "http://example.com")
 		def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.example.com/myuniqueID1", active:true, approved:true)
 		def idp = IDPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true).save()
 
@@ -154,7 +154,7 @@ class AttributeFilterGenerationServiceSpec extends IntegrationSpec {
 		setup:
 		setupSAML()
 		def expected = loadResult("testsinglesp")
-		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
+		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: "http://example.com")
 		def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.example.com/myuniqueID1", active:true, approved:true)
 		def idp = IDPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true).save()
 
@@ -202,7 +202,7 @@ class AttributeFilterGenerationServiceSpec extends IntegrationSpec {
 		setup:
 		setupSAML()
 		def expected = loadResult("testmultiplesp")
-		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
+		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: "http://example.com")
 		def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.example.com/myuniqueID1", active:true, approved:true)
 		def idp = IDPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true).save()
 
@@ -254,7 +254,7 @@ class AttributeFilterGenerationServiceSpec extends IntegrationSpec {
 		setup:
 		setupSAML()
 		def expected = loadResult("testsinglespmissing")
-		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
+		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: "http://example.com")
 		def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.example.com/myuniqueID1", active:true, approved:true)
 		def idp = IDPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true).save()
 
@@ -296,7 +296,7 @@ class AttributeFilterGenerationServiceSpec extends IntegrationSpec {
 		setup:
 		setupSAML()
 		def expected = loadResult("testmultiplespmissing")
-		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
+		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: "http://example.com")
 		def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.example.com/myuniqueID1", active:true, approved:true)
 		def idp = IDPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true).save()
 
@@ -342,7 +342,7 @@ class AttributeFilterGenerationServiceSpec extends IntegrationSpec {
 		setup:
 		setupSAML()
 		def expected = loadResult("testsinglespusingentitlement")
-		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
+		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: "http://example.com")
 		def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.example.com/myuniqueID1", active:true, approved:true)
 		def idp = IDPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true).save()
 
@@ -397,7 +397,7 @@ class AttributeFilterGenerationServiceSpec extends IntegrationSpec {
 	def baseSP(unique) {
 		def protocolSupportEnumerations = [saml1Prot, saml2Prot]
 		
-		def organization = Organization.build(name:"Test Organization - $unique", displayName:"Test Organization Display - $unique", lang:"en", url: new UrlURI(uri:"http://example.com"), active:true, approved:true)
+		def organization = Organization.build(name:"Test Organization - $unique", displayName:"Test Organization Display - $unique", lang:"en", url: "http://example.com", active:true, approved:true)
 		def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://server${unique}.test.example.com/saml", active:true, approved:true)
 		
 		def attrService = new AttributeConsumingService(lang:'en')

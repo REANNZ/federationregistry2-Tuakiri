@@ -80,11 +80,11 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		setup:
 		setupBindings()
 		
-		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))		
+		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: "http://example.com")		
 		def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.example.com/myuniqueID", active:true, approved:true)
 		def idp = IDPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, organization:organization, entityDescriptor:entityDescriptor, approved:true, active:true)
 		
-		def location = new UrlURI(uri:"https://test.example.com/SSO")
+		def location = "https://test.example.com/SSO"
 		def sso = SingleSignOnService.build(descriptor: idp, active:true, approved:true, binding:httpPost, location:location)
 		def expected = loadExpected('testvalidendpointgeneration')
 		
@@ -100,12 +100,12 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		setup:
 		setupBindings()
 		
-		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))		
+		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: "http://example.com")		
 		def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.example.com/myuniqueID", active:true, approved:true)
 		def idp = IDPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, organization:organization, entityDescriptor:entityDescriptor, approved:true, active:true)
 		
-		def location = new UrlURI(uri:"https://test.example.com/SSO")
-		def responseLocation = new UrlURI(uri:"https://test.example.com/response")
+		def location = "https://test.example.com/SSO"
+		def responseLocation = "https://test.example.com/response"
 		def sso = SingleSignOnService.build(descriptor:idp, active:true, approved:true, binding:httpPost, location:location, responseLocation:responseLocation)
 		def expected = loadExpected('testvalidendpointgenerationresponse')
 		
@@ -121,11 +121,11 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		setup:
 		setupBindings()
 		
-		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))		
+		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: "http://example.com")		
 		def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.example.com/myuniqueID", active:true, approved:true)
 		def idp = IDPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, organization:organization, entityDescriptor:entityDescriptor, approved:true, active:true)
 		
-		def location = new UrlURI(uri:"https://test.example.com/SSO")
+		def location = "https://test.example.com/SSO"
 		def sso = SingleSignOnService.build(descriptor:idp, active:false, approved:true, binding:httpPost, location:location)
 		
 		when:
@@ -140,11 +140,11 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		setup:
 		setupBindings()
 		
-		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))		
+		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: "http://example.com")		
 		def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.example.com/myuniqueID", active:true, approved:true)
 		def idp = IDPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, organization:organization, entityDescriptor:entityDescriptor, approved:true, active:true)
 		
-		def location = new UrlURI(uri:"https://test.example.com/SSO")
+		def location = "https://test.example.com/SSO"
 		def sso = SingleSignOnService.build(descriptor:idp, active:true, approved:false, binding:httpPost, location:location)
 		
 		when:
@@ -159,11 +159,11 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		setup:
 		setupBindings()
 		
-		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))		
+		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: "http://example.com")		
 		def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.example.com/myuniqueID", active:true, approved:true)
 		def idp = IDPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, organization:organization, entityDescriptor:entityDescriptor, approved:true, active:true)
 		
-		def location = new UrlURI(uri:"https://test.example.com/artifact")
+		def location = "https://test.example.com/artifact"
 		def ars = ArtifactResolutionService.build(descriptor: idp, active:true, approved:true, binding:httpPost, location:location, index:100)
 		def expected = loadExpected('testvalidindexedendpointgeneration')
 		
@@ -179,12 +179,12 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		setup:
 		setupBindings()
 		
-		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))		
+		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: "http://example.com")		
 		def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.example.com/myuniqueID", active:true, approved:true)
 		def idp = IDPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, organization:organization, entityDescriptor:entityDescriptor, approved:true, active:true)
 		
-		def location = new UrlURI(uri:"https://test.example.com/artifact")
-		def responseLocation = new UrlURI(uri:"https://test.example.com/response")
+		def location = "https://test.example.com/artifact"
+		def responseLocation = "https://test.example.com/response"
 		def ars = ArtifactResolutionService.build(descriptor:idp, active:true, approved:true, binding:httpPost, location:location, responseLocation:responseLocation, index:100)
 		def expected = loadExpected('testvalidindexedendpointgenerationresponse')
 		
@@ -200,11 +200,11 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		setup:
 		setupBindings()
 		
-		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))		
+		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: "http://example.com")		
 		def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.example.com/myuniqueID", active:true, approved:true)
 		def idp = IDPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, organization:organization, entityDescriptor:entityDescriptor, approved:true, active:true)
 		
-		def location = new UrlURI(uri:"https://test.example.com/artifact")
+		def location = "https://test.example.com/artifact"
 		def ars = ArtifactResolutionService.build(descriptor:idp, active:false, approved:true, binding:httpPost, location:location, index:100)
 		
 		when:
@@ -219,11 +219,11 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		setup:
 		setupBindings()
 		
-		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))		
+		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: "http://example.com")		
 		def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.example.com/myuniqueID", active:true, approved:true)
 		def idp = IDPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, organization:organization, entityDescriptor:entityDescriptor, approved:true, active:true)
 		
-		def location = new UrlURI(uri:"https://test.example.com/artifact")
+		def location = "https://test.example.com/artifact"
 		def ars = ArtifactResolutionService.build(descriptor:idp, active:true, approved:false, binding:httpPost, location:location, index:100)
 		
 		when:
@@ -236,7 +236,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 	
 	def "Test valid organization generation"() {
 		setup:
-		def organization = Organization.build(name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
+		def organization = Organization.build(name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: "http://example.com")
 		def expected = loadExpected('testvalidorganization')
 		
 		when:
@@ -249,10 +249,10 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 	
 	def "Test valid contact person generation"() {
 		setup:
-		def email = MailURI.build(uri:"test@example.com")
-		def home = TelNumURI.build(uri:"(07) 1111 1111")
-		def work = TelNumURI.build(uri:"(567) 222 22222")
-		def mobile = TelNumURI.build(uri:"0413 867 208")
+		def email = "test@example.com"
+		def home = "(07) 1111 1111"
+		def work = "(567) 222 22222"
+		def mobile = "0413 867 208"
 		def contact = Contact.build(givenName:"Test", surname:"User", email:email, homePhone:home, workPhone:work, mobilePhone:mobile)
 		def admin = ContactType.build(name:"administrative")
 		def contactPerson = ContactPerson.build(contact:contact, type:admin)
@@ -268,9 +268,9 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 
     def "Test valid contact person generation with non SAML type"() {
         setup:
-        def email = MailURI.build(uri:"test@example.com")
-        def home = TelNumURI.build(uri:"(07) 1111 1111")
-        def work = TelNumURI.build(uri:"(567) 222 22222")
+        def email = "test@example.com"
+        def home = "(07) 1111 1111"
+        def work = "(567) 222 22222"
         def contact = Contact.build(givenName:"Test", surname:"User", email:email, homePhone:home, workPhone:work)
         def admin = ContactType.build(name:"businessowner")
         def contactPerson = ContactPerson.build(contact:contact, type:admin)
@@ -286,8 +286,8 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 	
 	def "Test valid contact person generation with only mobile phone"() {
 		setup:
-		def email = MailURI.build(uri:"test@example.com")
-		def mobile = TelNumURI.build(uri:"0413 867 208")
+		def email = "test@example.com"
+		def mobile = "0413 867 208"
 		def contact = Contact.build(givenName:"Test", surname:"User", email:email, mobilePhone:mobile)
 		def admin = ContactType.build(name:"administrative")
 		def contactPerson = ContactPerson.build(contact:contact, type:admin)
@@ -303,11 +303,11 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 	
 	def "Test valid EntitiesDescriptor generation"() {
 		setup:
-		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
-		def email = MailURI.build(uri:"test@example.com")
-		def home = TelNumURI.build(uri:"(07) 1111 1111")
-		def work = TelNumURI.build(uri:"(567) 222 22222")
-		def mobile = TelNumURI.build(uri:"0413 867 208")
+		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: "http://example.com")
+		def email = "test@example.com"
+		def home = "(07) 1111 1111"
+		def work = "(567) 222 22222"
+		def mobile = "0413 867 208"
 		def contact = Contact.build(givenName:"Test", surname:"User", email:email, homePhone:home, workPhone:work, mobilePhone:mobile)
 		def admin = ContactType.build(name:"administrative")
 		def contactPerson = ContactPerson.build(contact:contact, type:admin)
@@ -321,10 +321,14 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 			entityDescriptor.addToAttributeAuthorityDescriptors(AttributeAuthorityDescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true))
 			
 			entitiesDescriptor.addToEntityDescriptors(entityDescriptor)
+
+            entityDescriptor.validate()
+            println "326"
+            entityDescriptor.errors?.each { println it }
 		}
 		
 		def keyInfo = new CAKeyInfo(certificate:new CACertificate(data:loadPK()))
-		def certificate2 = Certificate.build(data:loadPK())
+		//def certificate2 = Certificate.build(data:loadPK())
 		def keyInfo2 = new CAKeyInfo(certificate:new CACertificate(data:loadPK2()))
 		def certificateAuthorities = []
 		certificateAuthorities.add(keyInfo)
@@ -345,11 +349,11 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 	
 	def "Test valid EntitiesDescriptor generation with embedded entitiesdescriptors and no CA"() {
 		setup:
-		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
-		def email = MailURI.build(uri:"test@example.com")
-		def home = TelNumURI.build(uri:"(07) 1111 1111")
-		def work = TelNumURI.build(uri:"(567) 222 22222")
-		def mobile = TelNumURI.build(uri:"0413 867 208")
+		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: "http://example.com")
+		def email = "test@example.com"
+		def home = "(07) 1111 1111"
+		def work = "(567) 222 22222"
+		def mobile = "0413 867 208"
 		def contact = Contact.build(givenName:"Test", surname:"User", email:email, homePhone:home, workPhone:work, mobilePhone:mobile)
 		def admin = ContactType.build(name:"administrative")
 		def contactPerson = ContactPerson.build(contact:contact, type:admin)
@@ -385,7 +389,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 	
 	def "Test inactive EntityDescriptor generation"() {
 		setup:
-		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
+		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: "http://example.com")
 		def ed = EntityDescriptor.build(organization:organization, active:false, approved:true)
 		
 		when:
@@ -398,7 +402,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 	
 	def "Test not approved EntityDescriptor generation"() {
 		setup:
-		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
+		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: "http://example.com")
 		def ed = EntityDescriptor.build(organization:organization, active:true, approved:false)
 		
 		when:
@@ -411,7 +415,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 	
 	def "Test empty EntityDescriptor generation"() {
 		setup:
-		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
+		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: "http://example.com")
 		def ed = EntityDescriptor.build(organization:organization, active:true, approved:true)
 		
 		when:
@@ -424,11 +428,11 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 
 	def "Test valid EntityDescriptor generation with schema population"() {
 		setup:
-		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
-		def email = MailURI.build(uri:"test@example.com")
-		def home = TelNumURI.build(uri:"(07) 1111 1111")
-		def work = TelNumURI.build(uri:"(567) 222 22222")
-		def mobile = TelNumURI.build(uri:"0413 867 208")
+		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: "http://example.com")
+		def email = "test@example.com"
+		def home = "(07) 1111 1111"
+		def work = "(567) 222 22222"
+		def mobile = "0413 867 208"
 		def contact = Contact.build(givenName:"Test", surname:"User", email:email, homePhone:home, workPhone:work, mobilePhone:mobile)
 		def admin = ContactType.build(name:"administrative")
 		def contactPerson = ContactPerson.build(contact:contact, type:admin)
@@ -481,42 +485,49 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		setup:
 		setupBindings()
 		
-		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
+		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: "http://example.com")
 		def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.example.com/myuniqueID", active:true, approved:true)
 		
-		def email = MailURI.build(uri:"test@example.com")
-		def home = TelNumURI.build(uri:"(07) 1111 1111")
-		def work = TelNumURI.build(uri:"(567) 222 22222")
-		def mobile = TelNumURI.build(uri:"0413 867 208")
+		def email = "test@example.com"
+		def home = "(07) 1111 1111"
+		def work = "(567) 222 22222"
+		def mobile = "0413 867 208"
 		def contact = Contact.build(givenName:"Test", surname:"User", email:email, homePhone:home, workPhone:work, mobilePhone:mobile)
 		def admin = ContactType.build(name:"administrative")
 		def contactPerson = ContactPerson.build(contact:contact, type:admin)
 		
 		def idp = IDPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, organization:organization, entityDescriptor:entityDescriptor, approved:true, active:true)
-		
-		def certificate = Certificate.build(data:loadPK())
-		def keyInfo = KeyInfo.build(keyName:"key1", certificate:certificate)
-		def encryptionMethod = EncryptionMethod.build(algorithm:"http://www.w3.org/2001/04/xmlenc#tripledes-cbc")
-		def keyDescriptor = KeyDescriptor.build(keyInfo:keyInfo, encryptionMethod:encryptionMethod, keyType:KeyTypes.encryption)
-		
-		def certificate2 = Certificate.build(data:loadPK2())
-		def keyInfo2 = KeyInfo.build(certificate:certificate2)
-		def keyDescriptor2 = KeyDescriptor.build(keyInfo:keyInfo2, keyType:KeyTypes.signing)
+		        
+        def certificate = new Certificate(data:loadPK())
+        def keyInfo = new KeyInfo(keyName:"key1", certificate:certificate)
+        def encryptionMethod = new EncryptionMethod(algorithm:"http://www.w3.org/2001/04/xmlenc#tripledes-cbc")
+        def keyDescriptor = new KeyDescriptor(roleDescriptor:idp, keyType:KeyTypes.encryption, keyInfo:keyInfo, encryptionMethod:encryptionMethod)
 
-        def certificate3 = Certificate.build(data:loadPK2())
-        def keyInfo3 = KeyInfo.build(certificate:certificate3)
-        def keyDescriptor3 = KeyDescriptor.build(keyInfo:keyInfo3, keyType:KeyTypes.signing, disabled:true)
+        def certificate2 = new Certificate(data:loadPK2())
+        def keyInfo2 = new KeyInfo(certificate:certificate2)
+        def keyDescriptor2 = new KeyDescriptor(roleDescriptor:idp, keyType:KeyTypes.signing, keyInfo:keyInfo2)
+
+        def certificate3 = new Certificate(data:loadPK())
+        def keyInfo3 = new KeyInfo(certificate:certificate3)
+        def keyDescriptor3 = new KeyDescriptor(roleDescriptor:idp, keyType:KeyTypes.signing, keyInfo:keyInfo3, disabled:true)
+
+        keyDescriptor.id = 1
+        keyDescriptor2.id = 2
+        keyDescriptor3.id = 3
+
+		def ars = new ArtifactResolutionService(descriptor:idp, index:100, active:true, approved:true, isDefault:true, binding:soap, location:"https://test.example.com/ars/artifact")
+		def ars2 = new ArtifactResolutionService(descriptor:idp, index:101, active:true, approved:true, isDefault:false, binding:soap, location:"https://test.example.com/ars/artifact2")
+
+        ars.id = 1
+        ars2.id = 2
 		
-		def ars = ArtifactResolutionService.build(index:100, active:true, approved:true, isDefault:true, binding:soap, location:UrlURI.build(uri:"https://test.example.com/ars/artifact"))
-		def ars2 = ArtifactResolutionService.build(index:101, active:true, approved:true, isDefault:false, binding:soap, location:UrlURI.build(uri:"https://test.example.com/ars/artifact2"))
-		
-		def slo = SingleLogoutService.build(active:true, approved:true, binding:httpPost, location:UrlURI.build(uri:"https://test.example.com/slo/POST"))
-		def mnid = ManageNameIDService.build(active:true, approved:true, binding:httpRedirect, location:UrlURI.build(uri:"https://test.example.com/mnid/REDIRECT"))
+		def slo = new SingleLogoutService(descriptor:idp, active:true, approved:true, binding:httpPost, location:"https://test.example.com/slo/POST")
+		def mnid = new ManageNameIDService(descriptor:idp, active:true, approved:true, binding:httpRedirect, location:"https://test.example.com/mnid/REDIRECT")
 		def nidf = new SamlURI(uri:"supported:nameid:format:urn")
 		
-		def sso = SingleSignOnService.build(active:true, approved:true, binding:httpPost, location:UrlURI.build(uri:"https://test.example.com/sso/POST"))
-		def nidms = NameIDMappingService.build(active:true, approved:true, binding:httpRedirect, location:UrlURI.build(uri:"https://test.example.com/nameidmappingserivce/REDIRECT"))
-		def aidrs = new AssertionIDRequestService(active:true, approved:true, binding:httpRedirect, location:UrlURI.build(uri:"https://test.example.com/assertionidrequestservice/REDIRECT"))
+		def sso = new SingleSignOnService(descriptor:idp,active:true, approved:true, binding:httpPost, location:"https://test.example.com/sso/POST")
+		def nidms = new NameIDMappingService(descriptor:idp,active:true, approved:true, binding:httpRedirect, location:"https://test.example.com/nameidmappingserivce/REDIRECT")
+		def aidrs = new AssertionIDRequestService(descriptor:idp,active:true, approved:true, binding:httpRedirect, location:"https://test.example.com/assertionidrequestservice/REDIRECT")
 		
 		def ba1 =  new AttributeBase(oid:'2.5.4.3', nameFormat: attrUri, legacyName:'urn:mace:dir:attribute-def:cn', name:'commonName', description:'An individuals common name, typically their full name. This attribute should not be used in transactions where it is desirable to maintain user anonymity.', category:coreCategory, specificationRequired:false).save()
 		def ba2 =  new AttributeBase(oid:'2.5.4.4', nameFormat: attrUri, legacyName:'urn:mace:dir:attribute-def:sn', name:'surname', description:'Surname or family name', category:optionalCategory, specificationRequired:false).save()
@@ -542,9 +553,9 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		idp.addToManageNameIDServices(mnid)
 		idp.addToNameIDMappingServices(nidms)
 		idp.addToAssertionIDRequestServices(aidrs)
-		idp.addToNameIDFormats(nidf)
-		
+		idp.addToNameIDFormats(nidf)		
 		idp.addToSingleSignOnServices(sso)
+        
 		idp.addToAttributes(attr1)
 		idp.addToAttributes(attr2)
 		idp.addToAttributes(attr3)
@@ -555,12 +566,12 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		when:
 		metadataGenerationService.idpSSODescriptor(builder, false, false, true, idp)
 		def xml = writer.toString()
-		def strippedXML = xml.replace("shibmd:", "").replace("saml:", "")	// dodgy as hell but easiest option presently as namespaces causes problems in validation
+		def strippedXML = xml.replace("shibmd:", "").replace("saml:", "")	// dodgy as hell but easiest option presently
+        def diff = new Diff(expected, strippedXML)
 
 		then:
 		xml.contains('saml:Attribute')
 		xml.contains('shibmd:Scope')
-		def diff = new Diff(expected, strippedXML)
 		diff.similar()
 	}
 
@@ -595,34 +606,41 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def saml1Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:1.1:protocol urn:mace:shibboleth:1.0')
 		def protocolSupportEnumerations = [saml1Prot, saml2Prot]
 		
-		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
+		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: "http://example.com")
 		def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.example.com/myuniqueID", active:true, approved:true)
 		
-		def email = MailURI.build(uri:"test@example.com")
-		def home = TelNumURI.build(uri:"(07) 1111 1111")
-		def work = TelNumURI.build(uri:"(567) 222 22222")
-		def mobile = TelNumURI.build(uri:"0413 867 208")
+		def email = "test@example.com"
+		def home = "(07) 1111 1111"
+		def work = "(567) 222 22222"
+		def mobile = "0413 867 208"
 		def contact = Contact.build(givenName:"Test", surname:"User", email:email, homePhone:home, workPhone:work, mobilePhone:mobile)
 		def admin = ContactType.build(name:"administrative")
 		def contactPerson = ContactPerson.build(contact:contact, type:admin)
+
+        def sp = SPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, organization:organization, entityDescriptor:entityDescriptor, approved:true, active:true)
 		
-		def certificate = Certificate.build(data:loadPK())
-		def keyInfo = KeyInfo.build(keyName:"key1", certificate:certificate)
-		def encryptionMethod = EncryptionMethod.build(algorithm:"http://www.w3.org/2001/04/xmlenc#tripledes-cbc")
-		def keyDescriptor = KeyDescriptor.build(keyInfo:keyInfo, encryptionMethod:encryptionMethod, keyType:KeyTypes.encryption)
+        def certificate = new Certificate(data:loadPK())
+        def keyInfo = new KeyInfo(keyName:"key1", certificate:certificate)
+        def encryptionMethod = new EncryptionMethod(algorithm:"http://www.w3.org/2001/04/xmlenc#tripledes-cbc")
+        def keyDescriptor = new KeyDescriptor(roleDescriptor:sp, keyType:KeyTypes.encryption, keyInfo:keyInfo, encryptionMethod:encryptionMethod)
+
+        def certificate2 = new Certificate(data:loadPK2())
+        def keyInfo2 = new KeyInfo(keyName:"key2", certificate:certificate2)
+        def keyDescriptor2 = new KeyDescriptor(roleDescriptor:sp, keyType:KeyTypes.signing, keyInfo:keyInfo2)
+
+        keyDescriptor.id = 1
+        keyDescriptor2.id = 2
 		
-		def certificate2 = Certificate.build(data:loadPK())
-		def keyInfo2 = KeyInfo.build(keyName:"key2", certificate:certificate)
-		def keyDescriptor2 = KeyDescriptor.build(keyInfo:keyInfo2, keyType:KeyTypes.signing)
+		def ars = new ArtifactResolutionService(index:200, active:true, approved:true, isDefault:true, binding:soap, location:"https://test.example.com/ars/artifact")
+		def ars2 = new ArtifactResolutionService(index:201, active:true, approved:true, isDefault:false, binding:soap, location:"https://test.example.com/ars/artifact2")
+        ars.id = 1
+        ars2.id = 2
 		
-		def ars = ArtifactResolutionService.build(index:200, active:true, approved:true, isDefault:true, binding:soap, location:new UrlURI(uri:"https://test.example.com/ars/artifact"))
-		def ars2 = ArtifactResolutionService.build(index:201, active:true, approved:true, isDefault:false, binding:soap, location:new UrlURI(uri:"https://test.example.com/ars/artifact2"))
-		
-		def slo = SingleLogoutService.build(active:true, approved:true, binding:httpPost, location:new UrlURI(uri:"https://test.example.com/slo/POST"))
-		def mnid = ManageNameIDService.build(active:true, approved:true, binding:httpRedirect, location:new UrlURI(uri:"https://test.example.com/mnid/REDIRECT"))
+		def slo = new SingleLogoutService(active:true, approved:true, binding:httpPost, location:"https://test.example.com/slo/POST")
+		def mnid = new ManageNameIDService(active:true, approved:true, binding:httpRedirect, location:"https://test.example.com/mnid/REDIRECT")
 		def nidf = SamlURI.build(uri:"supported:nameid:format:urn")
 		
-		def acs = AssertionConsumerService.build(index:300, active:true, approved:true, binding:httpArtifact, location:new UrlURI(uri:"https://test.example.com/acs/ART"))
+		def acs = new AssertionConsumerService(index:300, active:true, approved:true, binding:httpArtifact, location:"https://test.example.com/acs/ART")
 		
 		def ba1 =  new AttributeBase(oid:'2.5.4.3', nameFormat: attrUri, legacyName:'urn:mace:dir:attribute-def:cn', name:'commonName', description:'An individuals common name, typically their full name. This attribute should not be used in transactions where it is desirable to maintain user anonymity.', category:coreCategory, specificationRequired:false).save()
 		def ba2 =  new AttributeBase(oid:'2.5.4.4', nameFormat: attrUri, legacyName:'urn:mace:dir:attribute-def:sn', name:'surname', description:'Surname or family name', category:optionalCategory, specificationRequired:false).save()
@@ -650,7 +668,6 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		attrService.addToRequestedAttributes(attr4)
         attrService.addToRequestedAttributes(attr5) // should not appear - spec required but no values
 		
-		def sp = SPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, organization:organization, entityDescriptor:entityDescriptor, approved:true, active:true)
 		sp.addToKeyDescriptors(keyDescriptor)
 		sp.addToKeyDescriptors(keyDescriptor2)
 		sp.addToContacts(contactPerson)
@@ -684,34 +701,41 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def saml1Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:1.1:protocol urn:mace:shibboleth:1.0')
 		def protocolSupportEnumerations = [saml1Prot, saml2Prot]
 		
-		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
+		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: "http://example.com")
 		def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.example.com/myuniqueID", active:true, approved:true)
 		
-		def email = MailURI.build(uri:"test@example.com")
-		def home = TelNumURI.build(uri:"(07) 1111 1111")
-		def work = TelNumURI.build(uri:"(567) 222 22222")
-		def mobile = TelNumURI.build(uri:"0413 867 208")
+		def email = "test@example.com"
+		def home = "(07) 1111 1111"
+		def work = "(567) 222 22222"
+		def mobile = "0413 867 208"
 		def contact = Contact.build(givenName:"Test", surname:"User", email:email, homePhone:home, workPhone:work, mobilePhone:mobile)
 		def admin = ContactType.build(name:"administrative")
 		def contactPerson = ContactPerson.build(contact:contact, type:admin)
 		
-		def certificate = Certificate.build(data:loadPK())
-		def keyInfo = KeyInfo.build(keyName:"key1", certificate:certificate)
-		def encryptionMethod = EncryptionMethod.build(algorithm:"http://www.w3.org/2001/04/xmlenc#tripledes-cbc")
-		def keyDescriptor = KeyDescriptor.build(keyInfo:keyInfo, encryptionMethod:encryptionMethod, keyType:KeyTypes.encryption)
+        def sp = SPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, organization:organization, entityDescriptor:entityDescriptor, approved:true, active:true)
+
+        def certificate = new Certificate(data:loadPK())
+        def keyInfo = new KeyInfo(keyName:"key1", certificate:certificate)
+        def encryptionMethod = new EncryptionMethod(algorithm:"http://www.w3.org/2001/04/xmlenc#tripledes-cbc")
+        def keyDescriptor = new KeyDescriptor(roleDescriptor:sp, keyType:KeyTypes.encryption, keyInfo:keyInfo, encryptionMethod:encryptionMethod)
+
+        def certificate2 = new Certificate(data:loadPK2())
+        def keyInfo2 = new KeyInfo(keyName:"key2", certificate:certificate2)
+        def keyDescriptor2 = new KeyDescriptor(roleDescriptor:sp, keyType:KeyTypes.signing, keyInfo:keyInfo2)
+
+        keyDescriptor.id = 1
+        keyDescriptor2.id = 2
+        
+        def ars = new ArtifactResolutionService(index:200, active:true, approved:true, isDefault:true, binding:soap, location:"https://test.example.com/ars/artifact")
+        def ars2 = new ArtifactResolutionService(index:201, active:true, approved:true, isDefault:false, binding:soap, location:"https://test.example.com/ars/artifact2")
+        ars.id = 1
+        ars2.id = 2
 		
-		def certificate2 = Certificate.build(data:loadPK())
-		def keyInfo2 = KeyInfo.build(keyName:"key2", certificate:certificate)
-		def keyDescriptor2 = KeyDescriptor.build(keyInfo:keyInfo2, keyType:KeyTypes.signing)
-		
-		def ars = ArtifactResolutionService.build(index:200, active:true, approved:true, isDefault:true, binding:soap, location:new UrlURI(uri:"https://test.example.com/ars/artifact"))
-		def ars2 = ArtifactResolutionService.build(index:201, active:true, approved:true, isDefault:false, binding:soap, location:new UrlURI(uri:"https://test.example.com/ars/artifact2"))
-		
-		def slo = SingleLogoutService.build(active:true, approved:true, binding:httpPost, location:new UrlURI(uri:"https://test.example.com/slo/POST"))
-		def mnid = ManageNameIDService.build(active:true, approved:true, binding:httpRedirect, location:new UrlURI(uri:"https://test.example.com/mnid/REDIRECT"))
+		def slo = new SingleLogoutService(active:true, approved:true, binding:httpPost, location:"https://test.example.com/slo/POST")
+		def mnid = new ManageNameIDService(active:true, approved:true, binding:httpRedirect, location:"https://test.example.com/mnid/REDIRECT")
 		def nidf = SamlURI.build(uri:"supported:nameid:format:urn")
 		
-		def acs = AssertionConsumerService.build(index:300, active:true, approved:true, binding:httpArtifact, location:new UrlURI(uri:"https://test.example.com/acs/ART"))
+		def acs = AssertionConsumerService.build(index:300, active:true, approved:true, binding:httpArtifact, location:"https://test.example.com/acs/ART")
 		
 		def ba1 =  new AttributeBase(oid:'2.5.4.3', nameFormat: attrUri, legacyName:'urn:mace:dir:attribute-def:cn', name:'commonName', description:'An individuals common name, typically their full name. This attribute should not be used in transactions where it is desirable to maintain user anonymity.', category:coreCategory, specificationRequired:false).save()
 		def ba2 =  new AttributeBase(oid:'2.5.4.4', nameFormat: attrUri, legacyName:'urn:mace:dir:attribute-def:sn', name:'surname', description:'Surname or family name', category:optionalCategory, specificationRequired:false).save()
@@ -734,9 +758,8 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		attrService.addToRequestedAttributes(attr1)
 		attrService.addToRequestedAttributes(attr2)
 		attrService.addToRequestedAttributes(attr3)
-		attrService.addToRequestedAttributes(attr4)
+		attrService.addToRequestedAttributes(attr4)		
 		
-		def sp = SPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, organization:organization, entityDescriptor:entityDescriptor, approved:true, active:true)
 		sp.addToKeyDescriptors(keyDescriptor)
 		sp.addToKeyDescriptors(keyDescriptor2)
 		sp.addToContacts(contactPerson)
@@ -770,34 +793,41 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
         def saml1Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:1.1:protocol urn:mace:shibboleth:1.0')
         def protocolSupportEnumerations = [saml1Prot, saml2Prot]
         
-        def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
+        def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: "http://example.com")
         def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.example.com/myuniqueID", active:true, approved:true)
         
-        def email = MailURI.build(uri:"test@example.com")
-        def home = TelNumURI.build(uri:"(07) 1111 1111")
-        def work = TelNumURI.build(uri:"(567) 222 22222")
-        def mobile = TelNumURI.build(uri:"0413 867 208")
+        def email = "test@example.com"
+        def home = "(07) 1111 1111"
+        def work = "(567) 222 22222"
+        def mobile = "0413 867 208"
         def contact = Contact.build(givenName:"Test", surname:"User", email:email, homePhone:home, workPhone:work, mobilePhone:mobile)
         def admin = ContactType.build(name:"administrative")
         def contactPerson = ContactPerson.build(contact:contact, type:admin)
         
-        def certificate = Certificate.build(data:loadPK())
-        def keyInfo = KeyInfo.build(keyName:"key1", certificate:certificate)
-        def encryptionMethod = EncryptionMethod.build(algorithm:"http://www.w3.org/2001/04/xmlenc#tripledes-cbc")
-        def keyDescriptor = KeyDescriptor.build(keyInfo:keyInfo, encryptionMethod:encryptionMethod, keyType:KeyTypes.encryption)
+        def sp = SPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, organization:organization, entityDescriptor:entityDescriptor, approved:true, active:true)
+
+        def certificate = new Certificate(data:loadPK())
+        def keyInfo = new KeyInfo(keyName:"key1", certificate:certificate)
+        def encryptionMethod = new EncryptionMethod(algorithm:"http://www.w3.org/2001/04/xmlenc#tripledes-cbc")
+        def keyDescriptor = new KeyDescriptor(roleDescriptor:sp, keyType:KeyTypes.encryption, keyInfo:keyInfo, encryptionMethod:encryptionMethod)
+
+        def certificate2 = new Certificate(data:loadPK2())
+        def keyInfo2 = new KeyInfo(keyName:"key2", certificate:certificate2)
+        def keyDescriptor2 = new KeyDescriptor(roleDescriptor:sp, keyType:KeyTypes.signing, keyInfo:keyInfo2)
+
+        keyDescriptor.id = 1
+        keyDescriptor2.id = 2
         
-        def certificate2 = Certificate.build(data:loadPK())
-        def keyInfo2 = KeyInfo.build(keyName:"key2", certificate:certificate)
-        def keyDescriptor2 = KeyDescriptor.build(keyInfo:keyInfo2, keyType:KeyTypes.signing)
+        def ars = new ArtifactResolutionService(index:200, active:true, approved:true, isDefault:true, binding:soap, location:"https://test.example.com/ars/artifact")
+        def ars2 = new ArtifactResolutionService(index:201, active:true, approved:true, isDefault:false, binding:soap, location:"https://test.example.com/ars/artifact2")
+        ars.id = 1
+        ars2.id = 2
         
-        def ars = ArtifactResolutionService.build(index:200, active:true, approved:true, isDefault:true, binding:soap, location:new UrlURI(uri:"https://test.example.com/ars/artifact"))
-        def ars2 = ArtifactResolutionService.build(index:201, active:true, approved:true, isDefault:false, binding:soap, location:new UrlURI(uri:"https://test.example.com/ars/artifact2"))
-        
-        def slo = SingleLogoutService.build(active:true, approved:true, binding:httpPost, location:new UrlURI(uri:"https://test.example.com/slo/POST"))
-        def mnid = ManageNameIDService.build(active:true, approved:true, binding:httpRedirect, location:new UrlURI(uri:"https://test.example.com/mnid/REDIRECT"))
+        def slo = new SingleLogoutService(active:true, approved:true, binding:httpPost, location:"https://test.example.com/slo/POST")
+        def mnid = new ManageNameIDService(active:true, approved:true, binding:httpRedirect, location:"https://test.example.com/mnid/REDIRECT")
         def nidf = SamlURI.build(uri:"supported:nameid:format:urn")
         
-        def acs = AssertionConsumerService.build(index:300, active:true, approved:true, binding:httpArtifact, location:new UrlURI(uri:"https://test.example.com/acs/ART"))
+        def acs = new AssertionConsumerService(index:300, active:true, approved:true, binding:httpArtifact, location:"https://test.example.com/acs/ART")
         
         def ba1 =  new AttributeBase(oid:'2.5.4.3', nameFormat: attrUri, legacyName:'urn:mace:dir:attribute-def:cn', name:'commonName', description:'An individuals common name, typically their full name. This attribute should not be used in transactions where it is desirable to maintain user anonymity.', category:coreCategory, specificationRequired:false).save()
         def ba2 =  new AttributeBase(oid:'2.5.4.4', nameFormat: attrUri, legacyName:'urn:mace:dir:attribute-def:sn', name:'surname', description:'Surname or family name', category:optionalCategory, specificationRequired:false).save()
@@ -818,9 +848,8 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
         attrService.addToRequestedAttributes(attr1)
         attrService.addToRequestedAttributes(attr2)
         attrService.addToRequestedAttributes(attr3)
-        attrService.addToRequestedAttributes(attr4)
+        attrService.addToRequestedAttributes(attr4)  
         
-        def sp = SPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, organization:organization, entityDescriptor:entityDescriptor, approved:true, active:true)
         sp.addToKeyDescriptors(keyDescriptor)
         sp.addToKeyDescriptors(keyDescriptor2)
         sp.addToContacts(contactPerson)
@@ -854,34 +883,41 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
         def saml1Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:1.1:protocol urn:mace:shibboleth:1.0')
         def protocolSupportEnumerations = [saml1Prot, saml2Prot]
         
-        def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
+        def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: "http://example.com")
         def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.example.com/myuniqueID", active:true, approved:true)
         
-        def email = MailURI.build(uri:"test@example.com")
-        def home = TelNumURI.build(uri:"(07) 1111 1111")
-        def work = TelNumURI.build(uri:"(567) 222 22222")
-        def mobile = TelNumURI.build(uri:"0413 867 208")
+        def email = "test@example.com"
+        def home = "(07) 1111 1111"
+        def work = "(567) 222 22222"
+        def mobile = "0413 867 208"
         def contact = Contact.build(givenName:"Test", surname:"User", email:email, homePhone:home, workPhone:work, mobilePhone:mobile)
         def admin = ContactType.build(name:"administrative")
         def contactPerson = ContactPerson.build(contact:contact, type:admin)
         
-        def certificate = Certificate.build(data:loadPK())
-        def keyInfo = KeyInfo.build(keyName:"key1", certificate:certificate)
-        def encryptionMethod = EncryptionMethod.build(algorithm:"http://www.w3.org/2001/04/xmlenc#tripledes-cbc")
-        def keyDescriptor = KeyDescriptor.build(keyInfo:keyInfo, encryptionMethod:encryptionMethod, keyType:KeyTypes.encryption)
+        def sp = SPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, organization:organization, entityDescriptor:entityDescriptor, approved:true, active:true)
+
+        def certificate = new Certificate(data:loadPK())
+        def keyInfo = new KeyInfo(keyName:"key1", certificate:certificate)
+        def encryptionMethod = new EncryptionMethod(algorithm:"http://www.w3.org/2001/04/xmlenc#tripledes-cbc")
+        def keyDescriptor = new KeyDescriptor(roleDescriptor:sp, keyType:KeyTypes.encryption, keyInfo:keyInfo, encryptionMethod:encryptionMethod)
+
+        def certificate2 = new Certificate(data:loadPK2())
+        def keyInfo2 = new KeyInfo(keyName:"key2", certificate:certificate2)
+        def keyDescriptor2 = new KeyDescriptor(roleDescriptor:sp, keyType:KeyTypes.signing, keyInfo:keyInfo2)
+
+        keyDescriptor.id = 1
+        keyDescriptor2.id = 2
         
-        def certificate2 = Certificate.build(data:loadPK())
-        def keyInfo2 = KeyInfo.build(keyName:"key2", certificate:certificate)
-        def keyDescriptor2 = KeyDescriptor.build(keyInfo:keyInfo2, keyType:KeyTypes.signing)
+        def ars = new ArtifactResolutionService(index:200, active:true, approved:true, isDefault:true, binding:soap, location:"https://test.example.com/ars/artifact")
+        def ars2 = new ArtifactResolutionService(index:201, active:true, approved:true, isDefault:false, binding:soap, location:"https://test.example.com/ars/artifact2")
+        ars.id = 1
+        ars2.id = 2
         
-        def ars = ArtifactResolutionService.build(index:200, active:true, approved:true, isDefault:true, binding:soap, location:new UrlURI(uri:"https://test.example.com/ars/artifact"))
-        def ars2 = ArtifactResolutionService.build(index:201, active:true, approved:true, isDefault:false, binding:soap, location:new UrlURI(uri:"https://test.example.com/ars/artifact2"))
-        
-        def slo = SingleLogoutService.build(active:true, approved:true, binding:httpPost, location:new UrlURI(uri:"https://test.example.com/slo/POST"))
-        def mnid = ManageNameIDService.build(active:true, approved:true, binding:httpRedirect, location:new UrlURI(uri:"https://test.example.com/mnid/REDIRECT"))
+        def slo = new SingleLogoutService(active:true, approved:true, binding:httpPost, location:"https://test.example.com/slo/POST")
+        def mnid = new ManageNameIDService(active:true, approved:true, binding:httpRedirect, location:"https://test.example.com/mnid/REDIRECT")
         def nidf = SamlURI.build(uri:"supported:nameid:format:urn")
         
-        def acs = AssertionConsumerService.build(index:300, active:true, approved:true, binding:httpArtifact, location:new UrlURI(uri:"https://test.example.com/acs/ART"))
+        def acs = AssertionConsumerService.build(index:300, active:true, approved:true, binding:httpArtifact, location:"https://test.example.com/acs/ART")
         
         def ba1 =  new AttributeBase(oid:'2.5.4.3', nameFormat: attrUri, legacyName:'urn:mace:dir:attribute-def:cn', name:'commonName', description:'An individuals common name, typically their full name. This attribute should not be used in transactions where it is desirable to maintain user anonymity.', category:coreCategory, specificationRequired:false).save()
         def ba2 =  new AttributeBase(oid:'2.5.4.4', nameFormat: attrUri, legacyName:'urn:mace:dir:attribute-def:sn', name:'surname', description:'Surname or family name', category:optionalCategory, specificationRequired:false).save()
@@ -893,7 +929,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
         attrService.addToServiceNames("Test Name 2")
         attrService.addToServiceDescriptions("This is a great description")
         
-        def sp = SPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, organization:organization, entityDescriptor:entityDescriptor, approved:true, active:true)
+
         sp.addToKeyDescriptors(keyDescriptor)
         sp.addToKeyDescriptors(keyDescriptor2)
         sp.addToContacts(contactPerson)
@@ -951,28 +987,33 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def saml1Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:1.1:protocol urn:mace:shibboleth:1.0')
 		def protocolSupportEnumerations = [saml1Prot, saml2Prot]
 
-		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
-		def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.com", active:true, approved:true)
+		def organization = new Organization(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: "http://example.com")
+		def entityDescriptor = new EntityDescriptor(organization:organization, entityID:"https://test.com", active:true, approved:true)
 		
-		def email = MailURI.build(uri:"test@example.com")
-		def home = TelNumURI.build(uri:"(07) 1111 1111")
-		def work = TelNumURI.build(uri:"(567) 222 22222")
-		def mobile = TelNumURI.build(uri:"0413 867 208")
+		def email = "test@example.com"
+		def home = "(07) 1111 1111"
+		def work = "(567) 222 22222"
+		def mobile = "0413 867 208"
 		def contact = Contact.build(givenName:"Test", surname:"User", email:email, homePhone:home, workPhone:work, mobilePhone:mobile)
 		def admin = ContactType.build(name:"administrative")
 		def contactPerson = ContactPerson.build(contact:contact, type:admin)
 
-		def certificate = Certificate.build(data:loadPK())
-		def keyInfo = KeyInfo.build(keyName:"key1", certificate:certificate)
-		def encryptionMethod = EncryptionMethod.build(algorithm:"http://www.w3.org/2001/04/xmlenc#tripledes-cbc")
-		def keyDescriptor = KeyDescriptor.build(keyInfo:keyInfo, encryptionMethod:encryptionMethod, keyType:KeyTypes.encryption)
+        def idp = new IDPSSODescriptor(protocolSupportEnumerations:protocolSupportEnumerations, entityDescriptor:entityDescriptor, organization:organization, approved:true, active:true, scope:"test.com")
 
-		def certificate2 = Certificate.build(data:loadPK())
-		def keyInfo2 = KeyInfo.build(keyName:"key2", certificate:certificate)
-		def keyDescriptor2 = KeyDescriptor.build(keyInfo:keyInfo2, keyType:KeyTypes.signing)
+        def certificate = new Certificate(data:loadPK())
+        def keyInfo = new KeyInfo(keyName:"key1", certificate:certificate)
+        def encryptionMethod = new EncryptionMethod(algorithm:"http://www.w3.org/2001/04/xmlenc#tripledes-cbc")
+        def keyDescriptor = new KeyDescriptor(roleDescriptor:idp, keyType:KeyTypes.encryption, keyInfo:keyInfo, encryptionMethod:encryptionMethod)
+
+        def certificate2 = new Certificate(data:loadPK())
+        def keyInfo2 = new KeyInfo(keyName:"key2", certificate:certificate2)
+        def keyDescriptor2 = new KeyDescriptor(roleDescriptor:idp, keyType:KeyTypes.signing, keyInfo:keyInfo2)
+
+        keyDescriptor.id = 1
+        keyDescriptor2.id = 2
 		
 		def nidf = new SamlURI(uri:"supported:nameid:format:urn")
-		def aidrs = new AssertionIDRequestService(active:true, approved:true, binding:httpRedirect, location:new UrlURI(uri:"https://test.example.com/assertionidrequestservice/REDIRECT"))
+		def aidrs = new AssertionIDRequestService(active:true, approved:true, binding:httpRedirect, location:"https://test.example.com/assertionidrequestservice/REDIRECT")
 		
 		def ba1 =  new AttributeBase(oid:'2.5.4.3', nameFormat: attrUri, legacyName:'urn:mace:dir:attribute-def:cn', name:'commonName', description:'An individuals common name, typically their full name. This attribute should not be used in transactions where it is desirable to maintain user anonymity.', category:coreCategory, specificationRequired:false).save()
 		def ba2 =  new AttributeBase(oid:'2.5.4.4', nameFormat: attrUri, legacyName:'urn:mace:dir:attribute-def:sn', name:'surname', description:'Surname or family name', category:optionalCategory, specificationRequired:false).save()
@@ -987,7 +1028,6 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		attr4.addToValues(new AttributeValue(value:'urn:mace:test:attr:value:2'))
 		attr4.addToValues(new AttributeValue(value:'urn:mace:test:attr:value:3'))
 		
-		def idp = IDPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, entityDescriptor:entityDescriptor, organization:organization, approved:true, active:true)
 		idp.addToKeyDescriptors(keyDescriptor)
 		idp.addToKeyDescriptors(keyDescriptor2)
 		idp.addToContacts(contactPerson)
@@ -1000,7 +1040,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		idp.addToAttributes(attr3)
 		idp.addToAttributes(attr4)
 
-		def aa = AttributeAuthorityDescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, entityDescriptor:entityDescriptor, organization:organization, approved:true, active:true)
+		def aa = new AttributeAuthorityDescriptor(protocolSupportEnumerations:protocolSupportEnumerations, entityDescriptor:entityDescriptor, organization:organization, approved:true, active:true)
 		aa.collaborator = idp
 		aa
 		
@@ -1028,30 +1068,33 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def saml1Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:1.1:protocol urn:mace:shibboleth:1.0')
 		def protocolSupportEnumerations = [saml1Prot, saml2Prot]
 
-		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: new UrlURI(uri:"http://example.com"))
-		def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.com", active:true, approved:true)
+		def organization = new Organization(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: "http://example.com")
+		def entityDescriptor = new EntityDescriptor(organization:organization, entityID:"https://test.com", active:true, approved:true)
 		
-		def email = MailURI.build(uri:"test@example.com")
-		def home = TelNumURI.build(uri:"(07) 1111 1111")
-		def work = TelNumURI.build(uri:"(567) 222 22222")
-		def mobile = TelNumURI.build(uri:"0413 867 208")
+		def email = "test@example.com"
+		def home = "(07) 1111 1111"
+		def work = "(567) 222 22222"
+		def mobile = "0413 867 208"
 		def contact = Contact.build(givenName:"Test", surname:"User", email:email, homePhone:home, workPhone:work, mobilePhone:mobile)
 		def admin = ContactType.build(name:"administrative")
 		def contactPerson = ContactPerson.build(contact:contact, type:admin)
 		
-		def aa = AttributeAuthorityDescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, entityDescriptor:entityDescriptor, organization:organization, approved:true, active:true)
+		def aa = new AttributeAuthorityDescriptor(protocolSupportEnumerations:protocolSupportEnumerations, entityDescriptor:entityDescriptor, organization:organization, approved:true, active:true, scope:"test.com")
 
-		def certificate = Certificate.build(data:loadPK())
-		def keyInfo = KeyInfo.build(keyName:"key1", certificate:certificate)
-		def encryptionMethod = EncryptionMethod.build(algorithm:"http://www.w3.org/2001/04/xmlenc#tripledes-cbc")
-		def keyDescriptor = KeyDescriptor.build(keyInfo:keyInfo, encryptionMethod:encryptionMethod, keyType:KeyTypes.encryption)
+        def certificate = new Certificate(data:loadPK())
+        def keyInfo = new KeyInfo(keyName:"key1", certificate:certificate)
+        def encryptionMethod = new EncryptionMethod(algorithm:"http://www.w3.org/2001/04/xmlenc#tripledes-cbc")
+        def keyDescriptor = new KeyDescriptor(roleDescriptor:aa, keyType:KeyTypes.encryption, keyInfo:keyInfo, encryptionMethod:encryptionMethod)
 
-		def certificate2 = Certificate.build(data:loadPK())
-		def keyInfo2 = KeyInfo.build(keyName:"key2", certificate:certificate)
-		def keyDescriptor2 = KeyDescriptor.build(keyInfo:keyInfo2, keyType:KeyTypes.signing)
+        def certificate2 = new Certificate(data:loadPK())
+        def keyInfo2 = new KeyInfo(keyName:"key2", certificate:certificate2)
+        def keyDescriptor2 = new KeyDescriptor(roleDescriptor:aa, keyType:KeyTypes.signing, keyInfo:keyInfo2)
+
+        keyDescriptor.id = 1
+        keyDescriptor2.id = 2
 		
 		def nidf = new SamlURI(uri:"supported:nameid:format:urn")
-		def aidrs = new AssertionIDRequestService(active:true, approved:true, binding:httpRedirect, location:new UrlURI(uri:"https://test.example.com/assertionidrequestservice/REDIRECT"))
+		def aidrs = new AssertionIDRequestService(active:true, approved:true, binding:httpRedirect, location:"https://test.example.com/assertionidrequestservice/REDIRECT")
 		
 		def ba1 =  new AttributeBase(oid:'2.5.4.3', nameFormat: attrUri, legacyName:'urn:mace:dir:attribute-def:cn', name:'commonName', description:'An individuals common name, typically their full name. This attribute should not be used in transactions where it is desirable to maintain user anonymity.', category:coreCategory, specificationRequired:false).save()
 		def ba2 =  new AttributeBase(oid:'2.5.4.4', nameFormat: attrUri, legacyName:'urn:mace:dir:attribute-def:sn', name:'surname', description:'Surname or family name', category:optionalCategory, specificationRequired:false).save()
