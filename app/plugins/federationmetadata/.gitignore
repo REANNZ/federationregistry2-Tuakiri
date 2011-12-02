@@ -10,7 +10,7 @@ docs.tar.gz
 *.iml
 *.iws
 *.war
-web-app/plugins/*
+web-app/*
 target/
 test/reports/*
 unzipped/*
