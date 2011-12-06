@@ -94,8 +94,8 @@ class WorkflowProcessService {
 			log.error "The process definition for ${processName} was not found, no such process by name or no process definition is active"
 			return [false, null]
 		}
-
-		def processInstance = new ProcessInstance(process: process, description: instanceDescription, status: ProcessStatus.INPROGRESS, priority: priority ?:ProcessPriority.LOW, params:params)
+		def processInstance = new ProcessInstance(process: process, description: instanceDescription, status: ProcessStatus.INPROGRESS, priority: priority ?:ProcessPriority.LOW)
+        processInstance.params = params
 		process.addToInstances(processInstance)
 		
 		if(!process.save()) {
