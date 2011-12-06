@@ -1,0 +1,18 @@
+
+# OS and editors
+.DS_Store
+fr.sublime-project
+fr.sublime-workspace
+.classpath
+.project
+.settings
+*.iws
+
+# Grails
+stacktrace.log
+test/reports
+web-app
+target
+*.war
+*DB*
+
