@@ -12,17 +12,29 @@ hibernate {
 // environment specific settings
 environments {
 	development {
-		dataSource {
-			dbCreate = "create-drop" // one of 'create', 'create-drop','update'
-			url = "jdbc:hsqldb:mem:devDB"
-		}
-	}
+        dataSource {
+            pooled = true
+            driverClassName = "org.hsqldb.jdbcDriver"
+            username = "sa"
+            password = ""
+            
+            dbCreate = "create" // one of 'create', 'create-drop','update'
+            url = "jdbc:hsqldb:mem:devDB"
+        }
+    }
 	test {
-		dataSource {
-			dbCreate = "update"
-			url = "jdbc:hsqldb:mem:testDb"
-		}
-	}
+        dataSource {
+            pooled = true
+            driverClassName = "com.mysql.jdbc.Driver"
+            dialect = org.hibernate.dialect.MySQL5InnoDBDialect
+            dbCreate = "create-drop"
+            loggingSql = false
+            
+            url = "jdbc:mysql://localhost/federationregistry_testapp_${System.getenv('fr_testdatabase')}"
+            username = "fr"
+            password =  "password"
+        }
+    }
 	production {
 		dataSource {
 			dbCreate = "update"
