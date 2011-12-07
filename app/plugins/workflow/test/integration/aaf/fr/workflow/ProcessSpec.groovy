@@ -8,7 +8,7 @@ class ProcessSpec extends IntegrationSpec {
 	
 	def "Ensure process with no tasks is invalid"() {
 		setup: 
-		def process = new Process(name:'test process', description:'test process', definition:'empty definition', processVersion:1, creator: new Subject(username:'testusername'), tasks:tasks)
+		def process = new Process(name:'test process', description:'test process', definition:'empty definition', processVersion:1, creator: new Subject(principal:'testprincipal'), tasks:tasks)
 		
 		when:
 		def result = process.validate()
@@ -22,7 +22,7 @@ class ProcessSpec extends IntegrationSpec {
 	
 	def "Ensure process with no finish task is invalid"() {
 		setup: 
-		def process = new Process(name:'test process', description:'test process', definition:'empty definition', processVersion:1, creator: new Subject(username:'testusername'))
+		def process = new Process(name:'test process', description:'test process', definition:'empty definition', processVersion:1, creator: new Subject(principal:'testprincipal'))
 		
 		def taskRejection = new TaskRejection(name:'test rejection', description:'test rejection description').addToStart('test2')
 		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome').addToStart('test2')
@@ -50,7 +50,7 @@ class ProcessSpec extends IntegrationSpec {
 	
 	def "Ensure process with tasks that depend on tasks not valid to the process are invalid"() {
 		setup: 
-		def process = new Process(name:'test process', description:'test process', definition:'empty definition', processVersion:1, creator: new Subject(username:'testusername'))
+		def process = new Process(name:'test process', description:'test process', definition:'empty definition', processVersion:1, creator: new Subject(principal:'testprincipal'))
 		def task = new Task(name:'test', description:'test description', finishOnThisTask:false)
 		def task2 = new Task(name:'test2', description:'test description2', finishOnThisTask:false)
 		task.addToApprovers('userID')
@@ -72,7 +72,7 @@ class ProcessSpec extends IntegrationSpec {
 	
 	def "Ensure process with rejections that depend on starting existing tasks are valid"() {
 		setup: 
-		def process = new Process(name:'test process', description:'test process', definition:'empty definition', processVersion:1, creator: new Subject(username:'testusername'))
+		def process = new Process(name:'test process', description:'test process', definition:'empty definition', processVersion:1, creator: new Subject(principal:'testprincipal'))
 		
 		def taskRejection = new TaskRejection(name:'test rejection', description:'test rejection description').addToStart('test3')
 		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome').addToStart('test2')
@@ -105,7 +105,7 @@ class ProcessSpec extends IntegrationSpec {
 	
 	def "Ensure process with rejections that depend on starting non-existing tasks are invalid"() {
 		setup: 
-		def process = new Process(name:'test process', description:'test process', definition:'empty definition', processVersion:1, creator: new Subject(username:'testusername'))
+		def process = new Process(name:'test process', description:'test process', definition:'empty definition', processVersion:1, creator: new Subject(principal:'testprincipal'))
 		
 		def taskRejection = new TaskRejection(name:'test rejection', description:'test rejection description').addToStart('noSuchTask')
 		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome').addToStart('test2')
@@ -139,7 +139,7 @@ class ProcessSpec extends IntegrationSpec {
 	
 	def "Ensure process with rejections that depend on terminating existing tasks are valid"() {
 		setup: 
-		def process = new Process(name:'test process', description:'test process', definition:'empty definition', processVersion:1, creator: new Subject(username:'testusername'))
+		def process = new Process(name:'test process', description:'test process', definition:'empty definition', processVersion:1, creator: new Subject(principal:'testprincipal'))
 		
 		def taskRejection = new TaskRejection(name:'test rejection', description:'test rejection description').addToStart('test3')
 		taskRejection.addToTerminate('test2')
@@ -172,7 +172,7 @@ class ProcessSpec extends IntegrationSpec {
 	
 	def "Ensure process with rejections that depend on terminating non existant tasks are invalid"() {
 		setup: 
-		def process = new Process(name:'test process', description:'test process', definition:'empty definition', processVersion:1, creator: new Subject(username:'testusername'))
+		def process = new Process(name:'test process', description:'test process', definition:'empty definition', processVersion:1, creator: new Subject(principal:'testprincipal'))
 		
 		def taskRejection = new TaskRejection(name:'test rejection', description:'test rejection description').addToStart('test3')
 		taskRejection.addToTerminate('noSuchTask')
@@ -206,7 +206,7 @@ class ProcessSpec extends IntegrationSpec {
 	
 	def "Ensure process with outcomes that depend on starting existing tasks are valid"() {
 		setup: 
-		def process = new Process(name:'test process', description:'test process', definition:'empty definition', processVersion:1, creator: new Subject(username:'testusername'))
+		def process = new Process(name:'test process', description:'test process', definition:'empty definition', processVersion:1, creator: new Subject(principal:'testprincipal'))
 		
 		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome').addToStart('test2')
 		def task = new Task(name:'test', description:'test description', finishOnThisTask:false)
@@ -234,7 +234,7 @@ class ProcessSpec extends IntegrationSpec {
 	
 	def "Ensure process with outcomes that depend on starting non-existing tasks are invalid"() {
 		setup: 
-		def process = new Process(name:'test process', description:'test process', definition:'empty definition', processVersion:1, creator: new Subject(username:'testusername'))
+		def process = new Process(name:'test process', description:'test process', definition:'empty definition', processVersion:1, creator: new Subject(principal:'testprincipal'))
 		
 		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome').addToStart('noSuchTask')
 		def task = new Task(name:'test', description:'test description', finishOnThisTask:false)
@@ -263,7 +263,7 @@ class ProcessSpec extends IntegrationSpec {
 	
 	def "Ensure process with outcomes that depend on terminating existing tasks are valid"() {
 		setup: 
-		def process = new Process(name:'test process', description:'test process', definition:'empty definition', processVersion:1, creator: new Subject(username:'testusername'))
+		def process = new Process(name:'test process', description:'test process', definition:'empty definition', processVersion:1, creator: new Subject(principal:'testprincipal'))
 		
 		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome').addToStart('test2')
 		taskOutcome.addToTerminate('test')
@@ -292,7 +292,7 @@ class ProcessSpec extends IntegrationSpec {
 	
 	def "Ensure process with outcomes that depend on termininating non-existing tasks are invalid"() {
 		setup: 
-		def process = new Process(name:'test process', description:'test process', definition:'empty definition', processVersion:1, creator: new Subject(username:'testusername'))
+		def process = new Process(name:'test process', description:'test process', definition:'empty definition', processVersion:1, creator: new Subject(principal:'testprincipal'))
 		
 		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome').addToStart('test2')
 		taskOutcome.addToTerminate('noSuchTask')

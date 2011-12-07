@@ -26,7 +26,7 @@
 					</tr>
 					<tr>
 						<th><g:message code="label.creator" /></th>
-						<td><g:link controller="user" action="show" id="${script.creator.id}">${script.creator.profile?.fullName ?: script.creator.username}</g:link></td>
+						<td><g:link controller="user" action="show" id="${script.creator.id}">${script.creator.profile?.fullName ?: script.creator.principal}</g:link></td>
 					</tr>
 					<tr>
 						<th><g:message code="label.definition" /></th>

@@ -18,7 +18,7 @@ class WorkflowProcessController {
 			[processList: processList]
 		}
 		else {
-			log.warn("Attempt to list workflow processes by $authenticatedUser was denied, incorrect permission set")
+			log.warn("Attempt to list workflow processes by $principal was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}
@@ -29,7 +29,7 @@ class WorkflowProcessController {
 			[process: process]
 		}
 		else {
-			log.warn("Attempt to create workflow process by $authenticatedUser was denied, incorrect permission set")
+			log.warn("Attempt to create workflow process by $principal was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}
@@ -56,7 +56,7 @@ class WorkflowProcessController {
 					return
 				}
 		
-				log.info "$authenticatedUser created $process"
+				log.info "$principal created $process"
 				redirect action: "show", id: process.id
 			}
 			catch(Exception e) {
@@ -67,7 +67,7 @@ class WorkflowProcessController {
 			}
 		}
 		else {
-			log.warn("Attempt to save workflow process by $authenticatedUser was denied, incorrect permission set")
+			log.warn("Attempt to save workflow process by $principal was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}
@@ -92,7 +92,7 @@ class WorkflowProcessController {
 			[process:process]
 		}
 		else {
-			log.warn("Attempt to view workflow process by $authenticatedUser was denied, incorrect permission set")
+			log.warn("Attempt to view workflow process by $principal was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}
@@ -116,7 +116,7 @@ class WorkflowProcessController {
 			[process:process]
 		}
 		else {
-			log.warn("Attempt to edit $process by $authenticatedUser was denied, incorrect permission set")
+			log.warn("Attempt to edit $process by $principal was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}
@@ -140,7 +140,7 @@ class WorkflowProcessController {
 		if(SecurityUtils.subject.isPermitted("workflow:process:${process.id}:update")) {
 			def updated, process_
 			try {
-				log.info "$authenticatedUser is updating $process"
+				log.info "$principal is updating $process"
 				(updated, process_) = workflowProcessService.update(process.name, params.code)
 		
 				if(!updated) {
@@ -153,7 +153,7 @@ class WorkflowProcessController {
 					return
 				}
 		
-				log.info "$authenticatedUser updated $process_"
+				log.info "$principal updated $process_"
 				redirect action: "show", id: process_.id
 			
 			}
@@ -164,7 +164,7 @@ class WorkflowProcessController {
 			}
 		}
 		else {
-			log.warn("Attempt to update $process by $authenticatedUser was denied, incorrect permission set")
+			log.warn("Attempt to update $process by $principal was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}

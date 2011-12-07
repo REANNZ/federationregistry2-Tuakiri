@@ -7,7 +7,7 @@ import aaf.fr.identity.Subject
 class TaskSpec extends IntegrationSpec {
 	static transactional = true
 	
-	def "Ensure non finish task with no approver, approverRoles, approverGroups or execute fails"() {
+	def "Ensure non finish task with no approver, approverRoles or execute fails"() {
 		setup: 
 		def process = new Process(name:'test process', description:'test process')
 		def task = new Task(name:'test', description:'test description', finishOnThisTask:false, process:process)
@@ -22,7 +22,6 @@ class TaskSpec extends IntegrationSpec {
 		!result
 		task.errors.getFieldError('execute').code == 'task.validation.invalid.directive.set'
 		task.errors.getFieldError('approvers').code == 'task.validation.directives.approvers.invalid'
-		task.errors.getFieldError('approverGroups').code == 'task.validation.directives.approvers.invalid'
 		task.errors.getFieldError('approverRoles').code == 'task.validation.directives.approvers.invalid'
 	}
 	
@@ -35,23 +34,6 @@ class TaskSpec extends IntegrationSpec {
 		def task2 = new Task(name:'test2', description:'test2 description', finishOnThisTask:true, process:process)
 		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome').addToStart('test2')
 		task.outcomes.put("testOutcomeVal", taskOutcome)
-		
-		when:
-		def result = task.validate()
-		
-		then:
-		result
-	}
-	
-	def "Ensure non finish task with only approverGroup is valid"() {
-		setup: 
-		def process = new Process(name:'test process', description:'test process')
-		def task = new Task(name:'test', description:'test description', finishOnThisTask:false, process:process)
-		task.addToApproverGroups('userID')
-		task.rejections.put('testReject', new TaskRejection(name:'test rejection', description:'test rejection description').addToStart('test'))
-		def task2 = new Task(name:'test2', description:'test2 description', finishOnThisTask:true, process:process)
-		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome').addToStart('test2')
-		task.outcomes.put('testOutcomeVal', taskOutcome)
 		
 		when:
 		def result = task.validate()
@@ -94,23 +76,6 @@ class TaskSpec extends IntegrationSpec {
 		task.errors.getFieldError('rejections').code == 'task.validation.approval.rejections.invalid.count'
 	}
 	
-	def "Ensure non finish task with approverGroup but no reject is invalid"() {
-		setup: 
-		def process = new Process(name:'test process', description:'test process')
-		def task = new Task(name:'test', description:'test description', finishOnThisTask:false, process:process)
-		task.addToApproverGroups('userID')
-		def task2 = new Task(name:'test2', description:'test2 description', finishOnThisTask:true, process:process)
-		def taskOutcome = new TaskOutcome(name:'testOutcomeVal', description:'testing outcome').addToStart('test2')
-		task.outcomes.put("testOutcomeVal", taskOutcome)
-		
-		when:
-		def result = task.validate()
-		
-		then:
-		!result
-		task.errors.getFieldError('rejections').code == 'task.validation.approval.rejections.invalid.count'
-	}
-	
 	def "Ensure non finish task with approverRole but no reject is invalid"() {
 		setup: 
 		def process = new Process(name:'test process', description:'test process')
@@ -133,21 +98,6 @@ class TaskSpec extends IntegrationSpec {
 		def process = new Process(name:'test process', description:'test process')
 		def task = new Task(name:'test', description:'test description', finishOnThisTask:false, process:process)
 		task.addToApprovers('userID')
-		task.rejections.put('testReject', new TaskRejection(name:'test rejection', description:'test rejection description').addToStart('test'))
-		
-		when:
-		def result = task.validate()
-		
-		then:
-		!result
-		task.errors.getFieldError('outcomes').code == 'task.validation.outcomes.approvalonly.invalid.count'
-	}
-	
-	def "Ensure non finish task with approverGroups but no outcome is invalid"() {
-		setup: 
-		def process = new Process(name:'test process', description:'test process')
-		def task = new Task(name:'test', description:'test description', finishOnThisTask:false, process:process)
-		task.addToApproverGroups('userID')
 		task.rejections.put('testReject', new TaskRejection(name:'test rejection', description:'test rejection description').addToStart('test'))
 		
 		when:
@@ -258,7 +208,7 @@ class TaskSpec extends IntegrationSpec {
 	
 	def "Ensure executable task defining script is valid"() {
 		setup: 
-		def user = new Subject(username:'testuser')
+		def user = new Subject(principal:'testuser', email:'test@testdomain.com')
 		user.save()
 		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:user)
 		testScript.save()

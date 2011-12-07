@@ -2,15 +2,14 @@ package aaf.fr.workflow
 
 class Task {
 
-    String name
+  String name
 	String description
 	
 	Map execute = [:]
-   	Map outcomes = [:]
+  Map outcomes = [:]
 	Map rejections = [:]
 	
 	List approverRoles = []
-	List approverGroups = []
 	List approvers = []
 	List dependenices = []
    	
@@ -24,7 +23,6 @@ class Task {
 						outcomes: TaskOutcome,
 						dependencies: String,
 						approverRoles: String,
-						approverGroups: String,
 						approvers: String,
 						execute: String
 	]
@@ -39,9 +37,6 @@ class Task {
 			obj.validateExecution()
 		})
 		approvers( validator: { val, obj ->
-			!obj.ensureMinimalDirectives() ? ['task.validation.directives.approvers.invalid', name] : true
-		})
-		approverGroups( validator: { val, obj ->
 			!obj.ensureMinimalDirectives() ? ['task.validation.directives.approvers.invalid', name] : true
 		})
 		approverRoles( validator: { val, obj ->
@@ -61,7 +56,7 @@ class Task {
 	
 	def ensureMinimalDirectives = {
 		if (!finishOnThisTask) {
-			if( (approvers.size() == 0) && (approverGroups.size() == 0) && (approverRoles.size() == 0) && (execute.size() == 0) )
+			if( (approvers.size() == 0) && (approverRoles.size() == 0) && (execute.size() == 0) )
 				return false
 		}
 		true
@@ -76,7 +71,7 @@ class Task {
 	}
 	
 	def needsApproval = {
-		(approvers.size() > 0) || (approverGroups.size() > 0) || (approverRoles.size() > 0)
+		(approvers.size() > 0) || (approverRoles.size() > 0)
 	}
 	
 	def executes = {

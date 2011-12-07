@@ -22,3 +22,26 @@ log4j = {
 
     warn   'org.mortbay.log'
 }
+
+environments {
+  development {
+    grails {
+      mail {
+        'default' {
+          from = "noreply@dev.aaf.fr"
+        }
+        port = com.icegreen.greenmail.util.ServerSetupTest.SMTP.port
+      }
+    }
+  }
+  test {
+    grails {
+      mail {
+        'default' {
+          from = "noreply@test.aaf.fr"
+        }
+        port = com.icegreen.greenmail.util.ServerSetupTest.SMTP.port
+      }
+    }
+  }
+}

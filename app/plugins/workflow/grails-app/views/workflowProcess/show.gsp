@@ -30,7 +30,7 @@
 					</tr>
 					<tr>
 						<th><g:message code="label.creator" /></th>
-						<td><g:link controller="user" action="show" id="${process.creator.id}">${process.creator.profile?.fullName ?: process.creator.username}</g:link></td>
+						<td><g:link controller="user" action="show" id="${process.creator.id}">${process.creator.profile?.fullName ?: process.creator.principal}</g:link></td>
 					</tr>
 					<tr>
 						<th><g:message code="label.definition" />:</th>

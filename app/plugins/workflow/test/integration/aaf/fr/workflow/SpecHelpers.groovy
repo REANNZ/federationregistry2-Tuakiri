@@ -12,7 +12,7 @@ import aaf.fr.identity.Subject
 class SpecHelpers {
 	
 	static void setupShiroEnv(def user) {
-		def subject = [ getPrincipal: { user.id }, isAuthenticated: { true } ] as Subject
+		def subject = [ getPrincipal: { user.id }, isAuthenticated: { true } ] as org.apache.shiro.subject.Subject
 		ThreadContext.put( ThreadContext.SECURITY_MANAGER_KEY, [ getSubject: { subject } ] as SecurityManager )
 		SecurityUtils.metaClass.static.getSubject = { subject }
 	}

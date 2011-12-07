@@ -16,16 +16,7 @@ class ApprovalDelegate {
 			task.approverRoles.add(approvers.get('role'))
 		}
 		
-		// Process groups
-		if(approvers.get('groups')) {
-			task.approverGroups.addAll(approvers.get('groups'))
-		}
-		
-		if(approvers.get('group')) {
-			task.approverGroups.add(approvers.get('group'))
-		}
-		
-		// Process users
+		// Process users / subjects (subject is FR 2.x naming scheme)
 		if(approvers.get('users')) {
 			task.approvers.addAll(approvers.get('users'))
 		}
@@ -33,6 +24,14 @@ class ApprovalDelegate {
 		if(approvers.get('user')) {
 			task.addToApprovers(approvers.get('user'))
 		}
+
+    if(approvers.get('subjects')) {
+      task.approvers.addAll(approvers.get('users'))
+    }
+    
+    if(approvers.get('subject')) {
+      task.addToApprovers(approvers.get('user'))
+    }
 	}
 	
 	def reject(Map map, Closure closure) {

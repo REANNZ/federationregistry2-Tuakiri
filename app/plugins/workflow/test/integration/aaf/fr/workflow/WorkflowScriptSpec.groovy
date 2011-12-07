@@ -3,23 +3,27 @@ package aaf.fr.workflow
 import grails.plugin.spock.*
 
 import aaf.fr.identity.Subject
+import grails.plugins.federatedgrails.Role
 
 class WorkflowScriptSpec extends IntegrationSpec {
 	static transactional = true
 	
 	def grailsApplication
+  def user
 	
 	def setup() {
-		def user = new Subject(username:'testuser').save()
+		def role = new Role(name:'allsubjects')
+    user = new Subject(principal:'testuser', email:'test@testdomain.com')
+    role.addToSubjects(user)
+    user.save()
 	}
 	
 	def cleanup() {
-		Subject.findWhere(username:'testuser').delete()
 	}
 	
 	def "validate a correctly formed WorkflowScript is saved"() {		
 		when:
-		def wfs = new WorkflowScript(name:'TestWorkflow', description:'Test workflow description', definition:'import fedreg.workflow.*; return true', creator:Subject.findWhere(username:'testuser')).save()
+		def wfs = new WorkflowScript(name:'TestWorkflow', description:'Test workflow description', definition:'import fedreg.workflow.*; return true', creator:Subject.findWhere(principal:'testuser')).save()
 		
 		then:
 		!wfs.hasErrors()
@@ -37,7 +41,7 @@ class WorkflowScriptSpec extends IntegrationSpec {
 	
 	def "validate a non named WorkflowScript isn't valid"() {		
 		when:
-		def wfs = new WorkflowScript(description:'Test workflow description', definition:'return true', creator:Subject.findWhere(username:'testuser'))
+		def wfs = new WorkflowScript(description:'Test workflow description', definition:'return true', creator:Subject.findWhere(principal:'testuser'))
 		wfs.validate()
 		
 		then:
@@ -55,7 +59,7 @@ class WorkflowScriptSpec extends IntegrationSpec {
 	
 	def "validate a WorkflowScript with null execution definition is invalid"() {		
 		when:
-		def wfs = new WorkflowScript(name:'TestWorkflow', description:'Test workflow description', definition:null, creator:Subject.findWhere(username:'testuser'))
+		def wfs = new WorkflowScript(name:'TestWorkflow', description:'Test workflow description', definition:null, creator:Subject.findWhere(principal:'testuser'))
 		wfs.validate()
 		
 		then:
@@ -65,7 +69,7 @@ class WorkflowScriptSpec extends IntegrationSpec {
 	
 	def "validate a WorkflowScript with a blank execution definition is invalid"() {		
 		when:
-		def wfs = new WorkflowScript(name:'TestWorkflow', description:'Test workflow description', definition:'', creator:Subject.findWhere(username:'testuser'))
+		def wfs = new WorkflowScript(name:'TestWorkflow', description:'Test workflow description', definition:'', creator:Subject.findWhere(principal:'testuser'))
 		wfs.validate()
 		
 		then:
@@ -75,7 +79,7 @@ class WorkflowScriptSpec extends IntegrationSpec {
 	
 	def "validate a WorkflowScript with a non-parsable execution definition is invalid"() {		
 		when:
-		def wfs = new WorkflowScript(name:'TestWorkflow', description:'Test workflow description', definition:'import this.will.never.exist; println x', creator:Subject.findWhere(username:'testuser'))
+		def wfs = new WorkflowScript(name:'TestWorkflow', description:'Test workflow description', definition:'import this.will.never.exist; println x', creator:Subject.findWhere(principal:'testuser'))
 		wfs.validate()
 		
 		then:
@@ -85,7 +89,7 @@ class WorkflowScriptSpec extends IntegrationSpec {
 	
 	def "validate a correctly formed WorkflowScript is able to be executed"() {		
 		setup:
-		def wfs = new WorkflowScript(name:'TestWorkflow', description:'Test workflow description', definition:'import fedreg.workflow.*; return "the test script validating execution ran fine"', creator:Subject.findWhere(username:'testuser')).save()
+		def wfs = new WorkflowScript(name:'TestWorkflow', description:'Test workflow description', definition:'import fedreg.workflow.*; return "the test script validating execution ran fine"', creator:Subject.findWhere(principal:'testuser')).save()
 		Binding binding = new Binding();
 		binding.setVariable("grailsApplication", grailsApplication);
 		

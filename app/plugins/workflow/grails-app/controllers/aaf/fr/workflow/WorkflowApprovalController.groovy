@@ -14,7 +14,7 @@ class WorkflowApprovalController {
 	def workflowTaskService
 	
 	def list = {
-		def tasks = workflowTaskService.retrieveTasksAwaitingApproval(authenticatedUser)
+		def tasks = workflowTaskService.retrieveTasksAwaitingApproval(principal)
 		[tasks:tasks]
 	}
 	
@@ -32,7 +32,7 @@ class WorkflowApprovalController {
 			[tasks:tasks]
 		}
 		else {
-			log.warn("Attempt to do administrative taskInstance listing by $authenticatedUser was denied, not administrative user")
+			log.warn("Attempt to do administrative taskInstance listing by $principal was denied, not administrative user")
 			response.sendError(403)
 		}
 	}
@@ -54,17 +54,17 @@ class WorkflowApprovalController {
 			return
 		}
 		
-		if(taskInstance.potentialApprovers.contains(authenticatedUser) || SecurityUtils.subject.hasRole(AdminsService.ADMIN_ROLE)) {
-			log.info "$authenticatedUser is approving $taskInstance"
+		if(taskInstance.potentialApprovers.contains(principal) || SecurityUtils.subject.hasRole(AdminsService.ADMIN_ROLE)) {
+			log.info "$principal is approving $taskInstance"
 			workflowTaskService.approve(taskInstance.id)
 			flash.type = "success"
 		    flash.message = message(code: 'fedreg.workflow.taskinstance.successfully.approved')
 		
-			log.info "$authenticatedUser approval of $taskInstance completed"
+			log.info "$principal approval of $taskInstance completed"
 			redirect action: "list"
 		}
 		else {
-			log.warn("Attempt to approve $taskInstance by $authenticatedUser was denied, no permission to modify this record")
+			log.warn("Attempt to approve $taskInstance by $principal was denied, no permission to modify this record")
 			response.sendError(403)
 		}
 	}
@@ -101,17 +101,17 @@ class WorkflowApprovalController {
 			return
 		}
 		
-		if(taskInstance.potentialApprovers.contains(authenticatedUser) || SecurityUtils.subject.hasRole(AdminsService.ADMIN_ROLE)) {
-			log.info "$authenticatedUser is rejecting $taskInstance"
+		if(taskInstance.potentialApprovers.contains(principal) || SecurityUtils.subject.hasRole(AdminsService.ADMIN_ROLE)) {
+			log.info "$principal is rejecting $taskInstance"
 			workflowTaskService.reject(taskInstance.id, params.rejection)
 			flash.type = "success"
 		    flash.message = message(code: 'fedreg.workflow.taskinstance.successfully.rejected')
 		
-			log.info "$authenticatedUser rejection of $taskInstance completed"
+			log.info "$principal rejection of $taskInstance completed"
 			redirect action: "list"
 		}
 		else {
-			log.warn("Attempt to reject $taskInstance with ${params.rejection} by $authenticatedUser was denied, no permission to modify this record")
+			log.warn("Attempt to reject $taskInstance with ${params.rejection} by $principal was denied, no permission to modify this record")
 			response.sendError(403)
 		}
 	}

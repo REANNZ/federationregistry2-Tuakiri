@@ -57,8 +57,8 @@ class WorkflowProcessService {
 		if (processes) {
 			processVersion = processes.size() + 1
 		}
-		
-		def process = new Process(name: m.name, description: m.description, processVersion: processVersion, creator: authenticatedUser, definition: definition, active:true)
+
+		def process = new Process(name: m.name, description: m.description, processVersion: processVersion, creator: subject, definition: definition, active:true)
 		closure.delegate = new ProcessDelegate(process)
 		closure()
 		
@@ -95,7 +95,7 @@ class WorkflowProcessService {
 			return [false, null]
 		}
 		def processInstance = new ProcessInstance(process: process, description: instanceDescription, status: ProcessStatus.INPROGRESS, priority: priority ?:ProcessPriority.LOW)
-        processInstance.params = params
+    processInstance.params = params
 		process.addToInstances(processInstance)
 		
 		if(!process.save()) {

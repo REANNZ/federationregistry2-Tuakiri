@@ -6,10 +6,12 @@ import org.apache.shiro.util.ThreadContext
 import org.apache.shiro.SecurityUtils
 
 import aaf.fr.identity.Subject
+import grails.plugins.federatedgrails.Role
 
 class WorkflowProcessServiceSpec extends IntegrationSpec {
 	static transactional = true
 	
+  def user
 	def workflowProcessService
 	def minimalDefinition
 	def savedMetaClasses
@@ -17,18 +19,21 @@ class WorkflowProcessServiceSpec extends IntegrationSpec {
 	def setup() {
 		savedMetaClasses = [:]
 		
-		def user = new Subject(username:'testuser').save()
+    def role = new Role(name:'allsubjects')
+    user = new Subject(principal:'testuser', email:'test@testdomain.com')
+    role.addToSubjects(user)
+    user.save()
 
 		SpecHelpers.setupShiroEnv(user)
 	}
 	
 	def cleanup() {
-		Subject.findWhere(username:'testuser').delete()
+
 	}
 
 	def "Create minimal process"() {
 		setup:
-		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:workflowProcessService.authenticatedUser)
+		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:workflowProcessService.subject)
 		testScript.save()
 
 		minimalDefinition = new File('test/data/minimal.pr').getText()
@@ -63,12 +68,12 @@ class WorkflowProcessServiceSpec extends IntegrationSpec {
 		process.tasks.get(4).needsApproval() == false
 		process.tasks.get(4).approverRoles.size() == 0
 		
-		process.creator == workflowProcessService.authenticatedUser
+		process.creator == workflowProcessService.subject
 	}
 	
 	def "Initiate minimal process"() {
 		setup:
-		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:workflowProcessService.authenticatedUser).save()
+		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:workflowProcessService.subject).save()
 		minimalDefinition = new File('test/data/minimal.pr').getText()
 		workflowProcessService.create(minimalDefinition)
 		def process = Process.findByName('Minimal Test Process')
@@ -91,7 +96,7 @@ class WorkflowProcessServiceSpec extends IntegrationSpec {
 	
 	def "Initiate erronous process"() {
 		setup:
-		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:workflowProcessService.authenticatedUser).save()
+		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:workflowProcessService.subject).save()
 		minimalDefinition = new File('test/data/minimal-broken.pr').getText()
 		
 		when:		
@@ -104,7 +109,7 @@ class WorkflowProcessServiceSpec extends IntegrationSpec {
 	
 	def "Update minimal process"() {
 		setup:
-		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:workflowProcessService.authenticatedUser).save()
+		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:workflowProcessService.subject).save()
 		minimalDefinition = new File('test/data/minimal.pr').getText()
 		def updatedDefinition = new File('test/data/minimal2.pr').getText()
 		workflowProcessService.create(minimalDefinition)
@@ -128,7 +133,7 @@ class WorkflowProcessServiceSpec extends IntegrationSpec {
 	
 	def "Multiple updates to minimal process"() {
 		setup:
-		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:workflowProcessService.authenticatedUser).save()
+		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:workflowProcessService.subject).save()
 		minimalDefinition = new File('test/data/minimal.pr').getText()
 		def updatedDefinition = new File('test/data/minimal2.pr').getText()
 		def updatedDefinition2 = new File('test/data/minimal3.pr').getText()
@@ -152,7 +157,7 @@ class WorkflowProcessServiceSpec extends IntegrationSpec {
 	
 	def "Ensure initiate always utilizes newest process definition"() {
 		setup:
-		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:workflowProcessService.authenticatedUser).save()
+		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:workflowProcessService.subject).save()
 		minimalDefinition = new File('test/data/minimal.pr').getText()
 		def updatedDefinition = new File('test/data/minimal2.pr').getText()
 		workflowProcessService.create(minimalDefinition)

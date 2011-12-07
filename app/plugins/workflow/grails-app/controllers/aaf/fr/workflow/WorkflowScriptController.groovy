@@ -16,7 +16,7 @@ class WorkflowScriptController {
 			[scriptList: scriptList]
 		}
 		else {
-			log.warn("Attempt to list workflow scripts by $authenticatedUser was denied, incorrect permission set")
+			log.warn("Attempt to list workflow scripts by $principal was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}
@@ -27,7 +27,7 @@ class WorkflowScriptController {
 			[script: script]
 		}
 		else {
-			log.warn("Attempt to create workflow script by $authenticatedUser was denied, incorrect permission set")
+			log.warn("Attempt to create workflow script by $principal was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}
@@ -42,7 +42,7 @@ class WorkflowScriptController {
 			}
 		
 			def script = new WorkflowScript(params)
-			script.creator = authenticatedUser
+			script.creator = principal
 			if(!script.save()) {
 				flash.type = "error"
 			    flash.message = message(code: 'fedreg.workflow.script.create.error')
@@ -50,11 +50,11 @@ class WorkflowScriptController {
 				return
 			}
 		
-			log.info "$authenticatedUser created $script"
+			log.info "$principal created $script"
 			redirect action: "show", id: script.id
 		}
 		else {
-			log.warn("Attempt to save workflow script by $authenticatedUser was denied, incorrect permission set")
+			log.warn("Attempt to save workflow script by $principal was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}
@@ -79,7 +79,7 @@ class WorkflowScriptController {
 			[script:script]
 		}
 		else {
-			log.warn("Attempt to show workflow script by $authenticatedUser was denied, incorrect permission set")
+			log.warn("Attempt to show workflow script by $principal was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}
@@ -104,7 +104,7 @@ class WorkflowScriptController {
 			[script:script]
 		}
 		else {
-			log.warn("Attempt to edit $script by $authenticatedUser was denied, incorrect permission set")
+			log.warn("Attempt to edit $script by $principal was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}
@@ -135,11 +135,11 @@ class WorkflowScriptController {
 				return
 			}
 		
-			log.info "$authenticatedUser updated $script"
+			log.info "$principal updated $script"
 			redirect action: "show", id: script.id
 		}
 		else {
-			log.warn("Attempt to update $script by $authenticatedUser was denied, incorrect permission set")
+			log.warn("Attempt to update $script by $principal was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}

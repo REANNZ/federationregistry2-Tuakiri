@@ -2,7 +2,7 @@
 process(name:'Minimal Test Process', description: 'Minimal test process description mkIV') {
 	
 	task(name: 'task1', description: 'Description of task1 mkIV') {
-		approver(role: '{TEST_VAR}', groups:['{TEST_VAR2}'], user:'test@testdomain.com') {
+		approver(role: '{TEST_VAR}', user:'test@testdomain.com') {
 			reject(name: 'rejection1', description:'rejection overview') {
 				start ('task5')
 			}
