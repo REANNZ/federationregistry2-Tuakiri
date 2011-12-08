@@ -1,6 +1,7 @@
 package aaf.fr.identity
 
 import grails.plugins.federatedgrails.Role
+import grails.plugins.federatedgrails.LevelPermission
 
 /**
  * Manage roles including addition/removal of subjects and permissions

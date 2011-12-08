@@ -1,5 +1,7 @@
 package aaf.fr.identity
 
+import grails.plugins.federatedgrails.LevelPermission
+
 /**
  * Provides methods for interacting with permissions.
  *

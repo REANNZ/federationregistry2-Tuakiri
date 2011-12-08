@@ -161,7 +161,7 @@ class RoleService {
       throw new RuntimeException("Error updating subject [$subject.id]$subject.subjectname when adding role [$role.id]$role.name")
     }
 
-    log.info("Successfully added role [$role.id]$role.name to subject [$subject.id]$subject.subjectname")
+    log.info("Successfully added $role to $subject")
   }
 
   /**
