@@ -1,7 +1,7 @@
 package aaf.fr.reporting
 
-import fedreg.core.IDPSSODescriptor
-import fedreg.core.SPSSODescriptor
+import aaf.fr.foundation.IDPSSODescriptor
+import aaf.fr.foundation.SPSSODescriptor
 
 /**
  * Provides attribute release compliance views.

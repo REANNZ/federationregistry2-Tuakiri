@@ -1,6 +1,6 @@
 package aaf.fr.reporting
 
-import fedreg.core.Certificate
+import aaf.fr.foundation.Certificate
 
 /**
  * Provides compliance to approved CA's across RoleDescriptors view

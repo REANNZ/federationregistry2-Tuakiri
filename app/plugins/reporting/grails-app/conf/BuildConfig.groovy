@@ -1,7 +1,7 @@
 
 // Local plugins
 grails.plugin.location.federatedgrails="/home/bradleybeddoes/development/federatedgrails"
-grails.plugin.location.core="../core"
+grails.plugin.location.core="../foundation"
 
 grails.project.class.dir = "target/classes"
 grails.project.test.class.dir = "target/test-classes"

@@ -4,7 +4,7 @@ import grails.converters.JSON
 import grails.plugins.federatedgrails.Role
 import org.apache.shiro.SecurityUtils
 
-import fedreg.core.*
+import aaf.fr.foundation.*
 
 /**
  * Provides Federation wide reporting data
@@ -29,7 +29,7 @@ class FederationReportsController {
 			def currentCal = new GregorianCalendar()
 			
 			// Key object creations
-			def minYear = Organization.executeQuery("select min(year(dateCreated)) from fedreg.core.Organization")[0] ?: 2010
+			def minYear = Organization.executeQuery("select min(year(dateCreated)) from aaf.fr.foundation.Organization")[0] ?: 2010
 			def maxYear = currentCal.get(Calendar.YEAR)
 			
 			if(minYear && maxYear) {
@@ -52,7 +52,7 @@ class FederationReportsController {
 					// Organization creations per year	
 					def orgValue = [:]	
 					orgValue.x = year
-					def orgCount = Organization.executeQuery("select count(*) from fedreg.core.Organization where year(dateCreated) = ?", [year])[0]
+					def orgCount = Organization.executeQuery("select count(*) from aaf.fr.foundation.Organization where year(dateCreated) = ?", [year])[0]
 					if(orgCount) {
 						orgValue.y = orgCount
 						if(orgMax < orgCount)
@@ -63,7 +63,7 @@ class FederationReportsController {
 					// IdP creations per year
 					def idpValue = [:]	
 					idpValue.x = year
-					def idpCount = IDPSSODescriptor.executeQuery("select count(*) from fedreg.core.IDPSSODescriptor where year(dateCreated) = ?", [year])[0]
+					def idpCount = IDPSSODescriptor.executeQuery("select count(*) from aaf.fr.foundation.IDPSSODescriptor where year(dateCreated) = ?", [year])[0]
 					if(idpCount) {
 						idpValue.y = idpCount
 						if(idpMax < idpCount)
@@ -74,7 +74,7 @@ class FederationReportsController {
 					// SP creations per year
 					def spValue = [:]	
 					spValue.x = year
-					def spCount = SPSSODescriptor.executeQuery("select count(*) from fedreg.core.SPSSODescriptor where year(dateCreated) = ?", [year])[0]
+					def spCount = SPSSODescriptor.executeQuery("select count(*) from aaf.fr.foundation.SPSSODescriptor where year(dateCreated) = ?", [year])[0]
 					if(spCount) {
 						spValue.y = spCount
 						if(spMax < spCount)
@@ -83,17 +83,17 @@ class FederationReportsController {
 					spValues.add(spValue)
 					
 					// Organization subscription
-					def orgSubscriptions = "select new map(count(*) as c, year(dateCreated) as t) from fedreg.core.Organization group by year(dateCreated)"
+					def orgSubscriptions = "select new map(count(*) as c, year(dateCreated) as t) from aaf.fr.foundation.Organization group by year(dateCreated)"
 					def orgSubscriberCounts = Organization.executeQuery(orgSubscriptions)
 					def (orgSubscriberTotals, orgSubMax) = ReportingHelpers.populateCumulativeTotals( 0, orgSubscriberCounts)
 					
 					// IdP subscription
-					def idpSubscriptions = "select new map(count(*) as c, year(dateCreated) as t) from fedreg.core.IDPSSODescriptor group by year(dateCreated)"
+					def idpSubscriptions = "select new map(count(*) as c, year(dateCreated) as t) from aaf.fr.foundation.IDPSSODescriptor group by year(dateCreated)"
 					def idpSubscriberCounts = IDPSSODescriptor.executeQuery(idpSubscriptions)
 					def (idpSubscriberTotals, idpSubMax) = ReportingHelpers.populateCumulativeTotals( 0, idpSubscriberCounts)
 					
 					// SP subscriptions
-					def spSubscriptions = "select new map(count(*) as c, year(dateCreated) as t) from fedreg.core.SPSSODescriptor group by year(dateCreated)"
+					def spSubscriptions = "select new map(count(*) as c, year(dateCreated) as t) from aaf.fr.foundation.SPSSODescriptor group by year(dateCreated)"
 					def spSubscriberCounts = SPSSODescriptor.executeQuery(spSubscriptions)
 					def (spSubscriberTotals, spSubMax) = ReportingHelpers.populateCumulativeTotals( 0, spSubscriberCounts)
 					
@@ -138,15 +138,15 @@ class FederationReportsController {
 			switch(params.type) {
 				case 'org': i18n = 'organization'
 							controller = 'organization'
-							className = "fedreg.core.Organization"
+							className = "aaf.fr.foundation.Organization"
 							break
 				case 'idp': i18n = 'identityprovider'
 							controller = 'IDPSSODescriptor'
-							className = "fedreg.core.IDPSSODescriptor"
+							className = "aaf.fr.foundation.IDPSSODescriptor"
 							break
 				case 'sp': i18n = 'serviceprovider'
 							controller = 'SPSSODescriptor'
-							className = "fedreg.core.SPSSODescriptor"
+							className = "aaf.fr.foundation.SPSSODescriptor"
 							break
 			}
 			
@@ -239,15 +239,15 @@ class FederationReportsController {
 			switch(params.type) {
 				case 'org': i18n = 'organization'
 							controller = 'organization'
-							className = "fedreg.core.Organization"
+							className = "aaf.fr.foundation.Organization"
 							break
 				case 'idp': i18n = 'identityprovider'
 							controller = 'IDPSSODescriptor'
-							className = "fedreg.core.IDPSSODescriptor"
+							className = "aaf.fr.foundation.IDPSSODescriptor"
 							break
 				case 'sp': i18n = 'serviceprovider'
 							controller = 'SPSSODescriptor'
-							className = "fedreg.core.SPSSODescriptor"
+							className = "aaf.fr.foundation.SPSSODescriptor"
 							break
 			}
 			

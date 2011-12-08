@@ -1,7 +1,7 @@
 package aaf.fr.reporting
 
 import grails.plugin.spock.*
-import fedreg.core.*
+import aaf.fr.foundation.*
 
 class AttributeReleaseControllerSpec extends IntegrationSpec {
 

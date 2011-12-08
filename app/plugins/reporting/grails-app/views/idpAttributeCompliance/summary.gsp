@@ -1,4 +1,4 @@
-<%! import fedreg.core.AttributeCategory %>
+<%! import aaf.fr.foundation.AttributeCategory %>
 <html>
 	<head>	
 		<meta name="layout" content="reporting" />
