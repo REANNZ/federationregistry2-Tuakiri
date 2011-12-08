@@ -12,7 +12,7 @@ class IdentityProviderController {
 	def defaultAction = "list"
 	def allowedMethods = [save: 'POST', update: 'PUT', delete: 'DELETE']
 
-	def IDPSSODescriptorService
+	def IdentityProviderService
 	
 	def list = {
 		[identityProviderList: IDPSSODescriptor.findAllWhere(archived:false), identityProviderTotal: IDPSSODescriptor.count()]
@@ -34,7 +34,7 @@ class IdentityProviderController {
 		def identityProvider = IDPSSODescriptor.get(params.id)
 		if (!identityProvider) {
 			flash.type="error"
-			flash.message = message(code: 'fedreg.core.idpssoroledescriptor.nonexistant')
+			flash.message = message(code: 'aaf.fr.foundation.idpssoroledescriptor.nonexistant')
 			redirect(action: "list")
 			return
 		}
@@ -55,15 +55,15 @@ class IdentityProviderController {
 	}
 	
 	def save = {
-		def (created, ret) = IDPSSODescriptorService.create(params)
+		def (created, ret) = IdentityProviderService.create(params)
 	
 		if(created) {
-			log.info "$authenticatedUser created ${ret.identityProvider}"
+			log.info "$subject created ${ret.identityProvider}"
 			redirect (action: "show", id: ret.identityProvider.id)
 		}
 		else {
 			flash.type="error"
-			flash.message = message(code: 'fedreg.core.idpssoroledescriptor.save.validation.error')
+			flash.message = message(code: 'aaf.fr.foundation.idpssoroledescriptor.save.validation.error')
 			def c = AttributeBase.createCriteria()
 			def attributeList = c.list {
 				order("category", "asc")
@@ -85,7 +85,7 @@ class IdentityProviderController {
 		def identityProvider = IDPSSODescriptor.get(params.id)
 		if (!identityProvider) {
 			flash.type="error"
-			flash.message = message(code: 'fedreg.core.idpssoroledescriptor.nonexistant')
+			flash.message = message(code: 'aaf.fr.foundation.idpssoroledescriptor.nonexistant')
 			redirect(action: "list")
 			return
 		}	
@@ -94,7 +94,7 @@ class IdentityProviderController {
 			[identityProvider: identityProvider]	
 		}
 		else {
-			log.warn("Attempt to edit $identityProvider by $authenticatedUser was denied, incorrect permission set")
+			log.warn("Attempt to edit $identityProvider by $subject was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}
@@ -111,24 +111,24 @@ class IdentityProviderController {
 		def identityProvider_ = IDPSSODescriptor.get(params.id)
 		if (!identityProvider_) {
 			flash.type="error"
-			flash.message = message(code: 'fedreg.core.idpssoroledescriptor.nonexistant')
+			flash.message = message(code: 'aaf.fr.foundation.idpssoroledescriptor.nonexistant')
 			redirect(action: "list")
 			return
 		}
 		if(SecurityUtils.subject.isPermitted("descriptor:${identityProvider_.id}:update")) {
-			def (updated, identityProvider) = IDPSSODescriptorService.update(params)
+			def (updated, identityProvider) = IdentityProviderService.update(params)
 			if(updated) {
-				log.info "$authenticatedUser updated $identityProvider"
+				log.info "$subject updated $identityProvider"
 				redirect (action: "show", id: identityProvider.id)
 			} else {
-				log.info "$authenticatedUser failed to update $identityProvider"
+				log.info "$subject failed to update $identityProvider"
 				flash.type="error"
-				flash.message = message(code: 'fedreg.core.idpssoroledescriptor.update.validation.error')
+				flash.message = message(code: 'aaf.fr.foundation.idpssoroledescriptor.update.validation.error')
 				render (view:'edit', model:[identityProvider:identityProvider])
 			}
 		}
 		else {
-			log.warn("Attempt to update $identityProvider_ by $authenticatedUser was denied, incorrect permission set")
+			log.warn("Attempt to update $identityProvider_ by $subject was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}

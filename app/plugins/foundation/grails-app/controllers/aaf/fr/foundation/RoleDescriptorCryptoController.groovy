@@ -52,11 +52,11 @@ class RoleDescriptorCryptoController {
 			log.info "Deleting KeyDescriptor"
 			cryptoService.unassociateCertificate(keyDescriptor)
 			
-			log.info "$authenticatedUser soft deleted $keyDescriptor from $descriptor"
+			log.info "$subject soft deleted $keyDescriptor from $descriptor"
 			render message(code: 'fedreg.keydescriptor.delete.success')
 		}
 		else {
-			log.warn("Attempt to remove $keyDescriptor from ${keyDescriptor.roleDescriptor} by $authenticatedUser was denied, incorrect permission set")
+			log.warn("Attempt to remove $keyDescriptor from ${keyDescriptor.roleDescriptor} by $subject was denied, incorrect permission set")
 			response.sendError(403)
 		}		
 	}
@@ -95,7 +95,7 @@ class RoleDescriptorCryptoController {
 					return
 				}
 				
-				log.info "$authenticatedUser created signing keyDescriptor for $descriptor"
+				log.info "$subject created signing keyDescriptor for $descriptor"
 			}
 			
 			if(params.encryption == "on") {
@@ -107,13 +107,13 @@ class RoleDescriptorCryptoController {
 					return
 				}
 				
-				log.info "$authenticatedUser created encryption keyDescriptor for $descriptor"
+				log.info "$subject created encryption keyDescriptor for $descriptor"
 			}
 			
 			render message(code: 'fedreg.keydescriptor.create.success')
 		}
 		else {
-			log.warn("Attempt to add crypto to $descriptor by $authenticatedUser was denied, incorrect permission set")
+			log.warn("Attempt to add crypto to $descriptor by $subject was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}

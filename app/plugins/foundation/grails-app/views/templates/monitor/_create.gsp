@@ -1,6 +1,6 @@
 <n:hasPermission target="descriptor:${descriptor.id}:monitor:create">
 
-	<%@page import="fedreg.core.MonitorType" %>
+	<%@page import="aaf.fr.foundation.MonitorType" %>
 
 	<script type="text/javascript">
 		$(function() {

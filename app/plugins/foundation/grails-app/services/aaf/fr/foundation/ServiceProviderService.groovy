@@ -3,7 +3,7 @@ package aaf.fr.foundation
 import org.springframework.context.i18n.LocaleContextHolder as LCH
 import org.springframework.transaction.interceptor.TransactionAspectSupport
 
-import fedreg.workflow.ProcessPriority
+import aaf.fr.workflow.ProcessPriority
 
 /**
  * Provides methods for managing SPSSODescriptor instances.
@@ -31,7 +31,7 @@ class ServiceProviderService {
                 contact = new Contact(givenName: params.contact?.givenName, surname: params.contact?.surname, email: params.contact?.email, organization:organization)
                 contact.save()
                 if(contact.hasErrors()) {
-                    log.info "$authenticatedUser attempted to create serviceProvider but contact details supplied were invalid"
+                    log.info "$subject attempted to create serviceProvider but contact details supplied were invalid"
                     contact.errors.each { log.debug it }
                 }
         }
@@ -229,10 +229,18 @@ class ServiceProviderService {
 
 		entityDescriptor.addToSpDescriptors(serviceProvider)
         serviceProvider.validate()
+
+            // Check contact explicitly to avoid TransientObjectException
+    if(!entityDescriptor.validate() || contact.hasErrors()) {
+            log.info "$subject attempted to create $serviceProvider but failed input validation"
+      entityDescriptor.errors.each {log.debug it}
+      TransactionAspectSupport.currentTransactionStatus().setRollbackOnly() 
+            return [false, ret]
+    }
 	
 		// Force flush as we need identifiers
         if(!entityDescriptor.save(flush:true)) {
-            log.info "$authenticatedUser attempted to create $serviceProvider but failed input validation"
+            log.info "$subject attempted to create $serviceProvider but failed save attempt"
             entityDescriptor.errors.each {log.debug it}
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly() 
             return [false, ret]
@@ -246,7 +254,7 @@ class ServiceProviderService {
 		else
 			throw new ErronousStateException("Unable to execute workflow when creating ${serviceProvider}")
 	
-		log.info "$authenticatedUser created $serviceProvider"
+		log.info "$subject created $serviceProvider"
 		return [true, ret]
 	}
 	
@@ -288,7 +296,7 @@ class ServiceProviderService {
 		serviceProvider.serviceDescription.maintenance = params.sp?.servicedescription?.maintenance
 		
 		if(!serviceProvider.entityDescriptor.validate()) {
-			log.info "$authenticatedUser attempted to update $serviceProvider but failed EntityDescriptor validation"
+			log.info "$subject attempted to update $serviceProvider but failed EntityDescriptor validation"
 			serviceProvider.entityDescriptor.errors.each {log.warn it}
 			return [false, serviceProvider]
 		}
@@ -298,7 +306,7 @@ class ServiceProviderService {
 			throw new ErronousStateException("Unable to save when updating ${serviceProvider}")
 		}
 		
-		log.info "$authenticatedUser updated $serviceProvider"
+		log.info "$subject updated $serviceProvider"
 		return [true, serviceProvider]
 	}
 	
@@ -307,7 +315,7 @@ class ServiceProviderService {
 		if(!serviceProvider)
 			throw new ErronousStateException("Unable to delete service provider, no such instance")
 			
-		log.info "Deleting $serviceProvider on request of $authenticatedUser"
+		log.info "Deleting $serviceProvider on request of $subject"
 		def entityDescriptor = serviceProvider.entityDescriptor
 
 		serviceProvider.discoveryResponseServices?.each { it.delete() }
@@ -318,7 +326,7 @@ class ServiceProviderService {
 		entityDescriptor.spDescriptors.remove(serviceProvider)
 		serviceProvider.delete()
 		
-		log.info "$authenticatedUser deleted $serviceProvider"
+		log.info "$subject deleted $serviceProvider"
 	}
 	
 	def archive(long id) {
@@ -334,7 +342,7 @@ class ServiceProviderService {
 			throw new ErronousStateException("Unable to archive SPSSODescriptor with id $id")
 		}
 		
-		log.info "$authenticatedUser successfully archived $serviceProvider"
+		log.info "$subject successfully archived $serviceProvider"
 	}
 	
 	def unarchive(long id) {
@@ -349,7 +357,7 @@ class ServiceProviderService {
 			throw new ErronousStateException("Unable to unarchive SPSSODescriptor with id $id")
 		}
 		
-		log.info "$authenticatedUser successfully unarchived $serviceProvider"
+		log.info "$subject successfully unarchived $serviceProvider"
 	}
 	
 	def activate(long id) {
@@ -364,6 +372,6 @@ class ServiceProviderService {
 			throw new ErronousStateException("Unable to activate SPSSODescriptor with id $id")
 		}
 		
-		log.info "$authenticatedUser successfully activate $serviceProvider"
+		log.info "$subject successfully activate $serviceProvider"
 	}
 }

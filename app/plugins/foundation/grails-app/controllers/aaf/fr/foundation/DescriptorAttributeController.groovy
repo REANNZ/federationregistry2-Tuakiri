@@ -52,7 +52,7 @@ class DescriptorAttributeController {
 			descriptor.removeFromAttributes(attribute)
 			descriptor.save()
 			if(descriptor.hasErrors()) {
-				log.warn "$authenticatedUser removing $attribute from descriptor ${params.id} failed"
+				log.warn "$subject removing $attribute from descriptor ${params.id} failed"
 				descriptor.errors.each {
 					log.debug it
 				}
@@ -60,12 +60,12 @@ class DescriptorAttributeController {
 				response.setStatus(500)
 				return
 			}else {
-				log.info "$authenticatedUser removed $attribute from descriptor ${params.id}"
+				log.info "$subject removed $attribute from descriptor ${params.id}"
 				render message(code: 'fedreg.attribute.remove.success', args:[attribute.base.name])
 			}
 		}
 		else {
-			log.warn("Attempt to remove attribute from $descriptor by $authenticatedUser was denied, incorrect permission set")
+			log.warn("Attempt to remove attribute from $descriptor by $subject was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}
@@ -141,7 +141,7 @@ class DescriptorAttributeController {
 			descriptor.addToAttributes(attribute)
 			descriptor.save()
 			if(descriptor.hasErrors()) {
-				log.warn "$authenticatedUser adding $attribute to descriptor ${params.id} failed"
+				log.warn "$subject adding $attribute to descriptor ${params.id} failed"
 				descriptor.errors.each {
 					log.debug it
 				}
@@ -149,12 +149,12 @@ class DescriptorAttributeController {
 				response.setStatus(500)
 				return
 			} else {
-				log.info "$authenticatedUser added $base to $descriptor"
+				log.info "$subject added $base to $descriptor"
 				render message(code: 'fedreg.attribute.add.success', args:[base.name])
 			}
 		}
 		else {
-			log.warn("Attempt to add attribute to $descriptor by $authenticatedUser was denied, incorrect permission set")
+			log.warn("Attempt to add attribute to $descriptor by $subject was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}

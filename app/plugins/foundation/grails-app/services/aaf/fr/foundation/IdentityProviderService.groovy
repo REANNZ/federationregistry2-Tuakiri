@@ -3,7 +3,7 @@ package aaf.fr.foundation
 import org.springframework.context.i18n.LocaleContextHolder as LCH
 import org.springframework.transaction.interceptor.TransactionAspectSupport
 
-import fedreg.workflow.ProcessPriority
+import aaf.fr.workflow.ProcessPriority
 
 /**
  * Provides methods for managing IDPSSODescriptor instances.
@@ -32,12 +32,13 @@ class IdentityProviderService {
                 contact = Contact.findByEmail(params.contact?.email)		// We may already have them referenced by email
 			
             if(!contact)
+            println "1234"
 				contact = new Contact(givenName: params.contact?.givenName, surname: params.contact?.surname, email: params.contact?.email, organization:organization)
 				contact.save()
-				if(contact.hasErrors()) {
-                    log.info "$authenticatedUser attempted to create identityProvider but contact details supplied were invalid"
-					contact.errors.each { log.debug it }
-				}
+                if(contact.hasErrors()) {
+                    log.info "$subject attempted to create identityProvider but contact details supplied were invalid"
+                    contact.errors.each { log.debug it }
+                }
 		}
 		def ct = params.contact?.type ?: 'administrative'
 	
@@ -158,7 +159,6 @@ class IdentityProviderService {
 		ret.certificate = params.cert
 		ret.supportedNameIDFormats = supportedNameIDFormats
 		ret.supportedAttributes = supportedAttributes
-	
 
 		entityDescriptor.addToIdpDescriptors(identityProvider)
 		if(params.aa?.create) {
@@ -169,10 +169,18 @@ class IdentityProviderService {
         if(params.aa?.create) {
             attributeAuthority.validate()
         }
+
+    // Check contact explicitly to avoid TransientObjectException
+    if(!entityDescriptor.validate() || contact.hasErrors()) {
+            log.info "$subject attempted to create $identityProvider but failed input validation"
+      entityDescriptor.errors.each {log.debug it}
+      TransactionAspectSupport.currentTransactionStatus().setRollbackOnly() 
+            return [false, ret]
+    }
         
-        // Force flush as we need identifiers
+    // Force flush as we need identifiers
 		if(!entityDescriptor.save(flush:true)) {
-            log.info "$authenticatedUser attempted to create $identityProvider but failed input validation"
+            log.info "$subject attempted to create $identityProvider but failed save attempt"
 			entityDescriptor.errors.each {log.debug it}
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly() 
             return [false, ret]
@@ -184,7 +192,7 @@ class IdentityProviderService {
             attributeAuthority.collaborator = identityProvider
 
             if(!entityDescriptor.save()) {
-                log.info "$authenticatedUser attempted to create $identityProvider but failed collaborator establishment"
+                log.info "$subject attempted to create $identityProvider but failed collaborator establishment"
                 entityDescriptor.errors.each {log.debug it}
                 TransactionAspectSupport.currentTransactionStatus().setRollbackOnly() 
                 return [false, ret]
@@ -200,7 +208,7 @@ class IdentityProviderService {
 		else
 			throw new ErronousStateException("Unable to execute workflow when creating ${identityProvider}")
 
-		log.info "$authenticatedUser created $identityProvider"
+		log.info "$subject created $identityProvider"
 		return [true, ret]
 	}
 	
@@ -238,7 +246,7 @@ class IdentityProviderService {
 		log.debug "Updating $identityProvider active: ${identityProvider.active}, requestSigned: ${identityProvider.wantAuthnRequestsSigned}"
 		
 		if(!identityProvider.entityDescriptor.validate()) {
-			log.info "$authenticatedUser attempted to update $identityProvider but failed IDPSSODescriptor validation"
+			log.info "$subject attempted to update $identityProvider but failed IDPSSODescriptor validation"
 			identityProvider.entityDescriptor.errors.each {log.warn it}
 			return [false, identityProvider]
 		}
@@ -248,7 +256,7 @@ class IdentityProviderService {
 			throw new ErronousStateException("Unable to save when updating ${identityProvider}")
 		}
 		
-		log.info "$authenticatedUser updated $identityProvider"
+		log.info "$subject updated $identityProvider"
 		return [true, identityProvider]
 	}
 	
@@ -257,7 +265,7 @@ class IdentityProviderService {
 		if(!identityProvider)
 			throw new ErronousStateException("Unable to delete identity provider, no such instance")
 			
-		log.info "Deleting $identityProvider on request of $authenticatedUser"
+		log.info "Deleting $identityProvider on request of $subject"
 
 		def entityDescriptor = identityProvider.entityDescriptor
 		def aa = identityProvider.collaborator
@@ -275,7 +283,7 @@ class IdentityProviderService {
 
 			entityDescriptor.attributeAuthorityDescriptors.remove(aa)
 
-			log.info "$authenticatedUser deleted $aa" 
+			log.info "$subject deleted $aa" 
 
 			aa.delete()
 		}
@@ -289,7 +297,7 @@ class IdentityProviderService {
 		entityDescriptor.idpDescriptors.remove(identityProvider)
 		identityProvider.delete()
 		
-		log.info "$authenticatedUser deleted $identityProvider"
+		log.info "$subject deleted $identityProvider"
 	}
 	
 	def archive(long id) {
@@ -305,7 +313,7 @@ class IdentityProviderService {
 			throw new ErronousStateException("Unable to archive IDPSSODescriptor with id $id")
 		}
 		
-		log.info "$authenticatedUser successfully archived $identityProvider"
+		log.info "$subject successfully archived $identityProvider"
 	}
 	
 	def unarchive(long id) {
@@ -320,7 +328,7 @@ class IdentityProviderService {
 			throw new ErronousStateException("Unable to unarchive IDPSSODescriptor with id $id")
 		}
 		
-		log.info "$authenticatedUser successfully unarchived $identityProvider"
+		log.info "$subject successfully unarchived $identityProvider"
 	}
 	
 	def activate(long id) {
@@ -335,7 +343,7 @@ class IdentityProviderService {
 			throw new ErronousStateException("Unable to activate IDPSSODescriptor with id $id")
 		}
 		
-		log.info "$authenticatedUser successfully activate $identityProvider"
+		log.info "$subject successfully activate $identityProvider"
 	}
 	
 }

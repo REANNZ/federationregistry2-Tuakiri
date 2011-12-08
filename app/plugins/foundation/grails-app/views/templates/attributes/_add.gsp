@@ -1,5 +1,5 @@
 <n:hasPermission target="descriptor:${descriptor.id}:attribute:add">
-	<%@page import="fedreg.core.AttributeBase" %>
+	<%@page import="aaf.fr.foundation.AttributeBase" %>
 
 	<script type="text/javascript">
 		$(function() {

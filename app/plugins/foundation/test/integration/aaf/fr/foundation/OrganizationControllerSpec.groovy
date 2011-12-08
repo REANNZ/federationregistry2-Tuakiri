@@ -1,24 +1,22 @@
 package aaf.fr.foundation
 
 import grails.plugin.spock.*
-
-import fedreg.core.*
-import fedreg.workflow.*
-import grails.plugins.nimble.core.*
+import aaf.fr.workflow.*
+import aaf.fr.identity.Subject
 
 class OrganizationControllerSpec extends IntegrationSpec {
 	
 	def controller, organizationService, user
 	
 	def cleanup() {
-        user.perms = []
+        user.permissions = []
 	}
 	
 	def setup () {
 		organizationService = new OrganizationService()		
 		controller = new OrganizationController(organizationService:organizationService)
 
-		user = UserBase.build()
+		user = Subject.build()
 		SpecHelpers.setupShiroEnv(user)
 	}
 	
@@ -55,7 +53,7 @@ class OrganizationControllerSpec extends IntegrationSpec {
 		
 		then:
 		controller.flash.type == "error"
-		controller.flash.message == "fedreg.core.organization.nonexistant"
+		controller.flash.message == "aaf.fr.foundation.organization.nonexistant"
 		controller.response.redirectedUrl == "/organization/list"
 	}
 	
@@ -100,7 +98,7 @@ class OrganizationControllerSpec extends IntegrationSpec {
 		
 		then:
 		controller.flash.type == "error"
-		controller.flash.message == "fedreg.core.organization.save.validation.error"	
+		controller.flash.message == "aaf.fr.foundation.organization.save.validation.error"	
 	}
 	
 	def "Validate successful update"() {
@@ -108,7 +106,7 @@ class OrganizationControllerSpec extends IntegrationSpec {
 		def organization = Organization.build().save()
 		
 		controller.params.id = organization.id
-        user.perms.add("organization:${organization.id}:update")
+        user.permissions.add("organization:${organization.id}:update")
 		organizationService.metaClass.update = { def p -> 
             return [true, organization]
         } 
@@ -125,7 +123,7 @@ class OrganizationControllerSpec extends IntegrationSpec {
         def organization = Organization.build().save()
         
         controller.params.id = organization.id
-        user.perms.add("organization:-1:update")
+        user.permissions.add("organization:-1:update")
 
         when:
         controller.update()
@@ -144,7 +142,7 @@ class OrganizationControllerSpec extends IntegrationSpec {
 		then:
 		controller.response.redirectedUrl == "/organization/list"	
 		controller.flash.type == "error"
-		controller.flash.message == "fedreg.core.organization.nonexistant"
+		controller.flash.message == "aaf.fr.foundation.organization.nonexistant"
 	}
 	
 	def "Invalid organization data fails update"() {
@@ -152,7 +150,7 @@ class OrganizationControllerSpec extends IntegrationSpec {
 		def organization = Organization.build().save()
 		
 		controller.params.id = organization.id
-		user.perms.add("organization:${organization.id}:update")
+		user.permissions.add("organization:${organization.id}:update")
 
 		when:
 		organizationService.metaClass.update = { def p -> 
@@ -162,6 +160,6 @@ class OrganizationControllerSpec extends IntegrationSpec {
 		
 		then:		
 		controller.flash.type == "error"
-		controller.flash.message == "fedreg.core.organization.update.validation.error"	
+		controller.flash.message == "aaf.fr.foundation.organization.update.validation.error"	
 	}
 }

@@ -52,7 +52,7 @@
 							<td colspan="2">${(ep.responseLocation?.uri ?:ep.location.uri).encodeAsHTML()}</td>
 						</tr>
 					</g:if>
-					<g:if test="${ep.instanceOf(fedreg.core.IndexedEndpoint)}">
+					<g:if test="${ep.instanceOf(aaf.fr.foundation.IndexedEndpoint)}">
 						<tr>
 							<th><g:message code="label.index" /></th>
 							<td>
@@ -79,7 +79,7 @@
 							<n:hasPermission target="descriptor:${ep.descriptor.id}:endpoint:toggle">
 								<n:confirmaction action="fedreg.endpoint_toggle(${ep.id}, '${endpointType}', '${containerID}' );" title="${message(code: 'fedreg.templates.endpoints.toggle.confirm.title')}" msg="${message(code: 'fedreg.templates.endpoints.toggle.confirm.descriptive')}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" label="${message(code: 'label.togglestate')}" class="toggle-button" />
 							</n:hasPermission>
-							<g:if test="${ep.instanceOf(fedreg.core.IndexedEndpoint) && !ep.isDefault}">
+							<g:if test="${ep.instanceOf(aaf.fr.foundation.IndexedEndpoint) && !ep.isDefault}">
 								<n:hasPermission target="descriptor:${ep.descriptor.id}:endpoint:toggle">
 									<n:confirmaction action="fedreg.endpoint_makedefault(${ep.id}, '${endpointType}', '${containerID}' );" title="${message(code: 'fedreg.templates.endpoints.makedefault.confirm.title')}" msg="${message(code: 'fedreg.templates.endpoints.makedefault.confirm.descriptive')}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" label="${message(code: 'label.makedefault')}" class="add-button" />
 								</n:hasPermission>

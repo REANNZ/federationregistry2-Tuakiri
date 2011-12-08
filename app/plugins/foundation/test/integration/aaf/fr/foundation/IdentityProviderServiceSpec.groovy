@@ -1,24 +1,22 @@
 package aaf.fr.foundation
 
 import grails.plugin.spock.*
+import aaf.fr.workflow.*
+import aaf.fr.identity.Subject
 
-import fedreg.core.*
-import fedreg.workflow.*
-import grails.plugins.nimble.core.*
-
-class IDPSSODescriptorServiceSpec extends IntegrationSpec {
+class IdentityProviderServiceSpec extends IntegrationSpec {
 	
 	def cryptoService
 	def savedMetaClasses
 	def workflowProcessService
 	def entityDescriptorService
-	def IDPSSODescriptorService
+	def IdentityProviderService
 	def params, user, svedMetaClasses
 	
 	def setup () {
         params = [:]
 
-        user = UserBase.build()
+        user = Subject.build()
 		SpecHelpers.setupShiroEnv(user)
 
         savedMetaClasses = [:]
@@ -84,7 +82,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 			[true, [:]]
 		}
 		WorkflowProcessService.metaClass.run = { def processInstance -> }
-		def (created, ret) = IDPSSODescriptorService.create(params)
+		def (created, ret) = IdentityProviderService.create(params)
 		
 		then:
 		created
@@ -183,7 +181,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 			[true, [:]]
 		}
 		WorkflowProcessService.metaClass.run = { def processInstance -> }
-		def (created, ret) = IDPSSODescriptorService.create(params)
+		def (created, ret) = IdentityProviderService.create(params)
 		
 		then:
 		created
@@ -282,7 +280,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 			[true, [:]]
 		}
 		WorkflowProcessService.metaClass.run = { def processInstance -> }
-		def (created, ret) = IDPSSODescriptorService.create(params)
+		def (created, ret) = IdentityProviderService.create(params)
 		
 		then:
 		created
@@ -370,7 +368,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		params.contact = [id: contact.id, type: ct.name]
 		
 		when:
-		def (created, ret) = IDPSSODescriptorService.create(params)
+		def (created, ret) = IdentityProviderService.create(params)
 		
 		then:
 		!created
@@ -436,7 +434,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		params.contact = [id: contact.id, type: ct.name]
 		
 		when:
-		def (created, ret) = IDPSSODescriptorService.create(params)
+		def (created, ret) = IdentityProviderService.create(params)
 		
 		then:
 		!created
@@ -501,7 +499,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		params.contact = [id: contact.id, type: ct.name]
 		
 		when:
-		def (created, ret) = IDPSSODescriptorService.create(params)
+		def (created, ret) = IdentityProviderService.create(params)
 		
 		then:
 		!created
@@ -568,7 +566,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		params.contact = [id: contact.id, type: ct.name]
 		
 		when:
-		def (created, ret) = IDPSSODescriptorService.create(params)
+		def (created, ret) = IdentityProviderService.create(params)
 		
 		then:
 		!created
@@ -632,7 +630,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		params.contact = [id: contact.id, type: ct.name]
 		
 		when:
-		def (created, ret) = IDPSSODescriptorService.create(params)
+		def (created, ret) = IdentityProviderService.create(params)
 		
 		then:
 		!created
@@ -698,7 +696,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		params.contact = [id: contact.id, type: ct.name]
 		
 		when:
-		def (created, ret) = IDPSSODescriptorService.create(params)
+		def (created, ret) = IdentityProviderService.create(params)
 		
 		then:
 		!created
@@ -763,7 +761,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		params.contact = [id: contact.id, type: ct.name]
 		
 		when:
-		def (created, ret) = IDPSSODescriptorService.create(params)
+		def (created, ret) = IdentityProviderService.create(params)
 		
 		then:
 		!created
@@ -838,7 +836,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 			[true, [:]]
 		}
 		WorkflowProcessService.metaClass.run = { def processInstance -> }
-		def (created, ret) = IDPSSODescriptorService.create(params)
+		def (created, ret) = IdentityProviderService.create(params)
 		
 		then:
 		created
@@ -912,7 +910,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 			[true, [:]]
 		}
 		WorkflowProcessService.metaClass.run = { def processInstance -> }
-		def (created, ret) = IDPSSODescriptorService.create(params)
+		def (created, ret) = IdentityProviderService.create(params)
 		
 		then:
 		created
@@ -985,7 +983,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 			[true, [:]]
 		}
 		WorkflowProcessService.metaClass.run = { def processInstance -> }
-		def (created, ret) = IDPSSODescriptorService.create(params)
+		def (created, ret) = IdentityProviderService.create(params)
 		
 		then:
 		created
@@ -1049,7 +1047,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		params.contact = [id: contact.id, type: ct.name]
 		
 		when:
-		def (created, ret) = IDPSSODescriptorService.create(params)
+		def (created, ret) = IdentityProviderService.create(params)
 		
 		then:
 		!created
@@ -1108,7 +1106,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		params.contact = [id: contact.id, type: ct.name]
 		
 		when:
-		def (created, ret) = IDPSSODescriptorService.create(params)
+		def (created, ret) = IdentityProviderService.create(params)
 		
 		then:
 		!created
@@ -1168,7 +1166,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		params.contact = [id: contact.id, type: ct.name]
 		
 		when:
-		def (created, ret) = IDPSSODescriptorService.create(params)
+		def (created, ret) = IdentityProviderService.create(params)
 		
 		then:
 		!created
@@ -1228,7 +1226,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		params.contact = [id: contact.id, type: ct.name]
 		
 		when:
-		def (created, ret) = IDPSSODescriptorService.create(params)
+		def (created, ret) = IdentityProviderService.create(params)
 		
 		then:
 		!created
@@ -1299,13 +1297,15 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
             [true, [:]]
         }
         WorkflowProcessService.metaClass.run = { def processInstance -> }
-        def (created, ret) = IDPSSODescriptorService.create(params)
+        def (created, ret) = IdentityProviderService.create(params)
         
         then:
         !created
+
+        ret.contact.hasErrors()
         
         def entityDescriptor = ret.entityDescriptor
-        entityDescriptor.hasErrors()
+        !entityDescriptor.hasErrors()
         entityDescriptor.entityID == "http://identityProvider1.test.com"
         
         def identityProvider = ret.identityProvider
@@ -1367,7 +1367,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		params.idp = [displayName:"new displayName", description:"new description", scope:"test.com", status:'true', wantauthnrequestssigned:true]
 		
 		when:
-		def (updated, identityProvider_) = IDPSSODescriptorService.update(params)
+		def (updated, identityProvider_) = IdentityProviderService.update(params)
 		
 		then:
 		updated
@@ -1387,7 +1387,7 @@ class IDPSSODescriptorServiceSpec extends IntegrationSpec {
 		params.idp = [displayName:"", description:"new description", status:'true', wantauthnrequestssigned:false]
 		
 		when:
-		def (updated, identityProvider_) = IDPSSODescriptorService.update(params)
+		def (updated, identityProvider_) = IdentityProviderService.update(params)
 		
 		then:
 		!updated

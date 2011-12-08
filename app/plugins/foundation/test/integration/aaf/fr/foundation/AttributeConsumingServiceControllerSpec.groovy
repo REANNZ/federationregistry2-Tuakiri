@@ -1,18 +1,16 @@
-package fedreg.core
+package aaf.fr.foundation
 
 import grails.plugin.spock.*
-
-import fedreg.core.*
-import fedreg.workflow.*
-import grails.plugins.nimble.core.*
+import aaf.fr.workflow.*
+import aaf.fr.identity.Subject
 
 class AttributeConsumingServiceControllerSpec extends IntegrationSpec {
 
 	def user, controller, renderMap
 	
 	def setup () {
-        UserBase.metaClass.contact = [ getId: 1 ]
-		user = UserBase.build()
+        Subject.metaClass.contact = [ getId: 1 ]
+		user = Subject.build()
 		SpecHelpers.setupShiroEnv(user)
 
         AttributeConsumingServiceController.metaClass.render = { Map map ->
@@ -23,7 +21,7 @@ class AttributeConsumingServiceControllerSpec extends IntegrationSpec {
 	}
 	
 	def cleanup() {
-		user.perms = []
+		user.permissions = []
 	}
 	
 	def "Add new requested attribute with correct perms"() {
@@ -33,7 +31,7 @@ class AttributeConsumingServiceControllerSpec extends IntegrationSpec {
 		
 		def wfProcessName, wfDescription, wfPriority, wfParams
 		
-		user.perms.add("descriptor:${acs.descriptor.id}:attribute:add")
+		user.permissions.add("descriptor:${acs.descriptor.id}:attribute:add")
 		
 		controller.params.id = acs.id
 		controller.params.attrid = attr.id
@@ -85,7 +83,7 @@ class AttributeConsumingServiceControllerSpec extends IntegrationSpec {
 		controller.params.attrid = ra1.base.id
 		controller.params.reasoning = "I really need it!"
 		
-		user.perms.add("descriptor:${acs.descriptor.id}:attribute:add")
+		user.permissions.add("descriptor:${acs.descriptor.id}:attribute:add")
 		WorkflowProcessService.metaClass.initiate =  { String processName, String instanceDescription, ProcessPriority priority, Map params ->
 			wfProcessName = processName
 			wfDescription = instanceDescription
@@ -127,7 +125,7 @@ class AttributeConsumingServiceControllerSpec extends IntegrationSpec {
 		acs.save()
 		
 		controller.params.raid = ra1.id
-		user.perms.add("descriptor:${acs.descriptor.id}:attribute:remove")
+		user.permissions.add("descriptor:${acs.descriptor.id}:attribute:remove")
 		
 		when:
 		def model = controller.removeRequestedAttribute()

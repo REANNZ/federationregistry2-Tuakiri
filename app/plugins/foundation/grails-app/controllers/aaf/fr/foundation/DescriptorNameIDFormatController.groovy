@@ -51,7 +51,7 @@ class DescriptorNameIDFormatController {
 			descriptor.removeFromNameIDFormats(nameIDFormat)
 			descriptor.save()
 			if(descriptor.hasErrors()) {
-				log.warn "$authenticatedUser removing $nameIDFormat from $descriptor failed"
+				log.warn "$subject removing $nameIDFormat from $descriptor failed"
 				descriptor.errors.each {
 					log.debug it
 				}
@@ -59,12 +59,12 @@ class DescriptorNameIDFormatController {
 				response.setStatus(500)
 				return
 			} else {
-				log.info "$authenticatedUser removed $nameIDFormat from $descriptor"
+				log.info "$subject removed $nameIDFormat from $descriptor"
 				render message(code: 'fedreg.nameidformat.remove.success', args:[nameIDFormat.uri])
 			}
 		}
 		else {
-			log.warn("Attempt to remove NameIDFormat from $descriptor by $authenticatedUser was denied, incorrect permission set")
+			log.warn("Attempt to remove NameIDFormat from $descriptor by $subject was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}
@@ -150,7 +150,7 @@ class DescriptorNameIDFormatController {
 			}
 		}
 		else {
-			log.warn("Attempt to add NameIDFormat to $descriptor by $authenticatedUser was denied, incorrect permission set")
+			log.warn("Attempt to add NameIDFormat to $descriptor by $subject was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}

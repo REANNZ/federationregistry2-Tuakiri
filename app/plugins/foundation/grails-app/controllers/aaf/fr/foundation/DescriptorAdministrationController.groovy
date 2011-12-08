@@ -20,7 +20,7 @@ class DescriptorAdministrationController {
 		def descriptor = Descriptor.get(params.id)
 		if (!descriptor) {
 			flash.type="error"
-			flash.message = message(code: 'fedreg.core.descriptor.nonexistant')
+			flash.message = message(code: 'aaf.fr.foundation.descriptor.nonexistant')
 			redirect(action: "list")
 			return
 		}
@@ -33,7 +33,7 @@ class DescriptorAdministrationController {
 		def descriptor = Descriptor.get(params.id)
 		if (!descriptor) {
 			flash.type="error"
-			flash.message = message(code: 'fedreg.core.descriptor.nonexistant')
+			flash.message = message(code: 'aaf.fr.foundation.descriptor.nonexistant')
 			redirect(action: "list")
 			return
 		}
@@ -41,7 +41,7 @@ class DescriptorAdministrationController {
 		def q = "%" + params.q + "%"
 	    log.debug("Performing search for users matching $q")
 
-	    def users = UserBase.findAllByUsernameIlike(q)
+	    def users = Subject.findAllByUsernameIlike(q)
 	    ProfileBase.findAllByFullNameIlikeOrEmailIlike(q, q)?.each {
 			if(!users.contains(it.owner))
 				users.add(it.owner)
@@ -52,7 +52,7 @@ class DescriptorAdministrationController {
 			users.removeAll(adminRole.users)
 			render template: '/templates/descriptor/searchresultsfulladministration', contextPath: pluginContextPath, model:[descriptor:descriptor, users: users]
 		} else {
-			log.warn("Attempt to search for administrative control for $descriptor to $user by $authenticatedUser was denied. Administrative role doesn't exist")
+			log.warn("Attempt to search for administrative control for $descriptor to $user by $subject was denied. Administrative role doesn't exist")
 			response.sendError(403)
 		}
 	}
@@ -61,15 +61,15 @@ class DescriptorAdministrationController {
 		def descriptor = Descriptor.get(params.id)
 		if (!descriptor) {
 			flash.type="error"
-			flash.message = message(code: 'fedreg.core.descriptor.nonexistant')
+			flash.message = message(code: 'aaf.fr.foundation.descriptor.nonexistant')
 			redirect(action: "list")
 			return
 		}	
 		
-		def user = UserBase.get(params.userID)
+		def user = Subject.get(params.userID)
 		if (!descriptor) {
 			flash.type="error"
-			flash.message = message(code: 'fedreg.core.user.nonexistant')
+			flash.message = message(code: 'aaf.fr.foundation.user.nonexistant')
 			redirect(action: "list")
 			return
 		}
@@ -80,15 +80,15 @@ class DescriptorAdministrationController {
 			if(adminRole) {
 				roleService.addMember(user, adminRole)
 			
-				log.info "$authenticatedUser successfully added $user to $adminRole"
+				log.info "$subject successfully added $user to $adminRole"
 				render message(code: 'fedreg.descriptor.administration.grant.success')
 			} else {
-				log.warn("Attempt to grant administrative control for $descriptor to $user by $authenticatedUser was denied. Administrative role doesn't exist")
+				log.warn("Attempt to grant administrative control for $descriptor to $user by $subject was denied. Administrative role doesn't exist")
 				response.sendError(403)
 			}
 		}
 		else {
-			log.warn("Attempt to assign complete administrative control for $descriptor to $user by $authenticatedUser was denied, incorrect permission set")
+			log.warn("Attempt to assign complete administrative control for $descriptor to $user by $subject was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}
@@ -97,15 +97,15 @@ class DescriptorAdministrationController {
 		def descriptor = Descriptor.get(params.id)
 		if (!descriptor) {
 			flash.type="error"
-			flash.message = message(code: 'fedreg.core.descriptor.nonexistant')
+			flash.message = message(code: 'aaf.fr.foundation.descriptor.nonexistant')
 			redirect(action: "list")
 			return
 		}	
 		
-		def user = UserBase.get(params.userID)
+		def user = Subject.get(params.userID)
 		if (!descriptor) {
 			flash.type="error"
-			flash.message = message(code: 'fedreg.core.user.nonexistant')
+			flash.message = message(code: 'aaf.fr.foundation.user.nonexistant')
 			redirect(action: "list")
 			return
 		}
@@ -114,11 +114,11 @@ class DescriptorAdministrationController {
 			def adminRole = Role.findByName("descriptor-${descriptor.id}-administrators")
 			roleService.deleteMember(user, adminRole)
 			
-			log.info "$authenticatedUser successfully removed $user from $adminRole"
+			log.info "$subject successfully removed $user from $adminRole"
 			render message(code: 'fedreg.descriptor.administration.revoke.success')
 		}
 		else {
-			log.warn("Attempt to remove complete administrative control for $descriptor from $user by $authenticatedUser was denied, incorrect permission set")
+			log.warn("Attempt to remove complete administrative control for $descriptor from $user by $subject was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}

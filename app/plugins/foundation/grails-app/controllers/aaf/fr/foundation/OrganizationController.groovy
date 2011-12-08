@@ -48,7 +48,7 @@ class OrganizationController {
 		}
 		else {
 			flash.type="error"
-			flash.message = message(code: 'fedreg.core.organization.nonexistant')
+			flash.message = message(code: 'aaf.fr.foundation.organization.nonexistant')
 			redirect(action: "list")
 		}
 	}
@@ -62,13 +62,13 @@ class OrganizationController {
 		def (created, organization, contact) = organizationService.create(params)
 	
 		if(created) {
-			log.info "$authenticatedUser created $organization"
+			log.info "$subject created $organization"
 			redirect (action: "show", id: organization.id)
 		} else {
-			log.info "$authenticatedUser failed to create $organization"
+			log.info "$subject failed to create $organization"
 			
 			flash.type="error"
-			flash.message = message(code: 'fedreg.core.organization.save.validation.error')
+			flash.message = message(code: 'aaf.fr.foundation.organization.save.validation.error')
 			render (view:'create', model:[organization:organization, contact:contact, organizationTypes: OrganizationType.list()])
 		}
 	}
@@ -85,7 +85,7 @@ class OrganizationController {
 		def organization = Organization.get(params.id)
 		if (!organization) {
 			flash.type="error"
-			flash.message = message(code: 'fedreg.core.organization.nonexistant')
+			flash.message = message(code: 'aaf.fr.foundation.organization.nonexistant')
 			redirect(action: "list")
 			return
 		}	
@@ -94,7 +94,7 @@ class OrganizationController {
 			[organization: organization, organizationTypes: OrganizationType.list()]	
 		}
 		else {
-			log.warn("Attempt to edit $organization by $authenticatedUser was denied, incorrect permission set")
+			log.warn("Attempt to edit $organization by $subject was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}
@@ -111,7 +111,7 @@ class OrganizationController {
 		def organization_ = Organization.get(params.id)
 		if (!organization_) {
 			flash.type="error"
-			flash.message = message(code: 'fedreg.core.organization.nonexistant')
+			flash.message = message(code: 'aaf.fr.foundation.organization.nonexistant')
 			redirect(action: "list")
 			return
 		}
@@ -119,19 +119,19 @@ class OrganizationController {
 		if(SecurityUtils.subject.isPermitted("organization:${organization_.id}:update")) {
 			def (updated, organization) = organizationService.update(params)
 			if(updated) {
-				log.info "$authenticatedUser updated $organization"
+				log.info "$subject updated $organization"
 				redirect (action: "show", id: organization.id)
 			}
 			else {
-				log.info "$authenticatedUser failed to update $organization"
+				log.info "$subject failed to update $organization"
 				
 				flash.type="error"
-				flash.message = message(code: 'fedreg.core.organization.update.validation.error')
+				flash.message = message(code: 'aaf.fr.foundation.organization.update.validation.error')
 				render (view:'edit', model:[organization:organization, organizationTypes: OrganizationType.list()])
 			}
 		}
 		else {
-			log.warn("Attempt to update $organization_ by $authenticatedUser was denied, incorrect permission set")
+			log.warn("Attempt to update $organization_ by $subject was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}

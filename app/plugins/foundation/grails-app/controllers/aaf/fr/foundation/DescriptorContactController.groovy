@@ -73,7 +73,7 @@ class DescriptorContactController {
 			
 			contactPerson.save()
 			if(contactPerson.hasErrors()) {
-				log.debug "$authenticatedUser failed to create $contactPerson linked to $contact for $descriptor"
+				log.debug "$subject failed to create $contactPerson linked to $contact for $descriptor"
 				contactPerson.errors.each {
 					log.error it
 				}
@@ -82,11 +82,11 @@ class DescriptorContactController {
 				return
 			}
 			
-			log.debug "$authenticatedUser created $contactPerson linked to $contact for $descriptor"
+			log.debug "$subject created $contactPerson linked to $contact for $descriptor"
 			render message(code: 'fedreg.contactperson.create.success')
 		}
 		else {
-			log.warn("Attempt to link contact to $descriptor by $authenticatedUser was denied, incorrect permission set")
+			log.warn("Attempt to link contact to $descriptor by $subject was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}
@@ -116,11 +116,11 @@ class DescriptorContactController {
 		if(SecurityUtils.subject.isPermitted("descriptor:${descriptor.id}:contact:remove")) {
 			contactPerson.delete();
 			
-			log.debug "$authenticatedUser deleted $contactPerson from $descriptor"
+			log.debug "$subject deleted $contactPerson from $descriptor"
 			render message(code: 'fedreg.contactperson.delete.success')
 		}
 		else {
-			log.warn("Attempt to remove $contactPerson from descriptor $id by $authenticatedUser was denied, incorrect permission set")
+			log.warn("Attempt to remove $contactPerson from descriptor $id by $subject was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}

@@ -1,12 +1,10 @@
 package aaf.fr.foundation
 
 import grails.plugin.spock.*
+import aaf.fr.workflow.*
+import aaf.fr.identity.Subject
 
-import fedreg.core.*
-import fedreg.workflow.*
-import grails.plugins.nimble.core.*
-
-class IDPSSODescriptorControllerSpec extends IntegrationSpec {
+class IdentityProviderControllerSpec extends IntegrationSpec {
 	
 	def controller, idpssoDescriptorService, user
 	
@@ -15,11 +13,11 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 	}
 	
 	def setup () {
-		idpssoDescriptorService = new IDPSSODescriptorService()
+		idpssoDescriptorService = new IdentityProviderService()
 		
-		controller = new IDPSSODescriptorController(IDPSSODescriptorService:idpssoDescriptorService)
+		controller = new IdentityProviderController(IdentityProviderService:idpssoDescriptorService)
 		
-        user = UserBase.build()
+        user = Subject.build()
 		SpecHelpers.setupShiroEnv(user)
 	}
 	
@@ -66,7 +64,7 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		then:
 		controller.flash.type == "error"
 		controller.flash.message == "fedreg.controllers.namevalue.missing"
-		controller.response.redirectedUrl == "/IDPSSODescriptor/list"
+		controller.response.redirectedUrl == "/identityProvider/list"
 	}
 	
 	def "Show with invalid IDPSSODescriptor ID"() {
@@ -78,8 +76,8 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		
 		then:
 		controller.flash.type == "error"
-		controller.flash.message == "fedreg.core.idpssoroledescriptor.nonexistant"
-		controller.response.redirectedUrl == "/IDPSSODescriptor/list"
+		controller.flash.message == "aaf.fr.foundation.idpssoroledescriptor.nonexistant"
+		controller.response.redirectedUrl == "/identityProvider/list"
 	}
 	
 	def "Validate create"() {
@@ -130,7 +128,7 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		def model = controller.save()
 		
 		then:
-		controller.response.redirectedUrl == "/IDPSSODescriptor/show/${identityProvider.id}"	
+		controller.response.redirectedUrl == "/identityProvider/show/${identityProvider.id}"	
 	}
 	
 	def "Validate failed save"() {
@@ -161,7 +159,7 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		attributeAuthority == controller.modelAndView.model.attributeAuthority
 		
 		controller.flash.type == "error"
-		controller.flash.message == "fedreg.core.idpssoroledescriptor.save.validation.error"	
+		controller.flash.message == "aaf.fr.foundation.idpssoroledescriptor.save.validation.error"	
 	}
 	
 	def "Validate successful update"() {
@@ -171,7 +169,7 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		def identityProvider = IDPSSODescriptor.build(entityDescriptor:entityDescriptor).save()
 		
 		controller.params.id = identityProvider.id
-		user.perms.add("descriptor:${identityProvider.id}:update")
+		user.permissions.add("descriptor:${identityProvider.id}:update")
         idpssoDescriptorService.metaClass.update = { def p -> 
             return [true, identityProvider]
         } 
@@ -180,7 +178,7 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		controller.update()
 		
 		then:
-		controller.response.redirectedUrl == "/IDPSSODescriptor/show/${identityProvider.id}"	
+		controller.response.redirectedUrl == "/identityProvider/show/${identityProvider.id}"	
 	}
 
     def "Validate update with incorrect perms"() {
@@ -190,7 +188,7 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
         def identityProvider = IDPSSODescriptor.build(entityDescriptor:entityDescriptor).save()
         
         controller.params.id = identityProvider.id
-        user.perms.add("descriptor:-1:update")
+        user.permissions.add("descriptor:-1:update")
 
         when:
         controller.update()
@@ -206,7 +204,7 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		def identityProvider = IDPSSODescriptor.build(entityDescriptor:entityDescriptor).save()
 		
 		controller.params.id = identityProvider.id
-        user.perms.add("descriptor:${identityProvider.id}:update")
+        user.permissions.add("descriptor:${identityProvider.id}:update")
 		idpssoDescriptorService.metaClass.update = { def p -> 
             return [false, identityProvider]
         } 
@@ -216,6 +214,6 @@ class IDPSSODescriptorControllerSpec extends IntegrationSpec {
 		
 		then:
 		controller.flash.type == "error"
-		controller.flash.message == "fedreg.core.idpssoroledescriptor.update.validation.error"	
+		controller.flash.message == "aaf.fr.foundation.idpssoroledescriptor.update.validation.error"	
 	}
 }

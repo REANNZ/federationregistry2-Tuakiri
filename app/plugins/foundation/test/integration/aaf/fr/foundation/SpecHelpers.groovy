@@ -7,15 +7,13 @@ import org.apache.shiro.subject.Subject
 import org.apache.shiro.util.ThreadContext
 import org.apache.shiro.SecurityUtils
 
-
-
-
 public class SpecHelpers {
 	
-	static void setupShiroEnv(def user) {
-		UserBase.metaClass.perms = [] as List
-		
-		def subject = [ getPrincipal: { user.id }, isAuthenticated: { true }, isPermitted: { perm -> def res = false; user.perms.each { if (it == perm) { res = true }}; res;} ] as Subject
+	static void setupShiroEnv(def user) {		
+
+    aaf.fr.identity.Subject.metaClass.permissions = [] as List
+
+		def subject = [ getPrincipal: { user.id }, isAuthenticated: { true }, isPermitted: { perm -> def res = false; user.permissions.each { if (it == perm) { res = true }}; res;} ] as Subject
 		ThreadContext.put( ThreadContext.SECURITY_MANAGER_KEY, [ getSubject: { subject } ] as SecurityManager )
 		SecurityUtils.metaClass.static.getSubject = { subject }
 	}

@@ -86,7 +86,7 @@ class ContactsController {
 
 		flash.type = "success"
 	    flash.message = message(code: 'fedreg.contact.create.success')
-		log.info "$authenticatedUser created $contact"
+		log.info "$subject created $contact"
 		redirect action: "show", id: contact.id
 	}
 
@@ -110,7 +110,7 @@ class ContactsController {
 			def organizations = Organization.list()
 			[contact: contact, organizations:organizations]
 		} else {
-			log.warn("Attempt to edit ${contact} by $authenticatedUser was denied, incorrect permission set")
+			log.warn("Attempt to edit ${contact} by $subject was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}
@@ -204,10 +204,10 @@ class ContactsController {
 	
 			flash.type = "success"
 		    flash.message = message(code: 'fedreg.contact.update.success')
-			log.info "$authenticatedUser updated $contact"
+			log.info "$subject updated $contact"
 			redirect action: "show", id: contact.id
 		} else {
-			log.warn("Attempt to update ${contact} by $authenticatedUser was denied, incorrect permission set")
+			log.warn("Attempt to update ${contact} by $subject was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}

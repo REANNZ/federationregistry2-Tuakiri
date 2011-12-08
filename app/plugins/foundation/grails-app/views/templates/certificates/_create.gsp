@@ -1,5 +1,5 @@
 
-<%@page import="fedreg.core.SPSSODescriptor" %>
+<%@page import="aaf.fr.foundation.SPSSODescriptor" %>
 
 <n:hasPermission target="descriptor:${descriptor.id}:crypto:create">
 	<r:script>

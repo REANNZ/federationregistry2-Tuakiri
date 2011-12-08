@@ -1,7 +1,7 @@
 dataSource {
     pooled = true
     driverClassName = "org.h2.Driver"
-    username = "sa"
+    principal = "sa"
     password = ""
 }
 hibernate {

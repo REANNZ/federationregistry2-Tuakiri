@@ -1,4 +1,4 @@
-<%@page import="fedreg.core.AttributeBase" %>
+<%@page import="aaf.fr.foundation.AttributeBase" %>
 <g:if test="${attributeConsumingServices}">
 <table>
 	<tbody>

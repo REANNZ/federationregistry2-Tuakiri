@@ -4,9 +4,8 @@ import grails.plugin.spock.*
 import org.springframework.transaction.interceptor.TransactionAspectSupport
 import org.springframework.transaction.annotation.*
 
-import fedreg.core.*
-import fedreg.workflow.*
-import grails.plugins.nimble.core.*
+import aaf.fr.workflow.*
+import aaf.fr.identity.Subject
 
 class OrganizationServiceSpec extends IntegrationSpec {
 	
@@ -21,7 +20,7 @@ class OrganizationServiceSpec extends IntegrationSpec {
 		SpecHelpers.registerMetaClass(WorkflowProcessService, savedMetaClasses)
 		workflowProcessService.metaClass = WorkflowProcessService.metaClass
 		
-		def user = UserBase.build()
+		def user = Subject.build()
 		SpecHelpers.setupShiroEnv(user)
 		
 		params = [:]

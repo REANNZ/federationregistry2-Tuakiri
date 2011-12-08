@@ -28,7 +28,7 @@ class EndpointService {
 			throw new ErronousStateException("Unable to save when creating ${endpoint} for ${descriptor}")
 		}
 		
-		log.info "$authenticatedUser created $endpoint for $descriptor of type $endpointType at $loc"
+		log.info "$subject created $endpoint for $descriptor of type $endpointType at $loc"
 	}
 	
 	def update(def endpoint, def binding, def location, def index) {
@@ -46,7 +46,7 @@ class EndpointService {
 			throw new ErronousStateException("Unable to save when updating ${endpoint}")
 		}
 		
-		log.info "$authenticatedUser updated $endpoint"
+		log.info "$subject updated $endpoint"
 	}
 	
 	def makeDefault(def endpoint, def endpointType) {
@@ -64,7 +64,7 @@ class EndpointService {
 		endpoint.isDefault = true
 		endpoint.save()
 		
-		log.info "$authenticatedUser set $endpoint as default"
+		log.info "$subject set $endpoint as default"
 	}
 	
 	def toggle(def endpoint) {
@@ -79,7 +79,7 @@ class EndpointService {
 			throw new ErronousStateException("Unable to save when toggling active state for ${endpoint}")
 		}
 		
-		log.info "$authenticatedUser toggled $endpoint state"
+		log.info "$subject toggled $endpoint state"
 	}
 	
 	def delete(def endpoint, def endpointType) {
@@ -96,7 +96,7 @@ class EndpointService {
 			throw new ErronousStateException("Unable to save descriptor when deleting ${endpoint}")
 		}
 		
-		log.info "$authenticatedUser deleted $endpoint from $descriptor"
+		log.info "$subject deleted $endpoint from $descriptor"
 	}
 	
 	def determineDescriptorProtocolSupport(descriptor) {

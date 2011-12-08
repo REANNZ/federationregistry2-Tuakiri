@@ -1,5 +1,5 @@
 
-<%@ page import="fedreg.core.Organization" %>
+<%@ page import="aaf.fr.foundation.Organization" %>
 <html>
 	<head>
 		

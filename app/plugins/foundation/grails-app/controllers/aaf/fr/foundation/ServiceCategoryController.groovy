@@ -68,7 +68,7 @@ class ServiceCategoryController {
 		def serviceProvider = SPSSODescriptor.get(params.id)
 		if(!serviceProvider) {
 			log.warn "SPSSODescriptor identified by id $params.id was not located"
-			render message(code: 'fedreg.core.spssoroledescriptor.nonexistant', args: [params.id])
+			render message(code: 'aaf.fr.foundation.spssoroledescriptor.nonexistant', args: [params.id])
 			response.setStatus(500)
 			return
 		}
@@ -92,13 +92,13 @@ class ServiceCategoryController {
 		
 		def serviceProvider = SPSSODescriptor.get(params.id)
 		if (!serviceProvider) {
-			render message(code: 'fedreg.core.spssoroledescriptor.nonexistant')
+			render message(code: 'aaf.fr.foundation.spssoroledescriptor.nonexistant')
 			response.setStatus(500)
 			return
 		}
 		def category = ServiceCategory.get(params.categoryID)
 		if (!category) {
-			render message(code: 'fedreg.core.servicecategory.nonexistant')
+			render message(code: 'aaf.fr.foundation.servicecategory.nonexistant')
 			response.setStatus(500)
 			return
 		}
@@ -108,21 +108,21 @@ class ServiceCategoryController {
 				serviceProvider.addToServiceCategories(category)
 				serviceProvider.save()
 				if(serviceProvider.hasErrors()) {
-					render message(code: 'fedreg.core.servicecategory.error.adding')
+					render message(code: 'aaf.fr.foundation.servicecategory.error.adding')
 					response.setStatus(500)
 					return
 				}
 				
-				render message(code: 'fedreg.core.servicecategory.added')
+				render message(code: 'aaf.fr.foundation.servicecategory.added')
 			}
 			else {
-				render message(code: 'fedreg.core.servicecategory.already.supported')
+				render message(code: 'aaf.fr.foundation.servicecategory.already.supported')
 				response.setStatus(500)
 				return
 			}
 		}
 		else {
-			log.warn("Attempt to update $serviceProvider by $authenticatedUser was denied, incorrect permission set")
+			log.warn("Attempt to update $serviceProvider by $subject was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}
@@ -143,13 +143,13 @@ class ServiceCategoryController {
 		
 		def serviceProvider = SPSSODescriptor.get(params.id)
 		if (!serviceProvider) {
-			render message(code: 'fedreg.core.spssoroledescriptor.nonexistant')
+			render message(code: 'aaf.fr.foundation.spssoroledescriptor.nonexistant')
 			response.setStatus(500)
 			return
 		}
 		def category = ServiceCategory.get(params.categoryID)
 		if (!category) {
-			render message(code: 'fedreg.core.servicecategory.nonexistant')
+			render message(code: 'aaf.fr.foundation.servicecategory.nonexistant')
 			response.setStatus(500)
 			return
 		}
@@ -158,15 +158,15 @@ class ServiceCategoryController {
 			serviceProvider.removeFromServiceCategories(category)
 			serviceProvider.save()
 			if(serviceProvider.hasErrors()) {
-				render message(code: 'fedreg.core.servicecategory.error.removing')
+				render message(code: 'aaf.fr.foundation.servicecategory.error.removing')
 				response.setStatus(500)
 				return
 			}
 			
-			render message(code: 'fedreg.core.servicecategory.removed')
+			render message(code: 'aaf.fr.foundation.servicecategory.removed')
 		}
 		else {
-			log.warn("Attempt to update $serviceProvider by $authenticatedUser was denied, incorrect permission set")
+			log.warn("Attempt to update $serviceProvider by $subject was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}

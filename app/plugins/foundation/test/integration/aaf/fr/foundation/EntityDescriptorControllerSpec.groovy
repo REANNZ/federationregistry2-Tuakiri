@@ -1,10 +1,8 @@
 package aaf.fr.foundation
 
 import grails.plugin.spock.*
-
-import fedreg.core.*
-import fedreg.workflow.*
-import grails.plugins.nimble.core.*
+import aaf.fr.workflow.*
+import aaf.fr.identity.Subject
 
 class EntityDescriptorControllerSpec extends IntegrationSpec {
 	
@@ -19,7 +17,7 @@ class EntityDescriptorControllerSpec extends IntegrationSpec {
         entityDescriptorService = new EntityDescriptorService()
 		
 		controller = new EntityDescriptorController(entityDescriptorService:entityDescriptorService)
-		user = UserBase.build()
+		user = Subject.build()
 		SpecHelpers.setupShiroEnv(user)
 	}
 	
@@ -56,7 +54,7 @@ class EntityDescriptorControllerSpec extends IntegrationSpec {
 		
 		then:
 		controller.flash.type == "error"
-		controller.flash.message == "fedreg.core.entitydescriptor.nonexistant"
+		controller.flash.message == "aaf.fr.foundation.entitydescriptor.nonexistant"
 		controller.response.redirectedUrl == "/entityDescriptor/list"
 	}
 	
@@ -103,7 +101,7 @@ class EntityDescriptorControllerSpec extends IntegrationSpec {
 		
 		then:		
 		controller.flash.type == "error"
-		controller.flash.message == "fedreg.core.entitydescriptor.save.validation.error"	
+		controller.flash.message == "aaf.fr.foundation.entitydescriptor.save.validation.error"	
 	}
 	
 	def "Validate successful update with correct permissions"() {
@@ -112,7 +110,7 @@ class EntityDescriptorControllerSpec extends IntegrationSpec {
 		def entityDescriptor = EntityDescriptor.build(organization:organization)
 		
 		controller.params.id = entityDescriptor.id
-		user.perms.add("descriptor:${entityDescriptor.id}:update")
+		user.permissions.add("descriptor:${entityDescriptor.id}:update")
 		
 		when:
 		entityDescriptorService.metaClass.update = { def p -> 
@@ -134,7 +132,7 @@ class EntityDescriptorControllerSpec extends IntegrationSpec {
 		then:
 		controller.response.redirectedUrl == "/entityDescriptor/list"	
 		controller.flash.type == "error"
-		controller.flash.message == "fedreg.core.entitydescriptor.nonexistant"
+		controller.flash.message == "aaf.fr.foundation.entitydescriptor.nonexistant"
 	}
 	
 	def "Invalid service response fails update with correct permissions"() {
@@ -143,7 +141,7 @@ class EntityDescriptorControllerSpec extends IntegrationSpec {
 		def entityDescriptor = EntityDescriptor.build(organization:organization)
 		
 		controller.params.id = entityDescriptor.id
-		user.perms.add("descriptor:${entityDescriptor.id}:update")
+		user.permissions.add("descriptor:${entityDescriptor.id}:update")
 		
 		when:
 		entityDescriptorService.metaClass.update = { def p -> 
@@ -153,7 +151,7 @@ class EntityDescriptorControllerSpec extends IntegrationSpec {
 		
 		then:		
 		controller.flash.type == "error"
-		controller.flash.message == "fedreg.core.entitydescriptor.update.validation.error"	
+		controller.flash.message == "aaf.fr.foundation.entitydescriptor.update.validation.error"	
 	}
 	
 	def "Validate unsuccessful update without correct permissions"() {

@@ -3,7 +3,7 @@ package aaf.fr.foundation
 import org.springframework.context.i18n.LocaleContextHolder as LCH
 import org.springframework.transaction.interceptor.TransactionAspectSupport
 
-import fedreg.workflow.ProcessPriority
+import aaf.fr.workflow.ProcessPriority
 
 
 /**
@@ -27,7 +27,7 @@ class OrganizationService {
 		}
 		
 		if(!organization.validate()) {
-			log.info "$authenticatedUser attempted to create $organization but failed Organization validation"
+			log.info "$subject attempted to create $organization but failed Organization validation"
 			organization?.errors.each { log.error it }
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly() 
 			return [ false, organization, contact ]
@@ -43,7 +43,7 @@ class OrganizationService {
 			contact.organization = savedOrg
 			
 		if(!contact.validate()) {
-			log.info "$authenticatedUser attempted to create $organization but failed Contact validation"
+			log.info "$subject attempted to create $organization but failed Contact validation"
 			contact?.errors.each { log.error it }
 			savedOrg.discard()
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly() 
@@ -64,7 +64,7 @@ class OrganizationService {
 		else
 			throw new ErronousStateException("Unable to execute workflow when creating ${organization}")
 		
-		log.info "$authenticatedUser created $organization"
+		log.info "$subject created $organization"
 		return [ true, organization, contact ]
 	}
 	
@@ -87,7 +87,7 @@ class OrganizationService {
 		}
 		
 		if(!organization.validate()) {
-			log.info "$authenticatedUser attempted to update $organization but failed Organization validation"
+			log.info "$subject attempted to update $organization but failed Organization validation"
 			organization?.errors.each { log.error it }
 			return [ false, organization ]
 		}
@@ -97,7 +97,7 @@ class OrganizationService {
 			throw new ErronousStateException("Unable to save when updating ${organization}")
 		}
 		
-		log.info "$authenticatedUser updated $organization"
+		log.info "$subject updated $organization"
 		return [true, organization]
 	}
 	
@@ -112,7 +112,7 @@ class OrganizationService {
 		def contacts = Contact.findAllWhere(organization:org)
 		contacts.each { contact ->
 			// This gets around a stupid hibernate cascade bug primarily but is also useful as a second level check to prevent accidents
-			if(contact.id == authenticatedUser.contact.id)
+			if(contact.id == subject.contact.id)
 				throw new RuntimeException("Authenticated user is a contact for this organization. Users are unable to remove their own organization.")
 			
 			def contactPersons = ContactPerson.findAllWhere(contact:contact)
@@ -124,7 +124,7 @@ class OrganizationService {
 		}
 		
 		org.delete()
-		log.info "$authenticatedUser deleted $org"
+		log.info "$subject deleted $org"
 	}
 	
 	def archive(def id) {
@@ -142,7 +142,7 @@ class OrganizationService {
 			org.errors.each { log.error it }
 			throw new ErronousStateException("Unable to archive Organization with id $id")
 		}
-		log.info "$authenticatedUser successfully archived $org"
+		log.info "$subject successfully archived $org"
 	}
 	
 	def unarchive(def id) {
@@ -159,6 +159,6 @@ class OrganizationService {
 			org.errors.each { log.error it }
 			throw new ErronousStateException("Unable to unarchive Organization with id $id")
 		}
-		log.info "$authenticatedUser successfully unarchived $org"
+		log.info "$subject successfully unarchived $org"
 	}
 }

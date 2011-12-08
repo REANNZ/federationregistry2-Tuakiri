@@ -1,9 +1,8 @@
 package aaf.fr.foundation
 
 import grails.plugin.spock.*
-
-import fedreg.core.*
-import fedreg.workflow.*
+import aaf.fr.workflow.*
+import aaf.fr.identity.Subject
 import com.icegreen.greenmail.util.*
 
 class BootstrapControllerSpec extends IntegrationSpec {	
@@ -13,12 +12,12 @@ class BootstrapControllerSpec extends IntegrationSpec {
 	}
 	
 	def setup () {
-        idpService = new IDPSSODescriptorService()
-        spService = new SPSSODescriptorService()
+        idpService = new IdentityProviderService()
+        spService = new ServiceProviderService()
         organizationService = new OrganizationService()
-		controller = new BootstrapController(IDPSSODescriptorService:idpService, SPSSODescriptorService:spService, organizationService: organizationService)
+		controller = new BootstrapController(IdentityProviderService:idpService, ServiceProviderService:spService, organizationService: organizationService)
 		
-        def user = UserBase.build()
+        def user = Subject.build()
 		SpecHelpers.setupShiroEnv(user)
 	}
 	
@@ -53,7 +52,7 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		def httpPost = SingleSignOnService.build(descriptor:identityProvider)
 		def httpRedirect = SingleSignOnService.build(descriptor:identityProvider)
 		def soapArtifact = SingleSignOnService.build(descriptor:identityProvider)
-		def contact = fedreg.core.Contact.build()
+		def contact = aaf.fr.foundation.Contact.build()
 		
 		def ret = [:]
 		ret.organization = organization
@@ -86,7 +85,7 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		def httpPost = SingleSignOnService.build(descriptor:identityProvider)
 		def httpRedirect = SingleSignOnService.build(descriptor:identityProvider)
 		def soapArtifact = SingleSignOnService.build(descriptor:identityProvider)
-		def contact = fedreg.core.Contact.build()
+		def contact = aaf.fr.foundation.Contact.build()
 		
 		def ret = [:]
 		ret.organization = organization
@@ -108,7 +107,7 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		
 		then:
 		controller.flash.type == "error"
-		controller.flash.message == "fedreg.core.idpssoroledescriptor.register.validation.error"
+		controller.flash.message == "aaf.fr.foundation.idpssoroledescriptor.register.validation.error"
 	}
 	
 	def "Validate IDP Registered with no supplied ID"() {
@@ -130,7 +129,7 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		
 		then:
 		controller.flash.type == "error"
-		controller.flash.message == "fedreg.core.idpssoroledescriptor.nonexistant"
+		controller.flash.message == "aaf.fr.foundation.idpssoroledescriptor.nonexistant"
 		controller.response.redirectedUrl == "/"
 	}
 	
@@ -197,7 +196,7 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		
 		then:
 		controller.flash.type == "error"
-		controller.flash.message == "fedreg.core.spssoroledescriptor.register.validation.error"	
+		controller.flash.message == "aaf.fr.foundation.spssoroledescriptor.register.validation.error"	
 	}
 	
 	def "Validate SP Registered with no supplied ID"() {
@@ -219,7 +218,7 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		
 		then:
 		controller.flash.type == "error"
-		controller.flash.message == "fedreg.core.spssoroledescriptor.nonexistant"
+		controller.flash.message == "aaf.fr.foundation.spssoroledescriptor.nonexistant"
 		controller.response.redirectedUrl == "/"
 	}
 	
@@ -264,7 +263,7 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		
 		then:
 		controller.flash.type == "error"
-		controller.flash.message == "fedreg.core.organization.register.validation.error"	
+		controller.flash.message == "aaf.fr.foundation.organization.register.validation.error"	
 	}
 	
 	def "Validate Organization Registered with no supplied ID"() {		
@@ -286,7 +285,7 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		
 		then:
 		controller.flash.type == "error"
-		controller.flash.message == "fedreg.core.organization.nonexistant"
+		controller.flash.message == "aaf.fr.foundation.organization.nonexistant"
 		controller.response.redirectedUrl == "/"
 	}
 

@@ -13,9 +13,9 @@ class DescriptorEndpointController {
 	def allowedMethods = [create:'POST', update:'PUT', toggle:'PUT', makeDefault:'PUT', delete:'DELETE']
 	
 	// Maps allowed endpoints to internal class representation
-	def allowedEndpoints = [singleSignOnServices:"fedreg.core.SingleSignOnService", artifactResolutionServices:"fedreg.core.ArtifactResolutionService", manageNameIDServices:"fedreg.core.ManageNameIDService",
-							singleLogoutServices:"fedreg.core.SingleLogoutService", assertionConsumerServices:"fedreg.core.AssertionConsumerService", attributeServices:"fedreg.core.AttributeService", 
-							discoveryResponseServices:"fedreg.core.DiscoveryResponseService"]
+	def allowedEndpoints = [singleSignOnServices:"aaf.fr.foundation.SingleSignOnService", artifactResolutionServices:"aaf.fr.foundation.ArtifactResolutionService", manageNameIDServices:"aaf.fr.foundation.ManageNameIDService",
+							singleLogoutServices:"aaf.fr.foundation.SingleLogoutService", assertionConsumerServices:"aaf.fr.foundation.AssertionConsumerService", attributeServices:"aaf.fr.foundation.AttributeService", 
+							discoveryResponseServices:"aaf.fr.foundation.DiscoveryResponseService"]
 
 	def endpointService
 	
@@ -79,10 +79,10 @@ class DescriptorEndpointController {
 		if(SecurityUtils.subject.isPermitted("descriptor:${endpoint.descriptor.id}:endpoint:update")) {
 			endpointService.update(endpoint, binding, params.location, params.int('samlindex'))
 		
-			log.info "$authenticatedUser updated $endpoint for ${endpoint.descriptor}"
+			log.info "$subject updated $endpoint for ${endpoint.descriptor}"
 			render message(code: 'fedreg.endpoint.update.success')
 		} else {
-			log.warn("Attempt to update $endpoint by $authenticatedUser was denied, incorrect permission set")
+			log.warn("Attempt to update $endpoint by $subject was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}
@@ -118,7 +118,7 @@ class DescriptorEndpointController {
 			render message(code: 'fedreg.endpoint.delete.success')
 		}
 		else {
-			log.warn("Attempt to remove $endpoint by $authenticatedUser was denied, incorrect permission set")
+			log.warn("Attempt to remove $endpoint by $subject was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}
@@ -233,17 +233,17 @@ class DescriptorEndpointController {
 				endpointService.create(descriptor, allowedEndpoints.get(endpointType), endpointType, binding, params.location, params.int('samlindex'), params.active ? true:false)
 				endpointService.determineDescriptorProtocolSupport(descriptor)
 				
-				log.info "$authenticatedUser created new endpoint location ${params.location}, $binding for $descriptor"
+				log.info "$subject created new endpoint location ${params.location}, $binding for $descriptor"
 				render message(code: 'fedreg.endpoint.create.success')
 			}
 			else {
-				log.warn "$authenticatedUser unable to create endpoint as ${endpointType} is invalid for ${descriptor}"
+				log.warn "$subject unable to create endpoint as ${endpointType} is invalid for ${descriptor}"
 				render message(code: 'fedreg.endpoint.invalid', args: [endpointType])
 				response.setStatus(500)
 			}
 		}
 		else {
-			log.warn("Attempt to create endpoint for $descriptor by $authenticatedUser was denied, incorrect permission set")
+			log.warn("Attempt to create endpoint for $descriptor by $subject was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}
@@ -267,11 +267,11 @@ class DescriptorEndpointController {
 		if(SecurityUtils.subject.isPermitted("descriptor:${endpoint.descriptor.id}:endpoint:toggle")) {
 			endpointService.toggle(endpoint)
 			
-			log.info "$authenticatedUser toggled state of $endpoint"
+			log.info "$subject toggled state of $endpoint"
 			render message(code: 'fedreg.endpoint.toggle.success')
 		}
 		else {
-			log.warn("Attempt to toggle $endpoint state by $authenticatedUser was denied, incorrect permission set")
+			log.warn("Attempt to toggle $endpoint state by $subject was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}
@@ -306,7 +306,7 @@ class DescriptorEndpointController {
 			if(allowedEndpoints.containsKey(endpointType) && descriptor.hasProperty(endpointType)) {
 				endpointService.makeDefault(endpoint, endpointType)
 				
-				log.info "$authenticatedUser made $endpoint default for $descriptor"
+				log.info "$subject made $endpoint default for $descriptor"
 				render message(code: 'fedreg.endpoint.makedefault.success')
 			}
 			else {
@@ -316,7 +316,7 @@ class DescriptorEndpointController {
 			}
 		}
 		else {
-			log.warn("Attempt to make $endpoint default by $authenticatedUser was denied, incorrect permission set")
+			log.warn("Attempt to make $endpoint default by $subject was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}

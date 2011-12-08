@@ -1,9 +1,7 @@
 package aaf.fr.foundation
 
 import grails.plugin.spock.*
-
-import fedreg.core.*
-import grails.plugins.nimble.core.*
+import aaf.fr.identity.Subject
 
 class OrganizationContactControllerSpec extends IntegrationSpec {
 	
@@ -15,7 +13,7 @@ class OrganizationContactControllerSpec extends IntegrationSpec {
         }
         controller = new OrganizationContactController()
 
-		user = new UserBase(username:"testuser", profile:new ProfileBase())
+		user = new Subject(principal:"testuser", email:"test@testdomain.com")
 		SpecHelpers.setupShiroEnv(user)
 	}
 	
@@ -53,7 +51,7 @@ class OrganizationContactControllerSpec extends IntegrationSpec {
 		controller.params.id = o.id
 		controller.params.contactID = c1.id
 		controller.params.contactType = ct.name
-		user.perms.add("organization:${o.id}:contact:add")
+		user.permissions.add("organization:${o.id}:contact:add")
 		
 		when:
 		controller.create()

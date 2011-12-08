@@ -24,7 +24,7 @@ class AttributeAuthorityDescriptorService {
 		
 		entityDescriptor.attributeAuthorityDescriptors.remove(aa)
 		
-		log.info "$authenticatedUser deleted $aa" 
+		log.info "$subject deleted $aa" 
 		
 		aa.delete()
 	}
@@ -42,7 +42,7 @@ class AttributeAuthorityDescriptorService {
 			throw new ErronousStateException("Unable to archive AttributeAuthorityDescriptor with id $id")
 		}
 		
-		log.info "$authenticatedUser successfully archived $aa"
+		log.info "$subject successfully archived $aa"
 	}
 
 	def unarchive(long id) {
@@ -57,7 +57,7 @@ class AttributeAuthorityDescriptorService {
 			throw new ErronousStateException("Unable to unarchive AttributeAuthorityDescriptor with id $id")
 		}
 		
-		log.info "$authenticatedUser successfully unarchived $aa"
+		log.info "$subject successfully unarchived $aa"
 	}
 	
 	def activate(long id) {
@@ -72,6 +72,6 @@ class AttributeAuthorityDescriptorService {
 			throw new ErronousStateException("Unable to activate AttributeAuthorityDescriptor with id $id")
 		}
 		
-		log.info "$authenticatedUser successfully activate $aa"
+		log.info "$subject successfully activate $aa"
 	}
 }

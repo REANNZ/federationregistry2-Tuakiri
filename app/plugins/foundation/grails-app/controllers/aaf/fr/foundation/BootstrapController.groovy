@@ -8,8 +8,8 @@ package aaf.fr.foundation
 class BootstrapController {
 	def allowedMethods = [saveidp: 'POST', savesp: 'POST', saveorganization: 'POST']
 	
-	def IDPSSODescriptorService
-	def SPSSODescriptorService
+	def IdentityProviderService
+	def ServiceProviderService
 	def organizationService
 	def grailsApplication
 	
@@ -24,7 +24,7 @@ class BootstrapController {
 	}
 	
 	def saveidp = {
-		def (created, ret) = IDPSSODescriptorService.create(params)
+		def (created, ret) = IdentityProviderService.create(params)
 		
 		if(created) {	
 			log.info "Sucessfully registered ${ret.identityProvider} from public source"
@@ -32,7 +32,7 @@ class BootstrapController {
 		}
 		else {
 			flash.type="error"
-			flash.message = message(code: 'fedreg.core.idpssoroledescriptor.register.validation.error')
+			flash.message = message(code: 'aaf.fr.foundation.idpssoroledescriptor.register.validation.error')
 			def c = AttributeBase.createCriteria()
 			def attributeList = c.list {
 				order("category", "asc")
@@ -54,7 +54,7 @@ class BootstrapController {
 		def identityProvider = IDPSSODescriptor.get(params.id)
 		if (!identityProvider) {
 			flash.type="error"
-			flash.message = message(code: 'fedreg.core.idpssoroledescriptor.nonexistant')
+			flash.message = message(code: 'aaf.fr.foundation.idpssoroledescriptor.nonexistant')
 			redirect uri:"/"
 			return
 		}
@@ -73,7 +73,7 @@ class BootstrapController {
 	}
 	
 	def savesp = {
-		def (created, ret) = SPSSODescriptorService.create(params)
+		def (created, ret) = ServiceProviderService.create(params)
 		
 		if(created) {
 			log.info "Sucessfully registered ${ret.serviceProvider} from public source"
@@ -81,7 +81,7 @@ class BootstrapController {
 		}
 		else {
 			flash.type="error"
-			flash.message = message(code: 'fedreg.core.spssoroledescriptor.register.validation.error')
+			flash.message = message(code: 'aaf.fr.foundation.spssoroledescriptor.register.validation.error')
 			def c = AttributeBase.createCriteria()
 			def attributeList = c.list {
 				order("category", "asc")
@@ -103,7 +103,7 @@ class BootstrapController {
 		def serviceProvider = SPSSODescriptor.get(params.id)
 		if (!serviceProvider) {
 			flash.type="error"
-			flash.message = message(code: 'fedreg.core.spssoroledescriptor.nonexistant')
+			flash.message = message(code: 'aaf.fr.foundation.spssoroledescriptor.nonexistant')
 			redirect uri: "/"
 			return
 		}
@@ -125,7 +125,7 @@ class BootstrapController {
 		}
 		else {
 			flash.type="error"
-			flash.message = message(code: 'fedreg.core.organization.register.validation.error')
+			flash.message = message(code: 'aaf.fr.foundation.organization.register.validation.error')
 			render (view:'organization', model:[organization:organization, contact:contact, organizationTypes: OrganizationType.list()])
 		}
 	}
@@ -142,7 +142,7 @@ class BootstrapController {
 		def organization = Organization.get(params.id)
 		if (!organization) {
 			flash.type = "error"
-			flash.message = message(code: 'fedreg.core.organization.nonexistant')
+			flash.message = message(code: 'aaf.fr.foundation.organization.nonexistant')
 			redirect uri: "/"
 			return
 		}

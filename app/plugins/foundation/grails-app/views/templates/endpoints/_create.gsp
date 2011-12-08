@@ -1,7 +1,7 @@
 <n:hasPermission target="descriptor:${descriptor.id}:endpoint:create">
 
-	<%@page import="fedreg.core.SamlURI" %>
-	<%@page import="fedreg.core.SamlURIType" %>
+	<%@page import="aaf.fr.foundation.SamlURI" %>
+	<%@page import="aaf.fr.foundation.SamlURIType" %>
 
 	<script type="text/javascript">
 		$(function() {

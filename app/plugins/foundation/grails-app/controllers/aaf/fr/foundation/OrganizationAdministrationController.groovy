@@ -20,7 +20,7 @@ class OrganizationAdministrationController {
 		def organization = Organization.get(params.id)
 		if (!organization) {
 			flash.type="error"
-			flash.message = message(code: 'fedreg.core.organization.nonexistant')
+			flash.message = message(code: 'aaf.fr.foundation.organization.nonexistant')
 			redirect(action: "list")
 			return
 		}
@@ -33,7 +33,7 @@ class OrganizationAdministrationController {
 		def organization = Organization.get(params.id)
 		if (!organization) {
 			flash.type="error"
-			flash.message = message(code: 'fedreg.core.organization.nonexistant')
+			flash.message = message(code: 'aaf.fr.foundation.organization.nonexistant')
 			redirect(action: "list")
 			return
 		}
@@ -41,7 +41,7 @@ class OrganizationAdministrationController {
 		def q = "%" + params.q + "%"
 	    log.debug("Performing search for users matching $q")
 
-	    def users = UserBase.findAllByUsernameIlike(q)
+	    def users = Subject.findAllByUsernameIlike(q)
 	    ProfileBase.findAllByFullNameIlikeOrEmailIlike(q, q)?.each {
 			if(!users.contains(it.owner))
 				users.add(it.owner)
@@ -57,15 +57,15 @@ class OrganizationAdministrationController {
 		def organization = Organization.get(params.id)
 		if (!organization) {
 			flash.type="error"
-			flash.message = message(code: 'fedreg.core.organization.nonexistant')
+			flash.message = message(code: 'aaf.fr.foundation.organization.nonexistant')
 			redirect(action: "list")
 			return
 		}	
 		
-		def user = UserBase.get(params.userID)
+		def user = Subject.get(params.userID)
 		if (!user) {
 			flash.type="error"
-			flash.message = message(code: 'fedreg.core.user.nonexistant')
+			flash.message = message(code: 'aaf.fr.foundation.user.nonexistant')
 			redirect(action: "list")
 			return
 		}
@@ -74,11 +74,11 @@ class OrganizationAdministrationController {
 			def adminRole = Role.findByName("organization-${organization.id}-administrators")
 			roleService.addMember(user, adminRole)
 			
-			log.info "$authenticatedUser granted $adminRole to $user"
+			log.info "$subject granted $adminRole to $user"
 			render message(code: 'fedreg.organization.administration.grant.success')
 		}
 		else {
-			log.warn("Attempt to assign complete administrative control for $organization to $user by $authenticatedUser was denied, incorrect permission set")
+			log.warn("Attempt to assign complete administrative control for $organization to $user by $subject was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}
@@ -87,15 +87,15 @@ class OrganizationAdministrationController {
 		def organization = Organization.get(params.id)
 		if (!organization) {
 			flash.type="error"
-			flash.message = message(code: 'fedreg.core.organization.nonexistant')
+			flash.message = message(code: 'aaf.fr.foundation.organization.nonexistant')
 			redirect(action: "list")
 			return
 		}	
 		
-		def user = UserBase.get(params.userID)
+		def user = Subject.get(params.userID)
 		if (!user) {
 			flash.type="error"
-			flash.message = message(code: 'fedreg.core.user.nonexistant')
+			flash.message = message(code: 'aaf.fr.foundation.user.nonexistant')
 			redirect(action: "list")
 			return
 		}
@@ -104,11 +104,11 @@ class OrganizationAdministrationController {
 			def adminRole = Role.findByName("organization-${organization.id}-administrators")
 			roleService.deleteMember(user, adminRole)
 			
-			log.info "$authenticatedUser revoked $adminRole from $user"
+			log.info "$subject revoked $adminRole from $user"
 			render message(code: 'fedreg.organization.administration.revoke.success')
 		}
 		else {
-			log.warn("Attempt to remove complete administrative control for $organization from $user by $authenticatedUser was denied, incorrect permission set")
+			log.warn("Attempt to remove complete administrative control for $organization from $user by $subject was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}

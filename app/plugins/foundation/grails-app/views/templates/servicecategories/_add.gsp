@@ -1,6 +1,6 @@
 <n:hasPermission target="descriptor:${descriptor.id}:category:add">
 
-	<%@page import="fedreg.core.ServiceCategory" %>
+	<%@page import="aaf.fr.foundation.ServiceCategory" %>
 	<script type="text/javascript">
 		$(function() {
 			$("#newcategory").hide();

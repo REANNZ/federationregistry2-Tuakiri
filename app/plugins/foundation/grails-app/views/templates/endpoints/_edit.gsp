@@ -1,5 +1,5 @@
-<%@page import="fedreg.core.SamlURI" %>
-<%@page import="fedreg.core.SamlURIType" %>
+<%@page import="aaf.fr.foundation.SamlURI" %>
+<%@page import="aaf.fr.foundation.SamlURIType" %>
 
 <script type="text/javascript">
   <njs:flashgrowl/>
@@ -31,7 +31,7 @@
 						<fr:tooltip code='fedreg.help.endpoint.location' />
 					</td>
 				</tr>
-				<g:if test="${endpoint.instanceOf(fedreg.core.IndexedEndpoint)}">
+				<g:if test="${endpoint.instanceOf(aaf.fr.foundation.IndexedEndpoint)}">
 					<tr>
 						<th><g:message code="label.index" /></th>
 						<td>

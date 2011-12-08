@@ -11,7 +11,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<g:each in="${administrators.sort{it.username}}" var="admin" status="i">
+				<g:each in="${administrators.sort{it.principal}}" var="admin" status="i">
 					<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 						<td>${admin.profile.fullName?.encodeAsHTML()}</td>
 						<td><a href="mailto:${admin.profile.email?.encodeAsHTML()}">${admin.profile.email?.encodeAsHTML()}</a></td>

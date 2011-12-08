@@ -4,7 +4,7 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport
 
 
 
-import grails.plugins.nimble.core.LevelPermission
+import grails.plugins.federatedgrails.LevelPermission
 
 /**
  * Provides methods for managing EntityDescriptor instances.
@@ -33,7 +33,7 @@ class EntityDescriptorService {
 			return [false, entityDescriptor]
 		}
 		
-		log.info "$authenticatedUser created $entityDescriptor (not yet persisted)"
+		log.info "$subject created $entityDescriptor (not yet persisted)"
 		return [true, entityDescriptor]
 	}
 	
@@ -59,9 +59,9 @@ class EntityDescriptorService {
 	    permission.managed = false
 		permissionService.createPermission(permission, adminRole)
 		
-		roleService.addMember(authenticatedUser, adminRole)
+		roleService.addMember(subject, adminRole)
 	
-		log.info "$authenticatedUser created $entityDescriptor"
+		log.info "$subject created $entityDescriptor"
 		return [true, entityDescriptor]
 	}
 	
@@ -82,7 +82,7 @@ class EntityDescriptorService {
 			throw new ErronousStateException("Unable to save when updating ${entityDescriptor}")
 		}
 		
-		log.info "$authenticatedUser updated $entityDescriptor"
+		log.info "$subject updated $entityDescriptor"
 		return [true, entityDescriptor]
 	}
 	
@@ -91,8 +91,8 @@ class EntityDescriptorService {
 		if(!ed)
 			throw new ErronousStateException("Unable to find EntityDescriptor with id $id")
 			
-		def idpService = grailsApplication.mainContext.IDPSSODescriptorService
-		def spService = grailsApplication.mainContext.SPSSODescriptorService
+		def idpService = grailsApplication.mainContext.IdentityProviderService
+		def spService = grailsApplication.mainContext.ServiceProviderService
 			
 		// We need to do this for GORM stupidity. If you delete an IDP (and hence collaborator) then try to process any remaining AA associted with the ED collaborators are still present
 		// in the list (regardless of refresh type calls). So for now at least an AA only ED is not processed - more thought needed.
@@ -104,14 +104,14 @@ class EntityDescriptorService {
 		ed.contacts.each { it.delete() }
 		
 		ed.delete()
-		def users = UserBase.findAllWhere(entityDescriptor:ed)
+		def users = Subject.findAllWhere(entityDescriptor:ed)
 		users.each { user ->
 			user.entityDescriptor = null
 			if(!user.save())
 				throw new ErronousStateException("Unable to update $user with nil entitydescriptor detail when removing $ed")
 		}
 		
-		log.info "$authenticatedUser deleted $ed"
+		log.info "$subject deleted $ed"
 	}
 	
 	def archive (def id) {
@@ -119,8 +119,8 @@ class EntityDescriptorService {
 		if(!ed)
 			throw new ErronousStateException("Unable to find EntityDescriptor with id $id")
 			
-		def idpService = grailsApplication.mainContext.IDPSSODescriptorService
-		def spService = grailsApplication.mainContext.SPSSODescriptorService
+		def idpService = grailsApplication.mainContext.IdentityProviderService
+		def spService = grailsApplication.mainContext.ServiceProviderService
 		def aaService = grailsApplication.mainContext.attributeAuthorityDescriptorService
 			
 		ed.idpDescriptors?.each { idpService.archive(it.id) }
@@ -135,7 +135,7 @@ class EntityDescriptorService {
 			throw new ErronousStateException("Unable to archive EntityDescriptor with id $id")
 		}
 		
-		log.info "$authenticatedUser successfully archived $ed"
+		log.info "$subject successfully archived $ed"
 	}
 	
 	def unarchive (def id) {
@@ -143,8 +143,8 @@ class EntityDescriptorService {
 		if(!ed)
 			throw new ErronousStateException("Unable to find EntityDescriptor with id $id")
 			
-		def idpService = grailsApplication.mainContext.IDPSSODescriptorService
-		def spService = grailsApplication.mainContext.SPSSODescriptorService
+		def idpService = grailsApplication.mainContext.IdentityProviderService
+		def spService = grailsApplication.mainContext.ServiceProviderService
 		def aaService = grailsApplication.mainContext.attributeAuthorityDescriptorService
 			
 		ed.idpDescriptors?.each { idpService.unarchive(it.id) }
@@ -158,7 +158,7 @@ class EntityDescriptorService {
 			throw new ErronousStateException("Unable to unarchive EntityDescriptor with id $id")
 		}
 		
-		log.info "$authenticatedUser successfully unarchived $ed"
+		log.info "$subject successfully unarchived $ed"
 	}
 	
 	def activate (def id) {
@@ -166,8 +166,8 @@ class EntityDescriptorService {
 		if(!ed)
 			throw new ErronousStateException("Unable to find EntityDescriptor with id $id")
 			
-		def idpService = grailsApplication.mainContext.IDPSSODescriptorService
-		def spService = grailsApplication.mainContext.SPSSODescriptorService
+		def idpService = grailsApplication.mainContext.IdentityProviderService
+		def spService = grailsApplication.mainContext.ServiceProviderService
 		def aaService = grailsApplication.mainContext.attributeAuthorityDescriptorService
 			
 		ed.idpDescriptors?.each { idpService.activate(it.id) }
@@ -181,7 +181,7 @@ class EntityDescriptorService {
 			throw new ErronousStateException("Unable to activate EntityDescriptor with id $id")
 		}
 		
-		log.info "$authenticatedUser successfully activated $ed"
+		log.info "$subject successfully activated $ed"
 	}
 
 }

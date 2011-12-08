@@ -65,7 +65,7 @@ class OrganizationContactController {
 			def contactPerson = new ContactPerson(contact:contact, type:contactType, organization: organization)			
 			contactPerson.save()
 			if(contactPerson.hasErrors()) {
-				log.debug "$authenticatedUser failed to create $contactPerson linked to $contact for $organization"
+				log.debug "$subject failed to create $contactPerson linked to $contact for $organization"
 				contactPerson.errors.each {
 					log.error it
 				}
@@ -74,11 +74,11 @@ class OrganizationContactController {
 				return
 			}
 			
-			log.debug "$authenticatedUser created $contactPerson linked to $contact for $organization"
+			log.debug "$subject created $contactPerson linked to $contact for $organization"
 			render message(code: 'fedreg.contactperson.create.success')
 		}
 		else {
-			log.warn("Attempt to link contact to $organization by $authenticatedUser was denied, incorrect permission set")
+			log.warn("Attempt to link contact to $organization by $subject was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}
@@ -103,11 +103,11 @@ class OrganizationContactController {
 		if(SecurityUtils.subject.isPermitted("organization:${organization.id}:contact:remove")) {
 			contactPerson.delete();
 			
-			log.debug "$authenticatedUser deleted $contactPerson from $organization"
+			log.debug "$subject deleted $contactPerson from $organization"
 			render message(code: 'fedreg.contactperson.delete.success')
 		}
 		else {
-			log.warn("Attempt to remove $contactPerson from organization $id by $authenticatedUser was denied, incorrect permission set")
+			log.warn("Attempt to remove $contactPerson from organization $id by $subject was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}
