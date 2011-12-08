@@ -1,1 +1,0 @@
-<pre class="metadata"><code>${md.encodeAsHTML()}</code></pre>
