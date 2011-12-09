@@ -1,8 +1,5 @@
 package fedreg.host
 
-import org.apache.shiro.SecurityUtils
-import grails.plugins.nimble.core.UserBase
-
 /**
  * Provides some reusable tags for the FR user interface
  *
@@ -21,17 +18,5 @@ class FedRegTagLib {
 
 	def working = {
 		out << "<div id='working'>${r.img(plugin:'federationregistry', dir:'images', file:'spinner.gif', width:'20px', height:'20px')}<br/>${g.message(code:'label.working')}</div>"
-	}
-
-	// Renders the contact ID of the logged in user
-	def contactID = {
-	    Long id = SecurityUtils.getSubject()?.getPrincipal()
-
-	    if (id) {
-	        def user = UserBase.get(id)
-
-	        if (user)
-	        out << user.contact.id
-	    }
 	}
 }

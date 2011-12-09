@@ -1,14 +1,15 @@
-package fedreg.host
+package aaf.fr.app
+
+import aaf.fr.identity.Subject
 
 class Invitation {
 
 	String inviteCode
 	
 	Boolean utilized = false
-	User utilizedBy
+	Subject utilizedBy
 		
 	Long role
-	Long group
 	Long permission
 	
 	String controller
@@ -19,7 +20,6 @@ class Invitation {
 		inviteCode(nullable:false, unique:true)
 		
 		role(nullable:true)
-		group(nullable:true)
 		permission(nullable:true)
 		
 		controller(nullable:true)

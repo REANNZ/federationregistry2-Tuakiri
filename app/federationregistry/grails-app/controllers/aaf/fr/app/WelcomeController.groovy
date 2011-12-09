@@ -1,9 +1,9 @@
-package fedreg.host
+package aaf.fr.app
 
 class WelcomeController {
 
 	def index = {
-		if(authenticatedUser)
+		if(subject)
 			redirect controller:'dashboard', action:'index'
 	}
 	

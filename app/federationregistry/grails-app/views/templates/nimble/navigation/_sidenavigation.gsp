@@ -12,7 +12,7 @@
 			<li class="${actionName == 'create' ? 'active':''}" ><g:link controller="user" action="create"><g:message code="label.create" /></g:link></li>
 			<g:if test="${actionName in ['show', 'edit', 'changepassword', 'changelocalpassword']}">
 				<li> | </li>
-				<li><g:message code="fedreg.view.user.show.heading" args="[user.profile?.fullName ?: user.username]"/>: </li>
+				<li><g:message code="fedreg.view.user.show.heading" args="[user.profile?.displayName ?: user.username]"/>: </li>
 				<li class="${actionName == 'show' ? 'active':''}" ><g:link controller="user" action="show" id="${user.id}"><g:message code="label.view" /></g:link></li>
 				<li class="${actionName == 'edit' ? 'active':''}"><g:link controller="user" action="edit" id="${user.id}"><g:message code="label.edit" /></g:link></li>
 				<g:if test="${user.external}">

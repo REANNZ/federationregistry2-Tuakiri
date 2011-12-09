@@ -1,7 +1,9 @@
 package fedreg.host
 
 import java.security.MessageDigest
-import grails.plugins.nimble.core.*
+
+import grails.plugins.federatedgrails.Role
+import aaf.fr.identity.Subject
 
 /**
  * Provides methods for managing invitations.
@@ -12,10 +14,10 @@ class InvitationService {
 	def roleService
 	def groupService
 
-	def create(group, role, permission, controller, action, objID) {
-		def invitation = new Invitation(group:group, role:role, permission:permission, controller:controller, action:action, objID:objID)
+	def create(role, permission, controller, action, objID) {
+		def invitation = new Invitation(role:role, permission:permission, controller:controller, action:action, objID:objID)
 		
-		def hash = "$group-$role-$permission-$controller-$action-$objID-${System.currentTimeMillis().toString()}"
+		def hash = "$role-$permission-$controller-$action-$objID-${System.currentTimeMillis().toString()}"
 		
 		def messageDigest = MessageDigest.getInstance("SHA1")
 		messageDigest.update( hash.getBytes() );
@@ -37,26 +39,18 @@ class InvitationService {
 		def invite = Invitation.findWhere(inviteCode:inviteCode)
 		if(invite) {
 			if(invite.utilized) {
-				log.warn "Attempt by $authenticatedUser to re-use invitation code $inviteCode"
+				log.warn "Attempt by $subject to re-use invitation code $inviteCode"
 				null
 			} else {
 				invite.utilized = true
-				invite.utilizedBy = authenticatedUser
+				invite.utilizedBy = subject
 				
 				if(invite.role) {
-					def role = grails.plugins.nimble.core.Role.get(invite.role) 
+					def role = Role.get(invite.role) 
 					if(role){
-						roleService.addMember(authenticatedUser, role)
+						roleService.addMember(subject, role)
 					} else {
 						throw new RuntimeException ("Invite $inviteCode references role with id ${invite.role} but this doesn't exist")
-					}
-				}
-				if(invite.group) {
-					def group = grails.plugins.nimble.core.Group.get(invite.group)
-					if(group){
-						groupService.addMember(authenticatedUser, group)
-					} else {
-						throw new RuntimeException ("Invite $inviteCode references group with id ${invite.group} but this doesn't exist")
 					}
 				}
 				

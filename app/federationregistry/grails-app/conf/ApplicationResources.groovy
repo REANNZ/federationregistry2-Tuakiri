@@ -57,7 +57,7 @@ modules = {
 		resource url:'js/modernizr.js'
 	}
 	'app' {
-		dependsOn 'nimble-ui, modernizr'
+		dependsOn 'modernizr'
 		resource url: 'css/application.css', disposition:'head', attrs:[rel:'stylesheet/less']
 		resource url:'js/application.js'
 		resource url:'js/less.min.js', disposition:'head'		// 1.0.35 

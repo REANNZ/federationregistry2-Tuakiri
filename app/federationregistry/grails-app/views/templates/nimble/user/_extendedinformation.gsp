@@ -4,7 +4,7 @@
  	<tbody>
 		<tr>
 	    	<th><g:message code="label.fullname" /></th>
-			<td>${user.profile?.fullName?.encodeAsHTML()}</td>
+			<td>${user.profile?.displayName?.encodeAsHTML()}</td>
 		</tr>
 		<tr>
 	    	<th><g:message code="label.email" /></th>

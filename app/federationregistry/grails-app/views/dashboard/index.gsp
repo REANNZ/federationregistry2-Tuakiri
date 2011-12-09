@@ -6,7 +6,7 @@
 	</head>
 	<body>
 		<div id="dashboardcontent">
-			<h2><g:message code="fedreg.view.dashboard.welcome" args="[authenticatedUser.profile.fullName]" /></h2>
+			<h2><g:message code="fedreg.view.dashboard.welcome" args="[subject.displayName]" /></h2>
 			<p><g:message code="fedreg.view.dashboard.welcome.descriptive"/></p>
 			
 			<div class="dashrow dashrowinternal">
@@ -64,7 +64,7 @@
 				<div class="dashcol3">
 					<div class="user">
 						<div class="userlogo">
-							<a href="http://gravatar.com"><avatar:gravatar email="${authenticatedUser.profile.email}" size="50" /></a>
+							<a href="http://gravatar.com"><avatar:gravatar email="${subject.email}" size="50" /></a>
 							<br>
 							<a href="http://gravatar.com"><g:message code="label.change"/></a>
 						</div>
@@ -78,9 +78,9 @@
 								<g:message code="fedreg.view.dashboard.outstanding.tasks.none"/>
 							</g:else>
 							<h4><g:message code="fedreg.view.dashboard.targetedid"/></h4>
-							${fieldValue(bean: authenticatedUser, field: 'username')}
+							${fieldValue(bean: subject, field: 'principal')}
 							<h4><g:message code="fedreg.view.dashboard.email"/></h4>
-							${fieldValue(bean: authenticatedUser, field: 'profile.email')}
+							${fieldValue(bean: subject, field: 'email')}
 						</div>
 					</div>
 				</div>

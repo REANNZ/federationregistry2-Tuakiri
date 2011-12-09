@@ -1,29 +1,12 @@
-/*
- *	Nimble, an extensive application base for Grails
- *	Copyright (C) 2010 Bradley Beddoes
- *
- *	Licensed under the Apache License, Version 2.0 (the "License");
- *	you may not use this file except in compliance with the License.
- *	You may obtain a copy of the License at
- *
- *	http://www.apache.org/licenses/LICENSE-2.0
- *
- *	Unless required by applicable law or agreed to in writing, software
- *	distributed under the License is distributed on an "AS IS" BASIS,
- *	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *	See the License for the specific language governing permissions and
- *	limitations under the License.
- */
-import grails.plugins.nimble.core.AdminsService
-import grails.plugins.nimble.core.UserService
-import fedreg.core.EntityDescriptor
+import aaf.fr.identity.AdminsService
+import aaf.fr.identity.SubjectService
 
 /**
- * Filter that works with Nimble security model to protect controllers, actions, views for Federation Registry
+ * Filter that works with shiro security model to protect controllers, actions, views for Federation Registry
  *
  * @author Bradley Beddoes
  */
-public class SecurityFilters extends grails.plugins.nimble.security.NimbleFilterBase {
+public class SecurityFilters {
 
 	def grailsApplication
 
@@ -40,99 +23,70 @@ public class SecurityFilters extends grails.plugins.nimble.security.NimbleFilter
 		// Invitations
 		invitations(controller: "invitation") {
 			before = {
-				accessControl (auth: false) {
-					role(UserService.USER_ROLE)
-				}
+				accessControl { true }
 			}
 		}
 
 		// Dashboard
 		dashboard(controller: "dashboard") {
 			before = {
-				accessControl (auth: false) {
-					role(UserService.USER_ROLE)
-				}
+				accessControl { true }
 			}
 		}
 
 		// Members
-		members(controller: "(organization|entityDescriptor|IDPSSODescriptor|SPSSODescriptor|contacts)") {
+		members(controller: "(organization|entityDescriptor|identityProvider|serviceProvider|contacts)") {
 			before = {
-				accessControl (auth: false) {
-					role(UserService.USER_ROLE)
-				}
+				accessControl { true }
 			}
 		}
 
 		// Members Backend
 		membersbackend(controller: "(attributeConsumingSerivce|descriptorAdministration|descriptorAttribute|descriptorContact|descriptorEndpoint|descriptorNameIDFormat|organizationAdministration|organizationContact|roleDescriptorCrypto|roleDescriptorMonitor)") {
 			before = {
-				accessControl (auth: false) {
-					role(UserService.USER_ROLE)
-				}
+				accessControl { true }
 			}
 		}
 		
 		// Service Categories
 		servicecategories(controller: "serviceCategory", action:"(list|add|remove)") {
 			before = {
-				accessControl {
-					role(UserService.USER_ROLE)
-				}
+				accessControl { true }
 			}
 		}
 		
 		// Reporting
-		compliance(controller: "(federationReports|idPReports|spReports)") {
+		compliance(controller: "(federationReports|identityProviderReports|serviceProviderReports|identityProviderAttributeCompliance|attributeRelease|certifyingAuthorityUsage)") {
 			before = {
-				accessControl (auth: false) {
-					role(UserService.USER_ROLE)
-				}
-			}
-		}
-		
-		// Compliance
-		compliance(controller: "(IDPSSODescriptorAttributeCompliance|attributeRelease|certifyingAuthorityUsage)") {
-			before = {
-				accessControl (auth: false) {
-					role(UserService.USER_ROLE)
-				}
+				accessControl { true }
 			}
 		}
 
 		// Workflow
 		workflow(controller: "workflow*") {
 			before = {
-				accessControl {
-					role(UserService.USER_ROLE)
-				}
+				accessControl { true }
 			}
 		}
 
 		// Metadata
 		metadata(controller: "metadata", action:"(view|viewall)") {
 			before = {
-				accessControl {
-					role(UserService.USER_ROLE)
-				}
+				accessControl { true }
 			}
 		}
 
 		// Monitoring functionality
 		monitoring(controller: "monitor") {
 			before = {
-				accessControl {
-					role(AdminsService.ADMIN_ROLE)
-				}
+				accessControl { true }
 			}
 		}
 
 		// Administrative components
-		administration(controller: "(admins|user|group|role)") {
+		administration(controller: "(admins|user|role)") {
 			before = {
-				accessControl {
-					role(AdminsService.ADMIN_ROLE)
-				}
+				accessControl { true }
 			}
 		}
 

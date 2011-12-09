@@ -59,15 +59,15 @@ class UrlMappings {
 		}
 		
 		"/reporting/identityprovider/$action/$id?" {
-			controller = "idPReports"
+			controller = "identityProviderReports"
 		}
 
 		"/reporting/serviceprovider/$action/$id?" {
-			controller = "spReports"
+			controller = "serviceProviderReports"
 		}
 	
 		"/compliance/identityprovider/attributes/$action?/$id?"{
-			controller = "IDPSSODescriptorAttributeCompliance"
+			controller = "identityProviderAttributeCompliance"
 		}
 	
 		"/compliance/attributes/release/$action?/$id?"{
@@ -87,11 +87,11 @@ class UrlMappings {
 		}
 	
 		"/membership/identityprovider/$action?/$id?"{
-			controller = "IDPSSODescriptor"
+			controller = "identityProvider"
 		}
 	
 		"/membership/serviceprovider/$action?/$id?"{
-			controller = "SPSSODescriptor"
+			controller = "serviceProvider"
 		}
 	
 		"/membership/contacts/$action?/$id?"{
@@ -206,6 +206,10 @@ class UrlMappings {
 		"/greenmail/$action?/$id?"{
 			controller = "greenmail"
 		}
+
+    "/auth/$action?/$id?"{
+      controller = "auth"
+    }
 	
 	    "/"{
 			controller = "welcome"

@@ -1,6 +1,6 @@
-package fedreg.host
+package aaf.fr.app
 
-import fedreg.core.*
+import aaf.fr.foundation.*
 import org.apache.shiro.SecurityUtils
 
 /**
@@ -23,15 +23,15 @@ class DashboardController {
 		def endpointCount = Endpoint.countByActive(true)
 		def certCounts = KeyDescriptor.countByDisabled(false)
 		
-		def tasks = workflowTaskService.retrieveTasksAwaitingApproval(authenticatedUser)
+		def tasks = workflowTaskService.retrieveTasksAwaitingApproval(subject)
 		
-		organizations.add(authenticatedUser?.entityDescriptor?.organization)
+		//organizations.add(subject?.entityDescriptor?.organization)
 		
 		// Find all additional orgs this user can admin
 		def orgs = Organization.list()
 		orgs.each {
 			if(!it.archived && SecurityUtils.subject.hasRole("organization-${it.id}-administrators"))
-				if(it.id != authenticatedUser?.entityDescriptor?.organization?.id)
+				if(it.id != subject?.entityDescriptor?.organization?.id)
 					organizations.add(it)
 		}
 		
@@ -47,7 +47,7 @@ class DashboardController {
 				serviceProviders.add(it)
 		}
 		
-		[orgCount:orgCount, idpCount:idpCount, spCount:spCount, organizations: organizations, endpointCount:endpointCount, certCounts:certCounts, tasks:tasks, identityProviders:identityProviders, serviceProviders:serviceProviders, authenticatedUser:authenticatedUser]
+		[orgCount:orgCount, idpCount:idpCount, spCount:spCount, organizations: organizations, endpointCount:endpointCount, certCounts:certCounts, tasks:tasks, identityProviders:identityProviders, serviceProviders:serviceProviders, subject:subject]
 	}
 
 }

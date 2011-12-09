@@ -1,4 +1,4 @@
-package fedreg.host
+package aaf.fr.app
 
 class CodeController {
 	
