@@ -12,6 +12,8 @@ class OrganizationContactController {
 	
 	def search = {
 		def contacts
+
+    println params
 			
 		if(!params.givenName && !params.surname && !params.email)
 			contacts = Contact.list()
@@ -26,7 +28,7 @@ class OrganizationContactController {
 				}
 			}
 		}
-		render template:"/templates/orgcontacts/results", contextPath: pluginContextPath, model:[contacts:contacts]
+		render template:"/templates/contacts/results", contextPath: pluginContextPath, model:[contacts:contacts]
 	}
 	
 	def create = {
@@ -84,6 +86,7 @@ class OrganizationContactController {
 	}
 	
 	def delete = {
+    println params
 		if(!params.id) {
 			log.warn "All name/value pairs required for this call were not present"
 			render message(code: 'fedreg.controllers.namevalue.missing')
@@ -128,6 +131,6 @@ class OrganizationContactController {
 			return
 		}
 		
-		render template:"/templates/orgcontacts/list", contextPath: pluginContextPath, model:[organization:organization, allowremove:params.allowremove?:true]
+		render template:"/templates/contacts/list", contextPath: pluginContextPath, model:[host:organization]
 	}
 }

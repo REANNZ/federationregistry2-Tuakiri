@@ -52,7 +52,6 @@
 			var idpReportsLoginsEndpoint = "${createLink(controller:'idPReports', action:'loginsjson', id:identityProvider.id)}"
 			
 			$(function() {
-				$("#attrfilpolood").hide();
 				fedreg.descriptor_metadata();
 			});	
 		</r:script>
@@ -61,6 +60,13 @@
 		<section>
 			
 		<h2><g:message code="fedreg.view.members.identityprovider.show.heading" args="[identityProvider.displayName]"/></h2>
+
+    <g:if test="${!identityProvider.functioning()}">
+        <div class="alert-message error">
+          <p><g:message code="fedreg.view.members.identityprovider.show.notfunctioning"/></p>
+        </div>
+      </g:if>
+
 		<table>
 			<tbody>		
 				<tr>
@@ -79,12 +85,12 @@
 					<th><g:message code="label.organization"/></th>
 					<td><g:link controller="organization" action="show" id="${identityProvider.organization.id}">${fieldValue(bean: identityProvider, field: "organization.displayName")}</g:link></td>
 				</tr>
-				<n:hasPermission target="saml:advanced">
+				<fr:hasPermission target="saml:advanced">
 					<tr>
 						<th><g:message code="label.entitydescriptor"/></th>
 						<td><g:link controller="entityDescriptor" action="show" id="${identityProvider.entityDescriptor.id}">${fieldValue(bean: identityProvider, field: "entityDescriptor.entityID")}</g:link></td>
 					</tr>
-				</n:hasPermission>
+				</fr:hasPermission>
 				<n:lacksPermission target="saml:advanced">
 					<tr>
 						<th><g:message code="label.entitydescriptor"/></th>
@@ -95,7 +101,7 @@
 					<th><g:message code="label.protocolsupport"/></th>
 					<td>
 						<g:each in="${identityProvider.protocolSupportEnumerations}" status="i" var="pse">
-						${pse.uri} <br/>
+						${pse} <br/>
 						</g:each>
 					</td>
 				<g:if test="${identityProvider.errorURL}">
@@ -176,17 +182,17 @@
 				<div id="tab-contacts" class="tabcontent">
 					<h3><g:message code="label.contacts" /></h3>
 					<div id="contacts">
-						<g:render template="/templates/contacts/list" plugin="federationcore" model="[descriptor:identityProvider]" />
+						<g:render template="/templates/contacts/list" plugin="foundation" model="[descriptor:identityProvider]" />
 					</div>
 					
-					<g:render template="/templates/contacts/create" plugin="federationcore" model="[descriptor:identityProvider, contactTypes:contactTypes]"/>
+					<g:render template="/templates/contacts/create" plugin="foundation" model="[descriptor:identityProvider, contactTypes:contactTypes]"/>
 				</div>
 				<div id="tab-crypto" class="tabcontent">
-					<h3><g:message code="label.publishedcertificates" plugin="federationcore" /></h3>
+					<h3><g:message code="label.publishedcertificates" plugin="foundation" /></h3>
 					<div id="certificates">
-						<g:render template="/templates/certificates/list" plugin="federationcore" model="[descriptor:identityProvider]" />
+						<g:render template="/templates/certificates/list" plugin="foundation" model="[descriptor:identityProvider]" />
 					</div>
-					<g:render template="/templates/certificates/create" plugin="federationcore" model="[descriptor:identityProvider]"/>
+					<g:render template="/templates/certificates/create" plugin="foundation" model="[descriptor:identityProvider]"/>
 				</div>
 				<div id="tab-endpoints" class="tabcontent">
 					<h3><g:message code="label.supportedendpoints" /></h3>
@@ -202,33 +208,33 @@
 						
 						<div id="tab-sso" class="componentlist">
 							<div id="ssoendpoints">
-								<g:render template="/templates/endpoints/list" plugin="federationcore" model="[endpoints:identityProvider.singleSignOnServices, endpointType:'singleSignOnServices', containerID:'ssoendpoints', minEndpoints:1]" />
+								<g:render template="/templates/endpoints/list" plugin="foundation" model="[endpoints:identityProvider.singleSignOnServices, endpointType:'singleSignOnServices', containerID:'ssoendpoints', minEndpoints:1]" />
 							</div>
 							
-							<g:render template="/templates/endpoints/create" plugin="federationcore" model="[descriptor:identityProvider, endpointType:'singleSignOnServices', containerID:'ssoendpoints']" />
+							<g:render template="/templates/endpoints/create" plugin="foundation" model="[descriptor:identityProvider, endpointType:'singleSignOnServices', containerID:'ssoendpoints']" />
 							
 						</div>
 						<div id="tab-ars" class="componentlist">
 							<div id="artifactendpoints">
-								<g:render template="/templates/endpoints/list" plugin="federationcore" model="[endpoints:identityProvider.artifactResolutionServices, endpointType:'artifactResolutionServices', containerID:'artifactendpoints']" />
+								<g:render template="/templates/endpoints/list" plugin="foundation" model="[endpoints:identityProvider.artifactResolutionServices, endpointType:'artifactResolutionServices', containerID:'artifactendpoints']" />
 							</div>
 							
-							<g:render template="/templates/endpoints/create" plugin="federationcore" model="[descriptor:identityProvider, endpointType:'artifactResolutionServices', containerID:'artifactendpoints', indexed:true]" />
+							<g:render template="/templates/endpoints/create" plugin="foundation" model="[descriptor:identityProvider, endpointType:'artifactResolutionServices', containerID:'artifactendpoints', indexed:true]" />
 						</div>
 						<div id="tab-slo" class="componentlist">
 							<div id="singlelogoutendpoints">
-								<g:render template="/templates/endpoints/list" plugin="federationcore" model="[endpoints:identityProvider.singleLogoutServices, endpointType:'singleLogoutServices', containerID:'singlelogoutendpoints']" />
+								<g:render template="/templates/endpoints/list" plugin="foundation" model="[endpoints:identityProvider.singleLogoutServices, endpointType:'singleLogoutServices', containerID:'singlelogoutendpoints']" />
 							</div>
 							
-							<g:render template="/templates/endpoints/create" plugin="federationcore" model="[descriptor:identityProvider, endpointType:'singleLogoutServices', containerID:'singlelogoutendpoints']" />
+							<g:render template="/templates/endpoints/create" plugin="foundation" model="[descriptor:identityProvider, endpointType:'singleLogoutServices', containerID:'singlelogoutendpoints']" />
 						</div>
 						<g:if test="${identityProvider.collaborator}">
 							<div id="tab-attrs" class="componentlist">
 								<div id="attributeserviceendpoints">
-									<g:render template="/templates/endpoints/list" plugin="federationcore" model="[endpoints:identityProvider.collaborator.attributeServices, endpointType:'attributeServices', containerID:'attributeserviceendpoints']" />
+									<g:render template="/templates/endpoints/list" plugin="foundation" model="[endpoints:identityProvider.collaborator.attributeServices, endpointType:'attributeServices', containerID:'attributeserviceendpoints']" />
 								</div>
 								
-								<g:render template="/templates/endpoints/create" plugin="federationcore" model="[descriptor:identityProvider, endpointType:'attributeServices', containerID:'attributeserviceendpoints']" />
+								<g:render template="/templates/endpoints/create" plugin="foundation" model="[descriptor:identityProvider, endpointType:'attributeServices', containerID:'attributeserviceendpoints']" />
 							</div>
 						</g:if>
 					</div>
@@ -236,17 +242,17 @@
 				<div id="tab-attributes" class="tabcontent">
 					<h3><g:message code="label.supportedattributes" /></h3>
 					<div id="attributes">
-						<g:render template="/templates/attributes/list" plugin="federationcore" model="[descriptor:identityProvider, attrs:identityProvider.sortedAttributes(), containerID:'attributes']" />
+						<g:render template="/templates/attributes/list" plugin="foundation" model="[descriptor:identityProvider, attrs:identityProvider.sortedAttributes(), containerID:'attributes']" />
 					</div>
-					<g:render template="/templates/attributes/add" plugin="federationcore" model="[descriptor:identityProvider, type:'idp', containerID:'attributes']"/>
+					<g:render template="/templates/attributes/add" plugin="foundation" model="[descriptor:identityProvider, type:'idp', containerID:'attributes']"/>
 				</div>
 				<div id="tab-nameidformats" class="tabcontent">
 					<h3><g:message code="label.supportednameidformats" /></h3>
 					<div id="nameidformats">
-						<g:render template="/templates/nameidformats/list" plugin="federationcore" model="[descriptor:identityProvider, nameIDFormats:identityProvider.nameIDFormats, containerID:'nameidformats']" />
+						<g:render template="/templates/nameidformats/list" plugin="foundation" model="[descriptor:identityProvider, nameIDFormats:identityProvider.nameIDFormats, containerID:'nameidformats']" />
 					</div>
 					
-					<g:render template="/templates/nameidformats/add" plugin="federationcore" model="[descriptor:identityProvider, containerID:'nameidformats']"/>
+					<g:render template="/templates/nameidformats/add" plugin="foundation" model="[descriptor:identityProvider, containerID:'nameidformats']"/>
 				</div>
 				<n:hasAnyPermission in='["descriptor:${identityProvider.id}:reporting" , "federation:reporting"]'>
 					<div id="tab-reports" class="tabcontent">
@@ -258,7 +264,7 @@
 				<div id="tab-attrfilpol">
 					<h3><g:message code="label.attributefilter"/></h3>
 					
-					<p id="attrfilpolood" class="error" style="margin: 6px;"><g:message code="fedreg.view.members.identityprovider.show.attributefilter.outofdate" /> <a href="#" onClick="fedreg.attributefilter_refresh(); return false;"><strong><g:message code="label.refreshnow" />.</strong></a></p>
+					<p id="attrfilpolood" class="error hidden" style="margin: 6px;"><g:message code="fedreg.view.members.identityprovider.show.attributefilter.outofdate" /> <a href="#" onClick="fedreg.attributefilter_refresh(); return false;"><strong><g:message code="label.refreshnow" />.</strong></a></p>
 					
 					<p><g:message code="fedreg.view.members.identityprovider.show.attributefilter.description" /></p>
 					<p><g:message code="fedreg.view.members.identityprovider.show.attributefilter.configuration" /></p>
@@ -277,19 +283,19 @@
 				</div>
 				<g:if test="${identityProvider.approved}">
 					<div id="tab-admins">
-						<g:render template="/templates/descriptor/listfulladministration" plugin="federationcore" model="[descriptor:identityProvider, administrators:administrators]" />
-						<n:hasPermission target="descriptor:${identityProvider.id}:manage:administrators">
-							<g:render template="/templates/descriptor/searchfulladministration" plugin="federationcore" model="[descriptor:identityProvider]" />
-						</n:hasPermission>
+						<g:render template="/templates/descriptor/listfulladministration" plugin="foundation" model="[descriptor:identityProvider, administrators:administrators]" />
+						<fr:hasPermission target="descriptor:${identityProvider.id}:manage:administrators">
+							<g:render template="/templates/descriptor/searchfulladministration" plugin="foundation" model="[descriptor:identityProvider]" />
+						</fr:hasPermission>
 					</div>
 				</g:if>
 				<div id="tab-monitors">
 					<div id="monitors">
-						<g:render template="/templates/monitor/list" plugin="federationcore" model="[roleDescriptor:identityProvider]" />
+						<g:render template="/templates/monitor/list" plugin="foundation" model="[roleDescriptor:identityProvider]" />
 					</div>
-					<n:hasPermission target="descriptor:${identityProvider.id}:manage:monitors">
-						<g:render template="/templates/monitor/create" plugin="federationcore" model="[descriptor:identityProvider]" />
-					</n:hasPermission>
+					<fr:hasPermission target="descriptor:${identityProvider.id}:manage:monitors">
+						<g:render template="/templates/monitor/create" plugin="foundation" model="[descriptor:identityProvider]" />
+					</fr:hasPermission>
 				</div>
 			</div>
 			

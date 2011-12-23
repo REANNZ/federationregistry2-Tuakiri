@@ -22,9 +22,9 @@
 					</g:else>
 				</td>
 				<td>
-					<n:hasPermission target="descriptor:${roleDescriptor.id}:monitor:delete">
+					<fr:hasPermission target="descriptor:${roleDescriptor.id}:monitor:delete">
 						<n:confirmaction action="fedreg.monitor_delete(${m.id});" title="${message(code: 'fedreg.templates.monitor.delete.confirm.title')}" msg="${message(code: 'fedreg.templates.monitor.delete.confirm.descriptive')}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" class="delete-button" label="${message(code: 'label.delete')}" />
-					</n:hasPermission>
+					</fr:hasPermission>
 				</td>
 			</tr>
 			</g:each>

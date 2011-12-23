@@ -11,12 +11,12 @@
 	<tbody>
 	<g:each in="${ nameIDFormats.sort{it.id} }" status="i" var="nidf">
 		<tr>
-			<td>${nidf.uri.encodeAsHTML()}</td>
+			<td>${nidf.encodeAsHTML()}</td>
 			<td>${nidf.description?.encodeAsHTML()}</td>
 			<td>
-				<n:hasPermission target="descriptor:${descriptor.id}:nameidformat:remove">
-					<n:confirmaction action="fedreg.nameIDFormat_remove(${nidf.id}, '${containerID}' );" title="${message(code: 'fedreg.templates.nameidformats.remove.confirm.title')}" msg="${message(code: 'fedreg.templates.nameidformats.remove.confirm.descriptive', args:[nidf.uri.encodeAsHTML()])}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" class="delete-button" label="${message(code: 'label.remove')}" />
-				</n:hasPermission>
+				<fr:hasPermission target="descriptor:${descriptor.id}:nameidformat:remove">
+					<n:confirmaction action="fedreg.nameIDFormat_remove(${nidf.id}, '${containerID}' );" title="${message(code: 'fedreg.templates.nameidformats.remove.confirm.title')}" msg="${message(code: 'fedreg.templates.nameidformats.remove.confirm.descriptive', args:[nidf.encodeAsHTML()])}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" class="delete-button" label="${message(code: 'label.remove')}" />
+				</fr:hasPermission>
 			</td>
 		</tr>
 	</g:each>

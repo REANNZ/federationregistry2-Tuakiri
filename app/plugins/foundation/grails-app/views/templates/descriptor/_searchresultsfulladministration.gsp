@@ -13,7 +13,7 @@
 		<g:each in="${users}" var="user" status="i">
 			<tr>
 				
-				<td>${user.profile.fullName?.encodeAsHTML()}</td>
+				<td>${user.profile.displayName?.encodeAsHTML()}</td>
 				<td>${user.profile.email?.encodeAsHTML()}</td>
 				<td><g:link controller='organization' action='show' id="${user.contact?.organization?.id}">${user.contact?.organization?.displayName?.encodeAsHTML()}</g:link></td>
 				<td>						

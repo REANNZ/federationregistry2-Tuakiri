@@ -141,6 +141,6 @@ class DescriptorContactController {
 			return
 		}
 		
-		render template:"/templates/contacts/list", contextPath: pluginContextPath, model:[descriptor:descriptor, allowremove:params.allowremove?:true]
+		render template:"/templates/contacts/list", contextPath: pluginContextPath, model:[host:descriptor]
 	}
 }

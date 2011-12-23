@@ -1,10 +1,10 @@
 package aaf.fr.foundation
 
 import org.apache.shiro.SecurityUtils
-
+import grails.plugins.federatedgrails.Role
 
 /**
- * Provides IDPSSODescriptor views.
+ * Provides Identity Provider views.
  *
  * @author Bradley Beddoes
  */
@@ -41,7 +41,7 @@ class IdentityProviderController {
 		
 		def adminRole = Role.findByName("descriptor-${identityProvider.id}-administrators")
 		def attributeFilter = g.include(controller:"attributeFilter", action:"generate", id:identityProvider.id)
-		[identityProvider: identityProvider, attributeFilter:attributeFilter, contactTypes:ContactType.list(), administrators:adminRole?.users]
+		[identityProvider: identityProvider, attributeFilter:attributeFilter, contactTypes:ContactType.list(), administrators:adminRole?.subjects]
 	}
 	
 	def create = {

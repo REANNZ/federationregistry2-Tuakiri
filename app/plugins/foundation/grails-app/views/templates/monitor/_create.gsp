@@ -1,4 +1,4 @@
-<n:hasPermission target="descriptor:${descriptor.id}:monitor:create">
+<fr:hasPermission target="descriptor:${descriptor.id}:monitor:create">
 
 	<%@page import="aaf.fr.foundation.MonitorType" %>
 
@@ -42,4 +42,4 @@
 		</form>
 	</div>
 	
-</n:hasPermission>
+</fr:hasPermission>

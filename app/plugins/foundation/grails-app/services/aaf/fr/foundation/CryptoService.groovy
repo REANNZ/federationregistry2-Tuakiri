@@ -10,6 +10,7 @@ import java.security.cert.*
  * @author Bradley Beddoes
  */
 class CryptoService {
+  static transactional = true
 	
 	def associateCertificate(RoleDescriptor descriptor, String data, String name, KeyTypes type) {
 		def cert = createCertificate(data)	

@@ -1,30 +1,30 @@
 
-	<g:if test="${organization.contacts}">
-	<table>
-		<thead>
-			<tr>
-				<th><g:message code="label.name" /></th>
-				<th><g:message code="label.email" /></th>
-				<th><g:message code="label.type" /></th>
-				<th/>
-			</tr>
-		</thead>
-		<tbody>
-			<g:each in="${organization.contacts.sort{it.contact.surname}}" var="contactPerson" status="i">
-				<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-					<td>${contactPerson.contact.givenName?.encodeAsHTML()} ${contactPerson.contact.surname?.encodeAsHTML()}</td>
-					<td><a href="mailto:${contactPerson.contact.email?.uri.encodeAsHTML()}">${contactPerson.contact.email?.uri.encodeAsHTML()}</a></td>
-					<td>${contactPerson.type.displayName.encodeAsHTML()}</td>
-					<td>
-						<n:button href="${createLink(controller:'contacts', action:'show', id: contactPerson.contact.id)}" label="${message(code:'label.view')}" class="view-button"/>
-						<n:hasPermission target="organization:${organization.id}:contact:remove">
-							<n:confirmaction action="fedreg.orgcontact_delete(${contactPerson.id});" label="${message(code:'label.delete')}" class="delete-button" title="${message(code: 'fedreg.templates.contacts.remove.confirm.title')}" msg="${message(code: 'fedreg.templates.contacts.remove.confirm.descriptive')}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}"/>
-						</n:hasPermission>
-					</td>
-				</tr>
-			</g:each>
-		</tbody>
-	</table>
+	<g:if test="${host.contacts.size() > 0}">
+  	<table>
+  		<thead>
+  			<tr>
+  				<th><g:message code="label.name" /></th>
+  				<th><g:message code="label.email" /></th>
+  				<th><g:message code="label.type" /></th>
+  				<th/>
+  			</tr>
+  		</thead>
+  		<tbody>
+  			<g:each in="${host.contacts?.sort{it.contact.surname}}" var="contactPerson" status="i">
+  				<tr>
+  					<td>${contactPerson.contact.givenName?.encodeAsHTML()} ${contactPerson.contact.surname?.encodeAsHTML()}</td>
+  					<td><a href="mailto:${contactPerson.contact.email?.encodeAsHTML()}">${contactPerson.contact.email?.encodeAsHTML()}</a></td>
+  					<td>${contactPerson.type.displayName.encodeAsHTML()}</td>
+  					<td>
+  						<a href="${createLink(controller:'contacts', action:'show', id: contactPerson.contact.id)}" class="btn"><g:message code='label.view'/></a>
+  						<fr:hasPermission target="organization:${owner.id}:contact:remove">
+                <a class="confirm-delete-contact btn" data-contact="${contactPerson.id}"><g:message code='label.delete'/></a>
+  						</fr:hasPermission>
+  					</td>
+  				</tr>
+  			</g:each>
+  		</tbody>
+  	</table>
 	</g:if>
 	<g:else>
 		<p><g:message code="fedreg.templates.contacts.noresults" /></p>

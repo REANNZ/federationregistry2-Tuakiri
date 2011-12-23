@@ -6,6 +6,7 @@ package aaf.fr.foundation
  * @author Bradley Beddoes
  */
 class AttributeAuthorityDescriptorService {
+  static transactional = true
 
 	def delete(def id) {
 		def aa = AttributeAuthorityDescriptor.get(id)

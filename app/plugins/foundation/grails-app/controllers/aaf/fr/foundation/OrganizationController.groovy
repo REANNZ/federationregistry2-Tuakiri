@@ -1,8 +1,7 @@
 package aaf.fr.foundation
 
 import org.apache.shiro.SecurityUtils
-
-
+import grails.plugins.federatedgrails.Role
 
 /**
  * Provides Organization views.

@@ -8,6 +8,7 @@ import static org.apache.commons.lang.StringUtils.*
  * @author Bradley Beddoes
  */
 class EndpointService {
+  static transactional = true
 	
 	def grailsApplication
 
@@ -33,7 +34,7 @@ class EndpointService {
 	
 	def update(def endpoint, def binding, def location, def index) {
 		endpoint.binding = binding
-		endpoint.location.uri = location
+		endpoint.location = location
 		
 		if(index)
 			endpoint.index = index

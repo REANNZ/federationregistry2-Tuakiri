@@ -11,6 +11,10 @@ class SamlURI  {
   String description
 	
 	public String toString() {	"samluri:[id:$id, uri: $uri]" }
+
+  static constraints = {
+    description(nullable: true)
+  }
 }
 
 public enum SamlURIType {

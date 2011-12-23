@@ -44,7 +44,7 @@ class DescriptorNameIDFormatController {
 			if(!descriptor.nameIDFormats.contains(nameIDFormat)) {
 				log.warn "NameIDFormat identified by id $params.formatID was already supported by descriptor ${params.id}"
 				response.setStatus(500)
-				render message(code: 'fedreg.nameidformat.remove.notsupported', args:[nameIDFormat.uri])
+				render message(code: 'fedreg.nameidformat.remove.notsupported', args:[nameIDFormat])
 				return
 			}
 			
@@ -55,12 +55,12 @@ class DescriptorNameIDFormatController {
 				descriptor.errors.each {
 					log.debug it
 				}
-				render message(code: 'fedreg.nameidformat.remove.failed', args:[nameIDFormat.uri])
+				render message(code: 'fedreg.nameidformat.remove.failed', args:[nameIDFormat])
 				response.setStatus(500)
 				return
 			} else {
 				log.info "$subject removed $nameIDFormat from $descriptor"
-				render message(code: 'fedreg.nameidformat.remove.success', args:[nameIDFormat.uri])
+				render message(code: 'fedreg.nameidformat.remove.success', args:[nameIDFormat])
 			}
 		}
 		else {
@@ -130,7 +130,7 @@ class DescriptorNameIDFormatController {
 			if(descriptor.nameIDFormats?.contains(nameIDFormat)) {
 				log.warn "NameIDFormat identified by id $params.formatID was already supported by descriptor ${params.id}"
 				response.setStatus(500)
-				render message(code: 'fedreg.nameidformat.add.alreadysupported', args:[nameIDFormat.uri])
+				render message(code: 'fedreg.nameidformat.add.alreadysupported', args:[nameIDFormat])
 				return
 			}
 		
@@ -141,12 +141,12 @@ class DescriptorNameIDFormatController {
 				descriptor.errors.each {
 					log.error it
 				}
-				render message(code: 'fedreg.nameidformat.add.failed', args:[nameIDFormat.uri])
+				render message(code: 'fedreg.nameidformat.add.failed', args:[nameIDFormat])
 				response.setStatus(500)
 				return
 			} else {
 				log.warn "Added nameIDFormat $nameIDFormat to $descriptor"
-				render message(code: 'fedreg.nameidformat.add.success', args:[nameIDFormat.uri])
+				render message(code: 'fedreg.nameidformat.add.success', args:[nameIDFormat])
 			}
 		}
 		else {

@@ -1,6 +1,6 @@
-<r:script disposition:'head'>
-	var certificateValidationEndpoint = "${createLink(controller:'coreUtilities', action:'validateCertificate')}";
-	var newCertificateValid = false;
+<r:script disposition='head'>
+	var certificateValidationEndpoint="${createLink(controller:'coreUtilities', action:'validateCertificate')}";
+	var newCertificateValid=false;
 	
 	$(function() {	
 		$('form').validate({
@@ -9,7 +9,7 @@
 		$('form').formwizard({ 
 		 	formPluginEnabled: false,
 		 	validationEnabled: true,
-		 	focusFirstInput : true,
+		 	focusFirstInput: true,
 			disableUIStyles: true
 		});
 	});
@@ -67,7 +67,7 @@
 						<label for="contact.email"><g:message code="label.email" /></label>
 					</td>
 					<td>
-						<g:textField name="contact.email"  size="50" class="required email" value="${contact?.email?.uri}"/>
+						<g:textField name="contact.email"  size="50" class="required email" value="${contact?.email}"/>
 					</td>
 				</tr>
 			</table>
@@ -106,7 +106,7 @@
 					<label for="organization.url"><g:message code="label.organizationurl" /></label>
 				</td>
 				<td>
-					<g:textField name="organization.url"  size="50" class="required url"  value="${organization?.url?.uri}"/>
+					<g:textField name="organization.url"  size="50" class="required url"  value="${organization?.url}"/>
 					<fr:tooltip code='fedreg.help.organization.url' />
 				</td>
 			</tr>

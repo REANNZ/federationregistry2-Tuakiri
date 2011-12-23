@@ -21,8 +21,14 @@
 	</head>
 	<body>
 		<section>
-			<h2><g:message code="fedreg.view.members.entity.show.heading" args="[entity.entityID]"/></h2>
-
+			
+      <h2><g:message code="fedreg.view.members.entity.show.heading" args="[entity.entityID]"/></h2>
+      <g:if test="${!entity.functioning()}">
+        <div class="alert-message error">
+          <p><g:message code="fedreg.view.members.entity.show.notfunctioning"/></p>
+        </div>
+      </g:if>
+      
 			<table>
 				<tbody>
 					<tr>
@@ -75,22 +81,22 @@
 		
 			<div class="tabs">
 				<ul>				
-					<li><a href="#tab-idp" class="icon icon_cog"><g:message code="label.identityproviders" /></a></li>
-					<li><a href="#tab-sp" class="icon icon_cog"><g:message code="label.serviceproviders" /></a></li>
-					<li><a href="#tab-contacts" class="icon icon_user_comment"><g:message code="label.contacts" /></a></li>
-					<li><a href="#tab-admins" class="icon icon_database_key"><g:message code="label.administrators" /></a></li>
+					<li><a href="#tab-idp"><g:message code="label.identityproviders" /></a></li>
+					<li><a href="#tab-sp"><g:message code="label.serviceproviders" /></a></li>
+					<li><a href="#tab-contacts"><g:message code="label.contacts" /></a></li>
+					<li><a href="#tab-admins"><g:message code="label.administrators" /></a></li>
 					<g:if test="${entity.extensions}">
-					<li><a href="#tab-ext" class="icon icon_cog"><g:message code="label.extensions" /></a></li>
+					<li><a href="#tab-ext"><g:message code="label.extensions" /></a></li>
 					</g:if>
 				</ul>
 				
 				<div id="tab-contacts" class="tabcontent">
 					<h3><g:message code="label.contacts" /></h3>
 					<div id="contacts">
-						<g:render template="/templates/contacts/list" plugin="federationcore" model="[descriptor:entity, allowremove:true]" />
+						<g:render template="/templates/contacts/list" plugin="foundation" model="[descriptor:entity, allowremove:true]" />
 					</div>
 					
-					<g:render template="/templates/contacts/create" plugin="federationcore" model="[descriptor:entity, contactTypes:contactTypes]"/>
+					<g:render template="/templates/contacts/create" plugin="foundation" model="[descriptor:entity, contactTypes:contactTypes]"/>
 				</div>
 				<div id="tab-idp" class="tabcontent">
 					<g:if test="${entity.idpDescriptors}">
@@ -161,10 +167,10 @@
 					</g:else>
 				</div>
 				<div id="tab-admins">
-					<g:render template="/templates/descriptor/listfulladministration" plugin="federationcore" model="[descriptor:entity, administrators:administrators]" />
-					<n:hasPermission target="descriptor:${entity.id}:manage:administrators">
-						<g:render template="/templates/descriptor/searchfulladministration" plugin="federationcore" model="[descriptor:entity]" />
-					</n:hasPermission>
+					<g:render template="/templates/descriptor/listfulladministration" plugin="foundation" model="[descriptor:entity, administrators:administrators]" />
+					<fr:hasPermission target="descriptor:${entity.id}:manage:administrators">
+						<g:render template="/templates/descriptor/searchfulladministration" plugin="foundation" model="[descriptor:entity]" />
+					</fr:hasPermission>
 				</div>
 				<g:if test="${entity.extensions}">
 				<div id="tab-ext">	

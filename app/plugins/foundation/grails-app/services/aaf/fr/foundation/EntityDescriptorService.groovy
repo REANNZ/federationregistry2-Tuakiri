@@ -2,9 +2,8 @@ package aaf.fr.foundation
 
 import org.springframework.transaction.interceptor.TransactionAspectSupport
 
-
-
 import grails.plugins.federatedgrails.LevelPermission
+import aaf.fr.identity.Subject
 
 /**
  * Provides methods for managing EntityDescriptor instances.
@@ -12,6 +11,7 @@ import grails.plugins.federatedgrails.LevelPermission
  * @author Bradley Beddoes
  */
 class EntityDescriptorService {
+  static transactional = true
 
 	def grailsApplication
 	def workflowProcessService
@@ -91,8 +91,8 @@ class EntityDescriptorService {
 		if(!ed)
 			throw new ErronousStateException("Unable to find EntityDescriptor with id $id")
 			
-		def idpService = grailsApplication.mainContext.IdentityProviderService
-		def spService = grailsApplication.mainContext.ServiceProviderService
+		def idpService = grailsApplication.mainContext.identityProviderService
+		def spService = grailsApplication.mainContext.serviceProviderService
 			
 		// We need to do this for GORM stupidity. If you delete an IDP (and hence collaborator) then try to process any remaining AA associted with the ED collaborators are still present
 		// in the list (regardless of refresh type calls). So for now at least an AA only ED is not processed - more thought needed.
@@ -104,13 +104,7 @@ class EntityDescriptorService {
 		ed.contacts.each { it.delete() }
 		
 		ed.delete()
-		def users = Subject.findAllWhere(entityDescriptor:ed)
-		users.each { user ->
-			user.entityDescriptor = null
-			if(!user.save())
-				throw new ErronousStateException("Unable to update $user with nil entitydescriptor detail when removing $ed")
-		}
-		
+    
 		log.info "$subject deleted $ed"
 	}
 	

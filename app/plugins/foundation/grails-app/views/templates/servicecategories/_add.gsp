@@ -1,34 +1,30 @@
-<n:hasPermission target="descriptor:${descriptor.id}:category:add">
+<fr:hasPermission target="descriptor:${descriptor.id}:category:add">
 
-	<%@page import="aaf.fr.foundation.ServiceCategory" %>
-	<script type="text/javascript">
-		$(function() {
-			$("#newcategory").hide();
-		});
-	</script>
+  <%@page import="aaf.fr.foundation.ServiceCategory" %>
 
-	<hr>
+  <div id="addcategory" class="actions">
+    <a onclick="$('#addcategory').fadeOut(); $('#newcategory').fadeIn(); return false;" class="btn"><g:message code="label.addcategory"/></a>
+  </div>
+  
+  <div id="newcategory"  class="hidden actions">
+    <h3><g:message code="fedreg.templates.servicecategories.add.heading"/></h3>
+    <form id="newservicecategorydata">
+      <fieldset>
+        <input type="hidden" name="id" value="${descriptor.id}"/>
+        
+        <div class="clearfix">
+          <label for="categoryID"><g:message code="label.category"/></label>
+          <div class="input">
+                <g:select name="categoryID" from="${ServiceCategory.list()}" optionKey="id" optionValue="name"/>
+          </div>
+        </div>
 
-	<div id="addcategory" class="searcharea">
-		<n:button onclick="\$('#addcategory').fadeOut(); \$('#newcategory').fadeIn();" label="${message(code:'label.addcategory')}" class="add-button"/>
-	</div>
-	
-	<div id="newcategory"  class="searcharea">
-		<h3><g:message code="fedreg.templates.servicecategories.add.heading"/></h3>
-		<form id="newservicecategorydata">
-		<table>
-			<tbody>
-				<tr>
-					<th><g:message code="label.category"/><th>
-					<td>
-						<g:select name="categoryID" from="${ServiceCategory.list()}" optionKey="id" optionValue="name"/>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-		<n:button onclick="fedreg.serviceCategory_add('${containerID}');" id="createcategorylink" label="${message(code:'label.add')}" class="add-button"/>
-		<n:button onclick="\$('#newcategory').fadeOut(); \$('#addcategory').fadeIn();" label="${message(code:'label.close')}" class="close-button"/>
-		</form>
-	</div>
-	
-</n:hasPermission>
+        <div class="input">
+          <a class="link-new-category btn success" id="createcategorylink"><g:message code="label.add"/></a>
+          <a onclick="$('#newcategory').fadeOut(); $('#addcategory').fadeIn(); return false;" class="btn"><g:message code="label.close"/></a>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+  
+</fr:hasPermission>

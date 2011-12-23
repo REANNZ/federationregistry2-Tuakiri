@@ -1,48 +1,42 @@
 <%@page import="aaf.fr.foundation.SamlURI" %>
 <%@page import="aaf.fr.foundation.SamlURIType" %>
 
-<script type="text/javascript">
-  <njs:flashgrowl/>
+<div id="endpoint-${endpoint.id}-editor" class="span12">
+  <h5><g:message code="label.editingendpoint"/> ${endpoint.id}</h5>
+  <form id="endpoint-edit-${endpoint.id}">
+    <fieldset>
+      <g:hiddenField name="id" value="${endpoint.id}" />
+      
+      <div class="clearfix">
+        <label for="uri"><g:message code="label.binding"/></label>
+        <div class="input">
+          <g:select name="binding" from="${SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding)}" optionKey="id" optionValue="uri" value="${endpoint.binding.id}"/>
+          <fr:tooltip code='fedreg.help.endpoint.binding' />
+        </div>
+      </div>
 
-	$(function() {		
-		$(function(){
-			$('.tip').tipTip({maxWidth: "auto", edgeOffset: 10, maxWidth:'200px', defaultPosition:"top"});
-		});
-	});
-</script>
+      <div class="clearfix">
+        <label for="location"><g:message code="label.location"/></label>
+        <div class="input">
+          <input name="location" type="text" class="required url" size="60" value="${endpoint.location}"/>
+          <fr:tooltip code='fedreg.help.endpoint.location' />
+        </div>
+      </div>
 
-<div class="overlaycontent">
-	<h4><g:message code="fedreg.templates.endpoints.edit.heading"/></h4>
-	<form id="endpoint-edit-${endpoint.id}">
-		<g:hiddenField name="id" value="${endpoint.id}" />
-		<table>
-			<tbody>
-				<tr>
-					<th><g:message code="label.binding"/></th>
-					<td>
-						<g:select name="binding" from="${SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding)}" optionKey="id" optionValue="uri" value="${endpoint.binding.id}"/>
-						<fr:tooltip code='fedreg.help.endpoint.binding' />
-					</td>
-				</tr>
-				<tr>
-					<th><g:message code="label.location"/></th>
-					<td>
-						<input name="location" type="text" class="required url" size="60" value="${endpoint.location.uri}"/>
-						<fr:tooltip code='fedreg.help.endpoint.location' />
-					</td>
-				</tr>
-				<g:if test="${endpoint.instanceOf(aaf.fr.foundation.IndexedEndpoint)}">
-					<tr>
-						<th><g:message code="label.index" /></th>
-						<td>
-							<input name="samlindex" type="text" class="required number" size="2" value="${endpoint.index}"/>
-							<fr:tooltip code='fedreg.help.endpoint.index' />
-						</td>
-					</tr>
-				</g:if>
-			</tbody>
-		</table>
-		<n:button onclick="if(\$('#endpoint-edit-${endpoint.id}').valid()) fedreg.endpoint_update('${endpoint.id}', '${endpointType}', '${containerID}');" label="${message(code:'label.update')}" class="update-button"/>
-		<n:button onclick="fedreg.endpoint_list('${endpointType}', '${containerID}');" label="${message(code:'label.cancel')}" class="close-button"/>
-	</form>
+      <g:if test="${endpoint.instanceOf(aaf.fr.foundation.IndexedEndpoint)}">
+        <div class="clearfix">
+          <label for="samlindex"><g:message code="label.index" /></label>
+          <div class="input">
+            <input name="samlindex" type="text" class="required number" size="2" value="${endpoint.index}"/>
+            <fr:tooltip code='fedreg.help.endpoint.index' />
+          </div>
+        </div>
+      </g:if>
+
+      <div class="input">
+        <a class="update-endpoint btn success" data-id="${endpoint.id}" data-type="${endpointType}" data-container="${containerID}"><g:message code="label.update"/></a>
+        <a class="cancel-edit-endpoint btn"><g:message code="label.cancel"/></a>
+      </div>
+    </fieldset>
+  </form>
 </div>

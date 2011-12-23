@@ -28,7 +28,7 @@
 						<td>${fieldValue(bean: identityProvider, field: "active")}</td>
 						<td>${fieldValue(bean: identityProvider, field: "approved")}</td>
 						<td>
-							<n:button href="${createLink(controller:'IDPSSODescriptor', action:'show', id: identityProvider.id)}" label="${message(code:'label.view')}" class="view-button"/>
+							<a href="${createLink(controller:'identityProvider', action:'show', id: identityProvider.id)}" class="btn"><g:message code="label.view"/></a>
 						</td>
 					</tr>
 				</g:each>

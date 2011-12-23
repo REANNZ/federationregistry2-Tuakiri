@@ -1,7 +1,7 @@
 package aaf.fr.foundation
 
 import org.apache.shiro.SecurityUtils
-
+import grails.plugins.federatedgrails.Role
 
 /**
  * Provides EntityDescriptor views.
@@ -38,9 +38,9 @@ class EntityDescriptorController {
 			redirect(action: "list")
 			return
 		}
-		
+		println entity 
 		def adminRole = Role.findByName("descriptor-${entity.id}-administrators")
-		[entity: entity, contactTypes:ContactType.list(), administrators:adminRole?.users]
+		[entity: entity, contactTypes:ContactType.list(), administrators:adminRole?.subjects]
 	}
 	
 	def create = {

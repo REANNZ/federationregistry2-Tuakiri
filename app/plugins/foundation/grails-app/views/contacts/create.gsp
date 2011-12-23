@@ -39,31 +39,31 @@
 						<tr>
 							<tr>
 								<th><g:message code="label.email" /></th>
-								<td><input type="text" name="email" value="${fieldValue(bean: contact, field: 'email.uri')}" class="required email"/></td>
+								<td><input type="text" name="email" value="${fieldValue(bean: contact, field: 'email')}" class="required email"/></td>
 							</tr>
 						</tr>
 						<tr>
 							<th><g:message code="label.secondaryemail" /></th>
 							<td>
-								<input type="text" name="secondaryEmail" value="${fieldValue(bean: contact, field: 'secondaryEmail.uri')}" class="email"/>
+								<input type="text" name="secondaryEmail" value="${fieldValue(bean: contact, field: 'secondaryEmail')}" class="email"/>
 							</td>
 						</tr>
 						<tr>
 							<th><g:message code="label.workphone" /></th>
 							<td>
-								<input type="text" name="workPhone" value="${fieldValue(bean: contact, field: 'workPhone.uri')}" />
+								<input type="text" name="workPhone" value="${fieldValue(bean: contact, field: 'workPhone')}" />
 							</td>
 						</tr>
 						<tr>
 							<th><g:message code="label.mobilephone" /></th>
 							<td>
-								<input type="text" name="mobilePhone" value="${fieldValue(bean: contact, field: 'mobilePhone.uri')}" />
+								<input type="text" name="mobilePhone" value="${fieldValue(bean: contact, field: 'mobilePhone')}" />
 							</td>
 						</tr>
 						<tr>
 							<th><g:message code="label.homephone" /></th>
 							<td>
-								<input type="text" name="homePhone" value="${fieldValue(bean: contact, field: 'homePhone.uri')}" />
+								<input type="text" name="homePhone" value="${fieldValue(bean: contact, field: 'homePhone')}" />
 							</td>
 						</tr>
 						<tr>

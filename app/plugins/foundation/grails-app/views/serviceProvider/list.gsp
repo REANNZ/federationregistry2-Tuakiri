@@ -14,8 +14,7 @@
 						<th><g:message code="label.serviceprovider" /></th>
 						<th><g:message code="label.organization" /></th>
 						<th><g:message code="label.entitydescriptor" /></th>
-						<th><g:message code="label.active" /></th>
-						<th><g:message code="label.approved" /></th>
+						<th><g:message code="label.functioning" /></th>
 						<th/>
 					</tr>
 				</thead>
@@ -25,10 +24,9 @@
 						<td>${fieldValue(bean: serviceProvider, field: "displayName")}</td>
 						<td>${fieldValue(bean: serviceProvider, field: "organization.name")}</td>
 						<td>${fieldValue(bean: serviceProvider, field: "entityDescriptor.entityID")}</td>
-						<td>${fieldValue(bean: serviceProvider, field: "active")}</td>
-						<td>${fieldValue(bean: serviceProvider, field: "approved")}</td>
+						<td>${serviceProvider.functioning()}</td>
 						<td>
-							<n:button href="${createLink(controller:'SPSSODescriptor', action:'show', id: serviceProvider.id)}" label="${message(code:'label.view')}" class="view-button"/>
+							<a href="${createLink(controller:'serviceProvider', action:'show', id: serviceProvider.id)}" class="btn"><g:message code='label.view'/></a>
 						</td>
 					</tr>
 				</g:each>

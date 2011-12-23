@@ -134,7 +134,7 @@ class ContactsController {
 		if(SecurityUtils.subject.isPermitted("contact:${contact.id}:update")) {
 			contact.givenName = params.givenname
 			contact.surname = params.surname
-			contact.email.uri = params.email
+			contact.email = params.email
 			contact.description = params.description
 			
 			if(params.organization) {
@@ -152,7 +152,7 @@ class ContactsController {
 				if(!contact.secondaryEmail)
 					contact.secondaryEmail = params.secondaryEmail
 				else
-					contact.secondaryEmail.uri = params.secondaryEmail
+					contact.secondaryEmail = params.secondaryEmail
 			else 
 				if(contact.secondaryEmail)
 					contact.secondaryEmail.delete()
@@ -161,7 +161,7 @@ class ContactsController {
 				if(!contact.workPhone)
 					contact.workPhone = params.workPhone
 				else
-					contact.workPhone.uri = params.workPhone
+					contact.workPhone = params.workPhone
 			else 
 				if(contact.workPhone) {
 					contact.workPhone.delete()
@@ -172,7 +172,7 @@ class ContactsController {
 				if(!contact.mobilePhone)
 					contact.mobilePhone = params.mobilePhone
 				else
-					contact.mobilePhone.uri = params.mobilePhone
+					contact.mobilePhone = params.mobilePhone
 			else 
 				if(contact.mobilePhone) {
 					contact.mobilePhone.delete()
@@ -183,7 +183,7 @@ class ContactsController {
 				if(!contact.homePhone)
 					contact.homePhone = params.homePhone
 				else 
-					contact.homePhone.uri = params.homePhone
+					contact.homePhone = params.homePhone
 			else 
 				if(contact.homePhone) {
 					contact.homePhone.delete()

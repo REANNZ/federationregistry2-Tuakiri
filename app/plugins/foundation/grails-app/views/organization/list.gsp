@@ -24,9 +24,9 @@
 				<g:each in="${organizationList.sort{it.name}}" status="i" var="organization">
 					<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 						<td>${fieldValue(bean: organization, field: "displayName")}</td>
-						<td>${fieldValue(bean: organization, field: "url.uri")}</td>
+						<td>${fieldValue(bean: organization, field: "url")}</td>
 						<td>${fieldValue(bean: organization, field: "primary.displayName")}</td>
-						<td><n:button href="${createLink(controller:'organization', action:'show', id:organization.id)}" label="label.view" class="view-button" /></td>
+						<td><a href="${createLink(controller:'organization', action:'show', id:organization.id)}" class="btn" /><g:message code="label.view"/></a></td>
 					</tr>
 				</g:each>
 				</tbody>

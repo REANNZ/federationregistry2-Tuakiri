@@ -12,44 +12,49 @@ import aaf.fr.workflow.ProcessPriority
  * @author Bradley Beddoes
  */
 class OrganizationService {
-
+  static transactional = true
+  
 	def workflowProcessService
 	def entityDescriptorService
 	
 	def create(def params) {
 		def organization = new Organization(approved:false, active:params.active, name:params.organization?.name, displayName:params.organization?.displayName, lang: params.organization?.lang, url: params.organization?.url, primary:OrganizationType.get(params.organization?.primary))
 		
-		def contact = Contact.get(params.contact?.id)
-		if(!contact) {
-			//contact = MailURI.findByUri(params.contact?.email)?.contact		// We may already have them referenced by email address and user doesn't realize
-			if(!contact)
-				contact = new Contact(givenName: params.contact?.givenName, surname: params.contact?.surname, email: params.contact?.email)
-		}
+    // Contact
+    def contact = Contact.get(params.contact?.id)
+    if(!contact) {
+      if(params.contact?.email)
+        contact = Contact.findByEmail(params.contact?.email)    // We may already have them referenced by email
+
+      if(!contact) {
+        // Due to hibernate cascade issues we have to actually save here to ensure no Transient Exception
+        contact = new Contact(givenName: params.contact?.givenName, surname: params.contact?.surname, email: params.contact?.email)
+        contact.save(flush:true)
+        if(contact.hasErrors()) {
+          log.info "$subject attempted to create identityProvider but contact details supplied were invalid"
+          contact.errors.each { log.debug it }
+        }
+      }
+    }
+    def ct = params.contact?.type ?: 'administrative'
 		
-		if(!organization.validate()) {
-			log.info "$subject attempted to create $organization but failed Organization validation"
+		if(!organization.validate() || contact.hasErrors()) {
+			log.info "$subject attempted to create $organization but failed input validation"
 			organization?.errors.each { log.error it }
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly() 
 			return [ false, organization, contact ]
 		}
 		
-		def savedOrg = organization.save(flush:true)
-		if(!savedOrg) {
+    // Force flush as we need identifiers
+		if(!organization.save(flush:true)) {
 			organization?.errors.each { log.error it }
-			throw new ErronousStateException("Unable to save when creating ${organization}")
+			throw new ErronousStateException("Unable to save when creating $organization")
 		}
 		
 		if(contact.organization == null)
-			contact.organization = savedOrg
-			
-		if(!contact.validate()) {
-			log.info "$subject attempted to create $organization but failed Contact validation"
-			contact?.errors.each { log.error it }
-			savedOrg.discard()
-			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly() 
-			return [ false, organization, contact ]
-		}
+			contact.organization = organization
 		
+    // Force flush as we need identifiers
 		if(!contact.save(flush:true)) {
 			contact?.errors.each { log.error it }
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly() 

@@ -12,18 +12,13 @@
 										<tr>
 											<td colspan="2">
 												<div id="acsspecattrvals${j}">
-													<g:render template="/templates/acs/listspecifiedattributevalues" plugin="federationcore" model='[requestedAttribute:ra, containerID:"acsspecattrvals${j}"]' />
+													<g:render template="/templates/acs/listspecifiedattributevalues" plugin="foundation" model='[requestedAttribute:ra, containerID:"acsspecattrvals${j}"]' />
 												</div>
 											</td>
 										</tr>
-										<n:hasPermission target="descriptor:${ra.attributeConsumingService.descriptor.id}:attribute:value:add">
+										<fr:hasPermission target="descriptor:${ra.attributeConsumingService.descriptor.id}:attribute:value:add">
 											<tr>
 												<td colspan="2" class="contentaddition">
-													<script type="text/javascript">
-														$(function() {
-															$("#newspecattributeval${j}").hide();
-														});
-													</script>
 													<div id="addnewspecattributeval${j}">
 														<n:button onclick="\$('#addnewspecattributeval${j}').fadeOut(); \$('#newspecattributeval${j}').fadeIn();" label="${message(code:'label.addvalue')}" class="add-button"/>
 													</div>
@@ -50,7 +45,7 @@
 													</div>
 												</td>
 											</tr>
-										</n:hasPermission>
+										</fr:hasPermission>
 									</tbody>
 								</table>
 							</div>

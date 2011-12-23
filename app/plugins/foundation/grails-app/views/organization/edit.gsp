@@ -67,7 +67,7 @@
 								<label for="organization.url"><g:message code="label.organizationurl" /></label>
 							</th>
 							<td>
-								<g:textField name="organization.url"  size="50" class="required url" minlength="4" maxlength="255" value="${organization.url.uri}"/>
+								<g:textField name="organization.url"  size="50" class="required url" minlength="4" maxlength="255" value="${organization.url}"/>
 								<fr:tooltip code='fedreg.help.organization.url' />
 							</td>
 						</tr>

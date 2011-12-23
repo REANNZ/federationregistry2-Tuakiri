@@ -29,26 +29,26 @@
 					<tr>
 						<tr>
 							<th><g:message code="label.email" /></th>
-							<td><a href="mailto:${fieldValue(bean: contact, field: "email.uri")}">${fieldValue(bean: contact, field: "email.uri")}</a></td>
+							<td><a href="mailto:${fieldValue(bean: contact, field: "email")}">${fieldValue(bean: contact, field: "email")}</a></td>
 						</tr>
 					</tr>
 					<g:if test="${contact.secondaryEmail}">
 						<tr>
 							<th><g:message code="label.secondaryemail" /></th>
-							<td><a href="mailto:${fieldValue(bean: contact, field: "secondaryEmail.uri")}">${fieldValue(bean: contact, field: "secondaryEmail.uri")}</a></td>
+							<td><a href="mailto:${fieldValue(bean: contact, field: "secondaryEmail")}">${fieldValue(bean: contact, field: "secondaryEmail")}</a></td>
 						</tr>
 					</g:if>
 					<tr>
 						<th><g:message code="label.workphone" /></th>
-						<td>${fieldValue(bean: contact, field: "workPhone.uri")}</td>
+						<td>${fieldValue(bean: contact, field: "workPhone")}</td>
 					</tr>
 					<tr>
 						<th><g:message code="label.mobilephone" /></th>
-						<td>${fieldValue(bean: contact, field: "mobilePhone.uri")}</td>
+						<td>${fieldValue(bean: contact, field: "mobilePhone")}</td>
 					</tr>
 					<tr>
 						<th><g:message code="label.homephone" /></th>
-						<td>${fieldValue(bean: contact, field: "homePhone.uri")}</td>
+						<td>${fieldValue(bean: contact, field: "homePhone")}</td>
 					</tr>
 					<tr>
 						<th><g:message code="label.description" /></th>

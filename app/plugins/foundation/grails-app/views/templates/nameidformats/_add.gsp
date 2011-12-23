@@ -1,5 +1,5 @@
 
-<n:hasPermission target="descriptor:${descriptor.id}:nameidformat:add">
+<fr:hasPermission target="descriptor:${descriptor.id}:nameidformat:add">
 
 	<%@page import="aaf.fr.foundation.SamlURI" %>
 	<%@page import="aaf.fr.foundation.SamlURIType" %>
@@ -34,4 +34,4 @@
 		</form>
 	</div>
 	
-</n:hasPermission>
+</fr:hasPermission>

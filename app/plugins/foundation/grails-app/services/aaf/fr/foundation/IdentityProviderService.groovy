@@ -11,7 +11,8 @@ import aaf.fr.workflow.ProcessPriority
  * @author Bradley Beddoes
  */
 class IdentityProviderService {
-	
+	static transactional = true
+  
 	def cryptoService
 	def workflowProcessService
 	def entityDescriptorService
@@ -28,17 +29,18 @@ class IdentityProviderService {
 		// Contact
 		def contact = Contact.get(params.contact?.id)
 		if(!contact) {
-            if(params.contact?.email)
-                contact = Contact.findByEmail(params.contact?.email)		// We may already have them referenced by email
-			
-            if(!contact)
-            println "1234"
-				contact = new Contact(givenName: params.contact?.givenName, surname: params.contact?.surname, email: params.contact?.email, organization:organization)
-				contact.save()
-                if(contact.hasErrors()) {
-                    log.info "$subject attempted to create identityProvider but contact details supplied were invalid"
-                    contact.errors.each { log.debug it }
-                }
+      if(params.contact?.email)
+        contact = Contact.findByEmail(params.contact?.email)		// We may already have them referenced by email
+
+      if(!contact) {
+        // Due to hibernate cascade issues we have to actually save here to ensure no Transient Exception
+        contact = new Contact(givenName: params.contact?.givenName, surname: params.contact?.surname, email: params.contact?.email, organization:organization)
+        contact.save()
+        if(contact.hasErrors()) {
+          log.info "$subject attempted to create identityProvider but contact details supplied were invalid"
+          contact.errors.each { log.debug it }
+        }
+      }
 		}
 		def ct = params.contact?.type ?: 'administrative'
 	
@@ -84,20 +86,20 @@ class IdentityProviderService {
 	
 		// Initial endpoints
 		def postBinding = SamlURI.findByUri(SamlConstants.httpPost)
-		def postLocation = params.idp?.post?.uri
+		def postLocation = params.idp?.post
 		def httpPost = new SingleSignOnService(approved: true, binding: postBinding, location:postLocation, active:params.active)
 		identityProvider.addToSingleSignOnServices(httpPost)
 		httpPost.validate()
 
 		def redirectBinding = SamlURI.findByUri(SamlConstants.httpRedirect)
-		def redirectLocation = params.idp?.redirect?.uri
+		def redirectLocation = params.idp?.redirect
 		def httpRedirect = new SingleSignOnService(approved: true, binding: redirectBinding, location:redirectLocation, active:params.active)
 		identityProvider.addToSingleSignOnServices(httpRedirect)
 		httpRedirect.validate()
 
 		def artifactBinding = SamlURI.findByUri(SamlConstants.soap)
-		def artifactLocation = params.idp?.artifact?.uri
-		def soapArtifact = new ArtifactResolutionService(approved: true, binding: artifactBinding, location:artifactLocation, index:params.idp?.artifact?.index, active:params.active, isDefault:true)
+		def artifactLocation = params.idp?.artifact
+		def soapArtifact = new ArtifactResolutionService(approved: true, binding: artifactBinding, location:artifactLocation, index:params.idp?.'artifact-index', active:params.active, isDefault:true)
 		identityProvider.addToArtifactResolutionServices(soapArtifact)
 		soapArtifact.validate()
 
@@ -128,7 +130,7 @@ class IdentityProviderService {
 			//identityProvider.collaborator = attributeAuthority
 		
 			def attributeServiceBinding = SamlURI.findByUri('urn:oasis:names:tc:SAML:2.0:bindings:SOAP')
-			def attributeServiceLocation = params.aa?.attributeservice?.uri
+			def attributeServiceLocation = params.aa?.attributeservice
 			soapAttributeService = new AttributeService(approved: true, binding: attributeServiceBinding, location:attributeServiceLocation, active:params.active)
 			attributeAuthority.addToAttributeServices(soapAttributeService)
             soapAttributeService.validate()

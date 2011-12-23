@@ -1,10 +1,10 @@
 package aaf.fr.foundation
 
 import org.apache.shiro.SecurityUtils
-
+import grails.plugins.federatedgrails.Role
 
 /**
- * Provides SPSSODescriptor views.
+ * Provides service provider views.
  *
  * @author Bradley Beddoes
  */

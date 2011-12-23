@@ -38,7 +38,7 @@ class ServiceCategoryController {
 				data.displayName = sp.displayName
 				data.description=sp.description
 				data.organization=sp.organization.displayName
-				data.organizationURL=sp.organization.url?.uri
+				data.organizationURL=sp.organization.url
 				data.url = sp.serviceDescription?.connectURL
 				data.logoURL = sp.serviceDescription?.logoURL
 				data.frURL = createLink(controller:'SPSSODescriptor', action:'show', id:sp.id, absolute:true )
@@ -58,13 +58,6 @@ class ServiceCategoryController {
 			return
 		}
 		
-		if(!params.containerID) {
-			log.warn "Container ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
-			response.setStatus(500)
-			return
-		}
-		
 		def serviceProvider = SPSSODescriptor.get(params.id)
 		if(!serviceProvider) {
 			log.warn "SPSSODescriptor identified by id $params.id was not located"
@@ -73,7 +66,7 @@ class ServiceCategoryController {
 			return
 		}
 		
-		render template: "/templates/servicecategories/list", contextPath: pluginContextPath, model:[descriptor:serviceProvider, categories:serviceProvider.serviceCategories, containerID:params.containerID]
+		render template: "/templates/servicecategories/list", contextPath: pluginContextPath, model:[descriptor:serviceProvider, categories:serviceProvider.serviceCategories]
 	}
 	
 	def add = {
@@ -108,6 +101,8 @@ class ServiceCategoryController {
 				serviceProvider.addToServiceCategories(category)
 				serviceProvider.save()
 				if(serviceProvider.hasErrors()) {
+          println "err"
+          serviceProvider.errors.each { println it }
 					render message(code: 'aaf.fr.foundation.servicecategory.error.adding')
 					response.setStatus(500)
 					return

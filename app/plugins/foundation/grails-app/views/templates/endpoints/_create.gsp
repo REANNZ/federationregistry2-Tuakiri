@@ -1,69 +1,68 @@
-<n:hasPermission target="descriptor:${descriptor.id}:endpoint:create">
+<fr:hasPermission target="descriptor:${descriptor.id}:endpoint:create">
 
-	<%@page import="aaf.fr.foundation.SamlURI" %>
-	<%@page import="aaf.fr.foundation.SamlURIType" %>
+  <%@page import="aaf.fr.foundation.SamlURI" %>
+  <%@page import="aaf.fr.foundation.SamlURIType" %>
 
-	<script type="text/javascript">
-		$(function() {
-			$("#new${endpointType}").hide();
-			$("#new${endpointType}data").validate();
-		});
-	</script>
+  <div id="add${endpointType}" class="actions">
+    <a onclick="$('#add${endpointType}').fadeOut(); $('#new${endpointType}').fadeIn();" class="btn"><g:message code="label.addendpoint"/></a>
+  </div>
 
-	<hr>
+  <div id="new${endpointType}" class="actions hidden">
+    <h4><g:message code="fedreg.templates.endpoints.add.heading"/></h4>
+    <form id="new${endpointType}data" class="validating span8">
+      <fieldset>
+        <input type="hidden" name="endpointType" value="${endpointType}">
 
-	<div id="add${endpointType}" class="searcharea">
-		<n:button onclick="\$('#add${endpointType}').fadeOut(); \$('#new${endpointType}').fadeIn();" label="${message(code:'label.addendpoint')}" class="add-button"/>
-	</div>
-	
-	<div id="new${endpointType}" class="searcharea">
-		<h3><g:message code="fedreg.templates.endpoints.add.heading"/></h3>
-		<form id="new${endpointType}data">
-		<table>
-			<tbody>
-				<tr>
-					<th><g:message code="label.binding"/></th>
-					<td>
-						<g:select name="binding" from="${SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding)}" optionKey="id" optionValue="uri"/>
-						<fr:tooltip code='fedreg.help.endpoint.binding' />
-					</td>
-				</tr>
-				<tr>
-					<th><g:message code="label.location"/></th>
-					<td>
-						<input name="location" type="text" class="required url" size="60"/>
-						<fr:tooltip code='fedreg.help.endpoint.location' />
-					</td>
-				</tr>
-				<g:if test="${resloc}">
-				<tr>
-					<th><g:message code="label.responselocation"/></th>
-					<td>
-						<input name="responselocation" type="text" class="easyinput" size="60"/>
-					</td>
-				</tr>
-				</g:if>
-				<g:if test="${indexed}">
-					<tr>
-						<th><g:message code="label.index" /></th>
-						<td>
-							<input name="samlindex" type="text" class="required number" size="2" />
-							<fr:tooltip code='fedreg.help.endpoint.index' />
-						</td>
-					</tr>
-				</g:if>
-				<tr>
-					<th><g:message code="label.active"/></th>
-					<td>
-						<g:checkBox name="active" value="true" />
-						<fr:tooltip code='fedreg.help.endpoint.active' />
-					</td>
-				</tr>
-			</tbody>
-		</table>
-		<n:button onclick="if(\$('#new${endpointType}data').valid()) fedreg.endpoint_create('${endpointType}', '${containerID}');" label="${message(code:'label.add')}" class="add-button"/>
-		<n:button onclick="\$('#new${endpointType}').fadeOut(); \$('#add${endpointType}').fadeIn();" label="${message(code:'label.close')}" class="close-button"/>
-		</form>
-	</div>
-	
-</n:hasPermission>
+        <div class="clearfix">
+          <label for="binding"><g:message code="label.binding"/></label>
+          <div class="input">
+            <g:select name="binding" from="${SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding)}" optionKey="id" optionValue="uri"/>
+            <fr:tooltip code='fedreg.help.endpoint.binding' />
+          </div>
+        </div>
+
+        <div class="clearfix">
+          <label for="location"><g:message code="label.location"/></label>
+          <div class="input">
+            <input name="location" type="text" class="required url" size="60"/>
+            <fr:tooltip code='fedreg.help.endpoint.location' />
+          </div>
+        </div>
+
+        <g:if test="${resloc}">
+          <div class="clearfix">
+            <label for="responselocation"><g:message code="label.responselocation"/></label>
+            <div class="input">
+              <input name="responselocation" type="text" class="easyinput" size="60"/>
+            </div>
+          </div>
+        </g:if>
+
+        <g:if test="${indexed}">
+          <div class="clearfix">
+            <label for="index"><g:message code="label.index" /></label>
+            <div class="input">
+              <input name="samlindex" type="text" class="required number" size="2" />
+              <fr:tooltip code='fedreg.help.endpoint.index' />
+            </div>
+          </div>
+        </g:if>
+
+        <div class="clearfix">
+          <label for="active"><g:message code="label.active"/></label>
+          <div class="input">
+            <g:checkBox name="active" value="true" />
+            <fr:tooltip code='fedreg.help.endpoint.active' />
+          </div>
+        </div>
+
+        <div class="input">
+          <a class="create-endpoint btn success" data-type="${endpointType}" data-container="${containerID}"><g:message code="label.add"/></a>
+          <a onclick="$('#new${endpointType}').fadeOut(); $('#add${endpointType}').fadeIn();" class="btn"><g:message code="label.cancel"/></a>
+        </div>
+
+      </fieldset>
+    </form>
+  </div>
+
+</fr:hasPermission>

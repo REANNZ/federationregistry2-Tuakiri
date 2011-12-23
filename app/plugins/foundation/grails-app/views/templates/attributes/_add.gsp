@@ -1,4 +1,4 @@
-<n:hasPermission target="descriptor:${descriptor.id}:attribute:add">
+<fr:hasPermission target="descriptor:${descriptor.id}:attribute:add">
 	<%@page import="aaf.fr.foundation.AttributeBase" %>
 
 	<script type="text/javascript">
@@ -33,4 +33,4 @@
 		<n:button onclick="\$('#newattribute').fadeOut(); \$('#addattribute').fadeIn();" label="${message(code:'label.close')}" class="close-button"/>
 		</form>
 	</div>
-</n:hasPermission>
+</fr:hasPermission>
