@@ -1,4 +1,6 @@
-import grails.plugins.nimble.core.*
+import grails.plugins.federatedgrails.*
+import aaf.fr.identity.*
+import aaf.fr.foundation.*
 
 workflowTaskService = ctx.getBean("workflowTaskService")
 

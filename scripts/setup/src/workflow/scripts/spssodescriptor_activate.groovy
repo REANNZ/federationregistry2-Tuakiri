@@ -1,6 +1,6 @@
-
-import grails.plugins.nimble.core.*
-import fedreg.core.*
+import grails.plugins.federatedgrails.*
+import aaf.fr.identity.*
+import aaf.fr.foundation.*
 
 
 workflowTaskService = ctx.getBean("workflowTaskService")
@@ -59,7 +59,7 @@ if(sp) {
 	
 	def creator = Contact.get(env.creator.toLong())
 	mailService.sendMail {            
-		to creator.email.uri
+		to creator.email
 		from ctx.grailsApplication.config.nimble.messaging.mail.from
 		subject messageSource.getMessage("fedreg.templates.mail.workflow.sp.activated.subject", null, "fedreg.templates.mail.workflow.sp.activated.subject", new Locale(env.locale))
 		body view:"/templates/mail/workflows/default/_activated_sp", model:[serviceProvider:sp, locale:env.locale, invitation:invitation]
