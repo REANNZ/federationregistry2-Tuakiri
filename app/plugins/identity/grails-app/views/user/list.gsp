@@ -27,8 +27,8 @@
 						<g:else>
 							<td>${subject.subjectname?.encodeAsHTML()}</td>
 						</g:else>
-						<g:if test="${subject.profile?.fullName}">
-							<td valign="top" class="value">${subject.profile?.fullName?.encodeAsHTML()}</td>
+						<g:if test="${subject.profile?.displayName}">
+							<td valign="top" class="value">${subject.profile?.displayName?.encodeAsHTML()}</td>
 						</g:if>
 						<g:else>
 							<td>&nbsp;</td>

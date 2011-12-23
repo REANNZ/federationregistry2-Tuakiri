@@ -1,7 +1,7 @@
 <html>
 	<head>
 		<meta name="layout" content="${grailsApplication.config.nimble.layout.administration}"/>
-		<title><g:message code="nimble.view.subject.show.title" args="[subject.profile?.fullName ?: subject.subjectname]" /></title>
+		<title><g:message code="nimble.view.subject.show.title" args="[subject.profile?.displayName ?: subject.subjectname]" /></title>
 		<r:script>
 			<njs:subject subject="${subject}"/>
 			<njs:permission parent="${subject}"/>

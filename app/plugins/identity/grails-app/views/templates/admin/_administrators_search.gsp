@@ -16,7 +16,7 @@
 					<g:else>
 						<td>${subject.subjectname?.encodeAsHTML()}</td>
 					</g:else>
-					<td>${subject?.profile?.fullName?.encodeAsHTML()}</td>
+					<td>${subject?.profile?.displayName?.encodeAsHTML()}</td>
 					<td>
 						<n:button href="${createLink(controller:'subject', action:'show', id:subject.id)}" label="label.view" class="view-button" />
 						<n:button onclick="nimble.grantAdministrator('${subject.id.encodeAsHTML()}', '${subject.subjectname.encodeAsHTML()}');" label="label.grant" class="add-button" />

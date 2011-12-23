@@ -7,7 +7,7 @@ federation {
   enabled = true
   automatelogin = false
   federationactive = false
-  developmentactive = false
+  developmentactive = true
   autoprovision = true
   
   // Supported as fallback for problematic webservers but should usually be true
@@ -27,14 +27,10 @@ federation {
     applicationID = "Shib-Application-ID" // The applicationId property derived for the request.     
     idpAuthenticationInstant = "Shib-Authentication-Instant" // The ISO timestamp provided by the IdP indicating the time of authentication. 
     
-    /*
-    See mappings in your attribute-map.xml file to enable more attributes (values for id)
-    Some additional common requirements:
       displayName = "displayName"
       email= "mail"
       entitlement = "entitlement"
       homeOrganization = "homeOrganization"
       homeOrganizationType = "homeOrganizationType"
-    */
   }
 }

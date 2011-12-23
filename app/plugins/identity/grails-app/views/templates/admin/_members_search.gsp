@@ -16,8 +16,8 @@
 					<g:else>
 						<td>${subject.subjectname?.encodeAsHTML()}</td>
 					</g:else>
-					<g:if test="${subject?.profile?.fullName}">
-						<td>${subject?.profile?.fullName.encodeAsHTML()}</td>
+					<g:if test="${subject?.profile?.displayName}">
+						<td>${subject?.profile?.displayName.encodeAsHTML()}</td>
 					</g:if>
 					<g:else>
 						<td>N/A</td>

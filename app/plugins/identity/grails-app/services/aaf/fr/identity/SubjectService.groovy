@@ -11,7 +11,7 @@ import org.apache.shiro.SecurityUtils
  */
 class SubjectService {
 
-    public static String USER_ROLE = "USER"
+    public static String SUBJECT_ROLE = "USER"
 
     boolean transactional = true
 

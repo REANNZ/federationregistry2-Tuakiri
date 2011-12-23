@@ -4,7 +4,7 @@ import grails.plugins.federatedgrails.SubjectBase
 
 class Subject extends SubjectBase {
 
-  // Extend with your custom values here
+  String displayName
   String email
 
   static constraints = {
@@ -15,4 +15,12 @@ class Subject extends SubjectBase {
       "aaf.fr.identity.Subject [id: $id, principal: $principal]"
   }
 
+  // Crude but necessary
+  public String getGivenName() {
+    displayName?.split(' ')[0]
+  }
+
+  public String getSurname() {
+    displayName?.split(' ')[1]
+  }
 }

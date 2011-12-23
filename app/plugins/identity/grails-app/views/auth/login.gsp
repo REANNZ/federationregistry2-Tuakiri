@@ -6,7 +6,7 @@
   
   <body>
     <div style="text-align: center;"><h2>Select login account</h2><br><br></div>
-
+aaa
     <h3 style="text-align: center;"><a href="${spsession_url}">Login via Federation</a></h3>
     <br><br>
     <h3 style="text-align: center;">OR</h3> 
@@ -22,6 +22,7 @@
               <g:hiddenField name="credential" value="fake-sessionid-webform" />
               <g:hiddenField name="attributes.givenName" value="Fred" />
               <g:hiddenField name="attributes.surname" value="Bloggs" />
+              <g:hiddenField name="attributes.displayName" value="Fred Bloggs" />
               <g:hiddenField name="attributes.email" value="fredbloggs@one.edu.au" />
               <g:hiddenField name="attributes.entityID" value="https://vho.aaf.edu.au/idp/shibboleth" />
               <g:hiddenField name="attributes.homeOrganization" value="one.edu.au" />
@@ -39,6 +40,7 @@
               <g:hiddenField name="credential" value="fake-sessionid-webform" />
               <g:hiddenField name="attributes.givenName" value="Joe" />
               <g:hiddenField name="attributes.surname" value="Schmoe" />
+              <g:hiddenField name="attributes.displayName" value="Joe Schmoe" />
               <g:hiddenField name="attributes.email" value="joeschmoe@one.edu.au" />
               <g:hiddenField name="attributes.entityID" value="https://vho.aaf.edu.au/idp/shibboleth" />
               <g:hiddenField name="attributes.homeOrganization" value="one.edu.au" />

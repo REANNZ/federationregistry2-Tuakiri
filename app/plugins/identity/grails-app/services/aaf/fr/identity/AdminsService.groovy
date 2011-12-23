@@ -1,6 +1,7 @@
 package aaf.fr.identity
 
 import org.apache.shiro.authz.permission.AllPermission
+import grails.plugins.federatedgrails.Role
 
 /**
  * Provides methods for granting and removing super administrator role.
@@ -38,9 +39,9 @@ class AdminsService {
         subject.addToRoles(adminRole)
 
         if (!adminRole.save()) {
-            log.error "Unable to grant administration privilege to [$subject.id]$subject.subjectname"
+            log.error "Unable to grant administration privilege to $subject"
             adminRole.errors.each {
-                log.error '[${subject.subjectname}] - ' + it
+                log.error '[$subject] - ' + it
             }
 
             adminRole.discard()
@@ -49,15 +50,15 @@ class AdminsService {
         }
         else {
             if (!subject.save()) {
-                log.error "Unable to grant administration role to [$subject.id]$subject.subjectname failed to modify subject account"
+                log.error "Unable to grant administration role to $subject failed to modify subject account"
                 subject.errors.each {
                     log.error it
                 }
 
-                throw new RuntimeException("Unable to grant administration role to [$subject.id]$subject.subjectname")
+                throw new RuntimeException("Unable to grant administration role to $subject")
             }
 
-            log.info "Granted administration privileges to [$subject.id]$subject.subjectname"
+            log.info "Granted administration privileges to $subject"
             return true
         }
     }
@@ -89,7 +90,7 @@ class AdminsService {
         subject.removeFromRoles(adminRole)
 
         if (!adminRole.save()) {
-            log.error "Unable to revoke administration privilege from [$subject.id]$subject.subjectname"
+            log.error "Unable to revoke administration privilege from $subject"
             adminRole.errors.each {
                 log.error it
             }
@@ -100,15 +101,15 @@ class AdminsService {
         }
         else {
             if (!subject.save()) {
-                log.error "Unable to revoke administration privilege from [$subject.id]$subject.subjectname failed to modify subject account"
+                log.error "Unable to revoke administration privilege from $subject failed to modify subject account"
                 subject.errors.each {
                     log.error it
                 }
 
-                throw new RuntimeException("Unable to revoke administration privilege from [$subject.id]$subject.subjectname failed to modify subject account")
+                throw new RuntimeException("Unable to revoke administration privilege from $subject failed to modify subject account")
             }
 
-            log.info "Revoked administration privilege from [$subject.id]$subject.subjectname"
+            log.info "Revoked administration privilege from $subject"
             return true
         }
     }

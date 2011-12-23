@@ -15,7 +15,7 @@
 				<g:else>
 					<td>${admin.subjectname?.encodeAsHTML()}</td>
 				</g:else>
-				<td>${admin?.profile?.fullName.encodeAsHTML()}</td>
+				<td>${admin?.profile?.displayName.encodeAsHTML()}</td>
 				<td>
 					<n:button href="${createLink(controller:'subject', action:'show', id:admin.id)}" label="label.view" class="view-button" />
 					<g:if test="${currentAdmin != admin}">
