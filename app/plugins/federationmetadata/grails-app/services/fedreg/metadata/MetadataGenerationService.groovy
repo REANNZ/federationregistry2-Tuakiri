@@ -153,7 +153,7 @@ class MetadataGenerationService {
 	@Transactional(readOnly = true)
 	def entityDescriptor(builder, all, minimal, roleExtensions, entityDescriptor, schema) {
 		if(all || entityDescriptor.functioning() ) {
-			if(entityDescriptor.empty()) {
+			if(!all && entityDescriptor.empty()) {
 				log.warn "Not rendering $entityDescriptor no children nodes detected"
 			}
 			else {
