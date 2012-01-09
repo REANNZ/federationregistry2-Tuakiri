@@ -16,6 +16,14 @@ class UrlMappings {
 		"/api/v1/metadata/$type/$id?"(controller:"metadataAPIv1"){
 			action = [GET: "show"]
 		}
+
+    "/api/v1/organizations"(controller:"organizationAPIv1"){ 
+      action = [GET: "list"]
+    }
+
+    "/api/v1/organizations/$id"(controller:"organizationAPIv1"){
+      action = [GET: "show"]
+    }
 		
 		"/api/v1/identityproviders"(controller:"identityProvidersAPIv1"){
 			action = [GET: "list"]

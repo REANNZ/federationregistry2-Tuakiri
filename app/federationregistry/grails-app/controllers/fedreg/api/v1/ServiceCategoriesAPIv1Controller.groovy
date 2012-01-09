@@ -8,15 +8,14 @@ class ServiceCategoriesAPIv1Controller {
 	def list = {
 		def results = []
 
-		def serviceCategories = ServiceCategory.list()		
+		def serviceCategories = ServiceCategory.list().sort{it.id}		
 		serviceCategories.each { sc ->
 			def result = [:]
 			result.id = sc.id
 			result.name = sc.name
 			result.description = sc.description
-			result.format = "json"
 			result.link = g.createLink(controller: 'serviceCategoriesAPIv1', id: sc.id, absolute: true)
-			
+			result.format = "json"
 			results.add(result)
 		}
 		
@@ -48,7 +47,7 @@ class ServiceCategoriesAPIv1Controller {
 			}
 		}
 	
-		serviceProviders.each { sp -> 
+		serviceProviders.sort{it.id}.each { sp -> 
 			if(sp.functioning()) {
 				def data = [:]
 				data.id = sp.id

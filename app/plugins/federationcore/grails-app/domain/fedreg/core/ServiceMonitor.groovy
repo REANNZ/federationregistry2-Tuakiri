@@ -27,12 +27,14 @@ class ServiceMonitor  {
 	
 	MonitorType type
 	String url
+  String node
 	boolean enabled = true
 	int checkPeriod = 0
 
 	static constraints = {
 		type(nullable: false)
 		url(nullable: false, blank: false)
+    node(nullable:true)
 	}
 	
 	static belongsTo = [roleDescriptor:RoleDescriptor]

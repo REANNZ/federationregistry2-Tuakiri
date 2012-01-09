@@ -35,6 +35,12 @@
 						<fr:tooltip code='fedreg.help.monitor.location' />
 					</td>
 				</tr>
+        <th><g:message code="label.node"/><th>
+          <td>
+            <input name="node" type="text" size="60"/>
+            <fr:tooltip code='fedreg.help.monitor.node' />
+          </td>
+        </tr>
 			</tbody>
 		</table>
 		<n:button onclick="if(\$('#newmonitordata').valid()) fedreg.monitor_create();" label="${message(code:'label.add')}" class="add-button"/>

@@ -11,7 +11,7 @@ class AttributeFiltersAPIv1Controller {
 		def results = []
 		
 		// Distribute non functioning IdP filters (but ignore archived) incase they come online and request AA before subsequent update
-		def identityProviders = IDPSSODescriptor.list(archived:false)		
+		def identityProviders = IDPSSODescriptor.list(archived:false).sort{it.id}		
 		identityProviders.each { idp ->
 			def filter = [:]
 			filter.identityprovider = [:]
