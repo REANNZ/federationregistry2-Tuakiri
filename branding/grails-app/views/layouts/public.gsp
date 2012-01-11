@@ -3,7 +3,7 @@
 <html>
 	<head>
 		<title><g:message code="fedreg.title.${grailsApplication.config.fedreg.deployment.environment}" /> | <g:layoutTitle /></title>
-		<r:use modules="html5, zenbox, tiptip, blockui, jgrowl, datatables, validate, alphanumeric, formwizard, app"/>
+		<r:use modules="jquery, bootstrap, app"/>
 		<r:layoutResources/>
 		<g:layoutHead />
 	</head>
