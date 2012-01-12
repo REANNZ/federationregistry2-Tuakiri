@@ -196,8 +196,8 @@
           </tbody>
         </table>
         <fr:hasPermission target="descriptor:${serviceProvider.id}:update">
-          <div class="actions">
-            <g:link action="edit" id="${serviceProvider.id}" class="btn"><g:message code="label.editsp"/></g:link>
+          <div>
+            <g:link action="edit" id="${serviceProvider.id}" class="btn info"><g:message code="label.editsp"/></g:link>
           </div>
         </fr:hasPermission>
       </div>

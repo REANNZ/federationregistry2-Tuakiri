@@ -2,11 +2,11 @@
 
   <%@page import="aaf.fr.foundation.ServiceCategory" %>
 
-  <div id="addcategory" class="actions">
-    <a onclick="$('#addcategory').fadeOut(); $('#newcategory').fadeIn(); return false;" class="btn"><g:message code="label.addcategory"/></a>
+  <div id="addcategory" class="">
+    <a onclick="$('#addcategory').fadeOut(); $('#newcategory').fadeIn(); return false;" class="btn info"><g:message code="label.addcategory"/></a>
   </div>
   
-  <div id="newcategory"  class="hidden actions">
+  <div id="newcategory"  class="hidden">
     <h3><g:message code="fedreg.templates.servicecategories.add.heading"/></h3>
     <form id="newservicecategorydata">
       <fieldset>

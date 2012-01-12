@@ -3,11 +3,11 @@
   <%@page import="aaf.fr.foundation.SamlURI" %>
   <%@page import="aaf.fr.foundation.SamlURIType" %>
 
-  <div id="add${endpointType}" class="actions">
-    <a onclick="$('#add${endpointType}').fadeOut(); $('#new${endpointType}').fadeIn();" class="btn"><g:message code="label.addendpoint"/></a>
+  <div id="add${endpointType}">
+    <a onclick="$('#add${endpointType}').fadeOut(); $('#new${endpointType}').fadeIn();" class="btn info"><g:message code="label.addendpoint"/></a>
   </div>
 
-  <div id="new${endpointType}" class="actions hidden">
+  <div id="new${endpointType}" class="hidden">
     <h4><g:message code="fedreg.templates.endpoints.add.heading"/></h4>
     <form id="new${endpointType}data" class="validating span8">
       <fieldset>

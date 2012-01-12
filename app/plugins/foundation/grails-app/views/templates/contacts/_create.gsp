@@ -1,8 +1,8 @@
 <fr:hasPermission target="organization:${owner.id}:contact:add">
 
-  <div class="search-contacts search-box actions">
+  <div class="search-contacts search-box">
   	<div class="add-contact span16">
-  		<a class="btn search-for-contact"><g:message code="label.addcontact" /></a>
+  		<a class="btn info search-for-contact"><g:message code="label.addcontact" /></a>
   	</div>
 
     <div class="potential-contacts hidden">

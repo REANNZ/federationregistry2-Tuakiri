@@ -2,11 +2,11 @@
 <%@page import="aaf.fr.foundation.SPSSODescriptor" %>
 
 <fr:hasPermission target="descriptor:${descriptor.id}:crypto:create">
-  <div id="addcertificate" class="actions">
-    <a onclick="$('#addcertificate').fadeOut(); $('#newcertificate').fadeIn();" class="btn"><g:message code="label.addcertificate"/></a>
+  <div id="addcertificate">
+    <a onclick="$('#addcertificate').fadeOut(); $('#newcertificate').fadeIn();" class="btn info"><g:message code="label.addcertificate"/></a>
   </div>
   
-  <div id="newcertificate" class="hidden actions">
+  <div id="newcertificate" class="hidden">
     <h4><g:message code="fedreg.templates.certificates.certificatemanagement.addnew.heading"/></h4>
     <p><g:message code="fedreg.templates.certificates.certificatemanagement.addnew.requestformat" /></p>
     
