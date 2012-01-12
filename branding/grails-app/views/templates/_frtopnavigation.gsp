@@ -1,6 +1,4 @@
-
-	
-	<ul class="level1">
+		<ul class="level1">
 		<fr:isNotLoggedIn>
 			<li class="${controllerName == 'auth' ? 'directactive':''}">
 				<g:link controller="auth"><g:message code="fedreg.navigation.login" /></g:link>
@@ -53,4 +51,3 @@
 			</li>
 		</fr:isLoggedIn>
 	</ul>
-  
