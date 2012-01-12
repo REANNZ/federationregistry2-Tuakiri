@@ -224,13 +224,12 @@ class IDPSSODescriptorService {
 		identityProvider.displayName = params.idp.displayName
 		identityProvider.description = params.idp.description
 		identityProvider.scope = params.idp.scope
-        identityProvider.wantAuthnRequestsSigned = params.idp.wantauthnrequestssigned
 
-        if(identityProvider.collaborator) {
-            identityProvider.collaborator.displayName = params.idp.displayName
-            identityProvider.collaborator.description = params.idp.description
-            identityProvider.collaborator.scope = params.idp.scope    
-        }
+    if(identityProvider.collaborator) {
+        identityProvider.collaborator.displayName = params.idp.displayName
+        identityProvider.collaborator.description = params.idp.description
+        identityProvider.collaborator.scope = params.idp.scope    
+    }
 
 		if(params.idp.status == 'true') {
 			identityProvider.active = true
