@@ -9,16 +9,16 @@ class ServiceProvidersAPIv1Controller {
 	def list = {	
 		def results = []
 
-		def serviceProviders = SPSSODescriptor.list()		
+		def serviceProviders = SPSSODescriptor.list().sort{it.id}		
 		serviceProviders.each { sp ->
 			def result = [:]
 			result.id = sp.id
 			result.name = sp.displayName
 			result.functioning = sp.functioning()
 			result.archived = sp.archived
-			result.format = "json"
 			result.link = g.createLink(controller: 'serviceProvidersAPIv1', id: sp.id, absolute: true)
-			
+			result.format = "json"
+      
 			results.add(result)
 		}
 		

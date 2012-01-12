@@ -4,6 +4,7 @@
 			<tr>
 				<th><g:message code="label.type"/></th>
 				<th><g:message code="label.url"/></th>
+        <th><g:message code="label.node"/></th>
 				<th><g:message code="label.interval"/></th>
 				<th/>
 			</tr>	
@@ -13,6 +14,7 @@
 			<tr>
 				<td>${m.type.name}</td>
 				<td>${m.url}</td>
+        <td>${m.node}</td>
 				<td>
 					<g:if test="${m.checkPeriod == 0}">
 						<g:message code="label.externallydefined"/>

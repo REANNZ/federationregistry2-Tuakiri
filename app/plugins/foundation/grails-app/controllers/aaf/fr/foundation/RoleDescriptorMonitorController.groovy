@@ -40,7 +40,7 @@ class RoleDescriptorMonitorController {
 		}
 		
 		if(SecurityUtils.subject.isPermitted("descriptor:${roleDescriptor.id}:monitor:add")) {
-			def serviceMonitor = new ServiceMonitor(type:monitorType, url:params.url, interval:params.interval)
+			def serviceMonitor = new ServiceMonitor(type:monitorType, url:params.url, interval:params.interval, node:params.node)
 			roleDescriptor.addToMonitors(serviceMonitor)
 			if(!roleDescriptor.save()) {
 				log.info "$subject was unable to add $serviceMonitor to $roleDescriptor"

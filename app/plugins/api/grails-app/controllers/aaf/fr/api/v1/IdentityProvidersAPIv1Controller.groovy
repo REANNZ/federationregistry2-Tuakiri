@@ -9,7 +9,7 @@ class IdentityProvidersAPIv1Controller {
 	def list = {	
 		def results = []
 
-		def identityProviders = IDPSSODescriptor.list()		
+		def identityProviders = IDPSSODescriptor.list().sort{it.id}		
 		identityProviders.each { idp ->
 			def result = [:]
 			result.id = idp.id
