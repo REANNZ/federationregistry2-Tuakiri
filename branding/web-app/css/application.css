@@ -68,6 +68,10 @@
   vertical-align:middle;
 }
 
+body {
+  background-color: #fff;
+}
+
 body header {  
   background-color: @headColor;
   color: @headFontColor;
@@ -161,15 +165,19 @@ body nav {
 
 body section {
   .zero;
+  padding: 3px;
   padding-top: 6px;
+  background-color: #fff;
 }
 
 body footer {
   .zero;
-  border-top: 2px solid #aaa;
+  background-color: #f2f2f2;
+  border-top: 1px solid #d2d2d2;
   margin-top: 24px;
-  padding-top: 6px;
-  margin-bottom: 12px;
+  padding: 6px;
+  padding-top: 12px;
+  padding-bottom: 12px;
   
   font-size:0.9em;
   color: #aaa;
