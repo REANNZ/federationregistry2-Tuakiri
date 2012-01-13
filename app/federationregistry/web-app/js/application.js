@@ -506,7 +506,7 @@ $('.create-endpoint').live('click', function() {
   } else { fedreg.reset_button(); }
 });
 
-$('.edit-endpoint').live('click', function(id, endpointType, containerID) {
+$('.edit-endpoint').live('click', function() {
   fedreg.set_button($(this));
   edit_endpoint = $(this).attr('data-id');
   type_endpoint = $(this).attr('data-type');
@@ -528,12 +528,12 @@ $('.edit-endpoint').live('click', function(id, endpointType, containerID) {
   });
 });
 
-$('.cancel-edit-endpoint').live('click', function(id, endpointType, containerID) {
+$('.cancel-edit-endpoint').live('click', function() {
   $('#endpoint-'+edit_endpoint+'-editor').remove();
   $("#endpoint-"+edit_endpoint).fadeIn();
 });
 
-$('.update-endpoint').live('click', function(id, endpointType, containerID) {
+$('.update-endpoint').live('click', function() {
   fedreg.set_button($(this));
   update_endpoint = $(this).attr('data-id');
   type_endpoint = $(this).attr('data-type');
@@ -1003,6 +1003,31 @@ fedreg.configureServiceProviderSAML = function(host) {
     }
   }
 };
+
+// Attribute request/require toggle for SP
+$('.request-attribute').live('click', function() {
+    var attr = $(this).attr('data-attrid');
+    var reason = $('.reason-attribute[data-attrid=' + attr +']');
+    var req = $('.require-attribute[data-attrid=' + attr +']');
+
+    if(!$(this).is(':checked') && req.is(':checked')) {
+        req.attr('checked', false);
+        reason.removeClass('required');
+    } else {
+        reason.addClass('required'); 
+    }
+});
+
+$('.require-attribute').live('click', function() {
+    var attr = $(this).attr('data-attrid');
+    var reason = $('.reason-attribute[data-attrid=' + attr +']');
+    var req = $('.request-attribute[data-attrid=' + attr +']');
+
+    if($(this).is(':checked') && !req.is(':checked')) {
+        req.attr('checked', true);
+        reason.addClass('required'); 
+    }
+});
 
 // Reporting
 fedreg.openRefinement = function() {

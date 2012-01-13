@@ -365,8 +365,8 @@
           <th><g:message code="label.name" /></th>
           <th><g:message code="label.category" /></th>
           <th><g:message code="label.requested" /></th>
-          <th class="nowrap"><g:message code="label.required" /> <fr:tooltip code='fedreg.help.serviceprovider.attribute.isrequired' /></th>
-          <th><g:message code="label.reasonrequested" /> <fr:tooltip code='fedreg.help.serviceprovider.attribute.reason' /></th>
+          <th><g:message code="label.reasonrequested" /></th>
+          <th class="nowrap"><g:message code="label.required" /></th>
         </tr>
         <g:each in="${attributeList}" var="attr" status="i">
           <g:if test="${!attr.specificationRequired}">
@@ -381,13 +381,13 @@
                 ${fieldValue(bean: attr, field: "category.name")}
               </td>
               <td class="centered">
-                <g:checkBox name="sp.attributes.${attr.id}.requested" id="spattributes${attr.id}requested" onClick="\$('#spattributes${attr.id}reasoning').toggleClass('required'); if(!\$(this).is(':checked') && \$('#spattributes${attr.id}required').is(':checked')) {\$('#spattributes${attr.id}required').attr('checked', false);}" checked="${ra}"/>
-              </td>
-              <td class="centered">
-                <g:checkBox name="sp.attributes.${attr.id}.required" id="spattributes${attr.id}required" checked="${ra?.isRequired}" onClick="if(\$(this).is(':checked') && !\$('#spattributes${attr.id}requested').is(':checked')) {\$('#spattributes${attr.id}requested').attr('checked', true);}"/>
+                <g:checkBox name="sp.attributes.${attr.id}.requested" checked="${ra}" class="request-attribute" data-attrid="${attr.id}" />
               </td>
               <td>
-                <input name="sp.attributes.${attr.id}.reasoning" id="spattributes${attr.id}reasoning" size="40" value="${ra?.reasoning}" />
+                <input name="sp.attributes.${attr.id}.reasoning" size="40" value="${ra?.reasoning}" rel="twipsy" data-original-title="${g.message(code:'fedreg.help.serviceprovider.attribute.reason')}" data-placement="right" class="reason-attribute" data-attrid="${attr.id}"/>
+              </td>
+              <td class="centered">
+                <g:checkBox name="sp.attributes.${attr.id}.required" id="spattributes${attr.id}required" checked="${ra?.isRequired}" rel="twipsy" data-original-title="${g.message(code:'fedreg.help.serviceprovider.attribute.isrequired')}" data-placement="right" class="require-attribute" data-attrid="${attr.id}" />
               </td>
             </tr>
           </g:if>
