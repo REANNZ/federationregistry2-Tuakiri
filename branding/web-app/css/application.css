@@ -68,6 +68,22 @@
   vertical-align:middle;
 }
 
+.cert {
+  width: 500px;
+}
+
+.validation-error{
+  border: 2px solid #FBC7C6;    
+}
+
+div.validation-error {
+  .rounded;
+  padding: 6px;
+  margin: 4px;
+  background-color: #FDDFDE;
+  float:right;
+}
+
 body {
   background-color: #fff;
 }

@@ -1010,9 +1010,13 @@ $('.request-attribute').live('click', function() {
     var reason = $('.reason-attribute[data-attrid=' + attr +']');
     var req = $('.require-attribute[data-attrid=' + attr +']');
 
-    if(!$(this).is(':checked') && req.is(':checked')) {
+    if(!$(this).is(':checked')) {
+      if(req.is(':checked')) {
         req.attr('checked', false);
-        reason.removeClass('required');
+      }
+      reason.removeClass('required');
+      reason.removeClass('validation-error');
+      reason.siblings('.validation-error').remove();  //removes error notice
     } else {
         reason.addClass('required'); 
     }
