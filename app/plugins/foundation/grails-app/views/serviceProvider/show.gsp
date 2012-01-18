@@ -60,10 +60,6 @@
       var spReportsLoginsEndpoint = "${createLink(controller:'spReports', action:'loginsjson', id:serviceProvider.id)}"
       var spReportsTotalsEndpoint = "${createLink(controller:'spReports', action:'totalsjson', id:serviceProvider.id)}"
       var spReportsConnectivityEndpoint = "${createLink(controller:'spReports', action:'connectivityjson', id:serviceProvider.id)}"
-      
-      $(function() {
-        fedreg.descriptor_metadata();
-      });
     </r:script>
   </head>
   <body>
@@ -291,12 +287,33 @@
 
               <div id="tab-nameidformats" class="tab-pane">
                 <div id="nameidformats">
-                  <g:render template="/templates/nameidformats/list" plugin="foundation" model="[descriptor:serviceProvider, nameIDFormats:serviceProvider.nameIDFormats, containerID:'nameidformats']" />
+                  <g:render template="/templates/nameidformats/list" plugin="foundation" model="[descriptor:serviceProvider, nameIDFormats:serviceProvider.nameIDFormats]" />
                 </div>
                 <hr>
-                <g:render template="/templates/nameidformats/add" plugin="foundation" model="[descriptor:serviceProvider, containerID:'nameidformats']"/>
+                <g:render template="/templates/nameidformats/add" plugin="foundation" model="[descriptor:serviceProvider]"/>
               </div>
+
+              <div id="tab-metadata" class="tab-pane">
+                <g:if test="${serviceProvider.functioning()}">
+                  <div class="row">
+                  <div class="span9">
+                    <p><g:message code="fedreg.view.members.serviceprovider.show.metadata.details" /></p>
+                  </div>
+                  <div class="span3">
+                    <a class="btn" class="load-descriptor-metadata"><g:message code="label.load" /></a>
+                  </div>
+                  </div>
+                  <div id="descriptormetadata"></div>
+                </g:if>
+                <g:else>
+                  <div class="alert-message block-message warn">
+                    <g:message code="fedreg.view.members.serviceprovider.show.metadata.unavailable.details" />
+                  </div>
+                </g:else>
+              </div>
+
             </div>
+
           </div>
         </div>
       </div>

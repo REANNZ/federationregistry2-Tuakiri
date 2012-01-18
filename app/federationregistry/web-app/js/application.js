@@ -57,7 +57,7 @@ $(document).ajaxComplete(function(event, request, settings){
 });
 
 // Descriptor Metadata
-fedreg.descriptor_metadata = function() {
+$('.load-descriptor-metadata').live('click',function() {
   $.ajax({
     type: "GET",
     cache: false,
@@ -66,12 +66,12 @@ fedreg.descriptor_metadata = function() {
       var target = $("#descriptormetadata");
       target.html(res);
       applyBehaviourTo(target);
-      },
-      error: function (xhr, ajaxOptions, thrownError) {
-      
-      }
+    },
+    error: function (xhr, ajaxOptions, thrownError) {
+    
+    }
   });
-};
+});
 
 // Organization Administrators
 fedreg.organization_fulladministrator_grant = function(userID) {
@@ -856,10 +856,6 @@ fedreg.nameIDFormat_list = function() {
       
       }
   });
-};
-
-fedreg.nameIDFormat_add = function(containerID) {
-  
 };
 
 // Service Categories
