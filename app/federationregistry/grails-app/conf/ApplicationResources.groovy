@@ -43,7 +43,7 @@ modules = {
 		resource url:[dir:'images', file:'logo.jpg'], disposition:'image', attrs:[width:102, height:50]
 		resource url:[dir:'images', file:'spinner.gif'], disposition:'image', attrs:[width:20, height:20]
 	}
-	'protvis' {
+	'protovis' {
 		resource url:'js/protovis-r3.2.js', disposition:'head'
 		resource url:'js/protovis-tipsy.js', disposition:'head'
 	}

@@ -13,7 +13,7 @@ $(function() {
 
 applyBehaviourTo = function(scope) {
   $('.tabs', scope).tabs();
-  $('.revealable', scope).hide();
+  
   $("[rel=twipsy]", scope).twipsy({offset:3}); 
 
   $('form > .validating', scope).validate({
@@ -22,7 +22,14 @@ applyBehaviourTo = function(scope) {
     errorClass: "validation-error",
     errorElement: "div"
   });
+
+  $('.revealable', scope).hide();
   $('.hidden', scope).hide();
+
+  if((Modernizr.svg))
+    $('.reportingunsupported').hide();
+  else
+    $('.reportingsupported').hide();
 };
 
 $('.modal-content').modal({keyboard:true, backdrop:'static'});
@@ -75,12 +82,12 @@ $('.load-descriptor-metadata').live('click',function() {
 
 // Organization Administrators
 fedreg.organization_fulladministrator_grant = function(userID) {
-  var dataString = "userID=" + userID
+  var data = "userID=" + userID
   $.ajax({
     async: false,
     type: "POST",
     url: organizationFullAdministratorGrantEndpoint,
-    data: dataString,
+    data: data,
     success: function(res) {
       
       fedreg.organization_fulladministrator_list();
@@ -93,12 +100,12 @@ fedreg.organization_fulladministrator_grant = function(userID) {
 };
 
 fedreg.organization_fulladministrator_revoke = function(userID) {
-  var dataString = "userID=" + userID
+  var data = "userID=" + userID
   $.ajax({
     async: false,
     type: "POST",
     url: organizationFullAdministratorRevokeEndpoint,
-    data: dataString  + "&_method=delete",
+    data: data  + "&_method=delete",
     success: function(res) {
       
       fedreg.organization_fulladministrator_list();
@@ -128,12 +135,12 @@ fedreg.organization_fulladministrator_list = function() {
 };
 
 fedreg.organization_fulladministrator_search = function() {
-  var dataString = "q=" + $('#q').val()
+  var data = "q=" + $('#q').val()
   $.ajax({
     type: "GET",
     cache: false,
     url: organizationFullAdministratorSearchEndpoint,
-    data: dataString,
+    data: data,
     success: function(res) {
       var target = $("#availablefulladministrators");
       target.html(res);
@@ -149,12 +156,12 @@ fedreg.organization_fulladministrator_search = function() {
 
 // Descriptor Administrators
 fedreg.descriptor_fulladministrator_grant = function(userID) {
-  var dataString = "userID=" + userID
+  var data = "userID=" + userID
   $.ajax({
     async: false,
     type: "POST",
     url: descriptorFullAdministratorGrantEndpoint,
-    data: dataString,
+    data: data,
     success: function(res) {
       
       fedreg.descriptor_fulladministrator_list();
@@ -167,12 +174,12 @@ fedreg.descriptor_fulladministrator_grant = function(userID) {
 }
 
 fedreg.descriptor_fulladministrator_revoke = function(userID) {
-  var dataString = "userID=" + userID
+  var data = "userID=" + userID
   $.ajax({
     async: false,
     type: "POST",
     url: descriptorFullAdministratorRevokeEndpoint,
-    data: dataString + "&_method=delete",
+    data: data + "&_method=delete",
     success: function(res) {
       
       fedreg.descriptor_fulladministrator_list();
@@ -200,12 +207,12 @@ fedreg.descriptor_fulladministrator_list = function() {
 };
 
 fedreg.descriptor_fulladministrator_search = function() {
-  var dataString = "q=" + $('#q').val()
+  var data = "q=" + $('#q').val()
   $.ajax({
     type: "GET",
     cache: false,
     url: descriptorFullAdministratorSearchEndpoint,
-    data: dataString,
+    data: data,
     success: function(res) {  
       var target = $("#availablefulladministrators");
       target.html(res);
@@ -224,11 +231,11 @@ $('.add-new-certificate').live('click', function(entity) {
   var entity = $(this).attr('data-entity');
   fedreg.keyDescriptor_verify(entity);
   if(valid_certificate){
-    var dataString = $("#newcryptoform").serialize();
+    var data = $("#newcryptoform").serialize();
     $.ajax({
       type: "POST",
       url: certificateCreationEndpoint,
-      data: dataString,
+      data: data,
       success: function(res) {
         $("#newcertificatedata").val('');
         $("#newcertificatedetails").html('');
@@ -251,11 +258,11 @@ $('.confirm-delete-certificate').live('click', function() {
 
 $('.delete-certificate').live('click', function() {
   fedreg.hide_modals();
-  var dataString = "id=" + delete_certificate;
+  var data = "id=" + delete_certificate;
   $.ajax({
     type: "POST",
     url: certificateDeleteEndpoint,
-    data: dataString + "&_method=delete",
+    data: data + "&_method=delete",
     success: function(res) {
       fedreg.keyDescriptor_list()
       },
@@ -473,11 +480,11 @@ $('.delete-endpoint').live('click', function() {
 
 $('.makedefault-endpoint').live('click', function() {
   fedreg.hide_modals();
-  var dataString = "id=" + makedefault_endpoint + "&endpointType=" + type_endpoint;
+  var data = "id=" + makedefault_endpoint + "&endpointType=" + type_endpoint;
   $.ajax({
     type: "POST",
     url: endpointMakeDefaultEndpoint,
-    data: dataString + "&_method=put",
+    data: data + "&_method=put",
     success: function(res) {
       fedreg.endpoint_list(type_endpoint, container_endpoint);
     },
@@ -540,11 +547,11 @@ $('.update-endpoint').live('click', function() {
   container_endpoint = $(this).attr('data-container');
   var target_form = $("#endpoint-edit-" + update_endpoint)
   if(target_form.valid()) {
-    var dataString =  target_form.serialize();
+    var data =  target_form.serialize();
     $.ajax({
       type: "POST",
       url: endpointUpdateEndpoint,
-      data: dataString + "&_method=put",
+      data: data + "&_method=put",
       success: function(res) {
         fedreg.endpoint_list(type_endpoint, container_endpoint);
       },
@@ -555,12 +562,12 @@ $('.update-endpoint').live('click', function() {
 });
 
 fedreg.endpoint_list = function(endpointType, containerID) {
-  var dataString = "endpointType=" + endpointType + "&containerID=" + containerID;
+  var data = "endpointType=" + endpointType + "&containerID=" + containerID;
   $.ajax({
     type: "GET",
     cache: false,
     url: endpointListEndpoint,
-    data: dataString,
+    data: data,
     success: function(res) {
       var target = $("#"+containerID);
       target.html(res);
@@ -915,11 +922,11 @@ fedreg.serviceCategory_list = function() {
 
 // Attributes
 fedreg.attribute_remove = function(attributeID, containerID) {
-  var dataString = "attributeID=" + attributeID;
+  var data = "attributeID=" + attributeID;
   $.ajax({
     type: "POST",
     url: attributeRemoveEndpoint,
-    data: dataString + "&_method=delete",
+    data: data + "&_method=delete",
     success: function(res) {
       
       fedreg.attribute_list(containerID);
@@ -932,12 +939,12 @@ fedreg.attribute_remove = function(attributeID, containerID) {
 };
 
 fedreg.attribute_list = function(containerID) {
-  var dataString = "containerID=" + containerID
+  var data = "containerID=" + containerID
   $.ajax({
     type: "GET",
     cache: false,
     url: attributeListEndpoint,
-    data: dataString,
+    data: data,
     success: function(res) {
       var target = $("#"+containerID);
       target.html(res);
@@ -950,11 +957,11 @@ fedreg.attribute_list = function(containerID) {
 };
 
 fedreg.attribute_add = function(containerID) {
-  var dataString = $("#newattributedata").serialize();
+  var data = $("#newattributedata").serialize();
   $.ajax({
     type: "POST",
     url: attributeAddEndpoint,
-    data: dataString,
+    data: data,
     success: function(res) {
       
       fedreg.attribute_list(containerID);
@@ -985,11 +992,11 @@ fedreg.attributefilter_refresh = function() {
 
 // Monitors
 fedreg.monitor_create = function() {
-  var dataString = $("#newmonitordata").serialize();
+  var data = $("#newmonitordata").serialize();
   $.ajax({
     type: "POST",
     url: monitorCreateEndpoint,
-    data: dataString,
+    data: data,
     success: function(res) {
       fedreg.monitor_list();
       
@@ -1001,11 +1008,11 @@ fedreg.monitor_create = function() {
 };
 
 fedreg.monitor_delete = function(monitorID) {
-  var dataString = "id=" + monitorID;
+  var data = "id=" + monitorID;
   $.ajax({
     type: "POST",
     url: monitorDeleteEndpoint,
-    data: dataString + "&_method=delete",
+    data: data + "&_method=delete",
     success: function(res) {
       fedreg.monitor_list();
       
@@ -1125,6 +1132,77 @@ $('.require-attribute').live('click', function() {
 });
 
 // Reporting
+$('.create-sp-report').live('click', function() {
+  var target_form = $('#reportrequirements');
+
+  if(target_form.valid()) {
+    if (Modernizr.svg) {
+      fedreg.closeRefinement();
+      $(".revealable").hide();
+    
+      var data = target_form.serialize() + fedreg.includeRobotsInReporting(true);
+    
+      if( $(".reporttype option:selected").val() == 'connections') {
+        $.ajax({url: spReportsConnectivityEndpoint, 
+          data: data,
+          dataType: 'json',
+          async:true, 
+          success: function(data){
+            fedreg.renderSPConnectivity(data, false);
+          },
+          error: function (xhr, ajaxOptions, thrownError) {
+            
+          }
+        });
+      }
+    
+      if( $(".reporttype option:selected").val() == 'sessions') {
+        $.ajax({url: spReportsSessionsEndpoint, 
+          data: data,
+          dataType: 'json',
+          async:true, 
+          success: function(data){
+            fedreg.renderSPSessions(data, false);
+          },
+          error: function (xhr, ajaxOptions, thrownError) {
+            
+          }
+        });
+      }
+    
+      if( $(".reporttype option:selected").val() == 'totals') {
+        $.ajax({url: spReportsTotalsEndpoint, 
+          data: data,
+          dataType: 'json',
+          async:true, 
+          success: function(data){
+            fedreg.renderSPTotals(data, false);
+          },
+          error: function (xhr, ajaxOptions, thrownError) {
+            
+          }
+        });
+      }
+    
+      if( $(".reporttype option:selected").val() == 'logins') {
+        $.ajax({url: spReportsLoginsEndpoint, 
+          data: data,
+          dataType: 'json',
+          async:true, 
+          success: function(data){
+            fedreg.renderSPLogins(data);
+          },
+          error: function (xhr, ajaxOptions, thrownError) {
+            
+          }
+        });
+      }
+    } else {
+      fedreg.toggleReportingContent(false);
+    }
+  }
+});
+
 fedreg.openRefinement = function() {
   $(".reportrefinementopen").hide();
   $(".reportrefinementinput").slideDown();
@@ -1141,15 +1219,15 @@ fedreg.closeRefinement = function() {
 
 fedreg.renderIdPReport = function() {
   if (Modernizr.svg) {
-    fedreg.workingOverlay();
+    
     fedreg.closeRefinement();
     $(".revealable").hide();
 
-    var dataString = $("#reportrequirements").serialize() + fedreg.includeRobotsInReporting(true);
+    var data = $("#reportrequirements").serialize() + fedreg.includeRobotsInReporting(true);
   
     if( $(".reporttype option:selected").val() == 'connections') {
       $.ajax({url: idpReportsConnectivityEndpoint, 
-        data: dataString,
+        data: data,
         dataType: 'json',
         async:true, 
         success: function(data){
@@ -1163,7 +1241,7 @@ fedreg.renderIdPReport = function() {
   
     if( $(".reporttype option:selected").val() == 'sessions') {
       $.ajax({url: idpReportsSessionsEndpoint, 
-        data: dataString,
+        data: data,
         dataType: 'json',
         async:true, 
         success: function(data){
@@ -1177,7 +1255,7 @@ fedreg.renderIdPReport = function() {
   
     if( $(".reporttype option:selected").val() == 'totals') {
       $.ajax({url: idpReportsTotalsEndpoint, 
-        data: dataString,
+        data: data,
         dataType: 'json',
         async:true, 
         success: function(data){
@@ -1191,7 +1269,7 @@ fedreg.renderIdPReport = function() {
   
     if( $(".reporttype option:selected").val() == 'logins') {
       $.ajax({url: idpReportsLoginsEndpoint, 
-        data: dataString,
+        data: data,
         dataType: 'json',
         async:true, 
         success: function(data){
@@ -1209,14 +1287,14 @@ fedreg.renderIdPReport = function() {
 
 fedreg.refineIdPReport = function(refinement) {
   if (Modernizr.svg) {
-    fedreg.workingOverlay();
+    
     fedreg.closeRefinement();
   
-    var dataString = $("#reportrequirements").serialize() + "&" + refinement.serialize() + fedreg.includeRobotsInReporting(true);
+    var data = $("#reportrequirements").serialize() + "&" + refinement.serialize() + fedreg.includeRobotsInReporting(true);
   
     if( $(".reporttype option:selected").val() == 'connections') {
       $.ajax({url: idpReportsConnectivityEndpoint, 
-        data: dataString,
+        data: data,
         dataType: 'json',
         async:true, 
         success: function(data){
@@ -1230,7 +1308,7 @@ fedreg.refineIdPReport = function(refinement) {
   
     if( $(".reporttype option:selected").val() == 'totals') {
       $.ajax({url: idpReportsTotalsEndpoint, 
-        data: dataString,
+        data: data,
         dataType: 'json',
         async:true, 
         success: function(data){
@@ -1246,84 +1324,16 @@ fedreg.refineIdPReport = function(refinement) {
   }
 };
 
-fedreg.renderSPReport = function() {
-  if (Modernizr.svg) {
-    fedreg.workingOverlay();
-    fedreg.closeRefinement();
-    $(".revealable").hide();
-  
-    var dataString = $("#reportrequirements").serialize() + fedreg.includeRobotsInReporting(true);
-  
-    if( $(".reporttype option:selected").val() == 'connections') {
-      $.ajax({url: spReportsConnectivityEndpoint, 
-        data: dataString,
-        dataType: 'json',
-        async:true, 
-        success: function(data){
-          fedreg.renderSPConnectivity(data, false);
-        },
-        error: function (xhr, ajaxOptions, thrownError) {
-          
-        }
-      });
-    }
-  
-    if( $(".reporttype option:selected").val() == 'sessions') {
-      $.ajax({url: spReportsSessionsEndpoint, 
-        data: dataString,
-        dataType: 'json',
-        async:true, 
-        success: function(data){
-          fedreg.renderSPSessions(data, false);
-        },
-        error: function (xhr, ajaxOptions, thrownError) {
-          
-        }
-      });
-    }
-  
-    if( $(".reporttype option:selected").val() == 'totals') {
-      $.ajax({url: spReportsTotalsEndpoint, 
-        data: dataString,
-        dataType: 'json',
-        async:true, 
-        success: function(data){
-          fedreg.renderSPTotals(data, false);
-        },
-        error: function (xhr, ajaxOptions, thrownError) {
-          
-        }
-      });
-    }
-  
-    if( $(".reporttype option:selected").val() == 'logins') {
-      $.ajax({url: spReportsLoginsEndpoint, 
-        data: dataString,
-        dataType: 'json',
-        async:true, 
-        success: function(data){
-          fedreg.renderSPLogins(data);
-        },
-        error: function (xhr, ajaxOptions, thrownError) {
-          
-        }
-      });
-    }
-  } else {
-    fedreg.toggleReportingContent(false);
-  }
-};
-
 fedreg.refineSPReport = function(refinement) {
   if (Modernizr.svg) {
-    fedreg.workingOverlay();
+    
     fedreg.closeRefinement();
   
-    var dataString = $("#reportrequirements").serialize() + "&" + refinement.serialize() + fedreg.includeRobotsInReporting(true);
+    var data = $("#reportrequirements").serialize() + "&" + refinement.serialize() + fedreg.includeRobotsInReporting(true);
   
     if( $(".reporttype option:selected").val() == 'connections') {
       $.ajax({url: spReportsConnectivityEndpoint, 
-        data: dataString,
+        data: data,
         dataType: 'json',
         async:true, 
         success: function(data){
@@ -1337,7 +1347,7 @@ fedreg.refineSPReport = function(refinement) {
   
     if( $(".reporttype option:selected").val() == 'totals') {
       $.ajax({url: spReportsTotalsEndpoint, 
-        data: dataString,
+        data: data,
         dataType: 'json',
         async:true, 
         success: function(data){
@@ -1355,15 +1365,15 @@ fedreg.refineSPReport = function(refinement) {
 
 fedreg.renderFederationReport = function(type) {
   if (Modernizr.svg) {
-    fedreg.workingOverlay();
+    
     fedreg.closeRefinement();
     $(".revealable").hide();
   
-    var dataString = $("#reportrequirements").serialize() + fedreg.includeRobotsInReporting(true);
+    var data = $("#reportrequirements").serialize() + fedreg.includeRobotsInReporting(true);
   
     if( type == 'logins') {
       $.ajax({url: federationReportsLoginsEndpoint, 
-        data: dataString,
+        data: data,
         dataType: 'json',
         async:true, 
         success: function(data){
@@ -1377,7 +1387,7 @@ fedreg.renderFederationReport = function(type) {
   
     if( type == 'sessions') {
       $.ajax({url: federationReportsSessionsEndpoint, 
-        data: dataString,
+        data: data,
         dataType: 'json',
         async:true, 
         success: function(data){
@@ -1391,7 +1401,7 @@ fedreg.renderFederationReport = function(type) {
   
     if( type == 'sessiontotals') {
       $.ajax({url: federationReportsSessionTotalsEndpoint, 
-        data: dataString,
+        data: data,
         dataType: 'json',
         async:true, 
         success: function(data){
@@ -1405,17 +1415,17 @@ fedreg.renderFederationReport = function(type) {
     
     if( type == 'registrations') {
       if( $("#registrationstype").val() == 'organization') {
-        dataString = dataString + "&type=org"
+        data = data + "&type=org"
       }
       if( $("#registrationstype").val() == 'identityprovider') {
-        dataString = dataString + "&type=idp"
+        data = data + "&type=idp"
       }
       if( $("#registrationstype").val() == 'serviceprovider') {
-        dataString = dataString + "&type=sp"
+        data = data + "&type=sp"
       }
       
       $.ajax({url: federationReportsRegistrationsEndpoint, 
-        data: dataString,
+        data: data,
         dataType: 'json',
         async:true, 
         success: function(data){
@@ -1429,17 +1439,17 @@ fedreg.renderFederationReport = function(type) {
     
     if( type == 'subscribers') {
       if( $("#subscriberstype").val() == 'organization') {
-        dataString = dataString + "&type=org"
+        data = data + "&type=org"
       }
       if( $("#subscriberstype").val() == 'identityprovider') {
-        dataString = dataString + "&type=idp"
+        data = data + "&type=idp"
       }
       if( $("#subscriberstype").val() == 'serviceprovider') {
-        dataString = dataString + "&type=sp"
+        data = data + "&type=sp"
       }
       
       $.ajax({url: federationReportsSubscribersEndpoint, 
-        data: dataString,
+        data: data,
         dataType: 'json',
         async:true, 
         success: function(data){
@@ -1453,7 +1463,7 @@ fedreg.renderFederationReport = function(type) {
     
     if( type == 'connectivity') {
       $.ajax({url: federationConnectivtyEndpoint, 
-        data: dataString,
+        data: data,
         dataType: 'json',
         async:true, 
         success: function(data){
@@ -1472,14 +1482,14 @@ fedreg.renderFederationReport = function(type) {
 
 fedreg.refineFederationReport = function(type, refinement) {
   if (Modernizr.svg) {
-    fedreg.workingOverlay();
+    
     fedreg.closeRefinement();
   
-    var dataString = $("#reportrequirements").serialize() + "&" + refinement.serialize() + fedreg.includeRobotsInReporting(true);
+    var data = $("#reportrequirements").serialize() + "&" + refinement.serialize() + fedreg.includeRobotsInReporting(true);
   
     if( type == 'sessiontotals') {
       $.ajax({url: federationReportsSessionTotalsEndpoint, 
-        data: dataString,
+        data: data,
         dataType: 'json',
         async:true, 
         success: function(data){
@@ -1498,12 +1508,12 @@ fedreg.refineFederationReport = function(type, refinement) {
 fedreg.renderFederationSummaryReport = function(type) {
   if (Modernizr.svg) {
     fedreg.toggleReportingContent(true);
-    fedreg.workingOverlay();
+    
   
-    var dataString = fedreg.includeRobotsInReporting(false);
+    var data = fedreg.includeRobotsInReporting(false);
   
     $.ajax({url: federationReportsSummaryEndpoint, 
-      data: dataString,
+      data: data,
       dataType: 'json',
       async:true, 
       success: function(data){

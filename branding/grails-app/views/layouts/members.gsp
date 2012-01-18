@@ -3,7 +3,7 @@
 <html>
   <head>
     <title><g:message code="fedreg.title.${grailsApplication.config.fedreg.deployment.environment}" /> | <g:layoutTitle /></title>
-    <r:use modules="bootstrap, validate, app"/>
+    <r:use modules="modernizr, bootstrap, validate, protovis, app"/>
     <r:layoutResources/>
     <g:layoutHead />
   </head>

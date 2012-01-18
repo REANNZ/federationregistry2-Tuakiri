@@ -1,4 +1,4 @@
-package fedreg.reporting
+package aaf.fr.reporting
 
 class ReportingHelpers {
 

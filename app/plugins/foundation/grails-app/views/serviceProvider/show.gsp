@@ -56,10 +56,10 @@
       
       var descriptorMetadataEndpoint = "${createLink(controller:'metadata', action:'entity', id:serviceProvider.entityDescriptor.id )}";
 
-      var spReportsSessionsEndpoint = "${createLink(controller:'spReports', action:'sessionsjson', id:serviceProvider.id)}"
-      var spReportsLoginsEndpoint = "${createLink(controller:'spReports', action:'loginsjson', id:serviceProvider.id)}"
-      var spReportsTotalsEndpoint = "${createLink(controller:'spReports', action:'totalsjson', id:serviceProvider.id)}"
-      var spReportsConnectivityEndpoint = "${createLink(controller:'spReports', action:'connectivityjson', id:serviceProvider.id)}"
+      var spReportsSessionsEndpoint = "${createLink(controller:'serviceProviderReports', action:'sessionsjson', id:serviceProvider.id)}"
+      var spReportsLoginsEndpoint = "${createLink(controller:'serviceProviderReports', action:'loginsjson', id:serviceProvider.id)}"
+      var spReportsTotalsEndpoint = "${createLink(controller:'serviceProviderReports', action:'totalsjson', id:serviceProvider.id)}"
+      var spReportsConnectivityEndpoint = "${createLink(controller:'serviceProviderReports', action:'connectivityjson', id:serviceProvider.id)}"
     </r:script>
   </head>
   <body>
@@ -78,7 +78,7 @@
       <li><a href="#tab-contacts"><g:message code="label.contacts" /></a></li>
       <li class="level"><a href="#tab-saml"><g:message code="label.saml" /></a></li>
       
-      <fr:hasAnyPermission in='["descriptor:${serviceProvider.id}:reporting:logins" , "federation:reporting"]'>
+      <fr:hasAnyPermission in='["descriptor:${serviceProvider.id}:reporting" , "federation:reporting"]'>
         <li><a href="#tab-reports" ><g:message code="label.reporting" /></a></li>
       </fr:hasAnyPermission>
       <li><a href="#tab-monitors"><g:message code="label.monitoring" /></a></li>
@@ -191,6 +191,7 @@
           </tbody>
         </table>
         <fr:hasPermission target="descriptor:${serviceProvider.id}:update">
+          <hr>
           <div>
             <g:link action="edit" id="${serviceProvider.id}" class="btn info"><g:message code="label.editsp"/></g:link>
           </div>
@@ -201,7 +202,7 @@
         <div id="categories">
           <g:render template="/templates/servicecategories/list" plugin="foundation" model="[descriptor:serviceProvider, categories:serviceProvider.serviceCategories, containerID:'categories']" />
         </div>
-
+        <hr>
         <g:render template="/templates/servicecategories/add" plugin="foundation" model="[descriptor:serviceProvider]"/>
       </div>
 
@@ -209,7 +210,7 @@
         <div id="contacts">
           <g:render template="/templates/contacts/list" plugin="foundation" model="[host:serviceProvider]" />
         </div>
-
+        <hr>
         <g:render template="/templates/contacts/create" plugin="foundation" model="[host:serviceProvider, contactTypes:contactTypes]" />
       </div>
 
@@ -229,6 +230,7 @@
                 <div id="certificates">
                   <g:render template="/templates/certificates/list" plugin="foundation" model="[descriptor:serviceProvider, allowremove:true]" />
                 </div>
+                <hr>
                 <g:render template="/templates/certificates/create" plugin="foundation" model="[descriptor:serviceProvider]"/>
               </div>
 
@@ -246,6 +248,7 @@
                     <div id="assertionconsumerendpoints">
                       <g:render template="/templates/endpoints/list" plugin="foundation" model="[endpoints:serviceProvider.assertionConsumerServices, allowremove:true, endpointType:'assertionConsumerServices', containerID:'assertionconsumerendpoints']" />
                     </div> 
+                    <hr>
                     <g:render template="/templates/endpoints/create" plugin="foundation" model="[descriptor:serviceProvider, endpointType:'assertionConsumerServices', containerID:'assertionconsumerendpoints', indexed:true]" />
                   </div>
 
@@ -253,6 +256,7 @@
                     <div id="artifactendpoints">
                       <g:render template="/templates/endpoints/list" plugin="foundation" model="[endpoints:serviceProvider.artifactResolutionServices, allowremove:true, endpointType:'artifactResolutionServices', containerID:'artifactendpoints']" />
                     </div>
+                    <hr>
                     <g:render template="/templates/endpoints/create" plugin="foundation" model="[descriptor:serviceProvider, endpointType:'artifactResolutionServices', containerID:'artifactendpoints', indexed:true]" />
                   </div>
 
@@ -260,6 +264,7 @@
                     <div id="singlelogoutendpoints">
                       <g:render template="/templates/endpoints/list" plugin="foundation" model="[endpoints:serviceProvider.singleLogoutServices, allowremove:true, endpointType:'singleLogoutServices', containerID:'singlelogoutendpoints']" />
                     </div>
+                    <hr>
                     <g:render template="/templates/endpoints/create" plugin="foundation" model="[descriptor:serviceProvider, endpointType:'singleLogoutServices', containerID:'singlelogoutendpoints']" />
                   </div>
 
@@ -267,6 +272,7 @@
                     <div id="discoveryresponseservices">
                       <g:render template="/templates/endpoints/list" plugin="foundation" model="[endpoints:serviceProvider.discoveryResponseServices, allowremove:true, endpointType:'discoveryResponseServices', containerID:'discoveryresponseservices']" />
                     </div>
+                    <hr>
                     <g:render template="/templates/endpoints/create" plugin="foundation" model="[descriptor:serviceProvider, endpointType:'discoveryResponseServices', containerID:'discoveryresponseservices', indexed:true]" />
                   </div>
 
@@ -274,6 +280,7 @@
                     <div id="managenameidservices">
                       <g:render template="/templates/endpoints/list" plugin="foundation" model="[endpoints:serviceProvider.manageNameIDServices, allowremove:true, endpointType:'manageNameIDServices', containerID:'managenameidservices']" />
                     </div>
+                    <hr>
                     <g:render template="/templates/endpoints/create" plugin="foundation" model="[descriptor:serviceProvider, endpointType:'manageNameIDServices', containerID:'managenameidservices']" />
                   </div>
 
@@ -317,6 +324,14 @@
           </div>
         </div>
       </div>
+
+      <fr:hasAnyPermission in='["descriptor:${serviceProvider.id}:reporting" , "federation:reporting"]'>
+        <div id="tab-reports" class="tab-pane">
+          <div id="reporting">
+            <g:render template="/templates/reporting/sp/reports" plugin="reporting" model="[id:serviceProvider.id]" />
+          </div>
+        </div>
+      </fr:hasAnyPermission>
     </div>
     
   </body>

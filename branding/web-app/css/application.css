@@ -46,6 +46,10 @@
   padding: 0px;
 }
 
+.centered {
+  text-align: center;
+}
+
 .horizitem
 {
   .zero;
@@ -82,6 +86,15 @@ div.validation-error {
   margin: 4px;
   background-color: #FDDFDE;
   float:right;
+}
+
+label.error {
+  .rounded;
+  padding: 6px;
+  margin: 4px;
+  background-color: #FDDFDE;
+  float:right;
+  font-weight:normal;  
 }
 
 table.borderless th {

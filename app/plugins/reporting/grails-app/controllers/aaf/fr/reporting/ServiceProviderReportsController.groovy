@@ -5,9 +5,10 @@ import grails.plugins.federatedgrails.Role
 import org.apache.shiro.SecurityUtils
 
 import aaf.fr.foundation.*
+import aaf.fr.reporting.ReportingHelpers
 
 /**
- * Provides IdP reporting data
+ * Provides SP reporting data
  *
  * @author Bradley Beddoes
  */

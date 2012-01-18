@@ -44,7 +44,7 @@
 	</div>
 </div>
 
-<div id="totalsreportnodata" class="revealable reportdata">
+<div id="totalsreportnodata" class="revealable reportdata alert-message block-message warn">
 	<p><em><g:message code="fedreg.templates.reports.nodata.description"/></em></p>
 </div>
 
