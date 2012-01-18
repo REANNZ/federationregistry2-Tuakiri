@@ -32,6 +32,7 @@ class DescriptorNameIDFormatController {
 			response.setStatus(500)
 			return
 		}
+
 		if(SecurityUtils.subject.isPermitted("descriptor:${descriptor.id}:nameidformat:remove")) {
 			def nameIDFormat = SamlURI.get(params.formatID)
 			if(!nameIDFormat) {
@@ -77,13 +78,6 @@ class DescriptorNameIDFormatController {
 			return
 		}
 		
-		if(!params.containerID) {
-			log.warn "Container ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
-			response.setStatus(500)
-			return
-		}
-		
 		def descriptor = RoleDescriptor.get(params.id)
 		if(!descriptor) {
 			log.warn "RoleDescriptor identified by id $params.id was not located"
@@ -92,7 +86,7 @@ class DescriptorNameIDFormatController {
 			return
 		}
 		
-		render template: "/templates/nameidformats/list", contextPath: pluginContextPath, model:[descriptor:descriptor, nameIDFormats:descriptor.nameIDFormats, containerID:params.containerID]
+		render template: "/templates/nameidformats/list", contextPath: pluginContextPath, model:[descriptor:descriptor, nameIDFormats:descriptor.nameIDFormats]
 	}
 	
 	def add = {

@@ -58,7 +58,7 @@
     </div>
     <div class="modal-footer">
       <a class="btn close-modal"><g:message code="label.cancel" /></a>
-      <a class="btn success link-contact"/><g:message code="label.accept" /></a>
+      <a class="btn success link-contact"><g:message code="label.accept" /></a>
     </div>
   </div>
 
@@ -72,7 +72,7 @@
     </div>
     <div class="modal-footer">
       <a class="btn close-modal"><g:message code="label.cancel" /></a>
-      <a class="btn danger delete-contact"/><g:message code="label.delete" /></a>
+      <a class="btn danger delete-contact"><g:message code="label.delete" /></a>
     </div>
   </div>
 

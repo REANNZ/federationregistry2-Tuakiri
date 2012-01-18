@@ -794,31 +794,61 @@ fedreg.acs_reqattribute_list_values = function(raID) {
 };
 
 // Name ID Formats
-fedreg.nameIDFormat_remove = function(formatID, containerID) {
-  var dataString = "formatID=" + formatID;
+$('.show-add-nameid').live('click', function() {
+  $("#addnameidformat").hide();
+  $("#newnameidformat").fadeIn();
+});
+
+$('.cancel-add-nameid').live('click', function() {
+  $("#newnameidformat").hide();
+  $("#addnameidformat").fadeIn();
+});
+
+$('.add-nameid').live('click', function() {
+  var data = $("#newnameidformatdata").serialize();
+  $.ajax({
+    type: "POST",
+    url: nameIDFormatAddEndpoint,
+    data: data,
+    success: function(res) {
+      fedreg.nameIDFormat_list();
+    },
+    error: function (xhr, ajaxOptions, thrownError) {
+    
+    }
+  });  
+});
+
+$('.confirm-delete-nameid').live('click', function() {
+  fedreg.set_button($(this)); 
+  formatID = $(this).attr('data-formatid');
+
+  $("#delete-nameid-modal").modal('show'); 
+});
+
+$('.delete-nameid').live('click', function() {
+  fedreg.hide_modals();
+  var data = "formatID=" + formatID;
   $.ajax({
     type: "POST",
     url: nameIDFormatRemoveEndpoint,
-    data: dataString + "&_method=delete",
+    data: data + "&_method=delete",
     success: function(res) {
-      
-      fedreg.nameIDFormat_list(containerID);
-      },
-      error: function (xhr, ajaxOptions, thrownError) {
-      
-      }
+      fedreg.nameIDFormat_list();
+    },
+    error: function (xhr, ajaxOptions, thrownError) {
+    
+    }
   });
-};
+});
 
-fedreg.nameIDFormat_list = function(containerID) {
-  var dataString = "containerID=" + containerID
+fedreg.nameIDFormat_list = function() {
   $.ajax({
     type: "GET",
     cache: false,
     url: nameIDFormatListEndpoint,
-    data: dataString,
     success: function(res) {
-      var target = $("#"+containerID);
+      var target = $("#nameidformats");
       target.html(res);
       applyBehaviourTo(target);
       },
@@ -829,19 +859,7 @@ fedreg.nameIDFormat_list = function(containerID) {
 };
 
 fedreg.nameIDFormat_add = function(containerID) {
-  var dataString = $("#newnameidformatdata").serialize();
-  $.ajax({
-    type: "POST",
-    url: nameIDFormatAddEndpoint,
-    data: dataString,
-    success: function(res) {
-      
-      fedreg.nameIDFormat_list(containerID);
-      },
-      error: function (xhr, ajaxOptions, thrownError) {
-      
-      }
-  });
+  
 };
 
 // Service Categories

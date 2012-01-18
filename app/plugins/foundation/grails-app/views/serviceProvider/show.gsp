@@ -85,10 +85,10 @@
       <fr:hasAnyPermission in='["descriptor:${serviceProvider.id}:reporting:logins" , "federation:reporting"]'>
         <li><a href="#tab-reports" ><g:message code="label.reporting" /></a></li>
       </fr:hasAnyPermission>
-      <li><a href="#tab-monitors" class="icon icon_database_key"><g:message code="label.monitoring" /></a></li>
+      <li><a href="#tab-monitors"><g:message code="label.monitoring" /></a></li>
       
       <g:if test="${serviceProvider.approved}">
-        <li><a href="#tab-admins" class="icon icon_database_key"><g:message code="label.administrators" /></a></li>
+        <li><a href="#tab-admins"><g:message code="label.administrators" /></a></li>
       </g:if>
     </ul>
 
@@ -287,6 +287,14 @@
 
               <div id="tab-attributes" class="tab-pane">
                 <g:render template="/templates/acs/list" plugin="foundation" model="[attributeConsumingServices:serviceProvider.attributeConsumingServices]"/>
+              </div>
+
+              <div id="tab-nameidformats" class="tab-pane">
+                <div id="nameidformats">
+                  <g:render template="/templates/nameidformats/list" plugin="foundation" model="[descriptor:serviceProvider, nameIDFormats:serviceProvider.nameIDFormats, containerID:'nameidformats']" />
+                </div>
+                <hr>
+                <g:render template="/templates/nameidformats/add" plugin="foundation" model="[descriptor:serviceProvider, containerID:'nameidformats']"/>
               </div>
             </div>
           </div>
