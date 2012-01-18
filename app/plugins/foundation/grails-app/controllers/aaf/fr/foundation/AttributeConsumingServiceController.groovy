@@ -22,12 +22,6 @@ class AttributeConsumingServiceController {
 			response.setStatus(500)
 			return
 		}
-		if(!params.containerID) {
-			log.warn "Rendering container ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
-			response.setStatus(500)
-			return
-		}
 		
 		def acs = AttributeConsumingService.get(params.id)
 		if(!acs) {
@@ -36,31 +30,7 @@ class AttributeConsumingServiceController {
 			response.setStatus(500)
 			return
 		}
-		render (template:"/templates/acs/listrequestedattributes", contextPath: pluginContextPath, model:[requestedAttributes:acs.sortedAttributes(), containerID:params.containerID])
-	}
-	
-	def listSpecifiedAttributes = {
-		if(!params.id) {
-			log.warn "Attribute Consuming Service ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
-			response.setStatus(500)
-			return
-		}
-		if(!params.containerID) {
-			log.warn "Rendering container ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
-			response.setStatus(500)
-			return
-		}
-		
-		def acs = AttributeConsumingService.get(params.id)
-		if(!acs) {
-			log.warn "Attribute Consuming Service identified by id ${params.id} was not located"
-			render message(code: 'fedreg.attributeconsumingservice.nonexistant', args: [params.id])
-			response.setStatus(500)
-			return
-		}
-		render (template:"/templates/acs/listspecifiedattributes", contextPath: pluginContextPath, model:[requestedAttributes:acs.sortedAttributes(), specificationAttributes: AttributeBase.findAllWhere(specificationRequired:true), containerID:params.containerID])
+		render (template:"/templates/acs/listrequestedattributes", contextPath: pluginContextPath, model:[acs:acs, requestedAttributes:acs.sortedAttributes(), specificationAttributes: AttributeBase.findAllWhere(specificationRequired:true)])
 	}
 	
 	def listSpecifiedAttributeValue = {
@@ -70,22 +40,16 @@ class AttributeConsumingServiceController {
 			response.setStatus(500)
 			return
 		}
-		if(!params.containerID) {
-			log.warn "Rendering container ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
-			response.setStatus(500)
-			return
-		}
 		
-		def reqAttr = RequestedAttribute.get(params.id)
-		if(!reqAttr) {
+		def ra = RequestedAttribute.get(params.id)
+		if(!ra) {
 			log.warn "Requested Attribute identified by id ${params.id} was not located"
 			render message(code: 'fedreg.attr.nonexistant', args: [params.id])
 			response.setStatus(500)
 			return
 		}
 		
-		render (template:"/templates/acs/listspecifiedattributevalues", contextPath: pluginContextPath, model:[requestedAttribute:reqAttr, containerID:params.containerID])
+		render (template:"/templates/acs/listspecifiedattributevalues", contextPath: pluginContextPath, model:[ra:ra, acs:ra.attributeConsumingService])
 	}
 	
 	def addSpecifiedAttributeValue = {
@@ -195,14 +159,12 @@ class AttributeConsumingServiceController {
 			response.setStatus(500)
 			return
 		}
-		
 		if(!params.attrid) {
 			log.warn "Requested attribute ID was not present"
 			render message(code: 'fedreg.controllers.namevalue.missing')
 			response.setStatus(500)
 			return
 		}
-		
 		if(!params.reasoning) {
 			log.warn "Reason for requesting attribute was not present"
 			render message(code: 'fedreg.controllers.namevalue.missing')
@@ -227,7 +189,7 @@ class AttributeConsumingServiceController {
 				return
 			}
 		
-			for( a in acs.requestedAttributes) {
+			for( a in acs.requestedAttributes ) {
 				if(a.base == attr) {
 					log.warn "${a} already supported by ${acs} and ${acs.descriptor} not adding"
 					render message(code: 'fedreg.attributeconsumingservice.requestedattribute.add.already.exists')
@@ -248,7 +210,7 @@ class AttributeConsumingServiceController {
 				return
 			}
 			
-			def workflowParams = [ creator:subject?.contact?.id?.toString(), requestedAttribute:reqAttr?.id?.toString(), serviceProvider:acs?.descriptor?.id?.toString(), locale:LCH.getLocale().getLanguage() ]
+			def workflowParams = [ creator:subject?.id?.toString(), requestedAttribute:reqAttr?.id?.toString(), serviceProvider:acs?.descriptor?.id?.toString(), locale:LCH.getLocale().getLanguage() ]
 			def (initiated, processInstance) = workflowProcessService.initiate( "requestedattribute_create", "Approval for addition of the attribute '${reqAttr.base?.name}' (OID: ${reqAttr.base?.oid}) to the service '${acs?.descriptor?.displayName}'", ProcessPriority.MEDIUM, workflowParams)
 
 			if(initiated)
@@ -289,9 +251,9 @@ class AttributeConsumingServiceController {
 		
 		if(SecurityUtils.subject.isPermitted("descriptor:${ra.attributeConsumingService.descriptor.id}:attribute:update")) {
 			ra.reasoning = params.reasoning
-			ra.isRequired = params.required ? true:false
+			ra.isRequired = params.required.equalsIgnoreCase('true')
 			
-			if(!ra.save()) {
+			if(!ra.save(flush:true)) {
 				ra.errors.each {
 					log.warn it
 				}

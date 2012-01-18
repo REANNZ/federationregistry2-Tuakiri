@@ -1,21 +1,21 @@
-<g:if test="${requestedAttribute?.values?.size() > 0}">
-	<table>
-		<tbody>
-			<g:each in="${requestedAttribute.values}" status="i" var="val">
-				<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-					<td> ${val.value?.encodeAsHTML()}</td>
-					<fr:hasPermission target="descriptor:${requestedAttribute.attributeConsumingService.descriptor.id}:attribute:value:remove">
-						<td>
-							<n:confirmaction action="fedreg.acs_specattribute_remove(${requestedAttribute.id}, ${val.id}, '${containerID}');" title="${message(code: 'fedreg.templates.acs.reqattributes.remove.value.confirm.title')}" msg="${message(code: 'fedreg.templates.acs.reqattributes.remove.value.confirm.descriptive', args:[requestedAttribute.base.name.encodeAsHTML()])}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" class="delete-button" label="label.remove" />
-						</td>
-					</fr:hasPermission>
-				</tr>
-			</g:each>
-		</tbody>
-	</table>
+<g:if test="${ra?.values?.size() > 0}">
+  <table class="borderless condensed-table">
+    <tbody>
+      <g:each in="${ra.values.sort{it.id}}" var="val">
+        <tr>
+          <td> ${val.value?.encodeAsHTML()}</td>
+          <fr:hasPermission target="descriptor:${ra.attributeConsumingService.descriptor.id}:attribute:value:remove">
+            <td>
+              <a class="confirm-delete-ra-value btn" data-acsid="${acs.id}" data-raid="${ra.id}" data-ravalueid="${val.id}"><g:message code="label.delete"/></a>
+            </td>
+          </fr:hasPermission>
+        </tr>
+      </g:each>
+    </tbody>
+  </table>
 </g:if>
 <g:else>
-	<div class="error">
-		<g:message code="fedreg.templates.acs.specattributes.no.values.currently.requested" args="[requestedAttribute.base.name, requestedAttribute.base.oid]"/>
-	</div>
+  <div class="alert-message block-message error">
+    <g:message code="fedreg.templates.acs.specattributes.no.values.currently.requested" args="[ra.base.name, ra.base.oid]"/>
+  </div>
 </g:else>

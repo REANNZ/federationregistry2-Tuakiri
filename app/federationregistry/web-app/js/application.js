@@ -573,69 +573,199 @@ fedreg.endpoint_list = function(endpointType, containerID) {
 };
 
 // Attribute Consuming Services
-fedreg.acs_reqattribute_add = function(acsID, formID, containerID) {
-  var dataString = "id=" + acsID + "&" + $("#" + formID).serialize();
-  $.ajax({
-    type: "POST",
-    url: acsAddAttr,
-    data: dataString,
-    success: function(res) {
-      
-      $(':input[name=reasoning]').val('')
-      fedreg.acs_reqattribute_list(acsID, containerID);
-      fedreg.acs_specattributes_list(acsID, 'acsspecattributes');
+$('.edit-ra').live('click', function() {
+  fedreg.set_button($(this));
+  raID = $(this).attr('data-raid');
+  manage_ra = $('.manage-ra[data-raid=' + raID +']');
+  update_ra = $('.manage-update-ra[data-raid=' + raID +']');
+  editor_ra = $('.editor-ra[data-raid=' + raID +']');
+  show_ra = $('.show-ra[data-raid=' + raID +']');
+
+  manage_ra.hide();
+  show_ra.hide();
+  editor_ra.fadeIn();
+  update_ra.fadeIn();
+
+  fedreg.reset_button();
+});
+
+$('.cancel-edit-ra').live('click', function() {
+  fedreg.close_ra_editor();
+});
+
+$('.update-ra').live('click', function() {
+  fedreg.set_button($(this));  
+  raID = $(this).attr('data-raid');
+  acsID = $(this).attr('data-acsid');
+  reason_ra = $('.reason-ra[data-raid=' + raID +']');
+  required_ra = $('.required-ra[data-raid=' + raID +']');
+
+  if(reason_ra.parent().valid()) {
+    fedreg.acs_reqattribute_update(acsID, raID, reason_ra.val(), required_ra.is(':checked'));   
+  }
+});
+
+$('.show-create-ra').live('click', function() {
+  acsID = $(this).attr('data-acsid');
+
+  $('#addattribute' + acsID).hide();
+  $('#newattribute' + acsID).fadeIn();
+});
+
+$('.create-ra').live('click', function() {
+  fedreg.set_button($(this));
+
+  acsID = $(this).attr('data-acsid');
+  var target_form = $('#newattributedata' + acsID)
+
+  if(target_form.valid()) {
+    var data = "id=" + acsID + "&" + $("#newattributedata" + acsID).serialize();
+    $.ajax({
+      type: "POST",
+      url: acsAddAttr,
+      data: data,
+      success: function(res) {
+        $(':input[name=reasoning]').val('')
+        fedreg.acs_reqattribute_list(acsID, "#acsreqattr" + acsID);
       },
       error: function (xhr, ajaxOptions, thrownError) {
       
       }
-  });
-};
+    }); 
+  } else { fedreg.reset_button(); }
+});
 
-fedreg.acs_reqattribute_remove = function(raID, acsID, containerID) {
-  var dataString = "raid=" + raID;
+$('.cancel-create-ra').live('click', function() {
+  acsID = $(this).attr('data-acsid');
+
+  $('#newattribute' + acsID).hide();
+  $('#addattribute' + acsID).fadeIn();
+});
+
+$('.confirm-delete-ra').live('click', function() {
+  fedreg.set_button($(this));
+  acsID = $(this).attr('data-acsid');
+  raID = $(this).attr('data-raid');
+
+  $("#delete-ra-modal").modal('show');
+});
+
+$('.delete-ra').live('click', function() {
+  fedreg.hide_modals();
+  var data = "raid=" + raID;
   $.ajax({
     type: "POST",
     url: acsRemoveAttr,
-    data: dataString + "&_method=delete",
+    data: data + "&_method=delete",
     success: function(res) {
-      
-      fedreg.acs_reqattribute_list(acsID, containerID);
-      fedreg.acs_specattributes_list(acsID, 'acsspecattributes');
+      fedreg.acs_reqattribute_list(acsID);
+    },
+    error: function (xhr, ajaxOptions, thrownError) {
+    
+    }
+  });
+});
+
+$('.add-ra-value').live('click', function() {
+  fedreg.set_button($(this));
+
+  raID = $(this).attr('data-raid');
+  acsID = $(this).attr('data-acsid');
+
+  var target_form = $("#newspecattributedata" + raID);
+  
+  if(target_form.valid()) {
+    var data = target_form.serialize();
+    $.ajax({
+      type: "POST",
+      url: acsAddSpecAttrVal,
+      data: data,
+      success: function(res) {
+        $(':input', target_form)
+        .not(':button, :submit, :reset, :hidden, select[name=binding]')
+        .val('')
+        fedreg.acs_reqattribute_list_values(raID);
       },
       error: function (xhr, ajaxOptions, thrownError) {
-      
+
       }
+    });
+  } else { fedreg.reset_button(); }
+});
+
+$('.show-add-ra-value').live('click', function() {
+  raID = $(this).attr('data-raid');
+  manage_ra = $('.manage-ra[data-raid=' + raID +']');
+
+  manage_ra.hide();
+  $("#newspecattributeval" + raID).fadeIn();
+});
+
+$('.close-add-ra-value').live('click', function() {
+  raID = $(this).attr('data-raid');
+  $("#newspecattributeval" + raID).hide();
+  manage_ra.fadeIn();
+});
+
+$('.confirm-delete-ra-value').live('click', function() {
+  fedreg.set_button($(this));
+  acsID = $(this).attr('data-acsid');
+  raID = $(this).attr('data-raid');
+  raValueID = $(this).attr('data-ravalueid');
+
+  $("#delete-ra-value-modal").modal('show');
+});
+
+$('.delete-ra-value').live('click', function() {
+  fedreg.hide_modals();
+  var data = "id=" + raID + "&valueid=" + raValueID;
+  $.ajax({
+    type: "POST",
+    url: acsRemoveSpecAttrVal,
+    data: data + "&_method=delete",
+    success: function(res) {
+      fedreg.acs_reqattribute_list_values(raID);
+    },
+    error: function (xhr, ajaxOptions, thrownError) {
+
+    }
   });
+});
+
+fedreg.close_ra_editor = function() {
+  editor_ra.hide();
+  update_ra.hide();
+
+  manage_ra.show();
+  show_ra.fadeIn();
 };
 
-fedreg.acs_reqattribute_update = function(acsID, id, reason, required, containerID) {
-  var dataString = "id=" + id + "&reasoning=" + reason
-  if(required)
-    dataString = dataString + "&required=" + required;
+fedreg.acs_reqattribute_update = function(acsID, raID, reason, required) {
+  var data = "id=" + raID + "&reasoning=" + reason + "&required=" + required;
   $.ajax({
     type: "POST",
     url: acsUpdateAttr,
-    data: dataString + "&_method=put",
+    data: data + "&_method=put",
     success: function(res) {
-      
-      fedreg.acs_reqattribute_list(acsID, containerID);
-      fedreg.acs_specattributes_list(acsID, 'acsspecattributes');
-      },
-      error: function (xhr, ajaxOptions, thrownError) {
-      
-      }
+      fedreg.close_ra_editor();
+      //TODO: when time permits clean this up further to stop total reload of content
+      fedreg.acs_reqattribute_list(acsID);
+    },
+    error: function (xhr, ajaxOptions, thrownError) {
+    
+    }
   });
 };
 
-fedreg.acs_reqattribute_list = function(acsID, containerID) {
-  var dataString = "id=" + acsID + "&containerID=" + containerID;
+fedreg.acs_reqattribute_list = function(acsID) {
+  var data = "id=" + acsID;
   $.ajax({
     type: "GET",
     cache: false,
     url: acsListAttr,
-    data: dataString,
+    data: data,
     success: function(res) {
-      var target = $("#"+containerID);
+      var target = $("#acsreqattr" + acsID);
       target.html(res);
       applyBehaviourTo(target);
       },
@@ -645,74 +775,21 @@ fedreg.acs_reqattribute_list = function(acsID, containerID) {
   });
 };
 
-fedreg.acs_specattribute_add = function(id, formID, containerID) {
-  var dataString = "id=" + id + "&" + $("#" + formID).serialize();
-  $.ajax({
-    type: "POST",
-    url: acsAddSpecAttrVal,
-    data: dataString,
-    success: function(res) {
-      
-      $(':input', "#" + formID)
-        .not(':button, :submit, :reset, :hidden, select[name=binding]')
-        .val('')
-      fedreg.acs_specattribute_list(id, containerID)
-      },
-      error: function (xhr, ajaxOptions, thrownError) {
-      
-      }
-  });
-}
-
-fedreg.acs_specattribute_remove = function(id, valueID, containerID) {
-  var dataString = "id=" + id + "&valueid=" + valueID;
-  $.ajax({
-    type: "POST",
-    url: acsRemoveSpecAttrVal,
-    data: dataString + "&_method=delete",
-    success: function(res) {
-      
-      fedreg.acs_specattribute_list(id, containerID)
-      },
-      error: function (xhr, ajaxOptions, thrownError) {
-      
-      }
-  });
-}
-
-fedreg.acs_specattribute_list = function(id, containerID) {
-  var dataString = "id=" + id + "&containerID=" + containerID;
+fedreg.acs_reqattribute_list_values = function(raID) {
+  var data = "id=" + raID;
   $.ajax({
     type: "GET",
     cache: false,
-    url: acsListSpecAttrVal,
-    data: dataString,
+    url: acsListSpecAttrValues,
+    data: data,
     success: function(res) {
-      var target = $("#"+containerID);
+      var target = $("#ra-values-" + raID);
       target.html(res);
       applyBehaviourTo(target);
-      },
-      error: function (xhr, ajaxOptions, thrownError) {
-      
-      }
-  });
-};
-
-fedreg.acs_specattributes_list = function(id, containerID) {
-  var dataString = "id=" + id + "&containerID=" + containerID;
-  $.ajax({
-    type: "GET",
-    cache: false,
-    url: acsListSpecAttrsVal,
-    data: dataString,
-    success: function(res) {
-      var target = $("#"+containerID);
-      target.html(res);
-      applyBehaviourTo(target);
-      },
-      error: function (xhr, ajaxOptions, thrownError) {
-      
-      }
+    },
+    error: function (xhr, ajaxOptions, thrownError) {
+    
+    }
   });
 };
 

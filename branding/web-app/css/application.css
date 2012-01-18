@@ -92,6 +92,12 @@ table.borderless td {
   border: 0px;
 }
 
+strong.highlight {
+  font-size: 1.2em;
+  color: 333;
+  font-weight: bold;
+}
+
 body {
   background-color: #fff;
 }
