@@ -113,29 +113,26 @@ class ServiceProviderController {
 	def update = {
 		if(!params.id) {
 			log.warn "SPSSODescriptor ID was not present"
-			flash.type="error"
-			flash.message = message(code: 'fedreg.controllers.namevalue.missing')
-			redirect(action: "list")
+			response.sendError(500)
 			return
 		}
 		def serviceProvider_ = SPSSODescriptor.get(params.id)
 		if (!serviceProvider_) {
-			flash.type="error"
-			flash.message = message(code: 'aaf.fr.foundation.spssoroledescriptor.nonexistant')
-			redirect(action: "list")
+			log.error "SPSSODescriptor for id ${params.id} does not exist"
+      response.sendError(500)
 			return
 		}
 		if(SecurityUtils.subject.isPermitted("descriptor:${serviceProvider_.id}:update")) {
 			def (updated, serviceProvider) = ServiceProviderService.update(params)
 			if(updated) {
 				log.info "$subject updated $serviceProvider"
-				redirect (action: "show", id: serviceProvider.id)
-			} else {
-				flash.type="error"
-				flash.message = message(code: 'aaf.fr.foundation.spssoroledescriptor.update.validation.error')
-				
+				render template:'/templates/serviceprovider/overview_editable', plugin:'foundation', model:[serviceProvider:serviceProvider]
+			} else {				
 				log.info "$subject failed when attempting update on $serviceProvider"
-				render (view:'edit', model:[serviceProvider:serviceProvider])
+        serviceProvider.errors.each {
+          log.debug it
+        }
+				response.sendError(500)
 			}
 		}
 		else {

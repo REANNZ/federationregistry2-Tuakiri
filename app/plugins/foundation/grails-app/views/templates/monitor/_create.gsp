@@ -2,7 +2,7 @@
 
   <%@page import="aaf.fr.foundation.MonitorType" %>
 
-  <div id="addmonitor" class="">
+  <div id="addmonitor">
     <a class="show-add-monitor btn info"><g:message code="label.addmonitor"/></a>
   </div>
   

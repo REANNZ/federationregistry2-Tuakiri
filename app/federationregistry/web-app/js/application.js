@@ -225,6 +225,43 @@ fedreg.descriptor_fulladministrator_search = function() {
   });
 }
 
+// Service Provider
+$('.show-edit-serviceprovider').live('click', function() {
+  $("#overview-serviceprovider").hide();
+  $("#editor-serviceprovider").fadeIn();
+});
+
+$('.cancel-edit-serviceprovider').live('click', function() {
+  $("#editor-serviceprovider").hide();
+  $("#overview-serviceprovider").fadeIn();
+});
+
+$('.edit-serviceprovider').live('click', function() {
+  var target_form = $("#editor-serviceprovider > form");
+
+  if(target_form.valid()) {
+    data = target_form.serialize();
+    $.ajax({
+      type: "POST",
+      url: updateServiceProviderEndpoint,
+      data: data,
+      success: function(res) {
+        var target = 
+        $("#editor-serviceprovider").hide();
+        $("#overview-serviceprovider-editable").html(res);
+        $("#overview-serviceprovider").fadeIn(); 
+      },
+      error: function (xhr, ajaxOptions, thrownError) {
+      }
+    });
+    
+  }
+});
+
+fedreg.reload_serviceprovider = function() {
+  
+}
+
 // Key Descriptor
 $('.add-new-certificate').live('click', function(entity) {
   fedreg.set_button($(this));

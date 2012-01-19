@@ -82,7 +82,7 @@
 
 div.validation-error {
   .rounded;
-  padding: 6px;
+  padding: 3px;
   margin: 4px;
   background-color: #FDDFDE;
   float:right;
@@ -90,7 +90,7 @@ div.validation-error {
 
 label.error {
   .rounded;
-  padding: 6px;
+  padding: 3px;
   margin: 4px;
   background-color: #FDDFDE;
   float:right;

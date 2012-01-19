@@ -6,7 +6,8 @@
     <title><g:message code="fedreg.view.members.serviceprovider.show.title" /></title>
     
     <r:script>
-      var activeContact
+      var updateServiceProviderEndpoint = "${createLink(controller:'serviceProvider', action:'update', id:serviceProvider.id )}";
+
       var contactCreateEndpoint = "${createLink(controller:'descriptorContact', action:'create', id:serviceProvider.id )}";
       var contactDeleteEndpoint = "${createLink(controller:'descriptorContact', action:'delete' )}";
       var contactListEndpoint = "${createLink(controller:'descriptorContact', action:'list', id:serviceProvider.id ) }";
@@ -91,111 +92,7 @@
     <div class="tab-content">
       
       <div id="tab-overview" class="tab-pane active">
-        <table class="borderless">
-          <tbody>   
-            <tr>
-              <th><g:message code="label.displayname"/></th>
-              <td>${fieldValue(bean: serviceProvider, field: "displayName")}</td>
-            </tr>
-            <tr>
-              <th>
-                <g:message code="label.description" />
-              </th>
-              <td>
-                ${fieldValue(bean: serviceProvider, field: "description")}
-              </td>
-            </tr>
-            <tr>
-              <th><g:message code="label.organization"/></th>
-              <td><g:link controller="organization" action="show" id="${serviceProvider.organization.id}">${fieldValue(bean: serviceProvider, field: "organization.displayName")}</g:link></td>
-            </tr>
-            <fr:hasPermission target="saml:advanced">
-              <tr>
-                <th><g:message code="label.entitydescriptor"/></th>
-                <td><g:link controller="entityDescriptor" action="show" id="${serviceProvider.entityDescriptor.id}">${fieldValue(bean: serviceProvider, field: "entityDescriptor.entityID")}</g:link></td>
-              </tr>
-            </fr:hasPermission>
-            <fr:lacksPermission target="saml:advanced">
-              <tr>
-                <th><g:message code="label.entitydescriptor"/></th>
-                <td>${fieldValue(bean: serviceProvider, field: "entityDescriptor.entityID")}</td>
-              </tr>
-            </fr:lacksPermission>
-            <tr>
-              <th>
-                <g:message code="label.serviceurl" />
-              </th>
-              <td>
-                ${fieldValue(bean: serviceProvider, field: "serviceDescription.connectURL")}
-              </td>
-            </tr>
-            <tr>
-              <th>
-                <g:message code="label.servicelogourl" />
-              </th>
-              <td>
-                ${fieldValue(bean: serviceProvider, field: "serviceDescription.logoURL")}
-              </td>
-            </tr>
-            <tr>
-              <th><g:message code="label.protocolsupport"/></th>
-              <td>
-                <g:each in="${serviceProvider.protocolSupportEnumerations}" status="i" var="pse">
-                  ${fieldValue(bean: pse, field: "uri")}<br>
-                </g:each>
-              </td>
-            <g:if test="${serviceProvider.errorURL}">
-            <tr>
-              <th><g:message code="label.errorurl"/></th>
-              <td><a href="${serviceProvider.errorURL}">${fieldValue(bean: serviceProvider, field: "errorURL")}</a></td>
-            </tr>
-            </g:if>
-            <tr>
-              <th><g:message code="label.status"/></th>
-              <td>
-                <g:if test="${serviceProvider.active}">
-                  <g:message code="label.active" />
-                </g:if>
-                <g:else>
-                  <span class="more-info not-in-federation" rel="twipsy" data-original-title="${g.message(code:'label.warningmetadata')}" data-placement="right"><g:message code="label.inactive" /></span>
-                </g:else>
-              </td>
-            </tr>
-            <tr>
-              <th><g:message code="label.archived"/></th>
-              <td>
-                <g:if test="${serviceProvider.archived}"> 
-                  <span class="alert-message warning"><g:message code="label.yes" /></span>
-                  <span class="more-info not-in-federation"  rel="twipsy" data-original-title="${g.message(code:'label.warningmetadataarchived')}" data-placement="right"><g:message code="label.no" /></span>
-                </g:if>
-                <g:else>
-                  <g:message code="label.no" /> 
-                </g:else>
-              </td>
-            </tr>
-            <tr>
-              <th><g:message code="label.approved"/></th>
-              <td>
-                <g:if test="${serviceProvider.approved}">
-                  <g:message code="label.yes" />
-                </g:if>
-                <g:else>
-                  <span class="more-info not-in-federation" rel="twipsy" data-original-title="${g.message(code:'label.undergoingapproval')}" data-placement="right"><g:message code="label.no" /></span>
-                </g:else>
-              </td>
-            </tr>
-            <tr>
-              <th><g:message code="label.datecreated" /></th>
-              <td>${fieldValue(bean: serviceProvider, field: "dateCreated")}</td>
-            </tr>
-          </tbody>
-        </table>
-        <fr:hasPermission target="descriptor:${serviceProvider.id}:update">
-          <hr>
-          <div>
-            <g:link action="edit" id="${serviceProvider.id}" class="btn info"><g:message code="label.editsp"/></g:link>
-          </div>
-        </fr:hasPermission>
+        <g:render template="/templates/serviceprovider/overview" plugin="foundation" model="[descriptor:serviceProvider]" />
       </div>
       
       <div id="tab-categories" class="tab-pane">
