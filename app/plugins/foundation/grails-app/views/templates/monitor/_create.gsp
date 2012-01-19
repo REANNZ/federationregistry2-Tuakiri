@@ -1,51 +1,62 @@
 <fr:hasPermission target="descriptor:${descriptor.id}:monitor:create">
 
-	<%@page import="aaf.fr.foundation.MonitorType" %>
+  <%@page import="aaf.fr.foundation.MonitorType" %>
 
-	<script type="text/javascript">
-		$(function() {
-			$("#newmonitor").hide();
-			$("#newmonitordata").validate();
-		});
-	</script>
+  <div id="addmonitor" class="">
+    <a class="show-add-monitor btn info"><g:message code="label.addmonitor"/></a>
+  </div>
+  
+  <div id="newmonitor" class="hidden">
+    <h3><g:message code="fedreg.templates.monitor.add.heading"/></h3>
+    <form id="newmonitordata" class="span8">
+      <fieldset>
+       <g:hiddenField name="interval" value="0" />
 
-	<hr>
+        <div class="clearfix">
+          <label for="type"><g:message code="label.monitortype"/></label>
+          <div class="input">
+            <g:select name="type" from="${MonitorType.list()}" optionKey="id" optionValue="name" class="span2"/>
+            <fr:tooltip code='fedreg.help.monitor.type' />
+          </div>
+        </div>
 
-	<div id="addmonitor" class="searcharea">
-		<n:button onclick="\$('#addmonitor').fadeOut(); \$('#newmonitor').fadeIn();" label="${message(code:'label.addmonitor')}" class="add-button"/>
-	</div>
-	
-	<div id="newmonitor" class="searcharea">
-		<h3><g:message code="fedreg.templates.monitor.add.heading"/></h3>
-		<form id="newmonitordata">
-			<g:hiddenField name="interval" value="0" />
-		<table>
-			<tbody>
-				<tr>
-					<th><g:message code="label.monitortype"/><th>
-					<td>
-						<g:select name="type" from="${MonitorType.list()}" optionKey="id" optionValue="name"/>
-						<fr:tooltip code='fedreg.help.monitor.type' />
-					</td>
-				</tr>
-				<tr>
-					<th><g:message code="label.location"/><th>
-					<td>
-						<input name="url" type="text" class="required" size="60"/>
-						<fr:tooltip code='fedreg.help.monitor.location' />
-					</td>
-				</tr>
-        <th><g:message code="label.node"/><th>
-          <td>
-            <input name="node" type="text" size="60"/>
-            <fr:tooltip code='fedreg.help.monitor.node' />
-          </td>
-        </tr>
-			</tbody>
-		</table>
-		<n:button onclick="if(\$('#newmonitordata').valid()) fedreg.monitor_create();" label="${message(code:'label.add')}" class="add-button"/>
-		<n:button onclick="\$('#newmonitor').fadeOut(); \$('#addmonitor').fadeIn();" label="${message(code:'label.close')}" class="close-button"/>
-		</form>
-	</div>
-	
+        <div class="clearfix">
+          <label for="url"><g:message code="label.location"/></label>
+          <div class="input">
+            <input name="url" type="text" class="required span5" />
+            <fr:tooltip code='fedreg.help.monitor.location' />
+          </div>
+        </div>
+
+        <div class="clearfix">
+          <label for="node"><g:message code="label.node"/></label>
+          <div class="input">
+            <input name="node" type="text" class="span3" />
+            <fr:tooltip code="fedreg.help.monitor.node" />
+          </div>
+        </div>
+
+        <div class="input">
+          <a class="add-monitor btn success"><g:message code="label.add"/></a>
+          <a class="cancel-add-monitor btn"><g:message code="label.cancel"/></a>
+        </div>
+
+      </fieldset>
+    </form>
+  </div>
+  
 </fr:hasPermission>
+
+<div id="delete-monitor-modal" class="modal hide fade">
+  <div class="modal-header">
+    <a href="#" class="close">×</a>
+    <h3><g:message code="fedreg.templates.monitor.delete.confirm.title"/></h3>
+  </div>
+  <div class="modal-body">
+    <p><g:message code="fedreg.templates.monitor.delete.confirm.descriptive"/></p>
+  </div>
+  <div class="modal-footer">
+    <a class="btn close-modal"><g:message code="label.cancel" /></a>
+    <a class="btn danger delete-monitor"><g:message code="label.delete" /></a>
+  </div>
+</div>

@@ -1,5 +1,5 @@
 <g:if test="${roleDescriptor.monitors.size() > 0}">
-	<table>
+	<table class="borderless">
 		<thead>
 			<tr>
 				<th><g:message code="label.type"/></th>
@@ -10,7 +10,7 @@
 			</tr>	
 		</thead>
 		<tbody>
-			<g:each in="${roleDescriptor.monitors}" var="m">
+			<g:each in="${roleDescriptor.monitors.sort{it.id}}" var="m">
 			<tr>
 				<td>${m.type.name}</td>
 				<td>${m.url}</td>
@@ -25,7 +25,7 @@
 				</td>
 				<td>
 					<fr:hasPermission target="descriptor:${roleDescriptor.id}:monitor:delete">
-						<n:confirmaction action="fedreg.monitor_delete(${m.id});" title="${message(code: 'fedreg.templates.monitor.delete.confirm.title')}" msg="${message(code: 'fedreg.templates.monitor.delete.confirm.descriptive')}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" class="delete-button" label="${message(code: 'label.delete')}" />
+            <a class="confirm-delete-monitor btn" data-monitorid="${m.id}"><g:message code="label.delete"/></a>
 					</fr:hasPermission>
 				</td>
 			</tr>
@@ -34,5 +34,5 @@
 	</table>
 </g:if>
 <g:else>
-	<p><g:message code="fedreg.templates.monitor.none"/></p>
+	<p class="alert-message block-message warn"><g:message code="fedreg.templates.monitor.none"/></p>
 </g:else>

@@ -890,7 +890,7 @@ $('.confirm-unlink-category').live('click', function() {
   $("#unlink-category-modal").modal('show');
 });
 
-$('.unlink-category').live('click', function(contactID) {
+$('.unlink-category').live('click', function() {
   fedreg.hide_modals();
   var data = "categoryID=" + delete_category;
   $.ajax({
@@ -991,23 +991,44 @@ fedreg.attributefilter_refresh = function() {
 };
 
 // Monitors
-fedreg.monitor_create = function() {
-  var data = $("#newmonitordata").serialize();
-  $.ajax({
-    type: "POST",
-    url: monitorCreateEndpoint,
-    data: data,
-    success: function(res) {
-      fedreg.monitor_list();
-      
+$('.show-add-monitor').live('click', function() {
+  $('#addmonitor').hide();
+  $('#newmonitor').fadeIn();
+});
+
+$('.cancel-add-monitor').live('click', function() {
+  $('#newmonitor').hide();
+  $('#addmonitor').fadeIn();
+});
+
+$('.add-monitor').live('click', function() {
+  var target_form = $("#newmonitordata")
+
+  if(target_form.valid()) {
+    var data = target_form.serialize();
+    $.ajax({
+      type: "POST",
+      url: monitorCreateEndpoint,
+      data: data,
+      success: function(res) {
+        fedreg.monitor_list(); 
       },
       error: function (xhr, ajaxOptions, thrownError) {
       
       }
-  });
-};
+    });
+  }
+});
 
-fedreg.monitor_delete = function(monitorID) {
+$('.confirm-delete-monitor').live('click', function() {
+  fedreg.set_button($(this));
+  monitorID = $(this).attr('data-monitorID');
+  $("#delete-monitor-modal").modal('show');
+});
+
+$('.delete-monitor').live('click', function() {
+  fedreg.hide_modals();
+
   var data = "id=" + monitorID;
   $.ajax({
     type: "POST",
@@ -1015,13 +1036,12 @@ fedreg.monitor_delete = function(monitorID) {
     data: data + "&_method=delete",
     success: function(res) {
       fedreg.monitor_list();
-      
-      },
-      error: function (xhr, ajaxOptions, thrownError) {
-      
-      }
+    },
+    error: function (xhr, ajaxOptions, thrownError) {
+    
+    }
   });
-};
+});
 
 fedreg.monitor_list = function(containerID) {
   $.ajax({

@@ -332,6 +332,16 @@
           </div>
         </div>
       </fr:hasAnyPermission>
+
+      <div id="tab-monitors" class="tab-pane">
+        <div id="monitors">
+          <g:render template="/templates/monitor/list" plugin="foundation" model="[roleDescriptor:serviceProvider]" />
+        </div>
+        <fr:hasPermission target="descriptor:${serviceProvider.id}:manage:monitors">
+          <hr>
+          <g:render template="/templates/monitor/create" plugin="foundation" model="[descriptor:serviceProvider]" />
+        </fr:hasPermission>
+      </div>
     </div>
     
   </body>
