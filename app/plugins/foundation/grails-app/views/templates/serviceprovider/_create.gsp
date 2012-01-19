@@ -35,14 +35,11 @@
     });
     
     $('#hostname').alphanumeric({nocaps:true, ichars:';'});
-    
-    $('form').validate({
-        ignore: ":disabled",
-        keyup: false,
-        errorClass: "validation-error",
-        errorElement: "div"
-    });
 
+    $('form').validate({
+      ignore: ":disabled",
+      keyup: false
+    });
     jQuery.validator.addMethod("validcert", function(value, element, params) { 
       fedreg.validateCertificate();
       return valid_certificate; 
@@ -76,7 +73,7 @@
 <div class="row">
 <div class="span14 offset1">
 
-<g:form action="${saveAction}">
+<form action="${saveAction}" method="post" class="validating">
   <g:hiddenField name="active" value="true"/>
   <g:hiddenField name="aa.create" value="true"/>
   <g:hiddenField name="contact.type" value="administrative" />
@@ -212,7 +209,7 @@
         <div class="clearfix">
           <label for="entity.identifier"><g:message code="label.entitydescriptor" /></label>
           <div class="input">
-            <g:textField name="entity.identifier" size="75" class="required url"  value="${entityDescriptor?.entityID}"/>
+            <g:textField name="entity.identifier" class="required url"  value="${entityDescriptor?.entityID}"/>
             <fr:tooltip code='fedreg.help.serviceprovider.entitydescriptor' />
           </div>
         </div>
@@ -225,7 +222,7 @@
             <g:textField name="sp.acs.post" size="75" class="required url"  value="${httpPostACS?.location}"/>
             
             <span class="index">Index:</span>
-            <g:textField name="sp.acs.post-index" size="2" class="required number index" value="${httpPostACS?.index}"/>
+            <g:textField name="sp.acs.post-index" class="required number index span1" value="${httpPostACS?.index}"/>
             <fr:tooltip code='fedreg.help.serviceprovider.acspost' />
             <br><span class="binding"><strong><g:message code="label.binding" /></strong>: SAML:2.0:bindings:HTTP-POST</span>
           </div>
@@ -235,10 +232,10 @@
           <label for="sp.acs.artifact"><g:message code="label.acsartifactendpoint" /></label>
           <div class="input">
             <g:hiddenField name="sp.acs.artifact-isdefault" value="false" />
-            <g:textField name="sp.acs.artifact" size="75" class="required url" value="${httpArtifactACS?.location}"/>
+            <g:textField name="sp.acs.artifact" class="required url" value="${httpArtifactACS?.location}"/>
             
             <span class="index">Index:</span>
-            <g:textField name="sp.acs.artifact-index" size="2" class="required number index" value="${httpArtifactACS?.index}"/>
+            <g:textField name="sp.acs.artifact-index" class="required number index span1" value="${httpArtifactACS?.index}"/>
             <fr:tooltip code='fedreg.help.serviceprovider.acsartifcate' />
             <br><span class="binding"><strong><g:message code="label.binding" /></strong>: SAML:2.0:bindings:HTTP-Artifact</span>
           </div>
@@ -325,7 +322,7 @@
           <div class="input">
             <g:textField name="sp.mnid.post" size="75" class="samloptional url" value="${mnidPost?.location}"/>
             <fr:tooltip code='fedreg.help.serviceprovider.mnidpost' />
-            <br><span class="binding"><strong><g:message code="label.binding" /></strong>: SAML:2.0:bindings:HTTP-POST</span>
+            <br><code><span class="binding"><strong><g:message code="label.binding" /></strong>: SAML:2.0:bindings:HTTP-POST</span></code>
           </div>
         </div>
       <fieldset>
@@ -386,7 +383,7 @@
               <td>
                 <input name="sp.attributes.${attr.id}.reasoning" size="40" value="${ra?.reasoning}" rel="twipsy" data-original-title="${g.message(code:'fedreg.help.serviceprovider.attribute.reason')}" data-placement="right" class="reason-attribute" data-attrid="${attr.id}"/>
               </td>
-              <td class="centered">
+              <td class="center">
                 <g:checkBox name="sp.attributes.${attr.id}.required" id="spattributes${attr.id}required" checked="${ra?.isRequired}" rel="twipsy" data-original-title="${g.message(code:'fedreg.help.serviceprovider.attribute.isrequired')}" data-placement="right" class="require-attribute" data-attrid="${attr.id}" />
               </td>
             </tr>
@@ -404,7 +401,7 @@
 
     <div class="row">
       <div class="offset12">
-        <g:submitButton name="submit" value="Submit" class="btn success"/>
+        <button type="submit" name="submit" value="submit" class="btn success"><g:message code="label.submit"/></button>
       </div>
     </div>
   </div>
@@ -412,4 +409,4 @@
   </div>
   </div>
 
-</g:form>
+</form>

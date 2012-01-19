@@ -254,7 +254,6 @@ $('.edit-serviceprovider').live('click', function() {
       error: function (xhr, ajaxOptions, thrownError) {
       }
     });
-    
   }
 });
 

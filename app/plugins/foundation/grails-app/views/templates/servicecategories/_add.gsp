@@ -7,7 +7,7 @@
   </div>
   
   <div id="newcategory"  class="hidden">
-    <h3><g:message code="fedreg.templates.servicecategories.add.heading"/></h3>
+    <h4><g:message code="fedreg.templates.servicecategories.add.heading"/></h4>
     <form id="newservicecategorydata">
       <fieldset>
         <input type="hidden" name="id" value="${descriptor.id}"/>

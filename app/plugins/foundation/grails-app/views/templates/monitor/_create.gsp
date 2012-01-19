@@ -7,7 +7,7 @@
   </div>
   
   <div id="newmonitor" class="hidden">
-    <h3><g:message code="fedreg.templates.monitor.add.heading"/></h3>
+    <h4><g:message code="fedreg.templates.monitor.add.heading"/></h4>
     <form id="newmonitordata" class="span8">
       <fieldset>
        <g:hiddenField name="interval" value="0" />
