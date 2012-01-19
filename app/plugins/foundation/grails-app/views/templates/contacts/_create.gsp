@@ -10,7 +10,7 @@
 
     <div class="search-contacts-form hidden">
       <h4><g:message code="fedreg.templates.contactmanager.searchforcontacts.heading"/></h4>
-      <form class="form-stacked">
+      <form class="span8">
   		  <fieldset>
           <input type="hidden" name="id" value="${owner.id}" />
 
@@ -35,9 +35,9 @@
             </div>
           </div>
 
-          <div>
-      		  <a class="btn primary submit-search-for-contact"><g:message code="label.search" /></a>
-      		  <a class="btn cancel-search-for-contact"><g:message code="label.cancel" /></a>
+          <div class="input">
+      		  <a class="submit-search-for-contact btn info"><g:message code="label.search" /></a>
+      		  <a class="cancel-search-for-contact btn"><g:message code="label.cancel" /></a>
           </div>
   		  </fieldset>
       </form>

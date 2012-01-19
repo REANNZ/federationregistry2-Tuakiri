@@ -1,7 +1,7 @@
 
 <p><g:message code="fedreg.templates.servicecategories.descriptive" /></p>
   <g:if test="${categories}">
-  <table>
+  <table class="borderless">
     <thead>
       <tr>
         <th><g:message code="label.name" /></th>

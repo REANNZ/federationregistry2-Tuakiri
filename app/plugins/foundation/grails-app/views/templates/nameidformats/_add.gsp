@@ -18,7 +18,7 @@
         </div>
       </div>
 
-      <div>
+      <div class="input">
         <a class="add-nameid btn success"><g:message code="label.add"/></a>
         <a class="cancel-add-nameid btn"><g:message code="label.close"/></a>
       </div>

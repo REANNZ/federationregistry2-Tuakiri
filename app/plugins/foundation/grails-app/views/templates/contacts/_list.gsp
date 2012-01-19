@@ -1,6 +1,6 @@
 
 	<g:if test="${host.contacts.size() > 0}">
-  	<table>
+  	<table class="borderless">
   		<thead>
   			<tr>
   				<th><g:message code="label.name" /></th>
