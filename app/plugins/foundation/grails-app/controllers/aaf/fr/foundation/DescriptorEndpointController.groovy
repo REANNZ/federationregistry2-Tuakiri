@@ -213,13 +213,7 @@ class DescriptorEndpointController {
       return
     }
     
-    if(SecurityUtils.subject.isPermitted("descriptor:${descriptor.id}:endpoint:create")) {
-      // Determine if we're actually updating the collaborator (useful for AA endpoints on IDP screen)
-      if(!descriptor.hasProperty(endpointType)) {
-        if(descriptor.collaborator.hasProperty(endpointType))
-          descriptor = descriptor.collaborator
-      }
-    
+    if(SecurityUtils.subject.isPermitted("descriptor:${descriptor.id}:endpoint:create")) {    
       def binding = SamlURI.get(params.binding)
       if (!binding) {
         log.warn "SamURI (binding) was not found for id ${params.id}"
