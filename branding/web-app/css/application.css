@@ -4,7 +4,7 @@
 @headFontColor: #fff;
 @navColor: #37404B;
 
-.rounded-top(@radius: 5px) {
+.rounded-top(@radius: 3px) {
   border-top-left-radius: @radius;
   border-top-right-radius: @radius;
   -webkit-border-top-left-radius: @radius;
@@ -13,7 +13,7 @@
   -moz-border-radius-topright: @radius;
 }
 
-.rounded-bottom(@radius: 5px) {
+.rounded-bottom(@radius: 3px) {
   border-bottom-left-radius: @radius;
   border-bottom-right-radius: @radius;
   -webkit-border-bottom-left-radius: @radius;
@@ -22,7 +22,7 @@
   -moz-border-radius-bottomright: @radius;
 }
 
-.rounded(@radius: 5px) {
+.rounded(@radius: 3px) {
    -webkit-border-radius: @radius;
    -moz-border-radius: @radius;
    border-radius: @radius;
@@ -82,12 +82,18 @@ input.required, textarea.required {
 
 label.error {
   .rounded;
-  padding: 3px;
+  .zero;
+  width: auto;
+  line-height: 0.9em;
+  padding: 4px;
   margin: 4px;
   background-color: #CD3B35;
   color: #fff;
   float:right;
-  font-weight:normal;  
+  font-weight:bold;  
+  text-transform: uppercase;
+  white-space: nowrap;
+  font-size: 0.9em;
 }
 
 input.error, textarea.error {
