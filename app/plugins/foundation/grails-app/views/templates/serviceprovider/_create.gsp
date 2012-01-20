@@ -322,7 +322,7 @@
           <div class="input">
             <g:textField name="sp.mnid.post" size="75" class="samloptional url" value="${mnidPost?.location}"/>
             <fr:tooltip code='fedreg.help.serviceprovider.mnidpost' />
-            <br><code><span class="binding"><strong><g:message code="label.binding" /></strong>: SAML:2.0:bindings:HTTP-POST</span></code>
+            <br><span class="binding"><strong><g:message code="label.binding" /></strong>: SAML:2.0:bindings:HTTP-POST</span>
           </div>
         </div>
       <fieldset>
@@ -343,7 +343,7 @@
           </div>
           <g:hiddenField name="sp.crypto.sig" value="${true}" />
           <g:hiddenField name="sp.crypto.enc" value="${true}" />
-          <g:textArea name="cert" id="cert" class="cert" rows="25" cols="60" value="${certificate}"/>
+          <g:textArea name="cert" id="cert" class="cert required" rows="25" cols="60" value="${certificate}"/>
           <fr:tooltip code='fedreg.help.serviceprovider.certificate' />
         </div>
       </div>
@@ -370,7 +370,7 @@
             <g:set var="ra" value="${supportedAttributes.find {it.base == attr}}" />
             <tr>
               <td>
-                <strong>${fieldValue(bean: attr, field: "name")}</strong><br>
+                <strong class="highlight">${fieldValue(bean: attr, field: "name")}</strong><br>
                 <code>oid:${fieldValue(bean: attr, field: "oid")}</code>
                 <br><br><em>${fieldValue(bean: attr, field: "description")}</em>
               </td>

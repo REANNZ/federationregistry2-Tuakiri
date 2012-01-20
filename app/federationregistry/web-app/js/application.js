@@ -19,8 +19,6 @@ applyBehaviourTo = function(scope) {
   $('form > .validating', scope).validate({
     ignore: ":disabled",
     keyup: false,
-    errorClass: "validation-error",
-    errorElement: "div"
   });
 
   $('.revealable', scope).hide();
@@ -246,9 +244,10 @@ $('.edit-serviceprovider').live('click', function() {
       url: updateServiceProviderEndpoint,
       data: data,
       success: function(res) {
-        var target = 
+        var target = $("#overview-serviceprovider-editable");
+        target.html(res);
+        applyBehaviourTo(target)
         $("#editor-serviceprovider").hide();
-        $("#overview-serviceprovider-editable").html(res);
         $("#overview-serviceprovider").fadeIn(); 
       },
       error: function (xhr, ajaxOptions, thrownError) {
@@ -1169,8 +1168,8 @@ $('.request-attribute').live('click', function() {
         req.attr('checked', false);
       }
       reason.removeClass('required');
-      reason.removeClass('validation-error');
-      reason.siblings('.validation-error').remove();  //removes error notice
+      reason.removeClass('error');
+      reason.siblings('.error').remove();  //removes error notice
     } else {
         reason.addClass('required'); 
     }
