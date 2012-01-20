@@ -146,11 +146,7 @@
       </nav>
 
       <section>
-        <div class="row">
-          <div class="span16" style="border: 0px solid pink;">
-            <g:layoutBody/>
-          </div>
-        </div>
+        <g:layoutBody/>
       </section>
 
       <footer>
