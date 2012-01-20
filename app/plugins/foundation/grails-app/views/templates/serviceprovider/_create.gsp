@@ -78,13 +78,13 @@
   <g:hiddenField name="aa.create" value="true"/>
   <g:hiddenField name="contact.type" value="administrative" />
   
-  <div class="step" id="overview">
+  <div id="overview">
     <p><g:message code="fedreg.templates.serviceprovider.create.overview.details" /></p>
   </div>
 
   <hr>
   
-  <div class="step" id="contact">
+  <div id="contact">
     <h3>1. <g:message code="fedreg.templates.serviceprovider.create.contact.heading" /></h3>
     <p><g:message code="fedreg.templates.serviceprovider.create.contact.details" /></p>
     <fieldset class="span12">
@@ -113,7 +113,7 @@
 
   <hr>
   
-  <div class="step" id="basic">
+  <div id="basic">
     <h3>2. <g:message code="fedreg.templates.serviceprovider.create.basicinformation.heading" /></h3>
     <p><g:message code="fedreg.templates.serviceprovider.create.basicinformation.details" /></p>
 
@@ -161,7 +161,7 @@
 
   <hr>
 
-  <div class="step" id="saml">
+  <div id="saml">
     <h3>3. <g:message code="fedreg.templates.serviceprovider.create.saml.heading" /></h3>
     <p><g:message code="fedreg.templates.serviceprovider.create.saml.details" /></p>
     
@@ -331,7 +331,7 @@
 
   <hr>
   
-  <div class="step" id="crypto">
+  <div id="crypto">
     <h3>4. <g:message code="fedreg.templates.serviceprovider.create.crypto.heading" /></h3>
     <p><g:message code="fedreg.templates.serviceprovider.create.crypto.details" /></p>
 
@@ -351,7 +351,7 @@
 
   <hr>
   
-  <div class="step" id="attributesupport">
+  <div id="attributesupport">
     <h3>5. <g:message code="fedreg.templates.serviceprovider.create.attributesupport.heading" /></h3>
     <p><g:message code="fedreg.templates.serviceprovider.create.attributesupport.details" /></p>
     <p><strong><g:message code="fedreg.help.serviceprovider.attribute.isrequired" /></strong></p>
@@ -395,7 +395,7 @@
   
   <hr>
   
-  <div class="step submit_step" id="creationsummary">
+  <div id="creationsummary">
     <h3>6. <g:message code="fedreg.templates.serviceprovider.create.summary.heading" /></h3>
     <p><g:message code="fedreg.templates.serviceprovider.create.summary.details" /></p>
 
