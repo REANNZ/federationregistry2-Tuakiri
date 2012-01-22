@@ -256,10 +256,6 @@ $('.edit-serviceprovider').live('click', function() {
   }
 });
 
-fedreg.reload_serviceprovider = function() {
-  
-}
-
 // Key Descriptor
 $('.add-new-certificate').live('click', function(entity) {
   fedreg.set_button($(this));
@@ -530,7 +526,6 @@ $('.makedefault-endpoint').live('click', function() {
 
 $('.create-endpoint').live('click', function() {
   fedreg.set_button($(this));
-  container_endpoint = $(this).attr('data-container');
   type_endpoint = $(this).attr('data-type');
   var target_form = $('#new' + type_endpoint + 'data')
   if(target_form.valid()) {
@@ -540,7 +535,7 @@ $('.create-endpoint').live('click', function() {
       url: endpointCreationEndpoint,
       data: data,
       success: function(res) {
-        fedreg.endpoint_list(type_endpoint, container_endpoint);
+        fedreg.endpoint_list(type_endpoint);
       },
       error: function (xhr, ajaxOptions, thrownError) {
       }
@@ -552,8 +547,7 @@ $('.edit-endpoint').live('click', function() {
   fedreg.set_button($(this));
   edit_endpoint = $(this).attr('data-id');
   type_endpoint = $(this).attr('data-type');
-  container_endpoint = $(this).attr('data-container');
-  var data = "id=" + edit_endpoint + "&endpointType=" + type_endpoint + "&containerID="+container_endpoint;
+  var data = "id=" + edit_endpoint + "&endpointType=" + type_endpoint;
   $.ajax({
     type: "GET",
     cache: false,
@@ -579,7 +573,6 @@ $('.update-endpoint').live('click', function() {
   fedreg.set_button($(this));
   update_endpoint = $(this).attr('data-id');
   type_endpoint = $(this).attr('data-type');
-  container_endpoint = $(this).attr('data-container');
   var target_form = $("#endpoint-edit-" + update_endpoint)
   if(target_form.valid()) {
     var data =  target_form.serialize();
@@ -588,7 +581,7 @@ $('.update-endpoint').live('click', function() {
       url: endpointUpdateEndpoint,
       data: data + "&_method=put",
       success: function(res) {
-        fedreg.endpoint_list(type_endpoint, container_endpoint);
+        fedreg.endpoint_list(type_endpoint);
       },
       error: function (xhr, ajaxOptions, thrownError) {
       }
@@ -596,15 +589,15 @@ $('.update-endpoint').live('click', function() {
   } else { fedreg.reset_button(); }
 });
 
-fedreg.endpoint_list = function(endpointType, containerID) {
-  var data = "endpointType=" + endpointType + "&containerID=" + containerID;
+fedreg.endpoint_list = function(endpointType) {
+  var data = "endpointType=" + endpointType;
   $.ajax({
     type: "GET",
     cache: false,
     url: endpointListEndpoint,
     data: data,
     success: function(res) {
-      var target = $("#"+containerID);
+      var target = $("#list-"+endpointType);
       target.html(res);
       applyBehaviourTo(target);
       },

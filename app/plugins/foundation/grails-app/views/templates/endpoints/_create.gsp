@@ -57,7 +57,7 @@
         </div>
 
         <div class="input">
-          <a class="create-endpoint btn success" data-type="${endpointType}" data-container="${containerID}"><g:message code="label.add"/></a>
+          <a class="create-endpoint btn success" data-type="${endpointType}><g:message code="label.add"/></a>
           <a onclick="$('#new${endpointType}').fadeOut(); $('#add${endpointType}').fadeIn();" class="btn"><g:message code="label.cancel"/></a>
         </div>
 

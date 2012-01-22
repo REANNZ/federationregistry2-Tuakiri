@@ -34,7 +34,7 @@
       </g:if>
 
       <div class="input">
-        <a class="update-endpoint btn success" data-id="${endpoint.id}" data-type="${endpointType}" data-container="${containerID}"><g:message code="label.update"/></a>
+        <a class="update-endpoint btn success" data-id="${endpoint.id}" data-type="${endpointType}"><g:message code="label.update"/></a>
         <a class="cancel-edit-endpoint btn"><g:message code="label.cancel"/></a>
       </div>
     </fieldset>
