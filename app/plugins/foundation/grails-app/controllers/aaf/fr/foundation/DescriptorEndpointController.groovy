@@ -35,7 +35,7 @@ class DescriptorEndpointController {
       return
     }
     
-    render template:"/templates/endpoints/edit", contextPath: pluginContextPath, model:[endpoint:endpoint, endpointType:params.endpointType, containerID:params.containerID]
+    render template:"/templates/endpoints/edit", contextPath: pluginContextPath, model:[endpoint:endpoint, endpointType:params.endpointType]
   }
   
   def update = {
@@ -113,7 +113,7 @@ class DescriptorEndpointController {
     
     if(SecurityUtils.subject.isPermitted("descriptor:${endpoint.descriptor.id}:endpoint:remove")) {
       endpointService.delete(endpoint, params.endpointType)
-      endpointService.determineDescriptorProtocolSupport(descriptor)
+      //endpointService.determineDescriptorProtocolSupport(descriptor)
       render message(code: 'fedreg.endpoint.delete.success')
     }
     else {
@@ -132,13 +132,6 @@ class DescriptorEndpointController {
     
     if(!params.endpointType) {
       log.warn "Endpoint type was not present"
-      render message(code: 'fedreg.controllers.namevalue.missing')
-      response.setStatus(500)
-      return
-    }
-    
-    if(!params.containerID) {
-      log.warn "Container ID was not present"
       render message(code: 'fedreg.controllers.namevalue.missing')
       response.setStatus(500)
       return
@@ -165,7 +158,7 @@ class DescriptorEndpointController {
       def minSizeConstraint = descriptor.constraints."$endpointType"?.getAppliedConstraint('minSize')
       def minEndpoints = minSizeConstraint ? minSizeConstraint.getMinSize():0
       
-      render template:"/templates/endpoints/list", contextPath: pluginContextPath, model:[endpoints:descriptor."${endpointType}", allowremove:true, endpointType:endpointType, containerID:params.containerID, minEndpoints:minEndpoints]
+      render template:"/templates/endpoints/list", contextPath: pluginContextPath, model:[endpoints:descriptor."${endpointType}", allowremove:true, endpointType:endpointType, minEndpoints:minEndpoints]
     }
     else {
       log.warn "Endpoint ${endpointType} is invalid for Descriptor with id ${params.id}"
@@ -224,7 +217,7 @@ class DescriptorEndpointController {
     
       if(allowedEndpoints.containsKey(endpointType) && descriptor.hasProperty(endpointType)) {
         endpointService.create(descriptor, allowedEndpoints.get(endpointType), endpointType, binding, params.location, params.int('samlindex'), params.active ? true:false)
-        endpointService.determineDescriptorProtocolSupport(descriptor)
+       // endpointService.determineDescriptorProtocolSupport(descriptor)
         
         log.info "$subject created new endpoint location ${params.location}, $binding for $descriptor"
         render message(code: 'fedreg.endpoint.create.success')

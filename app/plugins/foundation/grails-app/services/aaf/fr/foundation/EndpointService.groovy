@@ -17,7 +17,8 @@ class EndpointService {
 		if(index)
 			endpoint.index = index
 		descriptor."addTo${capitalize(endpointType)}"(endpoint)
-		
+		determineDescriptorProtocolSupport(descriptor)
+
 		descriptor.save()
 		if(descriptor.hasErrors() || endpoint.hasErrors()) {
 			descriptor.errors?.each {
@@ -38,10 +39,13 @@ class EndpointService {
 		
 		if(index)
 			endpoint.index = index
+
+    def descriptor = endpoint.descriptor
+    determineDescriptorProtocolSupport(descriptor)
 		
-		endpoint.save()
-		if(endpoint.hasErrors()) {
-			endpoint.errors.each {
+		descriptor.save()
+		if(descriptor.hasErrors()) {
+			descriptor.errors.each {
 				log.error it
 			}
 			throw new ErronousStateException("Unable to save when updating ${endpoint}")
@@ -90,6 +94,8 @@ class EndpointService {
 		endpoint.delete()
 		descriptor."removeFrom${capitalize(endpointType)}"(endpoint)
 
+    determineDescriptorProtocolSupport(descriptor)
+
 		if(!descriptor.save()) {
 			descriptor.errors.each {
 				log.error it
@@ -109,13 +115,14 @@ class EndpointService {
 			determineAttributeAuthorityProtocolSupport(descriptor)
 		if(descriptor.instanceOf(SPSSODescriptor))
 			determineSPSSODescriptorProtocolSupport(descriptor)
-			
+		
+    /*	
 		if(!descriptor.save()) {
 			descriptor.errors.each {
 				log.error it
 			}
 			throw new ErronousStateException("Unable to save $descriptor when determining endpoint protocol support")
-		}
+		}*/
 	}
 	
 	def determineSPSSODescriptorProtocolSupport(sp) {
