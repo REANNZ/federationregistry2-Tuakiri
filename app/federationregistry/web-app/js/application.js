@@ -524,6 +524,13 @@ $('.makedefault-endpoint').live('click', function() {
   });
 });
 
+$('.show-create-endpoint').live('click', function() {
+  type_endpoint = $(this).attr('data-type');
+
+  $('#add-' + type_endpoint).hide();
+  $('#new-' + type_endpoint).fadeIn();
+});
+
 $('.create-endpoint').live('click', function() {
   fedreg.set_button($(this));
   type_endpoint = $(this).attr('data-type');
@@ -541,6 +548,13 @@ $('.create-endpoint').live('click', function() {
       }
     });
   } else { fedreg.reset_button(); }
+});
+
+$('.cancel-create-endpoint').live('click', function() {
+  type_endpoint = $(this).attr('data-type');
+
+  $('#new-' + type_endpoint).hide();
+  $('#add-' + type_endpoint).fadeIn();
 });
 
 $('.edit-endpoint').live('click', function() {
