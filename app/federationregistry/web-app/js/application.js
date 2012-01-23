@@ -502,7 +502,7 @@ $('.delete-endpoint').live('click', function() {
     url: endpointDeleteEndpoint,
     data: data + "&_method=delete",
     success: function(res) {
-      $('#endpoint-' + delete_endpoint).remove();
+      fedreg.endpoint_list(type_endpoint);
     },
     error: function (xhr, ajaxOptions, thrownError) {
     }

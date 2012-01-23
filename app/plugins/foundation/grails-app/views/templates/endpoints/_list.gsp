@@ -1,11 +1,10 @@
+<div id="list-${endpointType}">
+  <g:if test="${endpoints}">
 
-<g:if test="${endpoints}">
+    <g:if test="${!minEndpoints}">
+      <g:set var="minEndpoints" value="${0}" />
+    </g:if>
 
-  <g:if test="${!minEndpoints}">
-    <g:set var="minEndpoints" value="${0}" />
-  </g:if>
-
-  <div id="list-${endpointType}">
     <g:each in="${endpoints.sort { it.id }}" status="i" var="ep">
       <div id="endpoint-${ep.id}">
         <table class="borderless">
@@ -93,8 +92,8 @@
         </table>
       </div>
     </g:each>
-  </div>
-</g:if>
-<g:else>
-  <p class="alert-message block-message error"><g:message code="fedreg.templates.endpoints.noresults"/></p>
-</g:else>
+  </g:if>
+  <g:else>
+    <p class="alert-message block-message error"><g:message code="fedreg.templates.endpoints.noresults"/></p>
+  </g:else>
+</div>
