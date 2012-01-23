@@ -78,13 +78,6 @@ class DescriptorAttributeController {
 			return
 		}
 		
-		if(!params.containerID) {
-			log.warn "Container ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
-			response.setStatus(500)
-			return
-		}
-		
 		def descriptor = RoleDescriptor.get(params.id)
 		if(!descriptor) {
 			log.warn "RoleDescriptor identified by id ${params.id} was not located"
@@ -93,7 +86,7 @@ class DescriptorAttributeController {
 			return
 		}
 		
-		render template: "/templates/attributes/list", contextPath: pluginContextPath, model:[descriptor:descriptor, attrs:descriptor.sortedAttributes(), containerID:params.containerID]
+		render template: "/templates/attributes/list", contextPath: pluginContextPath, model:[descriptor:descriptor, attrs:descriptor.sortedAttributes()]
 	}
 	
 	def add = {

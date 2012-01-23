@@ -963,58 +963,71 @@ fedreg.serviceCategory_list = function() {
 };
 
 // Attributes
-fedreg.attribute_remove = function(attributeID, containerID) {
-  var data = "attributeID=" + attributeID;
-  $.ajax({
-    type: "POST",
-    url: attributeRemoveEndpoint,
-    data: data + "&_method=delete",
-    success: function(res) {
-      
-      fedreg.attribute_list(containerID);
-      $('#attrfilpolood').show();
-      },
-      error: function (xhr, ajaxOptions, thrownError) {
-      
-      }
-  });
-};
+$('.show-add-attribute').live('click', function() {
+  $('#add-attribute').hide();
+  $('#new-attribute').fadeIn();
+});
 
-fedreg.attribute_list = function(containerID) {
-  var data = "containerID=" + containerID
-  $.ajax({
-    type: "GET",
-    cache: false,
-    url: attributeListEndpoint,
-    data: data,
-    success: function(res) {
-      var target = $("#"+containerID);
-      target.html(res);
-      applyBehaviourTo(target);
-      },
-      error: function (xhr, ajaxOptions, thrownError) {
-      
-      }
-  });
-};
+$('.cancel-add-attribute').live('click', function() {
+  $('#new-attribute').hide();
+  $('#add-attribute').fadeIn();
+});
 
-fedreg.attribute_add = function(containerID) {
+$('.add-attribute').live('click', function() {
+  fedreg.set_button($(this));
   var data = $("#newattributedata").serialize();
   $.ajax({
     type: "POST",
     url: attributeAddEndpoint,
     data: data,
     success: function(res) {
-      
-      fedreg.attribute_list(containerID);
-      $('#attrfilpolood').show();
-      },
-      error: function (xhr, ajaxOptions, thrownError) {
-      
-      }
+      fedreg.attribute_list();
+    },
+    error: function (xhr, ajaxOptions, thrownError) {
+    
+    }
+  });
+});
+
+$('.confirm-delete-attribute').live('click', function() {
+  fedreg.set_button($(this));
+  delete_attrid = $(this).attr('data-attrid');
+  $("#delete-attribute-modal").modal('show');
+});
+
+$('.delete-attribute').live('click', function() {
+  fedreg.hide_modals();
+  var data = "attributeID=" + delete_attrid;
+  $.ajax({
+    type: "POST",
+    url: attributeRemoveEndpoint,
+    data: data + "&_method=delete",
+    success: function(res) {   
+      fedreg.attribute_list();
+    },
+    error: function (xhr, ajaxOptions, thrownError) {
+    
+    }
+  });
+});
+
+fedreg.attribute_list = function() {
+  $.ajax({
+    type: "GET",
+    cache: false,
+    url: attributeListEndpoint,
+    success: function(res) {
+      var target = $("#supported-attributes");
+      target.html(res);
+      applyBehaviourTo(target);
+    },
+    error: function (xhr, ajaxOptions, thrownError) {
+    
+    }
   });
 };
 
+// Attribute Filter
 fedreg.attributefilter_refresh = function() {
   editor.setCode('working...');
   $.ajax({
