@@ -26,3 +26,16 @@
   </div>
   
 </fr:hasPermission>
+<div id="delete-nameid-modal" class="modal hide fade">
+  <div class="modal-header">
+    <a href="#" class="close">×</a>
+    <h3><g:message code="fedreg.templates.nameidformats.remove.confirm.title"/></h3>
+  </div>
+  <div class="modal-body">
+    <p><g:message code="fedreg.templates.nameidformats.remove.confirm.descriptive"/></p>
+  </div>
+  <div class="modal-footer">
+    <a class="btn close-modal"><g:message code="label.cancel" /></a>
+    <a class="btn danger delete-nameid"><g:message code="label.delete" /></a>
+  </div>
+</div>
