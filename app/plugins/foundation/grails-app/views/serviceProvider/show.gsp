@@ -118,10 +118,8 @@
                 <g:render template="/templates/acs/list" plugin="foundation" model="[attributeConsumingServices:serviceProvider.attributeConsumingServices]"/>
               </div>
 
-              <div id="tab-nameidformats" class="tab-pane">
-                <div id="nameidformats">
-                  <g:render template="/templates/nameidformats/list" plugin="foundation" model="[descriptor:serviceProvider, nameIDFormats:serviceProvider.nameIDFormats]" />
-                </div>
+              <div id="tab-nameidformats" class="tab-pane">       
+                <g:render template="/templates/nameidformats/list" plugin="foundation" model="[descriptor:serviceProvider, nameIDFormats:serviceProvider.nameIDFormats]" />
                 <hr>
                 <g:render template="/templates/nameidformats/add" plugin="foundation" model="[descriptor:serviceProvider]"/>
               </div>
