@@ -84,32 +84,6 @@ class ServiceProviderController {
 		}
 	}
 	
-	def edit = {
-		if(!params.id) {
-			log.warn "SPSSODescriptor ID was not present"
-			flash.type="error"
-			flash.message = message(code: 'fedreg.controllers.namevalue.missing')
-			redirect(action: "list")
-			return
-		}
-		
-		def serviceProvider = SPSSODescriptor.get(params.id)
-		if (!serviceProvider) {
-			flash.type="error"
-			flash.message = message(code: 'aaf.fr.foundation.spssoroledescriptor.nonexistant')
-			redirect(action: "list")
-			return
-		}	
-		
-		if(SecurityUtils.subject.isPermitted("descriptor:${serviceProvider.id}:update")) {
-			[serviceProvider: serviceProvider]	
-		}
-		else {
-			log.warn("Attempt to edit $serviceProvider by $subject was denied, incorrect permission set")
-			response.sendError(403)
-		}	
-	}
-	
 	def update = {
 		if(!params.id) {
 			log.warn "SPSSODescriptor ID was not present"
