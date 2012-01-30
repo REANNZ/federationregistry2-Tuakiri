@@ -1,5 +1,5 @@
 <div id="overview-serviceprovider-editable">
-  <table class="borderless">
+  <table class="borderless fixed">
     <tbody>  
       <tr>
         <th><g:message code="label.status"/></th>
