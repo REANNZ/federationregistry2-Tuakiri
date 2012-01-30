@@ -141,6 +141,10 @@ class EndpointService {
     idp.artifactResolutionServices?.each {
       determineProtocolSupport(it.binding, idp)
     }
+
+    if(idp.collaborator) {
+      determineAttributeAuthorityProtocolSupport(idp.collaborator)
+    }
     
     log.debug "Determined current IDP protocol support of ${idp.protocolSupportEnumerations}"
   }
