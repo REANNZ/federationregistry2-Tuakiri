@@ -102,13 +102,8 @@
                   <li class="${actionName == 'listarchived' ? 'active':''}"><g:link controller="identityProvider" action="listarchived"><g:message code="label.listarchived"/></g:link></li>
                 </fr:hasPermission>
                 <li class="${actionName in ['create', 'save'] ? 'active':''}"><g:link controller="identityProvider" action="create"><g:message code="label.create"/></g:link></li>
-                <g:if test="${actionName in ['show', 'edit']}">
-                <li> | </li>
-                <li><g:message code="fedreg.view.members.identityprovider.show.heading" args="[identityProvider.displayName]"/>: </li>
-                <li class="${actionName == 'show' ? 'active':''}"><g:link controller="identityProvider" action="show" id="${identityProvider.id}"><g:message code="label.view"/></g:link></li>
-                <fr:hasPermission target="descriptor:${identityProvider.id}:update">
-                  <li class="${actionName == 'edit' ? 'active':''}"><g:link controller="identityProvider" action="edit" id="${identityProvider.id}" class="${actionName == 'edit' ? 'active':''}"><g:message code="label.edit"/></g:link></li>
-                </fr:hasPermission>
+                <g:if test="${actionName in ['show']}">
+                  <li class="${actionName == 'show' ? 'active':''}"><g:message code="label.view"/></li>
                 </g:if>
                 </ul>
               </g:if>
@@ -120,7 +115,7 @@
                     <li class="${actionName == 'listarchived' ? 'active':''}"><g:link controller="serviceProvider" action="listarchived"><g:message code="label.listarchived"/></g:link></li>
                   </fr:hasPermission>
                   <li class="${actionName in ['create', 'save'] ? 'active':''}"><g:link controller="serviceProvider" action="create"><g:message code="label.create"/></g:link></li>
-                  <g:if test="${actionName in ['show', 'edit']}">
+                  <g:if test="${actionName in ['show']}">
                     <li class="active"><g:message code="label.view" /> </li>
                   </g:if>
                 </ul>

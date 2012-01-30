@@ -218,7 +218,7 @@
                 <div id="newcertificatedetails">
                 </div>
                 <g:hiddenField name="idp.crypto.sig" value="${true}" />
-                <g:textArea name="cert" id="cert" class="cert" rows="25" cols="60" value="${certificate}"/>
+                <g:textArea name="cert" id="cert" class="cert required" rows="25" cols="60" value="${certificate}"/>
                 <fr:tooltip code='fedreg.help.identityprovider.certificate' />
               </div>
         </fieldset>

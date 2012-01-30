@@ -73,32 +73,6 @@ class IdentityProviderController {
 		}
 	}
 	
-	def edit = {
-		if(!params.id) {
-			log.warn "IDPSSODescriptor ID was not present"
-			flash.type="error"
-			flash.message = message(code: 'fedreg.controllers.namevalue.missing')
-			redirect(action: "list")
-			return
-		}
-		
-		def identityProvider = IDPSSODescriptor.get(params.id)
-		if (!identityProvider) {
-			flash.type="error"
-			flash.message = message(code: 'aaf.fr.foundation.idpssoroledescriptor.nonexistant')
-			redirect(action: "list")
-			return
-		}	
-		
-		if(SecurityUtils.subject.isPermitted("descriptor:${identityProvider.id}:update")) {
-			[identityProvider: identityProvider]	
-		}
-		else {
-			log.warn("Attempt to edit $identityProvider by $subject was denied, incorrect permission set")
-			response.sendError(403)
-		}
-	}
-	
 	def update = {
 		if(!params.id) {
 			log.warn "IDPSSODescriptor ID was not present"
@@ -116,15 +90,18 @@ class IdentityProviderController {
 			return
 		}
 		if(SecurityUtils.subject.isPermitted("descriptor:${identityProvider_.id}:update")) {
+      println "XXX"
 			def (updated, identityProvider) = IdentityProviderService.update(params)
 			if(updated) {
+        println "XXXX222"
 				log.info "$subject updated $identityProvider"
-				redirect (action: "show", id: identityProvider.id)
+				render template:'/templates/identityprovider/overview_editable', plugin:'foundation', model:[identityProvider:identityProvider]
 			} else {
-				log.info "$subject failed to update $identityProvider"
-				flash.type="error"
-				flash.message = message(code: 'aaf.fr.foundation.idpssoroledescriptor.update.validation.error')
-				render (view:'edit', model:[identityProvider:identityProvider])
+				log.info "$subject failed when attempting update on $identityProvider"
+        identityProvider.errors.each {
+          log.debug it
+        }
+        response.sendError(500)
 			}
 		}
 		else {

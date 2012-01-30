@@ -238,7 +238,7 @@ class IdentityProviderService {
     
     if(!identityProvider.entityDescriptor.validate()) {
       log.info "$subject attempted to update $identityProvider but failed IDPSSODescriptor validation"
-      identityProvider.entityDescriptor.errors.each {log.warn it}
+      identityProvider.entityDescriptor.errors.each {log.warn it; print it}
       return [false, identityProvider]
     }
     
