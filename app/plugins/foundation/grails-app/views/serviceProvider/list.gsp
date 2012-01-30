@@ -23,7 +23,14 @@
           <td>${fieldValue(bean: serviceProvider, field: "displayName")}</td>
           <td>${fieldValue(bean: serviceProvider, field: "organization.name")}</td>
           <td>${fieldValue(bean: serviceProvider, field: "entityDescriptor.entityID")}</td>
-          <td>${serviceProvider.functioning()}</td>
+          <td>
+            <g:if test="${serviceProvider.functioning()}">
+              <g:message code="label.yes"/>
+            </g:if>
+            <g:else>
+              <span class="not-functioning"><g:message code="label.no"/></span>
+            </g:else>
+          </td>
           <td>
             <a href="${createLink(controller:'serviceProvider', action:'show', id: serviceProvider.id)}" class="btn"><g:message code='label.view'/></a>
           </td>

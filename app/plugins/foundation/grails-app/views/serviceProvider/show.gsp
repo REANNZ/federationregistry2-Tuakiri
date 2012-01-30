@@ -43,9 +43,7 @@
       </div>
 
       <div id="tab-contacts" class="tab-pane">
-        <div id="contacts">
-          <g:render template="/templates/contacts/list" plugin="foundation" model="[host:serviceProvider]" />
-        </div>
+        <g:render template="/templates/contacts/list" plugin="foundation" model="[host:serviceProvider]" />
         <hr>
         <g:render template="/templates/contacts/create" plugin="foundation" model="[host:serviceProvider, contactTypes:contactTypes]" />
       </div>
@@ -62,10 +60,9 @@
             </ul>
 
             <div class="tab-content">
+
               <div id="tab-crypto" class="tab-pane">
-                <div id="certificates">
-                  <g:render template="/templates/certificates/list" plugin="foundation" model="[descriptor:serviceProvider, allowremove:true]" />
-                </div>
+                <g:render template="/templates/certificates/list" plugin="foundation" model="[descriptor:serviceProvider, allowremove:true]" />
                 <hr>
                 <g:render template="/templates/certificates/create" plugin="foundation" model="[descriptor:serviceProvider]"/>
               </div>
@@ -146,26 +143,34 @@
             </div>
 
           </div>
+
         </div>
+
       </div>
 
       <fr:hasAnyPermission in='["descriptor:${serviceProvider.id}:reporting" , "federation:reporting"]'>
         <div id="tab-reports" class="tab-pane">
-          <div id="reporting">
-            <g:render template="/templates/reporting/sp/reports" plugin="reporting" model="[id:serviceProvider.id]" />
-          </div>
+          <g:render template="/templates/reporting/sp/reports" plugin="reporting" model="[id:serviceProvider.id]" />
         </div>
       </fr:hasAnyPermission>
 
       <div id="tab-monitors" class="tab-pane">
-        <div id="monitors">
-          <g:render template="/templates/monitor/list" plugin="foundation" model="[roleDescriptor:serviceProvider]" />
-        </div>
+        <g:render template="/templates/monitor/list" plugin="foundation" model="[roleDescriptor:serviceProvider]" />
         <fr:hasPermission target="descriptor:${serviceProvider.id}:manage:monitors">
           <hr>
           <g:render template="/templates/monitor/create" plugin="foundation" model="[descriptor:serviceProvider]" />
         </fr:hasPermission>
       </div>
+
+      <g:if test="${serviceProvider.approved}">
+        <div id="tab-admins" class="tab-pane">
+          <g:render template="/templates/descriptor/listfulladministration" plugin="foundation" model="[descriptor:serviceProvider, administrators:administrators]" />
+          <fr:hasPermission target="descriptor:${serviceProvider.id}:manage:administrators">
+            <g:render template="/templates/descriptor/searchfulladministration" plugin="foundation" model="[descriptor:serviceProvider]" />
+          </fr:hasPermission>
+        </div>
+      </g:if>
+
     </div>
 
     <r:script>
