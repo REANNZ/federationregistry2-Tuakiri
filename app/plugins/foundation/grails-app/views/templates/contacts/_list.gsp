@@ -1,4 +1,4 @@
-
+<div id="contacts">
 	<g:if test="${host.contacts.size() > 0}">
   	<table class="borderless">
   		<thead>
@@ -29,3 +29,4 @@
 	<g:else>
 		<p><g:message code="fedreg.templates.contacts.noresults" /></p>
 	</g:else>
+</div>
