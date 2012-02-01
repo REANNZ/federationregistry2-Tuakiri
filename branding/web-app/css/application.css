@@ -135,7 +135,7 @@ body header {
   background-color: #495666;
   color: @headFontColor;
   padding-top: 6px;
-  padding-bottom: 6px;
+  padding-bottom: 18px;
 
 
   img {
