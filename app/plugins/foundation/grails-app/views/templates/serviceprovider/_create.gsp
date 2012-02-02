@@ -1,72 +1,12 @@
-<r:script>
-  var certificateValidationEndpoint = "${createLink(controller:'coreUtilities', action:'validateCertificate')}";
-  var knownSPImplEndpoint = "${createLink(controller:'coreUtilities', action:'knownSPImpl')}";
-  
-  var newCertificateValid = false;
-  var knownSPImpl;
-  var currentImpl;
-  
-  $(function() {
-    $.ajax({
-      type: "GET",
-      cache: false,
-      dataType: 'json',
-      url: knownSPImplEndpoint,
-      success: function(res) {
-        knownSPImpl = res;
-        
-        $.each(knownSPImpl, function(key, value) {
-          if(knownSPImpl[key].selected) {
-            currentImpl = key
-            $('<input type="radio" class="currentimpl" name="knownimpls" checked value='+key+'> <strong>' + knownSPImpl[key].displayName + '</strong><br>').appendTo($("#knownimpl"));
-          }
-          else
-            $('<input type="radio" class="currentimpl" name="knownimpls" value='+key+'> <strong>' + knownSPImpl[key].displayName + '</strong><br>').appendTo($("#knownimpl"));
-        });
-        
-        $('input.currentimpl').change(function() {
-          currentImpl = $(this).val();
-          fedreg.configureServiceProviderSAML($('#hostname').val());
-        });
-        },
-        error: function (xhr, ajaxOptions, thrownError) {
-        nimble.growl('error', xhr.responseText);
-        }
-    });
-    
-    $('#hostname').alphanumeric({nocaps:true, ichars:';'});
-
-    $('form').validate({
-      ignore: ":disabled",
-      keyup: false
-    });
-    jQuery.validator.addMethod("validcert", function(value, element, params) { 
-      fedreg.validateCertificate();
-      return valid_certificate; 
-    }, jQuery.format("PEM data invalid"));
-    
-    $('#cert').rules("add", {
-         required: true,
-         validcert: true
-    });
-    
-    $('#hostname').bind('blur',  function() {
-      if( $(this).val().indexOf('/', $(this).val().length - 1) !== -1 && $(this).val().length > 9)
-        $(this).val($(this).val().substring(0, $(this).val().length - 1));
-      
-      fedreg.configureServiceProviderSAML( $(this).val() );
-    });
-  });
-</r:script>
-
 <g:hasErrors>
   <div class="alert-message block-message error">
-    <g:message code="fedreg.templates.service.create.errors" />
-    <br>
-    <strong><g:message code="label.identifiederrors"/></strong>
-    <g:renderErrors bean="${serviceProvider}" as="list" />
-    <g:renderErrors bean="${contact}" as="list"/>
-    <g:renderErrors bean="${entityDescriptor}" as="list"/>
+    <p><strong><g:message code="fedreg.templates.service.create.errors" />
+    <p>
+      <g:message code="label.identifiederrors"/>
+      <g:renderErrors bean="${serviceProvider}" as="list" />
+      <g:renderErrors bean="${contact}" as="list"/>
+      <g:renderErrors bean="${entityDescriptor}" as="list"/>
+    </p>
   </div>
 </g:hasErrors>
 
@@ -410,3 +350,64 @@
   </div>
 
 </form>
+
+<r:script>
+  var certificateValidationEndpoint = "${createLink(controller:'coreUtilities', action:'validateCertificate')}";
+  var knownSPImplEndpoint = "${createLink(controller:'coreUtilities', action:'knownSPImpl')}";
+  
+  var newCertificateValid = false;
+  var knownSPImpl;
+  var currentImpl;
+  
+  $(function() {
+    $.ajax({
+      type: "GET",
+      cache: false,
+      dataType: 'json',
+      url: knownSPImplEndpoint,
+      success: function(res) {
+        knownSPImpl = res;
+        
+        $.each(knownSPImpl, function(key, value) {
+          if(knownSPImpl[key].selected) {
+            currentImpl = key
+            $('<input type="radio" class="currentimpl" name="knownimpls" checked value='+key+'> <strong>' + knownSPImpl[key].displayName + '</strong><br>').appendTo($("#knownimpl"));
+          }
+          else
+            $('<input type="radio" class="currentimpl" name="knownimpls" value='+key+'> <strong>' + knownSPImpl[key].displayName + '</strong><br>').appendTo($("#knownimpl"));
+        });
+        
+        $('input.currentimpl').change(function() {
+          currentImpl = $(this).val();
+          fedreg.configureServiceProviderSAML($('#hostname').val());
+        });
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+        nimble.growl('error', xhr.responseText);
+        }
+    });
+    
+    $('#hostname').alphanumeric({nocaps:true, ichars:';'});
+
+    $('form').validate({
+      ignore: ":disabled",
+      keyup: false
+    });
+    jQuery.validator.addMethod("validcert", function(value, element, params) { 
+      fedreg.validateCertificate();
+      return valid_certificate; 
+    }, jQuery.format("PEM data invalid"));
+    
+    $('#cert').rules("add", {
+         required: true,
+         validcert: true
+    });
+    
+    $('#hostname').bind('blur',  function() {
+      if( $(this).val().indexOf('/', $(this).val().length - 1) !== -1 && $(this).val().length > 9)
+        $(this).val($(this).val().substring(0, $(this).val().length - 1));
+      
+      fedreg.configureServiceProviderSAML( $(this).val() );
+    });
+  });
+</r:script>

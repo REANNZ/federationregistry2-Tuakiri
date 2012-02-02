@@ -27,6 +27,6 @@
   	</table>
 	</g:if>
 	<g:else>
-		<p><g:message code="fedreg.templates.contacts.noresults" /></p>
+		<p class="alert-message block-message warn"><g:message code="fedreg.templates.contacts.noresults" /></p>
 	</g:else>
 </div>

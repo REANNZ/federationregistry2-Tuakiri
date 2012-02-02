@@ -1,11 +1,12 @@
 <g:hasErrors>
 <div class="alert-message block-message error">
-  <g:message code="fedreg.templates.identityprovider.create.errors" />
-  <br>
-  <strong><g:message code="label.identifiederrors"/></strong>
-  <g:renderErrors bean="${identityProvider}" as="list" />
-  <g:renderErrors bean="${contact}" as="list"/>
-  <g:renderErrors bean="${entityDescriptor}" as="list"/>
+  <p><strong><g:message code="fedreg.templates.identityprovider.create.errors" /></strong></p>
+  <p>
+    <g:message code="label.identifiederrors"/>
+    <g:renderErrors bean="${identityProvider}" as="list" />
+    <g:renderErrors bean="${contact}" as="list"/>
+    <g:renderErrors bean="${entityDescriptor}" as="list"/>
+  </p>
 </div>
 </g:hasErrors>
 

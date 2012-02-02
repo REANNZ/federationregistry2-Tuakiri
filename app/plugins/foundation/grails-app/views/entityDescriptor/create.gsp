@@ -1,79 +1,73 @@
-
 <html>
-	<head>
-		<meta name="layout" content="members" />
-		<title><g:message code="fedreg.view.members.entity.create.title" /></title>
-		
-		<r:script>
-			$(function() {	
+  <head>
+    <meta name="layout" content="members" />
+    <title><g:message code="fedreg.view.members.entity.create.title" /></title>
+  </head>
+  <body>
 
-				$('form').validate({
-						success: function(label) {
-							if($(label).next())
-								$(label).next().remove()
-							label.removeClass("error").addClass("icon icon_accept").html("&nbsp;");
-						},
-						keyup: false
-				});
-				$('form').formwizard({ 
-				 	formPluginEnabled: false,
-				 	validationEnabled: true,
-				 	focusFirstInput : true,
-					disableUIStyles: true
-				});
-			});
-		</r:script>
-	</head>
-	<body>
-		<section>
-			<h2><g:message code="fedreg.view.members.entity.create.heading" /></h2>
-			
-			<n:errors bean="${entity}" />
-				
-			<g:form action="save">
-				<g:hiddenField name="contact.id" value="${fr.contactID()}"/>
-				<g:hiddenField name="active" value="true"/>
-				
-				<div class="step" id="basic">
-					<h3><g:message code="fedreg.view.members.entity.create.basicinformation.heading" /></h3>
-					<p>
-						<g:message code="fedreg.view.members.entity.create.basicinformation.details" />
-					</p>
-					<table>
-						<tbody>
-							<tr>
-								<td>
-									<label for="organization.id"><g:message code="label.organization" /></label>
-								</td>
-								<td>
-									<g:select name="organization.id" from="${organizationList.sort{it.displayName}}" optionKey="id" optionValue="displayName" />
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<label for="entity.identifier"><g:message code="label.entitydescriptor" /></label>
-								</td>
-								<td>
-									<g:textField name="entity.identifier" value="${entity.entityID}" size="50" class="required url"/>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-				
-				<div class="step submit_step" id="creationsummary">
-					<h3><g:message code="fedreg.view.members.entity.create.summary.heading" /></h3>
-					<p>
-						<g:message code="fedreg.view.members.entity.create.summary.details" />
-					</p>
-				</div>
-				
-				<nav> 							
-					<input class="navigation_button" id="back" value="Back" type="reset" />
-					<input class="navigation_button" id="next" value="Next" type="submit" />
-				</nav>
-			</g:form>
-			
-		</section>
+    <g:hasErrors>
+      <div class="alert-message block-message error">
+        <p><strong><g:message code="fedreg.view.members.entity.create.errors" /></strong></p>
+        <p>
+          <g:message code="label.identifiederrors"/>
+          <g:renderErrors bean="${entity}" as="list" />
+          <g:renderErrors bean="${contact}" as="list"/>
+        </p>
+      </div>
+    </g:hasErrors>
+
+    <h2><g:message code="fedreg.view.members.entity.create.heading" /></h2>
+
+    <g:form controller="entityDescriptor" action="save" name="entitycreateform" class="validating">
+      <g:hiddenField name="active" value="true"/>
+
+      <div class="row">
+        <div class="span14 offset1">
+          <div id="overview">
+            <p><g:message code="fedreg.view.members.entity.create.overview.details" /></p>
+          </div>
+
+          <hr>
+
+          <div id="basic">
+              <h3>2. <g:message code="fedreg.view.members.entity.create.basicinformation.heading" /></h3>
+              <p><g:message code="fedreg.view.members.entity.create.basicinformation.details" /></p>
+
+            <fieldset class="span12">
+              <div class="clearfix">
+                <label for="organization.id"><g:message code="label.organization" /></label>
+                <div class="input">
+                  <g:select name="organization.id" from="${organizationList.sort{it.displayName}}" optionKey="id" optionValue="displayName" value="${organization?.id}"/>
+                </div>
+              </div>
+
+              <div class="clearfix">
+                <label for="entity.identifier"><g:message code="label.entityid" /></label>
+                <div class="input">
+                  <g:textField name="entity.identifier" value="${entity.entityID}" size="50" class="required"/>
+                </div>    
+              </div>
+          </div>
+
+          <hr>
+
+          <div id="creationsummary">
+            <h3>3. <g:message code="fedreg.view.members.entity.create.summary.heading" /></h3>
+            <p><g:message code="fedreg.view.members.entity.create.summary.details" /></p>
+
+            <div class="row">
+              <div class="offset12">
+                <g:submitButton name="submit" value="Submit" class="btn success"/>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </g:form>
+
+    <r:script>
+      $('form').validate();
+    </r:script>
+
 	</body>
 </html>

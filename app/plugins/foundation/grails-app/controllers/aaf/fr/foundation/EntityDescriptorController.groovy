@@ -38,7 +38,6 @@ class EntityDescriptorController {
       redirect(action: "list")
       return
     }
-    println entity 
     def adminRole = Role.findByName("descriptor-${entity.id}-administrators")
     [entity: entity, contactTypes:ContactType.list(), administrators:adminRole?.subjects]
   }
@@ -63,32 +62,6 @@ class EntityDescriptorController {
     }
   }
   
-  def edit = {
-    if(!params.id) {
-      log.warn "EntityDescriptor ID was not present"
-      flash.type="error"
-      flash.message = message(code: 'fedreg.controllers.namevalue.missing')
-      redirect(action: "list")
-      return
-    }
-    
-    def entityDescriptor = EntityDescriptor.get(params.id)
-    if (!entityDescriptor) {
-      flash.type="error"
-      flash.message = message(code: 'aaf.fr.foundation.entitydescriptor.nonexistant')
-      redirect(action: "list")
-      return
-    } 
-    
-    if(SecurityUtils.subject.isPermitted("descriptor:${entityDescriptor.id}:update")) {
-      [entity: entityDescriptor]
-    }
-    else {
-      log.warn("Attempt to edit $entityDescriptor by $subject was denied, incorrect permission set")
-      response.sendError(403)
-    }   
-  }
-  
   def update = {
     if(!params.id) {
       log.warn "EntityDescriptor ID was not present"
@@ -110,12 +83,14 @@ class EntityDescriptorController {
       def (updated, entityDescriptor) = entityDescriptorService.update(params)
       if(updated) {
         log.info "$subject updated $entityDescriptor"
-        redirect (controller: "entityDescriptor", action: "show", id: entityDescriptor.id)
+        render template:'/templates/entitydescriptor/overview_editable', plugin:'foundation', model:[entity:entityDescriptor]
       } else {
-        flash.type="error"
-        flash.message = message(code: 'aaf.fr.foundation.entitydescriptor.update.validation.error')
-        log.info "$subject failed attempt to update $entityDescriptor"
-        render (view:'edit', model:[entity:entityDescriptor])
+        log.info "$subject failed when attempting update on $entityDescriptor"
+        entityDescriptor.errors.each {
+          log.debug it
+        }
+        response.status = 500
+        return
       }
     }
     else {
@@ -144,7 +119,7 @@ class EntityDescriptorController {
     if(!(entityDescriptor.holdsIDPOnly() || entityDescriptor.holdsSPOnly())) {
       flash.type="error"
       flash.message = message(code: 'aaf.fr.foundation.entitydescriptor.nonstandard')
-      redirect(action: "list")
+      redirect(action: "show", id:entityDescriptor.id)
       return
     }
     
