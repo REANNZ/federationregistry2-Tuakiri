@@ -147,7 +147,6 @@ class BootstrapController {
 			return
 		}
 
-		println "OIOOOXOXOXOXO"
 		[organization: organization]
 	}
 }

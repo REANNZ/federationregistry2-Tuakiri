@@ -12,8 +12,6 @@ class OrganizationContactController {
 	
 	def search = {
 		def contacts
-
-    println params
 			
 		if(!params.givenName && !params.surname && !params.email)
 			contacts = Contact.list()
@@ -86,7 +84,6 @@ class OrganizationContactController {
 	}
 	
 	def delete = {
-    println params
 		if(!params.id) {
 			log.warn "All name/value pairs required for this call were not present"
 			render message(code: 'fedreg.controllers.namevalue.missing')

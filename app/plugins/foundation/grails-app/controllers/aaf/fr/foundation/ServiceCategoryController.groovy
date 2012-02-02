@@ -101,8 +101,6 @@ class ServiceCategoryController {
 				serviceProvider.addToServiceCategories(category)
 				serviceProvider.save()
 				if(serviceProvider.hasErrors()) {
-          println "err"
-          serviceProvider.errors.each { println it }
 					render message(code: 'aaf.fr.foundation.servicecategory.error.adding')
 					response.setStatus(500)
 					return
