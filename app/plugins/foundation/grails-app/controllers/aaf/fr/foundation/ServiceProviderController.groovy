@@ -90,12 +90,14 @@ class ServiceProviderController {
 			response.sendError(500)
 			return
 		}
+    
 		def serviceProvider_ = SPSSODescriptor.get(params.id)
 		if (!serviceProvider_) {
 			log.error "SPSSODescriptor for id ${params.id} does not exist"
       response.sendError(500)
 			return
 		}
+
 		if(SecurityUtils.subject.isPermitted("descriptor:${serviceProvider_.id}:update")) {
 			def (updated, serviceProvider) = ServiceProviderService.update(params)
 			if(updated) {
