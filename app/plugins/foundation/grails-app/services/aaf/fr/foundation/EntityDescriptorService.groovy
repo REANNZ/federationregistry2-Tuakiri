@@ -113,8 +113,8 @@ class EntityDescriptorService {
 		if(!ed)
 			throw new ErronousStateException("Unable to find EntityDescriptor with id $id")
 			
-		def idpService = grailsApplication.mainContext.IdentityProviderService
-		def spService = grailsApplication.mainContext.ServiceProviderService
+		def idpService = grailsApplication.mainContext.identityProviderService
+		def spService = grailsApplication.mainContext.serviceProviderService
 		def aaService = grailsApplication.mainContext.attributeAuthorityDescriptorService
 			
 		ed.idpDescriptors?.each { idpService.archive(it.id) }
