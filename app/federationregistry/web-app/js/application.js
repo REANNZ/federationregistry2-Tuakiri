@@ -223,6 +223,49 @@ fedreg.descriptor_fulladministrator_search = function() {
   });
 }
 
+// Entity Descriptor
+$('.confirm-archive-entitydescriptor').live('click', function() {
+  fedreg.set_button($(this));
+  $("#archive-entitydescriptor-modal").modal('show');
+});
+
+$('.confirm-delete-entitydescriptor').live('click', function() {
+  fedreg.set_button($(this));
+  $("#delete-entitydescriptor-modal").modal('show');
+});
+
+$('.show-edit-entitydescriptor').live('click', function() {
+  $("#overview-entitydescriptor").hide();
+  $("#editor-entitydescriptor").fadeIn();
+});
+
+$('.cancel-edit-entitydescriptor').live('click', function() {
+  $("#editor-entitydescriptor").hide();
+  $("#overview-entitydescriptor").fadeIn();
+});
+
+$('.edit-entitydescriptor').live('click', function() {
+  var target_form = $("#editor-entitydescriptor > form");
+
+  if(target_form.valid()) {
+    data = target_form.serialize();
+    $.ajax({
+      type: "POST",
+      url: updateEntityDescriptorEndpoint,
+      data: data,
+      success: function(res) {
+        var target = $("#overview-entitydescriptor-editable");
+        target.html(res);
+        applyBehaviourTo(target)
+        $("#editor-entitydescriptor").hide();
+        $("#overview-entitydescriptor").fadeIn(); 
+      },
+      error: function (xhr, ajaxOptions, thrownError) {
+      }
+    });
+  }
+});
+
 // Identity Provider
 $('.show-edit-identityprovider').live('click', function() {
   $("#overview-identityprovider").hide();
