@@ -76,24 +76,20 @@ class IdentityProviderController {
 	def update = {
 		if(!params.id) {
 			log.warn "IDPSSODescriptor ID was not present"
-			flash.type="error"
-			flash.message = message(code: 'fedreg.controllers.namevalue.missing')
-			redirect(action: "list")
+			response.sendError(500)
 			return
 		}
 		
 		def identityProvider_ = IDPSSODescriptor.get(params.id)
 		if (!identityProvider_) {
-			flash.type="error"
-			flash.message = message(code: 'aaf.fr.foundation.idpssoroledescriptor.nonexistant')
-			redirect(action: "list")
+      log.warn "IDPSSODescriptor identified by ID ${params.id} was not found"
+			response.sendError(500)
 			return
 		}
+    
 		if(SecurityUtils.subject.isPermitted("descriptor:${identityProvider_.id}:update")) {
-      println "XXX"
 			def (updated, identityProvider) = IdentityProviderService.update(params)
 			if(updated) {
-        println "XXXX222"
 				log.info "$subject updated $identityProvider"
 				render template:'/templates/identityprovider/overview_editable', plugin:'foundation', model:[identityProvider:identityProvider]
 			} else {
