@@ -180,7 +180,7 @@ class EntityDescriptorController {
       return
     }
     
-    if(SecurityUtils.subject.isPermitted("descriptor:${entityDescriptor.id}:archive")) {
+    if(SecurityUtils.subject.isPermitted("descriptor:${entityDescriptor.id}:delete")) {
       entityDescriptorService.delete(entityDescriptor.id)
       
       flash.type="success"
