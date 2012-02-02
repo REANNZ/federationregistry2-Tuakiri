@@ -71,27 +71,10 @@
                     <li class="${actionName == 'listarchived' ? 'active':''}"><g:link controller="entityDescriptor" action="listarchived"><g:message code="label.listarchived"/></g:link></li>
                     </fr:hasPermission>
                     <li class="${actionName in ['create', 'save'] ? 'active':''}"><g:link controller="entityDescriptor" action="create"><g:message code="label.create"/></g:link></li>
-                    <g:if test="${actionName in ['show', 'edit']}">
-                    <li> | </li>
-                    <li><g:message code="fedreg.view.members.entity.show.heading" args="[entity.entityID]"/>: </li>
-                    <li class="${actionName == 'show' ? 'active':''}"><g:link controller="entityDescriptor" action="show" id="${entity.id}"><g:message code="label.view"/></g:link></li>
-                    <fr:hasPermission target="descriptor:${entity.id}:update">
-                      <li class="${actionName == 'edit' ? 'active':''}"><g:link controller="entityDescriptor" action="edit" id="${entity.id}" class="${actionName == 'edit' ? 'active':''}"><g:message code="label.edit"/></g:link></li>
-                    </fr:hasPermission>
-                    <fr:hasPermission target="descriptor:${entity.id}:archive">
-                      <g:if test="${(entity.holdsIDPOnly() || entity.holdsSPOnly() || entity.empty()) && !entity.archived}">
-                        <li>
-                        <n:confirmaction action="\$('#edarchive').submit();" title="${message(code: 'fedreg.templates.entitydescriptor.archive.confirm.title')}" msg="${message(code: 'fedreg.templates.entitydescriptor.archive.confirm.descriptive')}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" label="${message(code: 'label.archive')}" plain="true"/>
-                        </li>
-                      </g:if>
-                    </fr:hasPermission>
+                    <g:if test="${actionName in ['show']}">
+                      <li class="${actionName == 'show' ? 'active':''}"><g:link controller="entityDescriptor" action="show" id="${entity.id}"><g:message code="label.view"/></g:link></li>
                     </g:if>
                   </ul>
-                  <g:if test="${actionName in ['show', 'edit']}">
-                    <g:form controller="entityDescriptor" action="archive" id="${entity.id}" name="edarchive">
-                      <input name="_method" type="hidden" value="delete" />
-                    </g:form>
-                  </g:if>
                 </g:if>
               </fr:hasPermission>
 
@@ -141,6 +124,26 @@
       </nav>
 
       <section>
+
+        <g:if test="${flash.type == 'info'}">
+          <div class="alert-message block-message info">
+            <strong><g:message code="label.info"/></strong>
+            <p>${flash.message}<p>
+          </div>
+        </g:if>
+        <g:if test="${flash.type == 'success'}">
+          <div class="alert-message block-message success">
+            <strong><g:message code="label.success"/></strong>
+            <p>${flash.message}<p>
+          </div>
+        </g:if>
+        <g:if test="${flash.type == 'error'}">
+          <div class="alert-message block-message error">
+            <strong><g:message code="label.error"/></strong>
+            <p>${flash.message}<p>
+          </div>
+        </g:if>
+
         <g:layoutBody/>
       </section>
 

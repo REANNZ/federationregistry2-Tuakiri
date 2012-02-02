@@ -134,7 +134,7 @@ body {
 body header {  
   background-color: #495666;
   color: @headFontColor;
-  padding-top: 6px;
+  padding-top: 12px;
   padding-bottom: 18px;
 
 
