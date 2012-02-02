@@ -25,7 +25,7 @@ class EntityDescriptorService {
 		def organization = Organization.get(params.organization?.id)
 	
 		// Entity Descriptor
-		def entityDescriptor = new EntityDescriptor(approved:false, active: params.active, entityID: params.entity?.identifier, organization: organization)
+		def entityDescriptor = new EntityDescriptor(approved:false, active: params.active, entityID: params.entity?.identifier?.trim(), organization: organization)
 
 		if(!entityDescriptor.validate()) {			
 			entityDescriptor.errors.each {log.warn it}
@@ -70,7 +70,7 @@ class EntityDescriptorService {
 		if(!entityDescriptor)
 			return [false, null]
 		
-		entityDescriptor.entityID = params.entity.identifier
+		entityDescriptor.entityID = params.entity?.identifier?.trim()
 		
 		if(!entityDescriptor.validate()) {			
 			entityDescriptor.errors.each {log.warn it}
