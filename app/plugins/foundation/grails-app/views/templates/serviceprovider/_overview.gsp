@@ -45,8 +45,7 @@
         <th><g:message code="label.archived"/></th>
         <td>
           <g:if test="${serviceProvider.archived}"> 
-            <span class="alert-message warning"><g:message code="label.yes" /></span>
-            <span class="more-info not-in-federation"  rel="twipsy" data-original-title="${g.message(code:'label.warningmetadataarchived')}" data-placement="right"><g:message code="label.no" /></span>
+            <g:message code="label.yes" /> <div class="alert-message block-message warn"><g:message code="label.warningmetadataarchived" /></div>
           </g:if>
           <g:else>
             <g:message code="label.no" /> 
@@ -60,7 +59,7 @@
             <g:message code="label.yes" />
           </g:if>
           <g:else>
-            <span class="more-info not-in-federation" rel="twipsy" data-original-title="${g.message(code:'label.undergoingapproval')}" data-placement="right"><g:message code="label.no" /></span>
+            <g:message code="label.no" /><div class="alert-message block-message error"><g:message code="label.undergoingapproval" /></div>
           </g:else>
         </td>
       </tr>
@@ -68,6 +67,10 @@
         <th><g:message code="label.datecreated" /></th>
         <td>${fieldValue(bean: serviceProvider, field: "dateCreated")}</td>
       </tr>
+      <tr>
+        <th><g:message code="label.lastupdated" /></th>
+        <td>${fieldValue(bean: entity, field: "lastUpdated")}</td>
+      </tr> 
     </tbody>
   </table>
 </div>

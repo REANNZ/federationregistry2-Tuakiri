@@ -56,7 +56,7 @@
         <th><g:message code="label.archived"/></th>
         <td>
           <g:if test="${identityProvider.archived}"> 
-            <g:message code="label.yes" /> <div class="warning"><g:message code="label.warningmetadataarchived" /></div>
+            <g:message code="label.yes" /> <div class="alert-message block-message warn"><g:message code="label.warningmetadataarchived" /></div>
           </g:if>
           <g:else>
             <g:message code="label.no" /> 
@@ -70,7 +70,7 @@
             <g:message code="label.yes" />
           </g:if>
           <g:else>
-            <g:message code="label.no" /> <div class="warning"><g:message code="label.undergoingapproval" /></div>
+            <g:message code="label.no" /> <div class="alert-message block-message error"><g:message code="label.undergoingapproval" /></div>
           </g:else>
         </td>
       </tr>
@@ -89,6 +89,10 @@
         <th><g:message code="label.datecreated" /></th>
         <td>${fieldValue(bean: identityProvider, field: "dateCreated")}</td>
       </tr>
+      <tr>
+        <th><g:message code="label.lastupdated" /></th>
+        <td>${fieldValue(bean: entity, field: "lastUpdated")}</td>
+      </tr> 
     </tbody>
   </table>
 </div>
