@@ -127,6 +127,29 @@ strong.highlight {
   font-weight: bold;
 }
 
+code {
+  color: #333;
+  background-color: #FFE68C;
+  border: 0px;
+  padding: 2px;
+}
+
+span.binding {
+  .rounded;
+  font-size: 0.85em;
+  background-color: #f2f2f2;
+  padding: 2px;
+  margin-top: 2px;
+}
+
+form {
+  padding: 6px;
+}
+
+div.step {
+  margin-top: 12px;
+}
+
 body {
   background-color: #f2f2f2;
 }
