@@ -36,10 +36,10 @@ class EntityDescriptor extends Descriptor  {
 		attributeAuthorityDescriptors(nullable: true)
 		pdpDescriptors(nullable: true)
 		contacts(nullable: true)
-		extensions(nullable: true)
 		dateCreated(nullable:true)
 		lastUpdated(nullable:true)
-  	}
+    extensions(nullable: true, maxSize:2000)
+  }
 
 	static mapping = {
 		tablePerHierarchy false
