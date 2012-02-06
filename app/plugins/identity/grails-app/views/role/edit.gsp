@@ -15,7 +15,8 @@
 		<n:errors bean="${role}"/>
 
 		<g:form method="post" name="editRole" action="update">
-			<input type="hidden" name="id" value="${role?.id.encodeAsHTML()}"/>
+			<input type="hidden"
+ name="id" value="${role?.id.encodeAsHTML()}"/>
 
 			<table>
 				<tbody>

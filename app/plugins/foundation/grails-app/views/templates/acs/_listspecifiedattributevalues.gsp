@@ -1,5 +1,5 @@
 <g:if test="${ra?.values?.size() > 0}">
-  <table class="borderless condensed-table">
+  <table class="table borderless table-condensed">
     <tbody>
       <g:each in="${ra.values.sort{it.id}}" var="val">
         <tr>
@@ -15,7 +15,7 @@
   </table>
 </g:if>
 <g:else>
-  <div class="alert-message block-message error">
+  <div class="alert alert-message alert-danger">
     <g:message code="fedreg.templates.acs.specattributes.no.values.currently.requested" args="[ra.base.name, ra.base.oid]"/>
   </div>
 </g:else>

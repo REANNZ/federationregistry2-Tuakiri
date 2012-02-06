@@ -71,6 +71,7 @@ class EntityDescriptorService {
 			return [false, null]
 		
 		entityDescriptor.entityID = params.entity?.identifier?.trim()
+    entityDescriptor.extensions = params.entity?.extensions
 		
 		if(!entityDescriptor.validate()) {			
 			entityDescriptor.errors.each {log.warn it}

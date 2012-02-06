@@ -1,7 +1,7 @@
 <div id="overview-identityprovider">
   <g:render template="/templates/identityprovider/overview_editable" plugin="foundation" model="[descriptor:identityProvider]" />
   <fr:hasPermission target="descriptor:${identityProvider.id}:update">
-    <a class="show-edit-identityprovider btn info"><g:message code="label.edit"/></a>
+    <a class="show-edit-identityprovider btn btn-info"><g:message code="label.edit"/></a>
   </fr:hasPermission>
 </div>
 <g:render template="/templates/identityprovider/edit" plugin="foundation" model="[descriptor:identityProvider]" />
@@ -56,7 +56,7 @@
         <th><g:message code="label.archived"/></th>
         <td>
           <g:if test="${identityProvider.archived}"> 
-            <g:message code="label.yes" /> <div class="alert-message block-message warn"><g:message code="label.warningmetadataarchived" /></div>
+            <g:message code="label.yes" /> <div class="alert alert-message"><g:message code="label.warningmetadataarchived" /></div>
           </g:if>
           <g:else>
             <g:message code="label.no" /> 
@@ -70,7 +70,7 @@
             <g:message code="label.yes" />
           </g:if>
           <g:else>
-            <g:message code="label.no" /> <div class="alert-message block-message error"><g:message code="label.undergoingapproval" /></div>
+            <g:message code="label.no" /> <div class="alert alert-message alert-danger"><g:message code="label.undergoingapproval" /></div>
           </g:else>
         </td>
       </tr>
@@ -91,7 +91,7 @@
       </tr>
       <tr>
         <th><g:message code="label.lastupdated" /></th>
-        <td>${fieldValue(bean: entity, field: "lastUpdated")}</td>
+        <td>${fieldValue(bean: identityProvider, field: "lastUpdated")}</td>
       </tr> 
     </tbody>
   </table>

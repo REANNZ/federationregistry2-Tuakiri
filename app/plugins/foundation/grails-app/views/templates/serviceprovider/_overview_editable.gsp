@@ -1,5 +1,5 @@
 <div id="overview-serviceprovider-editable">
-  <table class="borderless fixed">
+  <table class="table borderless fixed">
     <tbody>  
       <tr>
         <th><g:message code="label.status"/></th>
@@ -8,7 +8,7 @@
             <g:message code="label.active" />
           </g:if>
           <g:else>
-            <span class="more-info not-in-federation" rel="twipsy" data-original-title="${g.message(code:'label.warningmetadata')}" data-placement="right"><g:message code="label.inactive" /></span>
+            <span class="label label-important"><g:message code="label.inactive" /></span><fr:tooltip code='label.warningmetadata'/>
           </g:else>
         </td>
       </tr> 

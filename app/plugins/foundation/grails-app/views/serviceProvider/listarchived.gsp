@@ -7,7 +7,7 @@
   <body>
 
     <h2><g:message code="fedreg.view.members.serviceprovider.listarchived.heading" /></h2>
-    <table  class="sortable-table">
+    <table class="table sortable-table">
       <thead>
         <tr>
           <th><g:message code="label.serviceprovider" /></th>
@@ -23,7 +23,7 @@
           <td>${fieldValue(bean: serviceProvider, field: "organization.name")}</td>
           <td>${fieldValue(bean: serviceProvider, field: "entityDescriptor.entityID")}</td>
           <td>
-            <a href="${createLink(controller:'SPSSODescriptor', action:'show', id: serviceProvider.id)}" class="btn"><g:message code="label.view"/></a>
+            <a href="${createLink(controller:'serviceProvider', action:'show', id: serviceProvider.id)}" class="btn"><g:message code="label.view"/></a>
           </td>
         </tr>
       </g:each>

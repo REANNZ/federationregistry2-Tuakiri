@@ -1,18 +1,18 @@
 
 <g:if test="${corrupt}">
-	<div class="alert-message block-message error">
+	<div class="alert alert-message alert-danger">
 		<p><g:message code="fedreg.templates.certificates.validation.corrupt" /></p>
 	</div>
 </g:if>
 <g:else>
 	<g:if test="${valid}">
-		<div class="alert-message block-message success">
+		<div class="alert alert-message alert-success">
 	</g:if>
 	<g:else>
-		<div class="alert-message block-message error">
+		<div class="alert alert-message alert-danger">
 	</g:else>
 	
-	<table class="borderless">
+	<table class="table borderless">
 		<tbody>
 			
 			<tr>
@@ -45,7 +45,7 @@
 			</tbody>
 		</table>
 		</div>
-		<div class="alert-message block-message error">
+		<div class="alert alert-message alert-danger">
 			<span><strong><g:message code="fedreg.templates.certificates.validation.errors"/></strong></span>
 				<ol>
 				<g:each in="${certerrors}" var="e">

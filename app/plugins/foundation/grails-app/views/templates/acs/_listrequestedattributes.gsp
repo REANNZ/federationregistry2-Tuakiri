@@ -1,5 +1,5 @@
 <g:if test="${requestedAttributes}">
-  <table class="borderless">
+  <table class="table borderless">
     <thead>
       <tr>
         <th><g:message code="label.attribute" /></th>
@@ -35,11 +35,16 @@
           </td>
           <td> 
             <div>
-              ${fieldValue(bean: ra, field: "isRequired")}
+              <g:if test="${ra.isRequired}">
+                <g:message code="label.yes" />
+              </g:if>
+              <g:else>
+                <g:message code="label.no" />
+              </g:else>
             </div>
           </td>
         </tr>
-        <tr class="editor-ra hidden" data-raid="${ra.id}">
+        <tr class="editor-ra revealable" data-raid="${ra.id}">
         <td>
           <strong>${fieldValue(bean: ra, field: "base.name")}</strong><br>
           <code>oid:${fieldValue(bean: ra, field: "base.oid")}</code>
@@ -89,20 +94,21 @@
             </div>
 
             <fr:hasPermission target="descriptor:${ra.attributeConsumingService.descriptor.id}:attribute:edit">
-            <div class="manage-update-ra hidden" data-raid="${ra.id}">
-              <a class="update-ra btn success" data-raid="${ra.id}" data-acsid="${ra.attributeConsumingService.id}"><g:message code="label.update"/></a>
+            <div class="manage-update-ra revealable" data-raid="${ra.id}">
+              <a class="update-ra btn btn-success" data-raid="${ra.id}" data-acsid="${ra.attributeConsumingService.id}"><g:message code="label.update"/></a>
               <a class="cancel-edit-ra btn"><g:message code="label.cancel"/></a>
             </div>
             </fr:hasPermission>
 
             <g:if test="${specificationAttributes.contains(ra.base)}">
             <fr:hasPermission target="descriptor:${ra.attributeConsumingService.descriptor.id}:attribute:value:add">
-            <div id="newspecattributeval${ra.id}" class="hidden">
+            <div id="newspecattributeval${ra.id}" class="revealable">
               <p>
                 <g:message code="fedreg.templates.acs.specattributes.add.details"/>
               </p>
               <form id="newspecattributedata${ra.id}" class="validating">
-                <input type="hidden" name="id" value="${ra.id}">
+                <input type="hidden"
+ name="id" value="${ra.id}">
                 <table>
                   <tbody>
                     <tr>
@@ -115,7 +121,7 @@
                   </tbody>
                 </table>
               </form>
-              <a class="add-ra-value btn success" data-acsid="${acs.id}" data-raid="${ra.id}"><g:message code="label.add"/></a>
+              <a class="add-ra-value btn btn-success" data-acsid="${acs.id}" data-raid="${ra.id}"><g:message code="label.add"/></a>
               <a class="close-add-ra-value btn" data-raid="${ra.id}"><g:message code="label.close"/></a>
             </div>
             </fr:hasPermission>
@@ -127,7 +133,7 @@
   </table>
 </g:if>
 <g:else>
-  <div class="alert-message block-message info">
+  <div class="alert alert-message alert-info">
     <g:message code="fedreg.templates.acs.reqattributes.not.requested" />
   </div>
 </g:else>

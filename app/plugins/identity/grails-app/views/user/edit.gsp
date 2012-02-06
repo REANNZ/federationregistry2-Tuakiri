@@ -18,8 +18,10 @@
 		<n:errors bean="${subject}"/>
 
 		<g:form action="update" class="editaccount">
-			<input type="hidden" name="id" value="${subject.id}"/>
-			<input type="hidden" name="version" value="${subject.version}"/>
+			<input type="hidden"
+ name="id" value="${subject.id}"/>
+			<input type="hidden"
+ name="version" value="${subject.version}"/>
 
 			<table>
 				<tbody>

@@ -1,5 +1,5 @@
 <g:if test="${entity.idpDescriptors}">
-  <table>
+  <table class="table borderless">
     <thead>
       <tr>
         <th><g:message code="label.name" /></th>
@@ -28,5 +28,5 @@
   </table>
 </g:if>
 <g:else>
-  <p class="alert-message block-message warn"><g:message code="fedreg.view.members.entity.show.no.identityproviders" />
+  <p class="alert alert-message"><g:message code="fedreg.view.members.entity.show.no.identityproviders" />
 </g:else>

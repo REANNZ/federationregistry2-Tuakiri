@@ -1,7 +1,7 @@
 <div id="overview-serviceprovider">
   <g:render template="/templates/serviceprovider/overview_editable" plugin="foundation" model="[descriptor:serviceProvider]" />
   <fr:hasPermission target="descriptor:${serviceProvider.id}:update">
-    <a class="show-edit-serviceprovider btn info"><g:message code="label.edit"/></a>
+    <a class="show-edit-serviceprovider btn btn-info"><g:message code="label.edit"/></a>
   </fr:hasPermission>
 </div>
 <g:render template="/templates/serviceprovider/edit" plugin="foundation" model="[descriptor:serviceProvider]" />
@@ -10,7 +10,7 @@
 
 <div id="internalstate-serviceprovider">
   <h4><g:message code="fedreg.templates.serviceprovider.overview.internalstate" /></h4>
-  <table class="borderless fixed">
+  <table class="table borderless fixed">
     <tbody>
       <tr>
         <th><g:message code="label.organization"/></th>
@@ -45,7 +45,7 @@
         <th><g:message code="label.archived"/></th>
         <td>
           <g:if test="${serviceProvider.archived}"> 
-            <g:message code="label.yes" /> <div class="alert-message block-message warn"><g:message code="label.warningmetadataarchived" /></div>
+            <span class="label label-warning"><g:message code="label.warningmetadataarchived" /></span>
           </g:if>
           <g:else>
             <g:message code="label.no" /> 
@@ -59,7 +59,7 @@
             <g:message code="label.yes" />
           </g:if>
           <g:else>
-            <g:message code="label.no" /><div class="alert-message block-message error"><g:message code="label.undergoingapproval" /></div>
+            <span class="label label-important"><g:message code="label.undergoingapproval" /></span>
           </g:else>
         </td>
       </tr>
@@ -69,7 +69,7 @@
       </tr>
       <tr>
         <th><g:message code="label.lastupdated" /></th>
-        <td>${fieldValue(bean: entity, field: "lastUpdated")}</td>
+        <td>${fieldValue(bean: serviceProvider, field: "lastUpdated")}</td>
       </tr> 
     </tbody>
   </table>

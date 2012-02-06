@@ -7,13 +7,13 @@
 
     <g:each in="${endpoints.sort { it.id }}" status="i" var="ep">
       <div id="endpoint-${ep.id}">
-        <table class="borderless">
+        <table class="table borderless fixed">
           <tbody>
             <tr>
               <th><g:message code="label.status" /></th>
               <td>
-                <div id="endpoint-${ep.id}-active" class="${ep.active ? '':'hidden'}"><g:message code="label.active" /></div>
-                <div id="endpoint-${ep.id}-inactive" class="${ep.active ? 'hidden':''} not-in-federation"><g:message code="label.inactive" /></div>
+                <div id="endpoint-${ep.id}-active" class="${ep.active ? '':'revealable'}"><g:message code="label.active" /></div>
+                <div id="endpoint-${ep.id}-inactive" class="${ep.active ? 'revealable':''} not-in-federation"><g:message code="label.inactive" /></div>
               </td>
             </tr>
             <tr>
@@ -94,6 +94,6 @@
     </g:each>
   </g:if>
   <g:else>
-    <p class="alert-message block-message error"><g:message code="fedreg.templates.endpoints.noresults"/></p>
+    <p class="alert alert-message alert-danger"><g:message code="fedreg.templates.endpoints.noresults"/></p>
   </g:else>
 </div>

@@ -1,7 +1,7 @@
 
 <p><g:message code="fedreg.templates.servicecategories.descriptive" /></p>
   <g:if test="${categories}">
-  <table class="borderless">
+  <table class="table borderless">
     <thead>
       <tr>
         <th><g:message code="label.name" /></th>
@@ -26,13 +26,13 @@
   </g:if>
   <g:else>
     <div>
-      <p class="alert-message block-message warn"><g:message code="fedreg.templates.servicecategories.noresults"/></p>
+      <p class="alert alert-message"><g:message code="fedreg.templates.servicecategories.noresults"/></p>
     </div>
   </g:else>
 
 <div id="unlink-category-modal" class="modal hide fade">
   <div class="modal-header">
-    <a href="#" class="close">×</a>
+    <a class="close close-modal">&times;</a>
     <h3><g:message code="fedreg.templates.servicecategories.remove.confirm.title"/></h3>
   </div>
   <div class="modal-body">
@@ -40,6 +40,6 @@
   </div>
   <div class="modal-footer">
     <a class="btn close-modal"><g:message code="label.cancel" /></a>
-    <a class="btn danger unlink-category"><g:message code="label.delete" /></a>
+    <a class="btn btn-danger unlink-category"><g:message code="label.delete" /></a>
   </div>
 </div>

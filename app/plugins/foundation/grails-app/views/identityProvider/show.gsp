@@ -9,9 +9,9 @@
     <h2><g:message code="fedreg.view.members.identityprovider.show.heading" args="[identityProvider.displayName]"/></h2>
 
     <g:if test="${!identityProvider.functioning()}">
-      <div class="alert-message block-message error">
-        <p><g:message code="fedreg.view.members.identityprovider.show.notfunctioning"/></p>
-      </div>
+      <p class="alert alert-message alert-danger">
+        <g:message code="fedreg.view.members.identityprovider.show.notfunctioning"/>
+      </p>
     </g:if>
       
     <ul class="tabs">
@@ -57,42 +57,44 @@
           </div>
 
           <div id="tab-endpoints" class="tab-pane">
-            <ul class="tabs">
-              <li class="active"><a href="#tab-sso" ><g:message code="label.ssoservices" /></a></li>
-              <li><a href="#tab-ars" ><g:message code="label.artifactresolutionservices" /></a></li>
-              <g:if test="${identityProvider.collaborator}">
-                <li><a href="#tab-attrs" ><g:message code="label.attributeservices" /></a></li>
-              </g:if>
-              <li><a href="#tab-slo" ><g:message code="label.sloservices" /></a></li>
-            </ul>
-            
-            <div class="tab-content">
-              <div id="tab-sso" class="tab-pane">
-                <g:render template="/templates/endpoints/list" plugin="foundation" model="[endpoints:identityProvider.singleSignOnServices, endpointType:'singleSignOnServices', minEndpoints:1]" />
-                <hr>
-                <g:render template="/templates/endpoints/create" plugin="foundation" model="[descriptor:identityProvider, endpointType:'singleSignOnServices']" />      
-              </div>
-
-              <div id="tab-ars" class="tab-pane">
-                <g:render template="/templates/endpoints/list" plugin="foundation" model="[endpoints:identityProvider.artifactResolutionServices, endpointType:'artifactResolutionServices']" />
-                <hr>
-                <g:render template="/templates/endpoints/create" plugin="foundation" model="[descriptor:identityProvider, endpointType:'artifactResolutionServices', indexed:true]" />
-              </div>
-
-              <div id="tab-slo" class="tab-pane">
-                <g:render template="/templates/endpoints/list" plugin="foundation" model="[endpoints:identityProvider.singleLogoutServices, endpointType:'singleLogoutServices']" />
-                <hr>
-                <g:render template="/templates/endpoints/create" plugin="foundation" model="[descriptor:identityProvider, endpointType:'singleLogoutServices']" />
-              </div>
-
-              <g:if test="${identityProvider.collaborator}">
-                <div id="tab-attrs" class="tab-pane">
-                  <g:render template="/templates/endpoints/list" plugin="foundation" model="[endpoints:identityProvider.collaborator.attributeServices, endpointType:'attributeServices']" />
+            <div class="tabbable tabs-left">
+              <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab-sso" data-toggle="tab"><g:message code="label.ssoservices" /></a></li>
+                <li><a href="#tab-ars" data-toggle="tab"><g:message code="label.artifactresolutionservices" /></a></li>
+                <g:if test="${identityProvider.collaborator}">
+                  <li><a href="#tab-attrs" data-toggle="tab"><g:message code="label.attributeservices" /></a></li>
+                </g:if>
+                <li><a href="#tab-slo" data-toggle="tab"><g:message code="label.sloservices" /></a></li>
+              </ul>
+              
+              <div class="tab-content">
+                <div id="tab-sso" class="tab-pane">
+                  <g:render template="/templates/endpoints/list" plugin="foundation" model="[endpoints:identityProvider.singleSignOnServices, endpointType:'singleSignOnServices', minEndpoints:1]" />
                   <hr>
-                  <g:render template="/templates/endpoints/create" plugin="foundation" model="[descriptor:identityProvider.collaborator, endpointType:'attributeServices']" />
+                  <g:render template="/templates/endpoints/create" plugin="foundation" model="[descriptor:identityProvider, endpointType:'singleSignOnServices']" />      
                 </div>
-              </g:if>
-              <g:render template="/templates/endpoints/modals" plugin="foundation" />
+
+                <div id="tab-ars" class="tab-pane">
+                  <g:render template="/templates/endpoints/list" plugin="foundation" model="[endpoints:identityProvider.artifactResolutionServices, endpointType:'artifactResolutionServices']" />
+                  <hr>
+                  <g:render template="/templates/endpoints/create" plugin="foundation" model="[descriptor:identityProvider, endpointType:'artifactResolutionServices', indexed:true]" />
+                </div>
+
+                <div id="tab-slo" class="tab-pane">
+                  <g:render template="/templates/endpoints/list" plugin="foundation" model="[endpoints:identityProvider.singleLogoutServices, endpointType:'singleLogoutServices']" />
+                  <hr>
+                  <g:render template="/templates/endpoints/create" plugin="foundation" model="[descriptor:identityProvider, endpointType:'singleLogoutServices']" />
+                </div>
+
+                <g:if test="${identityProvider.collaborator}">
+                  <div id="tab-attrs" class="tab-pane">
+                    <g:render template="/templates/endpoints/list" plugin="foundation" model="[endpoints:identityProvider.collaborator.attributeServices, endpointType:'attributeServices']" />
+                    <hr>
+                    <g:render template="/templates/endpoints/create" plugin="foundation" model="[descriptor:identityProvider.collaborator, endpointType:'attributeServices']" />
+                  </div>
+                </g:if>
+                <g:render template="/templates/endpoints/modals" plugin="foundation" />
+              </div>
             </div>
           </div>
 
@@ -121,7 +123,7 @@
               <div id="descriptormetadata"></div>
             </g:if>
             <g:else>
-              <div class="alert-message block-message warn">
+              <div class="alert alert-message">
                 <g:message code="fedreg.view.members.identityprovider.show.metadata.unavailable.details" />
               </div>
             </g:else>

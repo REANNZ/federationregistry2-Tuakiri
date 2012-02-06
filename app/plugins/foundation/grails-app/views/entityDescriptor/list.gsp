@@ -9,7 +9,7 @@
 
     <h2><g:message code="fedreg.view.members.entity.list.heading" /></h2>
 
-    <table  class="sortable-table">
+    <table class="table borderless sortable-table">
       <thead>
         <tr>
           <th><g:message code="label.entitydescriptor" /></th>

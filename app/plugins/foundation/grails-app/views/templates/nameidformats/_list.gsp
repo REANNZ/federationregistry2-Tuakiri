@@ -1,6 +1,6 @@
 <div id="nameidformats">
   <g:if test="${nameIDFormats}">
-    <table class="borderless">
+    <table class="table borderless">
       <thead>
         <tr>
           <th><g:message code="label.supportedformat" /></th>
@@ -25,7 +25,7 @@
   </g:if>
   <g:else>
     <div>
-      <p class="alert-message block-message error"><g:message code="fedreg.templates.nameidformats.noresults"/></p>
+      <p class="alert alert-message alert-danger"><g:message code="fedreg.templates.nameidformats.noresults"/></p>
     </div>
   </g:else>
 </div>

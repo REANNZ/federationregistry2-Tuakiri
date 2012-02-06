@@ -9,23 +9,23 @@
     <h2><g:message code="fedreg.view.members.serviceprovider.show.heading" args="[serviceProvider.displayName]"/></h2>
 
     <g:if test="${!serviceProvider.functioning()}">
-          <p class="alert-message block-message error"><g:message code="fedreg.view.members.serviceprovider.show.notfunctioning"/></p>
+      <p class="alert alert-message alert-danger">
+        <g:message code="fedreg.view.members.serviceprovider.show.notfunctioning"/>
+      </p>
     </g:if>
     
-    <ul class="tabs">
-      <li class="active"><a href="#tab-overview"><g:message code="label.overview" /></a></li>
-      <li><a href="#tab-categories"><g:message code="label.categories" /></a></li>
-      <li><a href="#tab-contacts"><g:message code="label.contacts" /></a></li>
-      <li><a href="#tab-saml"><g:message code="label.saml" /></a></li>
+    <ul class="nav nav-tabs">
+      <li class="active"><a href="#tab-overview" data-toggle="tab"><g:message code="label.overview" /></a></li>
+      <li><a href="#tab-categories" data-toggle="tab"><g:message code="label.categories" /></a></li>
+      <li><a href="#tab-contacts" data-toggle="tab"><g:message code="label.contacts" /></a></li>
+      <li><a href="#tab-saml" data-toggle="tab"><g:message code="label.saml" /></a></li>
       
       <fr:hasAnyPermission in='["descriptor:${serviceProvider.id}:reporting" , "federation:reporting"]'>
-        <li><a href="#tab-reports" ><g:message code="label.reporting" /></a></li>
+        <li><a href="#tab-reports" data-toggle="tab"><g:message code="label.reporting" /></a></li>
       </fr:hasAnyPermission>
-      <li><a href="#tab-monitors"><g:message code="label.monitoring" /></a></li>
+      <li><a href="#tab-monitors" data-toggle="tab"><g:message code="label.monitoring" /></a></li>
       
-      <g:if test="${serviceProvider.approved}">
-        <li><a href="#tab-admins"><g:message code="label.administrators" /></a></li>
-      </g:if>
+
     </ul>
 
     <div class="tab-content">
@@ -49,65 +49,66 @@
       </div>
 
       <div id="tab-saml" class="tab-pane">
-        <div class="row">
-          <div class="span14 offset1">
-            <ul class="tabs">
-              <li class="active"><a href="#tab-crypto"><g:message code="label.crypto" /></a></li>
-              <li><a href="#tab-endpoints"><g:message code="label.endpoints" /></a></li>
-              <li><a href="#tab-attributes"><g:message code="label.attributeconsumingservices" /></a></li>
-              <li><a href="#tab-nameidformats"><g:message code="label.supportednameidformats" /></a></li>
-              <li><a href="#tab-metadata" ><g:message code="label.metadata" /></a></li>
+          <div class="tabbable">
+            <ul class="nav nav-tabs">
+              <li class="active"><a href="#tab-crypto" data-toggle="tab"><g:message code="label.crypto" /></a></li>
+              <li><a href="#tab-endpoints" data-toggle="tab"><g:message code="label.endpoints" /></a></li>
+              <li><a href="#tab-attributes" data-toggle="tab"><g:message code="label.attributeconsumingservices" /></a></li>
+              <li><a href="#tab-nameidformats" data-toggle="tab"><g:message code="label.supportednameidformats" /></a></li>
+              <li><a href="#tab-metadata"data-toggle="tab"><g:message code="label.metadata" /></a></li>
             </ul>
 
             <div class="tab-content">
 
-              <div id="tab-crypto" class="tab-pane">
+              <div id="tab-crypto" class="tab-pane active">
                 <g:render template="/templates/certificates/list" plugin="foundation" model="[descriptor:serviceProvider, allowremove:true]" />
                 <hr>
                 <g:render template="/templates/certificates/create" plugin="foundation" model="[descriptor:serviceProvider]"/>
               </div>
 
               <div id="tab-endpoints" class="tab-pane">
-                <ul class="tabs">
-                  <li class="active"><a href="#tab-acs">Assertion</a></li>
-                  <li><a href="#tab-ars">Artifact</a></li>
-                  <li><a href="#tab-slo">Logout</a></li>
-                  <li><a href="#tab-drs">Discovery</a></li>
-                  <li><a href="#tab-nim">Name ID</a></li>
-                </ul>
+                <div class="tabbable tabs-left">
+                  <ul class="nav nav-tabs">
+                    <li class="active"><a href="#tab-acs" data-toggle="tab">Assertion</a></li>
+                    <li><a href="#tab-ars" data-toggle="tab">Artifact</a></li>
+                    <li><a href="#tab-slo" data-toggle="tab">Logout</a></li>
+                    <li><a href="#tab-drs" data-toggle="tab">Discovery</a></li>
+                    <li><a href="#tab-nim" data-toggle="tab">Name ID</a></li>
+                  </ul>
 
-                <div class="tab-content">
-                  <div id="tab-acs" class="tab-pane">
-                    <g:render template="/templates/endpoints/list" plugin="foundation" model="[endpoints:serviceProvider.assertionConsumerServices, allowremove:true, endpointType:'assertionConsumerServices']" />
-                    <hr>
-                    <g:render template="/templates/endpoints/create" plugin="foundation" model="[descriptor:serviceProvider, endpointType:'assertionConsumerServices', containerID:'assertionconsumerendpoints', indexed:true]" />
+                  <div class="tab-content span8">
+                    <div id="tab-acs" class="tab-pane active">
+                      <g:render template="/templates/endpoints/list" plugin="foundation" model="[endpoints:serviceProvider.assertionConsumerServices, allowremove:true, endpointType:'assertionConsumerServices']" />
+                      <hr>
+                      <g:render template="/templates/endpoints/create" plugin="foundation" model="[descriptor:serviceProvider, endpointType:'assertionConsumerServices', containerID:'assertionconsumerendpoints', indexed:true]" />
+                    </div>
+
+                    <div id="tab-ars" class="tab-pane">
+                      <g:render template="/templates/endpoints/list" plugin="foundation" model="[endpoints:serviceProvider.artifactResolutionServices, allowremove:true, endpointType:'artifactResolutionServices']" />
+                      <hr>
+                      <g:render template="/templates/endpoints/create" plugin="foundation" model="[descriptor:serviceProvider, endpointType:'artifactResolutionServices', containerID:'artifactendpoints', indexed:true]" />
+                    </div>
+
+                    <div id="tab-slo" class="tab-pane">
+                      <g:render template="/templates/endpoints/list" plugin="foundation" model="[endpoints:serviceProvider.singleLogoutServices, allowremove:true, endpointType:'singleLogoutServices']" />
+                      <hr>
+                      <g:render template="/templates/endpoints/create" plugin="foundation" model="[descriptor:serviceProvider, endpointType:'singleLogoutServices', containerID:'singlelogoutendpoints']" />
+                    </div>
+
+                    <div id="tab-drs" class="tab-pane">
+                      <g:render template="/templates/endpoints/list" plugin="foundation" model="[endpoints:serviceProvider.discoveryResponseServices, allowremove:true, endpointType:'discoveryResponseServices']" />
+                      <hr>
+                      <g:render template="/templates/endpoints/create" plugin="foundation" model="[descriptor:serviceProvider, endpointType:'discoveryResponseServices', indexed:true]" />
+                    </div>
+
+                    <div id="tab-nim" class="tab-pane">
+                      <g:render template="/templates/endpoints/list" plugin="foundation" model="[endpoints:serviceProvider.manageNameIDServices, allowremove:true, endpointType:'manageNameIDServices']" />
+                      <hr>
+                      <g:render template="/templates/endpoints/create" plugin="foundation" model="[descriptor:serviceProvider, endpointType:'manageNameIDServices']" />
+                    </div>
+
+                    <g:render template="/templates/endpoints/modals" plugin="foundation" />
                   </div>
-
-                  <div id="tab-ars" class="tab-pane">
-                    <g:render template="/templates/endpoints/list" plugin="foundation" model="[endpoints:serviceProvider.artifactResolutionServices, allowremove:true, endpointType:'artifactResolutionServices']" />
-                    <hr>
-                    <g:render template="/templates/endpoints/create" plugin="foundation" model="[descriptor:serviceProvider, endpointType:'artifactResolutionServices', containerID:'artifactendpoints', indexed:true]" />
-                  </div>
-
-                  <div id="tab-slo" class="tab-pane">
-                    <g:render template="/templates/endpoints/list" plugin="foundation" model="[endpoints:serviceProvider.singleLogoutServices, allowremove:true, endpointType:'singleLogoutServices']" />
-                    <hr>
-                    <g:render template="/templates/endpoints/create" plugin="foundation" model="[descriptor:serviceProvider, endpointType:'singleLogoutServices', containerID:'singlelogoutendpoints']" />
-                  </div>
-
-                  <div id="tab-drs" class="tab-pane">
-                    <g:render template="/templates/endpoints/list" plugin="foundation" model="[endpoints:serviceProvider.discoveryResponseServices, allowremove:true, endpointType:'discoveryResponseServices']" />
-                    <hr>
-                    <g:render template="/templates/endpoints/create" plugin="foundation" model="[descriptor:serviceProvider, endpointType:'discoveryResponseServices', indexed:true]" />
-                  </div>
-
-                  <div id="tab-nim" class="tab-pane">
-                    <g:render template="/templates/endpoints/list" plugin="foundation" model="[endpoints:serviceProvider.manageNameIDServices, allowremove:true, endpointType:'manageNameIDServices']" />
-                    <hr>
-                    <g:render template="/templates/endpoints/create" plugin="foundation" model="[descriptor:serviceProvider, endpointType:'manageNameIDServices']" />
-                  </div>
-
-                  <g:render template="/templates/endpoints/modals" plugin="foundation" />
                 </div>
               </div>
 
@@ -134,18 +135,14 @@
                   <div id="descriptormetadata"></div>
                 </g:if>
                 <g:else>
-                  <div class="alert-message block-message warn">
+                  <div class="alert alert-message">
                     <g:message code="fedreg.view.members.serviceprovider.show.metadata.unavailable.details" />
                   </div>
                 </g:else>
               </div>
 
             </div>
-
           </div>
-
-        </div>
-
       </div>
 
       <fr:hasAnyPermission in='["descriptor:${serviceProvider.id}:reporting" , "federation:reporting"]'>

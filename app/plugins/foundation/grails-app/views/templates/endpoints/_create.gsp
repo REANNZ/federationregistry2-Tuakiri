@@ -4,60 +4,61 @@
   <%@page import="aaf.fr.foundation.SamlURIType" %>
 
   <div id="add-${endpointType}">
-    <a class="show-create-endpoint btn info" data-type="${endpointType}"><g:message code="label.addendpoint"/></a>
+    <a class="show-create-endpoint btn btn-info" data-type="${endpointType}"><g:message code="label.addendpoint"/></a>
   </div>
 
-  <div id="new-${endpointType}" class="hidden">
+  <div id="new-${endpointType}" class="revealable">
     <h4><g:message code="fedreg.templates.endpoints.add.heading"/></h4>
-    <form id="new${endpointType}data" class="validating span8">
+    <form id="new${endpointType}data" class="form-horizontal validating">
       <fieldset>
-        <input type="hidden" name="endpointType" value="${endpointType}">
+        <input type="hidden"
+ name="endpointType" value="${endpointType}">
 
-        <div class="clearfix">
+        <div class="control-group">
           <label for="binding"><g:message code="label.binding"/></label>
-          <div class="input">
-            <g:select name="binding" from="${SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding)}" optionKey="id" optionValue="uri"/>
+          <div class="controls">
+            <g:select name="binding" from="${SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding)}" optionKey="id" optionValue="uri" class="span4"/>
             <fr:tooltip code='fedreg.help.endpoint.binding' />
           </div>
         </div>
 
-        <div class="clearfix">
+        <div class="control-group">
           <label for="location"><g:message code="label.location"/></label>
-          <div class="input">
-            <input name="location" type="text" class="required url" size="60"/>
+          <div class="controls">
+            <input name="location" type="text" class="required url span4"/>
             <fr:tooltip code='fedreg.help.endpoint.location' />
           </div>
         </div>
 
         <g:if test="${resloc}">
-          <div class="clearfix">
+          <div class="control-group">
             <label for="responselocation"><g:message code="label.responselocation"/></label>
-            <div class="input">
-              <input name="responselocation" type="text" class="easyinput" size="60"/>
+            <div class="controls">
+              <input name="responselocation" type="text" class="span4"/>
             </div>
           </div>
         </g:if>
 
         <g:if test="${indexed}">
-          <div class="clearfix">
+          <div class="control-group">
             <label for="index"><g:message code="label.index" /></label>
-            <div class="input">
-              <input name="samlindex" type="text" class="required number" size="2" />
+            <div class="controls">
+              <input name="samlindex" type="text" class="required number span1" />
               <fr:tooltip code='fedreg.help.endpoint.index' />
             </div>
           </div>
         </g:if>
 
-        <div class="clearfix">
+        <div class="control-group">
           <label for="active"><g:message code="label.active"/></label>
-          <div class="input">
+          <div class="controls">
             <g:checkBox name="active" value="true" />
             <fr:tooltip code='fedreg.help.endpoint.active' />
           </div>
         </div>
 
-        <div class="input">
-          <a class="create-endpoint btn success" data-type="${endpointType}"><g:message code="label.add"/></a>
+        <div class="form-actions">
+          <a class="create-endpoint btn btn-success" data-type="${endpointType}"><g:message code="label.add"/></a>
           <a class="cancel-create-endpoint btn" data-type="${endpointType}"><g:message code="label.cancel"/></a>
         </div>
 

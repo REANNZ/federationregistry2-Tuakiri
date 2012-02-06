@@ -1,14 +1,15 @@
 
-<div id="connectivityreport" class="hidden reportdata">
+<div id="connectivityreport" class="revealable reportdata">
 	<div class="description">
 		<h4 id="connectivitytitle"></h4>
 		<p><g:message code="fedreg.templates.reports.serviceprovider.connectivity.description"/></p>
 
 		<div class="reportrefinement">
-			<div class="reportrefinementinput hidden">
+			<div class="reportrefinementinput revealable">
 				<form id='connectivityrefinement'>
 					<h5><g:message code="fedreg.templates.reports.serviceprovider.connectivity.refinement.title"/> ( <a href="#" onClick="$('#connectivitycomponents :unchecked').attr('checked', true); return false;"><g:message code="label.addallchecks" /></a> | <a href="#" onClick="$('#connectivitycomponents :checked').attr('checked', false); return false;"><g:message code="label.removeallchecks" /></a> )</h5>
-					<input type="hidden" name='activeidp' value='0'/>
+					<input type="hidden"
+ name='activeidp' value='0'/>
 			
 					<span id="connectivitycomponents" class="reportrefinementcomponents">
 					</span>
@@ -29,7 +30,7 @@
 
 </div>
 
-<div id="connectivityreportnodata" class="hidden reportdata alert-message block-message warn">
+<div id="connectivityreportnodata" class="revealable reportdata alert alert-message">
 	<p><em><g:message code="fedreg.templates.reports.nodata.description"/></em></p>
 </div>	
 

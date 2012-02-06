@@ -1,7 +1,7 @@
 
   <h4>Contacts matching search query</h4>
 	<g:if test="${contacts}">
-		<table class="borderless">
+		<table class="table borderless">
 			<thead>
 				<tr>
 					<th><g:message code="label.givenname" /></th>
@@ -26,7 +26,7 @@
 			</tbody>
 		</table>
 
-    <div>
+    <div class="form-actions">
       <a class="btn search-for-contact"><g:message code="label.refinesearch" /></a>
       <a class="btn cancel-search-for-contact"><g:message code="label.close" /></a>
     </div>

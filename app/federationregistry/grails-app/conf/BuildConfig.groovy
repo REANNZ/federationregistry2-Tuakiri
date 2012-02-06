@@ -1,11 +1,11 @@
 
 // Local Plugins
 
-grails.plugin.location.identity="../plugins/identity"
-grails.plugin.location.foundation="../plugins/foundation"
-grails.plugin.location.reporting="../plugins/reporting"
-grails.plugin.location.workflow="../plugins/workflow"
-grails.plugin.location.metadata="../plugins/metadata"
+grails.plugin.location.identity = "../plugins/identity"
+grails.plugin.location.foundation = "../plugins/foundation"
+grails.plugin.location.reporting = "../plugins/reporting"
+grails.plugin.location.workflow = "../plugins/workflow"
+grails.plugin.location.metadata = "../plugins/metadata"
 
 grails.project.class.dir = "target/classes"
 grails.project.test.class.dir = "target/test-classes"

@@ -1,5 +1,8 @@
 package fedreg.host
 
+import aaf.fr.foundation.AttributeBase
+import aaf.fr.foundation.AttributeCategory
+
 /**
  * Provides some reusable tags for the FR user interface
  *
@@ -7,16 +10,12 @@ package fedreg.host
  */
 class FedRegTagLib {
 
-    static namespace = "fr"
+  static namespace = "fr"
 
-	def tooltip = { attrs ->
-		def msg = g.message(code:attrs.code)
-		def src = g.resource()
-		
-		out << r.img(dir:'images', file:'help.png', plugin:'federationregistry', title:msg, width:'16px', height:'16px', rel:'twipsy', 'data-placement':'right')
+  def tooltip = { attrs ->
+    def msg = g.message(code:attrs.code)
+    def src = g.resource()
+    
+    out << r.img(dir:'images', file:'help.png', plugin:'federationregistry', title:msg, width:'16px', height:'16px', rel:'twipsy', 'data-placement':'right')
     }
-
-	def working = {
-		out << "<div id='working'>${r.img(plugin:'federationregistry', dir:'images', file:'spinner.gif', width:'20px', height:'20px', style:'vertical-align: middle')}<br/>${g.message(code:'label.working')}</div>"
-	}
 }

@@ -8,7 +8,8 @@
 			<div class="reportrefinementinput revealable">
 				<form id='totalsrefinement'>
 					<h5><g:message code="fedreg.templates.reports.serviceprovider.totals.refinement.title"/> ( <a href="#" onClick="$('#totalscomponents :unchecked').attr('checked', true); return false;"><g:message code="label.addallchecks" /></a> | <a href="#" onClick="$('#totalscomponents :checked').attr('checked', false); return false;"><g:message code="label.removeallchecks" /></a> )</h5>
-					<input type="hidden" name='activeidp' value='0'/>
+					<input type="hidden"
+ name='activeidp' value='0'/>
 			
 					<span id="totalscomponents" class="reportrefinementcomponents">
 					</span>
@@ -44,7 +45,7 @@
 	</div>
 </div>
 
-<div id="totalsreportnodata" class="revealable reportdata alert-message block-message warn">
+<div id="totalsreportnodata" class="revealable reportdata alert alert-message">
 	<p><em><g:message code="fedreg.templates.reports.nodata.description"/></em></p>
 </div>
 

@@ -1,6 +1,6 @@
 <div id="contacts">
 	<g:if test="${host.contacts.size() > 0}">
-  	<table class="borderless">
+  	<table class="table borderless">
   		<thead>
   			<tr>
   				<th><g:message code="label.name" /></th>
@@ -27,6 +27,6 @@
   	</table>
 	</g:if>
 	<g:else>
-		<p class="alert-message block-message warn"><g:message code="fedreg.templates.contacts.noresults" /></p>
+		<p class="alert alert-message"><g:message code="fedreg.templates.contacts.noresults" /></p>
 	</g:else>
 </div>

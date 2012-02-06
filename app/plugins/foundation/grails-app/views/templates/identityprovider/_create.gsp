@@ -1,5 +1,5 @@
 <g:hasErrors>
-<div class="alert-message block-message error">
+<div class="alert alert-message alert-danger">
   <p><strong><g:message code="fedreg.templates.identityprovider.create.errors" /></strong></p>
   <p>
     <g:message code="label.identifiederrors"/>
@@ -29,23 +29,23 @@
         <p><g:message code="fedreg.templates.identityprovider.create.contact.details" /></p>
         
         <fieldset class="span12">
-          <div class="clearfix">
+          <div class="control-group">
           <label for="contact.givenName"><g:message code="label.givenname" /></label>
-            <div class="input">
+            <div class="controls">
               <g:textField name="contact.givenName"  size="50" class="required" value="${contact?.givenName ?: fr.subject()?.givenName}"/>
             </div>
           </div>
 
-          <div class="clearfix">
+          <div class="control-group">
           <label for="contact.surname"><g:message code="label.surname" /></label>
-            <div class="input">
+            <div class="controls">
               <g:textField name="contact.surname"  size="50" class="required" value="${contact?.surname ?: fr.subject()?.surname}"/>
             </div>
           </div>
 
-          <div class="clearfix">
+          <div class="control-group">
             <label for="contact.email"><g:message code="label.email" /></label>
-            <div class="input">
+            <div class="controls">
               <g:textField name="contact.email"  size="50" class="required email" value="${contact?.email  ?: fr.subject()?.email}"/>
             </div>
           </div>
@@ -59,25 +59,25 @@
           <p><g:message code="fedreg.templates.identityprovider.create.basicinformation.details" /></p>
 
         <fieldset class="span12">
-          <div class="clearfix">
+          <div class="control-group">
             <label for="organization.id"><g:message code="label.organization" /></label>
-            <div class="input">
+            <div class="controls">
               <g:select name="organization.id" from="${organizationList.sort{it.displayName}}" optionKey="id" optionValue="displayName" value="${organization?.id}"/>
             </div>
           </div>
 
-          <div class="clearfix">
+          <div class="control-group">
             <label for="idp.displayName"><g:message code="label.displayname" /></label>
-            <div class="input">
+            <div class="controls">
               <g:hiddenField name="aa.displayName" value=""/>
               <g:textField name="idp.displayName"  size="50" class="required" value="${identityProvider?.displayName}"/>
               <fr:tooltip code='fedreg.help.identityprovider.displayname' />
             </div>    
           </div>
 
-          <div class="clearfix">
+          <div class="control-group">
             <label for="idp.description"><g:message code="label.description" /></label>
-            <div class="input">
+            <div class="controls">
               <g:hiddenField name="aa.description" />
               <g:textArea name="idp.description"  class="required" rows="8" cols="36" value="${identityProvider?.description}"/>
               <fr:tooltip code='fedreg.help.identityprovider.description' />
@@ -101,21 +101,21 @@
 
           <div class="row">
             <div class="span4 offset12">
-              <a href="#" class="btn info" onClick="$('#samlbasicmode').hide(); $('#samladvancedmode').fadeIn(); return false;"><g:message code="fedreg.templates.identityprovider.create.saml.known.switch" /></a>
+              <a href="#" class="btn btn-info" onClick="$('#samlbasicmode').hide(); $('#samladvancedmode').fadeIn(); return false;"><g:message code="fedreg.templates.identityprovider.create.saml.known.switch" /></a>
             </div>
           </div>
 
           <fieldset class="span12">
-            <div class="clearfix">
+            <div class="control-group">
               <label for="knownimpl"><g:message code="label.implementation" /></label>
-              <div class="input">
+              <div class="controls">
                 <span id="knownimpl"></span>
               </div>
             </div>
 
-            <div class="clearfix">
+            <div class="control-group">
               <label for="hostname"><g:message code="label.host" /></label>
-              <div class="input">
+              <div class="controls">
                 <g:textField name="hostname" size="50" class="url" value="${hostname}"/>
                 <fr:tooltip code='fedreg.help.identityprovider.hostname' />
               </div>
@@ -123,38 +123,38 @@
           </fieldset>
         </div>
         
-        <div id="samladvancedmode" class="hidden">
+        <div id="samladvancedmode" class="revealable">
           <h4><g:message code="fedreg.templates.identityprovider.create.saml.advanced.heading" /></h4>
           <p><g:message code="fedreg.templates.identityprovider.create.saml.advanced.descriptive" /></p>
 
           <div class="row">
             <div class="span4 offset12">
-              <a href="#" class="btn info" onClick="$('#samladvancedmode').hide(); $('#samlbasicmode').fadeIn(); return false;"><g:message code="fedreg.templates.identityprovider.create.saml.advanced.switch" /></a>
+              <a href="#" class="btn btn-info" onClick="$('#samladvancedmode').hide(); $('#samlbasicmode').fadeIn(); return false;"><g:message code="fedreg.templates.identityprovider.create.saml.advanced.switch" /></a>
             </div>
           </div>
 
           <fieldset>
-            <div class="clearfix">
+            <div class="control-group">
               <label for="entity.identifier"><g:message code="label.entityid" /></label>
-              <div class="input">
+              <div class="controls">
                 <g:textField name="entity.identifier" size="64" class="required url" value="${entityDescriptor?.entityID}"/>
                 <fr:tooltip code='fedreg.help.identityprovider.entitydescriptor' />
               </div>
             </div>
           </fieldset>
           <fieldset>
-            <div class="clearfix">
+            <div class="control-group">
               <label for="idp.post"><g:message code="label.httppostendpoint" /></label>
-              <div class="input">
+              <div class="controls">
                 <g:textField name="idp.post" size="64" class="required url" value="${httpPost?.location}"/>
                 <fr:tooltip code='fedreg.help.identityprovider.authpost' />
                 <br><span class="binding"><strong><g:message code="label.binding" /></strong>: SAML:2.0:bindings:HTTP-POST</span>
               </div>
             </div>
 
-            <div class="clearfix">
+            <div class="control-group">
               <label for="idp.redirect"><g:message code="label.httpredirectendpoint" /></label>
-              <div class="input">
+              <div class="controls">
                 <g:textField name="idp.redirect" size="64" class="required url" value="${httpRedirect?.location}"/>
                 <fr:tooltip code='fedreg.help.identityprovider.authredirect' />
                 <br><span class="binding"><strong><g:message code="label.binding" /></strong>: SAML:2.0:bindings:HTTP-Redirect</span>
@@ -162,9 +162,9 @@
             </div>
           </fieldset>
           <fieldset>
-            <div class="clearfix">
+            <div class="control-group">
               <label for="idp.artifact"><g:message code="label.soapartifactendpoint" /></label>
-              <div class="input">
+              <div class="controls">
                 <g:textField name="idp.artifact" size="64" class="required url" value="${soapArtifact?.location}"/>
 
                 <span class="index">Index:</span>
@@ -175,10 +175,10 @@
             </div>
           </fieldset>
           <fieldset>
-            <div class="clearfix">
+            <div class="control-group">
               <label for="aa.attributeservice"><g:message code="label.soapatrributequeryendpoint" /></label>
               
-              <div class="input">
+              <div class="controls">
                 <g:textField name="aa.attributeservice" size="64" class="required url" value="${soapAttributeService?.location}"/>
                 <fr:tooltip code='fedreg.help.identityprovider.aasoap' />
                 <br><span class="binding"><strong><g:message code="label.binding" /></strong>: SAML:2.0:bindings:SOAP</span>
@@ -196,9 +196,9 @@
         <p><g:message code="fedreg.templates.identityprovider.create.scope.example" /></p>
 
         <fieldset>
-          <div class="clearfix">
+          <div class="control-group">
               <label for="scope"><g:message code="label.scope" /></label>
-              <div class="input">
+              <div class="controls">
                 <g:textField name="idp.scope" size="50" class="required" value="${scope}"/>
                 <fr:tooltip code='fedreg.help.identityprovider.scope' />
               </div>
@@ -213,9 +213,9 @@
         <p><g:message code="fedreg.templates.identityprovider.create.crypto.details" /></p>
 
         <fieldset>
-          <div class="clearfix">
+          <div class="control-group">
               <label for="newcertificatedata"><g:message code="label.certificate" /></label>
-              <div class="input">
+              <div class="controls">
                 <div id="newcertificatedetails">
                 </div>
                 <g:hiddenField name="idp.crypto.sig" value="${true}" />
@@ -262,7 +262,7 @@
 
         <div class="row">
           <div class="offset12">
-            <g:submitButton name="submit" value="Submit" class="btn success"/>
+            <g:submitButton name="submit" value="Submit" class="btn btn-success"/>
           </div>
         </div>
       </div>

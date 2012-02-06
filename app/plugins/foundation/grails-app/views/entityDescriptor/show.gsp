@@ -9,21 +9,18 @@
     <h2><g:message code="fedreg.view.members.entity.show.heading" args="[entity.entityID]"/></h2>
 
     <g:if test="${!entity.functioning()}">
-      <div class="alert-message block-message error">
-        <p><g:message code="fedreg.view.members.entity.show.notfunctioning"/></p>
-      </div>
+      <p class="alert alert-message alert-danger">
+        <g:message code="fedreg.view.members.entity.show.notfunctioning"/>
+      </p>
     </g:if>
 
-    <ul class="tabs">
-      <li class="active"><a href="#tab-overview"><g:message code="label.overview" /></a></li>
-      <li><a href="#tab-contacts"><g:message code="label.contacts" /></a></li>
-      <li><a href="#tab-idp"><g:message code="label.identityproviders" /></a></li>
-      <li><a href="#tab-sp"><g:message code="label.serviceproviders" /></a></li>
+    <ul class="nav nav-tabs">
+      <li class="active"><a href="#tab-overview" data-toggle="tab"><g:message code="label.overview" /></a></li>
+      <li><a href="#tab-contacts" data-toggle="tab"><g:message code="label.contacts" /></a></li>
+      <li><a href="#tab-idp" data-toggle="tab"><g:message code="label.identityproviders" /></a></li>
+      <li><a href="#tab-sp" data-toggle="tab"><g:message code="label.serviceproviders" /></a></li>
       
-      <li><a href="#tab-admins"><g:message code="label.administrators" /></a></li>
-      <g:if test="${entity.extensions}">
-        <li><a href="#tab-ext"><g:message code="label.extensions" /></a></li>
-      </g:if>
+      <li><a href="#tab-admins" data-toggle="tab"><g:message code="label.administrators" /></a></li>
     </ul>
 
     <div class="tab-content">
@@ -44,14 +41,6 @@
       <div id="tab-sp" class="tab-pane">
         <g:render template="/templates/entitydescriptor/sp_list" plugin="foundation" model="[entity:entity]" />
       </div>
-
-      <g:if test="${entity.extensions}">
-        <div id="tab-ext" class="tab-pane">
-          <pre class="metadata">  
-            ${fieldValue(bean: entity, field: "extensions")}
-          </pre>
-        </div>
-      </g:if>
 
     </div>
 

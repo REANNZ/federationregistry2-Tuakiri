@@ -1,6 +1,6 @@
 <div id="supported-attributes">
   <g:if test="${attrs}">
-  <table>
+  <table class="table">
   	<thead>
   		<tr>
   			<th><g:message code="label.attribute" /></th>
@@ -29,7 +29,7 @@
   </g:if>
   <g:else>
   	<div>
-  		<p class="alert-message block-message warn"><g:message code="fedreg.templates.attributes.noresults"/></p>
+  		<p class="alert alert-message"><g:message code="fedreg.templates.attributes.noresults"/></p>
   	</div>
   </g:else>
 </div>

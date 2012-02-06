@@ -1,8 +1,10 @@
 <div id="overview-entitydescriptor">
   <g:render template="/templates/entitydescriptor/overview_editable" plugin="foundation" model="[entity:entity]" />
   <fr:hasPermission target="descriptor:${entity.id}:update">
-    <a class="show-edit-entitydescriptor btn info"><g:message code="label.edit"/></a>
-    <a class="confirm-archive-entitydescriptor btn"><g:message code="label.archive"/></a>
+    <a class="show-edit-entitydescriptor btn btn-info"><g:message code="label.edit"/></a>
+    <g:if test="${!entity.archived}">
+      <a class="confirm-archive-entitydescriptor btn"><g:message code="label.archive"/></a>
+    </g:if>
     <a class="confirm-delete-entitydescriptor btn"><g:message code="label.delete"/></a>
   </fr:hasPermission>
 </div>
@@ -11,7 +13,7 @@
 
 <div id="internalstate-entitydescriptor">
   <h4><g:message code="fedreg.templates.entitydescriptor.overview.internalstate" /></h4>
-  <table class="borderless fixed">
+  <table class="table borderless fixed">
     <tbody>
       <tr>
         <th><g:message code="label.organization"/></th>
@@ -24,7 +26,7 @@
             <g:message code="label.active" />
           </g:if>
           <g:else>
-            <g:message code="label.inactive" /> <div class="alert-message block-message error"><g:message code="label.warningmetadata" /></div>
+            <span class="label label-important"><g:message code="label.inactive" /></span><fr:tooltip code='label.warningmetadata'/>
           </g:else>
         </td>
       </tr>
@@ -32,7 +34,7 @@
         <th><g:message code="label.archived"/></th>
         <td>
           <g:if test="${entity.archived}"> 
-            <g:message code="label.yes" /><div class="alert-message block-message warn"><g:message code="label.warningmetadataarchived" /></div>
+            <span class="label label-warning"><g:message code="label.warningmetadataarchived" /></span>
           </g:if>
           <g:else>
             <g:message code="label.no" /> 
@@ -46,7 +48,7 @@
             <g:message code="label.yes" />
           </g:if>
           <g:else>
-            <g:message code="label.no" /> <div class="alert-message block-message error"><g:message code="label.warningmetadata" /></div>
+            <span class="label label-important"><g:message code="label.undergoingapproval" /></span>
           </g:else>
         </td>
       </tr> 

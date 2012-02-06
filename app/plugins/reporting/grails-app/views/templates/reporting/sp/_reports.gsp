@@ -1,29 +1,17 @@
 <div id="reporting">
   <div class="reportingsupported">
-    <form id="reportrequirements" class="validating form-stacked centered">
+    <form id="reportrequirements" class="validating form-inline centered">
       <div class="row">
-        <div class="clearfix">
-          <label for="day"><g:message code="label.day" /></label>
-          <div class="input">
-            <input name="day" size="2" class="number span1"/> <fr:tooltip code='fedreg.help.report.day'/>
-          </div>
-        </div>
+        <label for="day"><g:message code="label.day" /></label>
+        <input name="day" size="2" class="number span1"/><fr:tooltip code='fedreg.help.report.day'/>
 
-        <div class="clearfix">
-          <label for="month"><g:message code="label.month" /></label>
-          <div class="input">
-            <input name="month" size="2" class="number span1"/> <fr:tooltip code='fedreg.help.report.month'/>
-          </div>
-        </div>
+        <label for="month"><g:message code="label.month" /></label>
+        <input name="month" size="2" class="number span1"/><fr:tooltip code='fedreg.help.report.month'/>
 
-        <div class="clearfix">
-          <label for="year"><g:message code="label.year" /></label>
-          <div class="input">
-            <input name="year" size="4"  class="required number span2"/> <fr:tooltip code='fedreg.help.report.year'/>
-          </div>
-        </div>
+        <label for="year"><g:message code="label.year" /></label>
+        <input name="year" size="4"  class="required number span2"/> <fr:tooltip code='fedreg.help.report.year'/>
       </div>
-      <div class="row">
+      <div class="row" style="padding-top: 6px;">
         <select name="reporttype" class="reporttype">
             <option value="sessions"><g:message code="label.sessions" /></option>
             <option value="connections"><g:message code="label.connections" /></option>

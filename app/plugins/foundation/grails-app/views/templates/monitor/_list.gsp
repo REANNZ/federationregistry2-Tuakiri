@@ -1,6 +1,6 @@
 <div id="monitors">
   <g:if test="${roleDescriptor.monitors.size() > 0}">
-  	<table class="borderless">
+  	<table class="table borderless">
   		<thead>
   			<tr>
   				<th><g:message code="label.type"/></th>
@@ -35,6 +35,6 @@
   	</table>
   </g:if>
   <g:else>
-  	<p class="alert-message block-message warn"><g:message code="fedreg.templates.monitor.none"/></p>
+  	<p class="alert alert-message"><g:message code="fedreg.templates.monitor.none"/></p>
   </g:else>
 </div>

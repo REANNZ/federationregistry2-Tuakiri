@@ -241,7 +241,7 @@
         <h2>Login</h2>
 
         <g:form action="signin" name="signin">
-          <input type="hidden" name="targetUri" value="${targetUri}"/>
+          <input type="revealable" name="targetUri" value="${targetUri}"/>
 
           <fieldset>
             <label for="username" class="append-1"><g:message code="label.username" /></label>

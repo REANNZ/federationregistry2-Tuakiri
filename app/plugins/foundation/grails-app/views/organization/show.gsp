@@ -24,7 +24,7 @@
 			<h2><g:message code="fedreg.view.members.organization.show.heading" args="[organization.displayName]"/></h2>
 
       <g:if test="${!organization.functioning()}">
-        <div class="alert-message block-message error">
+        <div class="alert alert-message alert-danger">
           <p><g:message code="fedreg.view.members.organization.show.notfunctioning"/></p>
         </div>
       </g:if>

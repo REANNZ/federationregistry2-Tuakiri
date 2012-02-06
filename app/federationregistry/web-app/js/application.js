@@ -11,10 +11,8 @@ $(function() {
   applyBehaviourTo(document);
 });
 
-applyBehaviourTo = function(scope) {
-  $('.tabs', scope).tabs();
-  
-  $("[rel=twipsy]", scope).twipsy({offset:3}); 
+applyBehaviourTo = function(scope) {  
+  $("[rel=twipsy]", scope).tooltip({offset:3}); 
 
   $('form > .validating', scope).validate({
     ignore: ":disabled",
@@ -22,7 +20,7 @@ applyBehaviourTo = function(scope) {
   });
 
   $('.revealable', scope).hide();
-  $('.hidden', scope).hide();
+  //$('.hidden', scope).hide();
 
   if((Modernizr.svg))
     $('.reportingunsupported').hide();
@@ -35,9 +33,12 @@ $(".close-modal").click(function () {
   fedreg.hide_modals();
   fedreg.reset_button();
 });
+$(".modal").on('hidden', function(){
+  fedreg.reset_button();
+});
 $('.modal').bind('shown', function () {
   $('.btn', $(this)).removeAttr('disabled');
-})
+});
 fedreg.hide_modals = function() {
   $(".modal.in").modal('hide');
 };
@@ -62,7 +63,7 @@ $(document).ajaxComplete(function(event, request, settings){
 });
 
 // Descriptor Metadata
-$('.load-descriptor-metadata').live('click',function() {
+$(document).on('click', '.load-descriptor-metadata', function() {
   $.ajax({
     type: "GET",
     cache: false,
@@ -224,27 +225,27 @@ fedreg.descriptor_fulladministrator_search = function() {
 }
 
 // Entity Descriptor
-$('.confirm-archive-entitydescriptor').live('click', function() {
+$(document).on('click', '.confirm-archive-entitydescriptor', function() {
   fedreg.set_button($(this));
   $("#archive-entitydescriptor-modal").modal('show');
 });
 
-$('.confirm-delete-entitydescriptor').live('click', function() {
+$(document).on('click', '.confirm-delete-entitydescriptor', function() {
   fedreg.set_button($(this));
   $("#delete-entitydescriptor-modal").modal('show');
 });
 
-$('.show-edit-entitydescriptor').live('click', function() {
+$(document).on('click', '.show-edit-entitydescriptor', function() {
   $("#overview-entitydescriptor").hide();
   $("#editor-entitydescriptor").fadeIn();
 });
 
-$('.cancel-edit-entitydescriptor').live('click', function() {
+$(document).on('click', '.cancel-edit-entitydescriptor', function() {
   $("#editor-entitydescriptor").hide();
   $("#overview-entitydescriptor").fadeIn();
 });
 
-$('.edit-entitydescriptor').live('click', function() {
+$(document).on('click', '.edit-entitydescriptor', function() {
   var target_form = $("#editor-entitydescriptor > form");
 
   if(target_form.valid()) {
@@ -267,17 +268,17 @@ $('.edit-entitydescriptor').live('click', function() {
 });
 
 // Identity Provider
-$('.show-edit-identityprovider').live('click', function() {
+$(document).on('click', '.show-edit-identityprovider', function() {
   $("#overview-identityprovider").hide();
   $("#editor-identityprovider").fadeIn();
 });
 
-$('.cancel-edit-identityprovider').live('click', function() {
+$(document).on('click', '.cancel-edit-identityprovider', function() {
   $("#editor-identityprovider").hide();
   $("#overview-identityprovider").fadeIn();
 });
 
-$('.edit-identityprovider').live('click', function() {
+$(document).on('click', '.edit-identityprovider', function() {
   var target_form = $("#editor-identityprovider > form");
 
   if(target_form.valid()) {
@@ -300,17 +301,17 @@ $('.edit-identityprovider').live('click', function() {
 });
 
 // Service Provider
-$('.show-edit-serviceprovider').live('click', function() {
+$(document).on('click', '.show-edit-serviceprovider', function() {
   $("#overview-serviceprovider").hide();
   $("#editor-serviceprovider").fadeIn();
 });
 
-$('.cancel-edit-serviceprovider').live('click', function() {
+$(document).on('click', '.cancel-edit-serviceprovider', function() {
   $("#editor-serviceprovider").hide();
   $("#overview-serviceprovider").fadeIn();
 });
 
-$('.edit-serviceprovider').live('click', function() {
+$(document).on('click', '.edit-serviceprovider', function() {
   var target_form = $("#editor-serviceprovider > form");
 
   if(target_form.valid()) {
@@ -333,7 +334,7 @@ $('.edit-serviceprovider').live('click', function() {
 });
 
 // Key Descriptor
-$('.add-new-certificate').live('click', function(entity) {
+$(document).on('click', '.add-new-certificate', function(entity) {
   fedreg.set_button($(this));
   var entity = $(this).attr('data-entity');
   fedreg.keyDescriptor_verify(entity);
@@ -357,13 +358,13 @@ $('.add-new-certificate').live('click', function(entity) {
   }
 });
 
-$('.confirm-delete-certificate').live('click', function() {
+$(document).on('click', '.confirm-delete-certificate', function() {
   fedreg.set_button($(this));
   delete_certificate = $(this).attr('data-certificate');
   $("#delete-certificate-modal").modal('show');
 });
 
-$('.delete-certificate').live('click', function() {
+$(document).on('click', '.delete-certificate', function() {
   fedreg.hide_modals();
   var data = "id=" + delete_certificate;
   $.ajax({
@@ -427,14 +428,14 @@ fedreg.validateCertificate = function() {
 var delete_contact;
 var link_contact;
 
-$('.search-for-contact').live('click',function() {
+$(document).on('click', '.search-for-contact', function() {
   var p = $(this).parents('.search-contacts');
   p.children('.add-contact').hide();
   p.children('.potential-contacts').hide();
   p.children('.search-contacts-form').fadeIn(); 
 });
 
-$('.cancel-search-for-contact').live('click', function() {
+$(document).on('click', '.cancel-search-for-contact', function() {
   var p = $(this).parents('.search-contacts');
   p.children('.potential-contacts').hide();
   p.children('.search-contacts-form').hide();
@@ -464,7 +465,7 @@ $('.submit-search-for-contact').click(function() {
   });
 });
 
-$('.confirm-link-contact').live('click', function(contactID, name, email) {
+$(document).on('click', '.confirm-link-contact', function(contactID, name, email) {
   fedreg.set_button($(this));
   link_contact = $(this).attr('data-contact');
   $("#contactnameconfirmation").html($(this).attr('data-name'));
@@ -473,7 +474,7 @@ $('.confirm-link-contact').live('click', function(contactID, name, email) {
   $("#link-contact-modal").modal('show');
 });
 
-$('.link-contact').live('click', function(contactType) {
+$(document).on('click', '.link-contact', function(contactType) {
   fedreg.hide_modals();
   var data = "contactID=" + link_contact + "&contactType=" + $('#contactselectedtype').val()
   $.ajax({
@@ -488,13 +489,13 @@ $('.link-contact').live('click', function(contactType) {
   });
 });
 
-$('.confirm-delete-contact').live('click', function() {
+$(document).on('click', '.confirm-delete-contact', function() {
   fedreg.set_button($(this));
   delete_contact = $(this).attr('data-contact');
   $("#unlink-contact-modal").modal('show');
 });
 
-$('.delete-contact').live('click', function() {
+$(document).on('click', '.delete-contact', function() {
   fedreg.hide_modals();
   var data = "id=" + delete_contact;
   $.ajax({
@@ -526,7 +527,7 @@ fedreg.contact_list = function() {
 };
 
 // Endpoint
-$('.confirm-makedefault-endpoint').live('click', function() {
+$(document).on('click', '.confirm-makedefault-endpoint', function() {
   fedreg.set_button($(this));
   makedefault_endpoint = $(this).attr('data-id');
   container_endpoint = $(this).attr('data-container');
@@ -534,20 +535,20 @@ $('.confirm-makedefault-endpoint').live('click', function() {
   $("#makedefault-endpoint-modal").modal('show');
 });
 
-$('.confirm-toggle-endpoint').live('click', function() {
+$(document).on('click', '.confirm-toggle-endpoint', function() {
   fedreg.set_button($(this));
   toggle_endpoint = $(this).attr('data-id');
   $("#toggle-endpoint-modal").modal('show');
 });
 
-$('.confirm-delete-endpoint').live('click', function() {
+$(document).on('click', '.confirm-delete-endpoint', function() {
   fedreg.set_button($(this));
   delete_endpoint = $(this).attr('data-id');
   type_endpoint = $(this).attr('data-type');
   $("#delete-endpoint-modal").modal('show');
 });
 
-$('.toggle-endpoint').live('click', function() {
+$(document).on('click', '.toggle-endpoint', function() {
   fedreg.hide_modals();
   var data = "id=" + toggle_endpoint;
   $.ajax({
@@ -570,7 +571,7 @@ $('.toggle-endpoint').live('click', function() {
   });
 });
 
-$('.delete-endpoint').live('click', function() {
+$(document).on('click', '.delete-endpoint', function() {
   fedreg.hide_modals();
   var data = "id=" + delete_endpoint + "&endpointType=" + type_endpoint;
   $.ajax({
@@ -585,7 +586,7 @@ $('.delete-endpoint').live('click', function() {
   });
 });
 
-$('.makedefault-endpoint').live('click', function() {
+$(document).on('click', '.makedefault-endpoint', function() {
   fedreg.hide_modals();
   var data = "id=" + makedefault_endpoint + "&endpointType=" + type_endpoint;
   $.ajax({
@@ -600,14 +601,14 @@ $('.makedefault-endpoint').live('click', function() {
   });
 });
 
-$('.show-create-endpoint').live('click', function() {
+$(document).on('click', '.show-create-endpoint', function() {
   type_endpoint = $(this).attr('data-type');
 
   $('#add-' + type_endpoint).hide();
   $('#new-' + type_endpoint).fadeIn();
 });
 
-$('.create-endpoint').live('click', function() {
+$(document).on('click', '.create-endpoint', function() {
   fedreg.set_button($(this));
   type_endpoint = $(this).attr('data-type');
   var target_form = $('#new' + type_endpoint + 'data')
@@ -626,14 +627,14 @@ $('.create-endpoint').live('click', function() {
   } else { fedreg.reset_button(); }
 });
 
-$('.cancel-create-endpoint').live('click', function() {
+$(document).on('click', '.cancel-create-endpoint', function() {
   type_endpoint = $(this).attr('data-type');
 
   $('#new-' + type_endpoint).hide();
   $('#add-' + type_endpoint).fadeIn();
 });
 
-$('.edit-endpoint').live('click', function() {
+$(document).on('click', '.edit-endpoint', function() {
   fedreg.set_button($(this));
   edit_endpoint = $(this).attr('data-id');
   type_endpoint = $(this).attr('data-type');
@@ -654,12 +655,12 @@ $('.edit-endpoint').live('click', function() {
   });
 });
 
-$('.cancel-edit-endpoint').live('click', function() {
+$(document).on('click', '.cancel-edit-endpoint', function() {
   $('#endpoint-'+edit_endpoint+'-editor').remove();
   $("#endpoint-"+edit_endpoint).fadeIn();
 });
 
-$('.update-endpoint').live('click', function() {
+$(document).on('click', '.update-endpoint', function() {
   fedreg.set_button($(this));
   update_endpoint = $(this).attr('data-id');
   type_endpoint = $(this).attr('data-type');
@@ -698,7 +699,7 @@ fedreg.endpoint_list = function(endpointType) {
 };
 
 // Attribute Consuming Services
-$('.edit-ra').live('click', function() {
+$(document).on('click', '.edit-ra', function() {
   fedreg.set_button($(this));
   raID = $(this).attr('data-raid');
   manage_ra = $('.manage-ra[data-raid=' + raID +']');
@@ -714,11 +715,11 @@ $('.edit-ra').live('click', function() {
   fedreg.reset_button();
 });
 
-$('.cancel-edit-ra').live('click', function() {
+$(document).on('click', '.cancel-edit-ra', function() {
   fedreg.close_ra_editor();
 });
 
-$('.update-ra').live('click', function() {
+$(document).on('click', '.update-ra', function() {
   fedreg.set_button($(this));  
   raID = $(this).attr('data-raid');
   acsID = $(this).attr('data-acsid');
@@ -730,14 +731,14 @@ $('.update-ra').live('click', function() {
   }
 });
 
-$('.show-create-ra').live('click', function() {
+$(document).on('click', '.show-create-ra', function() {
   acsID = $(this).attr('data-acsid');
 
   $('#addattribute' + acsID).hide();
   $('#newattribute' + acsID).fadeIn();
 });
 
-$('.create-ra').live('click', function() {
+$(document).on('click', '.create-ra', function() {
   fedreg.set_button($(this));
 
   acsID = $(this).attr('data-acsid');
@@ -760,14 +761,14 @@ $('.create-ra').live('click', function() {
   } else { fedreg.reset_button(); }
 });
 
-$('.cancel-create-ra').live('click', function() {
+$(document).on('click', '.cancel-create-ra', function() {
   acsID = $(this).attr('data-acsid');
 
   $('#newattribute' + acsID).hide();
   $('#addattribute' + acsID).fadeIn();
 });
 
-$('.confirm-delete-ra').live('click', function() {
+$(document).on('click', '.confirm-delete-ra', function() {
   fedreg.set_button($(this));
   acsID = $(this).attr('data-acsid');
   raID = $(this).attr('data-raid');
@@ -775,7 +776,7 @@ $('.confirm-delete-ra').live('click', function() {
   $("#delete-ra-modal").modal('show');
 });
 
-$('.delete-ra').live('click', function() {
+$(document).on('click', '.delete-ra', function() {
   fedreg.hide_modals();
   var data = "raid=" + raID;
   $.ajax({
@@ -791,7 +792,7 @@ $('.delete-ra').live('click', function() {
   });
 });
 
-$('.add-ra-value').live('click', function() {
+$(document).on('click', '.add-ra-value', function() {
   fedreg.set_button($(this));
 
   raID = $(this).attr('data-raid');
@@ -818,7 +819,7 @@ $('.add-ra-value').live('click', function() {
   } else { fedreg.reset_button(); }
 });
 
-$('.show-add-ra-value').live('click', function() {
+$(document).on('click', '.show-add-ra-value', function() {
   raID = $(this).attr('data-raid');
   manage_ra = $('.manage-ra[data-raid=' + raID +']');
 
@@ -826,13 +827,13 @@ $('.show-add-ra-value').live('click', function() {
   $("#newspecattributeval" + raID).fadeIn();
 });
 
-$('.close-add-ra-value').live('click', function() {
+$(document).on('click', '.close-add-ra-value', function() {
   raID = $(this).attr('data-raid');
   $("#newspecattributeval" + raID).hide();
   manage_ra.fadeIn();
 });
 
-$('.confirm-delete-ra-value').live('click', function() {
+$(document).on('click', '.confirm-delete-ra-value', function() {
   fedreg.set_button($(this));
   acsID = $(this).attr('data-acsid');
   raID = $(this).attr('data-raid');
@@ -841,7 +842,7 @@ $('.confirm-delete-ra-value').live('click', function() {
   $("#delete-ra-value-modal").modal('show');
 });
 
-$('.delete-ra-value').live('click', function() {
+$(document).on('click', '.delete-ra-value', function() {
   fedreg.hide_modals();
   var data = "id=" + raID + "&valueid=" + raValueID;
   $.ajax({
@@ -919,17 +920,17 @@ fedreg.acs_reqattribute_list_values = function(raID) {
 };
 
 // Name ID Formats
-$('.show-add-nameid').live('click', function() {
+$(document).on('click', '.show-add-nameid', function() {
   $("#addnameidformat").hide();
   $("#newnameidformat").fadeIn();
 });
 
-$('.cancel-add-nameid').live('click', function() {
+$(document).on('click', '.cancel-add-nameid', function() {
   $("#newnameidformat").hide();
   $("#addnameidformat").fadeIn();
 });
 
-$('.add-nameid').live('click', function() {
+$(document).on('click', '.add-nameid', function() {
   var data = $("#newnameidformatdata").serialize();
   $.ajax({
     type: "POST",
@@ -944,14 +945,14 @@ $('.add-nameid').live('click', function() {
   });  
 });
 
-$('.confirm-delete-nameid').live('click', function() {
+$(document).on('click', '.confirm-delete-nameid', function() {
   fedreg.set_button($(this)); 
   formatID = $(this).attr('data-formatid');
 
   $("#delete-nameid-modal").modal('show'); 
 });
 
-$('.delete-nameid').live('click', function() {
+$(document).on('click', '.delete-nameid', function() {
   fedreg.hide_modals();
   var data = "formatID=" + formatID;
   $.ajax({
@@ -986,7 +987,7 @@ fedreg.nameIDFormat_list = function() {
 // Service Categories
 var delete_category;
 
-$('.link-new-category').live('click', function() {
+$(document).on('click', '.link-new-category', function() {
   fedreg.set_button($(this));
   var data = $("#newservicecategorydata").serialize();
   $.ajax({
@@ -1002,13 +1003,13 @@ $('.link-new-category').live('click', function() {
   });
 });
 
-$('.confirm-unlink-category').live('click', function() {
+$(document).on('click', '.confirm-unlink-category', function() {
   fedreg.set_button($(this));
   delete_category = $(this).attr('data-category');
   $("#unlink-category-modal").modal('show');
 });
 
-$('.unlink-category').live('click', function() {
+$(document).on('click', '.unlink-category', function() {
   fedreg.hide_modals();
   var data = "categoryID=" + delete_category;
   $.ajax({
@@ -1039,17 +1040,17 @@ fedreg.serviceCategory_list = function() {
 };
 
 // Attributes
-$('.show-add-attribute').live('click', function() {
+$(document).on('click', '.show-add-attribute', function() {
   $('#add-attribute').hide();
   $('#new-attribute').fadeIn();
 });
 
-$('.cancel-add-attribute').live('click', function() {
+$(document).on('click', '.cancel-add-attribute', function() {
   $('#new-attribute').hide();
   $('#add-attribute').fadeIn();
 });
 
-$('.add-attribute').live('click', function() {
+$(document).on('click', '.add-attribute', function() {
   fedreg.set_button($(this));
   var data = $("#newattributedata").serialize();
   $.ajax({
@@ -1065,13 +1066,13 @@ $('.add-attribute').live('click', function() {
   });
 });
 
-$('.confirm-delete-attribute').live('click', function() {
+$(document).on('click', '.confirm-delete-attribute', function() {
   fedreg.set_button($(this));
   delete_attrid = $(this).attr('data-attrid');
   $("#delete-attribute-modal").modal('show');
 });
 
-$('.delete-attribute').live('click', function() {
+$(document).on('click', '.delete-attribute', function() {
   fedreg.hide_modals();
   var data = "attributeID=" + delete_attrid;
   $.ajax({
@@ -1120,17 +1121,17 @@ fedreg.attributefilter_refresh = function() {
 };
 
 // Monitors
-$('.show-add-monitor').live('click', function() {
+$(document).on('click', '.show-add-monitor', function() {
   $('#addmonitor').hide();
   $('#newmonitor').fadeIn();
 });
 
-$('.cancel-add-monitor').live('click', function() {
+$(document).on('click', '.cancel-add-monitor', function() {
   $('#newmonitor').hide();
   $('#addmonitor').fadeIn();
 });
 
-$('.add-monitor').live('click', function() {
+$(document).on('click', '.add-monitor', function() {
   var target_form = $("#newmonitordata")
 
   if(target_form.valid()) {
@@ -1149,13 +1150,13 @@ $('.add-monitor').live('click', function() {
   }
 });
 
-$('.confirm-delete-monitor').live('click', function() {
+$(document).on('click', '.confirm-delete-monitor', function() {
   fedreg.set_button($(this));
   monitorID = $(this).attr('data-monitorID');
   $("#delete-monitor-modal").modal('show');
 });
 
-$('.delete-monitor').live('click', function() {
+$(document).on('click', '.delete-monitor', function() {
   fedreg.hide_modals();
 
   var data = "id=" + monitorID;
@@ -1252,7 +1253,7 @@ fedreg.configureServiceProviderSAML = function(host) {
 };
 
 // Attribute request/require toggle for SP
-$('.request-attribute').live('click', function() {
+$(document).on('click', '.request-attribute', function() {
     var attr = $(this).attr('data-attrid');
     var reason = $('.reason-attribute[data-attrid=' + attr +']');
     var req = $('.require-attribute[data-attrid=' + attr +']');
@@ -1269,7 +1270,7 @@ $('.request-attribute').live('click', function() {
     }
 });
 
-$('.require-attribute').live('click', function() {
+$(document).on('click', '.require-attribute', function() {
     var attr = $(this).attr('data-attrid');
     var reason = $('.reason-attribute[data-attrid=' + attr +']');
     var req = $('.request-attribute[data-attrid=' + attr +']');
@@ -1281,7 +1282,7 @@ $('.require-attribute').live('click', function() {
 });
 
 // Reporting
-$('.create-sp-report').live('click', function() {
+$(document).on('click', '.create-sp-report', function() {
   var target_form = $('#reportrequirements');
 
   if(target_form.valid()) {
@@ -1366,7 +1367,7 @@ fedreg.closeRefinement = function() {
   return false;
 };
 
-$('.create-idp-report').live('click', function() {
+$(document).on('click', '.create-idp-report', function() {
   var target_form = $('#reportrequirements');
 
   if(target_form.valid()) {

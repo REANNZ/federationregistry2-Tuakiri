@@ -31,7 +31,8 @@
 								<div class="reportrefinement">
 									<div class="reportrefinementinput revealable">
 										<form id='servicesrefinement'>
-											<input type="hidden" name='activesp' value='0'/>
+											<input type="hidden"
+ name='activesp' value='0'/>
 			
 											<span id="servicescomponents" class="reportrefinementcomponents">
 												<h5><g:message code="fedreg.view.reporting.federation.sessiontotals.topten.refinement.title"/> ( <a href="#" onClick="$('#servicescomponentstopten :unchecked').attr('checked', true); return false;"><g:message code="label.addallchecks" /></a> | <a href="#" onClick="$('#servicescomponentstopten :checked').attr('checked', false); return false;"><g:message code="label.removeallchecks" /></a> )</h5>
