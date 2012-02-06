@@ -41,7 +41,7 @@ class AttributeBase  {
 		lastUpdated(nullable:true)
 	}
 	
-	public String toString() {	"attributebase:[id:$id, name: $name, name: $name]" }
+	public String toString() {	"attributebase:[id:$id, name: $name, legacyName: $legacyName]" }
 	
 	public boolean equals(Object obj) {
 		if( this.is(obj) ) return true
