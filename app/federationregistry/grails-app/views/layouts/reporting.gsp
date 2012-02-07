@@ -24,13 +24,13 @@
 					<li class="${controllerName == 'idPReports' ? 'directactive':''}"><g:link controller="idPReports" action="view"><g:message code="fedreg.navigation.idpreports"/></g:link></li>
 					<li class="${controllerName == 'spReports' ? 'directactive':''}"><g:link controller="spReports" action="view"><g:message code="fedreg.navigation.spreports"/></g:link></li>
 				</n:hasPermission>
-				<li class="${controllerName in ['IDPSSODescriptorAttributeCompliance', 'attributeRelease', 'certifyingAuthorityUsage'] ? 'active':''}"><g:link controller="IDPSSODescriptorAttributeCompliance" action="summary"><g:message code="fedreg.navigation.compliance"/></g:link></li>
+				<li class="${controllerName in ['IdentityProviderAttributeCompliance', 'attributeRelease', 'certifyingAuthorityUsage'] ? 'active':''}"><g:link controller="IdentityProviderAttributeCompliance" action="summary"><g:message code="fedreg.navigation.compliance"/></g:link></li>
 			</ul>
 
-			<g:if test="${controllerName in ['IDPSSODescriptorAttributeCompliance', 'attributeRelease', 'certifyingAuthorityUsage']}" >
+			<g:if test="${controllerName in ['IdentityProviderAttributeCompliance', 'attributeRelease', 'certifyingAuthorityUsage']}" >
 				<ul class="level3a">
-					<li class="${controllerName == 'IDPSSODescriptorAttributeCompliance' ? 'active':''}">
-						<g:link controller="IDPSSODescriptorAttributeCompliance" action="summary"><g:message code="label.attributesummary" /></g:link>
+					<li class="${controllerName == 'IdentityProviderAttributeCompliance' ? 'active':''}">
+						<g:link controller="IdentityProviderAttributeCompliance" action="summary"><g:message code="label.attributesummary" /></g:link>
 				 	</li>
 					<li class="${controllerName == 'attributeRelease' ? 'active':''}">
 						<g:link controller="attributeRelease" action="index"><g:message code="label.attributerelease" /></g:link>

@@ -1,4 +1,6 @@
-import fedreg.core.*
+import grails.plugins.federatedgrails.*
+import aaf.fr.identity.*
+import aaf.fr.foundation.*
 
 entityDescriptorService = ctx.getBean("entityDescriptorService")
 spSSODescriptorService = ctx.getBean("SPSSODescriptorService")
@@ -13,7 +15,7 @@ if(sp) {
 	def args = new Object[1]
 	args[0] = sp.displayName
 	mailService.sendMail {            
-		to creator.email.uri
+		to creator.email
 		from ctx.grailsApplication.config.nimble.messaging.mail.from
 		subject messageSource.getMessage("fedreg.templates.mail.workflow.sp.rejected.subject", args, "fedreg.templates.mail.workflow.sp.rejected.subject", new Locale(env.locale))
 		body view:"/templates/mail/workflows/default/_rejected_sp", model:[serviceProvider:sp, locale:env.locale]

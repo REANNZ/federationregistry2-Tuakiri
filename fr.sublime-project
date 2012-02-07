@@ -1,9 +1,8 @@
 {
 	"folders":
-	{
-		"mount_points":
-		[
-			"/Volumes/grails.dev/development/federationregistrymaster"
-		]
-	}
+	[
+		{
+			"path": "/Volumes/grails.dev/development/federationregistrymaster"
+		}
+	]
 }

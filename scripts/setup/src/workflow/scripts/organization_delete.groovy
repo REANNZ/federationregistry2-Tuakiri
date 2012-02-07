@@ -1,4 +1,6 @@
-import fedreg.core.*
+import grails.plugins.federatedgrails.*
+import aaf.fr.identity.*
+import aaf.fr.foundation.*
 
 organizationService = ctx.getBean("organizationService")
 workflowTaskService = ctx.getBean("workflowTaskService")
@@ -11,7 +13,7 @@ if(org) {
 	def args = new Object[1]
 	args[0] = org.displayName
 	mailService.sendMail {            
-		to creator.email.uri
+		to creator.email
 		from ctx.grailsApplication.config.nimble.messaging.mail.from
 		subject messageSource.getMessage("fedreg.templates.mail.workflow.org.rejected.subject", args, "fedreg.templates.mail.workflow.org.rejected.subject", new Locale(env.locale))
 		body view:"/templates/mail/workflows/default/_rejected_organization", model:[organization:org, locale:env.locale]
