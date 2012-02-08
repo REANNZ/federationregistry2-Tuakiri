@@ -2,7 +2,7 @@
 
 <html>
 	<head>
-		<r:use modules="html5, jquery-ui, blockui, tiptip, jgrowl, datatables, validate, alphanumeric, formwizard, zenbox, app, protvis, tipsy"/>
+		<r:require modules="html5, jquery-ui, blockui, tiptip, jgrowl, datatables, validate, alphanumeric, formwizard, zenbox, app, protvis, tipsy"/>
 		<r:layoutResources/>
 		<g:layoutHead />
 		
