@@ -26,14 +26,14 @@
     <p><g:message code="fedreg.templates.serviceprovider.create.contact.details" /></p>
     <fieldset>
       <div class="control-group">
-      <label for="contact.givenName"><g:message code="label.givenname" /></label>
+        <label for="contact.givenName"><g:message code="label.givenname" /></label>
         <div class="controls">
           <g:textField name="contact.givenName"  size="50" class="required" value="${contact?.givenName ?: fr.subject()?.givenName}"/>
         </div>
       </div>
 
       <div class="control-group">
-      <label for="contact.surname"><g:message code="label.surname" /></label>
+        <label for="contact.surname"><g:message code="label.surname" /></label>
         <div class="controls">
           <g:textField name="contact.surname"  size="50" class="required" value="${contact?.surname ?: fr.subject()?.surname}"/>
         </div>
