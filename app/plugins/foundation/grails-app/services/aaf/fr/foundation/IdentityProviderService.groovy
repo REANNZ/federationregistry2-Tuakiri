@@ -27,19 +27,16 @@ class IdentityProviderService {
     def organization = Organization.lock(params.organization?.id)
 
     // Contact
-    def contact = Contact.get(params.contact?.id)
+    def contact
+    if(params.contact?.email)
+        contact = Contact.findByEmail(params.contact?.email)       // We may already have them referenced by email
+    
     if(!contact) {
-      if(params.contact?.email)
-        contact = Contact.findByEmail(params.contact?.email)    // We may already have them referenced by email
-
-      if(!contact) {
-        // Due to hibernate cascade issues we have to actually save here to ensure no Transient Exception
-        contact = new Contact(givenName: params.contact?.givenName, surname: params.contact?.surname, email: params.contact?.email, organization:organization)
-        contact.save()
-        if(contact.hasErrors()) {
-          log.info "$subject attempted to create identityProvider but contact details supplied were invalid"
+      contact = new Contact(givenName: params.contact?.givenName, surname: params.contact?.surname, email: params.contact?.email, organization:organization)
+      contact.save()
+      if(contact.hasErrors()) {
+          log.info "$subject attempted to create serviceProvider but contact details supplied were invalid"
           contact.errors.each { log.debug it }
-        }
       }
     }
     def ct = params.contact?.type ?: 'administrative'

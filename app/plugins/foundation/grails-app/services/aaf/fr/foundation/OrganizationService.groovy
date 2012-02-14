@@ -21,19 +21,17 @@ class OrganizationService {
 		def organization = new Organization(approved:false, active:params.active, name:params.organization?.name, displayName:params.organization?.displayName, lang: params.organization?.lang, url: params.organization?.url, primary:OrganizationType.get(params.organization?.primary))
 		
     // Contact
-    def contact = Contact.get(params.contact?.id)
-    if(!contact) {
-      if(params.contact?.email)
-        contact = Contact.findByEmail(params.contact?.email)    // We may already have them referenced by email
+    def contact
+    if(params.contact?.email)
+      contact = Contact.findByEmail(params.contact?.email)    // We may already have them referenced by email
 
-      if(!contact) {
-        // Due to hibernate cascade issues we have to actually save here to ensure no Transient Exception
-        contact = new Contact(givenName: params.contact?.givenName, surname: params.contact?.surname, email: params.contact?.email)
-        contact.save(flush:true)
-        if(contact.hasErrors()) {
-          log.info "$subject attempted to create identityProvider but contact details supplied were invalid"
-          contact.errors.each { log.debug it }
-        }
+    if(!contact) {
+      // Due to hibernate cascade issues we have to actually save here to ensure no Transient Exception
+      contact = new Contact(givenName: params.contact?.givenName, surname: params.contact?.surname, email: params.contact?.email)
+      contact.save(flush:true)
+      if(contact.hasErrors()) {
+        log.info "$subject attempted to create identityProvider but contact details supplied were invalid"
+        contact.errors.each { log.debug it }
       }
     }
     def ct = params.contact?.type ?: 'administrative'

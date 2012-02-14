@@ -20,19 +20,19 @@ class ServiceProviderService {
   def create(def params) {
     def organization = Organization.lock(params.organization?.id)
 
-    def contact = Contact.get(params.contact?.id)
+    def contact
+    if(params.contact?.email)
+        contact = Contact.findByEmail(params.contact?.email)       // We may already have them referenced by email
+    
     if(!contact) {
-        if(params.contact?.email)
-            contact = Contact.findByEmail(params.contact?.email)       // We may already have them referenced by email
-        
-        if(!contact)
-            contact = new Contact(givenName: params.contact?.givenName, surname: params.contact?.surname, email: params.contact?.email, organization:organization)
-            contact.save()
-            if(contact.hasErrors()) {
-                log.info "$subject attempted to create serviceProvider but contact details supplied were invalid"
-                contact.errors.each { log.debug it }
-            }
+      contact = new Contact(givenName: params.contact?.givenName, surname: params.contact?.surname, email: params.contact?.email, organization:organization)
+      contact.save()
+      if(contact.hasErrors()) {
+          log.info "$subject attempted to create serviceProvider but contact details supplied were invalid"
+          contact.errors.each { log.debug it }
+      }
     }
+
     def ct = params.contact?.type ?: 'administrative'
   
     def entityDescriptor
