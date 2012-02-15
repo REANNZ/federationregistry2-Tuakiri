@@ -9,7 +9,7 @@
 	</div>
 </div>
 
-<div id="sessionsreportnodata" class="revealable reportdata">
+<div id="sessionsreportnodata" class="revealable reportdata alert alert-message">
 	<p><em><g:message code="fedreg.templates.reports.nodata.description"/></em></p>
 </div>
 

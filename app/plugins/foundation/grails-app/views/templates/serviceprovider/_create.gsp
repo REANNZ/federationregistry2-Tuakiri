@@ -58,14 +58,14 @@
       <div class="control-group">
         <label for="organization.id"><g:message code="label.organization" /></label>
         <div class="controls">
-          <g:select name="organization.id" from="${organizationList.sort{it.displayName}}" optionKey="id" optionValue="displayName" value="${organization?.id}"/>
+          <g:select name="organization.id" from="${organizationList.sort{it.displayName}}" optionKey="id" optionValue="displayName" value="${organization?.id}" class="span4"/>
         </div>
       </div>
       
       <div class="control-group">
         <label for="sp.displayName"><g:message code="label.displayname" /></label>
         <div class="controls">
-          <g:textField name="sp.displayName"  size="50" class="required" value="${serviceProvider?.displayName}"/>
+          <g:textField name="sp.displayName" class="required span4" value="${serviceProvider?.displayName}"/>
           <fr:tooltip code='fedreg.help.serviceprovider.displayname' />
         </div>
       </div>
@@ -73,7 +73,7 @@
       <div class="control-group">
         <label for="sp.description"><g:message code="label.description" /></label>
         <div class="controls">
-          <g:textArea name="sp.description"  class="required" rows="8" cols="36" value="${serviceProvider?.description}"/>
+          <g:textArea name="sp.description"  class="required span4" rows="8" value="${serviceProvider?.description}"/>
           <fr:tooltip code='fedreg.help.serviceprovider.description' />
         </div>
       </div>
@@ -81,7 +81,7 @@
       <div class="control-group">
         <label for="sp.servicedescription.connecturl"><g:message code="label.serviceurl" /></label>
         <div class="controls">
-          <g:textField name="sp.servicedescription.connecturl" size="50" class="required url" value="${servicedescription?.connecturl}"/>
+          <g:textField name="sp.servicedescription.connecturl" class="required url span4" value="${servicedescription?.connecturl}"/>
           <fr:tooltip code='fedreg.help.serviceprovider.connecturl' />
         </div>
       </div>
@@ -89,7 +89,7 @@
       <div class="control-group">
         <label for="sp.servicedescription.logourl"><g:message code="label.servicelogourl" /></label>
         <div class="controls">
-          <g:textField name="sp.servicedescription.logourl" size="50" class="url" value="${servicedescription?.logourl}"/>
+          <g:textField name="sp.servicedescription.logourl" class="url span4" value="${servicedescription?.logourl}"/>
           <fr:tooltip code='fedreg.help.serviceprovider.logourl' />
         </div>
       </div>
