@@ -12,7 +12,7 @@
       <div class="control-group">
         <label for="attributeID"><g:message code="label.attribute"/></label>
         <div class="controls">
-          <g:select name="attributeID" from="${AttributeBase.list().sort{it.name}}" optionKey="id" optionValue="${{ it.name + ' ( oid:' + it.oid + ' )' }}" />
+          <fr:attributeSelection />
         </div>
       </div>
       <div class="controls">

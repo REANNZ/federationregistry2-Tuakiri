@@ -14,16 +14,16 @@
       </p>
     </g:if>
       
-    <ul class="tabs">
-      <li class="active"><a href="#tab-overview" ><g:message code="label.overview" /></a></li>
-      <li><a href="#tab-contacts" ><g:message code="label.contacts" /></a></li>
-      <li class="level"><a href="#tab-saml"><g:message code="label.saml" /></a></li>
+    <ul class="nav nav-tabs">
+      <li class="active"><a href="#tab-overview" data-toggle="tab"><g:message code="label.overview" /></a></li>
+      <li><a href="#tab-contacts" data-toggle="tab"><g:message code="label.contacts" /></a></li>
+      <li class="level"><a href="#tab-saml" data-toggle="tab"><g:message code="label.saml" /></a></li>
       <fr:hasAnyPermission in='["descriptor:${identityProvider.id}:reporting" , "federation:reporting"]'>
-        <li><a href="#tab-reports" ><g:message code="label.reporting" /></a></li>
+        <li><a href="#tab-reports" data-toggle="tab"><g:message code="label.reporting" /></a></li>
       </fr:hasAnyPermission>
-      <li><a href="#tab-monitors" ><g:message code="label.monitoring" /></a></li>
+      <li><a href="#tab-monitors" data-toggle="tab"><g:message code="label.monitoring" /></a></li>
       <g:if test="${identityProvider.approved}">
-        <li><a href="#tab-admins" ><g:message code="label.administrators" /></a></li>
+        <li><a href="#tab-admins" data-toggle="tab"><g:message code="label.administrators" /></a></li>
       </g:if>
     </ul>
 
@@ -39,107 +39,109 @@
       </div>
 
       <div id="tab-saml" class="tab-pane">
-        <ul class="tabs">
-          <li class="active"><a href="#tab-crypto" ><g:message code="label.crypto" /></a></li>
-          <li><a href="#tab-endpoints" ><g:message code="label.endpoints" /></a></li>
-          <li><a href="#tab-attributes" ><g:message code="label.supportedattributes" /></a></li>
-          <li><a href="#tab-nameidformats" ><g:message code="label.supportednameidformats" /></a></li>
-          <li><a href="#tab-metadata" ><g:message code="label.metadata" /></a></li>
-          <li><a href="#tab-attrfilpol" ><g:message code="label.attributefilter" /></a></li>
-        </ul>
+        <div class="tabbable">
+          <ul class="nav nav-tabs">
+            <li class="active"><a href="#tab-crypto" data-toggle="tab"><g:message code="label.crypto" /></a></li>
+            <li><a href="#tab-endpoints" data-toggle="tab"><g:message code="label.endpoints" /></a></li>
+            <li><a href="#tab-attributes" data-toggle="tab"><g:message code="label.supportedattributes" /></a></li>
+            <li><a href="#tab-nameidformats" data-toggle="tab"><g:message code="label.supportednameidformats" /></a></li>
+            <li><a href="#tab-metadata" data-toggle="tab"><g:message code="label.metadata" /></a></li>
+            <li><a href="#tab-attrfilpol" data-toggle="tab"><g:message code="label.attributefilter" /></a></li>
+          </ul>
 
-        <div class="tab-content">
-          
-          <div id="tab-crypto" class="tab-pane">
-            <g:render template="/templates/certificates/list" plugin="foundation" model="[descriptor:identityProvider]" />
-            <hr>
-            <g:render template="/templates/certificates/create" plugin="foundation" model="[descriptor:identityProvider]"/>
-          </div>
+          <div class="tab-content">
+            
+            <div id="tab-crypto" class="tab-pane active">
+              <g:render template="/templates/certificates/list" plugin="foundation" model="[descriptor:identityProvider]" />
+              <hr>
+              <g:render template="/templates/certificates/create" plugin="foundation" model="[descriptor:identityProvider]"/>
+            </div>
 
-          <div id="tab-endpoints" class="tab-pane">
-            <div class="tabbable tabs-left">
-              <ul class="nav nav-tabs">
-                <li class="active"><a href="#tab-sso" data-toggle="tab"><g:message code="label.ssoservices" /></a></li>
-                <li><a href="#tab-ars" data-toggle="tab"><g:message code="label.artifactresolutionservices" /></a></li>
-                <g:if test="${identityProvider.collaborator}">
-                  <li><a href="#tab-attrs" data-toggle="tab"><g:message code="label.attributeservices" /></a></li>
-                </g:if>
-                <li><a href="#tab-slo" data-toggle="tab"><g:message code="label.sloservices" /></a></li>
-              </ul>
-              
-              <div class="tab-content">
-                <div id="tab-sso" class="tab-pane">
-                  <g:render template="/templates/endpoints/list" plugin="foundation" model="[endpoints:identityProvider.singleSignOnServices, endpointType:'singleSignOnServices', minEndpoints:1]" />
-                  <hr>
-                  <g:render template="/templates/endpoints/create" plugin="foundation" model="[descriptor:identityProvider, endpointType:'singleSignOnServices']" />      
-                </div>
-
-                <div id="tab-ars" class="tab-pane">
-                  <g:render template="/templates/endpoints/list" plugin="foundation" model="[endpoints:identityProvider.artifactResolutionServices, endpointType:'artifactResolutionServices']" />
-                  <hr>
-                  <g:render template="/templates/endpoints/create" plugin="foundation" model="[descriptor:identityProvider, endpointType:'artifactResolutionServices', indexed:true]" />
-                </div>
-
-                <div id="tab-slo" class="tab-pane">
-                  <g:render template="/templates/endpoints/list" plugin="foundation" model="[endpoints:identityProvider.singleLogoutServices, endpointType:'singleLogoutServices']" />
-                  <hr>
-                  <g:render template="/templates/endpoints/create" plugin="foundation" model="[descriptor:identityProvider, endpointType:'singleLogoutServices']" />
-                </div>
-
-                <g:if test="${identityProvider.collaborator}">
-                  <div id="tab-attrs" class="tab-pane">
-                    <g:render template="/templates/endpoints/list" plugin="foundation" model="[endpoints:identityProvider.collaborator.attributeServices, endpointType:'attributeServices']" />
+            <div id="tab-endpoints" class="tab-pane">
+              <div class="tabbable tabs-left">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#tab-sso" data-toggle="tab"><g:message code="label.ssoservices" /></a></li>
+                  <li><a href="#tab-ars" data-toggle="tab"><g:message code="label.artifactresolutionservices" /></a></li>
+                  <g:if test="${identityProvider.collaborator}">
+                    <li><a href="#tab-attrs" data-toggle="tab"><g:message code="label.attributeservices" /></a></li>
+                  </g:if>
+                  <li><a href="#tab-slo" data-toggle="tab"><g:message code="label.sloservices" /></a></li>
+                </ul>
+                
+                <div class="tab-content span8">
+                  <div id="tab-sso" class="tab-pane active">
+                    <g:render template="/templates/endpoints/list" plugin="foundation" model="[endpoints:identityProvider.singleSignOnServices, endpointType:'singleSignOnServices', minEndpoints:1]" />
                     <hr>
-                    <g:render template="/templates/endpoints/create" plugin="foundation" model="[descriptor:identityProvider.collaborator, endpointType:'attributeServices']" />
+                    <g:render template="/templates/endpoints/create" plugin="foundation" model="[descriptor:identityProvider, endpointType:'singleSignOnServices']" />      
                   </div>
-                </g:if>
-                <g:render template="/templates/endpoints/modals" plugin="foundation" />
+
+                  <div id="tab-ars" class="tab-pane">
+                    <g:render template="/templates/endpoints/list" plugin="foundation" model="[endpoints:identityProvider.artifactResolutionServices, endpointType:'artifactResolutionServices']" />
+                    <hr>
+                    <g:render template="/templates/endpoints/create" plugin="foundation" model="[descriptor:identityProvider, endpointType:'artifactResolutionServices', indexed:true]" />
+                  </div>
+
+                  <div id="tab-slo" class="tab-pane">
+                    <g:render template="/templates/endpoints/list" plugin="foundation" model="[endpoints:identityProvider.singleLogoutServices, endpointType:'singleLogoutServices']" />
+                    <hr>
+                    <g:render template="/templates/endpoints/create" plugin="foundation" model="[descriptor:identityProvider, endpointType:'singleLogoutServices']" />
+                  </div>
+
+                  <g:if test="${identityProvider.collaborator}">
+                    <div id="tab-attrs" class="tab-pane">
+                      <g:render template="/templates/endpoints/list" plugin="foundation" model="[endpoints:identityProvider.collaborator.attributeServices, endpointType:'attributeServices']" />
+                      <hr>
+                      <g:render template="/templates/endpoints/create" plugin="foundation" model="[descriptor:identityProvider.collaborator, endpointType:'attributeServices']" />
+                    </div>
+                  </g:if>
+                  <g:render template="/templates/endpoints/modals" plugin="foundation" />
+                </div>
               </div>
             </div>
-          </div>
 
-          <div id="tab-attributes" class="tab-pane">
-            <g:render template="/templates/attributes/list" plugin="foundation" model="[descriptor:identityProvider, attrs:identityProvider.sortedAttributes()]" />
-            <hr>
-            <g:render template="/templates/attributes/add" plugin="foundation" model="[descriptor:identityProvider]"/>
-          </div>
+            <div id="tab-attributes" class="tab-pane">
+              <g:render template="/templates/attributes/list" plugin="foundation" model="[descriptor:identityProvider, attrs:identityProvider.sortedAttributes()]" />
+              <hr>
+              <g:render template="/templates/attributes/add" plugin="foundation" model="[descriptor:identityProvider]"/>
+            </div>
 
-          <div id="tab-nameidformats" class="tab-pane">
-            <g:render template="/templates/nameidformats/list" plugin="foundation" model="[descriptor:identityProvider, nameIDFormats:identityProvider.nameIDFormats, containerID:'nameidformats']" />
-            <hr>
-            <g:render template="/templates/nameidformats/add" plugin="foundation" model="[descriptor:identityProvider, containerID:'nameidformats']"/>
-          </div>
+            <div id="tab-nameidformats" class="tab-pane">
+              <g:render template="/templates/nameidformats/list" plugin="foundation" model="[descriptor:identityProvider, nameIDFormats:identityProvider.nameIDFormats, containerID:'nameidformats']" />
+              <hr>
+              <g:render template="/templates/nameidformats/add" plugin="foundation" model="[descriptor:identityProvider, containerID:'nameidformats']"/>
+            </div>
 
-          <div id="tab-metadata" class="tab-pane">
-            <g:if test="${identityProvider.functioning()}">
+            <div id="tab-metadata" class="tab-pane">
+              <g:if test="${identityProvider.functioning()}">
+                <div class="row">
+                  <div class="span10">
+                    <p><g:message code="fedreg.view.members.identityprovider.show.metadata.details" /></p>
+                  </div>
+                  <div class="span3 offset1">
+                    <a class="btn" class="load-descriptor-metadata"><g:message code="label.load" /></a>
+                  </div>
+                </div>
+                <div id="descriptormetadata"></div>
+              </g:if>
+              <g:else>
+                <div class="alert alert-message">
+                  <g:message code="fedreg.view.members.identityprovider.show.metadata.unavailable.details" />
+                </div>
+              </g:else>
+            </div>
+            
+            <div id="tab-attrfilpol" class="tab-pane">                        
               <div class="row">
-                <div class="span10">
-                  <p><g:message code="fedreg.view.members.identityprovider.show.metadata.details" /></p>
-                </div>
-                <div class="span3 offset1">
-                  <a class="btn" class="load-descriptor-metadata"><g:message code="label.load" /></a>
-                </div>
+                <p class="span8">
+                  <g:message code="fedreg.view.members.identityprovider.show.attributefilter.description" /></p>
+                <span class="span1 offset1">
+                  <a class="btn btn-warning" onClick="fedreg.attributefilter_refresh(); return false;">
+                    <g:message code="label.load"/>
+                  </a>
+                </span>
               </div>
-              <div id="descriptormetadata"></div>
-            </g:if>
-            <g:else>
-              <div class="alert alert-message">
-                <g:message code="fedreg.view.members.identityprovider.show.metadata.unavailable.details" />
-              </div>
-            </g:else>
-          </div>
-          
-          <div id="tab-attrfilpol" class="tab-pane">                        
-            <div class="row">
-              <p class="span10">
-                <g:message code="fedreg.view.members.identityprovider.show.attributefilter.description" /></p>
-              <span class="span3 offset1">
-                <a class="btn" onClick="fedreg.attributefilter_refresh(); return false;">
-                  <g:message code="label.load"/>
-                </a>
-              </span>
+              <pre id="current-attribute-filter" class="metadata">${attributeFilter.encodeAsHTML()}</pre>
             </div>
-            <pre id="current-attribute-filter" class="metadata">${attributeFilter.encodeAsHTML()}</pre>
           </div>
         </div>
       </div>

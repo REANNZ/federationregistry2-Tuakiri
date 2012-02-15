@@ -36,7 +36,7 @@
           </div>
         </div>
 
-        <div class="controls">
+        <div class="form-actions">
           <a class="add-monitor btn btn-success"><g:message code="label.add"/></a>
           <a class="cancel-add-monitor btn"><g:message code="label.cancel"/></a>
         </div>

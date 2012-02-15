@@ -1,35 +1,37 @@
 <div id="supported-attributes">
   <g:if test="${attrs}">
-  <table class="table">
-  	<thead>
-  		<tr>
-  			<th><g:message code="label.attribute" /></th>
-  			<th><g:message code="label.category" /></th>
-  			<th/>
-  		</tr>
-  	</thead>
-  	<tbody>
-  	<g:each in="${attrs}" status="i" var="attr">
-  		<tr>
-  			<td>
-  				<strong class="highlight">${fieldValue(bean: attr, field: "base.name")}</strong><br>
+  <table class="table borderless">
+    <thead>
+      <tr>
+        <th><g:message code="label.attribute" /></th>
+        <th><g:message code="label.category" /></th>
+        <th/>
+      </tr>
+    </thead>
+    <tbody>
+    <g:each in="${attrs}" status="i" var="attr">
+      <tr>
+        <td>
+          <strong class="highlight">${fieldValue(bean: attr, field: "base.name")}</strong><br>
             <code>oid:${fieldValue(bean: attr, field: "base.oid")}</code>
             <br><br><em>${fieldValue(bean: attr, field: "base.description")}</em>
-  			</td>
-  			<td>${attr.base.category.name.encodeAsHTML()}</td>
-  			<td>
-  				<fr:hasPermission target="descriptor:${descriptor.id}:attribute:remove">
-            <a class="confirm-delete-attribute btn" data-attrid="${attr.id}"><g:message code="label.delete"/></a>
-  				</fr:hasPermission>
-  			</td>
-  		</tr>
-  	</g:each>
-  	</tbody>
+        </td>
+        <td>${attr.base.category.name.encodeAsHTML()}</td>
+      </tr>
+      <tr>
+      <td colspan="2">
+          <fr:hasPermission target="descriptor:${descriptor.id}:attribute:remove">
+            <a class="confirm-delete-attribute btn" data-attrid="${attr.id}"><g:message code="label.remove"/></a>
+          </fr:hasPermission>
+        </td>
+      </tr>
+    </g:each>
+    </tbody>
   </table>
   </g:if>
   <g:else>
-  	<div>
-  		<p class="alert alert-message"><g:message code="fedreg.templates.attributes.noresults"/></p>
-  	</div>
+    <div>
+      <p class="alert alert-message"><g:message code="fedreg.templates.attributes.noresults"/></p>
+    </div>
   </g:else>
 </div>

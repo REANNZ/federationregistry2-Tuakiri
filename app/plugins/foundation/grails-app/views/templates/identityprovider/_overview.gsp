@@ -10,7 +10,7 @@
 
 <div id="internalstate-identityprovider">
   <h4><g:message code="fedreg.templates.identityprovider.overview.internalstate" /></h4>
-  <table class="borderless fixed">
+  <table class="table borderless fixed">
     <tbody>   
       <tr>
         <th><g:message code="label.organization"/></th>
@@ -42,21 +42,10 @@
       </tr>
       </g:if>
       <tr>
-        <th><g:message code="label.status"/></th>
-        <td>
-          <g:if test="${identityProvider.active}">
-            <g:message code="label.active" />
-          </g:if>
-          <g:else>
-            <g:message code="label.inactive" /> <div class="error"><g:message code="label.warningmetadata" /></div>
-          </g:else>
-        </td>
-      </tr>
-      <tr>
         <th><g:message code="label.archived"/></th>
         <td>
           <g:if test="${identityProvider.archived}"> 
-            <g:message code="label.yes" /> <div class="alert alert-message"><g:message code="label.warningmetadataarchived" /></div>
+            <span class="label label-warning"><g:message code="label.warningmetadataarchived" /></span>
           </g:if>
           <g:else>
             <g:message code="label.no" /> 
@@ -70,7 +59,7 @@
             <g:message code="label.yes" />
           </g:if>
           <g:else>
-            <g:message code="label.no" /> <div class="alert alert-message alert-danger"><g:message code="label.undergoingapproval" /></div>
+            <span class="label label-important"><g:message code="label.undergoingapproval" /></span>
           </g:else>
         </td>
       </tr>

@@ -30,9 +30,9 @@
 
 </div>
 
-<div id="connectivityreportnodata" class="revealable reportdata">
-	<p><em><g:message code="fedreg.templates.reports.nodata.description"/></em></p>
-</div>	
+<div id="connectivityreportnodata" class="revealable reportdata alert alert-message">
+  <p><em><g:message code="fedreg.templates.reports.nodata.description"/></em></p>
+</div>  
 
 <script type="text/javascript+protovis">
 	fedreg.renderIdPConnectivity = function(data, refine) {

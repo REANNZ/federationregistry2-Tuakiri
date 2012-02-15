@@ -1074,7 +1074,7 @@ $(document).on('click', '.confirm-delete-attribute', function() {
 
 $(document).on('click', '.delete-attribute', function() {
   fedreg.hide_modals();
-  var data = "attributeID=" + delete_attrid;
+  var data = "attrid=" + delete_attrid;
   $.ajax({
     type: "POST",
     url: attributeRemoveEndpoint,

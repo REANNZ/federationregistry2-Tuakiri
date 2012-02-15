@@ -46,7 +46,7 @@
   padding: 0px;
 }
 
-.centered {
+td.centered, th.centered, .centered {
   text-align: center;
 }
 

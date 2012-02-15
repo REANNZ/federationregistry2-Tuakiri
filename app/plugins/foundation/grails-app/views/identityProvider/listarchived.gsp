@@ -7,7 +7,7 @@
   <body>
 
     <h2><g:message code="fedreg.view.members.identityprovider.listarchived.heading" /></h2>
-    <table class="sortable-table">
+    <table class="sortable-table table borderless">
       <thead>
         <tr>
           <th><g:message code="label.identityprovider" /></th>
@@ -17,8 +17,8 @@
         </tr>
       </thead>
       <tbody>
-      <g:each in="${identityProviderList}" status="i" var="identityProvider">
-        <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
+      <g:each in="${identityProviderList}" var="identityProvider">
+        <tr>
           <td>${fieldValue(bean: identityProvider, field: "displayName")}</td>
           <td>${fieldValue(bean: identityProvider, field: "organization.name")}</td>
           <td>${fieldValue(bean: identityProvider, field: "entityDescriptor.entityID")}</td>

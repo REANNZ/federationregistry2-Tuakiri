@@ -1,12 +1,12 @@
 <div id="reporting">
   <div class="reportingsupported">
-    <form id="reportrequirements" class="validating form-stacked centered">
+    <form id="reportrequirements" class="validating form-inline centered">
       <div class="row">
         <label for="day"><g:message code="label.day" /></label>
-        <input name="day" size="2" class="number span1"/> <fr:tooltip code='fedreg.help.report.day'/>
+        <input name="day" size="2" class="number span1"/><fr:tooltip code='fedreg.help.report.day'/>
 
         <label for="month"><g:message code="label.month" /></label>
-        <input name="month" size="2" class="number span1"/> <fr:tooltip code='fedreg.help.report.month'/>
+        <input name="month" size="2" class="number span1"/><fr:tooltip code='fedreg.help.report.month'/>
 
         <label for="year"><g:message code="label.year" /></label>
         <input name="year" size="4"  class="required number span2"/> <fr:tooltip code='fedreg.help.report.year'/>
@@ -18,6 +18,7 @@
             <option value="totals"><g:message code="label.sessiontotals" /></option>
             <option value="logins"><g:message code="label.loginbreakdown" /></option>
         </select>
+
         <a class="create-idp-report btn"><g:message code="label.generate" /></a>
       </div>
     </form>
