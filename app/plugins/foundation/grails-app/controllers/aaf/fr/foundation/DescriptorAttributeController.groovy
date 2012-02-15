@@ -18,7 +18,7 @@ class DescriptorAttributeController {
 			return
 		}
 		
-		if(!params.attributeID) {
+		if(!params.attrid) {
 			log.warn "Attribute ID was not present"
 			render message(code: 'fedreg.controllers.namevalue.missing')
 			response.setStatus(500)
@@ -34,10 +34,10 @@ class DescriptorAttributeController {
 		}
 		
 		if(SecurityUtils.subject.isPermitted("descriptor:${descriptor.id}:attribute:remove")) {	
-			def attribute = Attribute.get(params.attributeID)
+			def attribute = Attribute.get(params.attrid)
 			if(!attribute) {
-				log.warn "Attribute identified by id ${params.attributeID} was not located"
-				render message(code: 'fedreg.attribute.nonexistant', args: [params.attributeID])
+				log.warn "Attribute identified by id ${params.attrid} was not located"
+				render message(code: 'fedreg.attribute.nonexistant', args: [params.attrid])
 				response.setStatus(500)
 				return
 			}
@@ -97,7 +97,7 @@ class DescriptorAttributeController {
 			return
 		}
 		
-		if(!params.attributeID) {
+		if(!params.attrid) {
 			log.warn "Attribute ID was not present"
 			render message(code: 'fedreg.controllers.namevalue.missing')
 			response.setStatus(500)
@@ -113,10 +113,10 @@ class DescriptorAttributeController {
 		}
 		
 		if(SecurityUtils.subject.isPermitted("descriptor:${descriptor.id}:attribute:add")) {
-			def base = AttributeBase.get(params.attributeID)
+			def base = AttributeBase.get(params.attrid)
 			if(!base) {
-				log.warn "Attribute Base identified by id ${params.attributeID} was not located"
-				render message(code: 'fedreg.nameidformat.nonexistant', args: [params.attributeID])
+				log.warn "Attribute Base identified by id ${params.attrid} was not located"
+				render message(code: 'fedreg.nameidformat.nonexistant', args: [params.attrid])
 				response.setStatus(500)
 				return
 			}
