@@ -256,6 +256,11 @@ $(document).on('click', '.confirm-archive-entitydescriptor', function() {
   $("#archive-entitydescriptor-modal").modal('show');
 });
 
+$(document).on('click', '.confirm-unarchive-entitydescriptor', function() {
+  fedreg.set_button($(this));
+  $("#unarchive-entitydescriptor-modal").modal('show');
+});
+
 $(document).on('click', '.confirm-delete-entitydescriptor', function() {
   fedreg.set_button($(this));
   $("#delete-entitydescriptor-modal").modal('show');
@@ -266,31 +271,19 @@ $(document).on('click', '.show-edit-entitydescriptor', function() {
   $("#editor-entitydescriptor").fadeIn();
 });
 
+$(document).on('click', '.show-migrate-organisation', function() {
+  $("#overview-entitydescriptor").hide();
+  $("#editor-entitydescriptor-migrateorg").fadeIn();
+});
+
 $(document).on('click', '.cancel-edit-entitydescriptor', function() {
   $("#editor-entitydescriptor").hide();
   $("#overview-entitydescriptor").fadeIn();
 });
 
-$(document).on('click', '.edit-entitydescriptor', function() {
-  var target_form = $("#editor-entitydescriptor > form");
-
-  if(target_form.valid()) {
-    data = target_form.serialize();
-    $.ajax({
-      type: "POST",
-      url: updateEntityDescriptorEndpoint,
-      data: data,
-      success: function(res) {
-        var target = $("#overview-entitydescriptor-editable");
-        target.html(res);
-        applyBehaviourTo(target)
-        $("#editor-entitydescriptor").hide();
-        $("#overview-entitydescriptor").fadeIn(); 
-      },
-      error: function (xhr, ajaxOptions, thrownError) {
-      }
-    });
-  }
+$(document).on('click', '.cancel-entitydescriptor-migrateorg', function() {
+  $("#editor-entitydescriptor-migrateorg").hide();
+  $("#overview-entitydescriptor").fadeIn();
 });
 
 // Identity Provider

@@ -70,6 +70,7 @@ class EntityDescriptorService {
     if(!entityDescriptor)
       return [false, null]
     
+    entityDescriptor.active = params.entity?.active == 'true'
     entityDescriptor.entityID = params.entity?.identifier?.trim()
     entityDescriptor.extensions = params.entity?.extensions
     
@@ -91,17 +92,19 @@ class EntityDescriptorService {
     def ed = EntityDescriptor.get(id)
     if(!ed)
       throw new ErronousStateException("Unable to find EntityDescriptor with id $id")
-      
-    def idpService = grailsApplication.mainContext.identityProviderService
-    def spService = grailsApplication.mainContext.serviceProviderService
-      
+    
+    // We have to initialize like this as there is a circular dependency
+    def identityProviderService = grailsApplication.mainContext.identityProviderService
+    def serviceProviderService = grailsApplication.mainContext.serviceProviderService
+    def attributeAuthorityDescriptorService = grailsApplication.mainContext.attributeAuthorityDescriptorService
+
     // We need to do this for GORM stupidity. If you delete an IDP (and hence collaborator) then try to process any remaining AA associted with the ED collaborators are still present
     // in the list (regardless of refresh type calls). So for now at least an AA only ED is not processed - more thought needed.
     if(ed.attributeAuthorityDescriptors?.size() > ed.idpDescriptors?.size() || ed.pdpDescriptors?.size() != 0)
       throw new ErronousStateException("EntityDescriptor $ed holds unique combination of IDP/SP/AA/PDP that is not supported by this delete method, manual intervention will be required")
       
-    ed.idpDescriptors.each { idpService.delete(it.id) }
-    ed.spDescriptors.each { spService.delete(it.id)}
+    ed.idpDescriptors.each { identityProviderService.delete(it.id) }
+    ed.spDescriptors.each { serviceProviderService.delete(it.id)}
     ed.contacts.each { it.delete() }
     
     ed.delete()
@@ -113,14 +116,15 @@ class EntityDescriptorService {
     def ed = EntityDescriptor.get(id)
     if(!ed)
       throw new ErronousStateException("Unable to find EntityDescriptor with id $id")
-      
-    def idpService = grailsApplication.mainContext.identityProviderService
-    def spService = grailsApplication.mainContext.serviceProviderService
-    def aaService = grailsApplication.mainContext.attributeAuthorityDescriptorService
-      
-    ed.idpDescriptors?.each { idpService.archive(it.id) }
-    ed.spDescriptors?.each { spService.archive(it.id) }
-    ed.attributeAuthorityDescriptors?.each { aaService.archive(it.id) }
+
+    // We have to initialize like this as there is a circular dependency
+    def identityProviderService = grailsApplication.mainContext.identityProviderService
+    def serviceProviderService = grailsApplication.mainContext.serviceProviderService
+    def attributeAuthorityDescriptorService = grailsApplication.mainContext.attributeAuthorityDescriptorService
+          
+    ed.idpDescriptors?.each { identityProviderService.archive(it.id) }
+    ed.spDescriptors?.each { serviceProviderService.archive(it.id) }
+    ed.attributeAuthorityDescriptors?.each { attributeAuthorityDescriptorService.archive(it.id) }
     
     ed.archived = true
     ed.active = false
@@ -138,16 +142,17 @@ class EntityDescriptorService {
     if(!ed)
       throw new ErronousStateException("Unable to find EntityDescriptor with id $id")
 
-    if(!ed.organization.archived)
+    if(ed.organization.archived)
       throw new ErronousStateException("Unable unarchive EntityDescriptor with id $id as parent organization is archived")
-      
-    def idpService = grailsApplication.mainContext.IdentityProviderService
-    def spService = grailsApplication.mainContext.ServiceProviderService
-    def aaService = grailsApplication.mainContext.attributeAuthorityDescriptorService
-      
-    ed.idpDescriptors?.each { idpService.unarchive(it.id) }
-    ed.spDescriptors?.each { spService.unarchive(it.id) }
-    ed.attributeAuthorityDescriptors?.each { aaService.unarchive(it.id) }
+    
+    // We have to initialize like this as there is a circular dependency
+    def identityProviderService = grailsApplication.mainContext.identityProviderService
+    def serviceProviderService = grailsApplication.mainContext.serviceProviderService
+    def attributeAuthorityDescriptorService = grailsApplication.mainContext.attributeAuthorityDescriptorService
+          
+    ed.idpDescriptors?.each { identityProviderService.unarchive(it.id) }
+    ed.spDescriptors?.each { serviceProviderService.unarchive(it.id) }
+    ed.attributeAuthorityDescriptors?.each { attributeAuthorityDescriptorService.unarchive(it.id) }
     
     ed.archived = false
     if(!ed.save()) {
@@ -163,14 +168,15 @@ class EntityDescriptorService {
     def ed = EntityDescriptor.get(id)
     if(!ed)
       throw new ErronousStateException("Unable to find EntityDescriptor with id $id")
+
+    // We have to initialize like this as there is a circular dependency
+    def identityProviderService = grailsApplication.mainContext.identityProviderService
+    def serviceProviderService = grailsApplication.mainContext.serviceProviderService
+    def attributeAuthorityDescriptorService = grailsApplication.mainContext.attributeAuthorityDescriptorService
       
-    def idpService = grailsApplication.mainContext.IdentityProviderService
-    def spService = grailsApplication.mainContext.ServiceProviderService
-    def aaService = grailsApplication.mainContext.attributeAuthorityDescriptorService
-      
-    ed.idpDescriptors?.each { idpService.activate(it.id) }
-    ed.spDescriptors?.each { spService.activate(it.id) }
-    ed.attributeAuthorityDescriptors?.each { aaService.activate(it.id) }
+    ed.idpDescriptors?.each { identityProviderService.activate(it.id) }
+    ed.spDescriptors?.each { serviceProviderService.activate(it.id) }
+    ed.attributeAuthorityDescriptors?.each { attributeAuthorityDescriptorService.activate(it.id) }
     
     ed.active = true
     if(!ed.save()) {
@@ -180,6 +186,40 @@ class EntityDescriptorService {
     }
     
     log.info "$subject successfully activated $ed"
+  }
+
+  def migrateOrganization(def id, def orgId) {
+    def entity = EntityDescriptor.get(id)
+    if(!entity)
+      throw new ErronousStateException("Unable to find EntityDescriptor with id $id")
+
+    def organization = Organization.get(orgId)
+    if(!organization)
+      throw new ErronousStateException("Unable to find organization with id $orgId")
+
+    entity.organization = organization
+    entity.idpDescriptors.each {
+      it.organization = organization
+    }
+    entity.idpDescriptors.each {
+      it.organization = organization
+    }
+    entity.spDescriptors.each {
+      it.organization = organization
+    }
+    entity.attributeAuthorityDescriptors.each {
+      it.organization = organization
+    }
+    entity.pdpDescriptors.each {
+      it.organization = organization
+    }
+
+    entity.save()
+    if(entity.hasErrors()) {
+      log.error "Unable to modify organization for $entity and children"
+      entity.errors.each { log.error it }
+      throw new ErronousStateException("Unable to modify organization for $entity and children")
+    }
   }
 
 }

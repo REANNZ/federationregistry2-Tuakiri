@@ -10,7 +10,7 @@ import grails.plugins.federatedgrails.Role
  */
 class EntityDescriptorController {
   static defaultAction = "list"
-  def allowedMethods = [save: 'POST', update: 'PUT', archive: 'DELETE']
+  def allowedMethods = [save: 'POST', update: 'PUT', archive: 'DELETE', delete:'DELETE', unarchive:'PUT', archive:'PUT', migrateOrg:'PUT']
     
   def entityDescriptorService
   
@@ -39,7 +39,10 @@ class EntityDescriptorController {
       return
     }
     def adminRole = Role.findByName("descriptor-${entity.id}-administrators")
-    [entity: entity, contactTypes:ContactType.list(), administrators:adminRole?.subjects]
+
+    def organizations = Organization.list().findAll { it.functioning() }
+
+    [entity: entity, contactTypes:ContactType.list(), administrators:adminRole?.subjects, organizations:organizations]
   }
   
   def create = {
@@ -83,13 +86,15 @@ class EntityDescriptorController {
       def (updated, entityDescriptor) = entityDescriptorService.update(params)
       if(updated) {
         log.info "$subject updated $entityDescriptor"
-        render template:'/templates/entitydescriptor/overview_editable', plugin:'foundation', model:[entity:entityDescriptor]
+        redirect (action: "show", id: entityDescriptor.id)
       } else {
         log.info "$subject failed when attempting update on $entityDescriptor"
         entityDescriptor.errors.each {
           log.debug it
         }
-        response.status = 500
+        flash.type="error"
+        flash.message = message(code: 'aaf.fr.foundation.entitydescriptor.save.validation.error')
+        redirect (action: "show", id: entityDescriptor.id)
         return
       }
     }
@@ -118,17 +123,58 @@ class EntityDescriptorController {
     
     if(!(entityDescriptor.holdsIDPOnly() || entityDescriptor.holdsSPOnly())) {
       flash.type="error"
-      flash.message = message(code: 'aaf.fr.foundation.entitydescriptor.nonstandard')
+      flash.message = message(code: 'fedreg.templates.entitydescriptor.nonstandard')
       redirect(action: "show", id:entityDescriptor.id)
       return
     }
     
-    if(SecurityUtils.subject.isPermitted("descriptor:${entityDescriptor.id}:archive")) {
+    if(SecurityUtils.subject.isPermitted("federation:management:advanced")) {
       entityDescriptorService.archive(entityDescriptor.id)
-      
+      log.info "$subject archived $entityDescriptor"
+
       flash.type="success"
-      flash.message = message(code: 'aaf.fr.foundation.entitydescriptor.archived')
-      log.info "$subject deleted $entityDescriptor"
+      flash.message = message(code: 'fedreg.templates.entitydescriptor.archived')
+      log.info "$subject archived $entityDescriptor"
+      
+      redirect (action: "show", id: entityDescriptor.id)
+    }
+    else {
+      log.warn("Attempt to delete $entityDescriptor by $subject was denied, incorrect permission set")
+      response.sendError(403)
+    }
+  }
+
+  def unarchive = {
+    if(!params.id) {
+      log.warn "EntityDescriptor ID was not present"
+      flash.type="error"
+      flash.message = message(code: 'fedreg.controllers.namevalue.missing')
+      redirect(action: "list") 
+      return
+    }
+    
+    def entityDescriptor = EntityDescriptor.get(params.id)
+    if (!entityDescriptor) {
+      flash.type="error"
+      flash.message = message(code: 'aaf.fr.foundation.entitydescriptor.nonexistant')
+      redirect(action: "list")
+      return
+    }
+    
+    if(!(entityDescriptor.holdsIDPOnly() || entityDescriptor.holdsSPOnly())) {
+      flash.type="error"
+      flash.message = message(code: 'fedreg.templates.entitydescriptor.nonstandard')
+      redirect(action: "show", id:entityDescriptor.id)
+      return
+    }
+    
+    if(SecurityUtils.subject.isPermitted("federation:management:advanced")) {
+      entityDescriptorService.unarchive(entityDescriptor.id)
+      log.info "$subject unarchive $entityDescriptor"
+
+      flash.type="success"
+      flash.message = message(code: 'fedreg.templates.entitydescriptor.unarchived')
+      log.info "$subject unarchived $entityDescriptor"
       
       redirect (action: "show", id: entityDescriptor.id)
     }
@@ -155,17 +201,67 @@ class EntityDescriptorController {
       return
     }
     
-    if(SecurityUtils.subject.isPermitted("descriptor:${entityDescriptor.id}:delete")) {
+    if(SecurityUtils.subject.isPermitted("federation:management:advanced")) {
       entityDescriptorService.delete(entityDescriptor.id)
-      
+      log.info "$subject deleted $entityDescriptor"
+
       flash.type="success"
-      flash.message = message(code: 'aaf.fr.foundation.entitydescriptor.deleted')
+      flash.message = message(code: 'fedreg.templates.entitydescriptor.deleted')
       log.info "$subject deleted $entityDescriptor"
       
       redirect (action: "list")
     }
     else {
       log.warn("Attempt to delete $entityDescriptor by $subject was denied, incorrect permission set")
+      response.sendError(403)
+    }
+  }
+
+  def migrate = {
+    if(!params.id) {
+      log.warn "EntityDescriptor ID was not present"
+      flash.type="error"
+      flash.message = message(code: 'fedreg.controllers.namevalue.missing')
+      redirect(action: "list")
+      return
+    }
+    
+    def entityDescriptor = EntityDescriptor.get(params.id)
+    if (!entityDescriptor) {
+      flash.type="error"
+      flash.message = message(code: 'aaf.fr.foundation.entitydescriptor.nonexistant')
+      redirect(action: "list")
+      return
+    }
+
+    if(!params.newOrgId) {
+      log.warn "New Organization ID was not present"
+      flash.type="error"
+      flash.message = message(code: 'fedreg.controllers.namevalue.missing')
+      redirect (action: "show", id: entityDescriptor.id)
+      return
+    }
+    
+    def organization = Organization.get(params.newOrgId)
+    if (!organization) {
+      flash.type="error"
+      flash.message = message(code: 'aaf.fr.foundation.organization.nonexistant')
+      redirect (action: "show", id: entityDescriptor.id)
+      return
+    }
+    
+    if(SecurityUtils.subject.isPermitted("federation:management:advanced")) {
+      entityDescriptorService.migrateOrganization(entityDescriptor.id, organization.id)
+      log.info "$subject migrated $entityDescriptor to $organization"
+
+      flash.type="success"
+      flash.message = message(code: 'fedreg.templates.entitydescriptor.migrated')
+      log.info "$subject migrated $entityDescriptor to $organization"
+      
+      redirect (action: "show", id: entityDescriptor.id)
+    }
+    else {
+      log.warn("Attempt to migrate $entityDescriptor to $organization by $subject was denied, incorrect permission set")
       response.sendError(403)
     }
   }

@@ -14,6 +14,8 @@
       </p>
     </g:if>
 
+    <g:render template="/templates/flash"  plugin="foundation"/>
+
     <ul class="nav nav-tabs">
       <li class="active"><a href="#tab-overview" data-toggle="tab"><g:message code="label.overview" /></a></li>
       <li><a href="#tab-contacts" data-toggle="tab"><g:message code="label.contacts" /></a></li>
@@ -25,7 +27,7 @@
 
     <div class="tab-content">
       <div id="tab-overview" class="tab-pane active">
-        <g:render template="/templates/entitydescriptor/overview" plugin="foundation" model="[entity:entity]" />
+        <g:render template="/templates/entitydescriptor/overview" plugin="foundation" model="[entity:entity, organizations:organizations]" />
       </div>
       
       <div id="tab-contacts" class="tab-pane">
