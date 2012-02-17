@@ -35,12 +35,7 @@
           ${fieldValue(bean: pse, field: "uri")}  <br/>
           </g:each>
         </td>
-      <g:if test="${identityProvider.errorURL}">
-      <tr>
-        <th><g:message code="label.errorurl"/></th>
-        <td><a href="${identityProvider.errorURL}">${fieldValue(bean: identityProvider, field: "errorURL")}</a></td>
       </tr>
-      </g:if>
       <tr>
         <th><g:message code="label.archived"/></th>
         <td>

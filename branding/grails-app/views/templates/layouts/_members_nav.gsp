@@ -28,13 +28,8 @@
       <li class="${actionName == 'listarchived' ? 'active':''}"><g:link controller="organization" action="listarchived"><g:message code="label.listarchived"/></g:link></li>
       </fr:hasPermission>
       <li class="${actionName in ['create', 'save'] ? 'active':''}"><g:link controller="organization" action="create"><g:message code="label.create"/></g:link></li>
-      <g:if test="${actionName in ['show', 'edit']}">
-        <li> | </li>
-        <li><g:message code="fedreg.view.members.organization.show.heading" args="[organization.displayName]"/>: </li>
+      <g:if test="${actionName in ['show']}">
         <li class="${actionName == 'show' ? 'active':''}"><g:link controller="organization" action="show" id="${organization.id}"><g:message code="label.view"/></g:link></li>
-        <fr:hasPermission target="organization:${organization.id}:update">
-          <li class="${actionName == 'edit' ? 'active':''}"><g:link controller="organization" action="edit" id="${organization.id}" class="${actionName == 'edit' ? 'active':''}"><g:message code="label.edit"/></g:link></li>
-        </fr:hasPermission>
       </g:if>
     </ul>
   </g:if>

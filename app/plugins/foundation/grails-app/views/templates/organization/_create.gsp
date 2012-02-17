@@ -1,137 +1,116 @@
-<r:script disposition='head'>
-	var certificateValidationEndpoint="${createLink(controller:'coreUtilities', action:'validateCertificate')}";
-	var newCertificateValid=false;
-	
-	$(function() {	
-		$('form').validate({
-				keyup: false
-		});
-		$('form').formwizard({ 
-		 	formPluginEnabled: false,
-		 	validationEnabled: true,
-		 	focusFirstInput: true,
-			disableUIStyles: true
-		});
-	});
-</r:script>
-
 <g:hasErrors>
-    <div class="warning">
-       <g:message code="fedreg.templates.organization.create.errors" />
-    </div>
-
-	<n:errors bean="${organization}" />
+  <div class="alert alert-message alert-danger">
+    <p><strong><g:message code="fedreg.templates.organization.create.errors" /></strong></p>
+    <p>
+      <g:message code="label.identifiederrors"/>
+      <g:renderErrors bean="${organization}" as="list" />
+      <g:renderErrors bean="${contact}" as="list"/>
+    </p>
+  </div>
 </g:hasErrors>
 
-<g:form action="${saveAction}">
-	<g:hiddenField name="active" value="true"/>
-	<g:if test="${!requiresContactDetails}">
-		<g:hiddenField name="contact.id" value="${fr.contactID()}"/>
-	</g:if>
-	<g:hiddenField name="contact.type" value="administrative" />
-	<g:hiddenField name="organization.lang" value="en" />
-	
-	<div class="step" id="overview">
-		<h3><g:message code="fedreg.templates.organization.create.overview.heading" /></h3>
-		<g:message code="fedreg.templates.organization.create.overview.details" />
-	</div>
-	
-	<g:if test="${requiresContactDetails}">
-		<div class="step" id="contact">
-			<h3><g:message code="fedreg.templates.organization.create.contact.heading" /></h3>
-			<p>
-				<g:message code="fedreg.templates.organization.create.contact.details" />
-			</p>
-			<g:hasErrors bean="${contact}">
-				<div class="error"><g:renderErrors bean="${contact}" as="list"/></div>
-			</g:hasErrors>
-			<table>
-				<tr>
-					<td>
-						<label for="contact.givenName"><g:message code="label.givenname" /></label>
-					</td>
-					<td>
-						<g:textField name="contact.givenName"  size="50" class="required" value="${contact?.givenName}"/>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<label for="contact.surname"><g:message code="label.surname" /></label>
-					</td>
-					<td>
-						<g:textField name="contact.surname"  size="50" class="required" value="${contact?.surname}"/>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<label for="contact.email"><g:message code="label.email" /></label>
-					</td>
-					<td>
-						<g:textField name="contact.email"  size="50" class="required email" value="${contact?.email}"/>
-					</td>
-				</tr>
-			</table>
-		</div>
-	</g:if>
-	
-	<div class="step" id="basicinformation">
-		<h3><g:message code="fedreg.templates.organization.create.basicinformation.heading" /></h3>
-		<p>
-			<g:message code="fedreg.templates.organization.create.basicinformation.details" />
-		</p>
-		<g:hasErrors bean="${organization}">
-			<div class="error"><g:renderErrors bean="${organization}" as="list"/></div>
-		</g:hasErrors>
-		<table>
-			<tr>
-				<td>
-					<label for="organization.name"><g:message code="label.name" /></label>
-				</td>
-				<td>
-					<g:textField name="organization.name"  size="50" class="required" value="${organization?.name}"/>
-					<fr:tooltip code='fedreg.help.organization.name' />
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<label for="organization.displayName"><g:message code="label.displayname" /></label>
-				</td>
-				<td>
-					<g:textField name="organization.displayName"  size="50" class="required" value="${organization?.displayName}"/>
-					<fr:tooltip code='fedreg.help.organization.displayName' />
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<label for="organization.url"><g:message code="label.organizationurl" /></label>
-				</td>
-				<td>
-					<g:textField name="organization.url"  size="50" class="required url"  value="${organization?.url}"/>
-					<fr:tooltip code='fedreg.help.organization.url' />
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<label for="organization.primary"><g:message code="label.organizationtype" /></label>
-				</td>
-				<td>
-					<g:select name="organization.primary" from="${organizationTypes}" optionKey="id" optionValue="displayName"  value="${organization?.primary?.id}"/>
-					<fr:tooltip code='fedreg.help.organization.type' />
-				</td>
-			</tr>
-		</table>
-	</div>
-	
-	<div class="step submit_step" id="creationsummary">
-		<h3><g:message code="fedreg.templates.organization.create.summary.heading" /></h3>
-		<p>
-			<g:message code="fedreg.templates.organization.create.summary.details" />
-		</p>
-	</div>
+<g:form action="${saveAction}" class="form-horizontal">
+  <g:hiddenField name="active" value="true"/>
+  <g:hiddenField name="contact.type" value="administrative" />
+  <g:hiddenField name="organization.lang" value="en" />
+  
+  <div class="step" id="overview">
+    <g:message code="fedreg.templates.organization.create.overview.details" />
+  </div>
 
-	<nav>
-		<input id="back" value="${g.message(code:'label.back')}" type="reset" /> 
-		<input id="next" value="${g.message(code:'label.next')}" type="submit" />
-	</nav>
+  <hr>
+  
+  <div id="contact" class="step">
+    <h3>1. <g:message code="fedreg.templates.organization.create.contact.heading" /></h3>
+    <p><g:message code="fedreg.templates.organization.create.contact.details" /></p>
+    <fieldset>
+      <div class="control-group">
+        <label for="contact.givenName"><g:message code="label.givenname" /></label>
+        <div class="controls">
+          <g:textField name="contact.givenName"  class="required" value="${contact?.givenName ?: fr.subject()?.givenName}"/>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label for="contact.surname"><g:message code="label.surname" /></label>
+        <div class="controls">
+          <g:textField name="contact.surname"  class="required" value="${contact?.surname ?: fr.subject()?.surname}"/>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label for="contact.email"><g:message code="label.email" /></label>
+        <div class="controls">
+          <g:textField name="contact.email"  class="required email" value="${contact?.email  ?: fr.subject()?.email}"/>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <hr>
+  
+  <div class="step" id="basicinformation">
+    <h3>2. <g:message code="fedreg.templates.organization.create.basicinformation.heading" /></h3>
+    <p>
+      <g:message code="fedreg.templates.organization.create.basicinformation.details" />
+    </p>
+    <fieldset>
+      <div class="control-group">
+      <label for="organization.name"><g:message code="label.name" /></label>
+        <div class="controls">
+          <g:textField name="organization.name" class="required span4" value="${organization?.name}"/>
+          <fr:tooltip code='fedreg.help.organization.name' />
+        </div>
+      </div>
+
+      <div class="control-group">
+      <label for="organization.displayName"><g:message code="label.displayname" /></label>
+        <div class="controls">
+          <g:textField name="organization.displayName" class="required span4" value="${organization?.displayName}"/>
+          <fr:tooltip code='fedreg.help.organization.displayName' />
+        </div>
+      </div>
+
+      <div class="control-group">
+      <label for="organization.url"><g:message code="label.organizationurl" /></label>
+        <div class="controls">
+          <g:textField name="organization.url" class="required url span4"  value="${organization?.url}"/>
+          <fr:tooltip code='fedreg.help.organization.url' />
+        </div>
+      </div>
+
+      <div class="control-group">
+      <label for="organization.primary"><g:message code="label.organizationtype" /></label>
+        <div class="controls">
+          <g:select name="organization.primary" from="${organizationTypes}" optionKey="id" optionValue="displayName" value="${organization?.primary?.id}" class="span4" />
+          <fr:tooltip code='fedreg.help.organization.type' />
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <hr>
+  
+  <div class="step" id="creationsummary">
+    <h3>3. <g:message code="fedreg.templates.organization.create.summary.heading" /></h3>
+    <p>
+      <g:message code="fedreg.templates.organization.create.summary.details" />
+    </p>
+
+    <div class="form-actions">
+      <button type="submit" name="submit" value="submit" class="btn btn-success"><g:message code="label.submit"/></button>
+    </div>
+  </div>
 
 </g:form>
+
+<r:script disposition='head'>
+  var certificateValidationEndpoint="${createLink(controller:'coreUtilities', action:'validateCertificate')}";
+  var newCertificateValid=false;
+  
+  $(function() {  
+    $('form').validate({
+        keyup: false
+    });
+  });
+</r:script>

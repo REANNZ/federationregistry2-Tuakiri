@@ -150,6 +150,10 @@ div.step {
   margin-top: 12px;
 }
 
+ul.clean {
+  list-style: none;
+}
+
 body {
   background-color: #f2f2f2;
 }

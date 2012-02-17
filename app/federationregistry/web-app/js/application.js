@@ -224,6 +224,32 @@ fedreg.descriptor_fulladministrator_search = function() {
   });
 }
 
+// Organization
+$(document).on('click', '.show-edit-organization', function() {
+  $("#overview-organization").hide();
+  $("#editor-organization").fadeIn();
+});
+
+$(document).on('click', '.cancel-edit-organization', function() {
+  $("#editor-organization").hide();
+  $("#overview-organization").fadeIn();
+});
+
+$(document).on('click', '.confirm-unarchive-organization', function() {
+  fedreg.set_button($(this));
+  $("#unarchive-organization-modal").modal('show');
+});
+
+$(document).on('click', '.confirm-archive-organization', function() {
+  fedreg.set_button($(this));
+  $("#archive-organization-modal").modal('show');
+});
+
+$(document).on('click', '.confirm-delete-organization', function() {
+  fedreg.set_button($(this));
+  $("#delete-organization-modal").modal('show');
+});
+
 // Entity Descriptor
 $(document).on('click', '.confirm-archive-entitydescriptor', function() {
   fedreg.set_button($(this));
