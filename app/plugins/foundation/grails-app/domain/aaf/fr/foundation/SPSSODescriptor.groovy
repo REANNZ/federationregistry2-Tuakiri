@@ -37,7 +37,7 @@ class SPSSODescriptor extends SSODescriptor {
 	public boolean equals(Object obj) {
 		if( this.is(obj) ) return true
 		if ( obj == null ) return false
-		if ( !obj.instanceOf(IDPSSODescriptor) ) return false
+		if ( !obj.instanceOf(SPSSODescriptor) ) return false
 		
 		SPSSODescriptor rhs = (SPSSODescriptor) obj
 		return new EqualsBuilder()
