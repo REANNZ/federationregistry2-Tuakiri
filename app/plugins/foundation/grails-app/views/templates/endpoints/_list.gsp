@@ -83,7 +83,7 @@
 
                 <fr:hasPermission target="descriptor:${ep.descriptor.id}:endpoint:remove">
                   <g:if test="${endpoints.size() > minEndpoints}">
-                    <a class="confirm-delete-endpoint btn" data-id="${ep.id}" data-type="${endpointType}"><g:message code='label.delete'/></a>
+                    <a class="confirm-delete-endpoint btn btn-danger" data-id="${ep.id}" data-type="${endpointType}"><g:message code='label.delete'/></a>
                   </g:if>
                 </fr:hasPermission>
               </td>

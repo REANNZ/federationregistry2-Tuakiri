@@ -6,7 +6,7 @@
           <td> ${val.value?.encodeAsHTML()}</td>
           <fr:hasPermission target="descriptor:${ra.attributeConsumingService.descriptor.id}:attribute:value:remove">
             <td>
-              <a class="confirm-delete-ra-value btn" data-acsid="${acs.id}" data-raid="${ra.id}" data-ravalueid="${val.id}"><g:message code="label.delete"/></a>
+              <a class="confirm-delete-ra-value btn btn-danger" data-acsid="${acs.id}" data-raid="${ra.id}" data-ravalueid="${val.id}"><g:message code="label.remove"/></a>
             </td>
           </fr:hasPermission>
         </tr>

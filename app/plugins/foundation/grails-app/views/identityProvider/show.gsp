@@ -13,6 +13,8 @@
         <g:message code="fedreg.view.members.identityprovider.show.notfunctioning"/>
       </p>
     </g:if>
+
+    <g:render template="/templates/flash" plugin="foundation"/>
       
     <ul class="nav nav-tabs">
       <li class="active"><a href="#tab-overview" data-toggle="tab"><g:message code="label.overview" /></a></li>
@@ -135,7 +137,7 @@
                 <p class="span8">
                   <g:message code="fedreg.view.members.identityprovider.show.attributefilter.description" /></p>
                 <span class="span1 offset1">
-                  <a class="btn btn-warning" onClick="fedreg.attributefilter_refresh(); return false;">
+                  <a class="btn btn-info" onClick="fedreg.attributefilter_refresh(); return false;">
                     <g:message code="label.load"/>
                   </a>
                 </span>

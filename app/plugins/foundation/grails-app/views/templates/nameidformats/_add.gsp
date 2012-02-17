@@ -5,7 +5,7 @@
   <%@page import="aaf.fr.foundation.SamlURIType" %>
 
   <div id="addnameidformat" class="searcharea">
-    <a class="show-add-nameid btn btn-info"><g:message code="label.addnameidformat"/></a>
+    <a class="show-add-nameid btn"><g:message code="label.addnameidformat"/></a>
   </div>
   
   <div id="newnameidformat" class="revealable">
@@ -20,7 +20,7 @@
 
       <div class="form-actions">
         <a class="add-nameid btn btn-success"><g:message code="label.add"/></a>
-        <a class="cancel-add-nameid btn"><g:message code="label.close"/></a>
+        <a class="cancel-add-nameid btn"><g:message code="label.cancel"/></a>
       </div>
     </form>
   </div>

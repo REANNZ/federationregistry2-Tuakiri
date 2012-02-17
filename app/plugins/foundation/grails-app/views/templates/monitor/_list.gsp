@@ -26,7 +26,7 @@
   				</td>
   				<td>
   					<fr:hasPermission target="descriptor:${roleDescriptor.id}:monitor:delete">
-              <a class="confirm-delete-monitor btn" data-monitorid="${m.id}"><g:message code="label.delete"/></a>
+              <a class="confirm-delete-monitor btn btn-danger" data-monitorid="${m.id}"><g:message code="label.delete"/></a>
   					</fr:hasPermission>
   				</td>
   			</tr>

@@ -21,7 +21,7 @@
       <tr>
       <td colspan="2">
           <fr:hasPermission target="descriptor:${descriptor.id}:attribute:remove">
-            <a class="confirm-delete-attribute btn" data-attrid="${attr.id}"><g:message code="label.remove"/></a>
+            <a class="confirm-delete-attribute btn btn-danger" data-attrid="${attr.id}"><g:message code="label.remove"/></a>
           </fr:hasPermission>
         </td>
       </tr>

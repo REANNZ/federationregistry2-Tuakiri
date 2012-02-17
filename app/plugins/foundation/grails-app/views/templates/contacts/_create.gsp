@@ -2,7 +2,7 @@
 
   <div class="search-contacts">
     <div class="add-contact">
-      <a class="btn btn-info search-for-contact"><g:message code="label.addcontact" /></a>
+      <a class="btn search-for-contact"><g:message code="label.addcontact" /></a>
     </div>
 
     <div class="potential-contacts revealable">

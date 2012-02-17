@@ -18,7 +18,7 @@
   					<td>
   						<a href="${createLink(controller:'contacts', action:'show', id: contactPerson.contact.id)}" class="btn"><g:message code='label.view'/></a>
   						<fr:hasPermission target="organization:${owner.id}:contact:remove">
-                <a class="confirm-delete-contact btn" data-contact="${contactPerson.id}"><g:message code='label.delete'/></a>
+                <a class="confirm-delete-contact btn btn-danger" data-contact="${contactPerson.id}"><g:message code='label.delete'/></a>
   						</fr:hasPermission>
   					</td>
   				</tr>

@@ -13,7 +13,7 @@
         </p>
       </g:if>
 
-      <g:render template="/templates/flash"  plugin="foundation"/>
+      <g:render template="/templates/flash" plugin="foundation"/>
       
       <ul class="nav nav-tabs">
         <li class="active"><a href="#tab-overview" data-toggle="tab"><g:message code="label.overview" /></a></li>

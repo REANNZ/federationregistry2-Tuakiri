@@ -80,17 +80,17 @@
         <tr>
           <td colspan="5">
             <div class="manage-ra" data-raid="${ra.id}">
+              <g:if test="${specificationAttributes.contains(ra.base)}">
+                <fr:hasPermission target="descriptor:${ra.attributeConsumingService.descriptor.id}:attribute:value:add">
+                  <a class="show-add-ra-value btn" data-raid="${ra.id}"><g:message code="label.addvalue"/></a>
+                </fr:hasPermission>
+              </g:if>
               <fr:hasPermission target="descriptor:${ra.attributeConsumingService.descriptor.id}:attribute:edit">
                 <a data-raid="${ra.id}" class="btn edit-ra"><g:message code="label.edit" /></a>
               </fr:hasPermission>
               <fr:hasPermission target="descriptor:${ra.attributeConsumingService.descriptor.id}:attribute:remove">
-                <a class="confirm-delete-ra btn" data-raid="${ra.id}" data-acsid="${ra.attributeConsumingService.id}"><g:message code="label.remove" /></a>
+                <a class="confirm-delete-ra btn btn-danger" data-raid="${ra.id}" data-acsid="${ra.attributeConsumingService.id}"><g:message code="label.remove" /></a>
               </fr:hasPermission>
-              <g:if test="${specificationAttributes.contains(ra.base)}">
-              <fr:hasPermission target="descriptor:${ra.attributeConsumingService.descriptor.id}:attribute:value:add">
-                <a class="show-add-ra-value btn" data-raid="${ra.id}"><g:message code="label.addvalue"/></a>
-              </fr:hasPermission>
-              </g:if>
             </div>
 
             <fr:hasPermission target="descriptor:${ra.attributeConsumingService.descriptor.id}:attribute:edit">
@@ -106,23 +106,23 @@
               <p>
                 <g:message code="fedreg.templates.acs.specattributes.add.details"/>
               </p>
-              <form id="newspecattributedata${ra.id}" class="validating">
-                <input type="hidden"
- name="id" value="${ra.id}">
-                <table>
-                  <tbody>
-                    <tr>
-                      <th><g:message code="label.value"/><th>
-                      <td>
-                        <input name="value" type="text" class="required" size="60"/>
-                        <fr:tooltip code='fedreg.help.acs.specvalue' />
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+              <form id="newspecattributedata${ra.id}" class="form-horizontal validating">
+                <input type="hidden" name="id" value="${ra.id}">
+                <fieldset>
+                  <div class="control-group">
+                    <label for="value"><g:message code="label.value"/></label>
+                    <div class="controls">
+                      <input name="value" type="text" class="required" size="60"/>
+                      <fr:tooltip code='fedreg.help.acs.specvalue' />
+                    </div>
+                  </div>
+                </fieldset>
+
+                <div class="form-actions">
+                  <a class="add-ra-value btn btn-success" data-acsid="${acs.id}" data-raid="${ra.id}"><g:message code="label.add"/></a>
+                  <a class="close-add-ra-value btn" data-raid="${ra.id}"><g:message code="label.cancel"/></a>
+                </div>
               </form>
-              <a class="add-ra-value btn btn-success" data-acsid="${acs.id}" data-raid="${ra.id}"><g:message code="label.add"/></a>
-              <a class="close-add-ra-value btn" data-raid="${ra.id}"><g:message code="label.close"/></a>
             </div>
             </fr:hasPermission>
             </g:if>

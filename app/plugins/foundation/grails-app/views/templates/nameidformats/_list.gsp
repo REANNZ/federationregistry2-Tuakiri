@@ -15,7 +15,7 @@
           <td>${nidf.description?.encodeAsHTML()}</td>
           <td>
             <fr:hasPermission target="descriptor:${descriptor.id}:nameidformat:remove">
-              <a class="confirm-delete-nameid btn" data-formatid="${nidf.id}"><g:message code="label.delete"/></a>
+              <a class="confirm-delete-nameid btn btn-danger" data-formatid="${nidf.id}"><g:message code="label.delete"/></a>
             </fr:hasPermission>
           </td>
         </tr>

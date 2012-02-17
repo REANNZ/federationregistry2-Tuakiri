@@ -4,7 +4,7 @@
   <%@page import="aaf.fr.foundation.SamlURIType" %>
 
   <div id="add-${endpointType}">
-    <a class="show-create-endpoint btn btn-info" data-type="${endpointType}"><g:message code="label.addendpoint"/></a>
+    <a class="show-create-endpoint btn" data-type="${endpointType}"><g:message code="label.addendpoint"/></a>
   </div>
 
   <div id="new-${endpointType}" class="revealable">

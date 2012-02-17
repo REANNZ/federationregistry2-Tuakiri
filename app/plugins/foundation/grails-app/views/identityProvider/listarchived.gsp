@@ -23,7 +23,7 @@
           <td>${fieldValue(bean: identityProvider, field: "organization.name")}</td>
           <td>${fieldValue(bean: identityProvider, field: "entityDescriptor.entityID")}</td>
           <td>
-            <a href="${createLink(controller:'IDPSSODescriptor', action:'show', id: identityProvider.id)}" class="btn"/><g:message code="label.view"/></a>
+            <a href="${createLink(controller:'identityProvider', action:'show', id: identityProvider.id)}" class="btn"/><g:message code="label.view"/></a>
           </td>
         </tr>
       </g:each>

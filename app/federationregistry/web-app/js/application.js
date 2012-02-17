@@ -353,6 +353,16 @@ $(document).on('click', '.edit-serviceprovider', function() {
 });
 
 // Key Descriptor
+$(document).on('click', '.show-addnew-certificate', function(entity) {
+  $('#addcertificate').hide(); 
+  $('#newcertificate').fadeIn();
+});
+
+$(document).on('click', '.hide-addnew-certificate', function(entity) {
+  $('#newcertificate').hide();
+  $('#addcertificate').fadeIn(); 
+});
+
 $(document).on('click', '.add-new-certificate', function(entity) {
   fedreg.set_button($(this));
   var entity = $(this).attr('data-entity');
@@ -1005,6 +1015,16 @@ fedreg.nameIDFormat_list = function() {
 
 // Service Categories
 var delete_category;
+
+$(document).on('click', '.show-addnew-servicecategory', function(entity) {
+  $('#addcategory').hide(); 
+  $('#newcategory').fadeIn();
+});
+
+$(document).on('click', '.hide-addnew-servicecategory', function(entity) {
+  $('#newcategory').hide();
+  $('#addcategory').fadeIn();
+});
 
 $(document).on('click', '.link-new-category', function() {
   fedreg.set_button($(this));

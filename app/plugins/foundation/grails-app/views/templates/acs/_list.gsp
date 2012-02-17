@@ -10,7 +10,7 @@
 
     <fr:hasPermission target="descriptor:${acs.descriptor.id}:attribute:add">
       <div id="addattribute${acs.id}">
-        <a class="show-create-ra btn btn-info" data-acsid="${acs.id}"><g:message code="label.addattribute"/></a>
+        <a class="show-create-ra btn" data-acsid="${acs.id}"><g:message code="label.addattribute"/></a>
       </div>
 
       <div id="newattribute${acs.id}" class="revealable">

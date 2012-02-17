@@ -3,7 +3,7 @@
   <%@page import="aaf.fr.foundation.MonitorType" %>
 
   <div id="addmonitor">
-    <a class="show-add-monitor btn btn-info"><g:message code="label.addmonitor"/></a>
+    <a class="show-add-monitor btn"><g:message code="label.addmonitor"/></a>
   </div>
   
   <div id="newmonitor" class="revealable">

@@ -3,7 +3,7 @@
   <%@page import="aaf.fr.foundation.ServiceCategory" %>
 
   <div id="addcategory" class="">
-    <a onclick="$('#addcategory').fadeOut(); $('#newcategory').fadeIn(); return false;" class="btn btn-info"><g:message code="label.addcategory"/></a>
+    <a class="show-addnew-servicecategory btn"><g:message code="label.addcategory"/></a>
   </div>
   
   <div id="newcategory"  class="revealable">
@@ -22,7 +22,7 @@
 
         <div class="form-actions">
           <a class="link-new-category btn btn-success" id="createcategorylink"><g:message code="label.add"/></a>
-          <a onclick="$('#newcategory').fadeOut(); $('#addcategory').fadeIn(); return false;" class="btn"><g:message code="label.close"/></a>
+          <a class="hide-addnew-servicecategory btn"><g:message code="label.cancel"/></a>
         </div>
       </fieldset>
     </form>

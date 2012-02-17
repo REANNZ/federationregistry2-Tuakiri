@@ -13,6 +13,8 @@
         <g:message code="fedreg.view.members.serviceprovider.show.notfunctioning"/>
       </p>
     </g:if>
+
+    <g:render template="/templates/flash" plugin="foundation"/>
     
     <ul class="nav nav-tabs">
       <li class="active"><a href="#tab-overview" data-toggle="tab"><g:message code="label.overview" /></a></li>
@@ -24,8 +26,6 @@
         <li><a href="#tab-reports" data-toggle="tab"><g:message code="label.reporting" /></a></li>
       </fr:hasAnyPermission>
       <li><a href="#tab-monitors" data-toggle="tab"><g:message code="label.monitoring" /></a></li>
-      
-
     </ul>
 
     <div class="tab-content">

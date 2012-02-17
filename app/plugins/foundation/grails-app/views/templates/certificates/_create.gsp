@@ -3,7 +3,7 @@
 
 <fr:hasPermission target="descriptor:${descriptor.id}:crypto:create">
   <div id="addcertificate">
-    <a onclick="$('#addcertificate').fadeOut(); $('#newcertificate').fadeIn();" class="btn btn-info"><g:message code="label.addcertificate"/></a>
+    <a class="show-addnew-certificate btn"><g:message code="label.addcertificate"/></a>
   </div>
   
   <div id="newcertificate" class="revealable">
@@ -48,7 +48,7 @@
 
         <div class="form-actions">
           <a data-entity="${descriptor.entityDescriptor.entityID}" class="add-new-certificate btn btn-success"><g:message code="label.add"/></a>
-          <a onclick="$('#newcertificate').fadeOut(); $('#addcertificate').fadeIn();" class="btn"><g:message code="label.close"/></a>
+          <a class="hide-addnew-certificate btn"><g:message code="label.cancel"/></a>
         </div>
       </fieldset>
     </form>
