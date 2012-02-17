@@ -10,7 +10,7 @@ import grails.plugins.federatedgrails.Role
  */
 class OrganizationController {
   static defaultAction = "index"
-  def allowedMethods = [save: 'POST', update: 'PUT']
+  def allowedMethods = [save: 'POST', update: 'PUT', delete:'DELETE', unarchive:'PUT', archive:'PUT']
     
   def organizationService
 

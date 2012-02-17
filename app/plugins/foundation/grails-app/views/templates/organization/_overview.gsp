@@ -10,8 +10,6 @@
     <g:else>
       <a class="confirm-archive-organization btn btn-warning"><g:message code="label.archive"/></a>
     </g:else>
-  </fr:hasPermission>
-  <fr:hasPermission target="organization:${organization.id}:delete">
     <a class="confirm-delete-organization btn btn-danger"><g:message code="label.delete"/></a>
   </fr:hasPermission>
 </div>

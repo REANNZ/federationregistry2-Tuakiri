@@ -79,7 +79,7 @@
     <a class="btn close-modal"><g:message code="label.cancel" /></a>
 
     <g:form controller="organization" action="unarchive" id="${organization.id}" style="padding: 0px;">
-      <input name="_method" type="hidden" value="post" />
+      <input name="_method" type="hidden" value="put" />
       <button type="submit" class="btn btn-warning"><g:message code="label.unarchive" /></a>
     </g:form>
   </div>
@@ -97,7 +97,7 @@
     <a class="btn close-modal"><g:message code="label.cancel" /></a>
 
     <g:form controller="organization" action="archive" id="${organization.id}" style="padding: 0px;">
-      <input name="_method" type="hidden" value="post" />
+      <input name="_method" type="hidden" value="put" />
       <button type="submit" class="btn btn-warning"><g:message code="label.archive" /></a>
     </g:form>
   </div>
