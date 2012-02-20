@@ -6,8 +6,9 @@
         <label for="sp.status"><g:message code="label.status" /></label>
         <div class="controls">
           <g:radioGroup name="sp.status" values="['true', 'false']" labels="['label.active', 'label.inactive']" value="${serviceProvider.active}">
-             ${it.radio} &nbsp;&nbsp; <g:message code="${it.label}" /><br>
+             ${it.radio} <g:message code="${it.label}" />
           </g:radioGroup>
+          <fr:tooltip code='fedreg.help.serviceprovider.status' />
         </div>
       </div>
 
@@ -44,7 +45,7 @@
       </div>
 
       <div class="form-actions">
-        <a class="edit-serviceprovider btn btn-success"><g:message code="label.save"/></a>
+        <button type="submit" class="edit-serviceprovider btn btn-success"><g:message code="label.save"/></button>
         <a class="cancel-edit-serviceprovider btn"><g:message code="label.cancel"/></a>
       </div>
 

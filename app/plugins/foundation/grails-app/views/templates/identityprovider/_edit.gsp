@@ -48,7 +48,7 @@
 
 
       <div class="form-actions">
-        <a class="edit-identityprovider btn btn-success"><g:message code="label.save"/></a>
+        <button type="submit" class="edit-identityprovider btn btn-success"><g:message code="label.save"/></button>
         <a class="cancel-edit-identityprovider btn"><g:message code="label.cancel"/></a>
       </div>
 

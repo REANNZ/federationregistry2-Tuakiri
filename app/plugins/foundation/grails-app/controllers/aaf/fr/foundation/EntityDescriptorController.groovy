@@ -76,6 +76,7 @@ class EntityDescriptorController {
     
     def entityDescriptor_ = EntityDescriptor.get(params.id)
     if (!entityDescriptor_) {
+      log.error "EntityDescriptor for id ${params.id} does not exist"
       flash.type="error"
       flash.message = message(code: 'aaf.fr.foundation.entitydescriptor.nonexistant')
       redirect(action: "list")

@@ -10,8 +10,7 @@
     <h4><g:message code="fedreg.templates.servicecategories.add.heading"/></h4>
     <form id="newservicecategorydata" class="form-horizontal">
       <fieldset>
-        <input type="hidden"
- name="id" value="${descriptor.id}"/>
+        <input type="hidden" name="id" value="${descriptor.id}"/>
         
         <div class="control-group">
           <label for="categoryID"><g:message code="label.category"/></label>
