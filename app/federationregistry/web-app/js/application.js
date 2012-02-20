@@ -297,28 +297,6 @@ $(document).on('click', '.cancel-edit-identityprovider', function() {
   $("#overview-identityprovider").fadeIn();
 });
 
-$(document).on('click', '.edit-identityprovider', function() {
-  var target_form = $("#editor-identityprovider > form");
-
-  if(target_form.valid()) {
-    data = target_form.serialize();
-    $.ajax({
-      type: "POST",
-      url: updateIdentityProviderEndpoint,
-      data: data,
-      success: function(res) {
-        var target = $("#overview-identityprovider-editable");
-        target.html(res);
-        applyBehaviourTo(target)
-        $("#editor-identityprovider").hide();
-        $("#overview-identityprovider").fadeIn(); 
-      },
-      error: function (xhr, ajaxOptions, thrownError) {
-      }
-    });
-  }
-});
-
 // Service Provider
 $(document).on('click', '.show-edit-serviceprovider', function() {
   $("#overview-serviceprovider").hide();
@@ -328,28 +306,6 @@ $(document).on('click', '.show-edit-serviceprovider', function() {
 $(document).on('click', '.cancel-edit-serviceprovider', function() {
   $("#editor-serviceprovider").hide();
   $("#overview-serviceprovider").fadeIn();
-});
-
-$(document).on('click', '.edit-serviceprovider', function() {
-  var target_form = $("#editor-serviceprovider > form");
-
-  if(target_form.valid()) {
-    data = target_form.serialize();
-    $.ajax({
-      type: "POST",
-      url: updateServiceProviderEndpoint,
-      data: data,
-      success: function(res) {
-        var target = $("#overview-serviceprovider-editable");
-        target.html(res);
-        applyBehaviourTo(target)
-        $("#editor-serviceprovider").hide();
-        $("#overview-serviceprovider").fadeIn(); 
-      },
-      error: function (xhr, ajaxOptions, thrownError) {
-      }
-    });
-  }
 });
 
 // Key Descriptor
