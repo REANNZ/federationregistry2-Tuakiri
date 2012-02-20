@@ -9,6 +9,7 @@
   </head>
 
   <body>
+
     <div class="container">
       <header>
         <div class="row">
@@ -38,6 +39,7 @@
         </div>
       </footer>
     </div>
+    
     <r:layoutResources/>
 
   </body>

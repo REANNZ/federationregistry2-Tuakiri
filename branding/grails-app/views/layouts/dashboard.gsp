@@ -3,30 +3,46 @@
 <html>
 	<head>
 		<title><g:message code="fedreg.title.${grailsApplication.config.fedreg.deployment.environment}" /> | <g:layoutTitle /></title>
-		<r:require modules="jquery, bootstrap, zenbox, app"/>
+		 <r:require modules="bootstrap, validate, protovis, modernizr, app"/>
 		<r:layoutResources/>
 		<g:layoutHead />
 	</head>
 
-	<body>
-	    <header>
-			<g:render template='/templates/frheader' />
-	    </header>
+  <body>
 
-		<nav>
-			<n:isLoggedIn>
-				<g:render template='/templates/frtopnavigation'/>
-			</n:isLoggedIn>
-		</nav>
-	
-		<section>
-			<g:layoutBody/>
-	    </section>
+    <div class="container">
+      <header>
+        <div class="row">
+          <div class="span12">
+            <g:render template='/templates/frheader' />
+          </div>
+        </div>
+      </header>
 
-		<footer>
-			<g:render template='/templates/frfooter' />
-		</footer>
-		
-		<r:layoutResources/>
-	</body>
+      <nav>
+        <div class="row">
+          <div class="span12">
+            <g:render template='/templates/frtopnavigation'/>  
+          </div>
+        </div>
+      </nav>
+
+      <section>
+        <g:layoutBody/>
+      </section>
+
+      <footer>
+        <div class="row">
+          <div class="span12">
+            <g:render template='/templates/frfooter' />
+          </div>
+        </div>
+      </footer>
+
+    </div>
+
+    <r:layoutResources/>
+
+  </body>
+
 </html>
