@@ -97,8 +97,7 @@
           .left(0)
           .width(x)
         .fillStyle("rgb(148,103,189)")
-          .text(function(d) d + " ( " + ((d / data.totalsessions) * 100).toFixed(3) + "%" + " of sessions for period )")
-        .event("mouseover", pv.Behavior.tipsy({gravity:'w', fade:true}));
+          .text(function(d) d + " ( " + ((d / data.totalsessions) * 100).toFixed(3) + "%" + " of sessions for period )");
 
       bar.anchor("left").add(pv.Label)
           .textMargin(10)

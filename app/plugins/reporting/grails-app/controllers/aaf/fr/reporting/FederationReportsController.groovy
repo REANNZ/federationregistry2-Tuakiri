@@ -40,7 +40,7 @@ class FederationReportsController {
 					// Sessions per year
 					def sessionValue = [:]	
 					sessionValue.x = year
-					def sessionQuery = "select count(*) from fedreg.reporting.WayfAccessRecord where year(dateCreated) = ? ${ReportingHelpers.robots(robot)}"
+					def sessionQuery = "select count(*) from aaf.fr.reporting.WayfAccessRecord where year(dateCreated) = ? ${ReportingHelpers.robots(robot)}"
 					def sessionCount = WayfAccessRecord.executeQuery(sessionQuery, [year])[0]
 					if(sessionCount) {
 						sessionValue.y = sessionCount
