@@ -4,6 +4,10 @@
 @headFontColor: #fff;
 @navColor: #37404B;
 
+.row-spacer {
+  margin-top: 48px;
+}
+
 .rounded-top(@radius: 3px) {
   border-top-left-radius: @radius;
   border-top-right-radius: @radius;
@@ -194,6 +198,7 @@ body nav {
         .zero;
         .horizitem;
         margin-left: 4px;
+        text-align: center;
         a {
           .zero;
           text-decoration: none;

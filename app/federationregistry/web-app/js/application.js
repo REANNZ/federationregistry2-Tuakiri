@@ -1,8 +1,4 @@
 
-window.nimble = window.nimble || {};
-var nimble = window.nimble;
-nimble.endpoints = nimble.endpoints || {};
-
 window.fedreg = window.fedreg || {};
 var fedreg = window.fedreg;
 var btn;
@@ -13,6 +9,7 @@ $(function() {
 
 applyBehaviourTo = function(scope) {  
   $("[rel=twipsy]", scope).tooltip({offset:3}); 
+  $("[rel=tooltip]", scope).tooltip({offset:3}); 
 
   $('form > .validating', scope).validate({
     ignore: ":disabled",
@@ -57,6 +54,22 @@ fedreg.set_button = function(b) {
 fedreg.reset_button = function() {
   $('.btn').button('reset').removeAttr('disabled');
 };
+
+fedreg.showspinner= function() {
+  $('.spinner').show();
+}
+
+fedreg.hidespinner= function() {
+  $('.spinner').hide();
+}
+
+fedreg.showlocalspinner= function(scope) {
+  $(scope + ' .spinner').show();
+}
+
+fedreg.hidelocalspinner= function(scope) {
+  $(scope + ' .spinner').hide();
+}
 
 $(document).ajaxComplete(function(event, request, settings){
    fedreg.reset_button();

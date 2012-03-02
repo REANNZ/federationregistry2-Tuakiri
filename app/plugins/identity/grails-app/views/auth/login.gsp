@@ -18,7 +18,7 @@ aaa
             <h3>Fred Bloggs</h3>
             <p>Principal: https://idp.one.edu.au/idp/shibboleth!-!d2404817-6fb9-4165-90d8-1</p>
               <g:form action="locallogin" method="post">
-              <g:hiddenField name="principal" value="https://idp.one.edu.au/idp/shibboleth!-!d2404817-6fb9-4165-90d8-1" />
+              <g:hiddenField name="principal" value="https://vho.test.aaf.edu.au/idp/shibboleth!-!8fde68a6-0897-4b59-a4da-ab4d46579228" />
               <g:hiddenField name="credential" value="fake-sessionid-webform" />
               <g:hiddenField name="attributes.givenName" value="Fred" />
               <g:hiddenField name="attributes.surname" value="Bloggs" />
