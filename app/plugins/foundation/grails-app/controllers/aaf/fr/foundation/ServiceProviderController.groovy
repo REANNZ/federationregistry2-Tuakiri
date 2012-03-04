@@ -56,6 +56,7 @@ class ServiceProviderController {
     def serviceProvider = new SPSSODescriptor()
     def c = AttributeBase.createCriteria()
     def attributeList = c.list {
+      eq("adminRestricted", false)
       order("category", "asc")
       order("name", "asc")
     }
