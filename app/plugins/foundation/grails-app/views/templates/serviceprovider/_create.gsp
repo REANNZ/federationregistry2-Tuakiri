@@ -102,28 +102,22 @@
     <h3>3. <g:message code="fedreg.templates.serviceprovider.create.saml.heading" /></h3>
     <p><g:message code="fedreg.templates.serviceprovider.create.saml.details" /></p>
     
-    <div id="samlbasicmode">
-      <h4><g:message code="fedreg.templates.serviceprovider.create.saml.known.heading" /></h4>
+    <div id="samlbasicmode" class="hero-unit">
+      <h3><g:message code="fedreg.templates.serviceprovider.create.saml.known.heading" /></h3>
       <p><g:message code="fedreg.templates.serviceprovider.create.saml.known.descriptive" /></p>
-
-      <div class="row">
-        <div class="span2 offset10">
-          <a href="#" class="btn btn-info" onClick="$('#samlbasicmode').hide(); $('#samladvancedmode').fadeIn(); return false;"><g:message code="fedreg.templates.serviceprovider.create.saml.basic.switch" /></a>
-        </div>
-      </div>
 
       <fieldset>
         <div class="control-group">
           <label for="knownimpl"><g:message code="label.implementation" /></label>
           <div class="controls">
             <div id="knownimpl">
-              <strong><g:message code="fedreg.templates.serviceprovider.create.saml.known.shib13" /></strong>&nbsp;&nbsp;<span class="label important"><g:message code="fedreg.templates.serviceprovider.create.saml.known.shib13.descriptive" /></span></span><br><br>
+              <strong>&nbsp;&nbsp;&nbsp;&nbsp;<g:message code="fedreg.templates.serviceprovider.create.saml.known.shib13" /></strong>&nbsp;&nbsp;<span class="label important"><g:message code="fedreg.templates.serviceprovider.create.saml.known.shib13.descriptive" /></span></span><br>
             </div>
           </div>
         </div>
 
         <div class="control-group">
-          <label for="hostname"><g:message code="label.host" /></label>
+          <label for="hostname"><g:message code="label.url" /></label>
           <div class="controls">
             <g:textField name="hostname" id="hostname" class="url span4"  value="${hostname}"/>
             <fr:tooltip code='fedreg.help.serviceprovider.hostname' />
@@ -131,16 +125,14 @@
         </div>
       </fieldset>
     </div>
-    
-    <div id="samladvancedmode" class="revealable">
-      <h4><g:message code="fedreg.templates.serviceprovider.create.saml.advanced.heading" /></h4>
-      <p><g:message code="fedreg.templates.serviceprovider.create.saml.advanced.descriptive" /></p>
 
-      <div class="row">
-        <div class="span2 offset10">
-          <a href="#" class="btn btn-info" onClick="$('#samladvancedmode').hide(); $('#samlbasicmode').fadeIn(); return false;"><g:message code="fedreg.templates.identityprovider.create.saml.advanced.switch" /></a>
-        </div>
-      </div>
+    <div class="centered">
+      <h2>OR</h2>
+    </div>
+    
+    <div id="samladvancedmode" class="hero-unit">
+      <h3><g:message code="fedreg.templates.serviceprovider.create.saml.advanced.heading" /></h3>
+      <p><g:message code="fedreg.templates.serviceprovider.create.saml.advanced.descriptive" /></p>
 
       <fieldset>
         <div class="control-group">
@@ -400,11 +392,16 @@
          validcert: true
     });
     
-    $('#hostname').bind('blur',  function() {
-      if( $(this).val().indexOf('/', $(this).val().length - 1) !== -1 && $(this).val().length > 9)
-        $(this).val($(this).val().substring(0, $(this).val().length - 1));
+    $('#hostname').bind('change',  function() {
+      var val = $.trim($(this).val());
+      if( val.indexOf('/', val.length - 1) !== -1 && val.length > 9)
+        val = val.substring(0, val.length - 1);
       
-      fedreg.configureServiceProviderSAML( $(this).val() );
+      if( val.indexOf('/shibboleth', val.length - 11) !== -1 && val.length > 9)
+        val = val.substring(0, val.length - 11);
+
+      fedreg.configureServiceProviderSAML(val);
+      $(this).val(val);
     });
   });
 </r:script>
