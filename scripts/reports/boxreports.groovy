@@ -10,7 +10,7 @@ import fedreg.core.*
 import fedreg.reporting.*
 
 // Configure here....
-def sCount = 10
+def sCount = 200
 def idpCount = 5
 long federationOrgID = 8  // exclude everything operated by the AAF (or federation using FR)
 def year = 2011
@@ -40,9 +40,9 @@ def sessions = WayfAccessRecord.executeQuery(query.toString(), queryParams, [max
 
 sessions.each { s ->
   def sp = SPSSODescriptor.get(s[1])
-  if(sp) {
+  if(sp && !sp.displayName.toLowerCase().contains('test') && !sp.displayName.toLowerCase().contains('tst') && !sp.displayName.toLowerCase().contains('dev') && !sp.displayName.toLowerCase().contains('uat'))  {
     def sc = s[0]
-    println "Session counts for SP ${sp.displayName}" 
+    println "Session counts for SP ${sp.displayName}"
     println "Owner: ${sp.organization.name}"
     println "Total sessions recorded: ${sc} ( ${(sc/sessionTotal) * 100}% of all federated sessions ) "
     println "\nTop $idpCount sources"
@@ -76,7 +76,7 @@ sessions.each { s ->
   def sp = SPSSODescriptor.get(s[1])
   if(sp) {
     // At this time we do nothing with non top 20 except add up and output, leaving here for future ext
-   osc = osc + s[0] 
+   osc = osc + s[0]
   }
 }
 println "Session total for all OTHER services: $osc ( ${(osc/sessionTotal) * 100}% of all federated sessions)"
