@@ -93,6 +93,10 @@ td.centered, th.centered, .centered {
   font: courier;
 }
 
+.dashboard-wow {
+  font-size: 3.5em;
+}
+
 input.required, textarea.required {
   border-bottom: 2px solid #7C868A;  
 }

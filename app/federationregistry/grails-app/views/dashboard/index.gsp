@@ -1,84 +1,119 @@
 
 <html>
-	<head>
-		<meta name="layout" content="dashboard" />
-		<title><g:message code="fedreg.view.dashboard.title" /></title>
-	</head>
-	<body>
+  <head>
+    <meta name="layout" content="dashboard" />
+  </head>
+  <body>
 
-			<h2><g:message code="fedreg.view.dashboard.welcome" args="[subject.displayName]" /></h2>
-			<p><g:message code="fedreg.view.dashboard.welcome.descriptive"/></p>
+    <div class="row">
+      <div class="span10 offset1">
+        <h1><g:message code="label.welcome"/></h1>
+        <p>
+          <g:message code="fr.dashboard.welcome"/>
+        </p>
+      </div>
+    </div>
 
-      <g:if test="${tasks}">
-        
-        <p class="alert alert-block alert-info"><strong><g:message code="label.outstandingworkflow"/></strong><a class="close" data-dismiss="alert" href="#">&times;</a><br>
-        <g:link controller="workflowApproval" action="list"><g:message code="fedreg.view.dashboard.outstanding.tasks.required" args="[tasks.size()]"/></g:link></p>
-      </g:if>
-
+    <g:if test="${tasks}">
       <div class="row">
-        <div class="span3 offset1">
-          <h3><g:message code="fedreg.view.dashboard.myorganizations"/></h3>
-          <g:if test="${organizations}">
-            <ul  class="dashlist">
-              <g:each in="${organizations}" var="org">
-                <li><a href="${createLink(controller:'organization', action:'show', id:org?.id)}">${fieldValue(bean: org, field: 'displayName')} </a></li>
-              </g:each>
-            </ul>
-          </g:if>
-          <g:else>
-            <p><g:message code="fedreg.view.dashboard.myorganizations.none"/></p>
-          </g:else>
-        </div>
-
-        <div class="span3">
-          <h3><g:message code="fedreg.view.dashboard.myidentityproviders"/></h3>
-          <g:if test="${identityProviders}">
-            <ul class="dashlist">
-              <g:each in="${identityProviders}" var="idp">
-                <li><a href="${createLink(controller:'identityProvider', action:'show', id:idp.id)}">${fieldValue(bean: idp, field: 'displayName')}</a></li>
-              </g:each>
-            </ul>
-          </g:if>
-          <g:else>
-            <p><g:message code="fedreg.view.dashboard.myidentityproviders.none"/></p> 
-          </g:else>
-        </div>
-        <div class="span3">
-          <h3><g:message code="fedreg.view.dashboard.myserviceproviders"/></h3>
-          <g:if test="${serviceProviders}">
-            <ul class="dashlist">
-              <g:each in="${serviceProviders}" var="sp">
-                <li><a href="${createLink(controller:'serviceProvider', action:'show', id:sp.id)}">${fieldValue(bean: sp, field: 'displayName')}</a></li>
-              </g:each>
-            </ul>
-          </g:if>
-          <g:else>
-            <p><g:message code="fedreg.view.dashboard.myserviceproviders.none"/></p> 
-          </g:else>
+        <div class="span11">
+          <p class="alert alert-block alert-info"><strong><g:message code="label.outstandingworkflow"/></strong><a class="close" data-dismiss="alert" href="#">&times;</a><br>
+          <g:link controller="workflowApproval" action="list"><g:message code="fedreg.view.dashboard.outstanding.tasks.required" args="[tasks.size()]"/></g:link></p>
         </div>
       </div>
+    </g:if>
 
-      <hr>
-      
-      <div class="row">
-        <div class="span5 offset1">
-          <h3><g:message code="fedreg.view.dashboard.federation.statistics"/></h3>
-          <p><strong>${orgCount}</strong> <g:message code="label.organizations"/> - <g:link controller="organization" action="list" class="btn btn-small"><g:message code="label.view"/></g:link></p>
-          <p><strong>${idpCount}</strong> <g:message code="label.identityproviders"/> - <g:link controller="identityProvider" action="list" class="btn btn-small"><g:message code="label.view"/></g:link></p>
-          <p><strong>${spCount}</strong> <g:message code="label.serviceproviders"/> - <g:link controller="serviceProvider" action="list" class="btn btn-small"><g:message code="label.view"/></g:link></p>
-          <p><strong>${endpointCount}</strong> <g:message code="label.activeendpoints"/></p>
-          <p><strong>${certCounts}</strong> <g:message code="label.activecertificates"/></p>   
+    <div class="row row-spacer">
+      <div class="span3 offset1 well">
+        <h2><g:message code="fedreg.view.dashboard.myorganizations"/></h2>
+        <g:if test="${organizations}">
+          <ul class="dashlist">
+            <g:each in="${organizations}" var="org">
+              <li><a href="${createLink(controller:'organization', action:'show', id:org?.id)}">${fieldValue(bean: org, field: 'displayName')} </a></li>
+            </g:each>
+          </ul>
+        </g:if>
+        <g:else>
+          <p><g:message code="fedreg.view.dashboard.myorganizations.none"/></p>
+        </g:else>
+        <hr>
+        <a href="${createLink(controller:'organization', action:'list')}" class="btn btn-info"><g:message code="label.viewall"/></a>
+      </div>
+
+      <div class="span3 well">
+        <h2><g:message code="fedreg.view.dashboard.myidentityproviders"/></h2>
+        <g:if test="${identityProviders}">
+          <ul class="dashlist">
+            <g:each in="${identityProviders}" var="idp">
+              <li><a href="${createLink(controller:'identityProvider', action:'show', id:idp.id)}">${fieldValue(bean: idp, field: 'displayName')}</a></li>
+            </g:each>
+          </ul>
+        </g:if>
+        <g:else>
+          <p><g:message code="fedreg.view.dashboard.myidentityproviders.none"/></p> 
+        </g:else>
+        <hr>
+        <a href="${createLink(controller:'identityProvider', action:'list')}" class="btn btn-info"><g:message code="label.viewall"/></a>
+      </div>
+
+      <div class="span3 well">
+        <h2><g:message code="fedreg.view.dashboard.myserviceproviders"/></h2>
+        <g:if test="${serviceProviders}">
+          <ul class="dashlist">
+            <g:each in="${serviceProviders}" var="sp">
+              <li><a href="${createLink(controller:'serviceProvider', action:'show', id:sp.id)}">${fieldValue(bean: sp, field: 'displayName')}</a></li>
+            </g:each>
+          </ul>
+        </g:if>
+        <g:else>
+          <p><g:message code="fedreg.view.dashboard.myserviceproviders.none"/></p> 
+        </g:else>
+        <hr>
+        <a href="${createLink(controller:'serviceProvider', action:'list')}" class="btn btn-info"><g:message code="label.viewall"/></a>
+      </div>
+    </div>
+
+
+    <div class="row row-spacer">
+      <div class="span11 offset1">
+        <h2><g:message code="fedreg.view.dashboard.federation.statistics"/></h2>
+      </div>
+      <div class="span3 offset1 well centered">
+        <strong class="dashboard-wow">${orgCount}</strong><hr><h4><g:message code="label.organizations"/></h4>
+      </div>
+      <div class="span3 well centered">
+        <strong class="dashboard-wow">${idpCount}</strong><hr><h4><g:message code="label.identityproviders"/></h4>
+      </div>
+      <div class="span3 well centered">
+        <strong class="dashboard-wow">${spCount}</strong><hr><h4><g:message code="label.serviceproviders"/></h4>
+      </div>
+    </div>
+
+    <div class="row row-spacer">
+      <div class="span10 offset1">
+        <div id="sessions">
+          <div class="span9 spinner centered"><r:img dir="images" file="spinner.gif"/></div>
         </div>
-        
-        <div class="span5">
-          <h3><fr:principalName /></h3>
-          <h4><g:message code="fedreg.view.dashboard.targetedid"/></h4>
-          ${fieldValue(bean: subject, field: 'principal')}
-          <h4><g:message code="fedreg.view.dashboard.email"/></h4>
-          ${fieldValue(bean: subject, field: 'email')}
-        </div>  
-      </div> 
+      </div>
+    </div>
 
-	</body>
+    <div class="row row-spacer">
+      <div class="span10 offset1">
+        <div id="registrations">
+          <div class="span9 spinner centered"><r:img dir="images" file="spinner.gif"/></div>
+        </div>
+      </div>
+    </div>
+
+    <r:script>
+      var summaryregistrationsEndpoint = "${createLink(controller:'federationReports', action:'summaryregistrations')}"
+      var summarysessionsEndpoint = "${createLink(controller:'federationReports', action:'summarysessions')}"
+      $(document).ready(function() {
+        fr.summary_registrations_report('registrations');
+        fr.summary_sessions_report('sessions');
+      });
+    </r:script>
+
+  </body>
 
 </html>

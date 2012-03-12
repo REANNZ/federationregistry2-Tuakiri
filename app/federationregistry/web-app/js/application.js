@@ -17,12 +17,6 @@ applyBehaviourTo = function(scope) {
   });
 
   $('.revealable', scope).hide();
-  //$('.hidden', scope).hide();
-
-  if((Modernizr.svg))
-    $('.reportingunsupported').hide();
-  else
-    $('.reportingsupported').hide();
 };
 
 $('.modal-content').modal({keyboard:true, backdrop:'static'});
