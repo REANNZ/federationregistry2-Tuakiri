@@ -47,7 +47,7 @@
             </div>
           </div>
 
-          <input type="submit" class="request-detailed-dsutilization-reports btn" label="${g.message(code:'label.generate')}"></input>
+          <input type="submit" class="btn" label="${g.message(code:'label.generate')}"></input>
 
         </g:form>
       </div>
