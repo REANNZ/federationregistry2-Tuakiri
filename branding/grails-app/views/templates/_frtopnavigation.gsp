@@ -20,7 +20,7 @@
     <li class="${['organization', 'entityDescriptor', 'identityProvider', 'serviceProvider', 'contacts'].contains(controllerName) ? 'active' : ''}">
       <g:link controller="organization" action="list"><g:message code="fedreg.navigation.membership" /></g:link>
     </li>
-    <li class="${['federationReports', 'identityProviderReports', 'serviceProviderReports', 'identityProviderAttributeCompliance', 'attributeRelease', 'certifyingAuthorityUsage'].contains(controllerName) ? 'active' : ''}">
+    <li class="${['federationReports', 'identityProviderReports', 'serviceProviderReports', 'complianceReports'].contains(controllerName) ? 'active' : ''}">
       <fr:hasPermission target="federation:reporting">
         <g:link controller="federationReports" action="summary"><g:message code="fedreg.navigation.reporting" /></g:link>
       </fr:hasPermission>

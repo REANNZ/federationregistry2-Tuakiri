@@ -665,7 +665,7 @@ $(".request-refine-detailedidputilization-content").click(function () {
   fedreg.reset_button($(this));
 });
 
-$(".request-detailed-detailedidputilization-reports").click(function () {
+$(".request-detailedidputilization-reports").click(function () {
   var form = $('#detailed-detailedidputilization-report-parameters');
   if(form.valid()) { 
     var params = form.serialize();
@@ -673,7 +673,7 @@ $(".request-detailed-detailedidputilization-reports").click(function () {
   }
 });
 
-$(".export-detailed-detailedidputilization-reports").click(function() {
+$(".export-detailedidputilization-reports").click(function() {
   var form = $('#detailed-detailedidputilization-report-parameters');
   if(form.valid()) { 
     var params = form.serialize();
@@ -690,7 +690,7 @@ function requestIdPUtilization(params) {
     var remainderContent = $('#refine-detailedidputilization-report-parameters > .remainder');
     var topTen = $('#topten-utilized-idps');
     var remainder = $('#remaning-utilized-idps');
-    var exportBut = $('.export-detailed-detailedidputilization-reports');
+    var exportBut = $('.export-detailedidputilization-reports');
 
     if(idputilization) {
       idputilization.destroy();
@@ -924,7 +924,7 @@ $(".export-detailed-dsutilization-report").click(function() {
   var form = $('#detailed-dsutilization-report-parameters');
   if(form.valid()) { 
     var params = form.serialize();
-    window.location = detailedwayfnodesessionsEndpoint + '?type=csv&' + params
+    window.location = detaileddsutilizationEndpoint + '?type=csv&' + params
   }
 });
 $(".request-detailed-dsutilization-reports").click(function () {
@@ -1043,3 +1043,236 @@ $(".request-detailed-dsutilization-reports").click(function () {
     });
   }  
 });
+
+// Compliance
+fr.attributesupport_compliance_report = function(target) {
+  fedreg.showspinner();
+
+    var options = {
+      chart: {
+        renderTo: 'attributesupportchart',
+        defaultSeriesType: 'bar',
+        height: 40
+      },
+      title: {},
+      xAxis: {
+        categories: [],
+        title: {
+          enabled:false
+        },
+      },
+      yAxis: {
+        min: 1,
+        title: {
+          text: '',
+        }
+      },
+      legend: {
+        enabled: false,
+      },
+      plotOptions: {
+        bar: {
+          dataLabels: {
+              enabled: true,
+              y:-5,
+              color:"black",
+              style: {
+                  fontSize: "12px"
+              },
+              formatter: function(){
+                return this.name;
+              }
+          }
+        }
+      },
+      tooltip: {
+        formatter: function() {
+          return ''+
+            this.series.name +': '+ this.y +' supported';
+        }
+      },
+    }
+
+    $.getJSON(attributesupportEndpoint, function(data) {
+      options.title.text = data.title;
+      options.yAxis.title.text = data.axis.y;
+
+      $.each(data.categories, function(k, v){
+        options.chart.height = options.chart.height + 40 // allow room per rendered sp
+        options.xAxis.categories.push(v.name);
+      });
+
+      options.series = [];
+      $.each(data.series, function(k, v) {
+        var series = {
+          max: v.max,
+          name: k,
+          data: v.data,
+          showInLegend: true,
+          tooltip: {
+            formatter: function() {
+              return this.y + '/' + v.max;
+            },
+          }
+        };
+        options.series.push(series);
+      });
+      
+      options.series.reverse();
+      fedreg.hidespinner();
+      attributesupport = new Highcharts.Chart(options);
+    });
+};
+
+fr.detailed_attributesupport_compliance_report = function(target) {
+  var exportBut = $('.export-detailed-attributesupport-report');
+  fedreg.showspinner();
+
+    $.getJSON(attributesupportEndpoint, function(data) {
+
+      $.each(data.categories, function(k, v){
+        $('#choose-indepth-idp').append($('<option></option>').val('indepth-idp-'+k).html(v.name));
+        var alert
+        if(v.automatedRelease) {
+          alert = '<div class="span6 alert alert-block alert-success alert-spacer"><h4 class="alert-heading">Automatic Release</h4>This IdP automatically supplies attributes requested by by services which it <strong>shows as available</strong> below.</div>'
+        } else {
+          alert = '<div class="span6 alert alert-block alert-spacer"><h4 class="alert-heading">Warning!</h4>This IdP <strong>does not</strong> automatically supply attributes requested by services. Service administrators will need to contact this IdP if they wish to be compatible with it.</div>'
+        }
+        $('#attributesupporttables').append('<div id="indepth-idp-'+k+'" class="span8 hidden idp-indepth"><div class="row"><div class="span4"><h3>'+v.name+'</h3></div><div class="span2 offset2"><a href="'+v.url+'" class="btn">View</a></div></div>'+alert+'<div class="row"><div id="idp-'+k+'" class="span8"></div></div></div>');
+      });
+
+      $.each(data.series, function(k, v) {        
+        $.each(v.data, function(l, w) {
+          $('#idp-'+l).append('<div class="offset0"><h4>'+ k +' Attributes</h4></div>');
+
+          $('#idp-'+l).append('<div class="offset1"><h5>Supported ('+w['supported'].length+')</h5></div>');
+          if(w['supported'].length > 0) {
+            $.each(w['supported'], function(m,x) {
+              $('#idp-'+l).append('<div class="offset2">' + data.attributes[x] + '</div>');
+            });
+          } else {
+            $('#idp-'+l).append('<div class="offset2"> N/A - None supported</div>');
+          }
+          $('#idp-'+l).append('<br>');
+          $('#idp-'+l).append('<div class="offset1"><h5>Unsupported ('+w['unsupported'].length+')</h5></div>');
+          if(w['unsupported'].length > 0) {
+            $.each(w['unsupported'], function(m,x) {
+              $('#idp-'+l).append('<div class="offset2">' + data.attributes[x] + '</div>');
+            });
+          } else {
+            $('#idp-'+l).append('<div class="offset2"> N/A - All supported</div>');
+          }
+          $('#idp-'+l).append('<br>');
+        });
+      });
+      
+      fedreg.hidespinner();
+      $('.detailed-idpattributesupport-report-parameters').removeClass('hidden');
+      $('#attributesupporttables').removeClass('hidden');
+      $(".detailed-idpattributesupport-report").click();
+    });
+
+};
+
+$(".detailed-idpattributesupport-report").click(function() {
+  $('.idp-indepth').addClass('hidden');
+  $('#'+$('#choose-indepth-idp').attr('value')).removeClass('hidden');
+});
+
+$(".detailed-idpattributesupport-reports").click(function() {
+  $('.idp-indepth').removeClass('hidden');
+});
+
+$(".export-detailed-idpattributesupport-report").click(function() {
+  window.location = attributesupportEndpoint + '?type=csv'
+});
+
+$(".request-detailed-attributecompatibility-report").click(function(target) {
+  $('#attributecompatibility').addClass('hidden');
+  fedreg.showspinner();
+  $('#attributecompatibility .alert').addClass('hidden');
+
+  var form = $('#detailed-attributecompatibility-report-parameters');
+  var params = form.serialize();
+
+    $.getJSON(attributecompatibilityEndpoint, params, function(data) {
+      if(!data.minimumRequirements) {
+        $('.unsupportedattributes').removeClass('hidden');
+      }
+      if(!data.idp.automatedRelease) {
+        $('.automaticrelease').removeClass('hidden');
+      }
+      if(data.idp.automatedRelease && data.minimumRequirements) {
+        $('.releasesuccess').removeClass('hidden');
+      }
+
+      var req = $('#attributecompatibility .requiredattributes');
+      req.html('');
+      var op = $('#attributecompatibility .optionalattributes');
+      op.html('');
+      $.each(data.series.required, function(k,v) {
+        var attr = '<div class="span1 offset1"> '+ v[0] + ' </div>';
+        if(v[1])
+          attr = attr + '<div class="span1 offset2"> supported </div>'
+        else
+          attr = attr + '<div class="span1 offset2 not-functioning"> unsupported </div>'
+        req.append(attr);
+      });
+
+      $.each(data.series.optional, function(k,v) {
+        var attr = '<div class="span1 offset1"> '+ v[0] + ' </div>';
+        if(v[1])
+          attr = attr + '<div class="span1 offset2"> supported </div>'
+        else
+          attr = attr + '<div class="span1 offset2 not-functioning"> unsupported </div>'
+        op.append(attr);
+      });
+
+      fedreg.hidespinner();
+      $('#attributecompatibility').removeClass('hidden');
+    });
+});
+
+$(".request-idpprovidingattribute-report").click(function(target) {
+  $('#idpprovidingattribute').addClass('hidden');
+  fedreg.showspinner();
+
+  var form = $('#idpprovidingattribute-report-parameters');
+  var params = form.serialize();
+
+    $.getJSON(idpprovidingattributeEndpoint, params, function(data) {
+      $('.attributename').text(data.attribute);
+
+      var supported = $("#idpprovidingattribute .supported");
+      supported.html('');
+      $('.supportedcount').html(data.supported.length);
+      $.each(data.supported, function(k,v) {
+        var markup = "<tr><td>"+v.name
+
+        if(!v.automatedRelease)
+          markup = markup + "<br><span class='label label-important'>No automated attribute release</span>";
+
+        markup = markup + "</td><td><a href='"+v.url+"' class='btn'>View</a></td>";
+        supported.append(markup);
+      });
+
+      var unsupported = $("#idpprovidingattribute .unsupported");
+      unsupported.html('');
+      $('.unsupportedcount').html(data.unsupported.length);
+      $.each(data.unsupported, function(k,v) {
+        var markup = "<tr><td>"+v.name
+
+        if(!v.automatedRelease)
+          markup = markup + "<br><span class='label label-important'>No automated attribute release</span>";
+
+        markup = markup + "</td><td><a href='"+v.url+"' class='btn'>View</a></td>";
+        unsupported.append(markup);
+      });
+
+      fedreg.hidespinner();
+      $('#idpprovidingattribute').removeClass('hidden');
+    });
+});
+
+
+

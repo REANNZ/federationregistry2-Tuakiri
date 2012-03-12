@@ -8,6 +8,10 @@
   margin-top: 48px;
 }
 
+.alert-spacer {
+  margin: 6px;
+}
+
 .rounded-top(@radius: 3px) {
   border-top-left-radius: @radius;
   border-top-right-radius: @radius;
@@ -159,7 +163,7 @@ ul.clean {
 }
 
 body {
-  background-color: #f2f2f2;
+  background-color: #f1f1f1;
 }
 
 body header {  
@@ -219,7 +223,7 @@ body nav {
     
     .level2 {
       background-color: #8f9a99;
-      .active { .rounded-top; background-color: #ccc; a { color: #555; }}
+      .active { .rounded-top; background-color: #f1f1f1; a { color: #555; }}
     }
     
     .level2a {
@@ -228,17 +232,21 @@ body nav {
     }
     
     .level3 {
-      background-color: #ccc;
+      background-color: #f1f1f1;
       color: #555;
+      border-left: 1px solid #d2d2d2;
+      border-right: 1px solid #d2d2d2;
       .active { .rounded-top; background-color: #979C9C;}
-      li { a{ color: #555; } }
+      li { a{ color: #555; } a:hover{ color: #555; }}
     }
     
     .level3a {
-      background-color: #ccc;
+      background-color: #f1f1f1;
       color: #555;
+      border-left: 1px solid #d2d2d2;
+      border-right: 1px solid #d2d2d2;
       .active { .rounded-top; background-color: #FFF; a{ color: #555; }}
-      li { a{ color: #555; } }
+      li { a{ color: #555; } a:hover{ color: #555; }}
     }
     
     .directactive {

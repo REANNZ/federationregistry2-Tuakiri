@@ -24,6 +24,7 @@ class FederationReportsController {
   def serviceutilization = {}
   def demand = {} 
   def dsutilization = {}
+  def exportonly = { [organizations:Organization.list()]}
 
 
   def summaryregistrations = {
@@ -648,6 +649,73 @@ class FederationReportsController {
     }
 
     render results as JSON
+  }
+
+  // Provides data for AAF 'box' reports per executive requirements.
+  def serviceutilizationbreakdown = {
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
+    Date startDate = formatter.parse(params.startDate)
+    Date endDate = formatter.parse(params.endDate)
+
+    response.setHeader("Content-disposition", "attachment; filename=serviceutilizationbreakdown.csv")
+    response.contentType = "application/vnd.ms-excel"
+    def httpout = response.outputStream
+    httpout << "Report:, Detailed Service Utilisation with IdP Breakdown\n"
+    httpout << "Period:, ${startDate}, ${endDate}\n\n"
+
+    def queryParams = [:]
+    queryParams.startDate = startDate
+    queryParams.endDate = endDate
+    queryParams.robot = false
+    queryParams.orgID = params.excludeorg as Long
+    def querySessionTotal = "select count(*) from WayfAccessRecord war, RoleDescriptor rd where war.spID = rd.id and rd.organization.id != :orgID and war.dateCreated between :startDate and :endDate and war.robot = :robot"
+    def sessionTotal = WayfAccessRecord.executeQuery(querySessionTotal, queryParams)[0]
+    httpout << "Total Sessions in Period:, ${sessionTotal}\n\n"
+
+    def query = new StringBuilder("select count(*), war.spID from WayfAccessRecord war, RoleDescriptor rd where war.spID = rd.id and rd.organization.id != :orgID and war.dateCreated between :startDate and :endDate and war.robot = :robot group by war.spID order by count(war.spID) desc")
+    def spSessions = WayfAccessRecord.executeQuery(query.toString(), queryParams)
+
+    httpout << "Session details for active services\n\n"
+    spSessions.each { s ->
+      def sp = SPSSODescriptor.get(s[1])
+      if(sp && !excludeTestUAT(sp.displayName, params.excludetestuat))  {
+        def sessions = s[0]
+        httpout <<  "Service,${sp.displayName}\n"
+        httpout <<  ",Owner,${sp.organization.name.replace(',','')},${sp.organization.displayName.replace(',','')}\n"
+        httpout <<  ",Sessions,${sessions}\n"
+        httpout <<  ",% Federated Sessions,${(sessions/sessionTotal) * 100}%\n\n"
+        httpout <<  ",Top $params.idpcount sources\n,,,Sessions,% Service Sessions\n"
+
+        def queryIdP = new StringBuilder("select count(*), idpID from WayfAccessRecord where spID = :spid and dateCreated between :startDate and :endDate and robot = :robot group by idpID order by count(idpID) desc")
+        def queryIdPParams = [:]
+        queryIdPParams.spid = sp.id
+        queryIdPParams.startDate = startDate
+        queryIdPParams.endDate = endDate
+        queryIdPParams.robot = false
+
+        def idpSessions = WayfAccessRecord.executeQuery(queryIdP.toString(), queryIdPParams, [max:params.idpcount])
+        def remainingSessions = sessions
+        idpSessions.each { idps ->
+          def idp = IDPSSODescriptor.get(idps[1])
+          if(idp) {
+            def idpSessionCount = idps[0]
+            remainingSessions = remainingSessions - idpSessionCount
+            httpout << ",,${idp.displayName.replace(',','')},${idpSessionCount},${(idpSessionCount/sessions) * 100}%\n"
+          }
+        }
+        httpout << ",,Other,${remainingSessions},${(remainingSessions/sessions) * 100}%\n\n\n"
+      }
+    }
+
+    httpout.flush()
+    httpout.close()
+  }
+
+  private def excludeTestUAT(name, exclude) {
+    if(name.toLowerCase().contains('test') || name.toLowerCase().contains('tst') || name.toLowerCase().contains('dev') || name.toLowerCase().contains('uat'))
+      exclude
+    else
+      false
   }
 
   // Populates missing zero values so every day has content for zooming

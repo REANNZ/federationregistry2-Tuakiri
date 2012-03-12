@@ -11,8 +11,8 @@
         <label for="startDate"><g:message code="label.enddate"/></label>
         <input name="endDate" placeholder="end date (YYYY-MM-DD)" data-datepicker="datepicker" class="required span2 date-value" type="text"/>
 
-        <a class="request-detailed-detailedidputilization-reports btn"><g:message code="label.generate"/></a>
-        <a class="export-detailed-detailedidputilization-reports export-button btn btn-info hidden" rel="tooltip" title="${g.message(code:'label.exportexcel')}"><i class="icon-edit icon-white"></i></a>
+        <a class="request-detailedidputilization-reports btn"><g:message code="label.generate"/></a>
+        <a class="export-detailedidputilization-reports export-button btn btn-info hidden" rel="tooltip" title="${g.message(code:'label.exportexcel')}"><i class="icon-edit icon-white"></i></a>
       </form>
     </div>
 
@@ -62,7 +62,7 @@
         var year = currentTime.getFullYear()
         $('input[name="startDate"]').val(year - 1 + "-" + month + "-" + day);   
         $('input[name="endDate"]').val(year + "-" + month + "-" + day); 
-        $('.request-detailed-detailedidputilization-reports').click();
+        $('.request-detailedidputilization-reports').click();
       });
     </r:script>
   </body>
