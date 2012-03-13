@@ -97,6 +97,22 @@ td.centered, th.centered, .centered {
   font-size: 3.0em;
 }
 
+.table tbody tr:hover td, .table tbody tr:hover th { 
+  background-color: #fff;
+}
+
+.table {
+  tbody tr:hover td, 
+  tbody tr:hover th {
+    background-color: #fff;
+  }
+}
+
+div.dataTables_length {
+  padding-left: 34px;
+  padding-top: 8px;
+}
+
 div.dataTables_length label {
   float: left;
   text-align: left;
@@ -108,10 +124,17 @@ div.dataTables_length select {
 
 div.dataTables_filter label {
   float: right;
+  font-weight: bold;
+
+  input {
+    .rounded(10px);
+  }
 }
 
 div.dataTables_info {
   padding-top: 8px;
+  padding-left: 34px;
+  font-weight: bold;
 }
 
 div.dataTables_paginate {
