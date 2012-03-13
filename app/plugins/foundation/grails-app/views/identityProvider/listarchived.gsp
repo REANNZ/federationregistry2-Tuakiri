@@ -7,7 +7,7 @@
   <body>
 
     <h2><g:message code="fedreg.view.members.identityprovider.listarchived.heading" /></h2>
-    <table class="sortable-table table borderless">
+    <table class="span11 table borderless table-striped table-sortable">
       <thead>
         <tr>
           <th><g:message code="label.identityprovider" /></th>

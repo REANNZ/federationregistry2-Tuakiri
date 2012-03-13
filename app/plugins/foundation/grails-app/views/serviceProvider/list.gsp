@@ -7,7 +7,7 @@
   <body>
 
     <h2><g:message code="fedreg.view.members.serviceprovider.list.heading" /></h2>
-    <table class="table sortable-table borderless">
+    <table class="span11 table borderless table-striped table-sortable">
       <thead>
         <tr>
           <th><g:message code="label.serviceprovider" /></th>

@@ -94,7 +94,47 @@ td.centered, th.centered, .centered {
 }
 
 .dashboard-wow {
-  font-size: 3.5em;
+  font-size: 3.0em;
+}
+
+div.dataTables_length label {
+  float: left;
+  text-align: left;
+}
+
+div.dataTables_length select {
+  width: 75px;
+}
+
+div.dataTables_filter label {
+  float: right;
+}
+
+div.dataTables_info {
+  padding-top: 8px;
+}
+
+div.dataTables_paginate {
+  float: right;
+  margin: 0;
+}
+
+table.table {
+  clear: both;
+  margin-bottom: 6px !important;
+}
+
+table.table thead .sorting,
+table.table thead .sorting_asc,
+table.table thead .sorting_desc,
+table.table thead .sorting_asc_disabled,
+table.table thead .sorting_desc_disabled {
+  cursor: pointer;
+  *cursor: hand;
+}
+
+table.dataTable th:active {
+  outline: none;
 }
 
 input.required, textarea.required {

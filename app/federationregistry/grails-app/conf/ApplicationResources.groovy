@@ -9,7 +9,8 @@ modules = {
   'datatables' {
     dependsOn 'jquery' 
     defaultBundle false
-    resource url:[dir:'js/jquery', file:'jquery.datatables.min.js'], disposition:'head', bundle: 'extjs' 
+    resource url:[dir:'js/jquery', file:'jquery.datatables.min.js'], disposition:'head', bundle: 'extjs'
+    resource url:[dir:'js/jquery', file:'jquery.datatables.bootstrap.js'], disposition:'head', bundle: 'extjs' 
   }
   'alphanumeric' {
     dependsOn 'jquery'

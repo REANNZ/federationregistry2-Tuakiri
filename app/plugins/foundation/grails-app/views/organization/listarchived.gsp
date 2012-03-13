@@ -8,7 +8,7 @@
   <body>
     <h2><g:message code="fedreg.view.members.organization.listarchived.heading" /></h2>
 
-    <table class="table borderless sortable-table">
+    <table class="span11 table borderless table-striped table-sortable">
       <thead>
         <tr>
           <th>${message(code: 'label.organization')}</th>

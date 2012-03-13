@@ -10,7 +10,7 @@
 
     <g:render template="/templates/flash" plugin="foundation"/>
 
-    <table class="table borderless sortable-table">
+    <table class="span11 table borderless table-striped table-sortable">
       <thead>
         <tr>
           <th>${message(code: 'label.organization')}</th>
