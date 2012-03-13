@@ -21,7 +21,7 @@
                 <span class="not-functioning"><g:message code="label.no"/></span>
               </g:else>
             </td>
-            <td><a href="${createLink(controller:'identityProvider', action:'show', id:idp.id)}" class="btn"><g:message code="label.view"/></a></td>
+            <td><a href="${createLink(controller:'identityProvider', action:'show', id:idp.id)}" class="btn btn-small"><g:message code="label.view"/></a></td>
           </tr>
         </g:each>
     </tbody>

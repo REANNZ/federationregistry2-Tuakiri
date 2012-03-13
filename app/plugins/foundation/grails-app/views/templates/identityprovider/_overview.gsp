@@ -1,7 +1,7 @@
 <div id="overview-identityprovider">
   <g:render template="/templates/identityprovider/overview_editable" plugin="foundation" model="[descriptor:identityProvider]" />
   <fr:hasPermission target="descriptor:${identityProvider.id}:update">
-    <a class="show-edit-identityprovider btn"><g:message code="label.edit"/></a>
+    <a class="show-edit-identityprovider btn btn-small btn-info"><g:message code="label.edit"/></a>
   </fr:hasPermission>
 </div>
 <g:render template="/templates/identityprovider/edit" plugin="foundation" model="[descriptor:identityProvider]" />

@@ -1,19 +1,19 @@
 <div id="overview-entitydescriptor">
   <g:render template="/templates/entitydescriptor/overview_editable" plugin="foundation" model="[entity:entity]" />
   <fr:hasPermission target="descriptor:${entity.id}:update">
-    <a class="show-edit-entitydescriptor btn"><g:message code="label.edit"/></a>
+    <a class="show-edit-entitydescriptor btn btn-small btn-info"><g:message code="label.edit"/></a>
   </fr:hasPermission>
   <fr:hasPermission target="federation:management:advanced">
-    <a class="show-migrate-organisation btn"><g:message code="label.migrateorg"/></a>
+    <a class="show-migrate-organisation btn btn-small"><g:message code="label.migrateorg"/></a>
     <g:if test="${entity.archived}"> 
       <g:if test="${!entity.organization.archived}"> 
-        <a class="confirm-unarchive-entitydescriptor btn btn-warning"><g:message code="label.unarchive"/></a>
+        <a class="confirm-unarchive-entitydescriptor btn btn-small"><g:message code="label.unarchive"/></a>
       </g:if>
     </g:if> 
     <g:else>
-      <a class="confirm-archive-entitydescriptor btn btn-warning"><g:message code="label.archive"/></a>
+      <a class="confirm-archive-entitydescriptor btn btn-small"><g:message code="label.archive"/></a>
     </g:else>
-    <a class="confirm-delete-entitydescriptor btn btn-danger"><g:message code="label.delete"/></a>
+    <a class="confirm-delete-entitydescriptor btn btn-small"><g:message code="label.delete"/></a>
   </fr:hasPermission>
 </div>
 <g:render template="/templates/entitydescriptor/edit" plugin="foundation" model="[entity:entity, organizations:organizations]" />

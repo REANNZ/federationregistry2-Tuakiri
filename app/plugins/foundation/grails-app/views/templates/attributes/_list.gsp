@@ -17,11 +17,9 @@
             <br><br><em>${fieldValue(bean: attr, field: "base.description")}</em>
         </td>
         <td>${attr.base.category.name.encodeAsHTML()}</td>
-      </tr>
-      <tr>
-      <td colspan="2">
+        <td>
           <fr:hasPermission target="descriptor:${descriptor.id}:attribute:remove">
-            <a class="confirm-delete-attribute btn btn-danger" data-attrid="${attr.id}"><g:message code="label.remove"/></a>
+            <a class="confirm-delete-attribute btn btn-mini" data-attrid="${attr.id}"><g:message code="label.remove"/></a>
           </fr:hasPermission>
         </td>
       </tr>

@@ -37,7 +37,7 @@
           <p><g:message code="fedreg.view.dashboard.myorganizations.none"/></p>
         </g:else>
         <hr>
-        <a href="${createLink(controller:'organization', action:'list')}" class="btn btn-info"><g:message code="label.viewall"/></a>
+        <a href="${createLink(controller:'organization', action:'list')}" class="btn btn-small btn-info"><g:message code="label.viewall"/></a>
       </div>
 
       <div class="span3 well">
@@ -53,7 +53,7 @@
           <p><g:message code="fedreg.view.dashboard.myidentityproviders.none"/></p> 
         </g:else>
         <hr>
-        <a href="${createLink(controller:'identityProvider', action:'list')}" class="btn btn-info"><g:message code="label.viewall"/></a>
+        <a href="${createLink(controller:'identityProvider', action:'list')}" class="btn btn-small btn-info"><g:message code="label.viewall"/></a>
       </div>
 
       <div class="span3 well">
@@ -69,7 +69,7 @@
           <p><g:message code="fedreg.view.dashboard.myserviceproviders.none"/></p> 
         </g:else>
         <hr>
-        <a href="${createLink(controller:'serviceProvider', action:'list')}" class="btn btn-info"><g:message code="label.viewall"/></a>
+        <a href="${createLink(controller:'serviceProvider', action:'list')}" class="btn btn-small btn-info"><g:message code="label.viewall"/></a>
       </div>
     </div>
 

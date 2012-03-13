@@ -23,7 +23,7 @@
           <td>${fieldValue(bean: organization, field: "displayName")}</td>
           <td>${fieldValue(bean: organization, field: "url")}</td>
           <td>${fieldValue(bean: organization, field: "primary.displayName")}</td>
-          <td><a href="${createLink(controller:'organization', action:'show', id:organization.id)}" class="btn" /><g:message code="label.view"/></td>
+          <td><a href="${createLink(controller:'organization', action:'show', id:organization.id)}" class="btn btn-small" /><g:message code="label.view"/></td>
         </tr>
       </g:each>
       </tbody>

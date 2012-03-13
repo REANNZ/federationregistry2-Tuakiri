@@ -33,7 +33,7 @@
         </div>
       </g:if>
 
-      <div class="controls">
+      <div class="form-actions">
         <a class="update-endpoint btn btn-success" data-id="${endpoint.id}" data-type="${endpointType}"><g:message code="label.update"/></a>
         <a class="cancel-edit-endpoint btn"><g:message code="label.cancel"/></a>
       </div>

@@ -1,16 +1,16 @@
 <div id="overview-organization">
   <g:render template="/templates/organization/overview_editable" plugin="foundation" model="[organization:organization]" />
   <fr:hasPermission target="organization:${organization.id}:update">
-    <a class="show-edit-organization btn"><g:message code="label.edit"/></a>
+    <a class="show-edit-organization btn btn-small btn-info"><g:message code="label.edit"/></a>
   </fr:hasPermission>
   <fr:hasPermission target="federation:management:advanced">
     <g:if test="${organization.archived}"> 
-      <a class="confirm-unarchive-organization btn btn-warning"><g:message code="label.unarchive"/></a>
+      <a class="confirm-unarchive-organization btn btn-small"><g:message code="label.unarchive"/></a>
     </g:if> 
     <g:else>
-      <a class="confirm-archive-organization btn btn-warning"><g:message code="label.archive"/></a>
+      <a class="confirm-archive-organization btn btn-small"><g:message code="label.archive"/></a>
     </g:else>
-    <a class="confirm-delete-organization btn btn-danger"><g:message code="label.delete"/></a>
+    <a class="confirm-delete-organization btn btn-small"><g:message code="label.delete"/></a>
   </fr:hasPermission>
 </div>
 <g:render template="/templates/organization/edit" plugin="foundation" model="[organization:organization, organizationTypes:organizationTypes]" />

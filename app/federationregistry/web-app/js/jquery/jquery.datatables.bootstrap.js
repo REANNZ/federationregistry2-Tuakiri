@@ -94,13 +94,15 @@ $.extend( $.fn.dataTableExt.oPagination, {
   }
 } );
 
-/* Table initialisation */
-$(document).ready(function() {
-  $('.table-sortable').dataTable( {
-    "sDom": "<'row'<'span6'l><'span5'f>r>t<'row'<'span6'i><'span5'p>>",
-    "sPaginationType": "bootstrap",
-    "oLanguage": {
-      "sLengthMenu": "_MENU_ records per page"
+function isDataTable ( nTable )
+{
+    var settings = $.fn.dataTableSettings;
+    for ( var i=0, iLen=settings.length ; i<iLen ; i++ )
+    {
+        if ( settings[i].nTable == nTable )
+        {
+            return true;
+        }
     }
-  } );
-} );
+    return false;
+}

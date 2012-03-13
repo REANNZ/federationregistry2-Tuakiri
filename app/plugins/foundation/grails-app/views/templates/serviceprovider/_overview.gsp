@@ -1,7 +1,7 @@
 <div id="overview-serviceprovider">
   <g:render template="/templates/serviceprovider/overview_editable" plugin="foundation" model="[descriptor:serviceProvider]" />
   <fr:hasPermission target="descriptor:${serviceProvider.id}:update">
-    <a class="show-edit-serviceprovider btn"><g:message code="label.edit"/></a>
+    <a class="show-edit-serviceprovider btn btn-small btn-info"><g:message code="label.edit"/></a>
   </fr:hasPermission>
 </div>
 <g:render template="/templates/serviceprovider/edit" plugin="foundation" model="[descriptor:serviceProvider]" />

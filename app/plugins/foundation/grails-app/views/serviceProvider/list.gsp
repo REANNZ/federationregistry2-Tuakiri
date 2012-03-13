@@ -32,7 +32,7 @@
             </g:else>
           </td>
           <td>
-            <a href="${createLink(controller:'serviceProvider', action:'show', id: serviceProvider.id)}" class="btn"><g:message code='label.view'/></a>
+            <a href="${createLink(controller:'serviceProvider', action:'show', id: serviceProvider.id)}" class="btn btn-small"><g:message code='label.view'/></a>
           </td>
         </tr>
       </g:each>

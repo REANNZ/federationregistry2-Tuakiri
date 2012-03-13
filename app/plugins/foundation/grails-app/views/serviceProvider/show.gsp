@@ -125,11 +125,11 @@
               <div id="tab-metadata" class="tab-pane">
                 <g:if test="${serviceProvider.functioning()}">
                   <div class="row">
-                  <div class="span9">
+                  <div class="span8">
                     <p><g:message code="fedreg.view.members.serviceprovider.show.metadata.details" /></p>
                   </div>
-                  <div class="span3">
-                    <a class="btn" class="load-descriptor-metadata"><g:message code="label.load" /></a>
+                  <div class="span1 offset1">
+                    <a class="btn btn-info" class="load-descriptor-metadata"><g:message code="label.load" /></a>
                   </div>
                   </div>
                   <div id="descriptormetadata"></div>

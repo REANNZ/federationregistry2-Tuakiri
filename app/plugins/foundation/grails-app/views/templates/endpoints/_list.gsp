@@ -68,22 +68,22 @@
             <tr>
               <td colspan="2">
                 <fr:hasPermission target="descriptor:${ep.descriptor.id}:endpoint:edit">
-                  <a class="edit-endpoint btn" data-id="${ep.id}" data-type="${endpointType}"><g:message code="label.edit"/></a>
+                  <a class="edit-endpoint btn btn-small btn-info" data-id="${ep.id}" data-type="${endpointType}"><g:message code="label.edit"/></a>
                 </fr:hasPermission>
 
                 <fr:hasPermission target="descriptor:${ep.descriptor.id}:endpoint:toggle">
-                  <a class="confirm-toggle-endpoint btn" data-id="${ep.id}"><g:message code='label.togglestatus'/></a>
+                  <a class="confirm-toggle-endpoint btn btn-small" data-id="${ep.id}"><g:message code='label.togglestatus'/></a>
                 </fr:hasPermission>
 
                 <g:if test="${ep.instanceOf(aaf.fr.foundation.IndexedEndpoint) && !ep.isDefault}">
                   <fr:hasPermission target="descriptor:${ep.descriptor.id}:endpoint:makedefault">
-                    <a class="confirm-makedefault-endpoint btn" data-id="${ep.id}" data-type="${endpointType}"><g:message code='label.makedefault'/></a>
+                    <a class="confirm-makedefault-endpoint btn btn-small" data-id="${ep.id}" data-type="${endpointType}"><g:message code='label.makedefault'/></a>
                   </fr:hasPermission>
                 </g:if>
 
                 <fr:hasPermission target="descriptor:${ep.descriptor.id}:endpoint:remove">
                   <g:if test="${endpoints.size() > minEndpoints}">
-                    <a class="confirm-delete-endpoint btn btn-danger" data-id="${ep.id}" data-type="${endpointType}"><g:message code='label.delete'/></a>
+                    <a class="confirm-delete-endpoint btn btn-small" data-id="${ep.id}" data-type="${endpointType}"><g:message code='label.delete'/></a>
                   </g:if>
                 </fr:hasPermission>
               </td>

@@ -34,7 +34,7 @@
               <span class="not-functioning"><g:message code="label.no"/></span>
             </g:else>
           </td>
-          <td><a href="${createLink(controller:'entityDescriptor', action:'show', id:entity.id)}" class="btn" /><g:message code="label.view"/></td>
+          <td><a href="${createLink(controller:'entityDescriptor', action:'show', id:entity.id)}" class="btn btn-small" /><g:message code="label.view"/></td>
         </tr>
       </g:each>
       </tbody>

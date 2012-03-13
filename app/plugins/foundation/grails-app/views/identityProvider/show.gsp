@@ -116,11 +116,11 @@
             <div id="tab-metadata" class="tab-pane">
               <g:if test="${identityProvider.functioning()}">
                 <div class="row">
-                  <div class="span10">
+                  <div class="span8">
                     <p><g:message code="fedreg.view.members.identityprovider.show.metadata.details" /></p>
                   </div>
-                  <div class="span3 offset1">
-                    <a class="btn" class="load-descriptor-metadata"><g:message code="label.load" /></a>
+                  <div class="span1 offset1">
+                    <a class="btn btn-info" class="load-descriptor-metadata"><g:message code="label.load" /></a>
                   </div>
                 </div>
                 <div id="descriptormetadata"></div>

@@ -17,6 +17,16 @@ applyBehaviourTo = function(scope) {
   });
 
   $('.revealable', scope).hide();
+
+  if($('.table-sortable').dataTable) {
+    $('.table-sortable', scope).dataTable( {
+      "sDom": "<'row'<'span6'l><'span5'f>r>t<'row'<'span6'i><'span5'p>>",
+      "sPaginationType": "bootstrap",
+      "oLanguage": {
+        "sLengthMenu": "_MENU_ records per page"
+      }
+    });
+  }
 };
 
 $('.modal-content').modal({keyboard:true, backdrop:'static'});

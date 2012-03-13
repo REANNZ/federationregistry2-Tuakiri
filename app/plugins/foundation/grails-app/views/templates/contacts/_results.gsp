@@ -1,7 +1,7 @@
 
   <h4>Contacts matching search query</h4>
 	<g:if test="${contacts}">
-		<table class="table borderless">
+		<table class="table table-sortable borderless">
 			<thead>
 				<tr>
 					<th><g:message code="label.givenname" /></th>

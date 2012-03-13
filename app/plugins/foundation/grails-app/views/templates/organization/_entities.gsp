@@ -20,7 +20,7 @@
           </g:else>
         </td>
         <td>
-          <a href="${createLink(controller:'entityDescriptor', action:'show', id:ent.id)}" class="btn"><g:message code="label.view"/></a>
+          <a href="${createLink(controller:'entityDescriptor', action:'show', id:ent.id)}" class="btn btn-small"><g:message code="label.view"/></a>
         </td>
       </tr>
     </g:each>
