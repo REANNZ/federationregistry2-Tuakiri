@@ -1274,5 +1274,696 @@ $(".request-idpprovidingattribute-report").click(function(target) {
     });
 });
 
+// Identity Providers
+
+var detailedidpsessions;
+$(".export-detailed-idpsessions-report").click(function() {
+  var form = $('#detailed-idpsessions-report-parameters');
+  if(form.valid()) { 
+    var params = form.serialize();
+    window.location = detailedidpsessionsEndpoint + '?type=csv&' + params
+  }
+});
+$(".request-detailed-idpsessions-report").click(function () {
+  var form = $('#detailed-idpsessions-report-parameters');
+  if(form.valid()) {
+    var exportBut = $('.export-detailed-idpsessions-report');
+    if(detailedidpsessions) {
+      detailedidpsessions.destroy();
+    }
+    fedreg.showspinner();
+
+    var options = {
+      chart: {
+        renderTo: 'detailedidpsessionschart',
+        type: 'area',
+        height: 600,
+        zoomType: 'x',
+      },
+      title: {},
+      xAxis: {
+        type: 'datetime',
+        maxZoom: 14 * 24 * 3600000, // fourteen days
+        title: {
+          text: null
+        }
+      },
+      yAxis: {
+        title: {},
+        labels: {
+          formatter: function() {
+            return this.value;
+          }
+        }
+      },
+      plotOptions: {
+        area: {
+          marker: {
+            enabled: false,
+            symbol: 'circle',
+            radius: 2,
+            states: {
+              hover: {
+                enabled: true
+              }
+            }
+          }
+        }
+      }
+    }
+
+    var params = form.serialize();
+    $.getJSON(detailedidpsessionsEndpoint, params, function(data) {
+      options.title.text = data.title;
+      options.yAxis.title.text = data.axis.y;
+      options.series = [];
+      var series = {
+        type: 'area',
+        pointInterval: 24 * 3600 * 1000,
+        pointStart: Date.UTC(data.startdate.year, data.startdate.month, data.startdate.day),
+        name: data.series.overall.name,
+        data: data.series.overall.count
+      };  
+      options.series.push(series);
 
 
+      fedreg.hidespinner();
+      detailedidpsessions = new Highcharts.Chart(options);
+      exportBut.removeClass('hidden');
+    });
+  }  
+});
+
+$(".request-refine-detailedidptoserviceutilization-content").click(function () {
+  fedreg.set_button($(this));
+  var form = $('#detailed-detailedidptoserviceutilization-report-parameters');
+  if(form.valid()) { 
+    var params = form.serialize();
+    params = params + '&' + $('#refine-detailedidptoserviceutilization-report-parameters').serialize();
+    requestIdPServiceUtilization(params);
+  }
+  fedreg.reset_button($(this));
+});
+
+$(".request-detailed-detailedidptoserviceutilization-reports").click(function () {
+  var form = $('#detailed-detailedidptoserviceutilization-report-parameters');
+  if(form.valid()) { 
+    var params = form.serialize();
+    requestIdPServiceUtilization(params);
+  }
+});
+
+$(".export-detailed-detailedidptoserviceutilization-reports").click(function() {
+  var form = $('#detailed-detailedidptoserviceutilization-report-parameters');
+  if(form.valid()) { 
+    var params = form.serialize();
+    params = params + '&' + $('#refine-detailedidptoserviceutilization-report-parameters').serialize();
+    window.location = detailedidptoserviceutilizationEndpoint + '?type=csv&' + params
+  }
+});
+
+var idpserviceutilization;
+var idpserviceutilizationtotals;
+function requestIdPServiceUtilization(params) {
+    var refineContent = $("#refine-detailedidptoserviceutilization-content");
+    var topTenContent = $('#refine-detailedidptoserviceutilization-report-parameters > .topten');
+    var remainderContent = $('#refine-detailedidptoserviceutilization-report-parameters > .remainder');
+    var topTen = $('#topten-utilized-services');
+    var remainder = $('#remaning-utilized-services');
+    var exportBut = $('.export-detailed-detailedidptoserviceutilization-reports');
+
+    if(idpserviceutilization) {
+      idpserviceutilization.destroy();
+      idpserviceutilizationtotals.destroy();
+    }
+
+    refineContent.addClass('hidden');
+    topTenContent.addClass('hidden');
+    remainderContent.addClass('hidden');
+    exportBut.addClass('hidden');
+    topTen.html('');
+    remainder.html(''); 
+    fedreg.showspinner();
+
+    var options = {
+      chart: {
+        renderTo: 'detailedidptoserviceutilization',
+        defaultSeriesType: 'bar',
+        height: 40
+      },
+      title: {},
+      xAxis: {
+        categories: [],
+        title: {
+          enabled:false
+        },
+      },
+      yAxis: {
+        min: 0,
+        title: {
+          text: '',
+        }
+      },
+      legend: {
+        enabled: false,
+      },
+      plotOptions: {
+        bar: {
+          dataLabels: {
+              enabled: true,
+              y:-5,
+              color:"black",
+              style: {
+                  fontSize: "12px"
+              },
+              formatter: function(){
+                return this.name;
+              }
+          }
+        }
+      }
+    }
+
+    var options2 = {
+      chart: {
+        renderTo: 'detailedidptoserviceutilizationtotals',
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        height: 440
+      },
+      title: {
+        text: ''
+      },
+      tooltip: {
+        formatter: function() {
+          return '<b>'+ this.point.name +'</b>: '+ this.y + ' sessions ('+this.percentage +' %)';
+        }
+      },
+      plotOptions: {
+        pie: {
+          allowPointSelect: true,
+          cursor: 'pointer',
+          dataLabels: {
+            enabled: false
+          },
+          showInLegend: false
+        }
+      },
+      series: []
+    }
+
+    $.getJSON(detailedidptoserviceutilizationEndpoint, params, function(data) {
+      options.title.text = data.title;
+      options.yAxis.title.text = data.axis.y;
+      options.series = [];
+      var series = {
+        name: 'Sessions',
+        data: [],
+        showInLegend: true
+      };
+      
+      if(data.series.length > 0) {
+        topTenContent.removeClass('hidden');
+        refineContent.removeClass('hidden');
+        exportBut.removeClass('hidden');
+      }
+      else {
+        topTenContent.addClass('hidden');
+        refineContent.addClass('hidden');
+        exportBut.addClass('hidden');
+      }
+
+      if(data.series.length > 10)
+        remainderContent.removeClass('hidden');
+      else
+        remainderContent.addClass('hidden');
+
+      var totals = {
+        type: 'pie',
+        name: 'Session Totals',
+        size: 400,
+        data: []
+      };
+
+      $.each(data.series, function(k, v) {
+        if(!v.excluded) {
+          options.chart.height = options.chart.height + 40 // allow room per rendered sp
+          options.xAxis.categories.push(v.name);
+          series.data.push(v.count);
+
+          var data = {
+            name: v.name,
+            y: v.count
+          };
+          totals.data.push(data);
+
+          var markup = '<label class="span3"><input name="activesp" type="checkbox" checked="checked" value="'+v.id+'"/> ' + v.name + '</label>';
+        }
+        else
+          var markup = '<label class="span3"><input name="activesp" type="checkbox" value="'+v.id+'"/> ' + v.name + '</label>';
+
+        if(k < 10)
+          topTen.append(markup);
+        else
+          remainder.append(markup);
+      });
+
+      options.series.push(series); 
+      options2.series.push(totals);
+      
+      fedreg.hidespinner();
+      idpserviceutilization = new Highcharts.Chart(options);
+      idpserviceutilizationtotals = new Highcharts.Chart(options2);
+    });
+};
+
+
+
+var detailedidpdemand;
+$(".export-detailed-idpdemand-report").click(function() {
+  var form = $('#detailed-idpdemand-report-parameters');
+  if(form.valid()) { 
+    var params = form.serialize();
+    window.location = detailedidpdemandEndpoint + '?type=csv&' + params
+  }
+});
+
+$(".request-detailed-idpdemand-report").click(function () {
+  var form = $('#detailed-idpdemand-report-parameters');
+  if(form.valid()) {
+
+    var exportBut = $('.export-detailed-idpdemand-report');
+    if(detailedidpdemand) {
+      detailedidpdemand.destroy();
+    }
+    fedreg.showspinner();
+
+    var options = {
+      chart: {
+        renderTo: 'idpdemanddetailed',
+        type: 'area',
+        height: 600,
+      },
+      title: {},
+      xAxis: {
+        type: 'linear',
+        title: {
+          text: 'Hour in day (24 hr format)'
+        },
+        tickInterval: 1
+      },
+      yAxis: {
+        title: {},
+        labels: {
+          formatter: function() {
+            return this.value;
+          }
+        }
+      },
+      legend: {
+        enabled: false,
+      },
+      plotOptions: {
+        area: {
+          marker: {
+            enabled: false,
+            symbol: 'circle',
+            radius: 2,
+            states: {
+              hover: {
+                enabled: true
+              }
+            }
+          }
+        }
+      }
+    }
+
+    var params = form.serialize();
+    $.getJSON(detailedidpdemandEndpoint, params, function(data) {
+      options.title.text = data.title;
+      options.yAxis.title.text = data.axis.y;
+      options.series = [];
+      var series = {
+        type: 'area',
+        name: 'sessions',
+        color: '#3BA187',
+        data: data.series
+      };  
+      options.series.push(series);
+
+
+      fedreg.hidespinner();
+      exportBut.removeClass('hidden');
+      detailedidpdemand = new Highcharts.Chart(options);
+    });
+  }  
+});
+
+// Service Providers
+
+var detailedspsessions;
+$(".export-detailed-spsessions-report").click(function() {
+  var form = $('#detailed-spsessions-report-parameters');
+  if(form.valid()) { 
+    var params = form.serialize();
+    window.location = detailedspsessionsEndpoint + '?type=csv&' + params
+  }
+});
+$(".request-detailed-spsessions-report").click(function () {
+  var form = $('#detailed-spsessions-report-parameters');
+  if(form.valid()) {
+    var exportBut = $('.export-detailed-spsessions-report');
+    if(detailedspsessions) {
+      detailedspsessions.destroy();
+    }
+    fedreg.showspinner();
+
+    var options = {
+      chart: {
+        renderTo: 'detailedspsessionschart',
+        type: 'area',
+        height: 600,
+        zoomType: 'x',
+      },
+      title: {},
+      xAxis: {
+        type: 'datetime',
+        maxZoom: 14 * 24 * 3600000, // fourteen days
+        title: {
+          text: null
+        }
+      },
+      yAxis: {
+        title: {},
+        labels: {
+          formatter: function() {
+            return this.value;
+          }
+        }
+      },
+      plotOptions: {
+        area: {
+          marker: {
+            enabled: false,
+            symbol: 'circle',
+            radius: 2,
+            states: {
+              hover: {
+                enabled: true
+              }
+            }
+          }
+        }
+      }
+    }
+
+    var params = form.serialize();
+    $.getJSON(detailedspsessionsEndpoint, params, function(data) {
+      options.title.text = data.title;
+      options.yAxis.title.text = data.axis.y;
+      options.series = [];
+      var series = {
+        type: 'area',
+        pointInterval: 24 * 3600 * 1000,
+        pointStart: Date.UTC(data.startdate.year, data.startdate.month, data.startdate.day),
+        name: data.series.overall.name,
+        data: data.series.overall.count
+      };  
+      options.series.push(series);
+
+
+      fedreg.hidespinner();
+      detailedspsessions = new Highcharts.Chart(options);
+      exportBut.removeClass('hidden');
+    });
+  }  
+});
+
+$(".request-refine-detailedsptoidputilization-content").click(function () {
+  fedreg.set_button($(this));
+  var form = $('#detailed-detailedsptoidputilization-report-parameters');
+  if(form.valid()) { 
+    var params = form.serialize();
+    params = params + '&' + $('#refine-detailedsptoidputilization-report-parameters').serialize();
+    requestSptoIdPUtilization(params);
+  }
+  fedreg.reset_button($(this));
+});
+
+$(".request-detailed-detailedsptoidputilization-reports").click(function () {
+  var form = $('#detailed-detailedsptoidputilization-report-parameters');
+  if(form.valid()) { 
+    var params = form.serialize();
+    requestSptoIdPUtilization(params);
+  }
+});
+
+$(".export-detailed-detailedsptoidputilization-reports").click(function() {
+  var form = $('#detailed-detailedsptoidputilization-report-parameters');
+  if(form.valid()) { 
+    var params = form.serialize();
+    params = params + '&' + $('#refine-detailedsptoidputilization-report-parameters').serialize();
+    window.location = detailedsptoidputilizationEndpoint + '?type=csv&' + params
+  }
+});
+
+var spserviceutilization;
+var spserviceutilizationtotals;
+function requestSptoIdPUtilization(params) {
+    var refineContent = $("#refine-detailedsptoidputilization-content");
+    var topTenContent = $('#refine-detailedsptoidputilization-report-parameters > .topten');
+    var remainderContent = $('#refine-detailedsptoidputilization-report-parameters > .remainder');
+    var topTen = $('#topten-utilized-services');
+    var remainder = $('#remaning-utilized-services');
+    var exportBut = $('.export-detailed-detailedsptoidputilization-reports');
+
+    if(spserviceutilization) {
+      spserviceutilization.destroy();
+      spserviceutilizationtotals.destroy();
+    }
+
+    refineContent.addClass('hidden');
+    topTenContent.addClass('hidden');
+    remainderContent.addClass('hidden');
+    exportBut.addClass('hidden');
+    topTen.html('');
+    remainder.html(''); 
+    fedreg.showspinner();
+
+    var options = {
+      chart: {
+        renderTo: 'detailedsptoidputilization',
+        defaultSeriesType: 'bar',
+        height: 40
+      },
+      title: {},
+      xAxis: {
+        categories: [],
+        title: {
+          enabled:false
+        },
+      },
+      yAxis: {
+        min: 0,
+        title: {
+          text: '',
+        }
+      },
+      legend: {
+        enabled: false,
+      },
+      plotOptions: {
+        bar: {
+          dataLabels: {
+              enabled: true,
+              y:-5,
+              color:"black",
+              style: {
+                  fontSize: "12px"
+              },
+              formatter: function(){
+                return this.name;
+              }
+          }
+        }
+      }
+    }
+
+    var options2 = {
+      chart: {
+        renderTo: 'detailedsptoidputilizationtotals',
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        height: 440
+      },
+      title: {
+        text: ''
+      },
+      tooltip: {
+        formatter: function() {
+          return '<b>'+ this.point.name +'</b>: '+ this.y + ' sessions ('+this.percentage +' %)';
+        }
+      },
+      plotOptions: {
+        pie: {
+          allowPointSelect: true,
+          cursor: 'pointer',
+          dataLabels: {
+            enabled: false
+          },
+          showInLegend: false
+        }
+      },
+      series: []
+    }
+
+    $.getJSON(detailedsptoidputilizationEndpoint, params, function(data) {
+      options.title.text = data.title;
+      options.yAxis.title.text = data.axis.y;
+      options.series = [];
+      var series = {
+        name: 'Sessions',
+        data: [],
+        showInLegend: true
+      };
+      
+      if(data.series.length > 0) {
+        topTenContent.removeClass('hidden');
+        refineContent.removeClass('hidden');
+        exportBut.removeClass('hidden');
+      }
+      else {
+        topTenContent.addClass('hidden');
+        refineContent.addClass('hidden');
+        exportBut.addClass('hidden');
+      }
+
+      if(data.series.length > 10)
+        remainderContent.removeClass('hidden');
+      else
+        remainderContent.addClass('hidden');
+
+      var totals = {
+        type: 'pie',
+        name: 'Session Totals',
+        size: 400,
+        data: []
+      };
+
+      $.each(data.series, function(k, v) {
+        if(!v.excluded) {
+          options.chart.height = options.chart.height + 40 // allow room per rendered sp
+          options.xAxis.categories.push(v.name);
+          series.data.push(v.count);
+
+          var data = {
+            name: v.name,
+            y: v.count
+          };
+          totals.data.push(data);
+
+          var markup = '<label class="span3"><input name="activeidp" type="checkbox" checked="checked" value="'+v.id+'"/> ' + v.name + '</label>';
+        }
+        else
+          var markup = '<label class="span3"><input name="activeidp" type="checkbox" value="'+v.id+'"/> ' + v.name + '</label>';
+
+        if(k < 10)
+          topTen.append(markup);
+        else
+          remainder.append(markup);
+      });
+
+      options.series.push(series); 
+      options2.series.push(totals);
+      
+      fedreg.hidespinner();
+      spserviceutilization = new Highcharts.Chart(options);
+      spserviceutilizationtotals = new Highcharts.Chart(options2);
+    });
+};
+
+
+
+var detailedspdemand;
+$(".export-detailed-spdemand-report").click(function() {
+  var form = $('#detailed-spdemand-report-parameters');
+  if(form.valid()) { 
+    var params = form.serialize();
+    window.location = detailedspdemandEndpoint + '?type=csv&' + params
+  }
+});
+
+$(".request-detailed-spdemand-report").click(function () {
+  var form = $('#detailed-spdemand-report-parameters');
+  if(form.valid()) {
+
+    var exportBut = $('.export-detailed-spdemand-report');
+    if(detailedspdemand) {
+      detailedspdemand.destroy();
+    }
+    fedreg.showspinner();
+
+    var options = {
+      chart: {
+        renderTo: 'spdemanddetailed',
+        type: 'area',
+        height: 600,
+      },
+      title: {},
+      xAxis: {
+        type: 'linear',
+        title: {
+          text: 'Hour in day (24 hr format)'
+        },
+        tickInterval: 1
+      },
+      yAxis: {
+        title: {},
+        labels: {
+          formatter: function() {
+            return this.value;
+          }
+        }
+      },
+      legend: {
+        enabled: false,
+      },
+      plotOptions: {
+        area: {
+          marker: {
+            enabled: false,
+            symbol: 'circle',
+            radius: 2,
+            states: {
+              hover: {
+                enabled: true
+              }
+            }
+          }
+        }
+      }
+    }
+
+    var params = form.serialize();
+    $.getJSON(detailedspdemandEndpoint, params, function(data) {
+      options.title.text = data.title;
+      options.yAxis.title.text = data.axis.y;
+      options.series = [];
+      var series = {
+        type: 'area',
+        name: 'sessions',
+        color: '#3BA187',
+        data: data.series
+      };  
+      options.series.push(series);
+
+
+      fedreg.hidespinner();
+      exportBut.removeClass('hidden');
+      detailedspdemand = new Highcharts.Chart(options);
+    });
+  }  
+});

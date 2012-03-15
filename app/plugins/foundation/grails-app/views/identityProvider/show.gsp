@@ -5,7 +5,7 @@
     <title><g:message code="fedreg.view.members.identityprovider.show.title" /></title>
   </head>
   <body>
-      
+    
     <h2><g:message code="fedreg.view.members.identityprovider.show.heading" args="[identityProvider.displayName]"/></h2>
 
     <g:if test="${!identityProvider.functioning()}">

@@ -1,5 +1,7 @@
 package aaf.fr.reporting
 
+import java.text.SimpleDateFormat;
+
 import grails.converters.JSON
 import grails.plugins.federatedgrails.Role
 import org.apache.shiro.SecurityUtils
@@ -8,387 +10,282 @@ import aaf.fr.foundation.*
 import aaf.fr.reporting.ReportingHelpers
 
 /**
- * Provides SP reporting data
+ * Provides Sp reporting data
  *
  * @author Bradley Beddoes
  */
 class ServiceProviderReportsController {
 
-	def view = {
-		def spList = SPSSODescriptor.listOrderByDisplayName()
-		[spList:spList]
-	}
-	
-	def loginsjson = {
-		if(!params.id) {
-			log.warn "SP was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
-			response.setStatus(500)
-			return
-		}
-		def sp = SPSSODescriptor.get(params.id)
-		if (!sp) {
-			render message(code: 'aaf.fr.foundation.spssoroledescriptor.nonexistant')
-			response.setStatus(500)
-			return
-		}
-			
-		if(SecurityUtils.subject.isPermitted("descriptor:${sp.id}:reporting") || SecurityUtils.subject.isPermitted("federation:reporting")) {
-			def robot = params.robot ? params.robot.toBoolean() : false
-			def year, month, day
-			year = params.int('year')
-			if(!year) {
-				def cal = Calendar.instance
-				year = cal.get(Calendar.YEAR)
-			}
-			month = params.int('month')
-			if(month)
-				day = params.int('day')
+  def sessions = {[spList:SPSSODescriptor.listOrderByDisplayName()]}
+  def utilization = {[spList:SPSSODescriptor.listOrderByDisplayName()]}
+  def demand = {[spList:SPSSODescriptor.listOrderByDisplayName()]}
+  def connections = {[spList:SPSSODescriptor.listOrderByDisplayName()]}
 
-			def results = [:]
-			results.title = "${g.message(code:'fedreg.templates.reports.serviceprovider.logins.title', args:[sp.displayName])} ${day ? day + ' /':''} ${month ? month + ' /':''} $year"
-			results.xaxis = g.message(code:'label.hour')
-			results.yaxis = g.message(code:'label.logins')
-			
-			def query = new StringBuilder("select new map(count(*) as c, hour(date_created) as t) from WayfAccessRecord where spid = :spid and year(dateCreated) = :year")
-			def queryParams = [:]
-			queryParams.spid = sp.id
-			queryParams.year = year
+  def detailedsessions = {
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
+    Date startDate = formatter.parse(params.startDate)
+    Date endDate = formatter.parse(params.endDate)
 
-			if(month) {
-				query << " and month(dateCreated) = :month"
-				queryParams.month = month
-			}
-			if(day) {
-				query << " and day(dateCreated) = :day"
-				queryParams.day = day
-			}
-		
-			query << " ${robots(robot)} group by hour(date_created)"
-		
-			def loginCounts = WayfAccessRecord.executeQuery(query.toString(), queryParams)
-			def (loginTotals, max) = ReportingHelpers.populateTotals(0..23, loginCounts, 0)
-			results.max = max
-			results.totals = loginTotals
-		
-			render results as JSON
-		}
-		else {
-			log.warn("Attempt to query logins json for $sp by $authenticatedUser was denied, incorrect permission set")
-			render message(code: 'fedreg.help.unauthorized')
-			response.setStatus(403)
-		}
-	}
-	
-	def sessionsjson = {
-		if(!params.id) {
-			log.warn "SP was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
-			response.setStatus(500)
-			return
-		}
-		
-		def sp = SPSSODescriptor.get(params.id)
-		if (!sp) {
-			render message(code: 'aaf.fr.foundation.spssoroledescriptor.nonexistant')
-			response.setStatus(500)
-			return
-		}
-		if(SecurityUtils.subject.isPermitted("descriptor:${sp.id}:reporting")  || SecurityUtils.subject.isPermitted("federation:reporting")) {
-			def robot = params.robot ? params.robot.toBoolean() : false
-			def year, month, day
-		
-			year = params.int('year')
-			if(!year) {
-				def cal = Calendar.instance
-				year = cal.get(Calendar.YEAR)
-			}
-			month = params.int('month')
-			if(month)
-				day = params.int('day')
-		
-			def results = [:]
-			results.title = "${g.message(code:'fedreg.templates.reports.serviceprovider.sessions.title', args:[sp.displayName])} ${day ? day + ' /':''} ${month ? month + ' /':''} $year"
-			results.yaxis = g.message(code:'label.sessions')
-			
-			def query, queryParams = [:], limit = 0
-			queryParams.spID = sp.id
-			queryParams.year = year
-					
-			if(day) {
-				query = "select new map(count(*) as c, hour(dateCreated) as t) from WayfAccessRecord where spID = :spID and year(dateCreated) = :year and month(dateCreated) = :month and day(dateCreated) = :day ${robots(robot)} group by hour(dateCreated)"
-				queryParams.month = month
-				queryParams.day = day
-				results.xaxis = g.message(code:'label.hour')
-			} else {
-				if(month) {
-					def cal = new GregorianCalendar(year,month - 1, 1)
-					def currentCal = new GregorianCalendar()
-					def currentYear = (cal.get(Calendar.YEAR) == currentCal.get(Calendar.YEAR))
-					def currentMonth = (cal.get(Calendar.MONTH) == currentCal.get(Calendar.MONTH))
-					if(currentYear && currentMonth) {
-						limit = currentCal.get(Calendar.DAY_OF_MONTH)
-					}
-					
-					query = "select new map(count(*) as c, day(dateCreated) as t) from WayfAccessRecord where spID = :spID and year(dateCreated) = :year and month(dateCreated) = :month ${robots(robot)} group by day(dateCreated)"
-					queryParams.month = month
-					results.xaxis = g.message(code:'label.day')
-				} else {
-					def cal = new GregorianCalendar(year, 0, 1)
-					def currentCal = new GregorianCalendar()
-					def currentYear = (cal.get(Calendar.YEAR) == currentCal.get(Calendar.YEAR))
-					if(currentYear) {
-						limit = currentCal.get(Calendar.MONTH) + 1
-					}
-					
-					query = "select new map(count(*) as c, month(dateCreated) as t) from WayfAccessRecord where spID = :spID and year(dateCreated) = :year ${robots(robot)} group by month(dateCreated)"
-					results.xaxis = g.message(code:'label.month')
-				}
-			}
+    def results = [
+      title: g.message(code:'label.detailedspsessionsreport'),
+      categories: [],
+      startdate: [
+          day: startDate.day,
+          month: startDate.month,
+          year: startDate.year + 1900
+      ],
+      axis: [
+        y: g.message(code:'label.sessions')
+      ],
+      series: [
+        overall: [
+          name: g.message(code:'label.totalsessions')
+        ],
+      ]
+    ]
 
-			def sessionCounts = WayfAccessRecord.executeQuery(query.toString(), queryParams)
-			def (sessionTotals, max) = ReportingHelpers.populateTotals(year, month, day, sessionCounts, limit)
-			results.max = max
-			results.totals = sessionTotals
-				
-			render results as JSON
-		}
-		else {
-			log.warn("Attempt to query totals json for $sp by $authenticatedUser was denied, incorrect permission set")
-			render message(code: 'fedreg.help.unauthorized')
-			response.setStatus(403)
-		}
-	}
-	
-	def totalsjson = {
-		if(!params.id) {
-			log.warn "SP was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
-			response.setStatus(500)
-			return
-		}
-		
-		def sp = SPSSODescriptor.get(params.id)
-		if (!sp) {
-			render message(code: 'aaf.fr.foundation.spssoroledescriptor.nonexistant')
-			response.setStatus(500)
-			return
-		}
-		if(SecurityUtils.subject.isPermitted("descriptor:${sp.id}:reporting")  || SecurityUtils.subject.isPermitted("federation:reporting")) {
-			def robot = params.robot ? params.robot.toBoolean() : false
-			def year, month, day, min, max
-		
-			year = params.int('year')
-			if(!year) {
-				def cal = Calendar.instance
-				year = cal.get(Calendar.YEAR)
-			}
-			month = params.int('month')
-			if(month)
-				day = params.int('day')
-		
-			min = params.int('min')	
-			max = params.int('max')
-			
-			def activeIDP = params.activeidp as List
-		
-			def count = 0, maxSessions = 0, totalSessions = 0
-			def results = [:]
-			def providers = []
-			def values = []
-			def valueLabels = []
-		
-			results.values = values
-			results.valuelabels = valueLabels
-			results.title = "${g.message(code:'fedreg.templates.reports.serviceprovider.totals.title', args:[sp.displayName])} ${day ? day + ' /':''} ${month ? month + ' /':''} $year"
-	
-			def query = new StringBuilder("select count(*), idpID from WayfAccessRecord where spID = :spid and year(dateCreated) = :year")
-			def queryParams = [:]
-			queryParams.spid = sp.id
-			queryParams.year = year
-		
-			if(month) {
-				query << " and month(dateCreated) = :month"
-				queryParams.month = month
-			}
-			if(day) {
-				query << " and day(dateCreated) = :day"
-				queryParams.day = day
-			}
-		
-			query << " ${robots(robot)} group by idpID order by count(idpID) desc"
-		
-			def sessions = WayfAccessRecord.executeQuery(query.toString(), queryParams)
-			if(sessions) {
-				results.populated = true
-				sessions.each { s ->
-					def idp = IDPSSODescriptor.get(s[1])
-					if(idp) {
-						def provider = [:]
-						provider.name = idp.displayName
-						provider.id = idp.id
-						provider.count = s[0]
-						providers.add(provider)
-					
-						totalSessions = totalSessions + provider.count
-		
-						if((activeIDP == null || activeIDP.contains(idp.id.toString())) && (!min || provider.count >= min) && (!max || provider.count <= max)) {
-							provider.rendered = true
-							values.add(provider.count)
-							valueLabels.add(idp.displayName)
-				
-							if(maxSessions < provider.count)
-								maxSessions = provider.count
-							count++
-						}
-						else
-							provider.rendered = false
-					}
-				}
+    def queryParams = [:]
+    queryParams.startDate = startDate
+    queryParams.endDate = endDate
+    queryParams.spID = params.spID as Long
 
-				results.providers = providers.sort{it.get('name').toLowerCase()}
-				results.maxsessions = maxSessions
-				results.totalsessions = totalSessions
-			} else {results.populated = false}
+    def knownDailyTotals = WayfAccessRecord.executeQuery("select count(*), dateCreated from aaf.fr.reporting.WayfAccessRecord where spID = :spID and dateCreated between :startDate and :endDate and robot = false group by year(dateCreated), month(dateCreated), day(dateCreated) order by year(dateCreated), month(dateCreated), day(dateCreated)", queryParams)
+    results.series.overall.count = populateDaily(knownDailyTotals, startDate, endDate)
 
-			render results as JSON
-		}
-		else {
-			log.warn("Attempt to query totals json for $sp by $authenticatedUser was denied, incorrect permission set")
-			render message(code: 'fedreg.help.unauthorized')
-			response.setStatus(403)
-		}
-	}
-	
-	def connectivityjson = {
-		if(!params.id) {
-			log.warn "IdP was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
-			response.setStatus(500)
-			return
-		}
-		
-		def sp = SPSSODescriptor.get(params.id)
-		if (!sp) {
-			render message(code: 'aaf.fr.foundation.spssoroledescriptor.nonexistant')
-			response.setStatus(500)
-			return
-		}
-		if(SecurityUtils.subject.isPermitted("descriptor:${sp.id}:reporting:connections") || SecurityUtils.subject.isPermitted("federation:reporting")) {
-			def robot = params.robot ? params.robot.toBoolean() : false
-			def year, month, day
-		
-			year = params.int('year')
-			if(!year) {
-				def cal = Calendar.instance
-				year = cal.get(Calendar.YEAR)
-			}
-			month = params.int('month')
-			if(month)
-				day = params.int('day')
-		
-			def activeIDP = params.activeidp as List
-		
-			def target = 1
-			def results = [:]
-			def providers = []
-			def nodes = []
-			def links = []
-		
-			results.nodes = nodes
-			results.links = links
-			results.title = "${g.message(code:'fedreg.templates.reports.serviceprovider.connectivity.title', args:[sp.displayName])} ${day ? day + ' /':''} ${month ? month + ' /':''} $year"
+    if(params.type == 'csv') {
+      response.setHeader("Content-disposition", "attachment; filename=detailedspsessions.csv")
+      response.contentType = "application/vnd.ms-excel"
 
-			def totalQuery = new StringBuilder("select count(*) as count from WayfAccessRecord where spid = :spid and year(dateCreated) = :year ${robots(robot)}")
-			def totalParams = [:]
-			totalParams.spid = sp.id
-			totalParams.year = year
+      def httpout = response.outputStream
+      httpout << "Report:, SP ${SPSSODescriptor.get(params.spID).displayName} Sessions\n"
+      httpout << "Period:, ${startDate}, ${endDate}\n\n"
+      httpout << "date,sessions\n"
+      def curDate = startDate
+      results.series.overall.count.each {
+        httpout << "${curDate},$it\n"
+        curDate++
+      }
+      httpout << "\n"
+      httpout.flush()
+      httpout.close()
+      return
+    }
 
-			if(month) {
-				totalQuery << " and month(dateCreated) = :month"
-				totalParams.month = month
-			}
-			if(day) {
-				totalQuery << " and day(dateCreated) = :day"
-				totalParams.day = day
-			}
-			if(activeIDP) {
-				totalQuery << " and idpid in (:activeIDP)"
-				totalParams.activeIDP = activeIDP
-			}
-		
-			def totalSessions = WayfAccessRecord.executeQuery(totalQuery.toString(), totalParams)
-			
-			if(totalSessions && totalSessions[0] > 0) {
-				results.populated = true
-			
-				def val = 0
-				def spNode = [:]
-				spNode.nodeName = sp.displayName
-				spNode.group = 2
-				nodes.add(spNode)
-				
-				// We remove any SP with a -1 id as this indicates the SP could not be determined at record creation time
-				def query = new StringBuilder("select count(*), idpID from WayfAccessRecord where spID != -1 and spID = :spid and year(dateCreated) = :year")
-				def queryParams = [:]
-				queryParams.spid = sp.id
-				queryParams.year = year
-			
-				if(month) {
-					query << " and month(dateCreated) = :month"
-					queryParams.month = month
-				}
-				if(day) {
-					query << " and day(dateCreated) = :day"
-					queryParams.day = day
-				}
-				query << " ${robots(robot)} group by idpID"
-				
-				def sessions = WayfAccessRecord.executeQuery(query.toString(), queryParams)
-				if(sessions) {
-					sessions.each { s ->
-						def idp = IDPSSODescriptor.get(s[1])
-						if(idp) {
-							def provider = [:]
-							provider.id = idp.id
-							provider.name = idp.displayName
-							providers.add(provider)
-			
-							if(activeIDP == null || activeIDP.contains(idp.id.toString())) {
-								provider.rendered = true
-			
-								def node = [:]
-								node.nodeName = idp.displayName
-								node.group = 1
-								nodes.add(node)
+    render results as JSON
+  }
 
-								def link = [:]
-								link.source = 0
-								def value = ((s[0] / totalSessions[0]) * 20)		// 0 - 20 instead of 0 - 1, makes graph look nicer
-								link.value = value
-								link.target = target++
+  def detailedidputilization = {
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
+    Date startDate = formatter.parse(params.startDate)
+    Date endDate = formatter.parse(params.endDate)
 
-								links.add(link)
-							}
-							else
-								provider.rendered = false
-						}
-					}
-				}
-				results.providers = providers.sort{it.get('name').toLowerCase()}
-			} else { results.populated = false }
-			
-			
-			render results as JSON
-		}
-		else {
-			log.warn("Attempt to query connections json for $sp by $authenticatedUser was denied, incorrect permission set")
-			render message(code: 'fedreg.help.unauthorized')
-			response.setStatus(403)
-		}
-	}
-	
-	def robots(def robot) {
-		robot ? '':'and robot = false'
-	}	
+    def results = [
+      title: g.message(code:'label.detailedsputilizationreport'),
+      categories: [],
+      startdate: [
+          day: startDate.day,
+          month: startDate.month,
+          year: startDate.year + 1900
+      ],
+      axis: [
+        y: g.message(code:'label.sessions')
+      ],
+      series: [],
+    ]
+
+    def queryParams = [:]
+    queryParams.startDate = startDate
+    queryParams.endDate = endDate
+    queryParams.spID = params.spID as Long
+    def sessionTotals = WayfAccessRecord.executeQuery("select idpID, count(*) from aaf.fr.reporting.WayfAccessRecord where spID = :spID and dateCreated between :startDate and :endDate and robot = false group by idpID", queryParams)
+
+    def requestedIDP = params.get('activeidp') as List
+    def idpList = IDPSSODescriptor.listOrderByDisplayName()
+    idpList.each { idp ->
+      if(idp.functioning()) {
+        def sessionTotal = sessionTotals.find{it[0] == idp.id}
+        if(sessionTotal && sessionTotal[1] > 0) {
+          def series = [:]
+          series.id = idp.id
+          series.name = idp.displayName
+          
+          series.count = sessionTotal[1]
+          series.excluded = (!requestedIDP || requestedIDP?.contains(idp.id.toString())) ? false:true
+          results.series.add(series)
+        }
+      }
+    }
+    results.series.sort { -it.count }
+
+    if(params.type == 'csv') {
+      response.setHeader("Content-disposition", "attachment; filename=detailedserviceutilization.csv")
+      response.contentType = "application/vnd.ms-excel"
+
+      def httpout = response.outputStream
+      httpout << "Report:, Detailed ${SPSSODescriptor.get(params.spID).displayName} Service Utilisation\n"
+      httpout << "Period:, ${startDate}, ${endDate}\n\n"
+      httpout << "id,name,sessions\n"
+      results.series.each {
+        if(!it.excluded)
+          httpout << "${it.id},${it.name.replace(',','')},${it.count}\n"
+      }
+      httpout.flush()
+      httpout.close()
+      return
+    }
+
+    render results as JSON
+  }
+
+  def detaileddemand = {
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
+    Date startDate = formatter.parse(params.startDate)
+    Date endDate = formatter.parse(params.endDate)
+
+    def results = [
+      title: g.message(code:'label.detailedspdemandreport'),
+      categories: [],
+      startdate: [
+          day: startDate.day,
+          month: startDate.month,
+          year: startDate.year + 1900
+      ],
+      axis: [
+        y: g.message(code:'label.sessions')
+      ],
+      series: [
+      ]
+    ]
+
+    def queryParams = [:]
+    queryParams.startDate = startDate
+    queryParams.endDate = endDate
+    queryParams.spID = params.spID as Long
+
+    def totals = WayfAccessRecord.executeQuery("select hour(dateCreated), count(*) from aaf.fr.reporting.WayfAccessRecord where spID = :spID and dateCreated between :startDate and :endDate and robot = false group by hour(dateCreated) order by hour(dateCreated)", queryParams)
+    results.series = totals
+
+    if(params.type == 'csv') {
+      response.setHeader("Content-disposition", "attachment; filename=detaileddemand.csv")
+      response.contentType = "application/vnd.ms-excel"
+
+      def httpout = response.outputStream
+      httpout << "Report:, SP ${SPSSODescriptor.get(params.spID).displayName} Demand\n"
+      httpout << "Period:, ${startDate}, ${endDate}\n\n"
+      httpout << "hour,sessions\n"
+      results.series.each {
+        httpout << "${it[0]},${it[1]}\n"
+      }
+      httpout.flush()
+      httpout.close()
+      return
+    }
+
+    render results as JSON
+  }
+  
+  def detailedconnectivity = {
+    // This code survived the cut of protovis because everyone loved it so much in mgmt etc - :( - Uggh.
+    // So we maintain protovis for this function only.
+
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
+    Date startDate = formatter.parse(params.startDate)
+    Date endDate = formatter.parse(params.endDate)
+
+    if(!params.spID) {
+      log.warn "Sp was not present"
+      render message(code: 'fedreg.controllers.namevalue.missing')
+      response.setStatus(500)
+      return
+    }
+    
+    def sp = SPSSODescriptor.get(params.spID)
+    if (!sp) {
+      render message(code: 'aaf.fr.foundation.spssoroledescriptor.nonexistant')
+      response.setStatus(500)
+      return
+    }
+    if(true || SecurityUtils.subject.isPermitted("descriptor:${sp.id}:reporting") || SecurityUtils.subject.isPermitted("federation:reporting")) {
+      
+      def queryParams = [:]
+      queryParams.startDate = startDate
+      queryParams.endDate = endDate
+      queryParams.spID = params.spID as Long
+    
+      def target = 1
+      def results = [:]
+      def services = []
+      def nodes = []
+      def links = []
+    
+      results.nodes = nodes
+      results.links = links
+    
+      def totalSessions = WayfAccessRecord.executeQuery("select count(*) as count from WayfAccessRecord where spid = :spID and dateCreated between :startDate and :endDate", queryParams)
+      if(totalSessions && totalSessions[0] > 0) {
+        results.populated = true
+      
+        def val = 0
+        def spNode = [:]
+        spNode.nodeName = sp.displayName
+        spNode.group = 1
+        nodes.add(spNode)
+        
+        def sessions = WayfAccessRecord.executeQuery("select count(*), idpID from WayfAccessRecord where spID = :spID and dateCreated between :startDate and :endDate and robot = false group by idpID", queryParams)
+        if(sessions) {
+          sessions.each { s ->
+            def idp = IDPSSODescriptor.get(s[1])
+            if(idp) {
+              def service = [:]
+              service.id = idp.id
+              service.name = idp.displayName
+              services.add(service)
+              service.rendered = true
+    
+              def node = [:]
+              node.nodeName = idp.displayName
+              node.group = 2
+              nodes.add(node)
+
+              def link = [:]
+              link.source = 0
+              def value = ((s[0] / totalSessions[0]) * 20)    /* 0 - 20 instead of 0 - 1, makes graph look nicer */
+              link.value = value
+              link.target = target++
+
+              links.add(link)
+            }
+          }
+        }
+        results.services = services.sort{it.get('name').toLowerCase()}
+      } else {
+        results.populated = false
+      }
+      render results as JSON
+    }
+    else {
+      log.warn("Attempt to query connections json for $sp by $authenticatedUser was denied, incorrect permission set")
+      render message(code: 'fedreg.help.unauthorized')
+      response.setStatus(403)
+    }
+  }
+
+  // Populates missing zero values so every day has content for zooming
+  private def populateDaily(knownDailyTotals, startDate, endDate) {
+    def allDailyTotals = []
+    def activeDates = [:]
+    knownDailyTotals.each {dailyTotal ->
+        activeDates.put(dailyTotal[1].clearTime(), dailyTotal[0])
+    }
+
+    (startDate..endDate).each { today ->
+      if(activeDates.containsKey(today)) {
+        allDailyTotals.add(activeDates[today])
+      }
+      else {
+        allDailyTotals.add(0)
+      }
+    }
+    allDailyTotals
+  }
 }

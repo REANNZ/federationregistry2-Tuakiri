@@ -56,7 +56,7 @@ public class SecurityFilters {
 		}
 		
 		// Reporting
-		compliance(controller: "(federationReports|complianceReports)") {
+		compliance(controller: "(federationReports|complianceReports|identityProviderReports|serviceProviderReports)") {
 			before = {
 				accessControl { true }
 			}
