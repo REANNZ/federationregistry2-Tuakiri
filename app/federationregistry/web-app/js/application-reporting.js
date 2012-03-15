@@ -1396,7 +1396,8 @@ function requestIdPServiceUtilization(params) {
       idpserviceutilization.destroy();
       idpserviceutilizationtotals.destroy();
     }
-
+    
+    fedreg.showspinner();
     refineContent.addClass('hidden');
     topTenContent.addClass('hidden');
     remainderContent.addClass('hidden');

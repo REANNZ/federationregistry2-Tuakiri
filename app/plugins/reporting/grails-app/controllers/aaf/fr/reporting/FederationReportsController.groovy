@@ -92,7 +92,7 @@ class FederationReportsController {
   def detailedregistrations = {
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
     Date startDate = formatter.parse(params.startDate)
-    Date endDate = formatter.parse(params.endDate)
+    Date endDate = formatter.parse(params.endDate) + 1
 
     def results
     use(groovy.time.TimeCategory) {
@@ -261,7 +261,7 @@ class FederationReportsController {
   def detailedsessions = {
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
     Date startDate = formatter.parse(params.startDate)
-    Date endDate = formatter.parse(params.endDate)
+    Date endDate = formatter.parse(params.endDate) + 1
 
     def results = [
       title: g.message(code:'label.detailedwaysessionsreport'),
@@ -309,7 +309,7 @@ class FederationReportsController {
   def detaileddemand = {
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
     Date startDate = formatter.parse(params.startDate)
-    Date endDate = formatter.parse(params.endDate)
+    Date endDate = formatter.parse(params.endDate) + 1
 
     def results = [
       title: g.message(code:'label.detaileddemandreport'),
@@ -351,7 +351,7 @@ class FederationReportsController {
   def detaileddsutilization = {
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
     Date startDate = formatter.parse(params.startDate)
-    Date endDate = formatter.parse(params.endDate)
+    Date endDate = formatter.parse(params.endDate) + 1
 
     def results = [
       title: g.message(code:'label.detailedwayfnodesessionsreport'),
@@ -462,7 +462,7 @@ class FederationReportsController {
   def detailedsubscribergrowth = {
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
     Date startDate = formatter.parse(params.startDate)
-    Date endDate = formatter.parse(params.endDate)
+    Date endDate = formatter.parse(params.endDate) + 1
 
     def results
     use(groovy.time.TimeCategory) {
@@ -550,7 +550,7 @@ class FederationReportsController {
   def detailedserviceutilization = {
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
     Date startDate = formatter.parse(params.startDate)
-    Date endDate = formatter.parse(params.endDate)
+    Date endDate = formatter.parse(params.endDate) + 1
 
     def results = [
       title: g.message(code:'label.detailedserviceutilizationreport'),
@@ -602,7 +602,7 @@ class FederationReportsController {
   def detailedidputilization = {
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
     Date startDate = formatter.parse(params.startDate)
-    Date endDate = formatter.parse(params.endDate)
+    Date endDate = formatter.parse(params.endDate) + 1
 
     def results = [
       title: g.message(code:'label.detailedidputilizationreport'),
@@ -655,7 +655,7 @@ class FederationReportsController {
   def serviceutilizationbreakdown = {
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
     Date startDate = formatter.parse(params.startDate)
-    Date endDate = formatter.parse(params.endDate)
+    Date endDate = formatter.parse(params.endDate) + 1
 
     response.setHeader("Content-disposition", "attachment; filename=serviceutilizationbreakdown.csv")
     response.contentType = "application/vnd.ms-excel"

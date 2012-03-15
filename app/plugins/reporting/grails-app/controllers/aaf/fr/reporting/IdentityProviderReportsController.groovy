@@ -24,7 +24,7 @@ class IdentityProviderReportsController {
   def detailedsessions = {
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
     Date startDate = formatter.parse(params.startDate)
-    Date endDate = formatter.parse(params.endDate)
+    Date endDate = formatter.parse(params.endDate) + 1
 
     def results = [
       title: g.message(code:'label.detailedidpsessionsreport'),
@@ -77,7 +77,7 @@ class IdentityProviderReportsController {
   def detailedserviceutilization = {
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
     Date startDate = formatter.parse(params.startDate)
-    Date endDate = formatter.parse(params.endDate)
+    Date endDate = formatter.parse(params.endDate) + 1
 
     def results = [
       title: g.message(code:'label.detailedidputilizationreport'),
@@ -140,7 +140,7 @@ class IdentityProviderReportsController {
   def detaileddemand = {
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
     Date startDate = formatter.parse(params.startDate)
-    Date endDate = formatter.parse(params.endDate)
+    Date endDate = formatter.parse(params.endDate) + 1
 
     def results = [
       title: g.message(code:'label.detailedidpdemandreport'),
@@ -190,7 +190,7 @@ class IdentityProviderReportsController {
 
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
     Date startDate = formatter.parse(params.startDate)
-    Date endDate = formatter.parse(params.endDate)
+    Date endDate = formatter.parse(params.endDate) + 1
 
     if(!params.idpID) {
       log.warn "IdP was not present"

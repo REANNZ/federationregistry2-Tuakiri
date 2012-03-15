@@ -24,7 +24,7 @@ class ServiceProviderReportsController {
   def detailedsessions = {
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
     Date startDate = formatter.parse(params.startDate)
-    Date endDate = formatter.parse(params.endDate)
+    Date endDate = formatter.parse(params.endDate) + 1
 
     def results = [
       title: g.message(code:'label.detailedspsessionsreport'),
@@ -77,7 +77,7 @@ class ServiceProviderReportsController {
   def detailedidputilization = {
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
     Date startDate = formatter.parse(params.startDate)
-    Date endDate = formatter.parse(params.endDate)
+    Date endDate = formatter.parse(params.endDate) + 1
 
     def results = [
       title: g.message(code:'label.detailedsputilizationreport'),
@@ -140,7 +140,7 @@ class ServiceProviderReportsController {
   def detaileddemand = {
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
     Date startDate = formatter.parse(params.startDate)
-    Date endDate = formatter.parse(params.endDate)
+    Date endDate = formatter.parse(params.endDate) + 1
 
     def results = [
       title: g.message(code:'label.detailedspdemandreport'),
@@ -190,7 +190,7 @@ class ServiceProviderReportsController {
 
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
     Date startDate = formatter.parse(params.startDate)
-    Date endDate = formatter.parse(params.endDate)
+    Date endDate = formatter.parse(params.endDate) + 1
 
     if(!params.spID) {
       log.warn "Sp was not present"

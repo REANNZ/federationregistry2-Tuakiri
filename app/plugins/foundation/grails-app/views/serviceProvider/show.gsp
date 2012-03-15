@@ -147,7 +147,7 @@
 
       <fr:hasAnyPermission in='["descriptor:${serviceProvider.id}:reporting" , "federation:reporting"]'>
         <div id="tab-reports" class="tab-pane">
-          <g:render template="/templates/reporting/sp/reports" plugin="reporting" model="[id:serviceProvider.id]" />
+          <g:render template="/templates/serviceprovider/reporting" model="[spID:serviceProvider.id]" />
         </div>
       </fr:hasAnyPermission>
 

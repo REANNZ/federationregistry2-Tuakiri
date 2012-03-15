@@ -3,7 +3,7 @@
 <html>
   <head>
     <title><g:message code="fedreg.title.${grailsApplication.config.fedreg.deployment.environment}" /> | <g:layoutTitle /></title>
-    <r:require modules="bootstrap, validate, app, datatables"/>
+    <r:require modules="bootstrap, bootstrap-datepicker, validate, app, datatables"/>
     <r:layoutResources/>
     <g:layoutHead />
   </head>

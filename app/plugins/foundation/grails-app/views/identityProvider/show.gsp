@@ -148,9 +148,9 @@
         </div>
       </div>
 
-      <fr:hasAnyPermission in='["descriptor:${identityProvider.id}:reporting" , "federation:reporting"]'>
+      <fr:hasAnyPermission in='["federation:management:descriptor:${identityProvider.id}:reporting" , "federation:reporting"]'>
         <div id="tab-reports" class="tab-pane">
-          <g:render template="/templates/reporting/idp/reports" plugin="federationreporting" model="[id:identityProvider.id]" />
+          <g:render template="/templates/identityprovider/reporting" model="[idpID:identityProvider.id]" />
         </div>
       </fr:hasAnyPermission>
 

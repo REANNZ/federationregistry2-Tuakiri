@@ -11,10 +11,12 @@ applyBehaviourTo = function(scope) {
   $("[rel=twipsy]", scope).tooltip({offset:3}); 
   $("[rel=tooltip]", scope).tooltip({offset:3}); 
 
-  $('form.validating', scope).validate({
-    ignore: ":disabled",
-    keyup: false,
-  });
+  if($('form.validating').dataTable) {
+    $('form.validating', scope).validate({
+      ignore: ":disabled",
+      keyup: false,
+    });
+  }
 
   $('.revealable', scope).hide();
 
