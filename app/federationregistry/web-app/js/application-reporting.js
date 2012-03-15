@@ -121,7 +121,7 @@ fr.summary_sessions_report = function(target) {
   var options = {
     chart: {
       renderTo: 'sessions',
-      type: 'area'
+      type: 'column'
     },
     title: {},
     xAxis: {

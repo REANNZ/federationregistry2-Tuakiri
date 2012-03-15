@@ -11,7 +11,7 @@ applyBehaviourTo = function(scope) {
   $("[rel=twipsy]", scope).tooltip({offset:3}); 
   $("[rel=tooltip]", scope).tooltip({offset:3}); 
 
-  if($('form.validating').dataTable) {
+  if($('form.validating').validate) {
     $('form.validating', scope).validate({
       ignore: ":disabled",
       keyup: false,
