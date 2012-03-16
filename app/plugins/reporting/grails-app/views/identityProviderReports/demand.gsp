@@ -27,7 +27,7 @@
     </div>
     
     <r:script>
-      var detailedidpdemandEndpoint = "${createLink(controller:'identityProviderReports', action:'detaileddemand')}"
+      var detailedidpdemandEndpoint = "${createLink(controller:'identityProviderReports', action:'reportdemand')}"
 
       $(document).ready(function() {
         var currentTime = new Date()

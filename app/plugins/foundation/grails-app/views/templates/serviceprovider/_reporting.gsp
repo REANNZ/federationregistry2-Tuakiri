@@ -140,7 +140,7 @@
       </div>
 
       <script type="text/javascript+protovis">
-        var spconnectionsEndpoint = "${createLink(controller:'serviceProviderReports', action:'detailedconnectivity')}"
+        var spconnectionsEndpoint = "${createLink(controller:'serviceProviderReports', action:'reportconnectivity')}"
 
         $(".request-sp-connections-report").click(function () {
           $('#spconnectivity').hide();
@@ -190,9 +190,9 @@
   </div>
 
   <r:script>
-    var detailedspsessionsEndpoint = "${createLink(controller:'serviceProviderReports', action:'detailedsessions')}"
-    var detailedsptoidputilizationEndpoint = "${createLink(controller:'serviceProviderReports', action:'detailedidputilization')}"
-    var detailedspdemandEndpoint = "${createLink(controller:'serviceProviderReports', action:'detaileddemand')}"
+    var detailedspsessionsEndpoint = "${createLink(controller:'serviceProviderReports', action:'reportsessions')}"
+    var detailedsptoidputilizationEndpoint = "${createLink(controller:'serviceProviderReports', action:'reportidputilization')}"
+    var detailedspdemandEndpoint = "${createLink(controller:'serviceProviderReports', action:'reportdemand')}"
 
     $(".generate-btn").click(function() {
       $('.generate-notice').hide();

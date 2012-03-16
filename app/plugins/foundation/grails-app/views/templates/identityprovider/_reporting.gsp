@@ -142,7 +142,7 @@
       </div>
 
       <script type="text/javascript+protovis">
-        var idpconnectionsEndpoint = "${createLink(controller:'identityProviderReports', action:'detailedconnectivity')}"
+        var idpconnectionsEndpoint = "${createLink(controller:'identityProviderReports', action:'reportconnectivity')}"
 
         $(".request-idp-connections-report").click(function () {
           $('#idpconnectivity').hide();
@@ -193,9 +193,9 @@
   </div>
 
   <r:script>
-    var detailedidpsessionsEndpoint = "${createLink(controller:'identityProviderReports', action:'detailedsessions')}";
-    var detailedidptoserviceutilizationEndpoint = "${createLink(controller:'identityProviderReports', action:'detailedserviceutilization')}";
-    var detailedidpdemandEndpoint = "${createLink(controller:'identityProviderReports', action:'detaileddemand')}";
+    var detailedidpsessionsEndpoint = "${createLink(controller:'identityProviderReports', action:'reportsessions')}";
+    var detailedidptoserviceutilizationEndpoint = "${createLink(controller:'identityProviderReports', action:'reportserviceutilization')}";
+    var detailedidpdemandEndpoint = "${createLink(controller:'identityProviderReports', action:'reportdemand')}";
 
     $(".generate-btn").click(function() {
       $('.generate-notice').hide();

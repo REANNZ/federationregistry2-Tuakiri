@@ -39,7 +39,7 @@
     </div>
 
     <r:script>
-      var idpprovidingattributeEndpoint = "${createLink(controller:'complianceReports', action:'providingAttribute')}"
+      var idpprovidingattributeEndpoint = "${createLink(controller:'complianceReports', action:'reportprovidingattribute')}"
 
       $(document).ready(function() {
         $('.request-idpprovidingattribute-report').click();

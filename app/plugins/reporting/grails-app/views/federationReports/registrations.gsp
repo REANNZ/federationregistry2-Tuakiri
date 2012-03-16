@@ -67,7 +67,7 @@
     </div>
 
     <r:script>
-      var detailedregistrationsEndpoint = "${createLink(controller:'federationReports', action:'detailedregistrations')}"
+      var detailedregistrationsEndpoint = "${createLink(controller:'federationReports', action:'reportregistrations')}"
 
       $(document).ready(function() {
         var currentTime = new Date()

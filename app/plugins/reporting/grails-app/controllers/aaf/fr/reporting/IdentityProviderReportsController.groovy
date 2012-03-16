@@ -21,7 +21,7 @@ class IdentityProviderReportsController {
   def demand = {[idpList:IDPSSODescriptor.listOrderByDisplayName()]}
   def connections = {[idpList:IDPSSODescriptor.listOrderByDisplayName()]}
 
-  def detailedsessions = {
+  def reportsessions = {
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
     Date startDate = formatter.parse(params.startDate)
     Date endDate = formatter.parse(params.endDate) + 1
@@ -74,7 +74,7 @@ class IdentityProviderReportsController {
     render results as JSON
   }
 
-  def detailedserviceutilization = {
+  def reportserviceutilization = {
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
     Date startDate = formatter.parse(params.startDate)
     Date endDate = formatter.parse(params.endDate) + 1
@@ -137,7 +137,7 @@ class IdentityProviderReportsController {
     render results as JSON
   }
 
-  def detaileddemand = {
+  def reportdemand = {
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
     Date startDate = formatter.parse(params.startDate)
     Date endDate = formatter.parse(params.endDate) + 1
@@ -184,28 +184,16 @@ class IdentityProviderReportsController {
     render results as JSON
   }
   
-  def detailedconnectivity = {
+  def reportconnectivity = {
     // This code survived the cut of protovis because everyone loved it so much in mgmt etc - :( - Uggh.
     // So we maintain protovis for this function only.
 
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
     Date startDate = formatter.parse(params.startDate)
     Date endDate = formatter.parse(params.endDate) + 1
-
-    if(!params.idpID) {
-      log.warn "IdP was not present"
-      render message(code: 'fedreg.controllers.namevalue.missing')
-      response.setStatus(500)
-      return
-    }
     
+    // Interceptor approved so we know it exists.
     def idp = IDPSSODescriptor.get(params.idpID)
-    if (!idp) {
-      render message(code: 'aaf.fr.foundation.idpssoroledescriptor.nonexistant')
-      response.setStatus(500)
-      return
-    }
-    if(true || SecurityUtils.subject.isPermitted("descriptor:${idp.id}:reporting") || SecurityUtils.subject.isPermitted("federation:reporting")) {
       
       def queryParams = [:]
       queryParams.startDate = startDate
@@ -269,12 +257,7 @@ class IdentityProviderReportsController {
         results.populated = false
       }
       render results as JSON
-    }
-    else {
-      log.warn("Attempt to query connections json for $idp by $authenticatedUser was denied, incorrect permission set")
-      render message(code: 'fedreg.help.unauthorized')
-      response.setStatus(403)
-    }
+    
   }
 
   // Populates missing zero values so every day has content for zooming

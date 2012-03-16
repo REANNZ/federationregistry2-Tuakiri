@@ -28,7 +28,7 @@
     </div>
 
     <script type="text/javascript+protovis">
-      var spconnectionsEndpoint = "${createLink(controller:'serviceProviderReports', action:'detailedconnectivity')}"
+      var spconnectionsEndpoint = "${createLink(controller:'serviceProviderReports', action:'reportconnectivity')}"
 
       $(".request-sp-connections-report").click(function () {
         $('#spconnectivity').hide();

@@ -25,7 +25,7 @@
         <g:link controller="federationReports" action="summary"><g:message code="fedreg.navigation.reporting" /></g:link>
       </fr:hasPermission>
       <fr:lacksPermission target="federation:reporting">
-        <g:link controller="IdentityProviderAttributeCompliance" action="summary"><g:message code="fedreg.navigation.reporting" /></g:link>
+        <g:link controller="complianceReports" action="attributesupport"><g:message code="fedreg.navigation.reporting" /></g:link>
       </fr:lacksPermission>
     </li>
     <li class="${['metadata'].contains(controllerName) ? 'active' : ''}">

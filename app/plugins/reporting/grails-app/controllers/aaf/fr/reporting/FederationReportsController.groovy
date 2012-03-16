@@ -27,7 +27,7 @@ class FederationReportsController {
   def exportonly = { [organizations:Organization.list()]}
 
 
-  def summaryregistrations = {
+  def reportsummaryregistrations = {
     def currentCal = new GregorianCalendar()
 
     def minYear = (Organization.executeQuery("select min(year(dateCreated)) from aaf.fr.foundation.Organization")[0] ?: 2010) - 1
@@ -89,7 +89,7 @@ class FederationReportsController {
     render results as JSON
   }
 
-  def detailedregistrations = {
+  def reportregistrations = {
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
     Date startDate = formatter.parse(params.startDate)
     Date endDate = formatter.parse(params.endDate) + 1
@@ -227,7 +227,7 @@ class FederationReportsController {
     render results as JSON
   }
 
-  def summarysessions = {
+  def reportsummarysessions = {
     def currentCal = new GregorianCalendar()
 
     def minYear = (Organization.executeQuery("select min(year(dateCreated)) from aaf.fr.foundation.Organization")[0] ?: 2010) - 1
@@ -258,7 +258,7 @@ class FederationReportsController {
     render results as JSON
   }
 
-  def detailedsessions = {
+  def reportsessions = {
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
     Date startDate = formatter.parse(params.startDate)
     Date endDate = formatter.parse(params.endDate) + 1
@@ -306,7 +306,7 @@ class FederationReportsController {
     render results as JSON
   }
 
-  def detaileddemand = {
+  def reportdemand = {
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
     Date startDate = formatter.parse(params.startDate)
     Date endDate = formatter.parse(params.endDate) + 1
@@ -348,7 +348,7 @@ class FederationReportsController {
     render results as JSON
   }
 
-  def detaileddsutilization = {
+  def reportdsutilization = {
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
     Date startDate = formatter.parse(params.startDate)
     Date endDate = formatter.parse(params.endDate) + 1
@@ -407,7 +407,7 @@ class FederationReportsController {
     render results as JSON
   }
 
-  def summarysubscribergrowth = {
+  def reportsummarysubscribergrowth = {
     def currentCal = new GregorianCalendar()
 
     def minYear = (Organization.executeQuery("select min(year(dateCreated)) from aaf.fr.foundation.Organization")[0] ?: 2010) - 1
@@ -459,7 +459,7 @@ class FederationReportsController {
     render results as JSON
   }
 
-  def detailedsubscribergrowth = {
+  def reportsubscribergrowth = {
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
     Date startDate = formatter.parse(params.startDate)
     Date endDate = formatter.parse(params.endDate) + 1
@@ -547,7 +547,7 @@ class FederationReportsController {
     render results as JSON
   }
 
-  def detailedserviceutilization = {
+  def reportserviceutilization = {
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
     Date startDate = formatter.parse(params.startDate)
     Date endDate = formatter.parse(params.endDate) + 1
@@ -599,7 +599,7 @@ class FederationReportsController {
     render results as JSON
   }
 
-  def detailedidputilization = {
+  def reportidputilization = {
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
     Date startDate = formatter.parse(params.startDate)
     Date endDate = formatter.parse(params.endDate) + 1
@@ -652,7 +652,7 @@ class FederationReportsController {
   }
 
   // Provides data for AAF 'box' reports per executive requirements.
-  def serviceutilizationbreakdown = {
+  def reportserviceutilizationbreakdown = {
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
     Date startDate = formatter.parse(params.startDate)
     Date endDate = formatter.parse(params.endDate) + 1

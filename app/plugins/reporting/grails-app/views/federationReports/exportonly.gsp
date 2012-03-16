@@ -11,7 +11,7 @@
     <div class="row">
       <div class="span8">
         <h4>SP utilisation showing source IdP breakdown (box reporting)</h4>
-        <g:form type="post" action="serviceutilizationbreakdown" class="form-horizontal report-parameters validating">
+        <g:form type="post" action="reportserviceutilizationbreakdown" class="form-horizontal report-parameters validating">
           <div class="control-group">
             <label for="startDate"><g:message code="label.startdate"/> </label>
             <div class="controls">

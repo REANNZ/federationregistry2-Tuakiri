@@ -26,7 +26,7 @@
     </div>
 
     <r:script>
-      var attributesupportEndpoint = "${createLink(controller:'complianceReports', action:'attributeAvailability')}"
+      var attributesupportEndpoint = "${createLink(controller:'complianceReports', action:'reportattributeavailability')}"
 
       $(document).ready(function() {
         fr.detailed_attributesupport_compliance_report();

@@ -106,8 +106,8 @@
     </div>
 
     <r:script>
-      var summaryregistrationsEndpoint = "${createLink(controller:'federationReports', action:'summaryregistrations')}"
-      var summarysessionsEndpoint = "${createLink(controller:'federationReports', action:'summarysessions')}"
+      var summaryregistrationsEndpoint = "${createLink(controller:'federationReports', action:'reportsummaryregistrations')}"
+      var summarysessionsEndpoint = "${createLink(controller:'federationReports', action:'reportsummarysessions')}"
       $(document).ready(function() {
         fr.summary_registrations_report('registrations');
         fr.summary_sessions_report('sessions');

@@ -27,7 +27,7 @@
     </div>
 
     <r:script>
-      var detailedspsessionsEndpoint = "${createLink(controller:'serviceProviderReports', action:'detailedsessions')}"
+      var detailedspsessionsEndpoint = "${createLink(controller:'serviceProviderReports', action:'reportsessions')}"
 
       $(document).ready(function() {
         var currentTime = new Date()

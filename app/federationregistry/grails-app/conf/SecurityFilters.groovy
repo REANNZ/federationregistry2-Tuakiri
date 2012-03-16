@@ -13,12 +13,12 @@ public class SecurityFilters {
 	def filters = {
 	
 		// Undertake bootstrap
-		all(controller: '*') {
-			before = {
-				if( !['initialBootstrap','console'].contains(controllerName) && grailsApplication.config.fedreg.bootstrap)
-					redirect (controller: "initialBootstrap")
-			}
-		}
+		//all(controller: '*') {
+		//	before = {
+		//		if( !['initialBootstrap','console'].contains(controllerName) && grailsApplication.config.fedreg.bootstrap)
+		//			redirect (controller: "initialBootstrap")
+		//	}
+		//}
 		
 		// Invitations
 		invitations(controller: "invitation") {
@@ -35,7 +35,7 @@ public class SecurityFilters {
 		}
 
 		// Members
-		members(controller: "(organization|entityDescriptor|identityProvider|serviceProvider|contacts)") {
+		members(controller: "(organization|entityDescriptor|serviceProvider|contacts)") {
 			before = {
 				accessControl { true }
 			}
@@ -50,13 +50,6 @@ public class SecurityFilters {
 		
 		// Service Categories
 		servicecategories(controller: "serviceCategory", action:"(list|add|remove)") {
-			before = {
-				accessControl { true }
-			}
-		}
-		
-		// Reporting
-		compliance(controller: "(federationReports|complianceReports|identityProviderReports|serviceProviderReports)") {
 			before = {
 				accessControl { true }
 			}

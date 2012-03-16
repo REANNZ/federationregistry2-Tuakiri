@@ -21,7 +21,7 @@ class ServiceProviderReportsController {
   def demand = {[spList:SPSSODescriptor.listOrderByDisplayName()]}
   def connections = {[spList:SPSSODescriptor.listOrderByDisplayName()]}
 
-  def detailedsessions = {
+  def reportsessions = {
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
     Date startDate = formatter.parse(params.startDate)
     Date endDate = formatter.parse(params.endDate) + 1
@@ -74,7 +74,7 @@ class ServiceProviderReportsController {
     render results as JSON
   }
 
-  def detailedidputilization = {
+  def reportidputilization = {
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
     Date startDate = formatter.parse(params.startDate)
     Date endDate = formatter.parse(params.endDate) + 1
@@ -137,7 +137,7 @@ class ServiceProviderReportsController {
     render results as JSON
   }
 
-  def detaileddemand = {
+  def reportdemand = {
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
     Date startDate = formatter.parse(params.startDate)
     Date endDate = formatter.parse(params.endDate) + 1
@@ -184,7 +184,7 @@ class ServiceProviderReportsController {
     render results as JSON
   }
   
-  def detailedconnectivity = {
+  def reportconnectivity = {
     // This code survived the cut of protovis because everyone loved it so much in mgmt etc - :( - Uggh.
     // So we maintain protovis for this function only.
 

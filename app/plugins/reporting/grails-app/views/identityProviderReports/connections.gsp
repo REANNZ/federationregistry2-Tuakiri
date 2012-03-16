@@ -28,7 +28,7 @@
     </div>
 
     <script type="text/javascript+protovis">
-      var idpconnectionsEndpoint = "${createLink(controller:'identityProviderReports', action:'detailedconnectivity')}"
+      var idpconnectionsEndpoint = "${createLink(controller:'identityProviderReports', action:'reportconnectivity')}"
 
       $(".request-idp-connections-report").click(function () {
         $('#idpconnectivity').hide();

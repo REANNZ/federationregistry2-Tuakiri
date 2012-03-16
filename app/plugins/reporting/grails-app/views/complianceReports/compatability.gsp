@@ -56,7 +56,7 @@
     </div>
 
     <r:script>
-      var attributecompatibilityEndpoint = "${createLink(controller:'complianceReports', action:'attributeCompatibility')}"
+      var attributecompatibilityEndpoint = "${createLink(controller:'complianceReports', action:'reportattributecompatibility')}"
 
       $(document).ready(function() {
         $('.request-detailed-attributecompatibility-report').click();

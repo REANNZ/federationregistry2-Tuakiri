@@ -30,11 +30,11 @@
     </div>
 
     <r:script>
-      var summaryregistrationsEndpoint = "${createLink(controller:'federationReports', action:'summaryregistrations')}"
+      var summaryregistrationsEndpoint = "${createLink(controller:'federationReports', action:'reportsummaryregistrations')}"
 
-      var summarysessionsEndpoint = "${createLink(controller:'federationReports', action:'summarysessions')}"
+      var summarysessionsEndpoint = "${createLink(controller:'federationReports', action:'reportsummarysessions')}"
 
-      var summarysubscribergrowthEndpoint = "${createLink(controller:'federationReports', action:'summarysubscribergrowth')}"
+      var summarysubscribergrowthEndpoint = "${createLink(controller:'federationReports', action:'reportsummarysubscribergrowth')}"
 
       $(document).ready(function() {
         fr.summary_registrations_report('registrations');

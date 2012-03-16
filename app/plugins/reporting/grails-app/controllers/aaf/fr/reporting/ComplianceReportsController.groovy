@@ -24,7 +24,7 @@ class ComplianceReportsController {
     [idpList: IDPSSODescriptor.list(), spList:SPSSODescriptor.list()]
   }
 
-  def attributeAvailability = {
+  def reportattributeavailability = {
 
     def results = [
       title: g.message(code:'label.idpsummaryattributesupport'),      
@@ -94,7 +94,7 @@ class ComplianceReportsController {
     render results as JSON
   }
 
-  def attributeCompatibility = {
+  def reportattributecompatibility = {
     def results = [
       title: g.message(code:'label.attributecompatibility'),
       minimumRequirements: true, 
@@ -145,7 +145,7 @@ class ComplianceReportsController {
     render results as JSON
   }
 
-  def providingAttribute = {
+  def reportprovidingattribute = {
     def results = [
       supported: [],
       unsupported: []
@@ -163,10 +163,6 @@ class ComplianceReportsController {
     }
 
     render results as JSON
-  }
-
-  def attributeSupported = {
-
   }
 
   def causage = {
