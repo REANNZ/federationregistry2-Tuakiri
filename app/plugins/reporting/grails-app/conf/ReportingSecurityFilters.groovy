@@ -4,6 +4,7 @@ import org.apache.shiro.SecurityUtils
 import aaf.fr.foundation.*
 
 class ReportingSecurityFilters {
+
   def filters = {
 
     authn(controller: "(federationReports|complianceReports|identityProviderReports|serviceProviderReports)") {
@@ -11,7 +12,7 @@ class ReportingSecurityFilters {
         accessControl { true }
       }
       after = {
-        log.info("Completed authenticated access for $subject to $params.controller/$params.action")
+        log.info("Completed authenticated access for $subject to $params.controller/$params.action ${params.type == 'csv' ? 'exporting CSV':''}")
       }
     }
 
@@ -22,7 +23,7 @@ class ReportingSecurityFilters {
           response.sendError(403)
           return false
         }
-      }
+      }  
     }
 
     idpReportRestriction(controller: 'identityProviderReports', action: 'report*') {
