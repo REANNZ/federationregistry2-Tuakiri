@@ -8,6 +8,11 @@ fedreg {
 	deployment.environment = "development"
 	bootstrap = false
 	enabledemonstration = false
+
+  gapps {
+    enabled = false
+    id = "123"
+  }
 	
 	certificates {
 		maxlifeindays = 7800	// shib default of 20 years for assertion certs
