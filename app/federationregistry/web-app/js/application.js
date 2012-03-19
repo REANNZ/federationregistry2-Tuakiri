@@ -81,6 +81,10 @@ $(document).ajaxComplete(function(event, request, settings){
    fedreg.reset_button();
 });
 
+$(document).on('click', '.show-problems-logging-on', function() {
+  $('.problems-logging-on').removeClass('hidden');
+});
+
 // Descriptor Metadata
 $(document).on('click', '.load-descriptor-metadata', function() {
   $.ajax({

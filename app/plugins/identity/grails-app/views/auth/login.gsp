@@ -1,20 +1,21 @@
 <html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <meta name="layout" content="main" />
+    <meta name="layout" content="public" />
   </head>
   
   <body>
-    <div style="text-align: center;"><h2>Select login account</h2><br><br></div>
-aaa
-    <h3 style="text-align: center;"><a href="${spsession_url}">Login via Federation</a></h3>
-    <br><br>
-    <h3 style="text-align: center;">OR</h3> 
-    <br><br>
-    <table style="border: 0;">
-      <tbody>
-        <tr>
-          <td style="text-align: center;">
+
+    <div class="hero-unit">
+      <h1>Select login account</h1>
+      <p>Please choose either federated or local account login for development purposes. For each local account in development mode different access levels are provided.</p>
+      <div class="row">
+        <div class="span5">
+          <h2>Federated Login</h2>
+          <a href="" class="btn btn-info btn-large">Federated Login</a>
+        </div>
+        <div class="span5">
+          <h2>Local Accounts</h2>
+          <div class="">
             <h3>Fred Bloggs</h3>
             <p>Principal: https://idp.one.edu.au/idp/shibboleth!-!d2404817-6fb9-4165-90d8-1</p>
               <g:form action="locallogin" method="post">
@@ -27,12 +28,10 @@ aaa
               <g:hiddenField name="attributes.entityID" value="https://vho.aaf.edu.au/idp/shibboleth" />
               <g:hiddenField name="attributes.homeOrganization" value="one.edu.au" />
               <g:hiddenField name="attributes.homeOrganizationType" value="university:australia" />
-              <br><br>
-              <g:submitButton name="Login" class="save-button"/>
+              <g:submitButton name="Login" class="btn btn-success btn-large"/>
             </g:form>
-          </td>
-          <td>&nbsp;&nbsp;&nbsp;&nbsp; <strong>OR</strong> &nbsp;&nbsp;&nbsp;&nbsp;</td>
-          <td style="text-align: center;">
+          </div>
+          <div class="">
             <h3>Joe Schmoe</h3>
             <p>Principal: https://idp.one.edu.au/idp/shibboleth!-!d2404817-6fb9-4165-90d8-2</p>
               <g:form action="locallogin" method="post">
@@ -45,12 +44,10 @@ aaa
               <g:hiddenField name="attributes.entityID" value="https://vho.aaf.edu.au/idp/shibboleth" />
               <g:hiddenField name="attributes.homeOrganization" value="one.edu.au" />
               <g:hiddenField name="attributes.homeOrganizationType" value="university:australia" />
-              <br><br>
-              <g:submitButton name="Login" class="save-button"/>
+              <g:submitButton name="Login" class="btn btn-warning btn-large"/>
             </g:form>
-          </td>
-          <td>&nbsp;&nbsp;&nbsp;&nbsp; <strong>OR</strong> &nbsp;&nbsp;&nbsp;&nbsp;</td>
-          <td style="text-align: center;">
+          </div>
+          <div class="">
             <h3>Max Mustermann</h3>
             <p>Principal: https://idp.one.edu.au/idp/shibboleth!-!d2404817-6fb9-4165-90d8-3</em></strong></p>
               <g:form action="locallogin" method="post">
@@ -61,13 +58,11 @@ aaa
               <g:hiddenField name="attributes.entityID" value="https://idp.one.edu.au/idp/shibboleth" />
               <g:hiddenField name="attributes.homeOrganization" value="one.edu.au" />
               <g:hiddenField name="attributes.homeOrganizationType" value="university:australia" />
-              <br><br>
-              <g:submitButton name="Login" class="save-button"/>
+              <g:submitButton name="Login" class="btn btn-inverse btn-large"/>
             </g:form>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+          </div>
+      </div>
+    </div>
 
   </body>
 </html>

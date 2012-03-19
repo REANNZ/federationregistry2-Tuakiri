@@ -5,12 +5,7 @@
     </head>
 	
     <body>
-		
-        <section>
-            <h2><g:message code="fedreg.view.members.bootstrap.serviceprovider.heading" /></h2>
-			
-			<g:render template="/templates/spssodescriptor/create"  plugin="foundation" model="[saveAction:'savesp', requiresContactDetails:true]"/>
-
-        </section>
+      <h2><g:message code="fedreg.view.members.bootstrap.serviceprovider.heading" /></h2>
+			<g:render template="/templates/serviceprovider/create"  plugin="foundation" />
     </body>
 </html>

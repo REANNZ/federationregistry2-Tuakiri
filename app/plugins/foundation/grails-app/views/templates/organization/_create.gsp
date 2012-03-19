@@ -27,21 +27,36 @@
       <div class="control-group">
         <label for="contact.givenName"><g:message code="label.givenname" /></label>
         <div class="controls">
-          <g:textField name="contact.givenName"  class="required" value="${contact?.givenName ?: fr.subject()?.givenName}"/>
+          <g:if test="${contact?.givenName}">
+            <g:textField name="contact.givenName"  class="required" value="${contact?.givenName}"/>
+          </g:if>
+          <g:else>
+            <g:textField name="contact.givenName"  class="required" value="${fr?.subject() ? fr.subject().givenName:''}"/>
+          </g:else>
         </div>
       </div>
 
       <div class="control-group">
         <label for="contact.surname"><g:message code="label.surname" /></label>
         <div class="controls">
-          <g:textField name="contact.surname"  class="required" value="${contact?.surname ?: fr.subject()?.surname}"/>
+          <g:if test="${contact?.surname}">
+            <g:textField name="contact.surname"  class="required" value="${contact?.surname}"/>
+          </g:if>
+          <g:else>
+            <g:textField name="contact.givenName"  class="required" value="${fr?.subject() ? fr.subject().surname:''}"/>
+          </g:else>
         </div>
       </div>
 
       <div class="control-group">
         <label for="contact.email"><g:message code="label.email" /></label>
         <div class="controls">
-          <g:textField name="contact.email"  class="required email" value="${contact?.email  ?: fr.subject()?.email}"/>
+          <g:if test="${contact?.email}">
+            <g:textField name="contact.email"  class="required email" value="${contact?.email}"/>
+          </g:if>
+          <g:else>
+            <g:textField name="contact.givenName"  class="required" value="${fr?.subject() ? fr.subject().email:''}"/>
+          </g:else>
         </div>
       </div>
     </fieldset>
@@ -97,8 +112,8 @@
       <g:message code="fedreg.templates.organization.create.summary.details" />
     </p>
 
-    <div class="form-actions">
-      <button type="submit" name="submit" value="submit" class="btn btn-success"><g:message code="label.submit"/></button>
+    <div class="form-action">
+      <button type="submit" name="submit" value="submit" class="btn btn-success btn-large"><g:message code="label.submit"/></button>
     </div>
   </div>
 
