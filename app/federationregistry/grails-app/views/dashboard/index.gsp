@@ -5,15 +5,6 @@
   </head>
   <body>
 
-    <div class="row">
-      <div class="span10 offset1">
-        <h1><g:message code="label.welcome"/></h1>
-        <p>
-          <g:message code="fr.dashboard.welcome"/>
-        </p>
-      </div>
-    </div>
-
     <g:if test="${tasks}">
       <div class="row">
         <div class="span11">
