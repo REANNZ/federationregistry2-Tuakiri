@@ -47,8 +47,11 @@
             <li><a href="#tab-endpoints" data-toggle="tab"><g:message code="label.endpoints" /></a></li>
             <li><a href="#tab-attributes" data-toggle="tab"><g:message code="label.supportedattributes" /></a></li>
             <li><a href="#tab-nameidformats" data-toggle="tab"><g:message code="label.supportednameidformats" /></a></li>
-            <li><a href="#tab-metadata" data-toggle="tab"><g:message code="label.metadata" /></a></li>
-            <li><a href="#tab-attrfilpol" data-toggle="tab"><g:message code="label.attributefilter" /></a></li>
+
+            <fr:hasPermission target="descriptor:${identityProvider.id}:manage">
+              <li><a href="#tab-metadata" data-toggle="tab"><g:message code="label.metadata" /></a></li>
+              <li><a href="#tab-attrfilpol" data-toggle="tab"><g:message code="label.attributefilter" /></a></li>
+            </fr:hasPermission>
           </ul>
 
           <div class="tab-content">
@@ -113,37 +116,39 @@
               <g:render template="/templates/nameidformats/add" plugin="foundation" model="[descriptor:identityProvider, containerID:'nameidformats']"/>
             </div>
 
-            <div id="tab-metadata" class="tab-pane">
-              <g:if test="${identityProvider.functioning()}">
-                <div class="row">
-                  <div class="span8">
-                    <p><g:message code="fedreg.view.members.identityprovider.show.metadata.details" /></p>
+            <fr:hasPermission target="descriptor:${identityProvider.id}:manage">
+              <div id="tab-metadata" class="tab-pane">
+                <g:if test="${identityProvider.functioning()}">
+                  <div class="row">
+                    <div class="span8">
+                      <p><g:message code="fedreg.view.members.identityprovider.show.metadata.details" /></p>
+                    </div>
+                    <div class="span1 offset1">
+                      <a class="load-descriptor-metadata btn btn-info"><g:message code="label.load" /></a>
+                    </div>
                   </div>
-                  <div class="span1 offset1">
-                    <a class="btn btn-info" class="load-descriptor-metadata"><g:message code="label.load" /></a>
+                  <div id="descriptormetadata"></div>
+                </g:if>
+                <g:else>
+                  <div class="alert alert-message">
+                    <g:message code="fedreg.view.members.identityprovider.show.metadata.unavailable.details" />
                   </div>
-                </div>
-                <div id="descriptormetadata"></div>
-              </g:if>
-              <g:else>
-                <div class="alert alert-message">
-                  <g:message code="fedreg.view.members.identityprovider.show.metadata.unavailable.details" />
-                </div>
-              </g:else>
-            </div>
-            
-            <div id="tab-attrfilpol" class="tab-pane">                        
-              <div class="row">
-                <p class="span8">
-                  <g:message code="fedreg.view.members.identityprovider.show.attributefilter.description" /></p>
-                <span class="span1 offset1">
-                  <a class="btn btn-info" onClick="fedreg.attributefilter_refresh(); return false;">
-                    <g:message code="label.load"/>
-                  </a>
-                </span>
+                </g:else>
               </div>
-              <pre id="current-attribute-filter" class="metadata">${attributeFilter.encodeAsHTML()}</pre>
-            </div>
+              
+              <div id="tab-attrfilpol" class="tab-pane">                        
+                <div class="row">
+                  <p class="span8">
+                    <g:message code="fedreg.view.members.identityprovider.show.attributefilter.description" /></p>
+                  <span class="span1 offset1">
+                    <a class="load-descriptor-attrfilter btn btn-info">
+                      <g:message code="label.load"/>
+                    </a>
+                  </span>
+                </div>
+                <pre id="descriptorattributefilter" class="metadata hidden"></pre>
+              </div>
+            </fr:hasPermission>
           </div>
         </div>
       </div>

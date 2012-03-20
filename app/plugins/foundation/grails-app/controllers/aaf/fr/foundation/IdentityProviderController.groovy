@@ -40,8 +40,7 @@ class IdentityProviderController {
     }
     
     def adminRole = Role.findByName("descriptor-${identityProvider.id}-administrators")
-    def attributeFilter = g.include(controller:"attributeFilter", action:"generate", id:identityProvider.id)
-    [identityProvider: identityProvider, attributeFilter:attributeFilter, contactTypes:ContactType.list(), administrators:adminRole?.subjects]
+    [identityProvider: identityProvider, contactTypes:ContactType.list(), administrators:adminRole?.subjects]
   }
   
   def create = {

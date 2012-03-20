@@ -87,17 +87,18 @@ $(document).on('click', '.show-problems-logging-on', function() {
 
 // Descriptor Metadata
 $(document).on('click', '.load-descriptor-metadata', function() {
+  var target = $("#descriptormetadata");
+  target.hide();
   $.ajax({
     type: "GET",
     cache: false,
     url: descriptorMetadataEndpoint,
     success: function(res) {
-      var target = $("#descriptormetadata");
       target.html(res);
-      applyBehaviourTo(target);
+      target.show();
     },
     error: function (xhr, ajaxOptions, thrownError) {
-    
+      
     }
   });
 });
@@ -1123,20 +1124,22 @@ fedreg.attribute_list = function() {
 };
 
 // Attribute Filter
-fedreg.attributefilter_refresh = function() {
+$(document).on('click', '.load-descriptor-attrfilter', function() {
+  $("#descriptorattributefilter").addClass('hidden');
   $.ajax({
     type: "GET",
     cache: false,
     url: attributeFilterEndpoint,
     dataType: "text",
     success: function(res) {
-      $("#current-attribute-filter").text(res);
+      $("#descriptorattributefilter").text(res);
+      $("#descriptorattributefilter").removeClass('hidden');
     },
     error: function (xhr, ajaxOptions, thrownError) {
     
     }
   });
-};
+});
 
 // Monitors
 $(document).on('click', '.show-add-monitor', function() {

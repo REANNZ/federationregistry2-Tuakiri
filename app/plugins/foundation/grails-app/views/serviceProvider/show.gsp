@@ -55,7 +55,9 @@
               <li><a href="#tab-endpoints" data-toggle="tab"><g:message code="label.endpoints" /></a></li>
               <li><a href="#tab-attributes" data-toggle="tab"><g:message code="label.attributeconsumingservices" /></a></li>
               <li><a href="#tab-nameidformats" data-toggle="tab"><g:message code="label.supportednameidformats" /></a></li>
-              <li><a href="#tab-metadata"data-toggle="tab"><g:message code="label.metadata" /></a></li>
+              <fr:hasPermission target="descriptor:${serviceProvider.id}:manage">
+                <li><a href="#tab-metadata"data-toggle="tab"><g:message code="label.metadata" /></a></li>
+              </fr:hasPermission>
             </ul>
 
             <div class="tab-content">
@@ -122,25 +124,26 @@
                 <g:render template="/templates/nameidformats/add" plugin="foundation" model="[descriptor:serviceProvider]"/>
               </div>
 
-              <div id="tab-metadata" class="tab-pane">
-                <g:if test="${serviceProvider.functioning()}">
-                  <div class="row">
-                  <div class="span8">
-                    <p><g:message code="fedreg.view.members.serviceprovider.show.metadata.details" /></p>
-                  </div>
-                  <div class="span1 offset1">
-                    <a class="btn btn-info" class="load-descriptor-metadata"><g:message code="label.load" /></a>
-                  </div>
-                  </div>
-                  <div id="descriptormetadata"></div>
-                </g:if>
-                <g:else>
-                  <div class="alert alert-message">
-                    <g:message code="fedreg.view.members.serviceprovider.show.metadata.unavailable.details" />
-                  </div>
-                </g:else>
-              </div>
-
+              <fr:hasPermission target="descriptor:${serviceProvider.id}:manage">
+                <div id="tab-metadata" class="tab-pane">
+                  <g:if test="${serviceProvider.functioning()}">
+                    <div class="row">
+                    <div class="span8">
+                      <p><g:message code="fedreg.view.members.serviceprovider.show.metadata.details" /></p>
+                    </div>
+                    <div class="span1 offset1">
+                      <a class="load-descriptor-metadata btn btn-info"><g:message code="label.load" /></a>
+                    </div>
+                    </div>
+                    <div id="descriptormetadata"></div>
+                  </g:if>
+                  <g:else>
+                    <div class="alert alert-message">
+                      <g:message code="fedreg.view.members.serviceprovider.show.metadata.unavailable.details" />
+                    </div>
+                  </g:else>
+                </div>
+              </fr:hasPermission>
             </div>
           </div>
       </div>
