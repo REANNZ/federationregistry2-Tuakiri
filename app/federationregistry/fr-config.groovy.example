@@ -4,6 +4,25 @@ appName=federationregistry
 grails.serverURL = "http://localhost:8080/federationregistry"
 
 // Federation Registry internal configuration
+aaf {
+  fr {
+    metadata {
+      federation = "aaf.edu.au"
+      current {
+        validForDays = 7
+      }
+      all {
+        validForDays = 7
+      }
+      wayf {
+        generateconfig {
+          orgtypes = ['university', 'nzuniversity', 'marcs', 'vho', 'others'] as List
+        }
+      }
+    }
+  }
+}
+
 fedreg {
 	deployment.environment = "development"
 	bootstrap = false
@@ -44,20 +63,7 @@ fedreg {
 		}
     }
 
-	metadata {
-		federation = "aaf.edu.au"
-		current {
-			validForDays = 7
-		}
-		all {
-			validForDays = 7
-		}
-		wayf {
-			generateconfig {
-				orgtypes = ['university', 'nzuniversity', 'marcs', 'vho', 'others'] as List
-			}
-		}
-	}
+
 	
 	knownimplementations {
 		identityproviders {

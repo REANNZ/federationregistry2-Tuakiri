@@ -1,14 +1,9 @@
-
 <html>
-	<head>
-		<meta name="layout" content="metadata" />
-		<title><g:message code="fedreg.view.metadata.current.title" /></title>
-	</head>
-	<body>
-		<section>
-			<h2><g:message code="fedreg.view.metadata.current.heading" /></h2>
-			<p><g:message code="fedreg.view.metadata.current.details" /></p>
-			<pre  class="metadata"><code>${md.encodeAsHTML()}</code></pre>
-		</section>
-	</body>
+  <head>
+    <meta name="layout" content="metadata" />
+  </head>
+  <body>
+    <p><g:message code="fedreg.view.metadata.current.details" /></p>
+    <pre  class="metadata"><code>${md.encodeAsHTML()}</code></pre>
+  </body>
 </html>
