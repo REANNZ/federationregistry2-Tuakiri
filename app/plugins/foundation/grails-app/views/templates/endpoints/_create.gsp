@@ -1,7 +1,8 @@
-<fr:hasPermission target="descriptor:${descriptor.id}:endpoint:create">
+<%@page import="aaf.fr.foundation.SamlURI" %>
+<%@page import="aaf.fr.foundation.SamlURIType" %>
 
-  <%@page import="aaf.fr.foundation.SamlURI" %>
-  <%@page import="aaf.fr.foundation.SamlURIType" %>
+<fr:hasPermission target="descriptor:${descriptor.id}:endpoint:create">
+  <hr>
 
   <div id="add-${endpointType}">
     <a class="show-create-endpoint btn" data-type="${endpointType}"><g:message code="label.addendpoint"/></a>

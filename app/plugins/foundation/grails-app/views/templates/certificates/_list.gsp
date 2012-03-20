@@ -31,7 +31,7 @@
                   ${kd.keyInfo.certificate.expiryDate.encodeAsHTML()}
                   <g:if test="${kd.keyInfo.certificate.criticalAlert()}">
                     <span class="label label-important">
-                      <g:message code="label.certificatecritical"/>!!
+                      <g:message code="label.certificatecritical"/>
                     </span>
                   </g:if>
                   <g:else>

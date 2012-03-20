@@ -1,6 +1,7 @@
-<fr:hasPermission target="descriptor:${descriptor.id}:monitor:create">
+<%@page import="aaf.fr.foundation.MonitorType" %>
 
-  <%@page import="aaf.fr.foundation.MonitorType" %>
+<fr:hasPermission target="descriptor:${descriptor.id}:monitor:create">
+  <hr>
 
   <div id="addmonitor">
     <a class="show-add-monitor btn"><g:message code="label.addmonitor"/></a>

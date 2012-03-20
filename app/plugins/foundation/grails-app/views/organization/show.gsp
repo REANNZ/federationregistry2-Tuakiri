@@ -36,7 +36,7 @@
         
         <div id="tab-contacts" class="tab-pane">
           <g:render template="/templates/contacts/list" plugin="foundation" model="[host:organization]" />
-          <hr>
+          
           <g:render template="/templates/contacts/create" plugin="foundation" model="[host:organization, contactTypes:contactTypes]"/>
         </div>
 

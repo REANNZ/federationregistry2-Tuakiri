@@ -1,8 +1,8 @@
+<%@page import="aaf.fr.foundation.SamlURI" %>
+<%@page import="aaf.fr.foundation.SamlURIType" %>
 
 <fr:hasPermission target="descriptor:${descriptor.id}:nameidformat:add">
-
-  <%@page import="aaf.fr.foundation.SamlURI" %>
-  <%@page import="aaf.fr.foundation.SamlURIType" %>
+  <hr>
 
   <div id="addnameidformat" class="searcharea">
     <a class="show-add-nameid btn"><g:message code="label.addnameidformat"/></a>

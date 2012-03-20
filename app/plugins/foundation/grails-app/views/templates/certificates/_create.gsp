@@ -2,6 +2,8 @@
 <%@page import="aaf.fr.foundation.SPSSODescriptor" %>
 
 <fr:hasPermission target="descriptor:${descriptor.id}:crypto:create">
+  <hr>
+  
   <div id="addcertificate">
     <a class="show-addnew-certificate btn"><g:message code="label.addcertificate"/></a>
   </div>

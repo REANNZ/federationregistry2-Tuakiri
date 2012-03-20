@@ -6,9 +6,11 @@
       <g:render template="/templates/acs/listrequestedattributes" plugin="foundation" model='[acs:acs, requestedAttributes:acs.sortedAttributes(), specificationAttributes:specificationAttributes]' />
     </div>
 
-    <hr>
+    
 
     <fr:hasPermission target="descriptor:${acs.descriptor.id}:attribute:add">
+      <hr>
+      
       <div id="addattribute${acs.id}">
         <a class="show-create-ra btn" data-acsid="${acs.id}"><g:message code="label.addattribute"/></a>
       </div>

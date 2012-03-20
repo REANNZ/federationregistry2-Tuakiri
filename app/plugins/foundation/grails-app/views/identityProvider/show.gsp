@@ -36,7 +36,7 @@
 
       <div id="tab-contacts" class="tab-pane">
         <g:render template="/templates/contacts/list" plugin="foundation" model="[host:identityProvider]" />
-        <hr>
+        
         <g:render template="/templates/contacts/create" plugin="foundation" model="[host:identityProvider, contactTypes:contactTypes]"/>
       </div>
 
@@ -55,7 +55,7 @@
             
             <div id="tab-crypto" class="tab-pane active">
               <g:render template="/templates/certificates/list" plugin="foundation" model="[descriptor:identityProvider]" />
-              <hr>
+
               <g:render template="/templates/certificates/create" plugin="foundation" model="[descriptor:identityProvider]"/>
             </div>
 
@@ -73,26 +73,26 @@
                 <div class="tab-content span8">
                   <div id="tab-sso" class="tab-pane active">
                     <g:render template="/templates/endpoints/list" plugin="foundation" model="[endpoints:identityProvider.singleSignOnServices, endpointType:'singleSignOnServices', minEndpoints:1]" />
-                    <hr>
+                    
                     <g:render template="/templates/endpoints/create" plugin="foundation" model="[descriptor:identityProvider, endpointType:'singleSignOnServices']" />      
                   </div>
 
                   <div id="tab-ars" class="tab-pane">
                     <g:render template="/templates/endpoints/list" plugin="foundation" model="[endpoints:identityProvider.artifactResolutionServices, endpointType:'artifactResolutionServices']" />
-                    <hr>
+                    
                     <g:render template="/templates/endpoints/create" plugin="foundation" model="[descriptor:identityProvider, endpointType:'artifactResolutionServices', indexed:true]" />
                   </div>
 
                   <div id="tab-slo" class="tab-pane">
                     <g:render template="/templates/endpoints/list" plugin="foundation" model="[endpoints:identityProvider.singleLogoutServices, endpointType:'singleLogoutServices']" />
-                    <hr>
+                    
                     <g:render template="/templates/endpoints/create" plugin="foundation" model="[descriptor:identityProvider, endpointType:'singleLogoutServices']" />
                   </div>
 
                   <g:if test="${identityProvider.collaborator}">
                     <div id="tab-attrs" class="tab-pane">
                       <g:render template="/templates/endpoints/list" plugin="foundation" model="[endpoints:identityProvider.collaborator.attributeServices, endpointType:'attributeServices']" />
-                      <hr>
+                      
                       <g:render template="/templates/endpoints/create" plugin="foundation" model="[descriptor:identityProvider.collaborator, endpointType:'attributeServices']" />
                     </div>
                   </g:if>
@@ -103,13 +103,13 @@
 
             <div id="tab-attributes" class="tab-pane">
               <g:render template="/templates/attributes/list" plugin="foundation" model="[descriptor:identityProvider, attrs:identityProvider.sortedAttributes()]" />
-              <hr>
+              
               <g:render template="/templates/attributes/add" plugin="foundation" model="[descriptor:identityProvider]"/>
             </div>
 
             <div id="tab-nameidformats" class="tab-pane">
               <g:render template="/templates/nameidformats/list" plugin="foundation" model="[descriptor:identityProvider, nameIDFormats:identityProvider.nameIDFormats, containerID:'nameidformats']" />
-              <hr>
+              
               <g:render template="/templates/nameidformats/add" plugin="foundation" model="[descriptor:identityProvider, containerID:'nameidformats']"/>
             </div>
 
@@ -157,7 +157,7 @@
       <div id="tab-monitors" class="tab-pane">
         <g:render template="/templates/monitor/list" plugin="foundation" model="[roleDescriptor:identityProvider]" />
         <fr:hasPermission target="descriptor:${identityProvider.id}:manage:monitors">
-          <hr>
+
           <g:render template="/templates/monitor/create" plugin="foundation" model="[descriptor:identityProvider]" />
         </fr:hasPermission>
       </div>

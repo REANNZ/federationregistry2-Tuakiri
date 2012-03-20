@@ -1,6 +1,6 @@
+<%@page import="aaf.fr.foundation.ServiceCategory" %>
 <fr:hasPermission target="descriptor:${descriptor.id}:category:add">
-
-  <%@page import="aaf.fr.foundation.ServiceCategory" %>
+  <hr>
 
   <div id="addcategory" class="">
     <a class="show-addnew-servicecategory btn"><g:message code="label.addcategory"/></a>

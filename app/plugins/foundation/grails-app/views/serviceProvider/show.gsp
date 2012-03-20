@@ -38,13 +38,13 @@
         <div id="categories">
           <g:render template="/templates/servicecategories/list" plugin="foundation" model="[descriptor:serviceProvider, categories:serviceProvider.serviceCategories, containerID:'categories']" />
         </div>
-        <hr>
+        
         <g:render template="/templates/servicecategories/add" plugin="foundation" model="[descriptor:serviceProvider]"/>
       </div>
 
       <div id="tab-contacts" class="tab-pane">
         <g:render template="/templates/contacts/list" plugin="foundation" model="[host:serviceProvider]" />
-        <hr>
+
         <g:render template="/templates/contacts/create" plugin="foundation" model="[host:serviceProvider, contactTypes:contactTypes]" />
       </div>
 
@@ -62,7 +62,7 @@
 
               <div id="tab-crypto" class="tab-pane active">
                 <g:render template="/templates/certificates/list" plugin="foundation" model="[descriptor:serviceProvider, allowremove:true]" />
-                <hr>
+
                 <g:render template="/templates/certificates/create" plugin="foundation" model="[descriptor:serviceProvider]"/>
               </div>
 
@@ -79,31 +79,31 @@
                   <div class="tab-content span8">
                     <div id="tab-acs" class="tab-pane active">
                       <g:render template="/templates/endpoints/list" plugin="foundation" model="[endpoints:serviceProvider.assertionConsumerServices, allowremove:true, endpointType:'assertionConsumerServices']" />
-                      <hr>
+                      
                       <g:render template="/templates/endpoints/create" plugin="foundation" model="[descriptor:serviceProvider, endpointType:'assertionConsumerServices', containerID:'assertionconsumerendpoints', indexed:true]" />
                     </div>
 
                     <div id="tab-ars" class="tab-pane">
                       <g:render template="/templates/endpoints/list" plugin="foundation" model="[endpoints:serviceProvider.artifactResolutionServices, allowremove:true, endpointType:'artifactResolutionServices']" />
-                      <hr>
+                      
                       <g:render template="/templates/endpoints/create" plugin="foundation" model="[descriptor:serviceProvider, endpointType:'artifactResolutionServices', containerID:'artifactendpoints', indexed:true]" />
                     </div>
 
                     <div id="tab-slo" class="tab-pane">
                       <g:render template="/templates/endpoints/list" plugin="foundation" model="[endpoints:serviceProvider.singleLogoutServices, allowremove:true, endpointType:'singleLogoutServices']" />
-                      <hr>
+                      
                       <g:render template="/templates/endpoints/create" plugin="foundation" model="[descriptor:serviceProvider, endpointType:'singleLogoutServices', containerID:'singlelogoutendpoints']" />
                     </div>
 
                     <div id="tab-drs" class="tab-pane">
                       <g:render template="/templates/endpoints/list" plugin="foundation" model="[endpoints:serviceProvider.discoveryResponseServices, allowremove:true, endpointType:'discoveryResponseServices']" />
-                      <hr>
+                      
                       <g:render template="/templates/endpoints/create" plugin="foundation" model="[descriptor:serviceProvider, endpointType:'discoveryResponseServices', indexed:true]" />
                     </div>
 
                     <div id="tab-nim" class="tab-pane">
                       <g:render template="/templates/endpoints/list" plugin="foundation" model="[endpoints:serviceProvider.manageNameIDServices, allowremove:true, endpointType:'manageNameIDServices']" />
-                      <hr>
+                      
                       <g:render template="/templates/endpoints/create" plugin="foundation" model="[descriptor:serviceProvider, endpointType:'manageNameIDServices']" />
                     </div>
 
@@ -118,7 +118,7 @@
 
               <div id="tab-nameidformats" class="tab-pane">       
                 <g:render template="/templates/nameidformats/list" plugin="foundation" model="[descriptor:serviceProvider, nameIDFormats:serviceProvider.nameIDFormats]" />
-                <hr>
+                
                 <g:render template="/templates/nameidformats/add" plugin="foundation" model="[descriptor:serviceProvider]"/>
               </div>
 
@@ -154,7 +154,6 @@
       <div id="tab-monitors" class="tab-pane">
         <g:render template="/templates/monitor/list" plugin="foundation" model="[roleDescriptor:serviceProvider]" />
         <fr:hasPermission target="descriptor:${serviceProvider.id}:manage:monitors">
-          <hr>
           <g:render template="/templates/monitor/create" plugin="foundation" model="[descriptor:serviceProvider]" />
         </fr:hasPermission>
       </div>

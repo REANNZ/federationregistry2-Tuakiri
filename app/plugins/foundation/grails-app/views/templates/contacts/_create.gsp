@@ -1,5 +1,6 @@
 <fr:hasPermission target="organization:${owner.id}:contact:add">
-
+  <hr>
+  
   <div class="search-contacts">
     <div class="add-contact">
       <a class="btn search-for-contact"><g:message code="label.addcontact" /></a>
