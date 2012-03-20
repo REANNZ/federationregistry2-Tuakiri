@@ -32,7 +32,7 @@
       
       <div id="tab-contacts" class="tab-pane">
         <g:render template="/templates/contacts/list" plugin="foundation" model="[host:entity, allowremove:true]" />
-        <hr>
+        
         <g:render template="/templates/contacts/create" plugin="foundation" model="[host:entity, contactTypes:contactTypes]"/>
       </div>
 
