@@ -223,9 +223,13 @@ class UrlMappings {
       controller = "auth"
     }
   
-      "/"{
+    "/"{
       controller = "welcome"
     }
-  
+
+    "403"(view:'/403')
+    "404"(view:'/404')
+    "500"(view:'/500')
+
   }
 }

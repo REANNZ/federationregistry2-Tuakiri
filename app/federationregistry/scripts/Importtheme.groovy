@@ -22,6 +22,7 @@ target(main: "This script imports custom themes for FR deployment from the direc
 					"grails-app/views/layouts/reporting.gsp",
 					"grails-app/views/layouts/reportingclean.gsp",
 					"grails-app/views/layouts/dashboard.gsp",
+          "grails-app/views/layouts/error.gsp",
 					"grails-app/views/layouts/email.gsp",
 					"grails-app/views/layouts/members.gsp",
 					"grails-app/views/layouts/metadata.gsp",
