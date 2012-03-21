@@ -26,7 +26,7 @@ class ReportingSecurityFilters {
       }  
     }
 
-    idpReportRestriction(controller: 'identityProviderReports', action: 'report*') {
+    idpReportRestriction(controller: 'identityProviderReports') {
       before = {
         def allow = idpGuard(params)
         if(!allow) {
@@ -36,7 +36,7 @@ class ReportingSecurityFilters {
       }
     }
 
-    spReportRestriction(controller: 'serviceProviderReports', action: 'report*') {
+    spReportRestriction(controller: 'serviceProviderReports') {
       before = {
         def allow = spGuard(params)
         if(!allow) {
