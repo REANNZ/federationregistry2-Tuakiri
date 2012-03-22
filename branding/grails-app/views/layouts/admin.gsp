@@ -32,12 +32,21 @@
           <div class="span2">
             <ul class="well nav nav-list">
               <li class="nav-header">
+                Attributes
+              </li>
+              <li class="${controllerName == 'attributeBase' && actionName == 'list' ? 'active' : ''}">
+                <g:link controller="attributeBase" action="list">List</g:link></li>
+              <li class="${controllerName == 'attributeBase' && actionName == 'create' ? 'active' : ''}">
+                <g:link controller="attributeBase" action="create">Create</g:link></li>
+
+              <li class="nav-header">
                 Organisation Types
               </li>
               <li class="${controllerName == 'organizationType' && actionName == 'list' ? 'active' : ''}">
                 <g:link controller="organizationType" action="list">List</g:link></li>
               <li class="${controllerName == 'organizationType' && actionName == 'create' ? 'active' : ''}">
                 <g:link controller="organizationType" action="create">Create</g:link></li>
+
 
               <li class="nav-header">
                 Monitor Types
@@ -54,6 +63,14 @@
                 <g:link controller="CAKeyInfo" action="list">List</g:link></li>
               <li class="${controllerName == 'CAKeyInfo' && actionName == 'create' ? 'active' : ''}">
                 <g:link controller="CAKeyInfo" action="create">Create</g:link></li>
+
+              <li class="nav-header">
+                SAML URI
+              </li>
+              <li class="${controllerName == 'samlURI' && actionName == 'list' ? 'active' : ''}">
+                <g:link controller="samlURI" action="list">List</g:link></li>
+              <li class="${controllerName == 'samlURI' && actionName == 'create' ? 'active' : ''}">
+                <g:link controller="samlURI" action="create">Create</g:link></li>
 
               <li class="nav-header nav-sectionheader">
                 Other
