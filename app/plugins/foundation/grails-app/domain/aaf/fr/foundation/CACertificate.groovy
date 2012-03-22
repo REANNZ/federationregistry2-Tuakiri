@@ -16,6 +16,7 @@ class CACertificate {
 	static constraints = {
 		dateCreated(nullable:true)
 		lastUpdated(nullable:true)
+    data(nullable:false, blank:false)
 	}
 	
 	static mapping = { 

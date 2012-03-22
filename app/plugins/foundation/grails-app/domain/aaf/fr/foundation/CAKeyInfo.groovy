@@ -15,6 +15,7 @@ class CAKeyInfo  {
 
 	static constraints = {
 		keyName(nullable: true, blank: true)
+    certificate(nullable:false)
 		expiryDate(nullable: true)
 		dateCreated(nullable:true)
 		lastUpdated(nullable:true)
