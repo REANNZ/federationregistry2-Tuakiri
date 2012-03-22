@@ -32,11 +32,12 @@ class AttributeBase  {
 
 	static constraints = {
 		name(nullable: false, blank: false, unique: true)
-		legacyName(nullable:true, blank:false)
-		nameFormat(nullable: true)
+		legacyName(nullable:false, blank:false)
+    oid(nullable: false, blank:false)
+    description (nullable: false, blank:false)
+		nameFormat(nullable: false)
 		adminRestricted(nullable:false)
-		oid (nullable: false, blank:false)
-		description (nullable: true, blank:false)
+	
 		dateCreated(nullable:true)
 		lastUpdated(nullable:true)
 	}
