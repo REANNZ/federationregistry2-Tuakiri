@@ -32,7 +32,15 @@
           <div class="span2">
             <ul class="well nav nav-list">
               <li class="nav-header">
-                CA Key Info
+                Monitor Types
+              </li>
+              <li class="${controllerName == 'monitorType' && actionName == 'list' ? 'active' : ''}">
+                <g:link controller="monitorType" action="list">List</g:link></li>
+              <li class="${controllerName == 'monitorType' && actionName == 'create' ? 'active' : ''}">
+                <g:link controller="monitorType" action="create">Create</g:link></li>
+
+              <li class="nav-header">
+                CA Key Info / Certs
               </li>
               <li class="${controllerName == 'CAKeyInfo' && actionName == 'list' ? 'active' : ''}">
                 <g:link controller="CAKeyInfo" action="list">List</g:link></li>
