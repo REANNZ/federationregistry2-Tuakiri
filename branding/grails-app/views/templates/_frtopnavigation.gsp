@@ -35,11 +35,8 @@
       <g:link controller="workflowApproval"><g:message code="fedreg.navigation.workflow" /></g:link>
     </li>
     <fr:isAdministrator>
-      <li class="${['admins', 'user', 'role', 'group'].contains(controllerName) ? 'active' : ''}">
-        <g:link controller="user"><g:message code="fedreg.navigation.accesscontrol" /></g:link>
-      </li>
-      <li class="${['code'].contains(controllerName) ? 'directactive' : ''}">
-        <g:link controller="code"><g:message code="fedreg.navigation.codeconsole" /></g:link>
+      <li class="${request.forwardURI.contains("administration") ? 'directactive' : ''}">
+        <g:link controller="code"><g:message code="fedreg.navigation.administration" /></g:link>
       </li>
     </fr:isAdministrator>
   </fr:isLoggedIn>
