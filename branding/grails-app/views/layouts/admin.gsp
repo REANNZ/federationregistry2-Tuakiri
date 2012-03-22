@@ -3,7 +3,7 @@
 <html>
   <head>
     <title><g:message code="fedreg.title.${grailsApplication.config.fedreg.deployment.environment}" /> | <g:layoutTitle /></title>
-    <r:require modules="bootstrap, zenbox, app"/>
+    <r:require modules="bootstrap, datatables, zenbox, app"/>
     <r:layoutResources/>
     <g:layoutHead />
   </head>
@@ -32,14 +32,14 @@
           <div class="span2">
             <ul class="well nav nav-list">
               <li class="nav-header">
-                Objects
+                CA Key Info
               </li>
+              <li class="${controllerName == 'CAKeyInfo' && actionName == 'list' ? 'active' : ''}">
+                <g:link controller="CAKeyInfo" action="list">List</g:link></li>
+              <li class="${controllerName == 'CAKeyInfo' && actionName == 'create' ? 'active' : ''}">
+                <g:link controller="CAKeyInfo" action="create">Create</g:link></li>
 
-              <li class="nav-header">
-                Access Control
-              </li>
-
-              <li class="nav-header">
+              <li class="nav-header nav-sectionheader">
                 Other
               </li>
               <li class="${controllerName == 'adminConsole' ? 'active' : ''}">
