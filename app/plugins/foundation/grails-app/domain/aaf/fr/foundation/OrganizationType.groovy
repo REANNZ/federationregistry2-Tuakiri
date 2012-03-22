@@ -17,7 +17,8 @@ class OrganizationType {
 	
 	static constraints = {
 		name(unique: true, blank:false)
-		description(nullable:true)
+    displayName(unique: true, blank:false)
+		description(nullable:false, blank:false)
 		dateCreated(nullable:true)
 		lastUpdated(nullable:true)
 	}

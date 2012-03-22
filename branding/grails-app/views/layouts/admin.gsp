@@ -32,6 +32,14 @@
           <div class="span2">
             <ul class="well nav nav-list">
               <li class="nav-header">
+                Organisation Types
+              </li>
+              <li class="${controllerName == 'organizationType' && actionName == 'list' ? 'active' : ''}">
+                <g:link controller="organizationType" action="list">List</g:link></li>
+              <li class="${controllerName == 'organizationType' && actionName == 'create' ? 'active' : ''}">
+                <g:link controller="organizationType" action="create">Create</g:link></li>
+
+              <li class="nav-header">
                 Monitor Types
               </li>
               <li class="${controllerName == 'monitorType' && actionName == 'list' ? 'active' : ''}">
