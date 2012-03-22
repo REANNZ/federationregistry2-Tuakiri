@@ -203,14 +203,6 @@ class UrlMappings {
       controller = "monitor"
     }
   
-    "/codeconsole/$action?/$id?"{
-      controller = "code"
-    }
-  
-    "/console/$action?/$id?"{
-      controller = "console"
-    }
-  
     "/bootstrap/$action?/$id?" {
       controller = "initialBootstrap"
     }

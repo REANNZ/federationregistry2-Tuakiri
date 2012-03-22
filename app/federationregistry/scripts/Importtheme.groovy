@@ -17,16 +17,14 @@ target(main: "This script imports custom themes for FR deployment from the direc
 	// Add directories and files here to extend theme import. Files will be copied from source at this location and installed in Federation Registry at the same location
 	// All files listed here must appear in .gitignore to ensure they aren't commited to revision control (they should be controlled in their own external project)
 	def dirs = [	"grails-app/i18n"	]
-	def files = [	"grails-app/views/layouts/access.gsp",
+	def files = [ "grails-app/views/layouts/admin.gsp",
 					"grails-app/views/layouts/bootstrap.gsp",
 					"grails-app/views/layouts/reporting.gsp",
-					"grails-app/views/layouts/reportingclean.gsp",
 					"grails-app/views/layouts/dashboard.gsp",
           "grails-app/views/layouts/error.gsp",
 					"grails-app/views/layouts/email.gsp",
 					"grails-app/views/layouts/members.gsp",
 					"grails-app/views/layouts/metadata.gsp",
-					"grails-app/views/layouts/monitoring.gsp",
 					"grails-app/views/layouts/public.gsp",
 					"grails-app/views/layouts/workflow.gsp",
 					"grails-app/views/templates/_frfooter.gsp",
