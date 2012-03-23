@@ -1,5 +1,6 @@
 
 
+grails.plugin.location.identity = "../identity"
 grails.plugin.location.foundation = "../foundation"
 
 

@@ -13,16 +13,20 @@ class AdminUrlMappings {
       controller = "organizationType"
     }
 
+    "/administration/contacttype/$action?/$id?"{
+      controller = "contactType"
+    }
+
     "/administration/cakeyinfo/$action?/$id?"{
       controller = "CAKeyInfo"
     }
 
-    "/administration/console/$action?/$id?"{
-      controller = "adminConsole"
+   "/administration/samluri/$action?/$id?"{
+      controller = "samlURI" 
     }
 
-    "/administration/samluri/$action?/$id?"{
-      controller = "samlURI" 
+    "/administration/console/$action?/$id?"{
+      controller = "adminConsole"
     }
   
     "/console/$action?/$id?"{
