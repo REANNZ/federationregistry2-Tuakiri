@@ -5,6 +5,10 @@ class AdminUrlMappings {
       controller = "attributeBase"
     }
 
+    "/administration/attributecategory/$action?/$id?"{
+      controller = "attributeCategory"
+    }
+
     "/administration/monitortype/$action?/$id?"{
       controller = "monitorType"
     }

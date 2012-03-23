@@ -40,6 +40,14 @@
                 <g:link controller="attributeBase" action="create">Create</g:link></li>
 
               <li class="nav-header">
+                Attribute Category
+              </li>
+              <li class="${controllerName == 'attributeCategory' && actionName == 'list' ? 'active' : ''}">
+                <g:link controller="attributeCategory" action="list">List</g:link></li>
+              <li class="${controllerName == 'attributeCategory' && actionName == 'create' ? 'active' : ''}">
+                <g:link controller="attributeCategory" action="create">Create</g:link></li>
+
+              <li class="nav-header">
                 Organisation Types
               </li>
               <li class="${controllerName == 'organizationType' && actionName == 'list' ? 'active' : ''}">
