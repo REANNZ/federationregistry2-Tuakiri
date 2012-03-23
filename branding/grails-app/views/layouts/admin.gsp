@@ -22,85 +22,30 @@
       <nav>
         <div class="row">
           <div class="span12">
-            <g:render template='/templates/frtopnavigation'/>      
+            <g:render template='/templates/layouts/administration_nav'/>      
           </div>
         </div>
       </nav>
 
       <section>
-        <div class="row">
-          <div class="span2">
-            <ul class="well nav nav-list">
-              <li class="nav-header">
-                Attributes
-              </li>
-              <li class="${controllerName == 'attributeBase' && actionName == 'list' ? 'active' : ''}">
-                <g:link controller="attributeBase" action="list">List</g:link></li>
-              <li class="${controllerName == 'attributeBase' && actionName == 'create' ? 'active' : ''}">
-                <g:link controller="attributeBase" action="create">Create</g:link></li>
-
-              <li class="nav-header">
-                Attribute Category
-              </li>
-              <li class="${controllerName == 'attributeCategory' && actionName == 'list' ? 'active' : ''}">
-                <g:link controller="attributeCategory" action="list">List</g:link></li>
-              <li class="${controllerName == 'attributeCategory' && actionName == 'create' ? 'active' : ''}">
-                <g:link controller="attributeCategory" action="create">Create</g:link></li>
-
-              <li class="nav-header">
-                Organisation Types
-              </li>
-              <li class="${controllerName == 'organizationType' && actionName == 'list' ? 'active' : ''}">
-                <g:link controller="organizationType" action="list">List</g:link></li>
-              <li class="${controllerName == 'organizationType' && actionName == 'create' ? 'active' : ''}">
-                <g:link controller="organizationType" action="create">Create</g:link></li>
-              
-              <li class="nav-header">
-                Contact Type
-              </li>
-              <li class="${controllerName == 'contactType' && actionName == 'list' ? 'active' : ''}">
-                <g:link controller="contactType" action="list">List</g:link></li>
-              <li class="${controllerName == 'contactType' && actionName == 'create' ? 'active' : ''}">
-                <g:link controller="contactType" action="create">Create</g:link></li>
-
-              <li class="nav-header">
-                Monitor Types
-              </li>
-              <li class="${controllerName == 'monitorType' && actionName == 'list' ? 'active' : ''}">
-                <g:link controller="monitorType" action="list">List</g:link></li>
-              <li class="${controllerName == 'monitorType' && actionName == 'create' ? 'active' : ''}">
-                <g:link controller="monitorType" action="create">Create</g:link></li>
-
-              <li class="nav-header">
-                CA Key Info / Certs
-              </li>
-              <li class="${controllerName == 'CAKeyInfo' && actionName == 'list' ? 'active' : ''}">
-                <g:link controller="CAKeyInfo" action="list">List</g:link></li>
-              <li class="${controllerName == 'CAKeyInfo' && actionName == 'create' ? 'active' : ''}">
-                <g:link controller="CAKeyInfo" action="create">Create</g:link></li>
-
-              <li class="nav-header">
-                SAML URI
-              </li>
-              <li class="${controllerName == 'samlURI' && actionName == 'list' ? 'active' : ''}">
-                <g:link controller="samlURI" action="list">List</g:link></li>
-              <li class="${controllerName == 'samlURI' && actionName == 'create' ? 'active' : ''}">
-                <g:link controller="samlURI" action="create">Create</g:link></li>
-
-              <li class="nav-header nav-sectionheader">
-                Other
-              </li>
-              <li class="${controllerName == 'adminConsole' ? 'active' : ''}">
-                <g:link controller="adminConsole" action="index"><g:message code="fedreg.navigation.admin.console" /></g:link>
-              </li>
-
-            </ul>
-          </div>
-          <div class="span9">
+        <g:if test="${controllerName == 'adminConsole'}">
+          <div class="centered">
             <g:layoutBody/>
           </div>
-        </div>
-      </section>
+        </g:if>
+        <g:else>
+          <div class="row">
+            <div class="span2">
+              <g:if test="${['attributeBase', 'attributeCategory', 'CAKeyInfo', 'contactType', 'monitorType', 'organizationType', 'samlURI'].contains(controllerName)}">
+                <g:render template='/templates/object_navigation' plugin='administration'/>
+              </g:if>
+            </div>
+            <div class="span9">
+              <g:layoutBody/>
+            </div>
+          </div>
+        </section>
+      </g:else>
 
       <footer>
         <div class="row">

@@ -32,6 +32,7 @@ target(main: "This script imports custom themes for FR deployment from the direc
 					"grails-app/views/templates/_frtopnavigation.gsp",
           "grails-app/views/templates/layouts/_members_nav.gsp",
           "grails-app/views/templates/layouts/_reporting_nav.gsp",
+          "grails-app/views/templates/layouts/_administration_nav.gsp",
 					"grails-app/views/templates/mail/workflows/default/_activated_idp.gsp",
 					"grails-app/views/templates/mail/workflows/default/_activated_organization.gsp",
 					"grails-app/views/templates/mail/workflows/default/_activated_sp.gsp",
