@@ -1,6 +1,7 @@
-package aaf.fr.foundation
+package aaf.fr.admin
 
 import org.springframework.dao.DataIntegrityViolationException
+import aaf.fr.foundation.*
 
 class ContactTypeController {
 
