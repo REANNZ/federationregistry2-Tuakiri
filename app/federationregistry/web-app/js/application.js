@@ -30,7 +30,7 @@ applyBehaviourTo = function(scope) {
     });
   }
 
-    if($('.table-admin-sortable').dataTable) {
+  if($('.table-admin-sortable').dataTable) {
     $('.table-admin-sortable', scope).dataTable( {
       "sDom": "<'row'<'span5'l><'span4'f>r>t<'row'<'span5'i><'span4'p>>",
       "sPaginationType": "bootstrap",
@@ -38,6 +38,11 @@ applyBehaviourTo = function(scope) {
         "sLengthMenu": "_MENU_ records per page"
       }
     });
+  }
+
+  var url = document.location.toString();
+  if (url.match('#')) {
+      $('.nav-tabs a[href=#'+url.split('#')[1]+']').tab('show') ;
   }
 };
 
