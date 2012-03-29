@@ -1,6 +1,12 @@
 class AdminUrlMappings {
 
   static mappings = {
+    // User administration
+    "/administration/roles/$action?/$id?"{
+      controller = "role" 
+    }
+
+    // Data Management
     "/administration/attributes/$action?/$id?"{
       controller = "attributeBase"
     }

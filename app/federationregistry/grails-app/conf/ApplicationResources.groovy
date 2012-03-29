@@ -50,6 +50,7 @@ modules = {
    resource url: 'css/application.css', disposition:'head', attrs:[rel:'stylesheet/less']
    resource url:'js/application.js'
    resource url:'js/application-reporting.js'
+   resource url:'js/application-administration.js'
    resource url:'js/less.min.js', disposition:'head'    // 1.0.35
    dependsOn(['jquery', 'protovis', 'highcharts'])
   }

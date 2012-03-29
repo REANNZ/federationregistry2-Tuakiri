@@ -77,23 +77,6 @@ class RoleService {
       }
     }
 
-    // Remove all groups from this role
-    def groups = []
-    groups.addAll(role.groups)
-    groups.each {
-      it.removeFromRoles(role)
-      it.save()
-
-      if (it.hasErrors()) {
-        log.error("Error updating group [$it.id]$it.name to remove role [$role.id]$role.name")
-        it.errors.each {err ->
-          log.error err
-        }
-
-        throw new RuntimeException("Error updating group [$it.id]$it.name to remove role [$role.id]$role.name")
-      }
-    }
-
     role.delete()
     log.info("Deleted role [$role.id]$role.name")
   }
@@ -141,24 +124,24 @@ class RoleService {
 
     def savedRole = role.save()
     if (!savedRole) {
-      log.error("Error updating role [$role.id]$role.name to add subject [$subject.id]$subject.subjectname")
+      log.error("Error updating role [$role.id]$role.name to add subject [$subject.id]$subject.displayName")
 
       role.errors.each {
         log.error(it)
       }
 
-      throw new RuntimeException("Unable to persist role [$role.id]$role.name when adding subject [$subject.id]$subject.subjectname")
+      throw new RuntimeException("Unable to persist role [$role.id]$role.name when adding subject [$subject.id]$subject.displayName")
     }
 
     def savedSubject = subject.save()
     if (!savedSubject) {
-      log.error("Error updating subject [$subject.id]$subject.subjectname when adding role [$role.id]$role.name")
+      log.error("Error updating subject [$subject.id]$subject.displayName when adding role [$role.id]$role.name")
 
       subject.errors.each {
         log.error(it)
       }
 
-      throw new RuntimeException("Error updating subject [$subject.id]$subject.subjectname when adding role [$role.id]$role.name")
+      throw new RuntimeException("Error updating subject [$subject.id]$subject.displayName when adding role [$role.id]$role.name")
     }
 
     log.info("Successfully added $role to $subject")
@@ -181,25 +164,25 @@ class RoleService {
 
     def savedRole = role.save()
     if (!savedRole) {
-      log.error("Error updating role [$role.id]$role.name to add subject [$subject.id]$subject.subjectname")
+      log.error("Error updating role [$role.id]$role.name to add subject [$subject.id]$subject.displayName")
 
       role.errors.each {
         log.error(it)
       }
 
-     throw new RuntimeException("Unable to persist role [$role.id]$role.name when removing subject [$subject.id]$subject.subjectname")
+     throw new RuntimeException("Unable to persist role [$role.id]$role.name when removing subject [$subject.id]$subject.displayName")
     }
 
     def savedSubject = subject.save()
     if (!savedSubject) {
-      log.error("Error updating subject [$subject.id]$subject.subjectname when adding role [$role.id]$role.name")
+      log.error("Error updating subject [$subject.id]$subject.displayName when adding role [$role.id]$role.name")
       subject.errors.each {
         log.error(it)
       }
 
-      throw new RuntimeException("Error updating subject [$subject.id]$subject.subjectname when removing role [$role.id]$role.name")
+      throw new RuntimeException("Error updating subject [$subject.id]$subject.displayName when removing role [$role.id]$role.name")
     }
 
-    log.info("Successfully removed role [$role.id]$role.name to subject [$subject.id]$subject.subjectname")
+    log.info("Successfully removed role [$role.id]$role.name to subject [$subject.id]$subject.displayName")
   }
 }

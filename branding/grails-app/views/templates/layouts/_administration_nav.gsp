@@ -8,5 +8,24 @@
     <li class="${controllerName == 'adminConsole' ? 'directactive':''}">
       <g:link controller="adminConsole" action="index"><g:message code="fedreg.navigation.admin.console" /></g:link>
     </li>
+    <li class="${controllerName == 'role' ? 'active':''}">
+      <g:link controller="role" action="list"><g:message code="fedreg.navigation.admin.roles" default="Roles"/></g:link>
+    </li>
   </ul>
+
+  <g:if test="${controllerName == 'role'}">
+    <ul class="level3">
+      <li class="${actionName == 'list' ? 'directactive':''}">
+        <g:link controller="role" action="list"><g:message code="fedreg.navigation.admin.roles.list" default="List"/></g:link>
+      </li>
+      <li class="${actionName == 'create' ? 'directactive':''}">
+        <g:link controller="role" action="create"><g:message code="fedreg.navigation.admin.roles.create" default="Create"/></g:link>
+      </li>
+      <g:if test="${actionName == 'show'}">
+        <li class="directactive">
+          <g:message code="fedreg.navigation.admin.roles.view" default="View"/>
+        </li>
+      </g:if>
+    </ul>
+  </g:if>
 </fr:isLoggedIn>

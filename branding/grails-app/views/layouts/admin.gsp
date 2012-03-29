@@ -3,7 +3,7 @@
 <html>
   <head>
     <title><g:message code="fedreg.title.${grailsApplication.config.fedreg.deployment.environment}" /> | <g:layoutTitle /></title>
-    <r:require modules="bootstrap, datatables, zenbox, app"/>
+    <r:require modules="bootstrap, bootstrap-datepicker, validate, datatables, alphanumeric, zenbox, app"/>
     <r:layoutResources/>
     <g:layoutHead />
   </head>
@@ -28,8 +28,8 @@
       </nav>
 
       <section>
-        <g:if test="${controllerName == 'adminConsole'}">
-          <div class="centered">
+        <g:if test="${controllerName == 'adminConsole' || controllerName == 'role'}">
+          <div>
             <g:layoutBody/>
           </div>
         </g:if>
@@ -44,8 +44,8 @@
               <g:layoutBody/>
             </div>
           </div>
-        </section>
-      </g:else>
+        </g:else>
+      </section>
 
       <footer>
         <div class="row">
