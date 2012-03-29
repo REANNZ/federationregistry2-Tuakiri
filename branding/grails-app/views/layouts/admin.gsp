@@ -28,7 +28,7 @@
       </nav>
 
       <section>
-        <g:if test="${controllerName == 'adminConsole' || controllerName == 'role' || controllerName == 'subject'}">
+        <g:if test="${controllerName == 'adminDashboard' || controllerName == 'adminConsole' || controllerName == 'role' || controllerName == 'subject'}">
           <div>
             <g:layoutBody/>
           </div>

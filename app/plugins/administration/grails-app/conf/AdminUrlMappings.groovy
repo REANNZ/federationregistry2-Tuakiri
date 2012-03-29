@@ -1,6 +1,12 @@
 class AdminUrlMappings {
 
   static mappings = {
+    // Dash
+    "/administration/dashboard"{
+      controller="adminDashboard"
+      action="index"
+    }
+
     // User administration
     "/administration/subjects/$action?/$id?"{
       controller = "subject" 

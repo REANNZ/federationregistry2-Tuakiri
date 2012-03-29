@@ -2,6 +2,9 @@
   <g:render template='/templates/frtopnavigation'/>
 
   <ul class="level2">
+    <li class="${controllerName == 'adminDashboard' ? 'directactive':''}">
+      <g:link controller="adminDashboard" action="index"><g:message code="fedreg.navigation.admin.dashboard" default="Dashboard"/></g:link>
+    </li>
     <li class="${controllerName == 'subject' ? 'active':''}">
       <g:link controller="subject" action="list"><g:message code="fedreg.navigation.admin.subjects" default="Subjects"/></g:link>
     </li>

@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import grails.converters.JSON
 import grails.converters.XML
 import grails.plugins.federatedgrails.Role
+import grails.plugins.federatedgrails.SessionRecord
 import org.apache.shiro.SecurityUtils
 
 import aaf.fr.foundation.*
@@ -709,6 +710,35 @@ class FederationReportsController {
 
     httpout.flush()
     httpout.close()
+  }
+
+  def reportinternalsessions = {
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
+    Date startDate = formatter.parse(params.startDate)
+    Date endDate = formatter.parse(params.endDate) + 1
+
+    def results = [
+      title: g.message(code:'label.detailedfrsessionsreport', default:"Federation Registry Sessions"),
+      categories: [],
+      startdate: [
+          day: startDate.day,
+          month: startDate.month,
+          year: startDate.year + 1900
+      ],
+      axis: [
+        y: g.message(code:'label.sessions')
+      ],
+      series: [
+        overall: [
+          name: g.message(code:'label.totalsessions')
+        ],
+      ]
+    ]
+
+    def knownDailyTotals = WayfAccessRecord.executeQuery("select count(*), dateCreated from SessionRecord where dateCreated between ? and ? group by year(dateCreated), month(dateCreated), day(dateCreated) order by year(dateCreated), month(dateCreated), day(dateCreated)", [startDate, endDate])
+    results.series.overall.count = populateDaily(knownDailyTotals, startDate, endDate)
+
+    render results as JSON
   }
 
   private def excludeTestUAT(name, exclude) {

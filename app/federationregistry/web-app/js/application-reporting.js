@@ -1968,3 +1968,72 @@ $(".request-detailed-spdemand-report").click(function () {
     });
   }  
 });
+
+var detailedfrsessions;
+$(".request-detailed-frsessions-report").click(function () {
+  var form = $('#detailed-frsessions-report-parameters');
+  if(form.valid()) {
+    if(detailedfrsessions) {
+      detailedfrsessions.destroy();
+    }
+    fedreg.showspinner();
+
+    var options = {
+      chart: {
+        renderTo: 'detailedfrsessionschart',
+        type: 'area',
+        height: 600,
+        zoomType: 'x',
+      },
+      title: {},
+      xAxis: {
+        type: 'datetime',
+        maxZoom: 14 * 24 * 3600000, // fourteen days
+        title: {
+          text: null
+        }
+      },
+      yAxis: {
+        title: {},
+        labels: {
+          formatter: function() {
+            return this.value;
+          }
+        }
+      },
+      plotOptions: {
+        area: {
+          marker: {
+            enabled: false,
+            symbol: 'circle',
+            radius: 2,
+            states: {
+              hover: {
+                enabled: true
+              }
+            }
+          }
+        }
+      }
+    }
+
+    var params = form.serialize();
+    $.getJSON(detailedfrsessionsEndpoint, params, function(data) {
+      options.title.text = data.title;
+      options.yAxis.title.text = data.axis.y;
+      options.series = [];
+      var series = {
+        type: 'area',
+        pointInterval: 24 * 3600 * 1000,
+        pointStart: Date.UTC(data.startdate.year, data.startdate.month, data.startdate.day),
+        name: data.series.overall.name,
+        data: data.series.overall.count
+      };  
+      options.series.push(series);
+
+
+      fedreg.hidespinner();
+      detailedfrsessions = new Highcharts.Chart(options);
+    });
+  }  
+});
