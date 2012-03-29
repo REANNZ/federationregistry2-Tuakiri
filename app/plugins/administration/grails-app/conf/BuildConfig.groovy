@@ -2,6 +2,7 @@
 
 grails.plugin.location.identity = "../identity"
 grails.plugin.location.foundation = "../foundation"
+grails.plugin.location.federatedgrails="/home/bradleybeddoes/development/federatedgrails"
 
 
 grails.project.class.dir = "target/classes"

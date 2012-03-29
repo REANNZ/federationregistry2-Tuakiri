@@ -25,3 +25,9 @@ $(document).on('click', '.confirm-delete-role', function() {
   fedreg.set_button($(this));
   $("#delete-role-modal").modal('show');
 });
+
+$(".show-manage-subject-permissions").click(function() {
+  $(this).hide();
+  $(".manage-subject-permissions").fadeIn();
+});
+

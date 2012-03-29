@@ -77,7 +77,6 @@
 
       <div id="tab-members" class="tab-pane">
         <g:if test="${role.subjects}">
-          <h3><g:message code="label.members" default="Members"/></h3>
           <table class="table borderless">
             <thead>
               <tr>
@@ -97,6 +96,7 @@
                     <g:form method="post" class="form">
                       <g:hiddenField name="id" value="${role?.id}" />
                       <g:hiddenField name="subjectID" value="${subject.id}" />
+                      <g:link controller="subject" action="show" id="${subject.id}" class="btn btn-small"><g:message code="label.view" default="View"/></g:link>
                       <g:actionSubmit action="removemember" class="btn btn-small" value="${message(code: 'label.remove', default: 'Remove')}" />
                     </g:form>
                   </td>
@@ -128,11 +128,11 @@
                   <td><g:fieldValue bean="${subject}" field="displayName"/></td>
                   <td><g:fieldValue bean="${subject}" field="principal"/></td>
                   <td>
-                    <g:form method="post" class="form">
+                    <g:form method="post">
                       <g:hiddenField name="id" value="${role?.id}" />
                       <g:hiddenField name="version" value="${role?.version}" />
                       <g:hiddenField name="subjectID" value="${subject?.id}" />
-                      
+                      <g:link controller="subject" action="show" id="${subject.id}" class="btn btn-small"><g:message code="label.view" default="View"/></g:link>
                       <g:actionSubmit action="addmember" class="btn btn-small" value="${message(code: 'label.add', default: 'Add')}" />
                     </g:form>
                   </td>
@@ -144,7 +144,6 @@
 
       <div id="tab-permissions" class="tab-pane">
         <g:if test="${role.permissions}">
-          <h4><g:message code="label.permissions" default="Permissions"/></h4>
           <table class="table borderless">
             <thead>
               <tr>
