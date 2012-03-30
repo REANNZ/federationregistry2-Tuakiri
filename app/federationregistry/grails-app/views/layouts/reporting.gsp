@@ -40,6 +40,7 @@
       </footer>
     </div>
     
+    <g:render template="/templates/ajaxload-modal" />
     <r:layoutResources/>
   </body>
 </html>

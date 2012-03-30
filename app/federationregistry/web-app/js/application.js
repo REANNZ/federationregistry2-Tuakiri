@@ -263,6 +263,13 @@ fedreg.descriptor_fulladministrator_search = function() {
   });
 }
 
+$(document).on('click', '.ajax-modal', function() {
+  $.get($(this).attr('data-load'),function(d){
+    $("#show-ajaxload-modal .modal-body").html(d);
+    $("#show-ajaxload-modal").modal('show');
+  });
+});
+
 // Organization
 $(document).on('click', '.show-edit-organization', function() {
   $("#overview-organization").hide();

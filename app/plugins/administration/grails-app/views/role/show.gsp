@@ -132,6 +132,7 @@
                       <g:hiddenField name="id" value="${role?.id}" />
                       <g:hiddenField name="version" value="${role?.version}" />
                       <g:hiddenField name="subjectID" value="${subject?.id}" />
+                      <a href="#" class="btn ajax-modal" data-load="${createLink(controller:'subject', action:'showpublic', id:subject.id, absolute:true)}" ><g:message code="label.quickview" default="Quick View"/></a>
                       <g:link controller="subject" action="show" id="${subject.id}" class="btn btn-small"><g:message code="label.view" default="View"/></g:link>
                       <g:actionSubmit action="addmember" class="btn btn-small" value="${message(code: 'label.add', default: 'Add')}" />
                     </g:form>
@@ -193,23 +194,23 @@
       </div>
     </div>
 
-  <div id="delete-role-modal" class="modal hide fade">
-    <div class="modal-header">
-      <a class="close close-modal">&times;</a>
-      <h3><g:message code="aaf.fr.identity.role.delete.confirm.title" default="Delete Role?"/></h3>
+    <div id="delete-role-modal" class="modal hide fade">
+      <div class="modal-header">
+        <a class="close close-modal">&times;</a>
+        <h3><g:message code="aaf.fr.identity.role.delete.confirm.title" default="Delete Role?"/></h3>
+      </div>
+      <div class="modal-body">
+        <p><g:message code="aaf.fr.identity.role.delete.confirm.title" default="Are you sure you wish to delete this role?. Removing permissions may impact user access"/></p>
+      </div>
+      <div class="modal-footer">
+        <g:form method="post" class="form">
+          <g:hiddenField name="id" value="${role?.id}" />
+          <g:hiddenField name="version" value="${role?.version}" />
+          <a class="btn close-modal"><g:message code="label.cancel" /></a>
+          <g:actionSubmit action="delete" class="btn btn-danger" value="${message(code: 'label.delete', default: 'Delete')}" />
+        </g:form>
+      </div>
     </div>
-    <div class="modal-body">
-      <p><g:message code="aaf.fr.identity.role.delete.confirm.title" default="Are you sure you wish to delete this role?. Removing permissions may impact user access"/></p>
-    </div>
-    <div class="modal-footer">
-      <g:form method="post" class="form">
-        <g:hiddenField name="id" value="${role?.id}" />
-        <g:hiddenField name="version" value="${role?.version}" />
-        <a class="btn close-modal"><g:message code="label.cancel" /></a>
-        <g:actionSubmit action="delete" class="btn btn-danger" value="${message(code: 'label.delete', default: 'Delete')}" />
-      </g:form>
-    </div>
-  </div>
 
   </body>
 </html>
