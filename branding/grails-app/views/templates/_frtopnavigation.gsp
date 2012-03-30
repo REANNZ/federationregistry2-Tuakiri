@@ -36,7 +36,7 @@
     </li>
     <fr:isAdministrator>
       <li class="${request.forwardURI.contains("administration") ? 'active' : ''}">
-        <g:link controller="code"><g:message code="fedreg.navigation.administration" /></g:link>
+        <g:link controller="adminDashboard"><g:message code="fedreg.navigation.administration" /></g:link>
       </li>
     </fr:isAdministrator>
   </fr:isLoggedIn>
