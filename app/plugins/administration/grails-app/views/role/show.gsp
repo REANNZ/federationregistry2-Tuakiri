@@ -132,7 +132,7 @@
                       <g:hiddenField name="id" value="${role?.id}" />
                       <g:hiddenField name="version" value="${role?.version}" />
                       <g:hiddenField name="subjectID" value="${subject?.id}" />
-                      <a href="#" class="btn ajax-modal" data-load="${createLink(controller:'subject', action:'showpublic', id:subject.id, absolute:true)}" ><g:message code="label.quickview" default="Quick View"/></a>
+                      <a href="#" class="btn btn-small ajax-modal" data-load="${createLink(controller:'subject', action:'showpublic', id:subject.id, absolute:true)}" ><g:message code="label.quickview" default="Quick View"/></a>
                       <g:link controller="subject" action="show" id="${subject.id}" class="btn btn-small"><g:message code="label.view" default="View"/></g:link>
                       <g:actionSubmit action="addmember" class="btn btn-small" value="${message(code: 'label.add', default: 'Add')}" />
                     </g:form>
