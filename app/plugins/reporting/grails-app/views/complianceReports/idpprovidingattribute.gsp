@@ -15,7 +15,7 @@
       <div class="span11">
         <div class="spinner centered"><r:img dir="images" file="spinner.gif"/></div>
         <div id="idpprovidingattribute" class="centered">
-          <div class="span9 offset1 alert alert-info">
+          <div class="span9 offset1 alert alert-info" style="text-align:left;">
             <p>For the attribute <strong><span class="attributename"></span></strong>, a total of <strong><span class="supportedcount"></span></strong> Identity Providers are capable of providing values to requesting services while <strong><span class="unsupportedcount"></span></strong> are not.</p>
             <p><strong>Please note that capability does not mean any one specific Identity Provider will provide your service values.</strong> This is particuarly true if they are noted as not automatically releasing attribute values below. If your service is not recieving an attribute from an Identity Provider capable of providing it please contact the administrators of that Identity Provider directly.
           </div>

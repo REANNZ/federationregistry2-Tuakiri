@@ -62,16 +62,16 @@ class ReportingSecurityFilters {
   private idpGuard(def params) {
     if(!params.idpID) {
       log.warn "idpID was not present"
-      return false
+      //return false
     }
     
     def idp = IDPSSODescriptor.get(params.idpID)
     if (!idp) {
       log.error "No idp for $params.idpID exists"
-      return false
+      //return false
     }
 
-   if(SecurityUtils.subject.isPermitted("federation:management:descriptor:${idp.id}:reporting") || SecurityUtils.subject.isPermitted("federation:reporting")) {
+   if(SecurityUtils.subject.isPermitted("federation:reporting") || SecurityUtils.subject.isPermitted("federation:management:descriptor:${idp.id}:reporting")) {
       log.info("Allowing access for $subject to undertake $params.controller/$params.action on $idp")
       return true
     }
@@ -84,15 +84,16 @@ class ReportingSecurityFilters {
   private spGuard(def params) {
     if(!params.spID) {
       log.warn "spID was not present"
-      return false
+      //return false
     }
     
     def sp = SPSSODescriptor.get(params.spID)
     if (!sp) {
       log.error "No idp for $params.spID exists"
+      //return false
     }
 
-   if(SecurityUtils.subject.isPermitted("federation:management:descriptor:${sp.id}:reporting") || SecurityUtils.subject.isPermitted("federation:reporting")) {
+   if(SecurityUtils.subject.isPermitted("federation:reporting") || SecurityUtils.subject.isPermitted("federation:management:descriptor:${sp.id}:reporting")) {
       log.info("Allowing access for $subject to undertake $params.controller/$params.action on $sp")
       return true
     }

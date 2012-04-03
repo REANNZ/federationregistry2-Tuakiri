@@ -91,9 +91,8 @@ class FederationReportsController {
   }
 
   def reportregistrations = {
-    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
-    Date startDate = formatter.parse(params.startDate)
-    Date endDate = formatter.parse(params.endDate) + 1
+    def startDate, endDate
+    (startDate, endDate) = setupDates(params)
 
     def results
     use(groovy.time.TimeCategory) {
@@ -104,9 +103,9 @@ class FederationReportsController {
           y: g.message(code:'label.totals')
         ],
         startdate: [
-            day: startDate.day,
-            month: startDate.month,
-            year: startDate.year + 1900
+            day: startDate.get(Calendar.DAY_OF_MONTH),
+            month: startDate.get(Calendar.MONTH),
+            year: startDate.get(Calendar.YEAR)
         ],
         series: [
           org: [
@@ -134,7 +133,7 @@ class FederationReportsController {
     }
 
     def knownDailyTotals
-    knownDailyTotals = Organization.executeQuery("select count(*), dateCreated, id, displayName from aaf.fr.foundation.Organization where dateCreated between ? and ? group by year(dateCreated), month(dateCreated), day(dateCreated) order by year(dateCreated), month(dateCreated), day(dateCreated)", [startDate, endDate])
+    knownDailyTotals = Organization.executeQuery("select count(*), dateCreated, id, displayName from aaf.fr.foundation.Organization where dateCreated between ? and ? group by year(dateCreated), month(dateCreated), day(dateCreated) order by year(dateCreated), month(dateCreated), day(dateCreated)", [startDate.time, endDate.time])
     results.series.org.counts = populateDaily(knownDailyTotals, startDate, endDate)
     knownDailyTotals.each { daily ->
       def o = [:]
@@ -146,7 +145,7 @@ class FederationReportsController {
     }
     results.detail.org.sort{it.dateCreated}
 
-    knownDailyTotals = IDPSSODescriptor.executeQuery("select count(*), dateCreated, id, displayName from aaf.fr.foundation.IDPSSODescriptor where dateCreated between ? and ? group by year(dateCreated), month(dateCreated), day(dateCreated) order by year(dateCreated), month(dateCreated), day(dateCreated)", [startDate, endDate])
+    knownDailyTotals = IDPSSODescriptor.executeQuery("select count(*), dateCreated, id, displayName from aaf.fr.foundation.IDPSSODescriptor where dateCreated between ? and ? group by year(dateCreated), month(dateCreated), day(dateCreated) order by year(dateCreated), month(dateCreated), day(dateCreated)", [startDate.time, endDate.time])
     results.series.idp.counts = populateDaily(knownDailyTotals, startDate, endDate)
     knownDailyTotals.each { daily ->
       def idp = [:]
@@ -158,7 +157,7 @@ class FederationReportsController {
     }
     results.detail.idp.sort{it.dateCreated}
 
-    knownDailyTotals = SPSSODescriptor.executeQuery("select count(*), dateCreated, id, displayName from aaf.fr.foundation.SPSSODescriptor where dateCreated between ? and ? group by year(dateCreated), month(dateCreated), day(dateCreated) order by year(dateCreated), month(dateCreated), day(dateCreated)", [startDate, endDate])
+    knownDailyTotals = SPSSODescriptor.executeQuery("select count(*), dateCreated, id, displayName from aaf.fr.foundation.SPSSODescriptor where dateCreated between ? and ? group by year(dateCreated), month(dateCreated), day(dateCreated) order by year(dateCreated), month(dateCreated), day(dateCreated)", [startDate.time, endDate.time])
     results.series.sp.counts = populateDaily(knownDailyTotals, startDate, endDate)
     knownDailyTotals.each { daily ->
       def sp = [:]
@@ -176,11 +175,11 @@ class FederationReportsController {
 
       def httpout = response.outputStream
       httpout << "Report:, Detailed Registrations\n"
-      httpout << "Period:, ${startDate}, ${endDate}\n\n"
+      httpout << "Period:, ${startDate.time}, ${endDate.time}\n\n"
 
       httpout << "Organizations\n"
       httpout << "date,count\n"
-      def curDate = startDate
+      def curDate = startDate.time
       results.series.org.counts.each {
         httpout << "${curDate},$it\n"
         curDate++
@@ -194,9 +193,9 @@ class FederationReportsController {
 
       httpout << "Identity Providers\n"
       httpout << "date,count\n"
-      curDate = startDate
+      curDate = startDate.time
       results.series.idp.counts.each {
-        httpout << "${curDate},$it\n"
+        httpout << "${curDate},$it\n" 
         curDate++
       }
       httpout << "\n"
@@ -208,7 +207,7 @@ class FederationReportsController {
 
       httpout << "Service Providers\n"
       httpout << "date,count\n"
-      curDate = startDate
+      curDate = startDate.time
       results.series.sp.counts.each {
         httpout << "${curDate},$it\n"
         curDate++
@@ -260,17 +259,16 @@ class FederationReportsController {
   }
 
   def reportsessions = {
-    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
-    Date startDate = formatter.parse(params.startDate)
-    Date endDate = formatter.parse(params.endDate) + 1
+    def startDate, endDate
+    (startDate, endDate) = setupDates(params)
 
     def results = [
       title: g.message(code:'label.detailedwaysessionsreport'),
       categories: [],
       startdate: [
-          day: startDate.day,
-          month: startDate.month,
-          year: startDate.year + 1900
+          day: startDate.get(Calendar.DAY_OF_MONTH),
+          month: startDate.get(Calendar.MONTH),
+          year: startDate.get(Calendar.YEAR)
       ],
       axis: [
         y: g.message(code:'label.sessions')
@@ -282,7 +280,7 @@ class FederationReportsController {
       ]
     ]
 
-    def knownDailyTotals = WayfAccessRecord.executeQuery("select count(*), dateCreated from aaf.fr.reporting.WayfAccessRecord where dateCreated between ? and ? and robot = false group by year(dateCreated), month(dateCreated), day(dateCreated) order by year(dateCreated), month(dateCreated), day(dateCreated)", [startDate, endDate])
+    def knownDailyTotals = WayfAccessRecord.executeQuery("select count(*), dateCreated from aaf.fr.reporting.WayfAccessRecord where dateCreated between ? and ? and robot = false group by year(dateCreated), month(dateCreated), day(dateCreated) order by year(dateCreated), month(dateCreated), day(dateCreated)", [startDate.time, endDate.time])
     results.series.overall.count = populateDaily(knownDailyTotals, startDate, endDate)
 
     if(params.type == 'csv') {
@@ -291,9 +289,9 @@ class FederationReportsController {
 
       def httpout = response.outputStream
       httpout << "Report:, DS Sessions\n"
-      httpout << "Period:, ${startDate}, ${endDate}\n\n"
+      httpout << "Period:, ${startDate.time}, ${endDate.time}\n\n"
       httpout << "date,sessions\n"
-      def curDate = startDate
+      def curDate = startDate.time
       results.series.overall.count.each {
         httpout << "${curDate},$it\n"
         curDate++
@@ -308,17 +306,16 @@ class FederationReportsController {
   }
 
   def reportdemand = {
-    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
-    Date startDate = formatter.parse(params.startDate)
-    Date endDate = formatter.parse(params.endDate) + 1
+    def startDate, endDate
+    (startDate, endDate) = setupDates(params)
 
     def results = [
       title: g.message(code:'label.detaileddemandreport'),
       categories: [],
       startdate: [
-          day: startDate.day,
-          month: startDate.month,
-          year: startDate.year + 1900
+          day: startDate.get(Calendar.DAY_OF_MONTH),
+          month: startDate.get(Calendar.MONTH),
+          year: startDate.get(Calendar.YEAR)
       ],
       axis: [
         y: g.message(code:'label.sessions')
@@ -327,7 +324,7 @@ class FederationReportsController {
       ]
     ]
 
-    def totals = WayfAccessRecord.executeQuery("select hour(dateCreated), count(*) from aaf.fr.reporting.WayfAccessRecord where dateCreated between ? and ? and robot = false group by hour(dateCreated) order by hour(dateCreated)", [startDate, endDate])
+    def totals = WayfAccessRecord.executeQuery("select hour(dateCreated), count(*) from aaf.fr.reporting.WayfAccessRecord where dateCreated between ? and ? and robot = false group by hour(dateCreated) order by hour(dateCreated)", [startDate.time, endDate.time])
     results.series = totals
 
     if(params.type == 'csv') {
@@ -336,7 +333,7 @@ class FederationReportsController {
 
       def httpout = response.outputStream
       httpout << "Report:, Detailed Demand\n"
-      httpout << "Period:, ${startDate}, ${endDate}\n\n"
+      httpout << "Period:, ${startDate.time}, ${endDate.time}\n\n"
       httpout << "hour,sessions\n"
       results.series.each {
         httpout << "${it[0]},${it[1]}\n"
@@ -350,17 +347,16 @@ class FederationReportsController {
   }
 
   def reportdsutilization = {
-    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
-    Date startDate = formatter.parse(params.startDate)
-    Date endDate = formatter.parse(params.endDate) + 1
+    def startDate, endDate
+    (startDate, endDate) = setupDates(params)
 
     def results = [
       title: g.message(code:'label.detailedwayfnodesessionsreport'),
       categories: [],
       startdate: [
-          day: startDate.day,
-          month: startDate.month,
-          year: startDate.year + 1900
+          day: startDate.get(Calendar.DAY_OF_MONTH),
+          month: startDate.get(Calendar.MONTH),
+          year: startDate.get(Calendar.YEAR)
       ],
       axis: [
         y: g.message(code:'label.sessions')
@@ -373,13 +369,13 @@ class FederationReportsController {
     dsNodes.each { node ->
       def series = [:]
       series.name = node
-      def knownDailyTotals = WayfAccessRecord.executeQuery("select count(*), dateCreated from aaf.fr.reporting.WayfAccessRecord where dsHost='${node}' and dateCreated between ? and ? and robot = false group by year(dateCreated), month(dateCreated), day(dateCreated) order by year(dateCreated), month(dateCreated), day(dateCreated)", [startDate, endDate])
+      def knownDailyTotals = WayfAccessRecord.executeQuery("select count(*), dateCreated from aaf.fr.reporting.WayfAccessRecord where dsHost='${node}' and dateCreated between ? and ? and robot = false group by year(dateCreated), month(dateCreated), day(dateCreated) order by year(dateCreated), month(dateCreated), day(dateCreated)", [startDate.time, endDate.time])
       series.counts = populateDaily(knownDailyTotals, startDate, endDate)
       results.series.add(series)
 
       def totals = [:]
       totals.name = node
-      totals.count = WayfAccessRecord.executeQuery("select count(*) from aaf.fr.reporting.WayfAccessRecord where dsHost='${node}' and dateCreated between ? and ? and robot = false", [startDate, endDate])[0]
+      totals.count = WayfAccessRecord.executeQuery("select count(*) from aaf.fr.reporting.WayfAccessRecord where dsHost='${node}' and dateCreated between ? and ? and robot = false", [startDate.time, endDate.time])[0]
       results.totals.add(totals)
     }
 
@@ -389,11 +385,11 @@ class FederationReportsController {
 
       def httpout = response.outputStream
       httpout << "Report:, DS Utilization\n"
-      httpout << "Period:, ${startDate}, ${endDate}\n\n"
+      httpout << "Period:, ${startDate.time}, ${endDate.time}\n\n"
       httpout << "node,date,sessions\n"
       results.series.each {
         httpout << "${it.name}\n"
-        def curDate = startDate
+        def curDate = startDate.time
         it.counts.each {
           httpout << ",${curDate},$it\n"
           curDate++
@@ -461,9 +457,8 @@ class FederationReportsController {
   }
 
   def reportsubscribergrowth = {
-    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
-    Date startDate = formatter.parse(params.startDate)
-    Date endDate = formatter.parse(params.endDate) + 1
+    def startDate, endDate
+    (startDate, endDate) = setupDates(params)
 
     def results
     use(groovy.time.TimeCategory) {
@@ -474,9 +469,9 @@ class FederationReportsController {
           y: g.message(code:'label.totals')
         ],
         startdate: [
-            day: startDate.day,
-            month: startDate.month,
-            year: startDate.year + 1900
+            day: startDate.get(Calendar.DAY_OF_MONTH),
+            month: startDate.get(Calendar.MONTH),
+            year: startDate.get(Calendar.YEAR)
         ],
         series: [
           org: [
@@ -495,15 +490,18 @@ class FederationReportsController {
       ]
     }
 
-    def knownDailyTotals
-    knownDailyTotals = Organization.executeQuery("select count(*), dateCreated from aaf.fr.foundation.Organization where dateCreated between ? and ? group by year(dateCreated), month(dateCreated), day(dateCreated) order by year(dateCreated), month(dateCreated), day(dateCreated)", [startDate, endDate])
-    results.series.org.counts = populateDailyCompound(knownDailyTotals, startDate, endDate)
+    def knownDailyTotals, previousCount
+    previousCount = Organization.executeQuery("select count(*) from aaf.fr.foundation.Organization where dateCreated < ?", [startDate.time])
+    knownDailyTotals = Organization.executeQuery("select count(*), dateCreated from aaf.fr.foundation.Organization where dateCreated between ? and ? group by year(dateCreated), month(dateCreated), day(dateCreated) order by year(dateCreated), month(dateCreated), day(dateCreated)", [startDate.time, endDate.time])
+    results.series.org.counts = populateDailyCompound(previousCount[0], knownDailyTotals, startDate, endDate)
 
-    knownDailyTotals = IDPSSODescriptor.executeQuery("select count(*), dateCreated from aaf.fr.foundation.IDPSSODescriptor where dateCreated between ? and ? group by year(dateCreated), month(dateCreated), day(dateCreated) order by year(dateCreated), month(dateCreated), day(dateCreated)", [startDate, endDate])
-    results.series.idp.counts = populateDailyCompound(knownDailyTotals, startDate, endDate)
+    previousCount = IDPSSODescriptor.executeQuery("select count(*) from aaf.fr.foundation.IDPSSODescriptor where dateCreated < ?", [startDate.time])
+    knownDailyTotals = IDPSSODescriptor.executeQuery("select count(*), dateCreated from aaf.fr.foundation.IDPSSODescriptor where dateCreated between ? and ? group by year(dateCreated), month(dateCreated), day(dateCreated) order by year(dateCreated), month(dateCreated), day(dateCreated)", [startDate.time, endDate.time])
+    results.series.idp.counts = populateDailyCompound(previousCount[0], knownDailyTotals, startDate, endDate)
     
-    knownDailyTotals = SPSSODescriptor.executeQuery("select count(*), dateCreated from aaf.fr.foundation.SPSSODescriptor where dateCreated between ? and ? group by year(dateCreated), month(dateCreated), day(dateCreated) order by year(dateCreated), month(dateCreated), day(dateCreated)", [startDate, endDate])
-    results.series.sp.counts = populateDailyCompound(knownDailyTotals, startDate, endDate)
+    previousCount = SPSSODescriptor.executeQuery("select count(*) from aaf.fr.foundation.SPSSODescriptor where dateCreated < ?", [startDate.time])
+    knownDailyTotals = SPSSODescriptor.executeQuery("select count(*), dateCreated from aaf.fr.foundation.SPSSODescriptor where dateCreated between ? and ? group by year(dateCreated), month(dateCreated), day(dateCreated) order by year(dateCreated), month(dateCreated), day(dateCreated)", [startDate.time, endDate.time])
+    results.series.sp.counts = populateDailyCompound(previousCount[0], knownDailyTotals, startDate, endDate)
 
     if(params.type == 'csv') {
       response.setHeader("Content-disposition", "attachment; filename=detailedsubscribergrowth.csv")
@@ -511,11 +509,11 @@ class FederationReportsController {
 
       def httpout = response.outputStream
       httpout << "Report:, Detailed Subscriber Growth\n"
-      httpout << "Period:, ${startDate}, ${endDate}\n"
+      httpout << "Period:, ${startDate.time}, ${endDate.time}\n"
 
       httpout << "Organizations\n"
       httpout << "date,count\n"
-      def curDate = startDate
+      def curDate = startDate.time
       results.series.org.counts.each {
         httpout << "${curDate},$it\n"
         curDate++
@@ -524,7 +522,7 @@ class FederationReportsController {
 
       httpout << "Identity Providers\n"
       httpout << "date,count\n"
-      curDate = startDate
+      curDate = startDate.time
       results.series.idp.counts.each {
         httpout << "${curDate},$it\n"
         curDate++
@@ -533,7 +531,7 @@ class FederationReportsController {
 
       httpout << "Service Providers\n"
       httpout << "date,count\n"
-      curDate = startDate
+      curDate = startDate.time
       results.series.sp.counts.each {
         httpout << "${curDate},$it\n"
         curDate++
@@ -549,17 +547,16 @@ class FederationReportsController {
   }
 
   def reportserviceutilization = {
-    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
-    Date startDate = formatter.parse(params.startDate)
-    Date endDate = formatter.parse(params.endDate) + 1
+    def startDate, endDate
+    (startDate, endDate) = setupDates(params)
 
     def results = [
       title: g.message(code:'label.detailedserviceutilizationreport'),
       categories: [],
       startdate: [
-          day: startDate.day,
-          month: startDate.month,
-          year: startDate.year + 1900
+          day: startDate.get(Calendar.DAY_OF_MONTH),
+          month: startDate.get(Calendar.MONTH),
+          year: startDate.get(Calendar.YEAR)
       ],
       axis: [
         y: g.message(code:'label.sessions')
@@ -573,7 +570,7 @@ class FederationReportsController {
         def series = [:]
         series.id = sp.id
         series.name = sp.displayName
-        def sessionTotal = WayfAccessRecord.executeQuery("select count(*) from aaf.fr.reporting.WayfAccessRecord where spID=${sp.id} and dateCreated between ? and ? and robot = false", [startDate, endDate])
+        def sessionTotal = WayfAccessRecord.executeQuery("select count(*) from aaf.fr.reporting.WayfAccessRecord where spID=${sp.id} and dateCreated between ? and ? and robot = false", [startDate.time, endDate.time])
         series.count = sessionTotal[0]
         series.excluded = (!requestedSP || requestedSP?.contains(sp.id.toString())) ? false:true
         results.series.add(series)
@@ -586,7 +583,7 @@ class FederationReportsController {
 
       def httpout = response.outputStream
       httpout << "Report:, Detailed Service Utilisation\n"
-      httpout << "Period:, ${startDate}, ${endDate}\n\n"
+      httpout << "Period:, ${startDate.time}, ${endDate.time}\n\n"
       httpout << "id,name,sessions\n"
       results.series.each {
         if(!it.excluded)
@@ -601,17 +598,16 @@ class FederationReportsController {
   }
 
   def reportidputilization = {
-    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
-    Date startDate = formatter.parse(params.startDate)
-    Date endDate = formatter.parse(params.endDate) + 1
+    def startDate, endDate
+    (startDate, endDate) = setupDates(params)
 
     def results = [
       title: g.message(code:'label.detailedidputilizationreport'),
       categories: [],
       startdate: [
-          day: startDate.day,
-          month: startDate.month,
-          year: startDate.year + 1900
+          day: startDate.get(Calendar.DAY_OF_MONTH),
+          month: startDate.get(Calendar.MONTH),
+          year: startDate.get(Calendar.YEAR)
       ],
       axis: [
         y: g.message(code:'label.sessions')
@@ -625,7 +621,7 @@ class FederationReportsController {
         def series = [:]
         series.id = idp.id
         series.name = idp.displayName
-        def sessionTotal = WayfAccessRecord.executeQuery("select count(*) from aaf.fr.reporting.WayfAccessRecord where idpID=${idp.id} and dateCreated between ? and ? and robot = false", [startDate, endDate])
+        def sessionTotal = WayfAccessRecord.executeQuery("select count(*) from aaf.fr.reporting.WayfAccessRecord where idpID=${idp.id} and dateCreated between ? and ? and robot = false", [startDate.time, endDate.time])
         series.count = sessionTotal[0]
         series.excluded = (!requestedIdP || requestedIdP?.contains(idp.id.toString())) ? false:true
         results.series.add(series)
@@ -638,7 +634,7 @@ class FederationReportsController {
 
       def httpout = response.outputStream
       httpout << "Report:, Detailed IdP Utilisation\n"
-      httpout << "Period:, ${startDate}, ${endDate}\n\n"
+      httpout << "Period:, ${startDate.time}, ${endDate.time}\n\n"
       httpout << "id,name,sessions\n"
       results.series.each {
         if(!it.excluded)
@@ -654,15 +650,14 @@ class FederationReportsController {
 
   // Provides data for AAF 'box' reports per executive requirements.
   def reportserviceutilizationbreakdown = {
-    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
-    Date startDate = formatter.parse(params.startDate)
-    Date endDate = formatter.parse(params.endDate) + 1
+    def startDate, endDate
+    (startDate, endDate) = setupDates(params)
 
     response.setHeader("Content-disposition", "attachment; filename=serviceutilizationbreakdown.csv")
     response.contentType = "application/vnd.ms-excel"
     def httpout = response.outputStream
     httpout << "Report:, Detailed Service Utilisation with IdP Breakdown\n"
-    httpout << "Period:, ${startDate}, ${endDate}\n\n"
+    httpout << "Period:, ${startDate.time}, ${endDate.time}\n\n"
 
     def queryParams = [:]
     queryParams.startDate = startDate
@@ -713,17 +708,16 @@ class FederationReportsController {
   }
 
   def reportinternalsessions = {
-    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
-    Date startDate = formatter.parse(params.startDate)
-    Date endDate = formatter.parse(params.endDate) + 1
+    def startDate, endDate
+    (startDate, endDate) = setupDates(params)
 
     def results = [
       title: g.message(code:'label.detailedfrsessionsreport', default:"Federation Registry Sessions"),
       categories: [],
       startdate: [
-          day: startDate.day,
-          month: startDate.month,
-          year: startDate.year + 1900
+          day: startDate.get(Calendar.DAY_OF_MONTH),
+          month: startDate.get(Calendar.MONTH),
+          year: startDate.get(Calendar.YEAR)
       ],
       axis: [
         y: g.message(code:'label.sessions')
@@ -735,10 +729,19 @@ class FederationReportsController {
       ]
     ]
 
-    def knownDailyTotals = WayfAccessRecord.executeQuery("select count(*), dateCreated from SessionRecord where dateCreated between ? and ? group by year(dateCreated), month(dateCreated), day(dateCreated) order by year(dateCreated), month(dateCreated), day(dateCreated)", [startDate, endDate])
+    def knownDailyTotals = WayfAccessRecord.executeQuery("select count(*), dateCreated from SessionRecord where dateCreated between ? and ? group by year(dateCreated), month(dateCreated), day(dateCreated) order by year(dateCreated), month(dateCreated), day(dateCreated)", [startDate.time, endDate.time])
     results.series.overall.count = populateDaily(knownDailyTotals, startDate, endDate)
 
     render results as JSON
+  }
+
+  private def setupDates(params) {
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
+    Calendar startDate = formatter.parse(params.startDate).toCalendar()
+    Calendar endDate = new GregorianCalendar()
+    endDate.setTimeInMillis((formatter.parse(params.endDate) + 1).time - 1)
+
+    [startDate, endDate]    
   }
 
   private def excludeTestUAT(name, exclude) {
@@ -756,7 +759,7 @@ class FederationReportsController {
         activeDates.put(dailyTotal[1].clearTime(), dailyTotal[0])
     }
 
-    (startDate..endDate).each { today ->
+    (startDate.time..endDate.time).each { today ->
       if(activeDates.containsKey(today)) {
         allDailyTotals.add(activeDates[today])
       }
@@ -768,15 +771,16 @@ class FederationReportsController {
   }
 
   // Populates missing total values so every day has content for zooming
-  private def populateDailyCompound(knownDailyTotals, startDate, endDate) {
+  private def populateDailyCompound(previousCount, knownDailyTotals, startDate, endDate) {
+
     def allDailyTotals = []
     def activeDates = [:]
     knownDailyTotals.each {dailyTotal ->
         activeDates.put(dailyTotal[1].clearTime(), dailyTotal[0])
     }
 
-    def total = 0
-    (startDate..endDate).each { today ->
+    def total = previousCount
+    (startDate.time..endDate.time).each { today ->
       if(activeDates.containsKey(today)) {
         total = total + activeDates[today]
         allDailyTotals.add(total)

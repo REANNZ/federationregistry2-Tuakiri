@@ -22,17 +22,16 @@ class IdentityProviderReportsController {
   def connections = {[idpList:IDPSSODescriptor.listOrderByDisplayName()]}
 
   def reportsessions = {
-    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
-    Date startDate = formatter.parse(params.startDate)
-    Date endDate = formatter.parse(params.endDate) + 1
+    def startDate, endDate
+    (startDate, endDate) = setupDates(params)
 
     def results = [
       title: g.message(code:'label.detailedidpsessionsreport'),
       categories: [],
       startdate: [
-          day: startDate.day,
-          month: startDate.month,
-          year: startDate.year + 1900
+          day: startDate.get(Calendar.DAY_OF_MONTH),
+          month: startDate.get(Calendar.MONTH),
+          year: startDate.get(Calendar.YEAR)
       ],
       axis: [
         y: g.message(code:'label.sessions')
@@ -45,8 +44,8 @@ class IdentityProviderReportsController {
     ]
 
     def queryParams = [:]
-    queryParams.startDate = startDate
-    queryParams.endDate = endDate
+    queryParams.startDate = startDate.time
+    queryParams.endDate = endDate.time
     queryParams.idpID = params.idpID as Long
 
     def knownDailyTotals = WayfAccessRecord.executeQuery("select count(*), dateCreated from aaf.fr.reporting.WayfAccessRecord where idpID = :idpID and dateCreated between :startDate and :endDate and robot = false group by year(dateCreated), month(dateCreated), day(dateCreated) order by year(dateCreated), month(dateCreated), day(dateCreated)", queryParams)
@@ -58,9 +57,9 @@ class IdentityProviderReportsController {
 
       def httpout = response.outputStream
       httpout << "Report:, IDP ${IDPSSODescriptor.get(params.idpID).displayName} Sessions\n"
-      httpout << "Period:, ${startDate}, ${endDate}\n\n"
+      httpout << "Period:, ${startDate.time}, ${endDate.time}\n\n"
       httpout << "date,sessions\n"
-      def curDate = startDate
+      def curDate = startDate.time
       results.series.overall.count.each {
         httpout << "${curDate},$it\n"
         curDate++
@@ -75,17 +74,16 @@ class IdentityProviderReportsController {
   }
 
   def reportserviceutilization = {
-    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
-    Date startDate = formatter.parse(params.startDate)
-    Date endDate = formatter.parse(params.endDate) + 1
+    def startDate, endDate
+    (startDate, endDate) = setupDates(params)
 
     def results = [
       title: g.message(code:'label.detailedidputilizationreport'),
       categories: [],
       startdate: [
-          day: startDate.day,
-          month: startDate.month,
-          year: startDate.year + 1900
+          day: startDate.get(Calendar.DAY_OF_MONTH),
+          month: startDate.get(Calendar.MONTH),
+          year: startDate.get(Calendar.YEAR)
       ],
       axis: [
         y: g.message(code:'label.sessions')
@@ -94,8 +92,8 @@ class IdentityProviderReportsController {
     ]
 
     def queryParams = [:]
-    queryParams.startDate = startDate
-    queryParams.endDate = endDate
+    queryParams.startDate = startDate.time
+    queryParams.endDate = endDate.time
     queryParams.idpID = params.idpID as Long
     def sessionTotals = WayfAccessRecord.executeQuery("select spID, count(*) from aaf.fr.reporting.WayfAccessRecord where idpID = :idpID and dateCreated between :startDate and :endDate and robot = false group by spID", queryParams)
 
@@ -123,7 +121,7 @@ class IdentityProviderReportsController {
 
       def httpout = response.outputStream
       httpout << "Report:, Detailed ${IDPSSODescriptor.get(params.idpID).displayName} Service Utilisation\n"
-      httpout << "Period:, ${startDate}, ${endDate}\n\n"
+      httpout << "Period:, ${startDate.time}, ${endDate.time}\n\n"
       httpout << "id,name,sessions\n"
       results.series.each {
         if(!it.excluded)
@@ -138,17 +136,16 @@ class IdentityProviderReportsController {
   }
 
   def reportdemand = {
-    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
-    Date startDate = formatter.parse(params.startDate)
-    Date endDate = formatter.parse(params.endDate) + 1
+    def startDate, endDate
+    (startDate, endDate) = setupDates(params)
 
     def results = [
       title: g.message(code:'label.detailedidpdemandreport'),
       categories: [],
       startdate: [
-          day: startDate.day,
-          month: startDate.month,
-          year: startDate.year + 1900
+          day: startDate.get(Calendar.DAY_OF_MONTH),
+          month: startDate.get(Calendar.MONTH),
+          year: startDate.get(Calendar.YEAR)
       ],
       axis: [
         y: g.message(code:'label.sessions')
@@ -158,8 +155,8 @@ class IdentityProviderReportsController {
     ]
 
     def queryParams = [:]
-    queryParams.startDate = startDate
-    queryParams.endDate = endDate
+    queryParams.startDate = startDate.time
+    queryParams.endDate = endDate.time
     queryParams.idpID = params.idpID as Long
 
     def totals = WayfAccessRecord.executeQuery("select hour(dateCreated), count(*) from aaf.fr.reporting.WayfAccessRecord where idpID = :idpID and dateCreated between :startDate and :endDate and robot = false group by hour(dateCreated) order by hour(dateCreated)", queryParams)
@@ -171,7 +168,7 @@ class IdentityProviderReportsController {
 
       def httpout = response.outputStream
       httpout << "Report:, IDP ${IDPSSODescriptor.get(params.idpID).displayName} Demand\n"
-      httpout << "Period:, ${startDate}, ${endDate}\n\n"
+      httpout << "Period:, ${startDate.time}, ${endDate.time}\n\n"
       httpout << "hour,sessions\n"
       results.series.each {
         httpout << "${it[0]},${it[1]}\n"
@@ -188,16 +185,15 @@ class IdentityProviderReportsController {
     // This code survived the cut of protovis because everyone loved it so much in mgmt etc - :( - Uggh.
     // So we maintain protovis for this function only.
 
-    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
-    Date startDate = formatter.parse(params.startDate)
-    Date endDate = formatter.parse(params.endDate) + 1
+    def startDate, endDate
+    (startDate, endDate) = setupDates(params)
     
     // Interceptor approved so we know it exists.
     def idp = IDPSSODescriptor.get(params.idpID)
       
       def queryParams = [:]
-      queryParams.startDate = startDate
-      queryParams.endDate = endDate
+      queryParams.startDate = startDate.time
+      queryParams.endDate = endDate.time
       queryParams.idpID = params.idpID as Long
     
       def activeSP = params.activesp as List
@@ -260,6 +256,15 @@ class IdentityProviderReportsController {
     
   }
 
+  private def setupDates(params) {
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd")
+    Calendar startDate = formatter.parse(params.startDate).toCalendar()
+    Calendar endDate = new GregorianCalendar()
+    endDate.setTimeInMillis((formatter.parse(params.endDate) + 1).time - 1)
+
+    [startDate, endDate]    
+  }
+
   // Populates missing zero values so every day has content for zooming
   private def populateDaily(knownDailyTotals, startDate, endDate) {
     def allDailyTotals = []
@@ -268,7 +273,7 @@ class IdentityProviderReportsController {
         activeDates.put(dailyTotal[1].clearTime(), dailyTotal[0])
     }
 
-    (startDate..endDate).each { today ->
+    (startDate.time..endDate.time).each { today ->
       if(activeDates.containsKey(today)) {
         allDailyTotals.add(activeDates[today])
       }

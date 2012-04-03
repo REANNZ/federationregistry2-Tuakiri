@@ -1134,7 +1134,7 @@ fr.detailed_attributesupport_compliance_report = function(target) {
         $('#choose-indepth-idp').append($('<option></option>').val('indepth-idp-'+k).html(v.name));
         var alert
         if(v.automatedRelease) {
-          alert = '<div class="span6 alert alert-block alert-success alert-spacer"><h4 class="alert-heading">Automatic Release</h4>This IdP automatically supplies attributes requested by by services which it <strong>shows as available</strong> below.</div>'
+          alert = '<div class="span6 alert alert-block alert-success alert-spacer"><h4 class="alert-heading">Automatic Release</h4>This IdP automatically supplies attributes requested by services which it <strong>shows as available</strong> below.</div>'
         } else {
           alert = '<div class="span6 alert alert-block alert-spacer"><h4 class="alert-heading">Warning!</h4>This IdP <strong>does not</strong> automatically supply attributes requested by services. Service administrators will need to contact this IdP if they wish to be compatible with it.</div>'
         }
