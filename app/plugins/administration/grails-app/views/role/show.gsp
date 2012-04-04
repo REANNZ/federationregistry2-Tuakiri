@@ -90,7 +90,7 @@
               <g:each in="${role.subjects.sort{it.id}}" var="subject">
                 <tr>
                   <td><g:fieldValue bean="${subject}" field="id"/></td>
-                  <td><g:fieldValue bean="${subject}" field="displayName"/></td>
+                  <td><g:fieldValue bean="${subject}" field="cn"/></td>
                   <td><g:fieldValue bean="${subject}" field="principal"/></td>
                   <td>
                     <g:form method="post" class="form">
@@ -125,7 +125,7 @@
               <g:each in="${subjects}" var="subject">
                 <tr>
                   <td><g:fieldValue bean="${subject}" field="id"/></td>
-                  <td><g:fieldValue bean="${subject}" field="displayName"/></td>
+                  <td><g:fieldValue bean="${subject}" field="cn"/></td>
                   <td><g:fieldValue bean="${subject}" field="principal"/></td>
                   <td>
                     <g:form method="post">

@@ -181,8 +181,6 @@ class AuthController {
       
       def token = new FederatedToken(principal:principal, credential:credential, attributes:attributes, remoteHost:remoteHost, userAgent:ua ) 
       
-      
-      
       SecurityUtils.subject.login(token)
       log.info "Successfully processed local development/testing authentication event for subject $principal based on credential provided in $credential, redirecting to content"
       
@@ -191,17 +189,17 @@ class AuthController {
       targetUri ? redirect(uri: targetUri) : redirect(uri:"/")
       return
     }
-        catch (IncorrectCredentialsException e) {
-            log.warn "Local credentials failure for subject $principal, incorrect credentials."
-            log.debug e
-        }
-        catch (DisabledAccountException e) {
-            log.warn "Local credentials failure for subject $principal, account disabled locally"
-            log.debug e
-        }
-        catch (AuthenticationException e) {
-            log.warn "Local credentials failure for subject $principal, generic fault"
-            log.debug e
+    catch (IncorrectCredentialsException e) {
+        log.warn "Local credentials failure for subject $principal, incorrect credentials."
+        log.debug e
+    }
+    catch (DisabledAccountException e) {
+        log.warn "Local credentials failure for subject $principal, account disabled locally"
+        log.debug e
+    }
+    catch (AuthenticationException e) {
+        log.warn "Local credentials failure for subject $principal, generic fault"
+        log.debug e
     }
     
     redirect(action: "login")

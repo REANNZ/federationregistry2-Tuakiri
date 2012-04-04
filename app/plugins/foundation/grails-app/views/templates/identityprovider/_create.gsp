@@ -305,7 +305,7 @@ $(function() {
       });
       },
       error: function (xhr, ajaxOptions, thrownError) {
-      nimble.growl('error', xhr.responseText);
+      
       }
   });
   

@@ -124,24 +124,24 @@ class RoleService {
 
     def savedRole = role.save()
     if (!savedRole) {
-      log.error("Error updating role [$role.id]$role.name to add subject [$subject.id]$subject.displayName")
+      log.error("Error updating role [$role.id]$role.name to add subject [$subject.id]$subject.cn")
 
       role.errors.each {
         log.error(it)
       }
 
-      throw new RuntimeException("Unable to persist role [$role.id]$role.name when adding subject [$subject.id]$subject.displayName")
+      throw new RuntimeException("Unable to persist role [$role.id]$role.name when adding subject [$subject.id]$subject.cn")
     }
 
     def savedSubject = subject.save()
     if (!savedSubject) {
-      log.error("Error updating subject [$subject.id]$subject.displayName when adding role [$role.id]$role.name")
+      log.error("Error updating subject [$subject.id]$subject.cn when adding role [$role.id]$role.name")
 
       subject.errors.each {
         log.error(it)
       }
 
-      throw new RuntimeException("Error updating subject [$subject.id]$subject.displayName when adding role [$role.id]$role.name")
+      throw new RuntimeException("Error updating subject [$subject.id]$subject.cn when adding role [$role.id]$role.name")
     }
 
     log.info("Successfully added $role to $subject")
@@ -164,25 +164,25 @@ class RoleService {
 
     def savedRole = role.save()
     if (!savedRole) {
-      log.error("Error updating role [$role.id]$role.name to add subject [$subject.id]$subject.displayName")
+      log.error("Error updating role [$role.id]$role.name to add subject [$subject.id]$subject.cn")
 
       role.errors.each {
         log.error(it)
       }
 
-     throw new RuntimeException("Unable to persist role [$role.id]$role.name when removing subject [$subject.id]$subject.displayName")
+     throw new RuntimeException("Unable to persist role [$role.id]$role.name when removing subject [$subject.id]$subject.cn")
     }
 
     def savedSubject = subject.save()
     if (!savedSubject) {
-      log.error("Error updating subject [$subject.id]$subject.displayName when adding role [$role.id]$role.name")
+      log.error("Error updating subject [$subject.id]$subject.cn when adding role [$role.id]$role.name")
       subject.errors.each {
         log.error(it)
       }
 
-      throw new RuntimeException("Error updating subject [$subject.id]$subject.displayName when removing role [$role.id]$role.name")
+      throw new RuntimeException("Error updating subject [$subject.id]$subject.cn when removing role [$role.id]$role.name")
     }
 
-    log.info("Successfully removed role [$role.id]$role.name to subject [$subject.id]$subject.displayName")
+    log.info("Successfully removed role [$role.id]$role.name to subject [$subject.id]$subject.cn")
   }
 }

@@ -18,7 +18,7 @@
             </tr>
             <tr>
               <th><g:message code="label.displayname" default="Display Name"/></th>
-              <td>${fieldValue(bean: subject, field: "displayName")}</td>
+              <td>${fieldValue(bean: subject, field: "cn")}</td>
             </tr>
             <tr>
               <th><g:message code="label.email" default="Email"/></th>

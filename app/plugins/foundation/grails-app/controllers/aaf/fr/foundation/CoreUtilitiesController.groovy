@@ -14,11 +14,11 @@ class CoreUtilitiesController {
 	def cryptoService
 	
 	def knownIDPImpl = {
-		render grailsApplication.config.fedreg.knownimplementations.identityproviders as JSON
+		render grailsApplication.config.aaf.fr.knownimplementations.identityproviders as JSON
 	}
 	
 	def knownSPImpl = {		
-		render grailsApplication.config.fedreg.knownimplementations.serviceproviders as JSON
+		render grailsApplication.config.aaf.fr.knownimplementations.serviceproviders as JSON
 	}
 	
 	def validateCertificate = {

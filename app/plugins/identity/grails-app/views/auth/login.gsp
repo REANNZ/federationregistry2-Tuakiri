@@ -21,13 +21,11 @@
               <g:form action="locallogin" method="post">
               <g:hiddenField name="principal" value="https://vho.test.aaf.edu.au/idp/shibboleth!-!8fde68a6-0897-4b59-a4da-ab4d46579228" />
               <g:hiddenField name="credential" value="fake-sessionid-webform" />
-              <g:hiddenField name="attributes.givenName" value="Fred" />
-              <g:hiddenField name="attributes.surname" value="Bloggs" />
-              <g:hiddenField name="attributes.displayName" value="Fred Bloggs" />
+              <g:hiddenField name="attributes.sharedToken" value="LGW3wpNaPgwnLoYYsghGbzXXXXXXXX" />
+              <g:hiddenField name="attributes.cn" value="Fred Bloggs" />
               <g:hiddenField name="attributes.email" value="fredbloggs@one.edu.au" />
-              <g:hiddenField name="attributes.entityID" value="https://vho.aaf.edu.au/idp/shibboleth" />
-              <g:hiddenField name="attributes.homeOrganization" value="one.edu.au" />
-              <g:hiddenField name="attributes.homeOrganizationType" value="university:australia" />
+              <g:hiddenField name="attributes.entityID" value="https://idp.one.edu.au/idp/shibboleth" />
+
               <g:submitButton name="Login" class="btn btn-success btn-large"/>
             </g:form>
           </div>
@@ -37,13 +35,11 @@
               <g:form action="locallogin" method="post">
               <g:hiddenField name="principal" value="https://idp.one.edu.au/idp/shibboleth!-!d2404817-6fb9-4165-90d8-2" />
               <g:hiddenField name="credential" value="fake-sessionid-webform" />
-              <g:hiddenField name="attributes.givenName" value="Joe" />
-              <g:hiddenField name="attributes.surname" value="Schmoe" />
-              <g:hiddenField name="attributes.displayName" value="Joe Schmoe" />
+              <g:hiddenField name="attributes.sharedToken" value="LGW3wpNaPgwnLoYYsghGbzSSSSSSS" />
+              <g:hiddenField name="attributes.cn" value="Joe Schmoe" />
               <g:hiddenField name="attributes.email" value="joeschmoe@one.edu.au" />
-              <g:hiddenField name="attributes.entityID" value="https://vho.aaf.edu.au/idp/shibboleth" />
-              <g:hiddenField name="attributes.homeOrganization" value="one.edu.au" />
-              <g:hiddenField name="attributes.homeOrganizationType" value="university:australia" />
+              <g:hiddenField name="attributes.entityID" value="https://idp.one.edu.au/idp/shibboleth" />
+
               <g:submitButton name="Login" class="btn btn-warning btn-large"/>
             </g:form>
           </div>
@@ -53,11 +49,11 @@
               <g:form action="locallogin" method="post">
               <g:hiddenField name="principal" value="https://idp.one.edu.au/idp/shibboleth!-!d2404817-6fb9-4165-90d8-3" />
               <g:hiddenField name="credential" value="fake-sessionid-webform" />
-              <g:hiddenField name="attributes.displayName" value="Max Mustermann" />
+              <g:hiddenField name="attributes.sharedToken" value="LGW3wpNaPgwnLoYYsghGbzZZZZZZZZ" />
+              <g:hiddenField name="attributes.cn" value="Max Mustermann" />
               <g:hiddenField name="attributes.email" value="maxmustermann@one.edu.au" />
               <g:hiddenField name="attributes.entityID" value="https://idp.one.edu.au/idp/shibboleth" />
-              <g:hiddenField name="attributes.homeOrganization" value="one.edu.au" />
-              <g:hiddenField name="attributes.homeOrganizationType" value="university:australia" />
+
               <g:submitButton name="Login" class="btn btn-inverse btn-large"/>
             </g:form>
           </div>

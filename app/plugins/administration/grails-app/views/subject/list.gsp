@@ -23,7 +23,7 @@
         <tr>
           <td>${fieldValue(bean: subject, field: "id")}</td>
           <td>${fieldValue(bean: subject, field: "principal")}</td>
-          <td>${fieldValue(bean: subject, field: "displayName")}</td>
+          <td>${fieldValue(bean: subject, field: "cn")}</td>
           <td>${fieldValue(bean: subject, field: "email")}</td>
           <td><g:link action="show" id="${subject.id}" class="btn btn-small"><g:message code="label.view"/></g:link>
         </tr>

@@ -87,7 +87,7 @@ class IdentityTagLib {
     Long id = SecurityUtils.getSubject()?.getPrincipal()
     if (id) {
       def subject = Subject.get(id)
-      out << subject.displayName
+      out << subject.cn
     }
   }
 

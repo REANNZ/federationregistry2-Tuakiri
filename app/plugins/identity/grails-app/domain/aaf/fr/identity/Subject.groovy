@@ -1,26 +1,31 @@
 package aaf.fr.identity
 
 import grails.plugins.federatedgrails.SubjectBase
+import aaf.fr.foundation.Contact
 
 class Subject extends SubjectBase {
 
-  String displayName
+  String cn
   String email
+  String sharedToken
+
+  Contact contact
 
   static constraints = {
     email email:true
+    cn nullable: false, blank: false
   }
 
   public String toString() {
-      "aaf.fr.identity.Subject [id: $id, principal: $principal]"
+      "aaf.fr.identity.Subject [id: $id, principal: $principal, cn:$cn]"
   }
 
   // Crude but necessary
   public String getGivenName() {
-    displayName?.split(' ')[0]
+    cn?.split(' ')[0]
   }
 
   public String getSurname() {
-    displayName?.split(' ')[1]
+    cn?.split(' ')[1]
   }
 }

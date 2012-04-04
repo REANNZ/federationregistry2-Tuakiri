@@ -17,5 +17,5 @@ class FedRegTagLib {
     def src = g.resource()
     
     out << r.img(dir:'images', file:'help.png', plugin:'federationregistry', title:msg, width:'16px', height:'16px', rel:'twipsy', 'data-placement':'right')
-    }
+  }
 }
