@@ -14,7 +14,7 @@ class WorkflowApprovalController {
 	def workflowTaskService
 	
 	def list = {
-		def tasks = workflowTaskService.retrieveTasksAwaitingApproval(principal)
+		def tasks = workflowTaskService.retrieveTasksAwaitingApproval(subject)
 		[tasks:tasks]
 	}
 	

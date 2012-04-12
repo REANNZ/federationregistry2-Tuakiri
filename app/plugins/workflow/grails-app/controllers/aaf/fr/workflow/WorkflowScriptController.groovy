@@ -42,10 +42,10 @@ class WorkflowScriptController {
 			}
 		
 			def script = new WorkflowScript(params)
-			script.creator = principal
+			script.creator = subject
 			if(!script.save()) {
 				flash.type = "error"
-			    flash.message = message(code: 'fedreg.workflow.script.create.error')
+        flash.message = message(code: 'fedreg.workflow.script.create.error')
 				render view: "create", model: [script: script]
 				return
 			}

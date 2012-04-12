@@ -16,6 +16,11 @@ $(".show-manage-members").click(function() {
   $(".manage-role-members").fadeIn();
 });
 
+$(".show-manage-reportadmins").click(function() {
+  $(this).hide();
+  $(".manage-reportadmins").fadeIn();
+});
+
 $(".show-manage-permissions").click(function() {
   $(this).hide();
   $(".manage-role-permissions").fadeIn();

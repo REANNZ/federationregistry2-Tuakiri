@@ -51,7 +51,7 @@ class WorkflowProcessController {
 						log.debug it
 					}
 					flash.type = "error"
-				    flash.message = message(code: 'fedreg.workflow.process.create.error')
+				  flash.message = message(code: 'fedreg.workflow.process.create.error')
 					render view: "create", model: [process: process]
 					return
 				}
