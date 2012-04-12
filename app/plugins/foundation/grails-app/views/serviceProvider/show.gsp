@@ -22,10 +22,13 @@
       <li><a href="#tab-contacts" data-toggle="tab"><g:message code="label.contacts" /></a></li>
       <li><a href="#tab-saml" data-toggle="tab"><g:message code="label.saml" /></a></li>
       
-      <fr:hasAnyPermission in='["descriptor:${serviceProvider.id}:reporting" , "federation:reporting"]'>
+      <fr:hasAnyPermission in='["federation:management:descriptor:${serviceProvider.id}:reporting" , "federation:reporting"]'>
         <li><a href="#tab-reports" data-toggle="tab"><g:message code="label.reporting" /></a></li>
       </fr:hasAnyPermission>
       <li><a href="#tab-monitors" data-toggle="tab"><g:message code="label.monitoring" /></a></li>
+      <g:if test="${serviceProvider.approved}">
+        <li><a href="#tab-admins" data-toggle="tab"><g:message code="label.administrators" /></a></li>
+      </g:if>
     </ul>
 
     <div class="tab-content">
@@ -163,10 +166,9 @@
 
       <g:if test="${serviceProvider.approved}">
         <div id="tab-admins" class="tab-pane">
-          <g:render template="/templates/descriptor/listfulladministration" plugin="foundation" model="[descriptor:serviceProvider, administrators:administrators]" />
-          <fr:hasPermission target="descriptor:${serviceProvider.id}:manage:administrators">
-            <g:render template="/templates/descriptor/searchfulladministration" plugin="foundation" model="[descriptor:serviceProvider]" />
-          </fr:hasPermission>
+          <g:render template="/templates/descriptor/listreportadministration" plugin="foundation" model="[descriptor:serviceProvider]" />
+          <hr>
+          <g:render template="/templates/descriptor/listfulladministration" plugin="foundation" model="[descriptor:serviceProvider]" />
         </div>
       </g:if>
 

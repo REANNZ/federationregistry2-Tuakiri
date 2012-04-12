@@ -60,10 +60,7 @@
 
         <g:if test="${organization.approved}">
           <div id="tab-admins" class="tab-pane">
-            <g:render template="/templates/organization/listfulladministration" plugin="foundation" model="[organization:organization, administrators:administrators]" />
-            <fr:hasPermission target="organization:${organization.id}:manage:administrators">
-              <g:render template="/templates/organization/searchfulladministration" plugin="foundation" model="[organization:organization, administrators:administrators]" />
-            </fr:hasPermission>
+            <g:render template="/templates/organization/listfulladministration" plugin="foundation" />
           </div>
         </g:if>
     </div>

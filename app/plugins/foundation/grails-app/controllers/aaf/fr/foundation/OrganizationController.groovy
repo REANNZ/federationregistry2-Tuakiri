@@ -3,6 +3,8 @@ package aaf.fr.foundation
 import org.apache.shiro.SecurityUtils
 import grails.plugins.federatedgrails.Role
 
+import aaf.fr.identity.Subject
+
 /**
  * Provides Organization views.
  *
@@ -13,6 +15,7 @@ class OrganizationController {
   def allowedMethods = [save: 'POST', update: 'PUT', delete:'DELETE', unarchive:'PUT', archive:'PUT']
     
   def organizationService
+  def roleService
 
   def list = {
     [organizationList: Organization.findAllWhere(archived:false), organizationTotal: Organization.count()]
@@ -43,7 +46,8 @@ class OrganizationController {
         e.spDescriptors.each { sp -> serviceproviders.add(sp) }
       }
       
-      [organization: organization, registrations:organization.buildStatistics(), entities:entities, identityproviders:identityproviders, serviceproviders:serviceproviders, administrators:adminRole?.users, contactTypes:ContactType.list(), organizationTypes: OrganizationType.list()]
+      def subjects = aaf.fr.identity.Subject.list()
+      [organization: organization, registrations:organization.buildStatistics(), entities:entities, identityproviders:identityproviders, serviceproviders:serviceproviders, administrators:adminRole?.subjects, subjects:subjects, contactTypes:ContactType.list(), organizationTypes: OrganizationType.list()]
     }
     else {
       flash.type="error"
@@ -139,7 +143,6 @@ class OrganizationController {
     }
   }
 
-
   def unarchive = {
     if(!params.id) {
       log.warn "Organization ID was not present"
@@ -196,6 +199,77 @@ class OrganizationController {
     }
     else {
       log.warn("Attempt to archive $organization by $subject was denied, incorrect permission set")
+      response.sendError(403)
+    }
+  }
+
+  def grantFullAdministration = {
+    def organization = Organization.get(params.id)
+    if (!organization) {
+      log.error "No organization exists for ${params.id}"
+      response.sendError(500)
+      return
+    } 
+    
+    def subj = Subject.get(params.subjectID)
+    if (!subj) {
+      flash.type="error"
+      flash.message = message(code: 'aaf.fr.foundation.subject.nonexistant', default:"The subject identified does not exist")
+      redirect(action: "show", id:organization.id, fragment:"tab-admins")
+      return
+    }
+    
+    if(SecurityUtils.subject.isPermitted("federation:manage:organization:${organization.id}:administrators")) {
+      def adminRole = Role.findByName("organization-${organization.id}-administrators")
+      
+      if(adminRole) {
+        roleService.addMember(subj, adminRole)
+      
+        log.info "$subject successfully added $subj to $adminRole"
+        redirect(action: "show", id:organization.id, fragment:"tab-admins")
+      } else {
+        log.warn("Attempt to grant administrative control for $organization to $subj by $subject was denied. Administrative role doesn't exist")
+        response.sendError(403)
+      }
+    }
+    else {
+      log.warn("Attempt to assign complete administrative control for $organization to $subj by $subject was denied, incorrect permission set")
+      response.sendError(403)
+    }
+  }
+
+  def revokeFullAdministration = {
+    def organization = Organization.get(params.id)
+    if (!organization) {
+      log.error "No organization exists for ${params.id}"
+      response.sendError(500)
+      return
+    } 
+   
+    def subj = Subject.get(params.subjectID)
+    if (!subj) {
+      flash.type="error"
+      flash.message = message(code: 'aaf.fr.foundation.user.nonexistant', default:"The subject identified does not exist")
+      redirect(action: "show", id:organization.id, fragment:"tab-admins")
+      return
+    }
+    
+    if(SecurityUtils.subject.isPermitted("federation:manage:organization:${organization.id}:administrators")) {
+      if(subj == subject) {
+        flash.type="error"
+        flash.message = message(code: 'controller.organizationadministration.selfedit', default:"Admins can't remove their own privileged access.")
+        redirect(action: "show", id:organization.id, fragment:"tab-admins")
+        return
+      }
+      
+      def adminRole = Role.findByName("organization-${organization.id}-administrators")
+      roleService.deleteMember(subj, adminRole)
+      
+      log.info "$subject successfully removed $subj from $adminRole"
+      redirect(action: "show", id:organization.id, fragment:"tab-admins")
+    }
+    else {
+      log.warn("Attempt to remove complete administrative control for $organization from $subj by $subject was denied, incorrect permission set")
       response.sendError(403)
     }
   }

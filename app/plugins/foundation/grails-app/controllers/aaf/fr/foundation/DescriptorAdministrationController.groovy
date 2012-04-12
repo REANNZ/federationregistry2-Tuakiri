@@ -1,10 +1,10 @@
 package aaf.fr.foundation
 
 import org.apache.shiro.SecurityUtils
+import grails.plugins.federatedgrails.Role
+import grails.plugins.federatedgrails.Permission
 
-
-
-
+import aaf.fr.identity.Subject
 
 /**
  * Provides administration management views for Descriptors.
@@ -12,114 +12,194 @@ import org.apache.shiro.SecurityUtils
  * @author Bradley Beddoes
  */
 class DescriptorAdministrationController {
-	def allowedMethods = [grantFullAdministration: 'POST', revokeFullAdministration: 'DELETE']
-	
-	def roleService
-	
-	def listFullAdministration = {
-		def descriptor = Descriptor.get(params.id)
-		if (!descriptor) {
-			flash.type="error"
-			flash.message = message(code: 'aaf.fr.foundation.descriptor.nonexistant')
-			redirect(action: "list")
-			return
-		}
-		
-		def adminRole = Role.findByName("descriptor-${descriptor.id}-administrators")
-		render template: '/templates/descriptor/listfulladministration', contextPath: pluginContextPath, model:[descriptor:descriptor, administrators: adminRole?.users]
-	}
-	
-	def searchFullAdministration = {
-		def descriptor = Descriptor.get(params.id)
-		if (!descriptor) {
-			flash.type="error"
-			flash.message = message(code: 'aaf.fr.foundation.descriptor.nonexistant')
-			redirect(action: "list")
-			return
-		}
-		
-		def q = "%" + params.q + "%"
-	    log.debug("Performing search for users matching $q")
+  def allowedMethods = [grantFullAdministrationToken:'POST', grantReportAdministration: 'POST', revokeReportAdministration: 'DELETE', grantFullAdministration: 'POST', revokeFullAdministration: 'DELETE']
+  
+  def roleService
+  def permissionService
+  def invitationService
 
-	    def users = Subject.findAllByUsernameIlike(q)
-	    ProfileBase.findAllByFullNameIlikeOrEmailIlike(q, q)?.each {
-			if(!users.contains(it.owner))
-				users.add(it.owner)
-	    }
+  def grantReportAdministration = {
+    def descriptor = Descriptor.get(params.id)
+    if (!descriptor) {
+      log.error "No descriptor exists for ${params.id}"
+      response.sendError(500)
+      return
+    } 
+    
+    def controller = determineController(descriptor) 
+    def subj = Subject.get(params.subjectID)
+    if (!subj) {
+      flash.type="error"
+      flash.message = message(code: 'aaf.fr.foundation.subject.nonexistant', default:"The subject identified does not exist")
+      redirect(controller: controller, action: "show", id:descriptor.id, fragment:"tab-admins")
+      return
+    }
+    
+    if(SecurityUtils.subject.isPermitted("descriptor:${descriptor.id}:manage:administrators")) {
+      def adminRole = Role.findByName("descriptor-${descriptor.id}-report-administrators")
+      
+      if(!adminRole) {
+        adminRole = roleService.createRole("descriptor-${descriptor.id}-report-administrators", "Report viewers for descriptor ${descriptor.id}", false)
 
-		def adminRole = Role.findByName("descriptor-${descriptor.id}-administrators")
-		if(adminRole) {
-			users.removeAll(adminRole.users)
-			render template: '/templates/descriptor/searchresultsfulladministration', contextPath: pluginContextPath, model:[descriptor:descriptor, users: users]
-		} else {
-			log.warn("Attempt to search for administrative control for $descriptor to $user by $subject was denied. Administrative role doesn't exist")
-			response.sendError(403)
-		}
-	}
-	
-	def grantFullAdministration = {
-		def descriptor = Descriptor.get(params.id)
-		if (!descriptor) {
-			flash.type="error"
-			flash.message = message(code: 'aaf.fr.foundation.descriptor.nonexistant')
-			redirect(action: "list")
-			return
-		}	
-		
-		def user = Subject.get(params.userID)
-		if (!descriptor) {
-			flash.type="error"
-			flash.message = message(code: 'aaf.fr.foundation.user.nonexistant')
-			redirect(action: "list")
-			return
-		}
-		
-		if(SecurityUtils.subject.isPermitted("descriptor:${descriptor.id}:manage:administrators")) {
-			def adminRole = Role.findByName("descriptor-${descriptor.id}-administrators")
-			
-			if(adminRole) {
-				roleService.addMember(user, adminRole)
-			
-				log.info "$subject successfully added $user to $adminRole"
-				render message(code: 'fedreg.descriptor.administration.grant.success')
-			} else {
-				log.warn("Attempt to grant administrative control for $descriptor to $user by $subject was denied. Administrative role doesn't exist")
-				response.sendError(403)
-			}
-		}
-		else {
-			log.warn("Attempt to assign complete administrative control for $descriptor to $user by $subject was denied, incorrect permission set")
-			response.sendError(403)
-		}
-	}
-	
-	def revokeFullAdministration = {
-		def descriptor = Descriptor.get(params.id)
-		if (!descriptor) {
-			flash.type="error"
-			flash.message = message(code: 'aaf.fr.foundation.descriptor.nonexistant')
-			redirect(action: "list")
-			return
-		}	
-		
-		def user = Subject.get(params.userID)
-		if (!descriptor) {
-			flash.type="error"
-			flash.message = message(code: 'aaf.fr.foundation.user.nonexistant')
-			redirect(action: "list")
-			return
-		}
-		
-		if(SecurityUtils.subject.isPermitted("descriptor:${descriptor.id}:manage:administrators")) {
-			def adminRole = Role.findByName("descriptor-${descriptor.id}-administrators")
-			roleService.deleteMember(user, adminRole)
-			
-			log.info "$subject successfully removed $user from $adminRole"
-			render message(code: 'fedreg.descriptor.administration.revoke.success')
-		}
-		else {
-			log.warn("Attempt to remove complete administrative control for $descriptor from $user by $subject was denied, incorrect permission set")
-			response.sendError(403)
-		}
-	}
+        def permission = new Permission()
+        permission.type = Permission.defaultPerm
+        permission.target = "federation:management:descriptor:${descriptor.id}:reporting"
+        permission.owner = adminRole
+        
+        permissionService.createPermission(permission, adminRole)
+      }
+
+      roleService.addMember(subj, adminRole)
+      log.info "$subject successfully added $subj to $adminRole"
+      redirect(controller: controller, action: "show", id:descriptor.id, fragment:"tab-admins")
+    }
+    else {
+      log.warn("Attempt to assign complete administrative control for $descriptor to $subj by $subject was denied, incorrect permission set")
+      response.sendError(403)
+    }
+  }
+  
+  def grantFullAdministration = {
+    def descriptor = Descriptor.get(params.id)
+    if (!descriptor) {
+      log.error "No descriptor exists for ${params.id}"
+      response.sendError(500)
+      return
+    } 
+    
+    def controller = determineController(descriptor) 
+    def subj = Subject.get(params.subjectID)
+    if (!subj) {
+      flash.type="error"
+      flash.message = message(code: 'aaf.fr.foundation.subject.nonexistant', default:"The subject identified does not exist")
+      redirect(controller: controller, action: "show", id:descriptor.id, fragment:"tab-admins")
+      return
+    }
+    
+    if(SecurityUtils.subject.isPermitted("descriptor:${descriptor.id}:manage:administrators")) {
+      def adminRole = Role.findByName("descriptor-${descriptor.id}-administrators")
+      
+      if(adminRole) {
+        roleService.addMember(subj, adminRole)
+      
+        log.info "$subject successfully added $subj to $adminRole"
+        redirect(controller: controller, action: "show", id:descriptor.id, fragment:"tab-admins")
+      } else {
+        log.warn("Attempt to grant administrative control for $descriptor to $subj by $subject was denied. Administrative role doesn't exist")
+        response.sendError(403)
+      }
+    }
+    else {
+      log.warn("Attempt to assign complete administrative control for $descriptor to $subj by $subject was denied, incorrect permission set")
+      response.sendError(403)
+    }
+  }
+
+  def grantFullAdministrationToken = {
+    def descriptor = Descriptor.get(params.id)
+    if (!descriptor) {
+      log.error "No descriptor exists for ${params.id}"
+      response.sendError(500)
+      return
+    } 
+
+    if(!params.token) {
+      log.error "No token supplied in request"
+      response.sendError(500)
+      return
+    }
+    
+    def controller = determineController(descriptor) 
+    
+    def invite = invitationService.claim(params.token, descriptor.id)
+    if(invite) {
+      log.info "$subject successfully claimed $invite"
+      flash.type="success"
+      flash.message="Token was applied successfully" 
+      redirect(controller: controller, action: "show", id:descriptor.id, fragment:"tab-admins")
+    } else {
+      log.info "$subject failed in claiming invite code $params.token"
+      flash.type="error"
+      flash.message="Code was not applied, it has been used before, is associated with a different provider or an internal error occured. Please verify correctness of entered code. Please contact support if you continue to have issues." 
+      redirect(controller: controller, action: "show", id:descriptor.id, fragment:"tab-admins")
+    }
+  }
+  
+  def revokeReportAdministration = {
+    def descriptor = Descriptor.get(params.id)
+    if (!descriptor) {
+      log.error "No descriptor exists for ${params.id}"
+      response.sendError(500)
+      return
+    }
+
+    def controller = determineController(descriptor)    
+    def subj = Subject.get(params.subjectID)
+    if (!subj) {
+      flash.type="error"
+      flash.message = message(code: 'aaf.fr.foundation.user.nonexistant', default:"The subject identified does not exist")
+      redirect(controller: controller, action: "show", id:descriptor.id, fragment:"tab-admins")
+      return
+    }
+    
+    if(SecurityUtils.subject.isPermitted("descriptor:${descriptor.id}:manage:administrators")) {      
+      def adminRole = Role.findByName("descriptor-${descriptor.id}-report-administrators")
+      roleService.deleteMember(subj, adminRole)
+      
+      log.info "$subject successfully removed $subj from $adminRole"
+      redirect(controller: controller, action: "show", id:descriptor.id, fragment:"tab-admins")
+    }
+    else {
+      log.warn("Attempt to remove complete administrative control for $descriptor from $subj by $subject was denied, incorrect permission set")
+      response.sendError(403)
+    }
+  }
+
+  def revokeFullAdministration = {
+    def descriptor = Descriptor.get(params.id)
+    if (!descriptor) {
+      log.error "No descriptor exists for ${params.id}"
+      response.sendError(500)
+      return
+    }
+
+    def controller = determineController(descriptor)    
+    def subj = Subject.get(params.subjectID)
+    if (!subj) {
+      flash.type="error"
+      flash.message = message(code: 'aaf.fr.foundation.user.nonexistant', default:"The subject identified does not exist")
+      redirect(controller: controller, action: "show", id:descriptor.id, fragment:"tab-admins")
+      return
+    }
+    
+    if(SecurityUtils.subject.isPermitted("descriptor:${descriptor.id}:manage:administrators")) {
+      if(subj == subject) {
+        flash.type="error"
+        flash.message = message(code: 'controller.descriptoradministration.selfedit', default:"Admins can't remove their own privileged access.")
+        redirect(controller: controller, action: "show", id:descriptor.id, fragment:"tab-admins")
+        return
+      }
+      
+      def adminRole = Role.findByName("descriptor-${descriptor.id}-administrators")
+      roleService.deleteMember(subj, adminRole)
+      
+      log.info "$subject successfully removed $subj from $adminRole"
+      redirect(controller: controller, action: "show", id:descriptor.id, fragment:"tab-admins")
+    }
+    else {
+      log.warn("Attempt to remove complete administrative control for $descriptor from $subj by $subject was denied, incorrect permission set")
+      response.sendError(403)
+    }
+  }
+
+  private String determineController(def descriptor) {
+    def controller
+    switch(descriptor.class.simpleName) {
+      case "IDPSSODescriptor" : controller = 'identityProvider'
+                                break
+      case "SPSSODescriptor" :  controller = 'serviceProvider'
+                                break                         
+    }
+    controller
+  }
 }
