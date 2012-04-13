@@ -21,10 +21,10 @@
       <g:link controller="organization" action="list"><g:message code="fedreg.navigation.membership" /></g:link>
     </li>
     <li class="${['federationReports', 'identityProviderReports', 'serviceProviderReports', 'complianceReports'].contains(controllerName) ? 'active' : ''}">
-      <fr:hasPermission target="federation:reporting">
+      <fr:hasPermission target="federation:management:reporting">
         <g:link controller="federationReports" action="summary"><g:message code="fedreg.navigation.reporting" /></g:link>
       </fr:hasPermission>
-      <fr:lacksPermission target="federation:reporting">
+      <fr:lacksPermission target="federation:management:reporting">
         <g:link controller="complianceReports" action="attributesupport"><g:message code="fedreg.navigation.reporting" /></g:link>
       </fr:lacksPermission>
     </li>

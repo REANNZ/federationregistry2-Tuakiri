@@ -219,7 +219,7 @@ class OrganizationController {
       return
     }
     
-    if(SecurityUtils.subject.isPermitted("federation:manage:organization:${organization.id}:administrators")) {
+    if(SecurityUtils.subject.isPermitted("federation:management:organization:${organization.id}:administrators")) {
       def adminRole = Role.findByName("organization-${organization.id}-administrators")
       
       if(adminRole) {
@@ -254,7 +254,7 @@ class OrganizationController {
       return
     }
     
-    if(SecurityUtils.subject.isPermitted("federation:manage:organization:${organization.id}:administrators")) {
+    if(SecurityUtils.subject.isPermitted("federation:management:organization:${organization.id}:administrators")) {
       if(subj == subject) {
         flash.type="error"
         flash.message = message(code: 'controller.organizationadministration.selfedit', default:"Admins can't remove their own privileged access.")

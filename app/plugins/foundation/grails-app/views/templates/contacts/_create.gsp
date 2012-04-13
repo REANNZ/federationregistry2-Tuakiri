@@ -1,4 +1,4 @@
-<fr:hasPermission target="organization:${owner.id}:contact:add">
+<fr:hasAnyPermission in='["federation:management:organization:${owner.id}:contact:add", "federation:management:contacts"]'>
   <hr>
   
   <div class="search-contacts">
@@ -65,4 +65,4 @@
     </div>
   </div>
 
-</fr:hasPermission>
+</fr:hasAnyPermission>

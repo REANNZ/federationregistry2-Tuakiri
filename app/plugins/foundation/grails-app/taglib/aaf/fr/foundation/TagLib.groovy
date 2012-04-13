@@ -12,7 +12,7 @@ class TagLib {
   static namespace = "fr"
 
   def attributeSelection = {
-    def provideAdminRestricted = SecurityUtils.subject.isPermitted("federation:manage:attributes:restricted")
+    def provideAdminRestricted = SecurityUtils.subject.isPermitted("federation:management:attributes:restricted")
     def markup = new StringBuffer()
 
     markup << "<select name='attrid' class='span4'>"

@@ -20,7 +20,7 @@
       <li class="active"><a href="#tab-overview" data-toggle="tab"><g:message code="label.overview" /></a></li>
       <li><a href="#tab-contacts" data-toggle="tab"><g:message code="label.contacts" /></a></li>
       <li class="level"><a href="#tab-saml" data-toggle="tab"><g:message code="label.saml" /></a></li>
-      <fr:hasAnyPermission in='["federation:management:descriptor:${identityProvider.id}:reporting" , "federation:reporting"]'>
+      <fr:hasAnyPermission in='["federation:management:descriptor:${identityProvider.id}:reporting" , "federation:management:reporting"]'>
         <li><a href="#tab-reports" data-toggle="tab"><g:message code="label.reporting" /></a></li>
       </fr:hasAnyPermission>
       <li><a href="#tab-monitors" data-toggle="tab"><g:message code="label.monitoring" /></a></li>
@@ -36,7 +36,6 @@
 
       <div id="tab-contacts" class="tab-pane">
         <g:render template="/templates/contacts/list" plugin="foundation" model="[host:identityProvider]" />
-        
         <g:render template="/templates/contacts/create" plugin="foundation" model="[host:identityProvider, contactTypes:contactTypes]"/>
       </div>
 
@@ -58,7 +57,6 @@
             
             <div id="tab-crypto" class="tab-pane active">
               <g:render template="/templates/certificates/list" plugin="foundation" model="[descriptor:identityProvider]" />
-
               <g:render template="/templates/certificates/create" plugin="foundation" model="[descriptor:identityProvider]"/>
             </div>
 
@@ -153,7 +151,7 @@
         </div>
       </div>
 
-      <fr:hasAnyPermission in='["federation:management:descriptor:${identityProvider.id}:reporting" , "federation:reporting"]'>
+      <fr:hasAnyPermission in='["federation:management:descriptor:${identityProvider.id}:reporting" , "federation:management:reporting"]'>
         <div id="tab-reports" class="tab-pane">
           <g:render template="/templates/identityprovider/reporting" model="[idpID:identityProvider.id]" />
         </div>
