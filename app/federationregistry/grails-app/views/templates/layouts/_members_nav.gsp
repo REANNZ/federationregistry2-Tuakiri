@@ -70,7 +70,7 @@
       </fr:hasPermission>
       <li class="${actionName in ['create', 'save'] ? 'active':''}"><g:link controller="serviceProvider" action="create"><g:message code="label.create"/></g:link></li>
       <g:if test="${actionName in ['show']}">
-        <li class="active"><g:message code="label.view" /> </li>
+        <li class="active"><g:message code="label.view" /></li>
       </g:if>
     </ul>
   </g:if>
@@ -79,13 +79,9 @@
     <ul class="level3a">
       <li class="${actionName == 'list' ? 'active':''}"><g:link controller="contacts" action="list"><g:message code="label.list"/></g:link></li>
       <li class="${actionName == 'create' ? 'active':''}"><g:link controller="contacts" action="create"><g:message code="label.create"/></g:link></li>
-      <g:if test="${actionName in ['show', 'edit']}">
-        <li> | </li>
-        <li><g:message code="fedreg.view.members.contacts.show.heading" args="[contact.givenName, contact.surname]"/>: </li>
-        <li class="${actionName == 'show' ? 'active':''}"><g:link controller="contacts" action="show" id="${contact.id}"><g:message code="label.view"/></g:link>
-        <fr:hasPermission target="contact:${contact.id}:update">
-          <li class="${actionName == 'edit' ? 'active':''}"><g:link controller="contacts" action="edit" id="${contact.id}"><g:message code="label.edit"/></g:link></li>
-        </fr:hasPermission>
+      <li class="${actionName == 'show' ? 'active':''}"><g:message code="label.view"/></li>
+      <g:if test="${actionName in ['edit']}">
+        <li class="${actionName == 'edit' ? 'active':''}"><g:message code="label.edit"/></li>
       </g:if>
     </ul>
   </g:if>

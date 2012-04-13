@@ -49,7 +49,7 @@ class ReportingSecurityFilters {
   }
 
   private federationGuard(def params) {
-   if(SecurityUtils.subject.isPermitted("federation:reporting")) {
+   if(SecurityUtils.subject.isPermitted("federation:management:reporting")) {
       log.info("Allowing access for $subject to undertake $params.controller/$params.action")
       return true
     }
@@ -71,7 +71,7 @@ class ReportingSecurityFilters {
       //return false
     }
 
-   if(SecurityUtils.subject.isPermitted("federation:reporting") || SecurityUtils.subject.isPermitted("federation:management:descriptor:${idp.id}:reporting")) {
+   if(SecurityUtils.subject.isPermitted("federation:management:reporting") || SecurityUtils.subject.isPermitted("federation:management:descriptor:${idp.id}:reporting")) {
       log.info("Allowing access for $subject to undertake $params.controller/$params.action on $idp")
       return true
     }
@@ -93,7 +93,7 @@ class ReportingSecurityFilters {
       //return false
     }
 
-   if(SecurityUtils.subject.isPermitted("federation:reporting") || SecurityUtils.subject.isPermitted("federation:management:descriptor:${sp.id}:reporting")) {
+   if(SecurityUtils.subject.isPermitted("federation:management:reporting") || SecurityUtils.subject.isPermitted("federation:management:descriptor:${sp.id}:reporting")) {
       log.info("Allowing access for $subject to undertake $params.controller/$params.action on $sp")
       return true
     }

@@ -1,11 +1,11 @@
 <g:render template='/templates/frtopnavigation'/>
 
 <ul class="level2">
-  <fr:hasPermission target="federation:reporting">
+  <fr:hasPermission target="federation:management:reporting">
     <li class="${controllerName == 'federationReports' ? 'active':''}"><g:link controller="federationReports" action="summary"><g:message code="fedreg.navigation.federationreports"/></g:link></li>
   </fr:hasPermission>
   <li class="${controllerName == 'complianceReports' ? 'active':''}"><g:link controller="complianceReports" action="attributesupport"><g:message code="fedreg.navigation.compliance"/></g:link></li>
-  <fr:hasPermission target="federation:reporting">
+  <fr:hasPermission target="federation:management:reporting">
     <li class="${controllerName == 'identityProviderReports' ? 'active':''}"><g:link controller="identityProviderReports" action="sessions"><g:message code="fedreg.navigation.idpreports"/></g:link></li>
     <li class="${controllerName == 'serviceProviderReports' ? 'active':''}"><g:link controller="serviceProviderReports" action="sessions"><g:message code="fedreg.navigation.spreports"/></g:link></li>
   </fr:hasPermission>
@@ -31,7 +31,7 @@
   </ul>
 </g:if>
 
-<fr:hasPermission target="federation:reporting">
+<fr:hasPermission target="federation:management:reporting">
   <g:if test="${controllerName in ['federationReports']}" >
     <ul class="level3a">
       <li class="${controllerName == 'federationReports' && actionName == 'summary' ? 'active':''}">
