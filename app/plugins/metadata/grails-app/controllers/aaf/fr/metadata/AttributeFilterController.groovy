@@ -37,7 +37,7 @@ class AttributeFilterController {
 		attributeFilterGenerationService.generate(builder, federation, identityProvider.id)
 		def xml = writer.toString()
 		
-		render(text:xml, encoding:"UTF-8")
+		render(text:xml, contentType: "text/xml", encoding:"UTF-8")
 	}
 
 }
