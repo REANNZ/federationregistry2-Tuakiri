@@ -17,9 +17,9 @@ Powered by Grails <g:meta name="app.grails.version"/>
     });
   }
 
-  <g:if test="${grailsApplication.config.fedreg.gapps.enabled}">
+  <g:if test="${grailsApplication.config.aaf.fr.gapps.enabled}">
     var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', "${grailsApplication.config.fedreg.gapps.id}"]);
+    _gaq.push(['_setAccount', "${grailsApplication.config.aaf.fr.gapps.id}"]);
     _gaq.push(['_trackPageview']);
 
     (function() {

@@ -2,7 +2,7 @@
 
 <html>
   <head>
-    <title><g:message code="fedreg.title.${grailsApplication.config.fedreg.deployment.environment}" /></title>
+    <title><g:message code='fr.branding.title' default='Federation Registry'/></title>
     <r:require modules="bootstrap, zenbox, app"/>
     <r:layoutResources/>
     <g:layoutHead />
@@ -24,10 +24,10 @@
           <div class="span12">
             <ul class="level1">
               <li class="${controllerName == 'dashboard' ? 'directactive':''}">
-                <g:link controller="dashboard"><g:message code="fedreg.navigation.dashboard" /></g:link>
+                <g:link controller="dashboard"><g:message code="fr.branding.nav.dashboard" default="Dashboard"/></g:link>
               </li>
-              <li><a style="color: #fff;" href="http://support.aaf.edu.au/forums"><g:message code="fedreg.navigation.help" /></a></li>
-              <li><a style="color: #fff;" href="#" onClick="script: Zenbox.show(); return false;"><g:message code="fedreg.navigation.support" /></a></li>
+              <li><a style="color: #fff;" href="http://support.aaf.edu.au/forums"><g:message code="fr.branding.nav.help" default="Help"/></a></li>
+              <li><a style="color: #fff;" href="#" onClick="script: Zenbox.show(); return false;"><g:message code="fr.branding.nav.support" default="Support"/></a></li>
             </ul>
           </div>
         </div>

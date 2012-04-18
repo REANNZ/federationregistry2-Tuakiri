@@ -4,7 +4,7 @@
 	<html>
 		<head></head>
 		<body>
-			<p><g:message code="fedreg.templates.mail.workflow.idp.activated.description" /></p>
+			<p><g:message code="fr.branding.mail.workflow.idp.activated.description" /></p>
 			
 			<table>
 				<tr>
@@ -41,9 +41,9 @@
 				</tr>
 			</table>
 		
-			<g:message code="fedreg.templates.mail.workflow.idp.activated.nextsteps" args="[createLink(controller:'invitation', action:'claim', params:[code:invitation.inviteCode], absolute:true)]"/>
+			<g:message code="fr.branding.mail.workflow.idp.activated.nextsteps" args="[createLink(controller:'invitation', action:'claim', params:[code:invitation.inviteCode], absolute:true)]"/>
 		
-			<p><g:message code="fedreg.templates.mail.get.support" /></p>
+			<p><g:message code="fr.branding.mail.get.support" /></p>
 		
 		</body>
 	</html>

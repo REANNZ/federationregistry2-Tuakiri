@@ -2,7 +2,7 @@
 
 <html>
   <head>
-    <title><g:message code="fedreg.title.${grailsApplication.config.fedreg.deployment.environment}" /></title>
+    <title><g:message code='fr.branding.title' default='Federation Registry'/></title>
     <r:require modules="bootstrap, zenbox, app"/>
     <r:layoutResources/>
     <g:layoutHead />
@@ -24,8 +24,8 @@
             <g:render template='/templates/frtopnavigation'/>
             <g:if test="${controllerName == 'metadata'}">
               <ul class="level2a">
-                <li class="${actionName == 'view' ? 'active':''}"><g:link controller="metadata" action="view"><g:message code="label.currentmetadata"/></g:link></li>
-                <li class="${actionName == 'viewall' ? 'active':''}"><g:link controller="metadata" action="viewall"><g:message code="label.allmetadata"/></g:link></li>
+                <li class="${actionName == 'view' ? 'active':''}"><g:link controller="metadata" action="view"><g:message code="fr.branding.nav.currentmetadata" default="Current"/></g:link></li>
+                <li class="${actionName == 'viewall' ? 'active':''}"><g:link controller="metadata" action="viewall"><g:message code="fr.branding.nav.allmetadata" default="All"/></g:link></li>
               </ul>
             </g:if>
           </div>

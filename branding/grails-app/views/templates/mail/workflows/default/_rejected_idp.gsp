@@ -4,7 +4,7 @@
 	<html>
 		<head></head>
 		<body>
-			<p><g:message code="fedreg.templates.mail.workflow.idp.rejected.description" /></p>
+			<p><g:message code="fr.branding.mail.workflow.idp.rejected.description" /></p>
 			
 			<table>
 				<tr>
@@ -49,7 +49,7 @@
 				</tr>
 			</table>
 		
-			<p><g:message code="fedreg.templates.mail.get.support" /></p>
+			<p><g:message code="fr.branding.mail.get.support" /></p>
 		
 		</body>
 	</html>

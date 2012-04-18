@@ -4,7 +4,7 @@
 	<html>
 		<head></head>
 		<body>
-			<p><g:message code="fedreg.templates.mail.workflow.sp.registered.description" /></p>
+			<p><g:message code="fr.branding.mail.workflow.sp.registered.description" /></p>
 			
 			<table>
 				<tr>
@@ -49,7 +49,7 @@
 				</tr>
 			</table>
 		
-			<p><g:message code="fedreg.templates.mail.get.support" /></p>
+			<p><g:message code="fr.branding.mail.get.support" /></p>
 		
 		</body>
 	</html>
