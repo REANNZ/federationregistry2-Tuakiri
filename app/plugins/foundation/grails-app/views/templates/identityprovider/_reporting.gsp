@@ -28,7 +28,7 @@
         <div class="span11">
           <div class="span11 spinner centered"><r:img dir="images" file="spinner.gif"/></div>
           <div id="detailedidpsessionschart">
-            <div class="span9 generate-notice offset1 alert alert-info"><g:message code="fedreg.views.reporting.clickgenerate"/></div>
+            <div class="span9 generate-notice offset1 alert alert-info"><g:message code="label.generate"/></div>
           </div>
         </div>
       </div>
@@ -59,7 +59,7 @@
       <div class="row">
         <div class="span11">
           <div id="detailedidptoserviceutilizationtotals">
-            <div class="span9 offset1 alert alert-info generate-notice"><g:message code="fedreg.views.reporting.clickgenerate"/></div>
+            <div class="span9 offset1 alert alert-info generate-notice"><g:message code="label.generate"/></div>
           </div>
         </div>
       </div>
@@ -109,7 +109,7 @@
         <div class="span11">
           <div class="span11 spinner centered"><r:img dir="images" file="spinner.gif"/></div>
           <div id="idpdemanddetailed">
-            <div class=" span9 offset1 alert alert-info generate-notice"><g:message code="fedreg.views.reporting.clickgenerate"/></div>
+            <div class=" span9 offset1 alert alert-info generate-notice"><g:message code="label.generate"/></div>
           </div>
         </div>
       </div>
@@ -133,7 +133,7 @@
       <div class="row">
         <div class="span11">
           <div class="span11 spinner centered"><r:img dir="images" file="spinner.gif"/></div>
-          <div class="span9 offset1 alert alert-info generate-notice"><g:message code="fedreg.views.reporting.clickgenerate"/></div>
+          <div class="span9 offset1 alert alert-info generate-notice"><g:message code="label.generate"/></div>
           <div id="idpconnectivity" class="centered">
             
           </div>

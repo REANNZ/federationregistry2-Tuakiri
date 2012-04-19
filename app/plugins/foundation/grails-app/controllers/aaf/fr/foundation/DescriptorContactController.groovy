@@ -35,7 +35,7 @@ class DescriptorContactController {
 	def create = {
 		if(!params.id || !params.contactID || !params.contactType) {
 			log.warn "All name/value pairs required for this call were not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			response.setStatus(500)
 			return
 		}
@@ -43,7 +43,7 @@ class DescriptorContactController {
 		def descriptor = Descriptor.get(params.id)
 		if(!descriptor) {
 			log.warn "RoleDescriptor identified by id $params.id was not located"
-			render message(code: 'fedreg.roledescriptor.nonexistant', args: [params.id])
+			render message(code: 'domains.fr.foundation.roledescriptor.nonexistant', args: [params.id])
 			response.setStatus(500)
 			return
 		}
@@ -52,7 +52,7 @@ class DescriptorContactController {
 			def contact = Contact.get(params.contactID)
 			if(!contact) {
 				log.warn "Contact identified by id $params.contactID was not located"
-				render message(code: 'fedreg.contact.nonexistant', args: [params.contactID])
+				render message(code: 'domains.fr.foundation.contact.nonexistant', args: [params.contactID])
 				response.setStatus(500)
 				return
 			}
@@ -60,7 +60,7 @@ class DescriptorContactController {
 			def contactType = ContactType.findByName(params.contactType)
 			if(!contactType) {
 				log.warn "ContactType identified by id $params.contactType was not located"
-				render message(code: 'fedreg.contacttype.nonexistant', args: [params.contactID])
+				render message(code: 'domains.fr.foundation.contacttype.nonexistant', args: [params.contactID])
 				response.setStatus(500)
 				return
 			}
@@ -77,13 +77,13 @@ class DescriptorContactController {
 				contactPerson.errors.each {
 					log.error it
 				}
-				render message(code: 'fedreg.contactperson.create.error')
+				render message(code: 'domains.fr.foundation.contactperson.create.error')
 				response.setStatus(500)
 				return
 			}
 			
 			log.debug "$subject created $contactPerson linked to $contact for $descriptor"
-			render message(code: 'fedreg.contactperson.create.success')
+			render message(code: 'domains.fr.foundation.contactperson.create.success')
 		}
 		else {
 			log.warn("Attempt to link contact to $descriptor by $subject was denied, incorrect permission set")
@@ -94,7 +94,7 @@ class DescriptorContactController {
 	def delete = {
 		if(!params.id) {
 			log.warn "All name/value pairs required for this call were not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			response.setStatus(500)
 			return
 		}
@@ -102,7 +102,7 @@ class DescriptorContactController {
 		def contactPerson = ContactPerson.get(params.id)
 		if(!contactPerson) {
 			log.warn "ContactPerson identified by id $params.id was not located"
-			render message(code: 'fedreg.contactperson.nonexistant', args: [params.id])
+			render message(code: 'domains.fr.foundation.contactperson.nonexistant', args: [params.id])
 			response.setStatus(500)
 			return
 		}
@@ -117,7 +117,7 @@ class DescriptorContactController {
 			contactPerson.delete();
 			
 			log.debug "$subject deleted $contactPerson from $descriptor"
-			render message(code: 'fedreg.contactperson.delete.success')
+			render message(code: 'domains.fr.foundation.contactperson.delete.success')
 		}
 		else {
 			log.warn("Attempt to remove $contactPerson from descriptor $id by $subject was denied, incorrect permission set")
@@ -128,7 +128,7 @@ class DescriptorContactController {
 	def list = {
 		if(!params.id) {
 			log.warn "All name/value pairs required for this call were not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			response.setStatus(500)
 			return
 		}
@@ -136,7 +136,7 @@ class DescriptorContactController {
 		def descriptor = Descriptor.get(params.id)
 		if(!descriptor) {
 			log.warn "RoleDescriptor identified by id $params.id was not located"
-			render message(code: 'fedreg.roledescriptor.nonexistant', args: [params.id])
+			render message(code: 'domains.fr.foundation.roledescriptor.nonexistant', args: [params.id])
 			response.sendError(500)
 			return
 		}

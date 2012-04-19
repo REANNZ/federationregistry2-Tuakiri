@@ -11,7 +11,7 @@
         <label for="uri"><g:message code="label.binding"/></label>
         <div class="controls">
           <g:select name="binding" from="${SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding)}" optionKey="id" optionValue="uri" value="${endpoint.binding.id}" class="span4"/>
-          <fr:tooltip code='fedreg.help.endpoint.binding' />
+          <fr:tooltip code='help.fr.endpoint.binding' />
         </div>
       </div>
 
@@ -19,7 +19,7 @@
         <label for="location"><g:message code="label.location"/></label>
         <div class="controls">
           <input name="location" type="text" class="required url span4" size="60" value="${endpoint.location}"/>
-          <fr:tooltip code='fedreg.help.endpoint.location' />
+          <fr:tooltip code='help.fr.endpoint.location' />
         </div>
       </div>
 
@@ -28,7 +28,7 @@
           <label for="samlindex"><g:message code="label.index" /></label>
           <div class="controls">
             <input name="samlindex" type="text" class="required number span1" value="${endpoint.index}"/>
-            <fr:tooltip code='fedreg.help.endpoint.index' />
+            <fr:tooltip code='help.fr.endpoint.index' />
           </div>
         </div>
       </g:if>

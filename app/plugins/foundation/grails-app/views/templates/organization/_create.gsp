@@ -1,6 +1,6 @@
 <g:hasErrors>
   <div class="alert alert-message alert-danger">
-    <p><strong><g:message code="fedreg.templates.organization.create.errors" /></strong></p>
+    <p><strong><g:message code="template.fr.organization.create.errors" /></strong></p>
     <p>
       <g:message code="label.identifiederrors"/>
       <g:renderErrors bean="${organization}" as="list" />
@@ -15,14 +15,14 @@
   <g:hiddenField name="organization.lang" value="en" />
   
   <div class="step" id="overview">
-    <g:message code="fedreg.templates.organization.create.overview.details" />
+    <g:message code="template.fr.organization.create.overview.details" />
   </div>
 
   <hr>
   
   <div id="contact" class="step">
-    <h3>1. <g:message code="fedreg.templates.organization.create.contact.heading" /></h3>
-    <p><g:message code="fedreg.templates.organization.create.contact.details" /></p>
+    <h3>1. <g:message code="template.fr.organization.create.contact.heading" /></h3>
+    <p><g:message code="template.fr.organization.create.contact.details" /></p>
     <fieldset>
       <div class="control-group">
         <label for="contact.givenName"><g:message code="label.givenname" /></label>
@@ -65,16 +65,16 @@
   <hr>
   
   <div class="step" id="basicinformation">
-    <h3>2. <g:message code="fedreg.templates.organization.create.basicinformation.heading" /></h3>
+    <h3>2. <g:message code="template.fr.organization.create.basicinformation.heading" /></h3>
     <p>
-      <g:message code="fedreg.templates.organization.create.basicinformation.details" />
+      <g:message code="template.fr.organization.create.basicinformation.details" />
     </p>
     <fieldset>
       <div class="control-group">
       <label for="organization.name"><g:message code="label.name" /></label>
         <div class="controls">
           <g:textField name="organization.name" class="required span4" value="${organization?.name}"/>
-          <fr:tooltip code='fedreg.help.organization.name' />
+          <fr:tooltip code='help.fr.organization.name' />
         </div>
       </div>
 
@@ -82,7 +82,7 @@
       <label for="organization.displayName"><g:message code="label.displayname" /></label>
         <div class="controls">
           <g:textField name="organization.displayName" class="required span4" value="${organization?.displayName}"/>
-          <fr:tooltip code='fedreg.help.organization.displayName' />
+          <fr:tooltip code='help.fr.organization.displayName' />
         </div>
       </div>
 
@@ -90,7 +90,7 @@
       <label for="organization.url"><g:message code="label.organizationurl" /></label>
         <div class="controls">
           <g:textField name="organization.url" class="required url span4"  value="${organization?.url}"/>
-          <fr:tooltip code='fedreg.help.organization.url' />
+          <fr:tooltip code='help.fr.organization.url' />
         </div>
       </div>
 
@@ -98,7 +98,7 @@
       <label for="organization.primary"><g:message code="label.organizationtype" /></label>
         <div class="controls">
           <g:select name="organization.primary" from="${organizationTypes}" optionKey="id" optionValue="displayName" value="${organization?.primary?.id}" class="span4" />
-          <fr:tooltip code='fedreg.help.organization.type' />
+          <fr:tooltip code='help.fr.organization.type' />
         </div>
       </div>
     </fieldset>
@@ -107,9 +107,9 @@
   <hr>
   
   <div class="step" id="creationsummary">
-    <h3>3. <g:message code="fedreg.templates.organization.create.summary.heading" /></h3>
+    <h3>3. <g:message code="template.fr.organization.create.summary.heading" /></h3>
     <p>
-      <g:message code="fedreg.templates.organization.create.summary.details" />
+      <g:message code="template.fr.organization.create.summary.details" />
     </p>
 
     <div class="form-action">

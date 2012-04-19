@@ -2,11 +2,11 @@
 <html>
   <head>
     <meta name="layout" content="members" />
-    <title><g:message code="fedreg.view.members.serviceprovider.listarchived.title" /></title>
+    <title><g:message code="views.fr.foundation.serviceprovider.listarchived.title" /></title>
   </head>
   <body>
 
-    <h2><g:message code="fedreg.view.members.serviceprovider.listarchived.heading" /></h2>
+    <h2><g:message code="views.fr.foundation.serviceprovider.listarchived.heading" /></h2>
     <table class="span11 table borderless table-striped table-sortable">
       <thead>
         <tr>

@@ -15,7 +15,7 @@ class RoleDescriptorCryptoController {
 	def list = {
 		if(!params.id) {
 			log.warn "Descriptor ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			response.setStatus(500)
 			return
 		}
@@ -23,7 +23,7 @@ class RoleDescriptorCryptoController {
 		def descriptor = RoleDescriptor.get(params.id)
 		if (!descriptor) {
 			log.warn "Descriptor was not found for id ${params.id}"
-			render message(code: 'fedreg.roledescriptor.nonexistant', args: [params.id])
+			render message(code: 'domains.fr.foundation.roledescriptor.nonexistant', args: [params.id])
 			response.setStatus(500)
 			return
 		}
@@ -34,7 +34,7 @@ class RoleDescriptorCryptoController {
 	def delete = {
 		if(!params.id) {
 			log.warn "KeyDescriptor ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			response.setStatus(500)
 			return
 		}
@@ -42,7 +42,7 @@ class RoleDescriptorCryptoController {
 		def keyDescriptor = KeyDescriptor.get(params.id)
 		if(!keyDescriptor) {
 			log.warn "KeyDescriptor identified by id $params.id was not located"
-			render message(code: 'fedreg.keydescriptor.nonexistant', args: [params.id])
+			render message(code: 'domains.fr.foundation.keydescriptor.nonexistant', args: [params.id])
 			response.setStatus(500)
 			return
 		}
@@ -53,7 +53,7 @@ class RoleDescriptorCryptoController {
 			cryptoService.unassociateCertificate(keyDescriptor)
 			
 			log.info "$subject soft deleted $keyDescriptor from $descriptor"
-			render message(code: 'fedreg.keydescriptor.delete.success')
+			render message(code: 'domains.fr.foundation.keydescriptor.delete.success')
 		}
 		else {
 			log.warn("Attempt to remove $keyDescriptor from ${keyDescriptor.roleDescriptor} by $subject was denied, incorrect permission set")
@@ -64,14 +64,14 @@ class RoleDescriptorCryptoController {
 	def create = {
 		if(!params.id) {
 			log.warn "RoleDescriptor ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			response.setStatus(500)
 			return
 		}
 		
 		if(!params.cert) {
 			log.warn "Certificate data was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			response.setStatus(500)
 			return
 		}
@@ -79,7 +79,7 @@ class RoleDescriptorCryptoController {
 		def descriptor = RoleDescriptor.get(params.id)
 		if (!descriptor) {
 			log.warn "Descriptor was not found for id ${params.id}"
-			render message(code: 'fedreg.roledescriptor.nonexistant', args: [params.id])
+			render message(code: 'domains.fr.foundation.roledescriptor.nonexistant', args: [params.id])
 			response.setStatus(500)
 			return
 		}
@@ -90,7 +90,7 @@ class RoleDescriptorCryptoController {
 				associated = cryptoService.associateCertificate(descriptor, params.cert, params.certname, KeyTypes.signing)
 		
 				if(!associated) {
-					render message(code: 'fedreg.keydescriptor.create.signing.failed')
+					render message(code: 'domains.fr.foundation.keydescriptor.create.signing.failed')
 					response.setStatus(500)
 					return
 				}
@@ -102,7 +102,7 @@ class RoleDescriptorCryptoController {
 				associated = cryptoService.associateCertificate(descriptor, params.cert, params.certname, KeyTypes.encryption)
 			
 				if(!associated) {
-					render message(code: 'fedreg.keydescriptor.create.encryption.failed')
+					render message(code: 'domains.fr.foundation.keydescriptor.create.encryption.failed')
 					response.setStatus(500)
 					return
 				}
@@ -110,7 +110,7 @@ class RoleDescriptorCryptoController {
 				log.info "$subject created encryption keyDescriptor for $descriptor"
 			}
 			
-			render message(code: 'fedreg.keydescriptor.create.success')
+			render message(code: 'domains.fr.foundation.keydescriptor.create.success')
 		}
 		else {
 			log.warn("Attempt to add crypto to $descriptor by $subject was denied, incorrect permission set")

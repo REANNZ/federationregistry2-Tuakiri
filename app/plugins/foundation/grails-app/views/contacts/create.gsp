@@ -3,7 +3,7 @@
     <meta name="layout" content="members" />
   </head>
   <body>
-    <h2><g:message code="fedreg.view.members.contacts.create.heading" /></h2>
+    <h2><g:message code="views.fr.foundation.contacts.create.heading" /></h2>
     
     <g:render template="/templates/flash" plugin="foundation"/>
     

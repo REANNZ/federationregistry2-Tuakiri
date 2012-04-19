@@ -18,7 +18,7 @@ class AttributeConsumingServiceController {
 	def listRequestedAttributes = {
 		if(!params.id) {
 			log.warn "Attribute Consuming Service ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			response.setStatus(500)
 			return
 		}
@@ -26,7 +26,7 @@ class AttributeConsumingServiceController {
 		def acs = AttributeConsumingService.get(params.id)
 		if(!acs) {
 			log.warn "Attribute Consuming Service identified by id ${params.id} was not located"
-			render message(code: 'fedreg.attributeconsumingservice.nonexistant', args: [params.id])
+			render message(code: 'domains.fr.foundation.attributeconsumingservice.nonexistant', args: [params.id])
 			response.setStatus(500)
 			return
 		}
@@ -36,7 +36,7 @@ class AttributeConsumingServiceController {
 	def listSpecifiedAttributeValue = {
 		if(!params.id) {
 			log.warn "Attribute Consuming Service ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			response.setStatus(500)
 			return
 		}
@@ -44,7 +44,7 @@ class AttributeConsumingServiceController {
 		def ra = RequestedAttribute.get(params.id)
 		if(!ra) {
 			log.warn "Requested Attribute identified by id ${params.id} was not located"
-			render message(code: 'fedreg.attr.nonexistant', args: [params.id])
+			render message(code: 'domains.fr.foundation.attr.nonexistant', args: [params.id])
 			response.setStatus(500)
 			return
 		}
@@ -55,14 +55,14 @@ class AttributeConsumingServiceController {
 	def addSpecifiedAttributeValue = {
 		if(!params.id) {
 			log.warn "RequestedAttribute ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			response.setStatus(500)
 			return
 		}
 		
 		if(!params.value) {
 			log.warn "Value to add was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			response.setStatus(500)
 			return
 		}
@@ -70,7 +70,7 @@ class AttributeConsumingServiceController {
 		def reqAttr = RequestedAttribute.get(params.id)
 		if(!reqAttr) {
 			log.warn "Requested Attribute identified by id ${params.id} was not located"
-			render message(code: 'fedreg.attr.nonexistant', args: [params.id])
+			render message(code: 'domains.fr.foundation.attr.nonexistant', args: [params.id])
 			response.setStatus(500)
 			return
 		}
@@ -82,13 +82,13 @@ class AttributeConsumingServiceController {
 				reqAttr.errors.each {
 					log.warn it
 				}
-				render message(code: 'fedreg.attributeconsumingservice.requestedattribute.add.failed')
+				render message(code: 'domains.fr.foundation.attributeconsumingservice.requestedattribute.add.failed')
 				response.setStatus(500)
 				return
 			}
 		
 			log.info "$subject added value ${params.value} to ${reqAttr} referencing ${reqAttr.base} for ${reqAttr.attributeConsumingService} belonging to ${reqAttr.attributeConsumingService.descriptor}"
-			render message(code: 'fedreg.attributeconsumingservice.requestedattribute.specifiedvalue.add.success')
+			render message(code: 'domains.fr.foundation.attributeconsumingservice.requestedattribute.specifiedvalue.add.success')
 		} else {
 			log.warn("Attempt to add a specifed attribute value by $subject was denied, incorrect permission set")
 			response.sendError(403)
@@ -98,14 +98,14 @@ class AttributeConsumingServiceController {
 	def removeSpecifiedAttributeValue = {
 		if(!params.id) {
 			log.warn "RequestedAttribute ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			response.setStatus(500)
 			return
 		}
 		
 		if(!params.valueid || !params.valueid.isLong()) {
 			log.warn "Value to add was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			response.setStatus(500)
 			return
 		}
@@ -113,7 +113,7 @@ class AttributeConsumingServiceController {
 		def reqAttr = RequestedAttribute.get(params.id)
 		if(!reqAttr) {
 			log.warn "Requested Attribute identified by id ${params.id} was not located"
-			render message(code: 'fedreg.attr.nonexistant', args: [params.id])
+			render message(code: 'domains.fr.foundation.attr.nonexistant', args: [params.id])
 			response.setStatus(500)
 			return
 		}
@@ -128,7 +128,7 @@ class AttributeConsumingServiceController {
 		
 			if(!val) {
 				log.warn "Value identified by id ${params.valueid} was not associated with ${reqAttr}"
-				render message(code: 'fedreg.attr.nonexistant', args: [params.id])
+				render message(code: 'domains.fr.foundation.attr.nonexistant', args: [params.id])
 				response.setStatus(500)
 				return
 			}
@@ -139,13 +139,13 @@ class AttributeConsumingServiceController {
 				reqAttr.errors.each {
 					log.warn it
 				}
-				render message(code: 'fedreg.attributeconsumingservice.requestedattribute.remove.failed')
+				render message(code: 'domains.fr.foundation.attributeconsumingservice.requestedattribute.remove.failed')
 				response.setStatus(500)
 				return
 			}
 		
 			log.info "$subject removed ${val} from ${reqAttr} referencing ${reqAttr.base} for ${reqAttr.attributeConsumingService} belonging to ${reqAttr.attributeConsumingService.descriptor}"
-			render message(code: 'fedreg.attributeconsumingservice.requestedattribute.specifiedvalue.remove.success')
+			render message(code: 'domains.fr.foundation.attributeconsumingservice.requestedattribute.specifiedvalue.remove.success')
 		} else {
 			log.warn("Attempt to remove a specifed attribute value by $subject was denied, incorrect permission set")
 			response.sendError(403)
@@ -155,19 +155,19 @@ class AttributeConsumingServiceController {
 	def addRequestedAttribute = {
 		if(!params.id) {
 			log.warn "Attribute Consuming Service ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			response.setStatus(500)
 			return
 		}
 		if(!params.attrid) {
 			log.warn "Requested attribute ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			response.setStatus(500)
 			return
 		}
 		if(!params.reasoning) {
 			log.warn "Reason for requesting attribute was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			response.setStatus(500)
 			return
 		}
@@ -175,7 +175,7 @@ class AttributeConsumingServiceController {
 		def acs = AttributeConsumingService.get(params.id)
 		if(!acs) {
 			log.warn "Attribute Consuming Service identified by id ${params.id} was not located"
-			render message(code: 'fedreg.attributeconsumingservice.nonexistant', args: [params.id])
+			render message(code: 'domains.fr.foundation.attributeconsumingservice.nonexistant', args: [params.id])
 			response.setStatus(500)
 			return
 		}
@@ -184,7 +184,7 @@ class AttributeConsumingServiceController {
 			def attr = AttributeBase.get(params.attrid)
 			if(!attr) {
 				log.warn "Attribute identified by id ${params.attrid} was not located"
-				render message(code: 'fedreg.attr.nonexistant', args: [params.id])
+				render message(code: 'domains.fr.foundation.attr.nonexistant', args: [params.id])
 				response.setStatus(500)
 				return
 			}
@@ -192,7 +192,7 @@ class AttributeConsumingServiceController {
 			for( a in acs.requestedAttributes ) {
 				if(a.base == attr) {
 					log.warn "${a} already supported by ${acs} and ${acs.descriptor} not adding"
-					render message(code: 'fedreg.attributeconsumingservice.requestedattribute.add.already.exists')
+					render message(code: 'domains.fr.foundation.attributeconsumingservice.requestedattribute.add.already.exists')
 					response.setStatus(500)
 					return
 				}
@@ -205,7 +205,7 @@ class AttributeConsumingServiceController {
 				reqAttr.errors.each {
 					log.warn it
 				}
-				render message(code: 'fedreg.attributeconsumingservice.requestedattribute.add.failed')
+				render message(code: 'domains.fr.foundation.attributeconsumingservice.requestedattribute.add.failed')
 				response.setStatus(500)
 				return
 			}
@@ -219,7 +219,7 @@ class AttributeConsumingServiceController {
 				throw new ErronousStateException("Unable to execute workflow when creating ${reqAttr}")
 		
 			log.info "$subject added ${reqAttr} referencing ${attr} to ${acs} and ${acs.descriptor}"
-			render message(code: 'fedreg.attributeconsumingservice.requestedattribute.add.success')
+			render message(code: 'domains.fr.foundation.attributeconsumingservice.requestedattribute.add.success')
 		} else {
 			log.warn("Attempt to add a requested attribute by $subject was denied, incorrect permission set")
 			response.sendError(403)
@@ -229,14 +229,14 @@ class AttributeConsumingServiceController {
 	def updateRequestedAttribute = {
 		if(!params.id) {
 			log.warn "Requested attribute ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			response.setStatus(500)
 			return
 		}
 		
 		if(!params.reasoning) {
 			log.warn "Reason for requesting attribute was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			response.setStatus(500)
 			return
 		}
@@ -244,7 +244,7 @@ class AttributeConsumingServiceController {
 		def ra = RequestedAttribute.get(params.id)
 		if(!ra) {
 			log.warn "Requested Attribute identified by id ${params.id} was not located"
-			render message(code: 'fedreg.attributeconsumingservice.nonexistant', args: [params.id])
+			render message(code: 'domains.fr.foundation.attributeconsumingservice.nonexistant', args: [params.id])
 			response.setStatus(500)
 			return
 		}
@@ -257,13 +257,13 @@ class AttributeConsumingServiceController {
 				ra.errors.each {
 					log.warn it
 				}
-				render message(code: 'fedreg.attributeconsumingservice.requestedattribute.update.failed')
+				render message(code: 'domains.fr.foundation.attributeconsumingservice.requestedattribute.update.failed')
 				response.setStatus(500)
 				return
 			}
 		
 			log.info "$subject updated ${ra} referencing ${ra.base}"
-			render message(code: 'fedreg.attributeconsumingservice.requestedattribute.update.success')
+			render message(code: 'domains.fr.foundation.attributeconsumingservice.requestedattribute.update.success')
 		} else {
 			log.warn("Attempt to update a requested attribute by $subject was denied, incorrect permission set")
 			response.sendError(403)
@@ -273,7 +273,7 @@ class AttributeConsumingServiceController {
 	def removeRequestedAttribute = {
 		if(!params.raid) {
 			log.warn "Requested attribute ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			response.setStatus(500)
 			return
 		}
@@ -281,7 +281,7 @@ class AttributeConsumingServiceController {
 		def requestedAttribute = RequestedAttribute.get(params.raid)
 		if(!requestedAttribute) {
 			log.warn "Requested attribute identified by id ${params.raid} was not located"
-			render message(code: 'fedreg.attributeconsumingservice.nonexistant', args: [params.id])
+			render message(code: 'domains.fr.foundation.attributeconsumingservice.nonexistant', args: [params.id])
 			response.setStatus(500)
 			return
 		}
@@ -294,14 +294,14 @@ class AttributeConsumingServiceController {
 			if(acs.hasErrors()) {
 				acs.errors.each {log.debug it}
 				log.warn "Attempt to save ${acs} after trying to remove ${requestedAttribute} failed"
-				render message(code: 'fedreg.attributeconsumingservice.requestedattribute.remove.failed')
+				render message(code: 'domains.fr.foundation.attributeconsumingservice.requestedattribute.remove.failed')
 				response.setStatus(500)
 				return
 			}
 			requestedAttribute.delete()
 		
 			log.info "$subject removed ${requestedAttribute} referencing ${requestedAttribute.base} from ${acs} and ${acs.descriptor}"
-			render message(code: 'fedreg.attributeconsumingservice.requestedattribute.remove.success')
+			render message(code: 'domains.fr.foundation.attributeconsumingservice.requestedattribute.remove.success')
 		} else {
 			log.warn("Attempt to remove a requested attribute by $subject was denied, incorrect permission set")
 			response.sendError(403)

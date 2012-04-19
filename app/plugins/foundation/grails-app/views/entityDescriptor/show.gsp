@@ -2,15 +2,15 @@
 <html>
   <head>
     <meta name="layout" content="members" />
-    <title><g:message code="fedreg.view.members.entity.show.title" /></title>    
+    <title><g:message code="views.fr.foundation.entity.show.title" /></title>    
   </head>
   <body>
       
-    <h2><g:message code="fedreg.view.members.entity.show.heading" args="[entity.entityID]"/></h2>
+    <h2><g:message code="views.fr.foundation.entity.show.heading" args="[entity.entityID]"/></h2>
 
     <g:if test="${!entity.functioning()}">
       <p class="alert alert-message alert-danger">
-        <g:message code="fedreg.view.members.entity.show.notfunctioning"/>
+        <g:message code="views.fr.foundation.entity.show.notfunctioning"/>
       </p>
     </g:if>
 

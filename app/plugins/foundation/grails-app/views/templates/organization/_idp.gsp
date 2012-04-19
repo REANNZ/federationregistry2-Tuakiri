@@ -30,5 +30,5 @@
   </table>
 </g:if>
 <g:else>
-  <p><g:message code="fedreg.view.members.organization.no.identityproviders" /></p>
+  <p><g:message code="views.fr.foundation.organization.no.identityproviders" /></p>
 </g:else>

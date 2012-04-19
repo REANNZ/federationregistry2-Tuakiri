@@ -16,9 +16,9 @@
       </div>
 
       <div id="newattribute${acs.id}" class="revealable">
-        <h3><g:message code="fedreg.templates.acs.reqattributes.add.heading"/></h3>
+        <h3><g:message code="template.fr.acs.reqattributes.add.heading"/></h3>
         <p>
-          <g:message code="fedreg.templates.acs.reqattributes.add.details"/>
+          <g:message code="template.fr.acs.reqattributes.add.details"/>
         </p>
         <form id="newattributedata${acs.id}" class="form-horizontal validating">
           <fieldset>
@@ -33,7 +33,7 @@
               <label for="reasoning"><g:message code="label.reason"/></label>
               <div class="controls">
                 <input name="reasoning" type="text" class="required span4"/>
-                <fr:tooltip code='fedreg.help.acs.reason' />
+                <fr:tooltip code='help.fr.acs.reason' />
               </div>
             </div>
 
@@ -41,7 +41,7 @@
               <label for="isrequired"><g:message code="label.required"/></label>
               <div class="controls">
                 <g:checkBox name="isrequired" />
-                <fr:tooltip code='fedreg.help.acs.isrequired' />
+                <fr:tooltip code='help.fr.acs.isrequired' />
               </div>
             </div>
 
@@ -59,10 +59,10 @@
 <div id="delete-ra-modal" class="modal hide fade">
   <div class="modal-header">
     <a class="close close-modal">&times;</a>
-    <h3><g:message code="fedreg.templates.acs.reqattributes.remove.confirm.title"/></h3>
+    <h3><g:message code="template.fr.acs.reqattributes.remove.confirm.title"/></h3>
   </div>
   <div class="modal-body">
-    <p><g:message code="fedreg.templates.acs.reqattributes.remove.confirm.descriptive"/></p>
+    <p><g:message code="template.fr.acs.reqattributes.remove.confirm.descriptive"/></p>
   </div>
   <div class="modal-footer">
     <a class="close-modal btn"><g:message code="label.cancel" /></a>
@@ -73,10 +73,10 @@
 <div id="delete-ra-value-modal" class="modal hide fade">
   <div class="modal-header">
     <a class="close close-modal">&times;</a>
-    <h3><g:message code="fedreg.templates.acs.reqattributes.remove.value.confirm.title"/></h3>
+    <h3><g:message code="template.fr.acs.reqattributes.remove.value.confirm.title"/></h3>
   </div>
   <div class="modal-body">
-    <p><g:message code="fedreg.templates.acs.reqattributes.remove.value.confirm.descriptive"/></p>
+    <p><g:message code="template.fr.acs.reqattributes.remove.value.confirm.descriptive"/></p>
   </div>
   <div class="modal-footer">
     <a class="close-modal btn"><g:message code="label.cancel" /></a>

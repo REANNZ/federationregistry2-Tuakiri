@@ -26,7 +26,7 @@ class EntityDescriptorController {
     if(!params.id) {
       log.warn "EntityDescriptor ID was not present"
       flash.type="error"
-      flash.message = message(code: 'fedreg.controllers.namevalue.missing')
+      flash.message = message(code: 'controllers.fr.generic.namevalue.missing')
       redirect(action: "list")
       return
     }
@@ -69,7 +69,7 @@ class EntityDescriptorController {
     if(!params.id) {
       log.warn "EntityDescriptor ID was not present"
       flash.type="error"
-      flash.message = message(code: 'fedreg.controllers.namevalue.missing')
+      flash.message = message(code: 'controllers.fr.generic.namevalue.missing')
       redirect(action: "list")
       return
     }
@@ -109,7 +109,7 @@ class EntityDescriptorController {
     if(!params.id) {
       log.warn "EntityDescriptor ID was not present"
       flash.type="error"
-      flash.message = message(code: 'fedreg.controllers.namevalue.missing')
+      flash.message = message(code: 'controllers.fr.generic.namevalue.missing')
       redirect(action: "list")
       return
     }
@@ -124,7 +124,7 @@ class EntityDescriptorController {
     
     if(!(entityDescriptor.holdsIDPOnly() || entityDescriptor.holdsSPOnly())) {
       flash.type="error"
-      flash.message = message(code: 'fedreg.templates.entitydescriptor.nonstandard')
+      flash.message = message(code: 'template.fr.entitydescriptor.nonstandard')
       redirect(action: "show", id:entityDescriptor.id)
       return
     }
@@ -134,7 +134,7 @@ class EntityDescriptorController {
       log.info "$subject archived $entityDescriptor"
 
       flash.type="success"
-      flash.message = message(code: 'fedreg.templates.entitydescriptor.archived')
+      flash.message = message(code: 'template.fr.entitydescriptor.archived')
       log.info "$subject archived $entityDescriptor"
       
       redirect (action: "show", id: entityDescriptor.id)
@@ -149,7 +149,7 @@ class EntityDescriptorController {
     if(!params.id) {
       log.warn "EntityDescriptor ID was not present"
       flash.type="error"
-      flash.message = message(code: 'fedreg.controllers.namevalue.missing')
+      flash.message = message(code: 'controllers.fr.generic.namevalue.missing')
       redirect(action: "list") 
       return
     }
@@ -164,7 +164,7 @@ class EntityDescriptorController {
     
     if(!(entityDescriptor.holdsIDPOnly() || entityDescriptor.holdsSPOnly())) {
       flash.type="error"
-      flash.message = message(code: 'fedreg.templates.entitydescriptor.nonstandard')
+      flash.message = message(code: 'template.fr.entitydescriptor.nonstandard')
       redirect(action: "show", id:entityDescriptor.id)
       return
     }
@@ -174,7 +174,7 @@ class EntityDescriptorController {
       log.info "$subject unarchive $entityDescriptor"
 
       flash.type="success"
-      flash.message = message(code: 'fedreg.templates.entitydescriptor.unarchived')
+      flash.message = message(code: 'template.fr.entitydescriptor.unarchived')
       log.info "$subject unarchived $entityDescriptor"
       
       redirect (action: "show", id: entityDescriptor.id)
@@ -189,7 +189,7 @@ class EntityDescriptorController {
     if(!params.id) {
       log.warn "EntityDescriptor ID was not present"
       flash.type="error"
-      flash.message = message(code: 'fedreg.controllers.namevalue.missing')
+      flash.message = message(code: 'controllers.fr.generic.namevalue.missing')
       redirect(action: "list")
       return
     }
@@ -207,7 +207,7 @@ class EntityDescriptorController {
       log.info "$subject deleted $entityDescriptor"
 
       flash.type="success"
-      flash.message = message(code: 'fedreg.templates.entitydescriptor.deleted')
+      flash.message = message(code: 'template.fr.entitydescriptor.deleted')
       log.info "$subject deleted $entityDescriptor"
       
       redirect (action: "list")
@@ -222,7 +222,7 @@ class EntityDescriptorController {
     if(!params.id) {
       log.warn "EntityDescriptor ID was not present"
       flash.type="error"
-      flash.message = message(code: 'fedreg.controllers.namevalue.missing')
+      flash.message = message(code: 'controllers.fr.generic.namevalue.missing')
       redirect(action: "list")
       return
     }
@@ -238,7 +238,7 @@ class EntityDescriptorController {
     if(!params.newOrgId) {
       log.warn "New Organization ID was not present"
       flash.type="error"
-      flash.message = message(code: 'fedreg.controllers.namevalue.missing')
+      flash.message = message(code: 'controllers.fr.generic.namevalue.missing')
       redirect (action: "show", id: entityDescriptor.id)
       return
     }
@@ -256,7 +256,7 @@ class EntityDescriptorController {
       log.info "$subject migrated $entityDescriptor to $organization"
 
       flash.type="success"
-      flash.message = message(code: 'fedreg.templates.entitydescriptor.migrated')
+      flash.message = message(code: 'template.fr.entitydescriptor.migrated')
       log.info "$subject migrated $entityDescriptor to $organization"
       
       redirect (action: "show", id: entityDescriptor.id)

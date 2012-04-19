@@ -25,7 +25,7 @@
               <g:message code="label.yes" />
             </g:if>
             <g:else>
-              <span class="not-in-federation"><g:message code="fedreg.templates.acs.reqattributes.workflow" /></span>
+              <span class="not-in-federation"><g:message code="template.fr.acs.reqattributes.workflow" /></span>
             </g:else>
           </td>
           <td> 
@@ -55,16 +55,16 @@
         <g:message code="label.yes" />
         </g:if>
         <g:else>
-          <span class="not-in-federation"><g:message code="fedreg.templates.acs.reqattributes.workflow" /></span>
+          <span class="not-in-federation"><g:message code="template.fr.acs.reqattributes.workflow" /></span>
         </g:else>
         </td>
         <td> 
           <form class="validating">
-            <input name="ra-edit-${ra.id}-reason" type="text" class="reason-ra required" data-raid="${ra.id}" size="40" value="${ra.reasoning?.encodeAsHTML()}" rel="twipsy" data-original-title="${g.message(code:'fedreg.help.serviceprovider.attribute.reason')}"/>
+            <input name="ra-edit-${ra.id}-reason" type="text" class="reason-ra required" data-raid="${ra.id}" size="40" value="${ra.reasoning?.encodeAsHTML()}" rel="twipsy" data-original-title="${g.message(code:'help.fr.serviceprovider.attribute.reason')}"/>
           </form>
         </td>
         <td>
-          <g:checkBox name="ra-edit-${ra.id}-required" class="required-ra" data-raid="${ra.id}" checked="${ra?.isRequired}" rel="twipsy" data-original-title="${g.message(code:'fedreg.help.serviceprovider.attribute.isrequired')}" />
+          <g:checkBox name="ra-edit-${ra.id}-required" class="required-ra" data-raid="${ra.id}" checked="${ra?.isRequired}" rel="twipsy" data-original-title="${g.message(code:'help.fr.serviceprovider.attribute.isrequired')}" />
         </td>
         </tr>
         <g:if test="${specificationAttributes.contains(ra.base)}">
@@ -104,7 +104,7 @@
             <fr:hasPermission target="descriptor:${ra.attributeConsumingService.descriptor.id}:attribute:value:add">
             <div id="newspecattributeval${ra.id}" class="revealable">
               <p>
-                <g:message code="fedreg.templates.acs.specattributes.add.details"/>
+                <g:message code="template.fr.acs.specattributes.add.details"/>
               </p>
               <form id="newspecattributedata${ra.id}" class="form-horizontal validating">
                 <input type="hidden" name="id" value="${ra.id}">
@@ -113,7 +113,7 @@
                     <label for="value"><g:message code="label.value"/></label>
                     <div class="controls">
                       <input name="value" type="text" class="required" size="60"/>
-                      <fr:tooltip code='fedreg.help.acs.specvalue' />
+                      <fr:tooltip code='help.fr.acs.specvalue' />
                     </div>
                   </div>
                 </fieldset>
@@ -134,6 +134,6 @@
 </g:if>
 <g:else>
   <div class="alert alert-message alert-info">
-    <g:message code="fedreg.templates.acs.reqattributes.not.requested" />
+    <g:message code="template.fr.acs.reqattributes.not.requested" />
   </div>
 </g:else>

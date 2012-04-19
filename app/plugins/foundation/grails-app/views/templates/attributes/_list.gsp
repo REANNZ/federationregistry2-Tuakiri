@@ -29,7 +29,7 @@
   </g:if>
   <g:else>
     <div>
-      <p class="alert alert-message"><g:message code="fedreg.templates.attributes.noresults"/></p>
+      <p class="alert alert-message"><g:message code="template.fr.attributes.noresults"/></p>
     </div>
   </g:else>
 </div>

@@ -16,7 +16,7 @@ class ServiceCategoryController {
 	def json = {
 		if(!params.id) {
 			log.warn "Service Category ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			response.setStatus(500)
 			return
 		}
@@ -53,7 +53,7 @@ class ServiceCategoryController {
 	def list = {
 		if(!params.id) {
 			log.warn "SPSSODescriptor ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			response.setStatus(500)
 			return
 		}
@@ -72,13 +72,13 @@ class ServiceCategoryController {
 	def add = {
 		if(!params.id) {
 			log.warn "SPSSODescriptor ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			response.setStatus(500)
 			return
 		}
 		if(!params.categoryID) {
 			log.warn "Category ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			response.setStatus(500)
 			return
 		}
@@ -123,13 +123,13 @@ class ServiceCategoryController {
 	def remove = {
 		if(!params.id) {
 			log.warn "SPSSODescriptor ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			response.setStatus(500)
 			return
 		}
 		if(!params.categoryID) {
 			log.warn "Category ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			response.setStatus(500)
 			return
 		}

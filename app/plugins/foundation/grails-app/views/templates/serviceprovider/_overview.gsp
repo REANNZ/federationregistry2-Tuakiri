@@ -9,7 +9,7 @@
 <hr>
 
 <div id="internalstate-serviceprovider">
-  <h4><g:message code="fedreg.templates.serviceprovider.overview.internalstate" /></h4>
+  <h4><g:message code="template.fr.serviceprovider.overview.internalstate" /></h4>
   <table class="table borderless fixed">
     <tbody>
       <tr>

@@ -18,7 +18,7 @@ class ContactsController {
 	def show = {
 		if(!params.id) {
 			log.warn "Contact ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			redirect action:list
 			return
 		}
@@ -26,7 +26,7 @@ class ContactsController {
 		def contact = Contact.get(params.id)
 		if (!contact) {
 			flash.type="error"
-			flash.message = message(code: 'fedreg.contact.nonexistant', args: [params.id])
+			flash.message = message(code: 'domains.fr.foundation.contact.nonexistant', args: [params.id])
 			redirect(action: "list")
 			return
 		}
@@ -78,14 +78,14 @@ class ContactsController {
 				log.warn it
 			}
 			flash.type = "error"
-		    flash.message = message(code: 'fedreg.contact.create.error')
+		    flash.message = message(code: 'domains.fr.foundation.contact.create.error')
 			def organizations = Organization.list()
 			render view: "create", model: [contact: contact, organizations:organizations]
 			return
 		}
 
 		flash.type = "success"
-	    flash.message = message(code: 'fedreg.contact.create.success')
+	    flash.message = message(code: 'domains.fr.foundation.contact.create.success')
 		log.info "$subject created $contact"
 		redirect action: "show", id: contact.id
 	}
@@ -93,7 +93,7 @@ class ContactsController {
 	def edit = {
 		if(!params.id) {
 			log.warn "Contact ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			redirect action:list
 			return
 		}
@@ -101,7 +101,7 @@ class ContactsController {
 		def contact = Contact.get(params.id)
 		if (!contact) {
 			flash.type="error"
-			flash.message = message(code: 'fedreg.contact.nonexistant', args: [params.id])
+			flash.message = message(code: 'domains.fr.foundation.contact.nonexistant', args: [params.id])
 			redirect(action: "list")
 			return
 		}
@@ -118,7 +118,7 @@ class ContactsController {
 	def update = {
 		if(!params.id) {
 			log.warn "Contact ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			redirect action:list
 			return
 		}
@@ -126,7 +126,7 @@ class ContactsController {
 		def contact = Contact.get(params.id)
 		if (!contact) {
 			flash.type="error"
-			flash.message = message(code: 'fedreg.contact.nonexistant', args: [params.id])
+			flash.message = message(code: 'domains.fr.foundation.contact.nonexistant', args: [params.id])
 			redirect(action: "list")
 			return
 		}
@@ -196,14 +196,14 @@ class ContactsController {
 					log.warn it
 				}
 				flash.type = "error"
-			    flash.message = message(code: 'fedreg.contact.update.error')
+			    flash.message = message(code: 'domains.fr.foundation.contact.update.error')
 				def organizations = Organization.list()
 				render view: "edit", model: [contact: contact, organizations:organizations]
 				return
 			}
 	
 			flash.type = "success"
-		    flash.message = message(code: 'fedreg.contact.update.success')
+		    flash.message = message(code: 'domains.fr.foundation.contact.update.success')
 			log.info "$subject updated $contact"
 			redirect action: "show", id: contact.id
 		} else {

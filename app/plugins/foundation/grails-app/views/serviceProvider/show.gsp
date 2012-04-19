@@ -3,14 +3,14 @@
   <head>
     <meta name="layout" content="members" />
 
-    <title><g:message code="fedreg.view.members.serviceprovider.show.title" /></title>
+    <title><g:message code="views.fr.foundation.serviceprovider.show.title" /></title>
   </head>
   <body>
-    <h2><g:message code="fedreg.view.members.serviceprovider.show.heading" args="[serviceProvider.displayName]"/></h2>
+    <h2><g:message code="views.fr.foundation.serviceprovider.show.heading" args="[serviceProvider.displayName]"/></h2>
 
     <g:if test="${!serviceProvider.functioning()}">
       <p class="alert alert-message alert-danger">
-        <g:message code="fedreg.view.members.serviceprovider.show.notfunctioning"/>
+        <g:message code="views.fr.foundation.serviceprovider.show.notfunctioning"/>
       </p>
     </g:if>
 
@@ -132,7 +132,7 @@
                   <g:if test="${serviceProvider.functioning()}">
                     <div class="row">
                     <div class="span8">
-                      <p><g:message code="fedreg.view.members.serviceprovider.show.metadata.details" /></p>
+                      <p><g:message code="views.fr.foundation.serviceprovider.show.metadata.details" /></p>
                     </div>
                     <div class="span1 offset1">
                       <a class="load-descriptor-metadata btn btn-info"><g:message code="label.load" /></a>
@@ -142,7 +142,7 @@
                   </g:if>
                   <g:else>
                     <div class="alert alert-message">
-                      <g:message code="fedreg.view.members.serviceprovider.show.metadata.unavailable.details" />
+                      <g:message code="views.fr.foundation.serviceprovider.show.metadata.unavailable.details" />
                     </div>
                   </g:else>
                 </div>

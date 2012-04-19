@@ -29,7 +29,7 @@ class OrganizationController {
     if(!params.id) {
       log.warn "Organization ID was not present"
       flash.type="error"
-      flash.message = message(code: 'fedreg.controllers.namevalue.missing')
+      flash.message = message(code: 'controllers.fr.generic.namevalue.missing')
       redirect(action: "list")
       return
     }
@@ -80,7 +80,7 @@ class OrganizationController {
     if(!params.id) {
       log.warn "Organization ID was not present"
       flash.type="error"
-      flash.message = message(code: 'fedreg.controllers.namevalue.missing')
+      flash.message = message(code: 'controllers.fr.generic.namevalue.missing')
       redirect(action: "list")
     }
     
@@ -117,7 +117,7 @@ class OrganizationController {
     if(!params.id) {
       log.warn "Organization ID was not present"
       flash.type="error"
-      flash.message = message(code: 'fedreg.controllers.namevalue.missing')
+      flash.message = message(code: 'controllers.fr.generic.namevalue.missing')
       redirect(action: "list")
     }
     
@@ -133,7 +133,7 @@ class OrganizationController {
       log.info "$subject archive $organization"
 
       flash.type="success"
-      flash.message = message(code: 'fedreg.templates.organization.archived')
+      flash.message = message(code: 'template.fr.organization.archived')
 
       redirect (action: "show", id: organization.id)
     }
@@ -147,7 +147,7 @@ class OrganizationController {
     if(!params.id) {
       log.warn "Organization ID was not present"
       flash.type="error"
-      flash.message = message(code: 'fedreg.controllers.namevalue.missing')
+      flash.message = message(code: 'controllers.fr.generic.namevalue.missing')
       redirect(action: "list")
     }
     
@@ -163,7 +163,7 @@ class OrganizationController {
       log.info "$subject unarchived $organization"
 
       flash.type="success"
-      flash.message = message(code: 'fedreg.templates.organization.unarchived')
+      flash.message = message(code: 'template.fr.organization.unarchived')
 
       redirect (action: "show", id: organization.id)
     }
@@ -177,7 +177,7 @@ class OrganizationController {
     if(!params.id) {
       log.warn "Organization ID was not present"
       flash.type="error"
-      flash.message = message(code: 'fedreg.controllers.namevalue.missing')
+      flash.message = message(code: 'controllers.fr.generic.namevalue.missing')
       redirect(action: "list")
     }
     
@@ -193,7 +193,7 @@ class OrganizationController {
 
       log.info "$subject deleted $organization"
       flash.type="success"
-      flash.message = message(code: 'fedreg.templates.organization.deleted')
+      flash.message = message(code: 'template.fr.organization.deleted')
 
       redirect (action: "list")
     }

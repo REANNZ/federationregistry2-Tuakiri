@@ -9,7 +9,7 @@
   </div>
   
   <div id="newnameidformat" class="revealable">
-    <h4><g:message code="fedreg.templates.nameidformats.add.heading"/></h4>
+    <h4><g:message code="template.fr.nameidformats.add.heading"/></h4>
     <form id="newnameidformatdata" class="form-horizontal">
       <div class="control-group">
         <label for="formatID"><g:message code="label.nameidformat"/></label>
@@ -29,10 +29,10 @@
 <div id="delete-nameid-modal" class="modal hide fade">
   <div class="modal-header">
     <a class="close close-modal">&times;</a>
-    <h3><g:message code="fedreg.templates.nameidformats.remove.confirm.title"/></h3>
+    <h3><g:message code="template.fr.nameidformats.remove.confirm.title"/></h3>
   </div>
   <div class="modal-body">
-    <p><g:message code="fedreg.templates.nameidformats.remove.confirm.descriptive"/></p>
+    <p><g:message code="template.fr.nameidformats.remove.confirm.descriptive"/></p>
   </div>
   <div class="modal-footer">
     <a class="btn close-modal"><g:message code="label.cancel" /></a>

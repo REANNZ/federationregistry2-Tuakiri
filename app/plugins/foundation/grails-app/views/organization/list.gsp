@@ -3,10 +3,10 @@
   <head>
     
     <meta name="layout" content="members" />
-    <title><g:message code="fedreg.view.members.organization.list.title" /></title>
+    <title><g:message code="views.fr.foundation.organization.list.title" /></title>
   </head>
   <body>
-    <h2><g:message code="fedreg.view.members.organization.list.heading" /></h2>
+    <h2><g:message code="views.fr.foundation.organization.list.heading" /></h2>
 
     <g:render template="/templates/flash" plugin="foundation"/>
 

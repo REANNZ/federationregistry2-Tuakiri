@@ -1,6 +1,6 @@
 <g:hasErrors>
 <div class="alert alert-message alert-danger">
-  <p><strong><g:message code="fedreg.templates.identityprovider.create.errors" /></strong></p>
+  <p><strong><g:message code="template.fr.identityprovider.create.errors" /></strong></p>
   <p>
     <g:message code="label.identifiederrors"/>
     <g:renderErrors bean="${identityProvider}" as="list" />
@@ -17,14 +17,14 @@
   <g:hiddenField name="contact.type" value="administrative" />
 
     <div id="overview">
-      <p><g:message code="fedreg.templates.identityprovider.create.overview.details" /></p>
+      <p><g:message code="template.fr.identityprovider.create.overview.details" /></p>
     </div>
 
     <hr>
 
     <div id="contact">
-      <h3>1. <g:message code="fedreg.templates.identityprovider.create.contact.heading" /></h3>
-      <p><g:message code="fedreg.templates.identityprovider.create.contact.details" /></p>
+      <h3>1. <g:message code="template.fr.identityprovider.create.contact.heading" /></h3>
+      <p><g:message code="template.fr.identityprovider.create.contact.details" /></p>
       <fieldset>
         <div class="control-group">
           <label for="contact.givenName"><g:message code="label.givenname" /></label>
@@ -67,8 +67,8 @@
     <hr>
 
     <div id="basic">
-        <h3>2. <g:message code="fedreg.templates.identityprovider.create.basicinformation.heading" /></h3>
-        <p><g:message code="fedreg.templates.identityprovider.create.basicinformation.details" /></p>
+        <h3>2. <g:message code="template.fr.identityprovider.create.basicinformation.heading" /></h3>
+        <p><g:message code="template.fr.identityprovider.create.basicinformation.details" /></p>
 
       <fieldset>
         <div class="control-group">
@@ -83,7 +83,7 @@
           <div class="controls">
             <g:hiddenField name="aa.displayName" value=""/>
             <g:textField name="idp.displayName" class="required span4" value="${identityProvider?.displayName}"/>
-            <fr:tooltip code='fedreg.help.identityprovider.displayname' />
+            <fr:tooltip code='help.fr.identityprovider.displayname' />
           </div>    
         </div>
 
@@ -92,7 +92,7 @@
           <div class="controls">
             <g:hiddenField name="aa.description" />
             <g:textArea name="idp.description"  class="required span4" rows="8" value="${identityProvider?.description}"/>
-            <fr:tooltip code='fedreg.help.identityprovider.description' />
+            <fr:tooltip code='help.fr.identityprovider.description' />
           </div>
         </div>
 
@@ -102,14 +102,14 @@
     <hr>
 
     <div id="saml">
-      <h3>3. <g:message code="fedreg.templates.identityprovider.create.saml.heading" /></h3>
+      <h3>3. <g:message code="template.fr.identityprovider.create.saml.heading" /></h3>
       <p>
-        <g:message code="fedreg.templates.identityprovider.create.saml.details" />
+        <g:message code="template.fr.identityprovider.create.saml.details" />
       </p>
 
       <div id="samlbasicmode" class="hero-unit">
-        <h3><g:message code="fedreg.templates.identityprovider.create.saml.known.heading" /></h3>
-        <p><g:message code="fedreg.templates.identityprovider.create.saml.known.descriptive" /></p>
+        <h3><g:message code="template.fr.identityprovider.create.saml.known.heading" /></h3>
+        <p><g:message code="template.fr.identityprovider.create.saml.known.descriptive" /></p>
 
         <fieldset>
           <div class="control-group">
@@ -123,7 +123,7 @@
             <label for="hostname"><g:message code="label.url" /></label>
             <div class="controls">
               <g:textField name="hostname" class="url span4" value="${hostname}"/>
-              <fr:tooltip code='fedreg.help.identityprovider.hostname' />
+              <fr:tooltip code='help.fr.identityprovider.hostname' />
             </div>
           </div>
         </fieldset>
@@ -134,15 +134,15 @@
       </div>
       
       <div id="samladvancedmode" class="hero-unit">
-        <h3><g:message code="fedreg.templates.identityprovider.create.saml.advanced.heading" /></h3>
-        <p><g:message code="fedreg.templates.identityprovider.create.saml.advanced.descriptive" /></p>
+        <h3><g:message code="template.fr.identityprovider.create.saml.advanced.heading" /></h3>
+        <p><g:message code="template.fr.identityprovider.create.saml.advanced.descriptive" /></p>
 
         <fieldset>
           <div class="control-group">
             <label for="entity.identifier"><g:message code="label.entityid" /></label>
             <div class="controls">
               <g:textField name="entity.identifier" size="64" class="required url span4" value="${entityDescriptor?.entityID}"/>
-              <fr:tooltip code='fedreg.help.identityprovider.entitydescriptor' />
+              <fr:tooltip code='help.fr.identityprovider.entitydescriptor' />
             </div>
           </div>
         </fieldset>
@@ -152,7 +152,7 @@
             <label for="idp.post"><g:message code="label.httppostendpoint" /></label>
             <div class="controls">
               <g:textField name="idp.post" size="64" class="required url span4" value="${httpPost?.location}"/>
-              <fr:tooltip code='fedreg.help.identityprovider.authpost' />
+              <fr:tooltip code='help.fr.identityprovider.authpost' />
               <br><span class="binding"><strong><g:message code="label.binding" /></strong>: SAML:2.0:bindings:HTTP-POST</span>
             </div>
           </div>
@@ -161,7 +161,7 @@
             <label for="idp.redirect"><g:message code="label.httpredirectendpoint" /></label>
             <div class="controls">
               <g:textField name="idp.redirect" size="64" class="required url span4" value="${httpRedirect?.location}"/>
-              <fr:tooltip code='fedreg.help.identityprovider.authredirect' />
+              <fr:tooltip code='help.fr.identityprovider.authredirect' />
               <br><span class="binding"><strong><g:message code="label.binding" /></strong>: SAML:2.0:bindings:HTTP-Redirect</span>
             </div>
           </div>
@@ -175,7 +175,7 @@
 
               <span class="index">Index:</span>
               <g:textField name="idp.artifact-index" size="2" class="required number index span1" value="${soapArtifact?.index}"/>
-              <fr:tooltip code='fedreg.help.identityprovider.authartifact' />
+              <fr:tooltip code='help.fr.identityprovider.authartifact' />
               <br><span class="binding"><strong><g:message code="label.binding" /></strong>: SAML:2.0:bindings:HTTP-Artifact</span>
             </div>
           </div>
@@ -187,7 +187,7 @@
             
             <div class="controls">
               <g:textField name="aa.attributeservice" size="64" class="required url span4" value="${soapAttributeService?.location}"/>
-              <fr:tooltip code='fedreg.help.identityprovider.aasoap' />
+              <fr:tooltip code='help.fr.identityprovider.aasoap' />
               <br><span class="binding"><strong><g:message code="label.binding" /></strong>: SAML:2.0:bindings:SOAP</span>
             </div>
           </div>
@@ -198,16 +198,16 @@
     <hr>
 
     <div id="scope">
-      <h3>4. <g:message code="fedreg.templates.identityprovider.create.scope.heading" /></h3>
-      <p><g:message code="fedreg.templates.identityprovider.create.scope.details" /></p>
-      <p><g:message code="fedreg.templates.identityprovider.create.scope.example" /></p>
+      <h3>4. <g:message code="template.fr.identityprovider.create.scope.heading" /></h3>
+      <p><g:message code="template.fr.identityprovider.create.scope.details" /></p>
+      <p><g:message code="template.fr.identityprovider.create.scope.example" /></p>
 
       <fieldset>
         <div class="control-group">
             <label for="scope"><g:message code="label.scope" /></label>
             <div class="controls">
               <g:textField name="idp.scope" class="required span4" value="${scope}"/>
-              <fr:tooltip code='fedreg.help.identityprovider.scope' />
+              <fr:tooltip code='help.fr.identityprovider.scope' />
             </div>
         </div>
       </fieldset>
@@ -216,8 +216,8 @@
     <hr>
 
     <div id="crypto">
-      <h3>5. <g:message code="fedreg.templates.identityprovider.create.crypto.heading" /></h3>
-      <p><g:message code="fedreg.templates.identityprovider.create.crypto.details" /></p>
+      <h3>5. <g:message code="template.fr.identityprovider.create.crypto.heading" /></h3>
+      <p><g:message code="template.fr.identityprovider.create.crypto.details" /></p>
 
       <fieldset>
         <div class="control-group">
@@ -227,7 +227,7 @@
               </div>
               <g:hiddenField name="idp.crypto.sig" value="${true}" />
               <g:textArea name="cert" id="cert" class="cert required" rows="25" cols="60" value="${certificate}"/>
-              <fr:tooltip code='fedreg.help.identityprovider.certificate' />
+              <fr:tooltip code='help.fr.identityprovider.certificate' />
             </div>
       </fieldset>
     </div>
@@ -235,8 +235,8 @@
     <hr>
 
     <div id="attributesupport">
-      <h3>6. <g:message code="fedreg.templates.identityprovider.create.attributesupport.heading" /></h3>
-      <p><g:message code="fedreg.templates.identityprovider.create.attributesupport.details" /></p>
+      <h3>6. <g:message code="template.fr.identityprovider.create.attributesupport.heading" /></h3>
+      <p><g:message code="template.fr.identityprovider.create.attributesupport.details" /></p>
       <table class="table table-striped borderless">
         <tr>
           <th class="span9"><g:message code="label.name" /></th>
@@ -264,8 +264,8 @@
     <hr>
 
     <div id="creationsummary">
-      <h3>7. <g:message code="fedreg.templates.identityprovider.create.summary.heading" /></h3>
-      <p><g:message code="fedreg.templates.identityprovider.create.summary.details" /></p>
+      <h3>7. <g:message code="template.fr.identityprovider.create.summary.heading" /></h3>
+      <p><g:message code="template.fr.identityprovider.create.summary.details" /></p>
 
       <div class="form-action">
         <button type="submit" name="submit" value="submit" class="btn btn-success btn-large"><g:message code="label.submit"/></button>

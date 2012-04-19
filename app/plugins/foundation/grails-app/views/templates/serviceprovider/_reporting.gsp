@@ -28,7 +28,7 @@
         <div class="span11">
           <div class="span11 spinner centered"><r:img dir="images" file="spinner.gif"/></div>
           <div id="detailedspsessionschart">
-            <div class="span9 generate-notice offset1 alert alert-info"><g:message code="fedreg.views.reporting.clickgenerate"/></div>
+            <div class="span9 generate-notice offset1 alert alert-info"><g:message code="label.generate"/></div>
           </div>
         </div>
       </div>
@@ -54,7 +54,7 @@
         <div class="span11">
           <div class="span11 spinner centered"><r:img dir="images" file="spinner.gif"/></div>
           <div id="detailedsptoidputilization">
-            <div class="span9 generate-notice offset1 alert alert-info"><g:message code="fedreg.views.reporting.clickgenerate"/></div>
+            <div class="span9 generate-notice offset1 alert alert-info"><g:message code="label.generate"/></div>
           </div>
         </div>
       </div>
@@ -109,7 +109,7 @@
         <div class="span11">
           <div class="span11 spinner centered"><r:img dir="images" file="spinner.gif"/></div>
           <div id="spdemanddetailed">
-            <div class="span9 generate-notice offset1 alert alert-info"><g:message code="fedreg.views.reporting.clickgenerate"/></div>
+            <div class="span9 generate-notice offset1 alert alert-info"><g:message code="label.generate"/></div>
           </div>
         </div>
       </div>
@@ -133,7 +133,7 @@
       <div class="row">
         <div class="span11">
           <div class="span11 spinner centered"><r:img dir="images" file="spinner.gif"/></div>
-          <div class="span9 generate-notice offset1 alert alert-info"><g:message code="fedreg.views.reporting.clickgenerate"/></div>
+          <div class="span9 generate-notice offset1 alert alert-info"><g:message code="label.generate"/></div>
           <div id="spconnectivity" class="span11 centered"></div>
           <div id="noconnectivity" class="hidden alert alert-error">No report data available.</div>
         </div>

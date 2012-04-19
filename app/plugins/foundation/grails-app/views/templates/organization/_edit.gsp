@@ -9,7 +9,7 @@
           <g:radioGroup name="organization.active" values="['true', 'false']" labels="['label.active', 'label.inactive']" value="${organization.active}">
              ${it.radio} <g:message code="${it.label}" />
           </g:radioGroup>
-          <fr:tooltip code='fedreg.help.organization.status' />
+          <fr:tooltip code='help.fr.organization.status' />
         </div>
       </div>
 
@@ -17,7 +17,7 @@
         <label for="organization.name"><g:message code="label.name" /></label>
         <div class="controls">
           <g:textField name="organization.name"  value="${organization.name}" class="required span4" minlength="4" maxlength="255"/>
-          <fr:tooltip code='fedreg.help.organization.name' />
+          <fr:tooltip code='help.fr.organization.name' />
         </div>
       </div>
 
@@ -25,7 +25,7 @@
         <label for="organization.displayName"><g:message code="label.displayname" /></label>
         <div class="controls">
           <g:textField name="organization.displayName"  value="${organization.displayName}" class="required span4" minlength="4" maxlength="255" />
-          <fr:tooltip code='fedreg.help.organization.displayName' />
+          <fr:tooltip code='help.fr.organization.displayName' />
         </div>
       </div>
 
@@ -33,7 +33,7 @@
         <label for="organization.url"><g:message code="label.url" /></label>
         <div class="controls">
           <g:textField name="organization.url"  class="required url span4" minlength="4" maxlength="255" value="${organization.url}"/>
-          <fr:tooltip code='fedreg.help.organization.url' />
+          <fr:tooltip code='help.fr.organization.url' />
         </div>
       </div>
 
@@ -41,7 +41,7 @@
         <label for="organization.primary"><g:message code="label.organizationtype" /></label>
         <div class="controls">
           <g:select name="organization.primary" from="${organizationTypes}" optionKey="id" optionValue="displayName" value="${organization.primary.id}"/>
-          <fr:tooltip code='fedreg.help.organization.edit.type' />
+          <fr:tooltip code='help.fr.organization.edit.type' />
         </div>
       </div>
 
@@ -70,10 +70,10 @@
 <div id="unarchive-organization-modal" class="modal hide fade">
   <div class="modal-header">
     <a class="close close-modal">&times;</a>
-    <h3><g:message code="fedreg.templates.organization.unarchive.confirm.title"/></h3>
+    <h3><g:message code="template.fr.organization.unarchive.confirm.title"/></h3>
   </div>
   <div class="modal-body">
-    <p><g:message code="fedreg.templates.organization.unarchive.confirm.descriptive"/></p>
+    <p><g:message code="template.fr.organization.unarchive.confirm.descriptive"/></p>
   </div>
   <div class="modal-footer">
     <a class="btn close-modal"><g:message code="label.cancel" /></a>
@@ -88,10 +88,10 @@
 <div id="archive-organization-modal" class="modal hide fade">
   <div class="modal-header">
     <a class="close close-modal">&times;</a>
-    <h3><g:message code="fedreg.templates.organization.archive.confirm.title"/></h3>
+    <h3><g:message code="template.fr.organization.archive.confirm.title"/></h3>
   </div>
   <div class="modal-body">
-    <p><g:message code="fedreg.templates.organization.archive.confirm.descriptive"/></p>
+    <p><g:message code="template.fr.organization.archive.confirm.descriptive"/></p>
   </div>
   <div class="modal-footer">
     <a class="btn close-modal"><g:message code="label.cancel" /></a>
@@ -106,10 +106,10 @@
 <div id="delete-organization-modal" class="modal hide fade">
   <div class="modal-header">
     <a class="close close-modal">&times;</a>
-    <h3><g:message code="fedreg.templates.organization.delete.confirm.title"/></h3>
+    <h3><g:message code="template.fr.organization.delete.confirm.title"/></h3>
   </div>
   <div class="modal-body">
-    <p><g:message code="fedreg.templates.organization.delete.confirm.descriptive"/></p>
+    <p><g:message code="template.fr.organization.delete.confirm.descriptive"/></p>
   </div>
   <div class="modal-footer">
     <a class="btn close-modal"><g:message code="label.cancel" /></a>

@@ -9,7 +9,7 @@
   </div>
 
   <div id="new-${endpointType}" class="revealable">
-    <h4><g:message code="fedreg.templates.endpoints.add.heading"/></h4>
+    <h4><g:message code="template.fr.endpoints.add.heading"/></h4>
     <form id="new${endpointType}data" class="form-horizontal validating">
       <fieldset>
         <input type="hidden"
@@ -19,7 +19,7 @@
           <label for="binding"><g:message code="label.binding"/></label>
           <div class="controls">
             <g:select name="binding" from="${SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding)}" optionKey="id" optionValue="uri" class="span4"/>
-            <fr:tooltip code='fedreg.help.endpoint.binding' />
+            <fr:tooltip code='help.fr.endpoint.binding' />
           </div>
         </div>
 
@@ -27,7 +27,7 @@
           <label for="location"><g:message code="label.location"/></label>
           <div class="controls">
             <input name="location" type="text" class="required url span4"/>
-            <fr:tooltip code='fedreg.help.endpoint.location' />
+            <fr:tooltip code='help.fr.endpoint.location' />
           </div>
         </div>
 
@@ -45,7 +45,7 @@
             <label for="index"><g:message code="label.index" /></label>
             <div class="controls">
               <input name="samlindex" type="text" class="required number span1" />
-              <fr:tooltip code='fedreg.help.endpoint.index' />
+              <fr:tooltip code='help.fr.endpoint.index' />
             </div>
           </div>
         </g:if>
@@ -54,7 +54,7 @@
           <label for="active"><g:message code="label.active"/></label>
           <div class="controls">
             <g:checkBox name="active" value="true" />
-            <fr:tooltip code='fedreg.help.endpoint.active' />
+            <fr:tooltip code='help.fr.endpoint.active' />
           </div>
         </div>
 

@@ -26,7 +26,7 @@ class IdentityProviderController {
     if(!params.id) {
       log.warn "IDPSSODescriptor ID was not present"
       flash.type="error"
-      flash.message = message(code: 'fedreg.controllers.namevalue.missing')
+      flash.message = message(code: 'controllers.fr.generic.namevalue.missing')
       redirect(action: "list")
       return
     }
@@ -79,7 +79,7 @@ class IdentityProviderController {
     if(!params.id) {
       log.warn "IDPSSODescriptor ID was not present"
       flash.type="error"
-      flash.message = message(code: 'fedreg.controllers.namevalue.missing')
+      flash.message = message(code: 'controllers.fr.generic.namevalue.missing')
       redirect(action: "list")
       return
     }

@@ -9,8 +9,8 @@
   </div>
   
   <div id="newcertificate" class="revealable">
-    <h4><g:message code="fedreg.templates.certificates.certificatemanagement.addnew.heading"/></h4>
-    <p><g:message code="fedreg.templates.certificates.certificatemanagement.addnew.requestformat" /></p>
+    <h4><g:message code="template.fr.certificates.certificatemanagement.addnew.heading"/></h4>
+    <p><g:message code="template.fr.certificates.certificatemanagement.addnew.requestformat" /></p>
     
     <div id="newcertificatedetails"></div>
 
@@ -20,7 +20,7 @@
           <label for="certname"><g:message code="label.name"/></label>
           <div class="controls">
             <g:textField name="certname" size="50"/>
-            <fr:tooltip code='fedreg.help.certificate.name' />
+            <fr:tooltip code='help.fr.certificate.name' />
           </div>
         </div>
 
@@ -28,7 +28,7 @@
           <label for="cert"><g:message code="label.certificate"/></label>
           <div class="controls">
             <g:textArea name="cert" class="cert" rows="25" cols="60"/>
-            <fr:tooltip code='fedreg.help.certificate' />
+            <fr:tooltip code='help.fr.certificate' />
           </div>
         </div>
 
@@ -36,7 +36,7 @@
           <label for="signing"><g:message code="label.signing" /></label>
           <div class="controls"> 
             <g:checkBox name="signing" value="${true}" />
-            <fr:tooltip code='fedreg.help.certificate.sign' />
+            <fr:tooltip code='help.fr.certificate.sign' />
           </div>
         </div>
         <br>
@@ -44,7 +44,7 @@
           <label for="encryption"><g:message code="label.encryption" /></label>
           <div class="controls">
             <g:checkBox name="encryption" value="${descriptor.instanceOf(SPSSODescriptor)}"/>
-            <fr:tooltip code='fedreg.help.certificate.enc' />
+            <fr:tooltip code='help.fr.certificate.enc' />
           </div>
         </div>
 
@@ -60,10 +60,10 @@
 <div id="delete-certificate-modal" class="modal hide fade">
   <div class="modal-header">
     <a class="close close-modal">&times;</a>
-    <h3><g:message code="fedreg.templates.certificates.remove.confirm.title"/></h3>
+    <h3><g:message code="template.fr.certificates.remove.confirm.title"/></h3>
   </div>
   <div class="modal-body">
-    <p><g:message code="fedreg.templates.certificates.remove.confirm.descriptive"/></p>
+    <p><g:message code="template.fr.certificates.remove.confirm.descriptive"/></p>
   </div>
   <div class="modal-footer">
     <a class="btn close-modal"><g:message code="label.cancel" /></a>

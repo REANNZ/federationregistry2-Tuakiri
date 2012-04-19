@@ -13,14 +13,14 @@ class DescriptorNameIDFormatController {
 	def remove = {
 		if(!params.id) {
 			log.warn "Descriptor ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			response.setStatus(500)
 			return
 		}
 		
 		if(!params.formatID) {
 			log.warn "NameIDFormat ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			response.setStatus(500)
 			return
 		}
@@ -28,7 +28,7 @@ class DescriptorNameIDFormatController {
 		def descriptor = RoleDescriptor.get(params.id)
 		if(!descriptor) {
 			log.warn "RoleDescriptor identified by id $params.id was not located"
-			render message(code: 'fedreg.roledescriptor.nonexistant', args: [params.id])
+			render message(code: 'domains.fr.foundation.roledescriptor.nonexistant', args: [params.id])
 			response.setStatus(500)
 			return
 		}
@@ -37,7 +37,7 @@ class DescriptorNameIDFormatController {
 			def nameIDFormat = SamlURI.get(params.formatID)
 			if(!nameIDFormat) {
 				log.warn "NameIDFormat identified by id $params.formatID was not located"
-				render message(code: 'fedreg.nameidformat.nonexistant', args: [params.formatID])
+				render message(code: 'domains.fr.foundation.nameidformat.nonexistant', args: [params.formatID])
 				response.setStatus(500)
 				return
 			}
@@ -45,7 +45,7 @@ class DescriptorNameIDFormatController {
 			if(!descriptor.nameIDFormats.contains(nameIDFormat)) {
 				log.warn "NameIDFormat identified by id $params.formatID was already supported by descriptor ${params.id}"
 				response.setStatus(500)
-				render message(code: 'fedreg.nameidformat.remove.notsupported', args:[nameIDFormat])
+				render message(code: 'domains.fr.foundation.nameidformat.remove.notsupported', args:[nameIDFormat])
 				return
 			}
 			
@@ -56,12 +56,12 @@ class DescriptorNameIDFormatController {
 				descriptor.errors.each {
 					log.debug it
 				}
-				render message(code: 'fedreg.nameidformat.remove.failed', args:[nameIDFormat])
+				render message(code: 'domains.fr.foundation.nameidformat.remove.failed', args:[nameIDFormat])
 				response.setStatus(500)
 				return
 			} else {
 				log.info "$subject removed $nameIDFormat from $descriptor"
-				render message(code: 'fedreg.nameidformat.remove.success', args:[nameIDFormat])
+				render message(code: 'domains.fr.foundation.nameidformat.remove.success', args:[nameIDFormat])
 			}
 		}
 		else {
@@ -73,7 +73,7 @@ class DescriptorNameIDFormatController {
 	def list = {
 		if(!params.id) {
 			log.warn "Descriptor ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			response.setStatus(500)
 			return
 		}
@@ -81,7 +81,7 @@ class DescriptorNameIDFormatController {
 		def descriptor = RoleDescriptor.get(params.id)
 		if(!descriptor) {
 			log.warn "RoleDescriptor identified by id $params.id was not located"
-			render message(code: 'fedreg.roledescriptor.nonexistant', args: [params.id])
+			render message(code: 'domains.fr.foundation.roledescriptor.nonexistant', args: [params.id])
 			response.setStatus(500)
 			return
 		}
@@ -92,14 +92,14 @@ class DescriptorNameIDFormatController {
 	def add = {
 		if(!params.id) {
 			log.warn "Descriptor ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			response.setStatus(500)
 			return
 		}
 		
 		if(!params.formatID) {
 			log.warn "NameIDFormat ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			response.setStatus(500)
 			return
 		}
@@ -107,7 +107,7 @@ class DescriptorNameIDFormatController {
 		def descriptor = RoleDescriptor.get(params.id)
 		if(!descriptor) {
 			log.warn "RoleDescriptor identified by id $params.id was not located"
-			render message(code: 'fedreg.roledescriptor.nonexistant', args: [params.id])
+			render message(code: 'domains.fr.foundation.roledescriptor.nonexistant', args: [params.id])
 			response.setStatus(500)
 			return
 		}
@@ -116,7 +116,7 @@ class DescriptorNameIDFormatController {
 			def nameIDFormat = SamlURI.get(params.formatID)
 			if(!nameIDFormat) {
 				log.warn "NameIDFormat identified by id $params.formatID was not located"
-				render message(code: 'fedreg.nameidformat.nonexistant', args: [params.formatID])
+				render message(code: 'domains.fr.foundation.nameidformat.nonexistant', args: [params.formatID])
 				response.setStatus(500)
 				return
 			}
@@ -124,7 +124,7 @@ class DescriptorNameIDFormatController {
 			if(descriptor.nameIDFormats?.contains(nameIDFormat)) {
 				log.warn "NameIDFormat identified by id $params.formatID was already supported by descriptor ${params.id}"
 				response.setStatus(500)
-				render message(code: 'fedreg.nameidformat.add.alreadysupported', args:[nameIDFormat])
+				render message(code: 'domains.fr.foundation.nameidformat.add.alreadysupported', args:[nameIDFormat])
 				return
 			}
 		
@@ -135,12 +135,12 @@ class DescriptorNameIDFormatController {
 				descriptor.errors.each {
 					log.error it
 				}
-				render message(code: 'fedreg.nameidformat.add.failed', args:[nameIDFormat])
+				render message(code: 'domains.fr.foundation.nameidformat.add.failed', args:[nameIDFormat])
 				response.setStatus(500)
 				return
 			} else {
 				log.warn "Added nameIDFormat $nameIDFormat to $descriptor"
-				render message(code: 'fedreg.nameidformat.add.success', args:[nameIDFormat])
+				render message(code: 'domains.fr.foundation.nameidformat.add.success', args:[nameIDFormat])
 			}
 		}
 		else {

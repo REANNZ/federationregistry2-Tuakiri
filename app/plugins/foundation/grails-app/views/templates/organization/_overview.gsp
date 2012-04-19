@@ -18,7 +18,7 @@
 <hr>
 
 <div id="internalstate-organization">
-  <h4><g:message code="fedreg.templates.organization.overview.internalstate" /></h4>
+  <h4><g:message code="template.fr.organization.overview.internalstate" /></h4>
   <table class="table borderless fixed">
     <tbody>
       <tr>

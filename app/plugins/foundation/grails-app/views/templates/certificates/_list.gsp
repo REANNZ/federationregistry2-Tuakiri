@@ -65,6 +65,6 @@
     </g:each>
   </g:if>
   <g:else>
-    <p class="alert alert-message alert-danger"><g:message code="fedreg.templates.certificates.none" /></p>
+    <p class="alert alert-message alert-danger"><g:message code="template.fr.certificates.none" /></p>
   </g:else>
 </div>

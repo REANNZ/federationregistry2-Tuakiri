@@ -8,7 +8,7 @@
           <g:radioGroup name="sp.status" values="['true', 'false']" labels="['label.active', 'label.inactive']" value="${serviceProvider.active}">
              ${it.radio} <g:message code="${it.label}" />
           </g:radioGroup>
-          <fr:tooltip code='fedreg.help.serviceprovider.status' />
+          <fr:tooltip code='help.fr.serviceprovider.status' />
         </div>
       </div>
 
@@ -16,7 +16,7 @@
         <label for="sp.displayName"><g:message code="label.displayname" /></label>
         <div class="controls">
           <g:textField name="sp.displayName"  value="${serviceProvider.displayName}" class="required span4" minlength="4" maxlength="255" />
-          <fr:tooltip code='fedreg.help.serviceprovider.displayname' />
+          <fr:tooltip code='help.fr.serviceprovider.displayname' />
         </div>
       </div>
       
@@ -24,7 +24,7 @@
         <label for="sp.description"><g:message code="label.description" /></label>
         <div class="controls">
           <g:textArea name="sp.description"  value="${serviceProvider.description}" class="required span4" minlength="4" rows="8" cols="36" maxlength="2000"/>
-          <fr:tooltip code='fedreg.help.serviceprovider.description' />
+          <fr:tooltip code='help.fr.serviceprovider.description' />
         </div>
       </div>
       
@@ -32,7 +32,7 @@
         <label for="sp.servicedescription.connecturl"><g:message code="label.serviceurl" /></label>
         <div class="controls">
           <g:textField name="sp.servicedescription.connecturl" value="${serviceProvider.serviceDescription.connectURL}" class="required url span4" maxlength="255"/>
-          <fr:tooltip code='fedreg.help.serviceprovider.connecturl' />
+          <fr:tooltip code='help.fr.serviceprovider.connecturl' />
         </div>
       </div>
       
@@ -40,7 +40,7 @@
         <label for="sp.servicedescription.logourl"><g:message code="label.servicelogourl" /></label>
         <div class="controls">
           <g:textField name="sp.servicedescription.logourl" value="${serviceProvider.serviceDescription.logoURL}" class="url span4" maxlength="255"/>
-          <fr:tooltip code='fedreg.help.serviceprovider.logourl' />
+          <fr:tooltip code='help.fr.serviceprovider.logourl' />
         </div>
       </div>
 

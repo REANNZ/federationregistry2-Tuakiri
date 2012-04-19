@@ -3,10 +3,10 @@
   <head>
     
     <meta name="layout" content="members" />
-    <title><g:message code="fedreg.view.members.organization.listarchived.title" /></title>
+    <title><g:message code="views.fr.foundation.organization.listarchived.title" /></title>
   </head>
   <body>
-    <h2><g:message code="fedreg.view.members.organization.listarchived.heading" /></h2>
+    <h2><g:message code="views.fr.foundation.organization.listarchived.heading" /></h2>
 
     <table class="span11 table borderless table-striped table-sortable">
       <thead>

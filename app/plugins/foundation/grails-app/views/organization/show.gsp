@@ -2,14 +2,14 @@
 <html>
   <head>
     <meta name="layout" content="members" />
-    <title><g:message code="fedreg.view.members.organization.show.title" /></title>
+    <title><g:message code="views.fr.foundation.organization.show.title" /></title>
   </head>
   <body>
-      <h2><g:message code="fedreg.view.members.organization.show.heading" args="[organization.displayName]"/></h2>
+      <h2><g:message code="views.fr.foundation.organization.show.heading" args="[organization.displayName]"/></h2>
 
       <g:if test="${!organization.functioning()}">
         <p class="alert alert-message alert-danger">
-          <g:message code="fedreg.view.members.organization.show.notfunctioning"/>
+          <g:message code="views.fr.foundation.organization.show.notfunctioning"/>
         </p>
       </g:if>
 

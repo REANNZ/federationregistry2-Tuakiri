@@ -9,7 +9,7 @@
           <g:radioGroup name="entity.active" values="['true', 'false']" labels="['label.active', 'label.inactive']" value="${entity.active}">
              ${it.radio} <g:message code="${it.label}" />
           </g:radioGroup>
-          <fr:tooltip code='fedreg.help.entity.status' />
+          <fr:tooltip code='help.fr.entity.status' />
         </div>
       </div>
     
@@ -39,7 +39,7 @@
 
 <div id="editor-entitydescriptor-migrateorg" class="revealable">
 
-  <p class="alert alert-info"><g:message code="fedreg.templates.entitydescriptor.overview.migrateorganization" /></p>
+  <p class="alert alert-info"><g:message code="template.fr.entitydescriptor.overview.migrateorganization" /></p>
 
   <g:form action="migrate" id="${entity.id}" method="PUT" class="form-horizontal validating">
     <fieldset>
@@ -72,10 +72,10 @@
 <div id="archive-entitydescriptor-modal" class="modal hide fade">
   <div class="modal-header">
     <a class="close close-modal">&times;</a>
-    <h3><g:message code="fedreg.templates.entitydescriptor.archive.confirm.title"/></h3>
+    <h3><g:message code="template.fr.entitydescriptor.archive.confirm.title"/></h3>
   </div>
   <div class="modal-body">
-    <p><g:message code="fedreg.templates.entitydescriptor.archive.confirm.descriptive"/></p>
+    <p><g:message code="template.fr.entitydescriptor.archive.confirm.descriptive"/></p>
   </div>
   <div class="modal-footer">
     <a class="btn close-modal"><g:message code="label.cancel" /></a>
@@ -90,10 +90,10 @@
 <div id="unarchive-entitydescriptor-modal" class="modal hide fade">
   <div class="modal-header">
     <a class="close close-modal">&times;</a>
-    <h3><g:message code="fedreg.templates.entitydescriptor.unarchive.confirm.title"/></h3>
+    <h3><g:message code="template.fr.entitydescriptor.unarchive.confirm.title"/></h3>
   </div>
   <div class="modal-body">
-    <p><g:message code="fedreg.templates.entitydescriptor.unarchive.confirm.descriptive"/></p>
+    <p><g:message code="template.fr.entitydescriptor.unarchive.confirm.descriptive"/></p>
   </div>
   <div class="modal-footer">
     <a class="btn close-modal"><g:message code="label.cancel" /></a>
@@ -108,10 +108,10 @@
 <div id="delete-entitydescriptor-modal" class="modal hide fade">
   <div class="modal-header">
     <a class="close close-modal">&times;</a>
-    <h3><g:message code="fedreg.templates.entitydescriptor.delete.confirm.title"/></h3>
+    <h3><g:message code="template.fr.entitydescriptor.delete.confirm.title"/></h3>
   </div>
   <div class="modal-body">
-    <p><g:message code="fedreg.templates.entitydescriptor.delete.confirm.descriptive"/></p>
+    <p><g:message code="template.fr.entitydescriptor.delete.confirm.descriptive"/></p>
   </div>
   <div class="modal-footer">
     <a class="btn close-modal"><g:message code="label.cancel" /></a>

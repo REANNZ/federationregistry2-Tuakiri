@@ -4,7 +4,7 @@
     <meta name="layout" content="members" />
   </head>
   <body>
-    <h2><g:message code="fedreg.view.members.contacts.list.heading" /></h2>
+    <h2><g:message code="views.fr.foundation.contacts.list.heading" /></h2>
 
     <table class="table table-sortable borderless">
       <thead>

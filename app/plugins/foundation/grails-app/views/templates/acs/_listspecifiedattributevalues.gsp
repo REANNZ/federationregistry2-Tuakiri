@@ -16,6 +16,6 @@
 </g:if>
 <g:else>
   <div class="alert alert-message alert-danger">
-    <g:message code="fedreg.templates.acs.specattributes.no.values.currently.requested" args="[ra.base.name, ra.base.oid]"/>
+    <g:message code="template.fr.acs.specattributes.no.values.currently.requested" args="[ra.base.name, ra.base.oid]"/>
   </div>
 </g:else>

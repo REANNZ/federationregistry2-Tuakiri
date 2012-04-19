@@ -2,15 +2,15 @@
 <html>
   <head>    
     <meta name="layout" content="members" />
-    <title><g:message code="fedreg.view.members.identityprovider.show.title" /></title>
+    <title><g:message code="views.fr.foundation.identityprovider.show.title" /></title>
   </head>
   <body>
     
-    <h2><g:message code="fedreg.view.members.identityprovider.show.heading" args="[identityProvider.displayName]"/></h2>
+    <h2><g:message code="views.fr.foundation.identityprovider.show.heading" args="[identityProvider.displayName]"/></h2>
 
     <g:if test="${!identityProvider.functioning()}">
       <p class="alert alert-message alert-danger">
-        <g:message code="fedreg.view.members.identityprovider.show.notfunctioning"/>
+        <g:message code="views.fr.foundation.identityprovider.show.notfunctioning"/>
       </p>
     </g:if>
 
@@ -119,7 +119,7 @@
                 <g:if test="${identityProvider.functioning()}">
                   <div class="row">
                     <div class="span8">
-                      <p><g:message code="fedreg.view.members.identityprovider.show.metadata.details" /></p>
+                      <p><g:message code="views.fr.foundation.identityprovider.show.metadata.details" /></p>
                     </div>
                     <div class="span1 offset1">
                       <a class="load-descriptor-metadata btn btn-info"><g:message code="label.load" /></a>
@@ -129,7 +129,7 @@
                 </g:if>
                 <g:else>
                   <div class="alert alert-message">
-                    <g:message code="fedreg.view.members.identityprovider.show.metadata.unavailable.details" />
+                    <g:message code="views.fr.foundation.identityprovider.show.metadata.unavailable.details" />
                   </div>
                 </g:else>
               </div>
@@ -137,7 +137,7 @@
               <div id="tab-attrfilpol" class="tab-pane">                        
                 <div class="row">
                   <p class="span8">
-                    <g:message code="fedreg.view.members.identityprovider.show.attributefilter.description" /></p>
+                    <g:message code="views.fr.foundation.identityprovider.show.attributefilter.description" /></p>
                   <span class="span1 offset1">
                     <a class="load-descriptor-attrfilter btn btn-info">
                       <g:message code="label.load"/>

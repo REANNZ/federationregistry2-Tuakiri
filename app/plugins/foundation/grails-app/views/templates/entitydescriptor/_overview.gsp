@@ -20,7 +20,7 @@
 <hr>
 
 <div id="internalstate-entitydescriptor">
-  <h4><g:message code="fedreg.templates.entitydescriptor.overview.internalstate" /></h4>
+  <h4><g:message code="template.fr.entitydescriptor.overview.internalstate" /></h4>
   <table class="table borderless fixed">
     <tbody>
       <tr>

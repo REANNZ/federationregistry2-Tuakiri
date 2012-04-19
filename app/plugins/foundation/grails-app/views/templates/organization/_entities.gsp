@@ -28,5 +28,5 @@
   </table>
 </g:if>
 <g:else>
-  <p><g:message code="fedreg.view.members.organization.no.entities" /></p>
+  <p><g:message code="views.fr.foundation.organization.no.entities" /></p>
 </g:else>

@@ -46,7 +46,7 @@ class BootstrapController {
 		if(!params.id) {
 			log.warn "IDPSSODescriptor ID was not present"
 			flash.type="error"
-			flash.message = message(code: 'fedreg.controllers.namevalue.missing')
+			flash.message = message(code: 'controllers.fr.generic.namevalue.missing')
 			redirect uri:"/"
 			return
 		}
@@ -95,7 +95,7 @@ class BootstrapController {
 		if(!params.id) {
 			log.warn "SPSSODescriptor ID was not present"
 			flash.type="error"
-			flash.message = message(code: 'fedreg.controllers.namevalue.missing')
+			flash.message = message(code: 'controllers.fr.generic.namevalue.missing')
 			redirect uri:"/"
 			return
 		}
@@ -134,7 +134,7 @@ class BootstrapController {
 		if(!params.id) {
 			log.warn "Organization ID was not present"
 			flash.type="error"
-			flash.message = message(code: 'fedreg.controllers.namevalue.missing')
+			flash.message = message(code: 'controllers.fr.generic.namevalue.missing')
 			redirect uri: "/"
 			return
 		}

@@ -8,7 +8,7 @@
   </div>
   
   <div id="newmonitor" class="revealable">
-    <h4><g:message code="fedreg.templates.monitor.add.heading"/></h4>
+    <h4><g:message code="template.fr.monitor.add.heading"/></h4>
     <form id="newmonitordata" class="form-horizontal">
       <fieldset>
        <g:hiddenField name="interval" value="0" />
@@ -17,7 +17,7 @@
           <label for="type"><g:message code="label.monitortype"/></label>
           <div class="controls">
             <g:select name="type" from="${MonitorType.list()}" optionKey="id" optionValue="name" class="span2"/>
-            <fr:tooltip code='fedreg.help.monitor.type' />
+            <fr:tooltip code='help.fr.monitor.type' />
           </div>
         </div>
 
@@ -25,7 +25,7 @@
           <label for="url"><g:message code="label.location"/></label>
           <div class="controls">
             <input name="url" type="text" class="required span4" />
-            <fr:tooltip code='fedreg.help.monitor.location' />
+            <fr:tooltip code='help.fr.monitor.location' />
           </div>
         </div>
 
@@ -33,7 +33,7 @@
           <label for="node"><g:message code="label.node"/></label>
           <div class="controls">
             <input name="node" type="text" class="span2" />
-            <fr:tooltip code="fedreg.help.monitor.node" />
+            <fr:tooltip code="help.fr.monitor.node" />
           </div>
         </div>
 
@@ -51,10 +51,10 @@
 <div id="delete-monitor-modal" class="modal hide fade">
   <div class="modal-header">
     <a class="close close-modal">&times;</a>
-    <h3><g:message code="fedreg.templates.monitor.delete.confirm.title"/></h3>
+    <h3><g:message code="template.fr.monitor.delete.confirm.title"/></h3>
   </div>
   <div class="modal-body">
-    <p><g:message code="fedreg.templates.monitor.delete.confirm.descriptive"/></p>
+    <p><g:message code="template.fr.monitor.delete.confirm.descriptive"/></p>
   </div>
   <div class="modal-footer">
     <a class="btn close-modal"><g:message code="label.cancel" /></a>

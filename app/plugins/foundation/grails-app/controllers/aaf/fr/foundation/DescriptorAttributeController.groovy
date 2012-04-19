@@ -13,14 +13,14 @@ class DescriptorAttributeController {
 	def remove = {
 		if(!params.id) {
 			log.warn "Descriptor ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			response.setStatus(500)
 			return
 		}
 		
 		if(!params.attrid) {
 			log.warn "Attribute ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			response.setStatus(500)
 			return
 		}
@@ -28,7 +28,7 @@ class DescriptorAttributeController {
 		def descriptor = RoleDescriptor.get(params.id)
 		if(!descriptor) {
 			log.warn "RoleDescriptor identified by id $params.id was not located"
-			render message(code: 'fedreg.attribute.nonexistant', args: [params.id])
+			render message(code: 'domains.fr.foundation.attribute.nonexistant', args: [params.id])
 			response.setStatus(500)
 			return
 		}
@@ -37,7 +37,7 @@ class DescriptorAttributeController {
 			def attribute = Attribute.get(params.attrid)
 			if(!attribute) {
 				log.warn "Attribute identified by id ${params.attrid} was not located"
-				render message(code: 'fedreg.attribute.nonexistant', args: [params.attrid])
+				render message(code: 'domains.fr.foundation.attribute.nonexistant', args: [params.attrid])
 				response.setStatus(500)
 				return
 			}
@@ -45,7 +45,7 @@ class DescriptorAttributeController {
 			if(!descriptor.attributes.contains(attribute)) {
 				log.warn "${attribute} isn't supported by descriptor ${params.id}"
 				response.setStatus(500)
-				render message(code: 'fedreg.attribute.remove.notsupported', args:[attribute.base.name])
+				render message(code: 'domains.fr.foundation.attribute.remove.notsupported', args:[attribute.base.name])
 				return
 			}
 		
@@ -56,12 +56,12 @@ class DescriptorAttributeController {
 				descriptor.errors.each {
 					log.debug it
 				}
-				render message(code: 'fedreg.attribute.remove.failed', args:[attribute.base.name])
+				render message(code: 'domains.fr.foundation.attribute.remove.failed', args:[attribute.base.name])
 				response.setStatus(500)
 				return
 			}else {
 				log.info "$subject removed $attribute from descriptor ${params.id}"
-				render message(code: 'fedreg.attribute.remove.success', args:[attribute.base.name])
+				render message(code: 'domains.fr.foundation.attribute.remove.success', args:[attribute.base.name])
 			}
 		}
 		else {
@@ -73,7 +73,7 @@ class DescriptorAttributeController {
 	def list = {
 		if(!params.id) {
 			log.warn "Descriptor ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			response.setStatus(500)
 			return
 		}
@@ -81,7 +81,7 @@ class DescriptorAttributeController {
 		def descriptor = RoleDescriptor.get(params.id)
 		if(!descriptor) {
 			log.warn "RoleDescriptor identified by id ${params.id} was not located"
-			render message(code: 'fedreg.roledescriptor.nonexistant', args: [params.id])
+			render message(code: 'domains.fr.foundation.roledescriptor.nonexistant', args: [params.id])
 			response.setStatus(500)
 			return
 		}
@@ -92,14 +92,14 @@ class DescriptorAttributeController {
 	def add = {
 		if(!params.id) {
 			log.warn "Descriptor ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			response.setStatus(500)
 			return
 		}
 		
 		if(!params.attrid) {
 			log.warn "Attribute ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			response.setStatus(500)
 			return
 		}
@@ -107,7 +107,7 @@ class DescriptorAttributeController {
 		def descriptor = RoleDescriptor.get(params.id)
 		if(!descriptor) {
 			log.warn "RoleDescriptor identified by id ${params.id} was not located"
-			render message(code: 'fedreg.roledescriptor.nonexistant', args: [params.id])
+			render message(code: 'domains.fr.foundation.roledescriptor.nonexistant', args: [params.id])
 			response.setStatus(500)
 			return
 		}
@@ -116,7 +116,7 @@ class DescriptorAttributeController {
 			def base = AttributeBase.get(params.attrid)
 			if(!base) {
 				log.warn "Attribute Base identified by id ${params.attrid} was not located"
-				render message(code: 'fedreg.nameidformat.nonexistant', args: [params.attrid])
+				render message(code: 'domains.fr.foundation.nameidformat.nonexistant', args: [params.attrid])
 				response.setStatus(500)
 				return
 			}
@@ -125,7 +125,7 @@ class DescriptorAttributeController {
 				if(a.base == base) {
 					log.warn "${base} is already supported by descriptor ${params.id}"
 					response.setStatus(500)
-					render message(code: 'fedreg.attribute.add.alreadysupported', args:[base.name])
+					render message(code: 'domains.fr.foundation.attribute.add.alreadysupported', args:[base.name])
 					return
 				}
 			}
@@ -138,12 +138,12 @@ class DescriptorAttributeController {
 				descriptor.errors.each {
 					log.debug it
 				}
-				render message(code: 'fedreg.attribute.add.failed', args:[base.name])
+				render message(code: 'domains.fr.foundation.attribute.add.failed', args:[base.name])
 				response.setStatus(500)
 				return
 			} else {
 				log.info "$subject added $base to $descriptor"
-				render message(code: 'fedreg.attribute.add.success', args:[base.name])
+				render message(code: 'domains.fr.foundation.attribute.add.success', args:[base.name])
 			}
 		}
 		else {
