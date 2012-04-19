@@ -189,7 +189,7 @@ class ServiceProviderReportsController {
 
     if(!params.spID) {
       log.warn "Sp was not present"
-      render message(code: 'fedreg.controllers.namevalue.missing')
+      render message(code: 'controllers.fr.generic.namevalue.missing')
       response.setStatus(500)
       return
     }
@@ -260,7 +260,7 @@ class ServiceProviderReportsController {
     }
     else {
       log.warn("Attempt to query connections json for $sp by $authenticatedUser was denied, incorrect permission set")
-      render message(code: 'fedreg.help.unauthorized')
+      render message(code: 'help.fr.unauthorized')
       response.setStatus(403)
     }
   }

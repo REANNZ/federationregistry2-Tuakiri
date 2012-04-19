@@ -16,9 +16,9 @@
 				<div id="reporting">
 					<div id="reports">
 						<form id="reportrequirements">	
-							<label><g:message code="label.day" />: <input name="day" size="2" class="number"/><fr:tooltip code='fedreg.help.report.day' /></label>
-							<label><g:message code="label.month" />: <input name="month" size="2" class="number"/><fr:tooltip code='fedreg.help.report.month' /></label>
-							<label><g:message code="label.year" />: <input name="year" size="4"  class="required number"/><fr:tooltip code='fedreg.help.report.year' /></label>
+							<label><g:message code="label.day" />: <input name="day" size="2" class="number"/><fr:tooltip code='help.fr.report.day' /></label>
+							<label><g:message code="label.month" />: <input name="month" size="2" class="number"/><fr:tooltip code='help.fr.report.month' /></label>
+							<label><g:message code="label.year" />: <input name="year" size="4"  class="required number"/><fr:tooltip code='help.fr.report.year' /></label>
 
 							<a href="#" onClick="if($('#reportrequirements').valid()){ fedreg.renderFederationReport('connectivity'); } return false;" class="search-button"><g:message code="label.generate" /></a>
 						</form>
@@ -29,7 +29,7 @@
 						</div>
 
 						<div id="connectivityreportnodata" class="revealable reportdata">
-							<p><em><g:message code="fedreg.templates.reports.nodata.description"/></em></p>
+							<p><em><g:message code="templates.fr.reports.nodata.description"/></em></p>
 						</div>	
 
 						<script type="text/javascript+protovis">
