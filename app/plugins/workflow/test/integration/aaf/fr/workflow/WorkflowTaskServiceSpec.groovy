@@ -74,7 +74,7 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
     processInstance.taskInstances.get(0).potentialApprovers.size() == 1
 		greenMail.getReceivedMessages().length == 1
 		def message = greenMail.getReceivedMessages()[0]
-		message.subject == 'fedreg.templates.mail.workflow.requestapproval.subject'
+		message.subject == 'template.fr.mail.workflow.requestapproval.subject'
 	}
 
 	def "Validate first task in minimal process requires approval when process is run and approval is provided to users in role1, also validates correct variable substition to workflow script"() {
@@ -104,10 +104,10 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
     processInstance.taskInstances.get(0).potentialApprovers.size() == 2
 		greenMail.getReceivedMessages().length == 2
 		def message = greenMail.getReceivedMessages()[0]
-		'fedreg.templates.mail.workflow.requestapproval.subject' == message.subject
+		'template.fr.mail.workflow.requestapproval.subject' == message.subject
 		'test@testdomain.com' == GreenMailUtil.getAddressList(message.getRecipients(javax.mail.Message.RecipientType.TO))
 		def message2 = greenMail.getReceivedMessages()[1]
-		'fedreg.templates.mail.workflow.requestapproval.subject' == message2.subject
+		'template.fr.mail.workflow.requestapproval.subject' == message2.subject
 		'test2@testdomain.com' == GreenMailUtil.getAddressList(message2.getRecipients(javax.mail.Message.RecipientType.TO))
 		
 		cleanup:

@@ -5,7 +5,7 @@
     <meta name="layout" content="workflow" />
   </head>
   <body>
-      <h2><g:message code="fedreg.view.workflow.script.create.heading" /></h2>
+      <h2><g:message code="views.fr.workflow.script.create.heading" /></h2>
       
       <g:render template="/templates/flash" />
 

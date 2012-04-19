@@ -4,7 +4,7 @@
     <meta name="layout" content="workflow" />
   </head>
   <body>
-      <h2><g:message code="fedreg.view.workflow.script.list.heading" /></h2>
+      <h2><g:message code="views.fr.workflow.script.list.heading" /></h2>
     
       <table class="table table-sortable borderless">
         <thead>

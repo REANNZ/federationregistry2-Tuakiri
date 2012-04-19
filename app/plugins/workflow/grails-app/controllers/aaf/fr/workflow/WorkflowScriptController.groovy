@@ -36,7 +36,7 @@ class WorkflowScriptController {
 		if(SecurityUtils.subject.isPermitted("workflow:script:create")) {
 			if(!params.definition) {
 				log.warn "Script definition was not present"
-				render message(code: 'fedreg.controllers.namevalue.missing')
+				render message(code: 'controllers.fr.generic.namevalue.missing')
 				redirect action:list
 				return
 			}
@@ -45,7 +45,7 @@ class WorkflowScriptController {
 			script.creator = subject
 			if(!script.save()) {
 				flash.type = "error"
-        flash.message = message(code: 'fedreg.workflow.script.create.error')
+        flash.message = message(code: 'domains.fr.workflow.script.create.error')
 				render view: "create", model: [script: script]
 				return
 			}
@@ -63,7 +63,7 @@ class WorkflowScriptController {
 		if(SecurityUtils.subject.isPermitted("workflow:scripts:view")) {
 			if(!params.id) {
 				log.warn "Workflow Script ID was not present"
-				render message(code: 'fedreg.controllers.namevalue.missing')
+				render message(code: 'controllers.fr.generic.namevalue.missing')
 				redirect action:list
 				return
 			}
@@ -71,7 +71,7 @@ class WorkflowScriptController {
 			def script = WorkflowScript.get(params.id)
 			if(!script) {
 				flash.type = "error"
-			    flash.message = message(code: 'fedreg.workflow.script.nonexistant', args: [params.id])
+			    flash.message = message(code: 'domains.fr.workflow.script.nonexistant', args: [params.id])
 				render view: "list"
 				return
 			}
@@ -87,7 +87,7 @@ class WorkflowScriptController {
 	def edit = {
 		if(!params.id) {
 			log.warn "Process ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			redirect action:list
 			return
 		}
@@ -95,7 +95,7 @@ class WorkflowScriptController {
 		def script = WorkflowScript.get(params.id)
 		if(!script) {
 			flash.type = "error"
-		    flash.message = message(code: 'fedreg.workflow.script.nonexistant', args: [params.id])
+		    flash.message = message(code: 'domains.fr.workflow.script.nonexistant', args: [params.id])
 			render view: "list"
 			return
 		}
@@ -112,7 +112,7 @@ class WorkflowScriptController {
 	def update = {
 		if(!params.id) {
 			log.warn "WorkflowScript ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			redirect action:list
 			return
 		}
@@ -120,7 +120,7 @@ class WorkflowScriptController {
 		def script = WorkflowScript.get(params.id)
 		if(!script) {
 			flash.type = "error"
-		    flash.message = message(code: 'fedreg.workflow.script.nonexistant', args: [params.id])
+		    flash.message = message(code: 'domains.fr.workflow.script.nonexistant', args: [params.id])
 			render view: "list"
 			return
 		}
@@ -130,7 +130,7 @@ class WorkflowScriptController {
 			script.save()
 			if(script.hasErrors()) {
 				flash.type = "error"
-			    flash.message = message(code: 'fedreg.workflow.script.update.error')
+			    flash.message = message(code: 'domains.fr.workflow.script.update.error')
 				render view: "edit", model: [script: script]
 				return
 			}

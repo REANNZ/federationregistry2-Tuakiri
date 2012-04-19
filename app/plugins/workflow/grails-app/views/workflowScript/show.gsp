@@ -5,7 +5,7 @@
   </head>
   
   <body>
-      <h2><g:message code="fedreg.view.workflow.script.show.heading" args="[script.name]"/></h2>
+      <h2><g:message code="views.fr.workflow.script.show.heading" args="[script.name]"/></h2>
 
       <table class="table borderless">
         <tbody>   

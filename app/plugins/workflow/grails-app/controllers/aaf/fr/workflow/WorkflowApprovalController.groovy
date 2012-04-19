@@ -41,7 +41,7 @@ class WorkflowApprovalController {
 		if(!params.id) {
 			log.warn "Task instance id was not present"
 			flash.type = "error"
-		    flash.message = message(code: 'fedreg.controllers.namevalue.missing')
+		    flash.message = message(code: 'controllers.fr.generic.namevalue.missing')
 			redirect action:list
 			return
 		}
@@ -49,7 +49,7 @@ class WorkflowApprovalController {
 		def taskInstance = TaskInstance.get(params.id)
 		if(!taskInstance) {
 			flash.type = "error"
-		    flash.message = message(code: 'fedreg.workflow.taskinstance.nonexistant', args: [params.id])
+		    flash.message = message(code: 'domains.fr.workflow.taskinstance.nonexistant', args: [params.id])
 			redirect action: "list"
 			return
 		}
@@ -58,7 +58,7 @@ class WorkflowApprovalController {
 			log.info "$principal is approving $taskInstance"
 			workflowTaskService.approve(taskInstance.id)
 			flash.type = "success"
-		    flash.message = message(code: 'fedreg.workflow.taskinstance.successfully.approved')
+		    flash.message = message(code: 'domains.fr.workflow.taskinstance.successfully.approved')
 		
 			log.info "$principal approval of $taskInstance completed"
 			redirect action: "list"
@@ -73,7 +73,7 @@ class WorkflowApprovalController {
 		if(!params.id) {
 			log.warn "Task instance id was not present"
 			flash.type = "error"
-		    flash.message = message(code: 'fedreg.controllers.namevalue.missing')
+		    flash.message = message(code: 'controllers.fr.generic.namevalue.missing')
 			redirect action: "list"
 			return
 		}
@@ -81,7 +81,7 @@ class WorkflowApprovalController {
 		if(!params.rejection) {
 			log.warn "Rejection selection was not present"
 			flash.type = "error"
-		    flash.message = message(code: 'fedreg.controllers.namevalue.missing')
+		    flash.message = message(code: 'controllers.fr.generic.namevalue.missing')
 			redirect action: "list"
 			return
 		}
@@ -89,14 +89,14 @@ class WorkflowApprovalController {
 		def taskInstance = TaskInstance.get(params.id)
 		if(!taskInstance) {
 			flash.type = "error"
-		    flash.message = message(code: 'fedreg.workflow.taskinstance.nonexistant', args: [params.id])
+		    flash.message = message(code: 'domains.fr.workflow.taskinstance.nonexistant', args: [params.id])
 			redirect action: "list"
 			return
 		}
 		
 		if(!taskInstance.task.rejections.containsKey(params.rejection)) {
 			flash.type = "error"
-		    flash.message = message(code: 'fedreg.workflow.taskinstance.no.such.rejection', args: [params.id])
+		    flash.message = message(code: 'domains.fr.workflow.taskinstance.no.such.rejection', args: [params.id])
 			redirect action: "list"
 			return
 		}
@@ -105,7 +105,7 @@ class WorkflowApprovalController {
 			log.info "$principal is rejecting $taskInstance"
 			workflowTaskService.reject(taskInstance.id, params.rejection)
 			flash.type = "success"
-		    flash.message = message(code: 'fedreg.workflow.taskinstance.successfully.rejected')
+		    flash.message = message(code: 'domains.fr.workflow.taskinstance.successfully.rejected')
 		
 			log.info "$principal rejection of $taskInstance completed"
 			redirect action: "list"

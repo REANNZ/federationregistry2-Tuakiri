@@ -38,7 +38,7 @@ class WorkflowProcessController {
 		if(SecurityUtils.subject.isPermitted("workflow:process:create")) {
 			if(!params.code) {
 				log.warn "Process definition was not present"
-				render message(code: 'fedreg.controllers.namevalue.missing')
+				render message(code: 'controllers.fr.generic.namevalue.missing')
 				redirect action:list
 				return
 			}
@@ -51,7 +51,7 @@ class WorkflowProcessController {
 						log.debug it
 					}
 					flash.type = "error"
-				  flash.message = message(code: 'fedreg.workflow.process.create.error')
+				  flash.message = message(code: 'domains.fr.workflow.process.create.error')
 					render view: "create", model: [process: process]
 					return
 				}
@@ -62,7 +62,7 @@ class WorkflowProcessController {
 			catch(Exception e) {
 				process = new Process(definition: params.code)
 				flash.type = "error"
-			    flash.message = message(code: 'fedreg.workflow.process.create.totalfailure')
+			    flash.message = message(code: 'domains.fr.workflow.process.create.totalfailure')
 				render view: "create", model: [process: process]
 			}
 		}
@@ -76,7 +76,7 @@ class WorkflowProcessController {
 		if(SecurityUtils.subject.isPermitted("workflow:processes:view")) {
 			if(!params.id) {
 				log.warn "Process ID was not present"
-				render message(code: 'fedreg.controllers.namevalue.missing')
+				render message(code: 'controllers.fr.generic.namevalue.missing')
 				redirect action:list
 				return
 			}
@@ -84,7 +84,7 @@ class WorkflowProcessController {
 			def process = Process.get(params.id)
 			if(!process) {
 				flash.type = "error"
-			    flash.message = message(code: 'fedreg.workflow.process.nonexistant', args: [params.id])
+			    flash.message = message(code: 'domains.fr.workflow.process.nonexistant', args: [params.id])
 				render view: "list"
 				return
 			}
@@ -100,7 +100,7 @@ class WorkflowProcessController {
 	def edit = {
 		if(!params.id) {
 			log.warn "Process ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			redirect action:list
 			return
 		}
@@ -108,7 +108,7 @@ class WorkflowProcessController {
 		def process = Process.get(params.id)
 		if(!process) {
 			flash.type = "error"
-		    flash.message = message(code: 'fedreg.workflow.process.nonexistant', args: [params.id])
+		    flash.message = message(code: 'domains.fr.workflow.process.nonexistant', args: [params.id])
 			render view: "list"
 			return
 		}
@@ -124,7 +124,7 @@ class WorkflowProcessController {
 	def update = {
 		if(!params.id) {
 			log.warn "Process ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			redirect action:list
 			return
 		}
@@ -132,7 +132,7 @@ class WorkflowProcessController {
 		def process = Process.get(params.id)
 		if(!process) {
 			flash.type = "error"
-		    flash.message = message(code: 'fedreg.workflow.process.nonexistant', args: [params.id])
+		    flash.message = message(code: 'domains.fr.workflow.process.nonexistant', args: [params.id])
 			render view: "list"
 			return
 		}
@@ -148,7 +148,7 @@ class WorkflowProcessController {
 						log.debug it
 					}
 					flash.type = "error"
-				    flash.message = message(code: 'fedreg.workflow.process.update.error')
+				    flash.message = message(code: 'domains.fr.workflow.process.update.error')
 					render view: "edit", model: [process: process_]
 					return
 				}
@@ -159,7 +159,7 @@ class WorkflowProcessController {
 			}
 			catch(Exception e) {
 				flash.type = "error"
-			    flash.message = message(code: 'fedreg.workflow.process.update.totalfailure')
+			    flash.message = message(code: 'domains.fr.workflow.process.update.totalfailure')
 				render view: "edit", model: [process: process]
 			}
 		}

@@ -5,7 +5,7 @@
   </head>
   
   <body>
-      <h2><g:message code="fedreg.view.workflow.process.show.heading" args="[process.name]"/></h2>
+      <h2><g:message code="views.fr.workflow.process.show.heading" args="[process.name]"/></h2>
 
       <table class="table borderless">
         <tbody>   

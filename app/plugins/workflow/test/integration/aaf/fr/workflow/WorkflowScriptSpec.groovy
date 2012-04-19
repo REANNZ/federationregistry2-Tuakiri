@@ -23,7 +23,7 @@ class WorkflowScriptSpec extends IntegrationSpec {
 	
 	def "validate a correctly formed WorkflowScript is saved"() {		
 		when:
-		def wfs = new WorkflowScript(name:'TestWorkflow', description:'Test workflow description', definition:'import fedreg.workflow.*; return true', creator:Subject.findWhere(principal:'testuser')).save()
+		def wfs = new WorkflowScript(name:'TestWorkflow', description:'Test workflow description', definition:'import domains.fr.workflow.*; return true', creator:Subject.findWhere(principal:'testuser')).save()
 		
 		then:
 		!wfs.hasErrors()
@@ -32,7 +32,7 @@ class WorkflowScriptSpec extends IntegrationSpec {
 	
 	def "validate a WorkflowScript with no creator isn't valid"() {		
 		when:
-		def wfs = new WorkflowScript(name:'TestWorkflow', description:'Test workflow description', definition:'import fedreg.workflow.*; return true')
+		def wfs = new WorkflowScript(name:'TestWorkflow', description:'Test workflow description', definition:'import domains.fr.workflow.*; return true')
 		wfs.save()
 		
 		then:
@@ -89,7 +89,7 @@ class WorkflowScriptSpec extends IntegrationSpec {
 	
 	def "validate a correctly formed WorkflowScript is able to be executed"() {		
 		setup:
-		def wfs = new WorkflowScript(name:'TestWorkflow', description:'Test workflow description', definition:'import fedreg.workflow.*; return "the test script validating execution ran fine"', creator:Subject.findWhere(principal:'testuser')).save()
+		def wfs = new WorkflowScript(name:'TestWorkflow', description:'Test workflow description', definition:'import domains.fr.workflow.*; return "the test script validating execution ran fine"', creator:Subject.findWhere(principal:'testuser')).save()
 		Binding binding = new Binding();
 		binding.setVariable("grailsApplication", grailsApplication);
 		

@@ -347,7 +347,7 @@ class WorkflowTaskService {
     Object[] args = [taskInstance.task.name]
     mailService.sendMail {
       to sb.email   
-      subject messageSource.getMessage('fedreg.templates.mail.workflow.requestapproval.subject', args, 'fedreg.templates.mail.workflow.requestapproval.subject', new Locale("EN"))
+      subject messageSource.getMessage('template.fr.mail.workflow.requestapproval.subject', args, 'template.fr.mail.workflow.requestapproval.subject', new Locale("EN"))
       body(view: '/templates/mail/_workflow_requestapproval', plugin: "federationworkflow", model: [taskInstance: taskInstance])
     }
   }
@@ -412,7 +412,7 @@ class WorkflowTaskService {
     def workflowScript = WorkflowScript.findByName(scriptName)
     
     if(workflowScript) {
-      def _log = LogFactory.getLog("fedreg.workflow.script.$scriptName")
+      def _log = LogFactory.getLog("domains.fr.workflow.script.$scriptName")
       
       Binding binding = new Binding()
       binding.setVariable("env", env)
