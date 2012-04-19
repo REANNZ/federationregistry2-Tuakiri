@@ -16,7 +16,7 @@ target(main: "This script imports custom themes for FR deployment from the direc
 
 	// Add directories and files here to extend theme import. Files will be copied from source at this location and installed in Federation Registry at the same location
 	// All files listed here must appear in .gitignore to ensure they aren't commited to revision control (they should be controlled in their own external project)
-	def dirs = [	"grails-app/i18n"	]
+	//def dirs = [	"grails-app/i18n"	]
 	def files = [ "grails-app/views/layouts/admin.gsp",
 					"grails-app/views/layouts/bootstrap.gsp",
 					"grails-app/views/layouts/reporting.gsp",
@@ -48,12 +48,14 @@ target(main: "This script imports custom themes for FR deployment from the direc
 				
 	def ant = new AntBuilder()
 
-	dirs.each { dir ->
+	/*
+  dirs.each { dir ->
 		def dst = new File("${basedir}/$dir")
 		def src = new File("${source}/$dir")
 		
 		FileUtils.copyDirectory(src, dst)
 	}
+  */
 	
 	files.each { file ->
 		def dst = new File("${basedir}/$file")

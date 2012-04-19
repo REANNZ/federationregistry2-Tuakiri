@@ -2,7 +2,7 @@
 
 <html>
   <head>
-    <title><g:message code="fedreg.title.${grailsApplication.config.fedreg.deployment.environment}" /> | <g:layoutTitle /></title>
+    <title><g:message code='fr.branding.title' default='Federation Registry'/></title>
     <r:require modules="bootstrap, bootstrap-datepicker, validate, modernizr, highcharts, app"/>
     <r:layoutResources/>
     <g:layoutHead />

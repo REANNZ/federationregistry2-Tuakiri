@@ -1,19 +1,16 @@
-package fedreg.host
-
-import aaf.fr.foundation.AttributeBase
-import aaf.fr.foundation.AttributeCategory
+package aaf.fr
 
 /**
- * Provides some reusable tags for the FR user interface
+ * Provides reusable tags for the wider FR user interface
  *
  * @author Bradley Beddoes
  */
-class FedRegTagLib {
+class FRTagLib {
 
   static namespace = "fr"
 
   def tooltip = { attrs ->
-    def msg = g.message(code:attrs.code)
+    def msg = g.message(code:attrs.code, default:attrs.default)
     def src = g.resource()
     
     out << r.img(dir:'images', file:'help.png', plugin:'federationregistry', title:msg, width:'16px', height:'16px', rel:'twipsy', 'data-placement':'right')
