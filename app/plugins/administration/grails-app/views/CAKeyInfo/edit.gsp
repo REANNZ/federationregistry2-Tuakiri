@@ -34,7 +34,7 @@
         </fieldset>
         <fieldset>
           <div class="form-actions">
-            <g:actionSubmit class="save" action="update" class="btn btn-success" value="${message(code: 'default.button.update.label', default: 'Update')}" />
+            <g:actionSubmit class="save" action="update" class="btn btn-success" value="${message(code: 'label.update', default: 'Update')}" />
             <g:link action="show" id="${CAKeyInfoInstance.id}" class="btn"><g:message code="label.cancel"/></g:link>
           </div>
         </fieldset>

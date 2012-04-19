@@ -67,7 +67,7 @@
             </fieldset>
             <fieldset>
               <div class="form-actions">
-                <g:actionSubmit class="save" action="update" class="btn btn-success" value="${message(code: 'default.button.update.label', default: 'Update')}" />
+                <g:actionSubmit class="save" action="update" class="btn btn-success" value="${message(code: 'label.update', default: 'Update')}" />
                 <a class="cancel-edit-role btn"><g:message code="label.cancel" default="Cancel" /></a>
               </div>
             </fieldset>
