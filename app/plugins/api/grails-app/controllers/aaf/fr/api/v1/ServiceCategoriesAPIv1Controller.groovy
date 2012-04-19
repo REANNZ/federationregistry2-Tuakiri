@@ -26,7 +26,7 @@ class ServiceCategoriesAPIv1Controller {
 	def show = {
 		if(!params.id) {
 			log.warn "Service Category ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			response.sendError(400)
 			return
 		}
@@ -35,7 +35,7 @@ class ServiceCategoriesAPIv1Controller {
 		def serviceCategory = ServiceCategory.get(params.id)
 		if (!serviceCategory) {
 			log.warn "ServiceCategory does not exist for ${params.id}"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			response.sendError(400)
 			return
 		}

@@ -33,14 +33,14 @@ class MonitoringAPIv1Controller {
 	def show = {
 		if(!params.type) {
 			log.warn "Type was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			response.sendError(400)
 			return
 		}
 		
 		if(!params.id) {
 			log.warn "descriptor id was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			response.sendError(400)
 			return
 		}
@@ -57,7 +57,7 @@ class MonitoringAPIv1Controller {
 		
 		if(!descriptor) {
 			log.warn "Descriptor ID and/or type was invalid"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			response.sendError(400)
 			return
 		}

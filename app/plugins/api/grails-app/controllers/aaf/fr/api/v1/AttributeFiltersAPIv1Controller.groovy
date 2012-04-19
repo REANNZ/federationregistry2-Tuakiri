@@ -30,7 +30,7 @@ class AttributeFiltersAPIv1Controller {
 	def show = {		
 		if(!params.id) {
 			log.warn "IDPSSODescriptor ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			response.sendError(400)
 			return
 		}
@@ -38,7 +38,7 @@ class AttributeFiltersAPIv1Controller {
 		def identityProvider = IDPSSODescriptor.get(params.id)
 		if (!identityProvider) {
 			log.warn "IDPSSODescriptor does not exist for ${params.id}"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			response.sendError(400)
 			return
 		}
@@ -47,7 +47,7 @@ class AttributeFiltersAPIv1Controller {
 		def builder = new MarkupBuilder(writer)
 		builder.doubleQuotes = true
 		
-		def federation = grailsApplication.config.fedreg.metadata.federation
+		def federation = grailsApplication.config.aaf.fr.metadata.federation
 		
 		attributeFilterGenerationService.generate(builder, federation, identityProvider.id)
 		def xml = writer.toString()

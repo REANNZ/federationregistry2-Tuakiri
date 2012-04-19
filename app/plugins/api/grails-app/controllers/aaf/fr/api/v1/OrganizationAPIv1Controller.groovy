@@ -1,6 +1,5 @@
 package aaf.fr.api.v1
 
-import fedreg.core.*
 import grails.converters.JSON
 import groovy.xml.MarkupBuilder
 
@@ -28,7 +27,7 @@ class OrganizationAPIv1Controller {
   def show = {    
     if(!params.id) {
       log.warn "Organization ID was not present"
-      render message(code: 'fedreg.controllers.namevalue.missing')
+      render message(code: 'controllers.fr.generic.namevalue.missing')
       response.sendError(400)
       return
     }
@@ -36,7 +35,7 @@ class OrganizationAPIv1Controller {
     def org = Organization.get(params.id)
     if (!org) {
       log.warn "Organization does not exist for ${params.id}"
-      render message(code: 'fedreg.controllers.namevalue.missing')
+      render message(code: 'controllers.fr.generic.namevalue.missing')
       response.sendError(400)
       return
     }

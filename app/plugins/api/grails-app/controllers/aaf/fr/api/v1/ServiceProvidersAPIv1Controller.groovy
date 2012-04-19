@@ -29,7 +29,7 @@ class ServiceProvidersAPIv1Controller {
 	def show = {		
 		if(!params.id) {
 			log.warn "SPSSODescriptor ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			response.sendError(400)
 			return
 		}
@@ -37,7 +37,7 @@ class ServiceProvidersAPIv1Controller {
 		def sp = SPSSODescriptor.get(params.id)
 		if (!sp) {
 			log.warn "SPSSODescriptor does not exist for ${params.id}"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			response.sendError(400)
 			return
 		}

@@ -69,8 +69,8 @@ class MetadataAPIv1Controller {
 	
 	private String currentPublishedMetadata(def minimal, def ext) {
 		def now = new Date();
-		def validUntil = now + grailsApplication.config.fedreg.metadata.current.validForDays
-		def federation = grailsApplication.config.fedreg.metadata.federation
+		def validUntil = now + grailsApplication.config.aaf.fr.metadata.current.validForDays
+		def federation = grailsApplication.config.aaf.fr.metadata.federation
 		def certificateAuthorities = CAKeyInfo.list()
 		
 		def writer = new StringWriter()
@@ -86,8 +86,8 @@ class MetadataAPIv1Controller {
 	
 	private String allMetadata(def minimal) {
 		def now = new Date();
-		def validUntil = now + grailsApplication.config.fedreg.metadata.all.validForDays
-		def federation = grailsApplication.config.fedreg.metadata.federation
+		def validUntil = now + grailsApplication.config.aaf.fr.metadata.all.validForDays
+		def federation = grailsApplication.config.aaf.fr.metadata.federation
 		def certificateAuthorities = CAKeyInfo.list()
 		
 		def writer = new StringWriter()

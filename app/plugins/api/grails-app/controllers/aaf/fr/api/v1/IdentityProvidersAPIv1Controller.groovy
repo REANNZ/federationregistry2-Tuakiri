@@ -29,7 +29,7 @@ class IdentityProvidersAPIv1Controller {
 	def show = {		
 		if(!params.id) {
 			log.warn "IDPSSODescriptor ID was not present"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			response.sendError(400)
 			return
 		}
@@ -37,7 +37,7 @@ class IdentityProvidersAPIv1Controller {
 		def idp = IDPSSODescriptor.get(params.id)
 		if (!idp) {
 			log.warn "IDPSSODescriptor does not exist for ${params.id}"
-			render message(code: 'fedreg.controllers.namevalue.missing')
+			render message(code: 'controllers.fr.generic.namevalue.missing')
 			response.sendError(400)
 			return
 		}
