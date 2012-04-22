@@ -46,6 +46,7 @@ web-app/js/prototype/
 # These are important files but supplied externally to allow other federations to customize
 grails-app/i18n/messages-deployment.properties
 grails-app/views/layouts/*
+grails-app/views/templates/layouts/*
 grails-app/views/templates/_frheader.gsp
 grails-app/views/templates/_frfooter.gsp
 grails-app/views/templates/_frtopnavigation.gsp
