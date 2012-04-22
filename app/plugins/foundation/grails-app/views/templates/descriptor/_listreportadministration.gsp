@@ -1,8 +1,8 @@
 <div id="descriptorreportadministratorlist">
-  <h3><g:message code="template.fr.descriptor.report.administrators" default="Report Viewers"/></h3>
+  <h3><g:message code="templates.fr.descriptor.report.administrators" default="Report Viewers"/></h3>
   <g:if test="${reportAdministrators}">
-    <p><g:message code="template.fr.descriptor.report.administrators.detail" default="The following users are able to view reports for this descriptor but otherwise have no administrative control."/>
-    <p><strong><g:message code="template.fr.descriptor.reportadministrator.obtain" default="To obtain access to reports for this descriptor please contact one of the administrators listed below directly." /></strong></p>
+    <p><g:message code="templates.fr.descriptor.report.administrators.detail" default="The following users are able to view reports for this descriptor but otherwise have no administrative control."/>
+    <p><strong><g:message code="templates.fr.descriptor.reportadministrator.obtain" default="To obtain access to reports for this descriptor please contact one of the administrators listed below directly." /></strong></p>
     <table class="table borderless">
       <thead>
         <tr>
@@ -32,7 +32,7 @@
     </table>
   </g:if>
   <g:else>
-    <p class="alert alert-info"><g:message code="template.fr.descriptor.reportadministrator.noresults" default="No specific users have been granted report access at the time" /></p>
+    <p class="alert alert-info"><g:message code="templates.fr.descriptor.reportadministrator.noresults" default="No specific users have been granted report access at the time" /></p>
   </g:else>
 
   <fr:hasPermission target="descriptor:${descriptor.id}:manage:administrators">
@@ -70,7 +70,7 @@
         </table>
       </g:if>
       <g:else>
-        <p class="alert alert-info"><g:message code="template.fr.descriptor.administrator.alladded" default="All subjects are currently administrators" /></p>
+        <p class="alert alert-info"><g:message code="templates.fr.descriptor.administrator.alladded" default="All subjects are currently administrators" /></p>
       </g:else>
     </div>
   </fr:hasPermission>

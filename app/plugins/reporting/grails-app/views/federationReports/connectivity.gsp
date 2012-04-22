@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta name="layout" content="reportingclean" />
-		<title><g:message code="fedreg.view.reporting.federation.connectivity.title" /></title>
+		<title><g:message code="views.fr.reporting.federation.connectivity.title" /></title>
 		
 		<r:script>
 			var federationConnectivtyEndpoint = "${createLink(controller:'federationReports', action:'reportconnectivity')}"
@@ -11,7 +11,7 @@
 	<body>
 		<section>
 			<div class="reportingsupported">
-				<h2><g:message code="fedreg.view.reporting.federation.connectivity.heading" /></h2>
+				<h2><g:message code="views.fr.reporting.federation.connectivity.heading" /></h2>
 			
 				<div id="reporting">
 					<div id="reports">

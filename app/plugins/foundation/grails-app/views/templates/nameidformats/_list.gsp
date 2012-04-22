@@ -25,7 +25,7 @@
   </g:if>
   <g:else>
     <div>
-      <p class="alert alert-message alert-danger"><g:message code="template.fr.nameidformats.noresults"/></p>
+      <p class="alert alert-message alert-danger"><g:message code="templates.fr.nameidformats.noresults"/></p>
     </div>
   </g:else>
 </div>

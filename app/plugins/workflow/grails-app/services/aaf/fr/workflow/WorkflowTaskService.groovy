@@ -347,7 +347,7 @@ class WorkflowTaskService {
     Object[] args = [taskInstance.task.name]
     mailService.sendMail {
       to sb.email   
-      subject messageSource.getMessage('template.fr.mail.workflow.requestapproval.subject', args, 'template.fr.mail.workflow.requestapproval.subject', new Locale("EN"))
+      subject messageSource.getMessage('templates.fr.mail.workflow.requestapproval.subject', args, 'templates.fr.mail.workflow.requestapproval.subject', new Locale("EN"))
       body(view: '/templates/mail/_workflow_requestapproval', plugin: "federationworkflow", model: [taskInstance: taskInstance])
     }
   }

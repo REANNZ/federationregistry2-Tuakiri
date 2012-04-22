@@ -1,6 +1,6 @@
 <g:hasErrors>
   <div class="alert alert-message alert-danger">
-    <p><strong><g:message code="template.fr.organization.create.errors" /></strong></p>
+    <p><strong><g:message code="templates.fr.organization.create.errors" /></strong></p>
     <p>
       <g:message code="label.identifiederrors"/>
       <g:renderErrors bean="${organization}" as="list" />
@@ -15,14 +15,14 @@
   <g:hiddenField name="organization.lang" value="en" />
   
   <div class="step" id="overview">
-    <g:message code="template.fr.organization.create.overview.details" />
+    <g:message code="templates.fr.organization.create.overview.details" />
   </div>
 
   <hr>
   
   <div id="contact" class="step">
-    <h3>1. <g:message code="template.fr.organization.create.contact.heading" /></h3>
-    <p><g:message code="template.fr.organization.create.contact.details" /></p>
+    <h3>1. <g:message code="templates.fr.organization.create.contact.heading" /></h3>
+    <p><g:message code="templates.fr.organization.create.contact.details" /></p>
     <fieldset>
       <div class="control-group">
         <label for="contact.givenName"><g:message code="label.givenname" /></label>
@@ -65,9 +65,9 @@
   <hr>
   
   <div class="step" id="basicinformation">
-    <h3>2. <g:message code="template.fr.organization.create.basicinformation.heading" /></h3>
+    <h3>2. <g:message code="templates.fr.organization.create.basicinformation.heading" /></h3>
     <p>
-      <g:message code="template.fr.organization.create.basicinformation.details" />
+      <g:message code="templates.fr.organization.create.basicinformation.details" />
     </p>
     <fieldset>
       <div class="control-group">
@@ -107,9 +107,9 @@
   <hr>
   
   <div class="step" id="creationsummary">
-    <h3>3. <g:message code="template.fr.organization.create.summary.heading" /></h3>
+    <h3>3. <g:message code="templates.fr.organization.create.summary.heading" /></h3>
     <p>
-      <g:message code="template.fr.organization.create.summary.details" />
+      <g:message code="templates.fr.organization.create.summary.details" />
     </p>
 
     <div class="form-action">

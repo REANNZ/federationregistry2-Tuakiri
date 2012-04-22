@@ -70,10 +70,10 @@
 <div id="unarchive-organization-modal" class="modal hide fade">
   <div class="modal-header">
     <a class="close close-modal">&times;</a>
-    <h3><g:message code="template.fr.organization.unarchive.confirm.title"/></h3>
+    <h3><g:message code="templates.fr.organization.unarchive.confirm.title"/></h3>
   </div>
   <div class="modal-body">
-    <p><g:message code="template.fr.organization.unarchive.confirm.descriptive"/></p>
+    <p><g:message code="templates.fr.organization.unarchive.confirm.descriptive"/></p>
   </div>
   <div class="modal-footer">
     <a class="btn close-modal"><g:message code="label.cancel" /></a>
@@ -88,10 +88,10 @@
 <div id="archive-organization-modal" class="modal hide fade">
   <div class="modal-header">
     <a class="close close-modal">&times;</a>
-    <h3><g:message code="template.fr.organization.archive.confirm.title"/></h3>
+    <h3><g:message code="templates.fr.organization.archive.confirm.title"/></h3>
   </div>
   <div class="modal-body">
-    <p><g:message code="template.fr.organization.archive.confirm.descriptive"/></p>
+    <p><g:message code="templates.fr.organization.archive.confirm.descriptive"/></p>
   </div>
   <div class="modal-footer">
     <a class="btn close-modal"><g:message code="label.cancel" /></a>
@@ -106,10 +106,10 @@
 <div id="delete-organization-modal" class="modal hide fade">
   <div class="modal-header">
     <a class="close close-modal">&times;</a>
-    <h3><g:message code="template.fr.organization.delete.confirm.title"/></h3>
+    <h3><g:message code="templates.fr.organization.delete.confirm.title"/></h3>
   </div>
   <div class="modal-body">
-    <p><g:message code="template.fr.organization.delete.confirm.descriptive"/></p>
+    <p><g:message code="templates.fr.organization.delete.confirm.descriptive"/></p>
   </div>
   <div class="modal-footer">
     <a class="btn close-modal"><g:message code="label.cancel" /></a>

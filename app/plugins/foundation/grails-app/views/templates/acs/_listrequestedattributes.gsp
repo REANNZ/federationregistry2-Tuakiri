@@ -25,7 +25,7 @@
               <g:message code="label.yes" />
             </g:if>
             <g:else>
-              <span class="not-in-federation"><g:message code="template.fr.acs.reqattributes.workflow" /></span>
+              <span class="not-in-federation"><g:message code="templates.fr.acs.reqattributes.workflow" /></span>
             </g:else>
           </td>
           <td> 
@@ -55,7 +55,7 @@
         <g:message code="label.yes" />
         </g:if>
         <g:else>
-          <span class="not-in-federation"><g:message code="template.fr.acs.reqattributes.workflow" /></span>
+          <span class="not-in-federation"><g:message code="templates.fr.acs.reqattributes.workflow" /></span>
         </g:else>
         </td>
         <td> 
@@ -104,7 +104,7 @@
             <fr:hasPermission target="descriptor:${ra.attributeConsumingService.descriptor.id}:attribute:value:add">
             <div id="newspecattributeval${ra.id}" class="revealable">
               <p>
-                <g:message code="template.fr.acs.specattributes.add.details"/>
+                <g:message code="templates.fr.acs.specattributes.add.details"/>
               </p>
               <form id="newspecattributedata${ra.id}" class="form-horizontal validating">
                 <input type="hidden" name="id" value="${ra.id}">
@@ -134,6 +134,6 @@
 </g:if>
 <g:else>
   <div class="alert alert-message alert-info">
-    <g:message code="template.fr.acs.reqattributes.not.requested" />
+    <g:message code="templates.fr.acs.reqattributes.not.requested" />
   </div>
 </g:else>

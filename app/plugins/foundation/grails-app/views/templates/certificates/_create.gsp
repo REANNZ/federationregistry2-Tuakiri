@@ -9,8 +9,8 @@
   </div>
   
   <div id="newcertificate" class="revealable">
-    <h4><g:message code="template.fr.certificates.certificatemanagement.addnew.heading"/></h4>
-    <p><g:message code="template.fr.certificates.certificatemanagement.addnew.requestformat" /></p>
+    <h4><g:message code="templates.fr.certificates.certificatemanagement.addnew.heading"/></h4>
+    <p><g:message code="templates.fr.certificates.certificatemanagement.addnew.requestformat" /></p>
     
     <div id="newcertificatedetails"></div>
 
@@ -60,10 +60,10 @@
 <div id="delete-certificate-modal" class="modal hide fade">
   <div class="modal-header">
     <a class="close close-modal">&times;</a>
-    <h3><g:message code="template.fr.certificates.remove.confirm.title"/></h3>
+    <h3><g:message code="templates.fr.certificates.remove.confirm.title"/></h3>
   </div>
   <div class="modal-body">
-    <p><g:message code="template.fr.certificates.remove.confirm.descriptive"/></p>
+    <p><g:message code="templates.fr.certificates.remove.confirm.descriptive"/></p>
   </div>
   <div class="modal-footer">
     <a class="btn close-modal"><g:message code="label.cancel" /></a>

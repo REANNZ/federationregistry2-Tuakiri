@@ -1,5 +1,5 @@
 
-<p><g:message code="template.fr.servicecategories.descriptive" /></p>
+<p><g:message code="templates.fr.servicecategories.descriptive" /></p>
   <g:if test="${categories}">
   <table class="table borderless">
     <thead>
@@ -26,17 +26,17 @@
   </g:if>
   <g:else>
     <div>
-      <p class="alert alert-message"><g:message code="template.fr.servicecategories.noresults"/></p>
+      <p class="alert alert-message"><g:message code="templates.fr.servicecategories.noresults"/></p>
     </div>
   </g:else>
 
 <div id="unlink-category-modal" class="modal hide fade">
   <div class="modal-header">
     <a class="close close-modal">&times;</a>
-    <h3><g:message code="template.fr.servicecategories.remove.confirm.title"/></h3>
+    <h3><g:message code="templates.fr.servicecategories.remove.confirm.title"/></h3>
   </div>
   <div class="modal-body">
-    <p><g:message code="template.fr.servicecategories.remove.confirm.descriptive"/></p>
+    <p><g:message code="templates.fr.servicecategories.remove.confirm.descriptive"/></p>
   </div>
   <div class="modal-footer">
     <a class="btn close-modal"><g:message code="label.cancel" /></a>

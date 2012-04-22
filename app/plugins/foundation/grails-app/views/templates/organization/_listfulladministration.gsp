@@ -1,7 +1,7 @@
 <div id="organizationfulladministratorlist">
-  <h3><g:message code="template.fr.organization.full.administrators" /></h3>
+  <h3><g:message code="templates.fr.organization.full.administrators" /></h3>
   <g:if test="${administrators}">
-    <p><strong><g:message code="template.fr.organization.report.administrators.detail" default="The following users have complete administrative control for this organization."/></strong>
+    <p><strong><g:message code="templates.fr.organization.report.administrators.detail" default="The following users have complete administrative control for this organization."/></strong>
     <table class="table borderless">
       <thead>
         <tr>
@@ -33,7 +33,7 @@
   <g:else>
     <h2 class="alert alert-error">No current administrators</h2>
     <div class="span5">
-      <p><g:message code="template.fr.organization.administrator.justregistered" default="Have you recently registered this organisation? If so you will have recieved an email from Federation Registry stating registration was completed. This email contains within a unique code (10 characters a mix of letters and numbers) that when entered will give you administrative rights. Please look for and enter this code now." /></p>
+      <p><g:message code="templates.fr.organization.administrator.justregistered" default="Have you recently registered this organisation? If so you will have recieved an email from Federation Registry stating registration was completed. This email contains within a unique code (10 characters a mix of letters and numbers) that when entered will give you administrative rights. Please look for and enter this code now." /></p>
     </div>
     <div class="offset1 span5">
       <g:form controller="organization" action="grantFullAdministrationToken" method="POST">
@@ -45,7 +45,7 @@
       </g:form>
     </div>
     <div class="span11 row-spacer">
-      <p><strong><g:message code="template.fr.organization.administrator.nocode" default="If you have not been provided a code or cannot locate it please log a support request using the links above." /></strong><br><br><br></p>
+      <p><strong><g:message code="templates.fr.organization.administrator.nocode" default="If you have not been provided a code or cannot locate it please log a support request using the links above." /></strong><br><br><br></p>
     </div>
   </g:else>
   <fr:hasPermission target="descriptor:${organization.id}:manage:administrators">
@@ -83,7 +83,7 @@
         </table>
       </g:if>
       <g:else>
-        <p class="alert alert-info"><g:message code="template.fr.organization.administrator.alladded" default="All subjects are currently administrators" /></p>
+        <p class="alert alert-info"><g:message code="templates.fr.organization.administrator.alladded" default="All subjects are currently administrators" /></p>
       </g:else>
     </div>
   </fr:hasPermission>

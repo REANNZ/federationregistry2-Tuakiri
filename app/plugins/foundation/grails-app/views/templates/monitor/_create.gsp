@@ -8,7 +8,7 @@
   </div>
   
   <div id="newmonitor" class="revealable">
-    <h4><g:message code="template.fr.monitor.add.heading"/></h4>
+    <h4><g:message code="templates.fr.monitor.add.heading"/></h4>
     <form id="newmonitordata" class="form-horizontal">
       <fieldset>
        <g:hiddenField name="interval" value="0" />
@@ -51,10 +51,10 @@
 <div id="delete-monitor-modal" class="modal hide fade">
   <div class="modal-header">
     <a class="close close-modal">&times;</a>
-    <h3><g:message code="template.fr.monitor.delete.confirm.title"/></h3>
+    <h3><g:message code="templates.fr.monitor.delete.confirm.title"/></h3>
   </div>
   <div class="modal-body">
-    <p><g:message code="template.fr.monitor.delete.confirm.descriptive"/></p>
+    <p><g:message code="templates.fr.monitor.delete.confirm.descriptive"/></p>
   </div>
   <div class="modal-footer">
     <a class="btn close-modal"><g:message code="label.cancel" /></a>

@@ -1,6 +1,6 @@
 <g:hasErrors>
   <div class="alert alert-message alert-danger">
-    <p><strong><g:message code="template.fr.service.create.errors" /></strong></p>
+    <p><strong><g:message code="templates.fr.service.create.errors" /></strong></p>
     <p>
       <g:message code="label.identifiederrors"/>
       <g:renderErrors bean="${serviceProvider}" as="list" />
@@ -16,14 +16,14 @@
   <g:hiddenField name="contact.type" value="administrative" />
   
   <div id="overview">
-    <p><g:message code="template.fr.serviceprovider.create.overview.details" /></p>
+    <p><g:message code="templates.fr.serviceprovider.create.overview.details" /></p>
   </div>
 
   <hr>
   
   <div id="contact" class="step">
-    <h3>1. <g:message code="template.fr.serviceprovider.create.contact.heading" /></h3>
-    <p><g:message code="template.fr.serviceprovider.create.contact.details" /></p>
+    <h3>1. <g:message code="templates.fr.serviceprovider.create.contact.heading" /></h3>
+    <p><g:message code="templates.fr.serviceprovider.create.contact.details" /></p>
     <fieldset>
       <div class="control-group">
         <label for="contact.givenName"><g:message code="label.givenname" /></label>
@@ -66,8 +66,8 @@
   <hr>
   
   <div id="basic" class="step">
-    <h3>2. <g:message code="template.fr.serviceprovider.create.basicinformation.heading" /></h3>
-    <p><g:message code="template.fr.serviceprovider.create.basicinformation.details" /></p>
+    <h3>2. <g:message code="templates.fr.serviceprovider.create.basicinformation.heading" /></h3>
+    <p><g:message code="templates.fr.serviceprovider.create.basicinformation.details" /></p>
 
     <fieldset>
       <div class="control-group">
@@ -114,19 +114,19 @@
   <hr>
 
   <div id="saml" class="step">
-    <h3>3. <g:message code="template.fr.serviceprovider.create.saml.heading" /></h3>
-    <p><g:message code="template.fr.serviceprovider.create.saml.details" /></p>
+    <h3>3. <g:message code="templates.fr.serviceprovider.create.saml.heading" /></h3>
+    <p><g:message code="templates.fr.serviceprovider.create.saml.details" /></p>
     
     <div id="samlbasicmode" class="hero-unit">
-      <h3><g:message code="template.fr.serviceprovider.create.saml.known.heading" /></h3>
-      <p><g:message code="template.fr.serviceprovider.create.saml.known.descriptive" /></p>
+      <h3><g:message code="templates.fr.serviceprovider.create.saml.known.heading" /></h3>
+      <p><g:message code="templates.fr.serviceprovider.create.saml.known.descriptive" /></p>
 
       <fieldset>
         <div class="control-group">
           <label for="knownimpl"><g:message code="label.implementation" /></label>
           <div class="controls">
             <div id="knownimpl">
-              <strong>&nbsp;&nbsp;&nbsp;&nbsp;<g:message code="template.fr.serviceprovider.create.saml.known.shib13" /></strong>&nbsp;&nbsp;<span class="label important"><g:message code="template.fr.serviceprovider.create.saml.known.shib13.descriptive" /></span></span><br>
+              <strong>&nbsp;&nbsp;&nbsp;&nbsp;<g:message code="templates.fr.serviceprovider.create.saml.known.shib13" /></strong>&nbsp;&nbsp;<span class="label important"><g:message code="templates.fr.serviceprovider.create.saml.known.shib13.descriptive" /></span></span><br>
             </div>
           </div>
         </div>
@@ -146,8 +146,8 @@
     </div>
     
     <div id="samladvancedmode" class="hero-unit">
-      <h3><g:message code="template.fr.serviceprovider.create.saml.advanced.heading" /></h3>
-      <p><g:message code="template.fr.serviceprovider.create.saml.advanced.descriptive" /></p>
+      <h3><g:message code="templates.fr.serviceprovider.create.saml.advanced.heading" /></h3>
+      <p><g:message code="templates.fr.serviceprovider.create.saml.advanced.descriptive" /></p>
 
       <fieldset>
         <div class="control-group">
@@ -280,8 +280,8 @@
   <hr>
   
   <div id="crypto" class="step">
-    <h3>4. <g:message code="template.fr.serviceprovider.create.crypto.heading" /></h3>
-    <p><g:message code="template.fr.serviceprovider.create.crypto.details" /></p>
+    <h3>4. <g:message code="templates.fr.serviceprovider.create.crypto.heading" /></h3>
+    <p><g:message code="templates.fr.serviceprovider.create.crypto.details" /></p>
 
     <fieldset>
       <div class="control-group">
@@ -300,8 +300,8 @@
   <hr>
   
   <div id="attributesupport" class="step">
-    <h3>5. <g:message code="template.fr.serviceprovider.create.attributesupport.heading" /></h3>
-    <p><g:message code="template.fr.serviceprovider.create.attributesupport.details" /></p>
+    <h3>5. <g:message code="templates.fr.serviceprovider.create.attributesupport.heading" /></h3>
+    <p><g:message code="templates.fr.serviceprovider.create.attributesupport.details" /></p>
     <p><strong><g:message code="help.fr.serviceprovider.attribute.isrequired" /></strong></p>
     <fieldset>
       <table class="table table-striped borderless">
@@ -345,8 +345,8 @@
   <hr>
   
   <div id="creationsummary" class="step">
-    <h3>6. <g:message code="template.fr.serviceprovider.create.summary.heading" /></h3>
-    <p><g:message code="template.fr.serviceprovider.create.summary.details" /></p>
+    <h3>6. <g:message code="templates.fr.serviceprovider.create.summary.heading" /></h3>
+    <p><g:message code="templates.fr.serviceprovider.create.summary.details" /></p>
 
     <div class="form-action">
         <button type="submit" name="submit" value="submit" class="btn btn-success btn-large"><g:message code="label.submit"/></button>

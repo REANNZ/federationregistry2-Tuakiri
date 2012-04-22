@@ -9,7 +9,7 @@
   </div>
 
   <div id="new-${endpointType}" class="revealable">
-    <h4><g:message code="template.fr.endpoints.add.heading"/></h4>
+    <h4><g:message code="templates.fr.endpoints.add.heading"/></h4>
     <form id="new${endpointType}data" class="form-horizontal validating">
       <fieldset>
         <input type="hidden"

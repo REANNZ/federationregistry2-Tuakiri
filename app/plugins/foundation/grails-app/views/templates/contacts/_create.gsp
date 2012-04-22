@@ -10,7 +10,7 @@
     </div>
 
     <div class="search-contacts-form revealable">
-      <h4><g:message code="template.fr.contactmanager.searchforcontacts.heading"/></h4>
+      <h4><g:message code="templates.fr.contactmanager.searchforcontacts.heading"/></h4>
       <form>
         <fieldset>
           <input type="hidden" name="id" value="${owner.id}" />
@@ -36,11 +36,11 @@
   <div id="link-contact-modal" class="modal hide fade">
     <div class="modal-header">
       <a class="close close-modal">&times;</a>
-      <h3><g:message code="template.fr.contacts.confirmaddition.title"/></h3>
+      <h3><g:message code="templates.fr.contacts.confirmaddition.title"/></h3>
     </div>
     <div class="modal-body">
-      <p><g:message code="template.fr.contacts.confirmaddition"/></p>
-      <strong><g:message code="template.fr.contacts.selecttype"/></strong>
+      <p><g:message code="templates.fr.contacts.confirmaddition"/></p>
+      <strong><g:message code="templates.fr.contacts.selecttype"/></strong>
       <div class="controls">
         <g:select id="contactselectedtype" name="contactType" from="${contactTypes}" optionKey="name" optionValue="displayName"/>
       </div>
@@ -54,10 +54,10 @@
   <div id="unlink-contact-modal" class="modal hide fade">
     <div class="modal-header">
       <a class="close close-modal">&times;</a>
-      <h3><g:message code="template.fr.contacts.remove.confirm.title"/></h3>
+      <h3><g:message code="templates.fr.contacts.remove.confirm.title"/></h3>
     </div>
     <div class="modal-body">
-      <p><g:message code="template.fr.contacts.remove.confirm.descriptive"/></p>
+      <p><g:message code="templates.fr.contacts.remove.confirm.descriptive"/></p>
     </div>
     <div class="modal-footer">
       <a class="btn close-modal"><g:message code="label.cancel" /></a>

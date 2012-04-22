@@ -28,17 +28,17 @@
           <div class="row">
             <div class="unsupportedattributes span6 alert alert-box alert-error hidden">
               <h4 class="alert-heading"><g:message code="label.supportedattributesunavailable"/></h4>
-              <p><g:message code="fedreg.view.reporting.federation.compliance.compatability.unavailable"/></p>
+              <p><g:message code="views.fr.reporting.federation.compliance.compatability.unavailable"/></p>
             </div>
 
             <div class="automaticrelease span6 alert alert-box hidden">
               <h4 class="alert-heading"><g:message code="label.noautomaticrelease"/></h4>
-              <p><g:message code="fedreg.view.reporting.federation.compliance.compatability.automatic"/></p>
+              <p><g:message code="views.fr.reporting.federation.compliance.compatability.automatic"/></p>
             </div>
 
             <div class="releasesuccess span6 alert alert-box alert-success hidden">
               <h4 class="alert-heading"><g:message code="label.successfulrelease"/></h4>
-              <p><g:message code="fedreg.view.reporting.federation.compliance.compatability.success"/></p>
+              <p><g:message code="views.fr.reporting.federation.compliance.compatability.success"/></p>
             </div>
           </div>
           

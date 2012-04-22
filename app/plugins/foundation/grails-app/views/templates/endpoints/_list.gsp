@@ -94,6 +94,6 @@
     </g:each>
   </g:if>
   <g:else>
-    <p class="alert alert-message alert-danger"><g:message code="template.fr.endpoints.noresults"/></p>
+    <p class="alert alert-message alert-danger"><g:message code="templates.fr.endpoints.noresults"/></p>
   </g:else>
 </div>

@@ -7,7 +7,7 @@
   </div>
   
   <div id="new-attribute" class="revealable">
-    <h3><g:message code="template.fr.attributes.add.heading"/></h3>
+    <h3><g:message code="templates.fr.attributes.add.heading"/></h3>
 
     <form id="newattributedata" class="form-horizontal">
       <div class="control-group">
@@ -28,10 +28,10 @@
 <div id="delete-attribute-modal" class="modal hide fade">
   <div class="modal-header">
     <a class="close close-modal">&times;</a>
-    <h3><g:message code="template.fr.attributes.remove.confirm.title"/></h3>
+    <h3><g:message code="templates.fr.attributes.remove.confirm.title"/></h3>
   </div>
   <div class="modal-body">
-    <p><g:message code="template.fr.attributes.remove.confirm.descriptive"/></p>
+    <p><g:message code="templates.fr.attributes.remove.confirm.descriptive"/></p>
   </div>
   <div class="modal-footer">
     <a class="close-modal btn"><g:message code="label.cancel" /></a>

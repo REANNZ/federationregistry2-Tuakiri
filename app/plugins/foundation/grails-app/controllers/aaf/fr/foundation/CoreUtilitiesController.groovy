@@ -44,7 +44,7 @@ class CoreUtilitiesController {
 			// Wilcard certificate
 			if(subject.contains('*')) {
 				valid = false
-				certerrors.add("template.fr.certificates.validation.wildcard")
+				certerrors.add("templates.fr.certificates.validation.wildcard")
 				log.warn "Certificate contains wildcard"
 			}
 
@@ -55,11 +55,11 @@ class CoreUtilitiesController {
 				log.info "Certificate CN is $cn and entity is ${params.entity}"
 				if(!params.entity.contains(cn)) {
 					valid = false
-					certerrors.add("template.fr.certificates.validation.subject.doesnot.contain.host")
+					certerrors.add("templates.fr.certificates.validation.subject.doesnot.contain.host")
 					log.warn "Certificate CN does not contain hostname"
 				}
 			} else {
-				certerrors.add("template.fr.certificates.validation.subject.doesnot.contain.cn")
+				certerrors.add("templates.fr.certificates.validation.subject.doesnot.contain.cn")
 				log.warn "Certificate CN does not exist"
 			}
 			
@@ -68,7 +68,7 @@ class CoreUtilitiesController {
 			def maxValidDate = today + grailsApplication.config.aaf.fr.certificates.maxlifeindays
 			if(expires.after(maxValidDate)) {
 				valid = false
-				certerrors.add("template.fr.certificates.validation.expiry.tolong")
+				certerrors.add("templates.fr.certificates.validation.expiry.tolong")
 				log.warn "Certificate exceeds max time period for validity"
 			}
 		
@@ -78,7 +78,7 @@ class CoreUtilitiesController {
 		
 			if(!validca) {
 				valid = false
-				certerrors.add("template.fr.certificates.validation.invalidca")
+				certerrors.add("templates.fr.certificates.validation.invalidca")
 				log.warn "Certificate requires CA and can't be verified"
 			}
 			

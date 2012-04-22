@@ -133,7 +133,7 @@ class OrganizationController {
       log.info "$subject archive $organization"
 
       flash.type="success"
-      flash.message = message(code: 'template.fr.organization.archived')
+      flash.message = message(code: 'templates.fr.organization.archived')
 
       redirect (action: "show", id: organization.id)
     }
@@ -163,7 +163,7 @@ class OrganizationController {
       log.info "$subject unarchived $organization"
 
       flash.type="success"
-      flash.message = message(code: 'template.fr.organization.unarchived')
+      flash.message = message(code: 'templates.fr.organization.unarchived')
 
       redirect (action: "show", id: organization.id)
     }
@@ -193,7 +193,7 @@ class OrganizationController {
 
       log.info "$subject deleted $organization"
       flash.type="success"
-      flash.message = message(code: 'template.fr.organization.deleted')
+      flash.message = message(code: 'templates.fr.organization.deleted')
 
       redirect (action: "list")
     }

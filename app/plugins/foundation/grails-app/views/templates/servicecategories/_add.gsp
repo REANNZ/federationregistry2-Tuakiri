@@ -7,7 +7,7 @@
   </div>
   
   <div id="newcategory"  class="revealable">
-    <h4><g:message code="template.fr.servicecategories.add.heading"/></h4>
+    <h4><g:message code="templates.fr.servicecategories.add.heading"/></h4>
     <form id="newservicecategorydata" class="form-horizontal">
       <fieldset>
         <input type="hidden" name="id" value="${descriptor.id}"/>

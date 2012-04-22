@@ -44,14 +44,14 @@ class MetadataController {
   
   def entity = {
     if(!params.id) {
-      render message(code: 'fedreg.controllers.namevalue.missing')
+      render message(code: 'controllers.fr.generic.namevalue.missing')
       response.setStatus(500)
       return
     }
     
     def entity = EntityDescriptor.get(params.id)
     if (!entity) {
-      render message(code: 'fedreg.endpoint.nonexistant', args: [params.id])
+      render message(code: 'domains.fr.endpoint.nonexistant', args: [params.id])
       response.setStatus(500)
       return
     }

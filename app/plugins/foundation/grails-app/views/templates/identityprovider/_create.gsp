@@ -1,6 +1,6 @@
 <g:hasErrors>
 <div class="alert alert-message alert-danger">
-  <p><strong><g:message code="template.fr.identityprovider.create.errors" /></strong></p>
+  <p><strong><g:message code="templates.fr.identityprovider.create.errors" /></strong></p>
   <p>
     <g:message code="label.identifiederrors"/>
     <g:renderErrors bean="${identityProvider}" as="list" />
@@ -17,14 +17,14 @@
   <g:hiddenField name="contact.type" value="administrative" />
 
     <div id="overview">
-      <p><g:message code="template.fr.identityprovider.create.overview.details" /></p>
+      <p><g:message code="templates.fr.identityprovider.create.overview.details" /></p>
     </div>
 
     <hr>
 
     <div id="contact">
-      <h3>1. <g:message code="template.fr.identityprovider.create.contact.heading" /></h3>
-      <p><g:message code="template.fr.identityprovider.create.contact.details" /></p>
+      <h3>1. <g:message code="templates.fr.identityprovider.create.contact.heading" /></h3>
+      <p><g:message code="templates.fr.identityprovider.create.contact.details" /></p>
       <fieldset>
         <div class="control-group">
           <label for="contact.givenName"><g:message code="label.givenname" /></label>
@@ -67,8 +67,8 @@
     <hr>
 
     <div id="basic">
-        <h3>2. <g:message code="template.fr.identityprovider.create.basicinformation.heading" /></h3>
-        <p><g:message code="template.fr.identityprovider.create.basicinformation.details" /></p>
+        <h3>2. <g:message code="templates.fr.identityprovider.create.basicinformation.heading" /></h3>
+        <p><g:message code="templates.fr.identityprovider.create.basicinformation.details" /></p>
 
       <fieldset>
         <div class="control-group">
@@ -102,14 +102,14 @@
     <hr>
 
     <div id="saml">
-      <h3>3. <g:message code="template.fr.identityprovider.create.saml.heading" /></h3>
+      <h3>3. <g:message code="templates.fr.identityprovider.create.saml.heading" /></h3>
       <p>
-        <g:message code="template.fr.identityprovider.create.saml.details" />
+        <g:message code="templates.fr.identityprovider.create.saml.details" />
       </p>
 
       <div id="samlbasicmode" class="hero-unit">
-        <h3><g:message code="template.fr.identityprovider.create.saml.known.heading" /></h3>
-        <p><g:message code="template.fr.identityprovider.create.saml.known.descriptive" /></p>
+        <h3><g:message code="templates.fr.identityprovider.create.saml.known.heading" /></h3>
+        <p><g:message code="templates.fr.identityprovider.create.saml.known.descriptive" /></p>
 
         <fieldset>
           <div class="control-group">
@@ -134,8 +134,8 @@
       </div>
       
       <div id="samladvancedmode" class="hero-unit">
-        <h3><g:message code="template.fr.identityprovider.create.saml.advanced.heading" /></h3>
-        <p><g:message code="template.fr.identityprovider.create.saml.advanced.descriptive" /></p>
+        <h3><g:message code="templates.fr.identityprovider.create.saml.advanced.heading" /></h3>
+        <p><g:message code="templates.fr.identityprovider.create.saml.advanced.descriptive" /></p>
 
         <fieldset>
           <div class="control-group">
@@ -198,9 +198,9 @@
     <hr>
 
     <div id="scope">
-      <h3>4. <g:message code="template.fr.identityprovider.create.scope.heading" /></h3>
-      <p><g:message code="template.fr.identityprovider.create.scope.details" /></p>
-      <p><g:message code="template.fr.identityprovider.create.scope.example" /></p>
+      <h3>4. <g:message code="templates.fr.identityprovider.create.scope.heading" /></h3>
+      <p><g:message code="templates.fr.identityprovider.create.scope.details" /></p>
+      <p><g:message code="templates.fr.identityprovider.create.scope.example" /></p>
 
       <fieldset>
         <div class="control-group">
@@ -216,8 +216,8 @@
     <hr>
 
     <div id="crypto">
-      <h3>5. <g:message code="template.fr.identityprovider.create.crypto.heading" /></h3>
-      <p><g:message code="template.fr.identityprovider.create.crypto.details" /></p>
+      <h3>5. <g:message code="templates.fr.identityprovider.create.crypto.heading" /></h3>
+      <p><g:message code="templates.fr.identityprovider.create.crypto.details" /></p>
 
       <fieldset>
         <div class="control-group">
@@ -235,8 +235,8 @@
     <hr>
 
     <div id="attributesupport">
-      <h3>6. <g:message code="template.fr.identityprovider.create.attributesupport.heading" /></h3>
-      <p><g:message code="template.fr.identityprovider.create.attributesupport.details" /></p>
+      <h3>6. <g:message code="templates.fr.identityprovider.create.attributesupport.heading" /></h3>
+      <p><g:message code="templates.fr.identityprovider.create.attributesupport.details" /></p>
       <table class="table table-striped borderless">
         <tr>
           <th class="span9"><g:message code="label.name" /></th>
@@ -264,8 +264,8 @@
     <hr>
 
     <div id="creationsummary">
-      <h3>7. <g:message code="template.fr.identityprovider.create.summary.heading" /></h3>
-      <p><g:message code="template.fr.identityprovider.create.summary.details" /></p>
+      <h3>7. <g:message code="templates.fr.identityprovider.create.summary.heading" /></h3>
+      <p><g:message code="templates.fr.identityprovider.create.summary.details" /></p>
 
       <div class="form-action">
         <button type="submit" name="submit" value="submit" class="btn btn-success btn-large"><g:message code="label.submit"/></button>
