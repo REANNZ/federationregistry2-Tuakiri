@@ -65,5 +65,8 @@ frSetup.append("SecurityUtils.metaClass = null")
 frSetup.append("// Next step\n")
 frSetup.append("println 'If this script has executed successfully you should progress to executing aafAttributePopulation.groovy or the equivalent for your federation'")
 
-def out = new File('frFullSetup.groovy')
+def target = new File('target')
+target.mkdir()
+
+def out = new File('target/frFullSetup.groovy')
 out.write(frSetup.toString())

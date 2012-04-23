@@ -34,9 +34,10 @@ def attrUri = new SamlURI(type:SamlURIType.AttributeNameFormat, uri:'urn:oasis:n
 def attrBasic = new SamlURI(type:SamlURIType.AttributeNameFormat, uri:'urn:oasis:names:tc:SAML:2.0:attrname-format:basic', description:'').save()
 
 // Contact Types
-def tech = new ContactType(name:'technical', displayName:'Technical', description: 'Technical contacts').save()
-def mark = new ContactType(name:'marketing', displayName:'Marketing', description: 'Marketting contacts').save()
+def prodmgr = new ContactType(name:'productservicemgr', displayName:'Product and Services Manager', description: 'Product and services manager in an Organisation').save()
+def prirep = new ContactType(name:'primaryrepresentative', displayName:'Primary Representitive', description: 'Primary organisation representative').save()
 def bill = new ContactType(name:'billing', displayName:'Billing', description: 'Billing contacts').save()
+
+def tech = new ContactType(name:'technical', displayName:'Technical', description: 'Technical contacts').save()
 def supp = new ContactType(name:'support', displayName:'Support', description: 'Support contacts').save()
-def admin = new ContactType(name:'administrative', displayName:'Administrative', description: 'Administrative contacts').save()
 def other = new ContactType(name:'other', displayName:'Other', description: 'Other contacts').save()
