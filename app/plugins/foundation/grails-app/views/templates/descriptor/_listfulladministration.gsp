@@ -33,16 +33,16 @@
   <g:else>
     <h2 class="alert alert-error">No current administrators</h2>
     <div class="span5">
-      <p><g:message code="templates.fr.descriptor.administrator.justregistered" default="Have you recently registered this provider? If so you will have recieved an email from Federation Registry stating registration was completed. This email contains within a unique code (10 characters a mix of letters and numbers) that when entered will give you administrative rights. Please look for and enter this code now." /></p>
+      <p><g:message code="templates.fr.descriptor.administrator.justregistered" /></p>
     </div>
     <div class="offset1 span5">
-      <g:form controller="descriptorAdministration" action="grantFullAdministrationToken" method="POST">
+      <form id="addfulladministrator" method="POST" class="validating" action='${g.createLink(controller:"descriptorAdministration", action:"grantFullAdministrationToken")}'>
         <g:hiddenField name="id" value="${descriptor.id}" />
         <div class="input-prepend">
-          <span class="add-on"><strong>CODE</strong> </span><input class="span2" id="token" name="token" size="16" type="text">
+          <span class="add-on"><strong>CODE</strong> </span><input class="span2 required" id="token" name="token" size="16" type="text">
         </div>
-        <g:submitButton name="submit" value="${message(code: 'label.submitcode', default: 'Submit Code')}" class="btn btn-success btn-large" />
-      </g:form>
+        <input type="submit" name="submit" value="${message(code: 'label.submitcode', default: 'Submit Code')}" class="btn btn-success btn-large" />
+      </form>
     </div>
     <div class="span11 row-spacer">
       <p><strong><g:message code="templates.fr.descriptor.administrator.nocode" default="If you have not been provided a code or cannot locate it please log a support request using the links above." /></strong><br><br><br></p>
@@ -88,3 +88,10 @@
     </div>
   </fr:hasPermission>
 </div>
+
+<r:script>
+    $('#addfulladministrator').validate({
+      ignore: ":disabled",
+      keyup: false,
+    });
+</r:script>

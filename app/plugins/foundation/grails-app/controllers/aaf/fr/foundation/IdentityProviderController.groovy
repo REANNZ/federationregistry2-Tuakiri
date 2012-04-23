@@ -42,7 +42,7 @@ class IdentityProviderController {
     def adminRole = Role.findByName("descriptor-${identityProvider.id}-administrators")
     def reportRole = Role.findByName("descriptor-${identityProvider.id}-report-administrators")
     def subjects = aaf.fr.identity.Subject.list()
-    [identityProvider: identityProvider, contactTypes:ContactType.list(), administrators:adminRole.subjects, reportAdministrators:reportRole?.subjects, subjects:subjects]
+    [identityProvider: identityProvider, contactTypes:ContactType.list(), administrators:adminRole?.subjects, reportAdministrators:reportRole?.subjects, subjects:subjects]
   }
   
   def create = {

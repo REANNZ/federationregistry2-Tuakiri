@@ -32,7 +32,7 @@
     </table>
   </g:if>
   <g:else>
-    <p class="alert alert-info"><g:message code="templates.fr.descriptor.reportadministrator.noresults" default="No specific users have been granted report access at the time" /></p>
+    <p class="alert alert-info"><g:message code="templates.fr.descriptor.reportadministrator.noresults" default="No user has been granted report viewing rights at this time." /></p>
   </g:else>
 
   <fr:hasPermission target="descriptor:${descriptor.id}:manage:administrators">

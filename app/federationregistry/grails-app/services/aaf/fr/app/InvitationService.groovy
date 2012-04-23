@@ -65,11 +65,11 @@ class InvitationService {
         invite.errors.each { log.warn it }
         throw new RuntimeException ("Error when attempting to utilize invitation, unable to save state")
       }
-      invite
+      return invite
     }
     else {
-      log.error "Possible attempt to breach invite system located. Request submitted invite code $inviteCode"
-      throw new RuntimeException ("Error when attempting to retrieve invitation, no such identifier")
+      log.error "Request submitted invite code $inviteCode, no such identifier"
+      return null
     }
   }
 
