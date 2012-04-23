@@ -34,7 +34,7 @@ class OrganizationService {
         contact.errors.each { log.debug it }
       }
     }
-    def ct = params.contact?.type ?: 'administrative'
+    def ct = params.contact?.type ?: 'technical'
     
     if(!organization.validate() || contact.hasErrors()) {
       log.info "$subject attempted to create $organization but failed input validation"

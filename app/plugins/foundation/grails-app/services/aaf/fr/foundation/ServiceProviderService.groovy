@@ -33,7 +33,7 @@ class ServiceProviderService {
       }
     }
 
-    def ct = params.contact?.type ?: 'administrative'
+    def ct = params.contact?.type ?: 'technical'
   
     def entityDescriptor
     if(params.entity?.id) {   

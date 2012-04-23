@@ -39,7 +39,7 @@ class IdentityProviderService {
           contact.errors.each { log.debug it }
       }
     }
-    def ct = params.contact?.type ?: 'administrative'
+    def ct = params.contact?.type ?: 'technical'
   
     // Entity Descriptor
     def entityDescriptor
