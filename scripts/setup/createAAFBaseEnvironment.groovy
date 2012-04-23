@@ -95,7 +95,7 @@ federationMonitors.each {
 }
 
 println "completed createAAFBaseEnvironment.groovy"
-
+true
 
 
 ​

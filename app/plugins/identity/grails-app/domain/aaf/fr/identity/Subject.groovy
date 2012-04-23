@@ -14,6 +14,9 @@ class Subject extends SubjectBase {
   static constraints = {
     email email:true
     cn nullable: false, blank: false
+
+    contact nullable:true
+    sharedToken nullable:true   // This two may be left null for internal system accounts only.
   }
 
   public String toString() {

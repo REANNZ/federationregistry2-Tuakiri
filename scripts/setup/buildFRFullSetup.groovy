@@ -64,6 +64,7 @@ frSetup.append("SecurityUtils.metaClass = null")
 
 frSetup.append("// Next step\n")
 frSetup.append("println 'If this script has executed successfully you should progress to executing aafAttributePopulation.groovy or the equivalent for your federation'")
+frSetup.append("true")
 
 def target = new File('target')
 target.mkdir()
