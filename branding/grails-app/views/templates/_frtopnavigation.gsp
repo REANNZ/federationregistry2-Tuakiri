@@ -40,7 +40,6 @@
       </li>
     </fr:isAdministrator>
   </fr:isLoggedIn>
-  <li><a style="color: #fff;" href="http://support.aaf.edu.au/forums"><g:message code="fr.branding.nav.help" default="Help" /></a></li>
   <li><a style="color: #fff;" href="#" onClick="script: Zenbox.show(); return false;"><g:message code="fr.branding.nav.support" default="Support" /></a></li>
   <fr:isLoggedIn>
     <li>
