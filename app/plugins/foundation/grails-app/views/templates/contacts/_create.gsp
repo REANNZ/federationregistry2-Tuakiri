@@ -1,4 +1,4 @@
-<fr:hasAnyPermission in='["federation:management:organization:${owner.id}:contact:add", "federation:management:contacts"]'>
+<fr:hasAnyPermission in='["federation:management:organization:${host.id}:contact:add", "federation:management:contacts"]'>
   <hr>
   
   <div class="search-contacts">
@@ -13,7 +13,7 @@
       <h4><g:message code="templates.fr.contactmanager.searchforcontacts.heading"/></h4>
       <form>
         <fieldset>
-          <input type="hidden" name="id" value="${owner.id}" />
+          <input type="hidden" name="id" value="${host.id}" />
 
           <label for="givenName"><g:message code="label.givenname"/></label>
           <input type="text" id="givenName" name="givenName" class="x-large" />
