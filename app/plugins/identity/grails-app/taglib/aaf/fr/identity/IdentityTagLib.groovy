@@ -16,7 +16,7 @@ class IdentityTagLib {
 
   // This tag only writes its body to the output if the current user is an FR wide administrator
   def isAdministrator = { attrs, body ->
-    if(SecurityUtils.subject.hasRole(AdminsService.ADMIN_ROLE)) {
+    if(checkPermission('federation:globaladministrator')) {
       out << body()
     }
   }
