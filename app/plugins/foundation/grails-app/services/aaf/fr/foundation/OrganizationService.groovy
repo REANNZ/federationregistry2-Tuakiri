@@ -30,11 +30,13 @@ class OrganizationService {
       contact = new Contact(givenName: params.contact?.givenName, surname: params.contact?.surname, email: params.contact?.email)
       contact.save(flush:true)
       if(contact.hasErrors()) {
-        log.info "$subject attempted to create identityProvider but contact details supplied were invalid"
+        log.info "$subject attempted to create organisation but contact details supplied were invalid"
         contact.errors.each { log.debug it }
       }
     }
     def ct = params.contact?.type ?: 'technical'
+    def contactPerson = new ContactPerson(contact:contact, type:ContactType.findByName(ct))
+    organization.addToContacts(contactPerson) 
     
     if(!organization.validate() || contact.hasErrors()) {
       log.info "$subject attempted to create $organization but failed input validation"

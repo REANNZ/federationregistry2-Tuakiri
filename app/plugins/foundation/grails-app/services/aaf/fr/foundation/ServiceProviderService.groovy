@@ -28,7 +28,7 @@ class ServiceProviderService {
       contact = new Contact(givenName: params.contact?.givenName, surname: params.contact?.surname, email: params.contact?.email, organization:organization)
       contact.save()
       if(contact.hasErrors()) {
-          log.info "$subject attempted to create serviceProvider but contact details supplied were invalid"
+          log.info "$subject attempted to create service provider but contact details supplied were invalid"
           contact.errors.each { log.debug it }
       }
     }
