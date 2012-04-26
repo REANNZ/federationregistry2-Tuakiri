@@ -11,7 +11,7 @@
 
 <g:form action="${saveAction}" class="form-horizontal">
   <g:hiddenField name="active" value="true"/>
-  <g:hiddenField name="contact.type" value="administrative" />
+  <g:hiddenField name="contact.type" value="technical" />
   <g:hiddenField name="organization.lang" value="en" />
   
   <div class="step" id="overview">
@@ -43,7 +43,7 @@
             <g:textField name="contact.surname"  class="required" value="${contact?.surname}"/>
           </g:if>
           <g:else>
-            <g:textField name="contact.givenName"  class="required" value="${fr?.subject() ? fr.subject().surname:''}"/>
+            <g:textField name="contact.surname"  class="required" value="${fr?.subject() ? fr.subject().surname:''}"/>
           </g:else>
         </div>
       </div>
@@ -55,7 +55,7 @@
             <g:textField name="contact.email"  class="required email" value="${contact?.email}"/>
           </g:if>
           <g:else>
-            <g:textField name="contact.givenName"  class="required" value="${fr?.subject() ? fr.subject().email:''}"/>
+            <g:textField name="contact.email"  class="required" value="${fr?.subject() ? fr.subject().email:''}"/>
           </g:else>
         </div>
       </div>
@@ -73,7 +73,7 @@
       <div class="control-group">
       <label for="organization.name"><g:message code="label.name" /></label>
         <div class="controls">
-          <g:textField name="organization.name" class="required span4" value="${organization?.name}"/>
+          <g:textField name="organization.name" class="required span4" value="${organization?.name}" placeholder="example.edu.au" />
           <fr:tooltip code='help.fr.organization.name' />
         </div>
       </div>
@@ -81,7 +81,7 @@
       <div class="control-group">
       <label for="organization.displayName"><g:message code="label.displayname" /></label>
         <div class="controls">
-          <g:textField name="organization.displayName" class="required span4" value="${organization?.displayName}"/>
+          <g:textField name="organization.displayName" class="required span4" value="${organization?.displayName}" placeholder="Example University"/>
           <fr:tooltip code='help.fr.organization.displayName' />
         </div>
       </div>
@@ -89,7 +89,7 @@
       <div class="control-group">
       <label for="organization.url"><g:message code="label.organizationurl" /></label>
         <div class="controls">
-          <g:textField name="organization.url" class="required url span4"  value="${organization?.url}"/>
+          <g:textField name="organization.url" class="required url span4" value="${organization?.url}" placeholder="http://www.example.edu.au"/>
           <fr:tooltip code='help.fr.organization.url' />
         </div>
       </div>

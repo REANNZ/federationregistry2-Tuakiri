@@ -23,7 +23,7 @@
             <pre class="metadata">${fieldValue(bean: entity, field: "extensions")}</pre>
           </g:if>
           <g:else>
-            <span class="alert alert-message"><g:message code="aaf.fr.foundation.entitydescriptor.noextensions"/></span>
+            <g:message code="templates.fr.entitydescriptor.noextensions"/>
           </g:else>
         </td>
       </tr>

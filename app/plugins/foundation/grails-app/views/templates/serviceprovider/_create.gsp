@@ -13,7 +13,7 @@
 <form action="${saveAction}" method="post" class="form-horizontal validating">
   <g:hiddenField name="active" value="true"/>
   <g:hiddenField name="aa.create" value="true"/>
-  <g:hiddenField name="contact.type" value="administrative" />
+  <g:hiddenField name="contact.type" value="technical" />
   
   <div id="overview">
     <p><g:message code="templates.fr.serviceprovider.create.overview.details" /></p>
@@ -134,7 +134,7 @@
         <div class="control-group">
           <label for="hostname"><g:message code="label.url" /></label>
           <div class="controls">
-            <g:textField name="hostname" id="hostname" class="url span4"  value="${hostname}"/>
+            <g:textField name="hostname" id="hostname" class="url span4" value="${hostname}" placeholder="https://sp.example.edu.au"/>
             <fr:tooltip code='help.fr.serviceprovider.hostname' />
           </div>
         </div>
@@ -153,7 +153,7 @@
         <div class="control-group">
           <label for="entity.identifier"><g:message code="label.entitydescriptor" /></label>
           <div class="controls">
-            <g:textField name="entity.identifier" class="required url span4"  value="${entityDescriptor?.entityID}"/>
+            <g:textField name="entity.identifier" class="required url span4" value="${entityDescriptor?.entityID}"/>
             <fr:tooltip code='help.fr.serviceprovider.entitydescriptor' />
           </div>
         </div>

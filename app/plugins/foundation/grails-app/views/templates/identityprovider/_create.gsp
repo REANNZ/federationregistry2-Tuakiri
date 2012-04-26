@@ -14,7 +14,7 @@
   <g:hiddenField name="active" value="true"/>
   <g:hiddenField name="idp.autoacceptservices" value="true"/>
   <g:hiddenField name="aa.create" value="true"/>
-  <g:hiddenField name="contact.type" value="administrative" />
+  <g:hiddenField name="contact.type" value="technical" />
 
     <div id="overview">
       <p><g:message code="templates.fr.identityprovider.create.overview.details" /></p>
@@ -122,7 +122,7 @@
           <div class="control-group">
             <label for="hostname"><g:message code="label.url" /></label>
             <div class="controls">
-              <g:textField name="hostname" class="url span4" value="${hostname}"/>
+              <g:textField name="hostname" class="url span4" value="${hostname}" placeholder="https://idp.example.edu.au" />
               <fr:tooltip code='help.fr.identityprovider.hostname' />
             </div>
           </div>
@@ -206,7 +206,7 @@
         <div class="control-group">
             <label for="scope"><g:message code="label.scope" /></label>
             <div class="controls">
-              <g:textField name="idp.scope" class="required span4" value="${scope}"/>
+              <g:textField name="idp.scope" class="required span4" value="${scope}" placeholder="example.edu.au"/>
               <fr:tooltip code='help.fr.identityprovider.scope' />
             </div>
         </div>
