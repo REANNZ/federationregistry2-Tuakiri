@@ -35,8 +35,8 @@ class FederatedRealm {
 
     def entityDescriptor = EntityDescriptor.findWhere(entityID:token.attributes.entityID)
     if(!entityDescriptor) {
-      log.error("Authentication attempt for Shibboleth provider, denying attempt as no Entity matching (FederatedToken.entityID) is available.")
-      throw new UnknownAccountException("Authentication attempt for Shibboleth provider, denying attempt as no Entity matching (FederatedToken.entityID) is available.")
+      log.error("Authentication attempt for Shibboleth provider, denying attempt as no Entity matching ($token.attributes.entityID) is available.")
+      throw new UnknownAccountException("Authentication attempt for Shibboleth provider, denying attempt as no Entity matching ($token.attributes.entityID) is available.")
     }
 
     SubjectBase.withTransaction {
