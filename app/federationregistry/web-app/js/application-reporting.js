@@ -504,8 +504,7 @@ function requestServiceUtilization(params) {
     var options = {
       chart: {
         renderTo: 'detailedserviceutilization',
-        defaultSeriesType: 'bar',
-        height: 40
+        defaultSeriesType: 'bar'
       },
       title: {},
       xAxis: {
@@ -709,7 +708,6 @@ function requestIdPUtilization(params) {
       chart: {
         renderTo: 'detailedidputilization',
         defaultSeriesType: 'bar',
-        height: 40
       },
       title: {},
       xAxis: {
@@ -1051,8 +1049,7 @@ fr.attributesupport_compliance_report = function(target) {
     var options = {
       chart: {
         renderTo: 'attributesupportchart',
-        defaultSeriesType: 'bar',
-        height: 40
+        defaultSeriesType: 'bar'
       },
       title: {},
       xAxis: {
@@ -1062,7 +1059,7 @@ fr.attributesupport_compliance_report = function(target) {
         },
       },
       yAxis: {
-        min: 1,
+        min: 0,
         title: {
           text: '',
         }
@@ -1409,8 +1406,7 @@ function requestIdPServiceUtilization(params) {
     var options = {
       chart: {
         renderTo: 'detailedidptoserviceutilization',
-        defaultSeriesType: 'bar',
-        height: 40
+        defaultSeriesType: 'bar'
       },
       title: {},
       xAxis: {
@@ -1756,8 +1752,7 @@ function requestSptoIdPUtilization(params) {
     var options = {
       chart: {
         renderTo: 'detailedsptoidputilization',
-        defaultSeriesType: 'bar',
-        height: 40
+        defaultSeriesType: 'bar'
       },
       title: {},
       xAxis: {

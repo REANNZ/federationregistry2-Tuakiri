@@ -53,7 +53,7 @@
         <g:link controller="federationReports" action="serviceutilization"><g:message code="fr.branding.nav.reports.serviceutilization" default="Service Provider Utilisation"/></g:link>
       </li>
       <li class="${controllerName == 'federationReports' && actionName == 'dsutilization' ? 'active':''}">
-        <g:link controller="federationReports" action="dsutilization"><g:message code="fr.branding.nav.reports.dsutilization" default="Discovery Service Utilisation" /></g:link>
+        <g:link controller="federationReports" action="dsutilization"><g:message code="fr.branding.nav.reports.dsutilization" default="DS Utilisation" /></g:link>
       </li>
       <li class="${controllerName == 'federationReports' && actionName == 'demand' ? 'active':''}">
         <g:link controller="federationReports" action="demand"><g:message code="fr.branding.nav.reports.demand" default="Demand"/></g:link>
@@ -70,7 +70,7 @@
         <g:link controller="identityProviderReports" action="sessions"><g:message code="fr.branding.nav.reports.idp.sessions"  default="Sessions"/></g:link>
       </li>
       <li class="${controllerName == 'identityProviderReports' && actionName == 'utilization' ? 'active':''}">
-        <g:link controller="identityProviderReports" action="utilization"><g:message code="fr.branding.nav.reports.idp.utilization" default="Utilsation" /></g:link>
+        <g:link controller="identityProviderReports" action="utilization"><g:message code="fr.branding.nav.reports.idp.utilization" default="Utilisation" /></g:link>
       </li>
       <li class="${controllerName == 'identityProviderReports' && actionName == 'demand' ? 'active':''}">
         <g:link controller="identityProviderReports" action="demand"><g:message code="fr.branding.nav.reports.idp.demand" default="Demand" /></g:link>

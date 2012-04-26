@@ -133,39 +133,49 @@ class FederationReportsController {
     }
 
     def knownDailyTotals
-    knownDailyTotals = Organization.executeQuery("select count(*), dateCreated, id, displayName from aaf.fr.foundation.Organization where dateCreated between ? and ? group by year(dateCreated), month(dateCreated), day(dateCreated) order by year(dateCreated), month(dateCreated), day(dateCreated)", [startDate.time, endDate.time])
+    knownDailyTotals = Organization.executeQuery("select count(*), dateCreated from aaf.fr.foundation.Organization where dateCreated between ? and ? group by year(dateCreated), month(dateCreated), day(dateCreated) order by year(dateCreated), month(dateCreated), day(dateCreated)", [startDate.time, endDate.time])
     results.series.org.counts = populateDaily(knownDailyTotals, startDate, endDate)
+    
     knownDailyTotals.each { daily ->
-      def o = [:]
-      o.id = daily[2]
-      o.displayName = daily[3]
-      o.dateCreated = daily[1].format("yyyy-MM-dd")
-      o.url = g.createLink(absolute: true, controller:'organization', action:'show', id:o.id)
-      results.detail.org.add(o)
+      def organizations = Organization.executeQuery("select id, displayName, dateCreated from aaf.fr.foundation.Organization where date(dateCreated) = ?", daily[1])
+      organizations.each { org ->
+        def o = [:]
+        o.id = org[0]
+        o.displayName = org[1]
+        o.dateCreated = org[2]
+        o.url = g.createLink(absolute: true, controller:'organization', action:'show', id:o.id)
+        results.detail.org.add(o)
+      }
     }
     results.detail.org.sort{it.dateCreated}
 
-    knownDailyTotals = IDPSSODescriptor.executeQuery("select count(*), dateCreated, id, displayName from aaf.fr.foundation.IDPSSODescriptor where dateCreated between ? and ? group by year(dateCreated), month(dateCreated), day(dateCreated) order by year(dateCreated), month(dateCreated), day(dateCreated)", [startDate.time, endDate.time])
+    knownDailyTotals = IDPSSODescriptor.executeQuery("select count(*), dateCreated from aaf.fr.foundation.IDPSSODescriptor where dateCreated between ? and ? group by year(dateCreated), month(dateCreated), day(dateCreated) order by year(dateCreated), month(dateCreated), day(dateCreated)", [startDate.time, endDate.time])
     results.series.idp.counts = populateDaily(knownDailyTotals, startDate, endDate)
     knownDailyTotals.each { daily ->
-      def idp = [:]
-      idp.id = daily[2]
-      idp.displayName = daily[3]
-      idp.dateCreated = daily[1].format("yyyy-MM-dd")
-      idp.url = g.createLink(absolute: true, controller:'identityProvider', action:'show', id:idp.id)
-      results.detail.idp.add(idp)
+      def idps = IDPSSODescriptor.executeQuery("select id, displayName, dateCreated from aaf.fr.foundation.IDPSSODescriptor where date(dateCreated) = ?", daily[1])
+      idps.each { idp ->
+        def i = [:]
+        i.id = idp[0]
+        i.displayName = idp[1]
+        i.dateCreated = idp[2]
+        i.url = g.createLink(absolute: true, controller:'organization', action:'show', id:i.id)
+        results.detail.idp.add(i)
+      }
     }
     results.detail.idp.sort{it.dateCreated}
 
-    knownDailyTotals = SPSSODescriptor.executeQuery("select count(*), dateCreated, id, displayName from aaf.fr.foundation.SPSSODescriptor where dateCreated between ? and ? group by year(dateCreated), month(dateCreated), day(dateCreated) order by year(dateCreated), month(dateCreated), day(dateCreated)", [startDate.time, endDate.time])
+    knownDailyTotals = SPSSODescriptor.executeQuery("select count(*), dateCreated from aaf.fr.foundation.SPSSODescriptor where dateCreated between ? and ? group by year(dateCreated), month(dateCreated), day(dateCreated) order by year(dateCreated), month(dateCreated), day(dateCreated)", [startDate.time, endDate.time])
     results.series.sp.counts = populateDaily(knownDailyTotals, startDate, endDate)
     knownDailyTotals.each { daily ->
-      def sp = [:]
-      sp.id = daily[2]
-      sp.displayName = daily[3]
-      sp.dateCreated = daily[1].format("yyyy-MM-dd")
-      sp.url = g.createLink(absolute: true, controller:'serviceProvider', action:'show', id:sp.id)
-      results.detail.sp.add(sp)
+      def sps = SPSSODescriptor.executeQuery("select id, displayName, dateCreated from aaf.fr.foundation.SPSSODescriptor where date(dateCreated) = ?", daily[1])
+      sps.each { sp ->
+        def s = [:]
+        s.id = sp[0]
+        s.displayName = sp[1]
+        s.dateCreated = sp[2]
+        s.url = g.createLink(absolute: true, controller:'organization', action:'show', id:s.id)
+        results.detail.sp.add(s)
+      }
     }
     results.detail.sp.sort{it.dateCreated}
 
