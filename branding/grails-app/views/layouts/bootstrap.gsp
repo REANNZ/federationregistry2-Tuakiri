@@ -42,6 +42,8 @@
         </div>
       </footer>
     </div>
+
+    <r:layoutResources/>
     
   </body>
 
