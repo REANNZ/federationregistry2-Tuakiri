@@ -1,4 +1,59 @@
-// SAML Base (createSAMLBase.groovy)
+import org.apache.shiro.subject.Subject
+import org.apache.shiro.util.ThreadContext
+import org.apache.shiro.SecurityUtils
+import grails.plugins.federatedgrails.*
+import aaf.fr.app.*
+import aaf.fr.workflow.*
+import aaf.fr.foundation.*
+import aaf.fr.identity.*
+
+/*
+Bootstrap - Step 1
+
+This step should be performed by all federations deploying FR
+*/
+
+roleService = ctx.getBean("roleService")
+permissionService = ctx.getBean("permissionService")
+
+// Create federation-administrators role, used in workflows etc
+def adminRole = roleService.createRole("federation-administrators", "Role representing federation level administrators who can make decisions onbehalf of the entire federation, granted global FR access", false)
+
+// Grant administrative 'ALL' permission
+Permission adminPermission = new Permission(target:'*')
+adminPermission.managed = true
+adminPermission.type = Permission.adminPerm
+
+permissionService.createPermission(adminPermission, adminRole)
+
+// Create federation-reporting role, used to grant full reporting access to non fr wide admins
+def reportingRole = roleService.createRole("federation-reporting", "Access to federation wide reports for executive, management etc.", false)
+
+// Grant global reports access permission
+Permission reportingAdminPermission = new Permission(target:'federation:management:reporting')
+reportingAdminPermission.managed = true
+reportingAdminPermission.type = Permission.adminPerm
+
+permissionService.createPermission(reportingAdminPermission, reportingRole)
+
+// Create contactmanagement-reporting role, used to grant full contact management access to non fr wide admins
+def contactManagementRole = roleService.createRole("federation-contactmanagement", "Access to manage contacts for all IdP and SP", false)
+
+// Grant global reports access permission
+Permission contactAdminPermission = new Permission(target:'federation:management:contacts')
+contactAdminPermission.managed = true
+contactAdminPermission.type = Permission.adminPerm
+
+permissionService.createPermission(contactAdminPermission, contactManagementRole)
+
+// Populate default administrative account if required
+def subject = new aaf.fr.identity.Subject(principal:'internaladministrator', cn:'internal administrator', email:'internaladministrator@not.valid')
+subject.save(flush: true)
+if(subject.hasErrors()) {
+  subject.errors.each { println it }
+  return false
+}
+
 // Overall SAML2 protocol support, all SAML 2.0 compliant RoleDescriptors need this.
 def saml2Namespace = new SamlURI(type:SamlURIType.ProtocolSupport, uri:'urn:oasis:names:tc:SAML:2.0:protocol').save()
 def saml1Namespace = new SamlURI(type:SamlURIType.ProtocolSupport, uri:'urn:oasis:names:tc:SAML:1.1:protocol').save()
@@ -32,12 +87,3 @@ def shibNameID = new SamlURI(type:SamlURIType.NameIdentifierFormat, uri:'urn:mac
 def attrUnspec = new SamlURI(type:SamlURIType.AttributeNameFormat, uri:'urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified', description:'').save()
 def attrUri = new SamlURI(type:SamlURIType.AttributeNameFormat, uri:'urn:oasis:names:tc:SAML:2.0:attrname-format:uri', description:'').save()
 def attrBasic = new SamlURI(type:SamlURIType.AttributeNameFormat, uri:'urn:oasis:names:tc:SAML:2.0:attrname-format:basic', description:'').save()
-
-// Contact Types
-def prodmgr = new ContactType(name:'productservicemgr', displayName:'Product and Services Manager', description: 'Product and services manager in an Organisation').save()
-def prirep = new ContactType(name:'primaryrepresentative', displayName:'Primary Representitive', description: 'Primary organisation representative').save()
-def bill = new ContactType(name:'billing', displayName:'Billing', description: 'Billing contacts').save()
-
-def tech = new ContactType(name:'technical', displayName:'Technical', description: 'Technical contacts').save()
-def supp = new ContactType(name:'support', displayName:'Support', description: 'Support contacts').save()
-def other = new ContactType(name:'other', displayName:'Other', description: 'Other contacts').save()
