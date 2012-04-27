@@ -29,3 +29,6 @@ use (TimeCategory) {
     }
   }
 }
+
+println "Completed creation of test data for reports and default O, IdP, SP"
+true

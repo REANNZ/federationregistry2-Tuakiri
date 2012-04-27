@@ -16,7 +16,7 @@ Bootstrap - Step 4
 Having run buildAAFWorkflow to create this script the workflow in setup/src/workflow will now be imported to FR database for use.
 */\n\n""")
 
-output.append("def subject = new aaf.fr.identity.Subject.findWhere(principal:'internaladministrator')")
+output.append("def subject = aaf.fr.identity.Subject.findWhere(principal:'internaladministrator')\n\n")
 
 output.append("// Workflow scripts\n")
 def scripts = new File("./src/workflow/scripts")
