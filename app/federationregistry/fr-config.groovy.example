@@ -24,11 +24,6 @@ aaf {
       // shib default of 20 years for assertion certs so this must be large
       maxlifeindays = 7800
     }
-
-    gapps {
-      enabled = false
-      id = "UA-1234"
-    }
     
     shibboleth {
       federationprovider {
