@@ -58,7 +58,7 @@ class MetadataController {
     
     def md = entityMetadata(entity)
     
-    render template:"/templates/entitymetadata", contextPath: pluginContextPath, model:[md:md], contentType: "text/plain"
+    render(text:md, contentType: "text/xml", encoding:"UTF-8")
   }
   
   private def currentPublishedMetadata(def minimal, def ext) {
