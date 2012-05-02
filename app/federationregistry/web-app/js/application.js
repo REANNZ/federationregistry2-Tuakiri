@@ -1,6 +1,6 @@
 
-window.fedreg = window.fedreg || {};
-var fedreg = window.fedreg;
+window.fr = window.fr || {};
+var fr = window.fr;
 var btn;
 
 $(function() {
@@ -48,52 +48,52 @@ applyBehaviourTo = function(scope) {
 
 $('.modal-content').modal({keyboard:true, backdrop:'static'});
 $(".close-modal").click(function () {
-  fedreg.hide_modals();
-  fedreg.reset_button();
+  fr.hide_modals();
+  fr.reset_button();
 });
 $(".modal").on('hidden', function(){
-  fedreg.reset_button();
+  fr.reset_button();
 });
 $('.modal').bind('shown', function () {
   $('.btn', $(this)).removeAttr('disabled');
 });
-fedreg.hide_modals = function() {
+fr.hide_modals = function() {
   $(".modal.in").modal('hide');
 };
 
-fedreg.getParameterByName = function(name) {
+fr.getParameterByName = function(name) {
   var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
   return match ? decodeURIComponent(match[1].replace(/\+/g, ' ')) : null;
 }
 
-fedreg.set_button = function(b) {
+fr.set_button = function(b) {
   btn = b; 
   btn.button('loading');
   $('.btn').attr('disabled', '');
 };
 
-fedreg.reset_button = function() {
+fr.reset_button = function() {
   $('.btn').button('reset').removeAttr('disabled');
 };
 
-fedreg.showspinner= function() {
+fr.showspinner= function() {
   $('.spinner').show();
 }
 
-fedreg.hidespinner= function() {
+fr.hidespinner= function() {
   $('.spinner').hide();
 }
 
-fedreg.showlocalspinner= function(scope) {
+fr.showlocalspinner= function(scope) {
   $(scope + ' .spinner').show();
 }
 
-fedreg.hidelocalspinner= function(scope) {
+fr.hidelocalspinner= function(scope) {
   $(scope + ' .spinner').hide();
 }
 
 $(document).ajaxComplete(function(event, request, settings){
-   fedreg.reset_button();
+   fr.reset_button();
 });
 
 $(document).on('click', '.show-problems-logging-on', function() {
@@ -104,7 +104,7 @@ $(document).on('click', '.show-problems-logging-on', function() {
 $(document).on('click', '.load-descriptor-metadata', function() {
   var target = $("#descriptormetadata");
   target.addClass('hidden');
-  fedreg.set_button($(this));
+  fr.set_button($(this));
   $.ajax({
     type: "GET",
     cache: false,
@@ -113,17 +113,17 @@ $(document).on('click', '.load-descriptor-metadata', function() {
     success: function(res) {
       target.text(res);
       target.removeClass('hidden');
-      fedreg.reset_button($(this));
+      fr.reset_button($(this));
     },
     error: function (xhr, ajaxOptions, thrownError) {
-      fedreg.reset_button($(this));
+      fr.reset_button($(this));
     }
   });
 
 });
 
 // Organization Administrators
-fedreg.organization_fulladministrator_grant = function(userID) {
+fr.organization_fulladministrator_grant = function(userID) {
   var data = "userID=" + userID
   $.ajax({
     async: false,
@@ -132,8 +132,8 @@ fedreg.organization_fulladministrator_grant = function(userID) {
     data: data,
     success: function(res) {
       
-      fedreg.organization_fulladministrator_list();
-      fedreg.organization_fulladministrator_search();
+      fr.organization_fulladministrator_list();
+      fr.organization_fulladministrator_search();
       },
       error: function (xhr, ajaxOptions, thrownError) {
       
@@ -141,7 +141,7 @@ fedreg.organization_fulladministrator_grant = function(userID) {
   });
 };
 
-fedreg.organization_fulladministrator_revoke = function(userID) {
+fr.organization_fulladministrator_revoke = function(userID) {
   var data = "userID=" + userID
   $.ajax({
     async: false,
@@ -150,7 +150,7 @@ fedreg.organization_fulladministrator_revoke = function(userID) {
     data: data  + "&_method=delete",
     success: function(res) {
       
-      fedreg.organization_fulladministrator_list();
+      fr.organization_fulladministrator_list();
       },
       error: function (xhr, ajaxOptions, thrownError) {
       
@@ -158,7 +158,7 @@ fedreg.organization_fulladministrator_revoke = function(userID) {
   });
 };
 
-fedreg.organization_fulladministrator_list = function() {
+fr.organization_fulladministrator_list = function() {
   $.ajax({
     type: "GET",
     cache: false,
@@ -176,7 +176,7 @@ fedreg.organization_fulladministrator_list = function() {
   });
 };
 
-fedreg.organization_fulladministrator_search = function() {
+fr.organization_fulladministrator_search = function() {
   var data = "q=" + $('#q').val()
   $.ajax({
     type: "GET",
@@ -197,7 +197,7 @@ fedreg.organization_fulladministrator_search = function() {
 }
 
 // Descriptor Administrators
-fedreg.descriptor_fulladministrator_grant = function(userID) {
+fr.descriptor_fulladministrator_grant = function(userID) {
   var data = "userID=" + userID
   $.ajax({
     async: false,
@@ -206,8 +206,8 @@ fedreg.descriptor_fulladministrator_grant = function(userID) {
     data: data,
     success: function(res) {
       
-      fedreg.descriptor_fulladministrator_list();
-      fedreg.descriptor_fulladministrator_search();
+      fr.descriptor_fulladministrator_list();
+      fr.descriptor_fulladministrator_search();
       },
       error: function (xhr, ajaxOptions, thrownError) {
       
@@ -215,7 +215,7 @@ fedreg.descriptor_fulladministrator_grant = function(userID) {
   });
 }
 
-fedreg.descriptor_fulladministrator_revoke = function(userID) {
+fr.descriptor_fulladministrator_revoke = function(userID) {
   var data = "userID=" + userID
   $.ajax({
     async: false,
@@ -224,7 +224,7 @@ fedreg.descriptor_fulladministrator_revoke = function(userID) {
     data: data + "&_method=delete",
     success: function(res) {
       
-      fedreg.descriptor_fulladministrator_list();
+      fr.descriptor_fulladministrator_list();
       },
       error: function (xhr, ajaxOptions, thrownError) {
       
@@ -232,7 +232,7 @@ fedreg.descriptor_fulladministrator_revoke = function(userID) {
   });
 }
 
-fedreg.descriptor_fulladministrator_list = function() {
+fr.descriptor_fulladministrator_list = function() {
   $.ajax({
     type: "GET",
     cache: false,
@@ -248,7 +248,7 @@ fedreg.descriptor_fulladministrator_list = function() {
   });
 };
 
-fedreg.descriptor_fulladministrator_search = function() {
+fr.descriptor_fulladministrator_search = function() {
   var data = "q=" + $('#q').val()
   $.ajax({
     type: "GET",
@@ -286,33 +286,33 @@ $(document).on('click', '.cancel-edit-organization', function() {
 });
 
 $(document).on('click', '.confirm-unarchive-organization', function() {
-  fedreg.set_button($(this));
+  fr.set_button($(this));
   $("#unarchive-organization-modal").modal('show');
 });
 
 $(document).on('click', '.confirm-archive-organization', function() {
-  fedreg.set_button($(this));
+  fr.set_button($(this));
   $("#archive-organization-modal").modal('show');
 });
 
 $(document).on('click', '.confirm-delete-organization', function() {
-  fedreg.set_button($(this));
+  fr.set_button($(this));
   $("#delete-organization-modal").modal('show');
 });
 
 // Entity Descriptor
 $(document).on('click', '.confirm-archive-entitydescriptor', function() {
-  fedreg.set_button($(this));
+  fr.set_button($(this));
   $("#archive-entitydescriptor-modal").modal('show');
 });
 
 $(document).on('click', '.confirm-unarchive-entitydescriptor', function() {
-  fedreg.set_button($(this));
+  fr.set_button($(this));
   $("#unarchive-entitydescriptor-modal").modal('show');
 });
 
 $(document).on('click', '.confirm-delete-entitydescriptor', function() {
-  fedreg.set_button($(this));
+  fr.set_button($(this));
   $("#delete-entitydescriptor-modal").modal('show');
 });
 
@@ -370,9 +370,9 @@ $(document).on('click', '.hide-addnew-certificate', function(entity) {
 });
 
 $(document).on('click', '.add-new-certificate', function(entity) {
-  fedreg.set_button($(this));
+  fr.set_button($(this));
   var entity = $(this).attr('data-entity');
-  fedreg.keyDescriptor_verify(entity);
+  fr.keyDescriptor_verify(entity);
   if(valid_certificate){
     var data = $("#newcryptoform").serialize();
     $.ajax({
@@ -385,7 +385,7 @@ $(document).on('click', '.add-new-certificate', function(entity) {
         $("#newcertificate").hide();
         $('#validcertificate').hide();
         $("#addcertificate").fadeIn();
-        fedreg.keyDescriptor_list();
+        fr.keyDescriptor_list();
         },
         error: function (xhr, ajaxOptions, thrownError) {
         }
@@ -394,27 +394,27 @@ $(document).on('click', '.add-new-certificate', function(entity) {
 });
 
 $(document).on('click', '.confirm-delete-certificate', function() {
-  fedreg.set_button($(this));
+  fr.set_button($(this));
   delete_certificate = $(this).attr('data-certificate');
   $("#delete-certificate-modal").modal('show');
 });
 
 $(document).on('click', '.delete-certificate', function() {
-  fedreg.hide_modals();
+  fr.hide_modals();
   var data = "id=" + delete_certificate;
   $.ajax({
     type: "POST",
     url: certificateDeleteEndpoint,
     data: data + "&_method=delete",
     success: function(res) {
-      fedreg.keyDescriptor_list()
+      fr.keyDescriptor_list()
       },
       error: function (xhr, ajaxOptions, thrownError) {
       }
   });
 });
 
-fedreg.keyDescriptor_verify = function(entity) {
+fr.keyDescriptor_verify = function(entity) {
   var data = $("#cert").serialize() + "&entity=" + entity;
   valid_certificate = false;
   $.ajax({
@@ -435,7 +435,7 @@ fedreg.keyDescriptor_verify = function(entity) {
   });
 };
 
-fedreg.keyDescriptor_list = function() {
+fr.keyDescriptor_list = function() {
   $.ajax({
     type: "GET",
     cache: false,
@@ -451,9 +451,9 @@ fedreg.keyDescriptor_list = function() {
   });
 };
 
-fedreg.validateCertificate = function() {
+fr.validateCertificate = function() {
   $('#newcertificatedata').removeClass('error');
-  fedreg.keyDescriptor_verify($('#entity\\.identifier').val());
+  fr.keyDescriptor_verify($('#entity\\.identifier').val());
   if(!valid_certificate) {
     $('#newcertificatedata').addClass('error');
   }
@@ -478,7 +478,7 @@ $(document).on('click', '.cancel-search-for-contact', function() {
 });
 
 $('.submit-search-for-contact').click(function() {
-  fedreg.set_button($(this));
+  fr.set_button($(this));
   var p = $(this).closest('.search-contacts');
   var data = p.find('.search-contacts-form > form').serialize();
 
@@ -501,7 +501,7 @@ $('.submit-search-for-contact').click(function() {
 });
 
 $(document).on('click', '.confirm-link-contact', function(contactID, name, email) {
-  fedreg.set_button($(this));
+  fr.set_button($(this));
   link_contact = $(this).attr('data-contact');
   $("#contactnameconfirmation").html($(this).attr('data-name'));
   $("#contactemailconfirmation").html($(this).attr('data-email'));
@@ -510,14 +510,14 @@ $(document).on('click', '.confirm-link-contact', function(contactID, name, email
 });
 
 $(document).on('click', '.link-contact', function(contactType) {
-  fedreg.hide_modals();
+  fr.hide_modals();
   var data = "contactID=" + link_contact + "&contactType=" + $('#contactselectedtype').val()
   $.ajax({
     type: "POST",
     url: contactCreateEndpoint,
     data: data,
     success: function(res) {
-      fedreg.contact_list();
+      fr.contact_list();
       },
       error: function (xhr, ajaxOptions, thrownError) {
       }
@@ -525,27 +525,27 @@ $(document).on('click', '.link-contact', function(contactType) {
 });
 
 $(document).on('click', '.confirm-delete-contact', function() {
-  fedreg.set_button($(this));
+  fr.set_button($(this));
   delete_contact = $(this).attr('data-contact');
   $("#unlink-contact-modal").modal('show');
 });
 
 $(document).on('click', '.delete-contact', function() {
-  fedreg.hide_modals();
+  fr.hide_modals();
   var data = "id=" + delete_contact;
   $.ajax({
     type: "POST",
     url: contactDeleteEndpoint,
     data: data + "&_method=delete",
     success: function(res) {
-      fedreg.contact_list();
+      fr.contact_list();
       },
       error: function (xhr, ajaxOptions, thrownError) {
       }
   });
 });
 
-fedreg.contact_list = function() {
+fr.contact_list = function() {
   $.ajax({
     type: "GET",
     cache: false,
@@ -563,7 +563,7 @@ fedreg.contact_list = function() {
 
 // Endpoint
 $(document).on('click', '.confirm-makedefault-endpoint', function() {
-  fedreg.set_button($(this));
+  fr.set_button($(this));
   makedefault_endpoint = $(this).attr('data-id');
   container_endpoint = $(this).attr('data-container');
   type_endpoint = $(this).attr('data-type');
@@ -571,20 +571,20 @@ $(document).on('click', '.confirm-makedefault-endpoint', function() {
 });
 
 $(document).on('click', '.confirm-toggle-endpoint', function() {
-  fedreg.set_button($(this));
+  fr.set_button($(this));
   toggle_endpoint = $(this).attr('data-id');
   $("#toggle-endpoint-modal").modal('show');
 });
 
 $(document).on('click', '.confirm-delete-endpoint', function() {
-  fedreg.set_button($(this));
+  fr.set_button($(this));
   delete_endpoint = $(this).attr('data-id');
   type_endpoint = $(this).attr('data-type');
   $("#delete-endpoint-modal").modal('show');
 });
 
 $(document).on('click', '.toggle-endpoint', function() {
-  fedreg.hide_modals();
+  fr.hide_modals();
   var data = "id=" + toggle_endpoint;
   $.ajax({
     type: "POST",
@@ -607,14 +607,14 @@ $(document).on('click', '.toggle-endpoint', function() {
 });
 
 $(document).on('click', '.delete-endpoint', function() {
-  fedreg.hide_modals();
+  fr.hide_modals();
   var data = "id=" + delete_endpoint + "&endpointType=" + type_endpoint;
   $.ajax({
     type: "POST",
     url: endpointDeleteEndpoint,
     data: data + "&_method=delete",
     success: function(res) {
-      fedreg.endpoint_list(type_endpoint);
+      fr.endpoint_list(type_endpoint);
     },
     error: function (xhr, ajaxOptions, thrownError) {
     }
@@ -622,14 +622,14 @@ $(document).on('click', '.delete-endpoint', function() {
 });
 
 $(document).on('click', '.makedefault-endpoint', function() {
-  fedreg.hide_modals();
+  fr.hide_modals();
   var data = "id=" + makedefault_endpoint + "&endpointType=" + type_endpoint;
   $.ajax({
     type: "POST",
     url: endpointMakeDefaultEndpoint,
     data: data + "&_method=put",
     success: function(res) {
-      fedreg.endpoint_list(type_endpoint, container_endpoint);
+      fr.endpoint_list(type_endpoint, container_endpoint);
     },
     error: function (xhr, ajaxOptions, thrownError) {
     }
@@ -644,7 +644,7 @@ $(document).on('click', '.show-create-endpoint', function() {
 });
 
 $(document).on('click', '.create-endpoint', function() {
-  fedreg.set_button($(this));
+  fr.set_button($(this));
   type_endpoint = $(this).attr('data-type');
   var target_form = $('#new' + type_endpoint + 'data')
   if(target_form.valid()) {
@@ -654,12 +654,12 @@ $(document).on('click', '.create-endpoint', function() {
       url: endpointCreationEndpoint,
       data: data,
       success: function(res) {
-        fedreg.endpoint_list(type_endpoint);
+        fr.endpoint_list(type_endpoint);
       },
       error: function (xhr, ajaxOptions, thrownError) {
       }
     });
-  } else { fedreg.reset_button(); }
+  } else { fr.reset_button(); }
 });
 
 $(document).on('click', '.cancel-create-endpoint', function() {
@@ -670,7 +670,7 @@ $(document).on('click', '.cancel-create-endpoint', function() {
 });
 
 $(document).on('click', '.edit-endpoint', function() {
-  fedreg.set_button($(this));
+  fr.set_button($(this));
   edit_endpoint = $(this).attr('data-id');
   type_endpoint = $(this).attr('data-type');
   var data = "id=" + edit_endpoint + "&endpointType=" + type_endpoint;
@@ -696,7 +696,7 @@ $(document).on('click', '.cancel-edit-endpoint', function() {
 });
 
 $(document).on('click', '.update-endpoint', function() {
-  fedreg.set_button($(this));
+  fr.set_button($(this));
   update_endpoint = $(this).attr('data-id');
   type_endpoint = $(this).attr('data-type');
   var target_form = $("#endpoint-edit-" + update_endpoint)
@@ -707,15 +707,15 @@ $(document).on('click', '.update-endpoint', function() {
       url: endpointUpdateEndpoint,
       data: data + "&_method=put",
       success: function(res) {
-        fedreg.endpoint_list(type_endpoint);
+        fr.endpoint_list(type_endpoint);
       },
       error: function (xhr, ajaxOptions, thrownError) {
       }
     });
-  } else { fedreg.reset_button(); }
+  } else { fr.reset_button(); }
 });
 
-fedreg.endpoint_list = function(endpointType) {
+fr.endpoint_list = function(endpointType) {
   var data = "endpointType=" + endpointType;
   $.ajax({
     type: "GET",
@@ -735,7 +735,7 @@ fedreg.endpoint_list = function(endpointType) {
 
 // Attribute Consuming Services
 $(document).on('click', '.edit-ra', function() {
-  fedreg.set_button($(this));
+  fr.set_button($(this));
   raID = $(this).attr('data-raid');
   manage_ra = $('.manage-ra[data-raid=' + raID +']');
   update_ra = $('.manage-update-ra[data-raid=' + raID +']');
@@ -747,22 +747,22 @@ $(document).on('click', '.edit-ra', function() {
   editor_ra.fadeIn();
   update_ra.fadeIn();
 
-  fedreg.reset_button();
+  fr.reset_button();
 });
 
 $(document).on('click', '.cancel-edit-ra', function() {
-  fedreg.close_ra_editor();
+  fr.close_ra_editor();
 });
 
 $(document).on('click', '.update-ra', function() {
-  fedreg.set_button($(this));  
+  fr.set_button($(this));  
   raID = $(this).attr('data-raid');
   acsID = $(this).attr('data-acsid');
   reason_ra = $('.reason-ra[data-raid=' + raID +']');
   required_ra = $('.required-ra[data-raid=' + raID +']');
 
   if(reason_ra.parent().valid()) {
-    fedreg.acs_reqattribute_update(acsID, raID, reason_ra.val(), required_ra.is(':checked'));   
+    fr.acs_reqattribute_update(acsID, raID, reason_ra.val(), required_ra.is(':checked'));   
   }
 });
 
@@ -774,7 +774,7 @@ $(document).on('click', '.show-create-ra', function() {
 });
 
 $(document).on('click', '.create-ra', function() {
-  fedreg.set_button($(this));
+  fr.set_button($(this));
 
   acsID = $(this).attr('data-acsid');
   var target_form = $('#newattributedata' + acsID)
@@ -787,13 +787,13 @@ $(document).on('click', '.create-ra', function() {
       data: data,
       success: function(res) {
         $(':input[name=reasoning]').val('')
-        fedreg.acs_reqattribute_list(acsID, "#acsreqattr" + acsID);
+        fr.acs_reqattribute_list(acsID, "#acsreqattr" + acsID);
       },
       error: function (xhr, ajaxOptions, thrownError) {
       
       }
     }); 
-  } else { fedreg.reset_button(); }
+  } else { fr.reset_button(); }
 });
 
 $(document).on('click', '.cancel-create-ra', function() {
@@ -804,7 +804,7 @@ $(document).on('click', '.cancel-create-ra', function() {
 });
 
 $(document).on('click', '.confirm-delete-ra', function() {
-  fedreg.set_button($(this));
+  fr.set_button($(this));
   acsID = $(this).attr('data-acsid');
   raID = $(this).attr('data-raid');
 
@@ -812,14 +812,14 @@ $(document).on('click', '.confirm-delete-ra', function() {
 });
 
 $(document).on('click', '.delete-ra', function() {
-  fedreg.hide_modals();
+  fr.hide_modals();
   var data = "raid=" + raID;
   $.ajax({
     type: "POST",
     url: acsRemoveAttr,
     data: data + "&_method=delete",
     success: function(res) {
-      fedreg.acs_reqattribute_list(acsID);
+      fr.acs_reqattribute_list(acsID);
     },
     error: function (xhr, ajaxOptions, thrownError) {
     
@@ -828,7 +828,7 @@ $(document).on('click', '.delete-ra', function() {
 });
 
 $(document).on('click', '.add-ra-value', function() {
-  fedreg.set_button($(this));
+  fr.set_button($(this));
 
   raID = $(this).attr('data-raid');
   acsID = $(this).attr('data-acsid');
@@ -845,13 +845,13 @@ $(document).on('click', '.add-ra-value', function() {
         $(':input', target_form)
         .not(':button, :submit, :reset, :hidden, select[name=binding]')
         .val('')
-        fedreg.acs_reqattribute_list_values(raID);
+        fr.acs_reqattribute_list_values(raID);
       },
       error: function (xhr, ajaxOptions, thrownError) {
 
       }
     });
-  } else { fedreg.reset_button(); }
+  } else { fr.reset_button(); }
 });
 
 $(document).on('click', '.show-add-ra-value', function() {
@@ -869,7 +869,7 @@ $(document).on('click', '.close-add-ra-value', function() {
 });
 
 $(document).on('click', '.confirm-delete-ra-value', function() {
-  fedreg.set_button($(this));
+  fr.set_button($(this));
   acsID = $(this).attr('data-acsid');
   raID = $(this).attr('data-raid');
   raValueID = $(this).attr('data-ravalueid');
@@ -878,14 +878,14 @@ $(document).on('click', '.confirm-delete-ra-value', function() {
 });
 
 $(document).on('click', '.delete-ra-value', function() {
-  fedreg.hide_modals();
+  fr.hide_modals();
   var data = "id=" + raID + "&valueid=" + raValueID;
   $.ajax({
     type: "POST",
     url: acsRemoveSpecAttrVal,
     data: data + "&_method=delete",
     success: function(res) {
-      fedreg.acs_reqattribute_list_values(raID);
+      fr.acs_reqattribute_list_values(raID);
     },
     error: function (xhr, ajaxOptions, thrownError) {
 
@@ -893,7 +893,7 @@ $(document).on('click', '.delete-ra-value', function() {
   });
 });
 
-fedreg.close_ra_editor = function() {
+fr.close_ra_editor = function() {
   editor_ra.hide();
   update_ra.hide();
 
@@ -901,16 +901,16 @@ fedreg.close_ra_editor = function() {
   show_ra.fadeIn();
 };
 
-fedreg.acs_reqattribute_update = function(acsID, raID, reason, required) {
+fr.acs_reqattribute_update = function(acsID, raID, reason, required) {
   var data = "id=" + raID + "&reasoning=" + reason + "&required=" + required;
   $.ajax({
     type: "POST",
     url: acsUpdateAttr,
     data: data + "&_method=put",
     success: function(res) {
-      fedreg.close_ra_editor();
+      fr.close_ra_editor();
       //TODO: when time permits clean this up further to stop total reload of content
-      fedreg.acs_reqattribute_list(acsID);
+      fr.acs_reqattribute_list(acsID);
     },
     error: function (xhr, ajaxOptions, thrownError) {
     
@@ -918,7 +918,7 @@ fedreg.acs_reqattribute_update = function(acsID, raID, reason, required) {
   });
 };
 
-fedreg.acs_reqattribute_list = function(acsID) {
+fr.acs_reqattribute_list = function(acsID) {
   var data = "id=" + acsID;
   $.ajax({
     type: "GET",
@@ -936,7 +936,7 @@ fedreg.acs_reqattribute_list = function(acsID) {
   });
 };
 
-fedreg.acs_reqattribute_list_values = function(raID) {
+fr.acs_reqattribute_list_values = function(raID) {
   var data = "id=" + raID;
   $.ajax({
     type: "GET",
@@ -972,7 +972,7 @@ $(document).on('click', '.add-nameid', function() {
     url: nameIDFormatAddEndpoint,
     data: data,
     success: function(res) {
-      fedreg.nameIDFormat_list();
+      fr.nameIDFormat_list();
     },
     error: function (xhr, ajaxOptions, thrownError) {
     
@@ -981,21 +981,21 @@ $(document).on('click', '.add-nameid', function() {
 });
 
 $(document).on('click', '.confirm-delete-nameid', function() {
-  fedreg.set_button($(this)); 
+  fr.set_button($(this)); 
   formatID = $(this).attr('data-formatid');
 
   $("#delete-nameid-modal").modal('show'); 
 });
 
 $(document).on('click', '.delete-nameid', function() {
-  fedreg.hide_modals();
+  fr.hide_modals();
   var data = "formatID=" + formatID;
   $.ajax({
     type: "POST",
     url: nameIDFormatRemoveEndpoint,
     data: data + "&_method=delete",
     success: function(res) {
-      fedreg.nameIDFormat_list();
+      fr.nameIDFormat_list();
     },
     error: function (xhr, ajaxOptions, thrownError) {
     
@@ -1003,7 +1003,7 @@ $(document).on('click', '.delete-nameid', function() {
   });
 });
 
-fedreg.nameIDFormat_list = function() {
+fr.nameIDFormat_list = function() {
   $.ajax({
     type: "GET",
     cache: false,
@@ -1033,14 +1033,14 @@ $(document).on('click', '.hide-addnew-servicecategory', function(entity) {
 });
 
 $(document).on('click', '.link-new-category', function() {
-  fedreg.set_button($(this));
+  fr.set_button($(this));
   var data = $("#newservicecategorydata").serialize();
   $.ajax({
     type: "POST",
     url: serviceCategoryAddEndpoint,
     data: data,
     success: function(res) {
-      fedreg.serviceCategory_list();
+      fr.serviceCategory_list();
       },
       error: function (xhr, ajaxOptions, thrownError) {
       
@@ -1049,27 +1049,27 @@ $(document).on('click', '.link-new-category', function() {
 });
 
 $(document).on('click', '.confirm-unlink-category', function() {
-  fedreg.set_button($(this));
+  fr.set_button($(this));
   delete_category = $(this).attr('data-category');
   $("#unlink-category-modal").modal('show');
 });
 
 $(document).on('click', '.unlink-category', function() {
-  fedreg.hide_modals();
+  fr.hide_modals();
   var data = "categoryID=" + delete_category;
   $.ajax({
     type: "POST",
     url: serviceCategoryRemoveEndpoint,
     data: data + "&_method=delete",
     success: function(res) {
-      fedreg.serviceCategory_list();
+      fr.serviceCategory_list();
       },
       error: function (xhr, ajaxOptions, thrownError) {
       }
   });
 });
 
-fedreg.serviceCategory_list = function() {
+fr.serviceCategory_list = function() {
   $.ajax({
     type: "GET",
     cache: false,
@@ -1096,14 +1096,14 @@ $(document).on('click', '.cancel-add-attribute', function() {
 });
 
 $(document).on('click', '.add-attribute', function() {
-  fedreg.set_button($(this));
+  fr.set_button($(this));
   var data = $("#newattributedata").serialize();
   $.ajax({
     type: "POST",
     url: attributeAddEndpoint,
     data: data,
     success: function(res) {
-      fedreg.attribute_list();
+      fr.attribute_list();
     },
     error: function (xhr, ajaxOptions, thrownError) {
     
@@ -1112,20 +1112,20 @@ $(document).on('click', '.add-attribute', function() {
 });
 
 $(document).on('click', '.confirm-delete-attribute', function() {
-  fedreg.set_button($(this));
+  fr.set_button($(this));
   delete_attrid = $(this).attr('data-attrid');
   $("#delete-attribute-modal").modal('show');
 });
 
 $(document).on('click', '.delete-attribute', function() {
-  fedreg.hide_modals();
+  fr.hide_modals();
   var data = "attrid=" + delete_attrid;
   $.ajax({
     type: "POST",
     url: attributeRemoveEndpoint,
     data: data + "&_method=delete",
     success: function(res) {   
-      fedreg.attribute_list();
+      fr.attribute_list();
     },
     error: function (xhr, ajaxOptions, thrownError) {
     
@@ -1133,7 +1133,7 @@ $(document).on('click', '.delete-attribute', function() {
   });
 });
 
-fedreg.attribute_list = function() {
+fr.attribute_list = function() {
   $.ajax({
     type: "GET",
     cache: false,
@@ -1152,7 +1152,7 @@ fedreg.attribute_list = function() {
 // Attribute Filter
 $(document).on('click', '.load-descriptor-attrfilter', function() {
   $("#descriptorattributefilter").addClass('hidden');
-  fedreg.set_button($(this));
+  fr.set_button($(this));
   $.ajax({
     type: "GET",
     cache: false,
@@ -1161,10 +1161,10 @@ $(document).on('click', '.load-descriptor-attrfilter', function() {
     success: function(res) {
       $("#descriptorattributefilter").text(res);
       $("#descriptorattributefilter").removeClass('hidden');
-      fedreg.reset_button($(this));
+      fr.reset_button($(this));
     },
     error: function (xhr, ajaxOptions, thrownError) {
-      fedreg.reset_button($(this));
+      fr.reset_button($(this));
     }
   });
 });
@@ -1190,7 +1190,7 @@ $(document).on('click', '.add-monitor', function() {
       url: monitorCreateEndpoint,
       data: data,
       success: function(res) {
-        fedreg.monitor_list(); 
+        fr.monitor_list(); 
       },
       error: function (xhr, ajaxOptions, thrownError) {
       
@@ -1200,13 +1200,13 @@ $(document).on('click', '.add-monitor', function() {
 });
 
 $(document).on('click', '.confirm-delete-monitor', function() {
-  fedreg.set_button($(this));
+  fr.set_button($(this));
   monitorID = $(this).attr('data-monitorID');
   $("#delete-monitor-modal").modal('show');
 });
 
 $(document).on('click', '.delete-monitor', function() {
-  fedreg.hide_modals();
+  fr.hide_modals();
 
   var data = "id=" + monitorID;
   $.ajax({
@@ -1214,7 +1214,7 @@ $(document).on('click', '.delete-monitor', function() {
     url: monitorDeleteEndpoint,
     data: data + "&_method=delete",
     success: function(res) {
-      fedreg.monitor_list();
+      fr.monitor_list();
     },
     error: function (xhr, ajaxOptions, thrownError) {
     
@@ -1222,7 +1222,7 @@ $(document).on('click', '.delete-monitor', function() {
   });
 });
 
-fedreg.monitor_list = function(containerID) {
+fr.monitor_list = function(containerID) {
   $.ajax({
     type: "GET",
     cache: false,
@@ -1239,7 +1239,7 @@ fedreg.monitor_list = function(containerID) {
 };
 
 // Registration
-fedreg.configureIdentityProviderSAML = function(host) {
+fr.configureIdentityProviderSAML = function(host) {
   $(".samloptional").val("");
   if(host.length > 0) {
     host = host.toLowerCase();
@@ -1253,7 +1253,7 @@ fedreg.configureIdentityProviderSAML = function(host) {
   }
 };
 
-fedreg.configureServiceProviderSAML = function(host) {
+fr.configureServiceProviderSAML = function(host) {
   $(".samloptional").val("");
   if(host.length > 0) {
     host = host.toLowerCase();
@@ -1336,10 +1336,10 @@ $(document).on('click', '.create-sp-report', function() {
 
   if(target_form.valid()) {
     if (Modernizr.svg) {
-      fedreg.closeRefinement();
+      fr.closeRefinement();
       $(".revealable").hide();
     
-      var data = target_form.serialize() + fedreg.includeRobotsInReporting(true);
+      var data = target_form.serialize() + fr.includeRobotsInReporting(true);
     
       if( $(".reporttype option:selected").val() == 'connections') {
         $.ajax({url: spReportsConnectivityEndpoint, 
@@ -1347,7 +1347,7 @@ $(document).on('click', '.create-sp-report', function() {
           dataType: 'json',
           async:true, 
           success: function(data){
-            fedreg.renderSPConnectivity(data, false);
+            fr.renderSPConnectivity(data, false);
           },
           error: function (xhr, ajaxOptions, thrownError) {
             
@@ -1361,7 +1361,7 @@ $(document).on('click', '.create-sp-report', function() {
           dataType: 'json',
           async:true, 
           success: function(data){
-            fedreg.renderSPSessions(data, false);
+            fr.renderSPSessions(data, false);
           },
           error: function (xhr, ajaxOptions, thrownError) {
             
@@ -1375,7 +1375,7 @@ $(document).on('click', '.create-sp-report', function() {
           dataType: 'json',
           async:true, 
           success: function(data){
-            fedreg.renderSPTotals(data, false);
+            fr.renderSPTotals(data, false);
           },
           error: function (xhr, ajaxOptions, thrownError) {
             
@@ -1389,7 +1389,7 @@ $(document).on('click', '.create-sp-report', function() {
           dataType: 'json',
           async:true, 
           success: function(data){
-            fedreg.renderSPLogins(data);
+            fr.renderSPLogins(data);
           },
           error: function (xhr, ajaxOptions, thrownError) {
             
@@ -1397,19 +1397,19 @@ $(document).on('click', '.create-sp-report', function() {
         });
       }
     } else {
-      fedreg.toggleReportingContent(false);
+      fr.toggleReportingContent(false);
     }
   }
 });
 
-fedreg.openRefinement = function() {
+fr.openRefinement = function() {
   $(".reportrefinementopen").hide();
   $(".reportrefinementinput").slideDown();
   
   return false;
 };
 
-fedreg.closeRefinement = function() {
+fr.closeRefinement = function() {
   $(".reportrefinementinput").slideUp();
   $(".reportrefinementopen").show();
   
@@ -1422,10 +1422,10 @@ $(document).on('click', '.create-idp-report', function() {
   if(target_form.valid()) {
     if (Modernizr.svg) {
       
-      fedreg.closeRefinement();
+      fr.closeRefinement();
       $(".revealable").hide();
 
-      var data = $("#reportrequirements").serialize() + fedreg.includeRobotsInReporting(true);
+      var data = $("#reportrequirements").serialize() + fr.includeRobotsInReporting(true);
     
       if( $(".reporttype option:selected").val() == 'connections') {
         $.ajax({url: idpReportsConnectivityEndpoint, 
@@ -1433,7 +1433,7 @@ $(document).on('click', '.create-idp-report', function() {
           dataType: 'json',
           async:true, 
           success: function(data){
-            fedreg.renderIdPConnectivity(data, false);
+            fr.renderIdPConnectivity(data, false);
           },
           error: function (xhr, ajaxOptions, thrownError) {
             
@@ -1447,7 +1447,7 @@ $(document).on('click', '.create-idp-report', function() {
           dataType: 'json',
           async:true, 
           success: function(data){
-            fedreg.renderIdPSessions(data, false);
+            fr.renderIdPSessions(data, false);
           },
           error: function (xhr, ajaxOptions, thrownError) {
             
@@ -1461,7 +1461,7 @@ $(document).on('click', '.create-idp-report', function() {
           dataType: 'json',
           async:true, 
           success: function(data){
-            fedreg.renderIdPTotals(data, false);
+            fr.renderIdPTotals(data, false);
           },
           error: function (xhr, ajaxOptions, thrownError) {
             
@@ -1475,7 +1475,7 @@ $(document).on('click', '.create-idp-report', function() {
           dataType: 'json',
           async:true, 
           success: function(data){
-            fedreg.renderIdPLogins(data);
+            fr.renderIdPLogins(data);
           },
           error: function (xhr, ajaxOptions, thrownError) {
             
@@ -1483,17 +1483,17 @@ $(document).on('click', '.create-idp-report', function() {
         });
       }
     } else {
-      fedreg.toggleReportingContent(false);
+      fr.toggleReportingContent(false);
     }
   }
 });
 
-fedreg.refineIdPReport = function(refinement) {
+fr.refineIdPReport = function(refinement) {
   if (Modernizr.svg) {
     
-    fedreg.closeRefinement();
+    fr.closeRefinement();
   
-    var data = $("#reportrequirements").serialize() + "&" + refinement.serialize() + fedreg.includeRobotsInReporting(true);
+    var data = $("#reportrequirements").serialize() + "&" + refinement.serialize() + fr.includeRobotsInReporting(true);
   
     if( $(".reporttype option:selected").val() == 'connections') {
       $.ajax({url: idpReportsConnectivityEndpoint, 
@@ -1501,7 +1501,7 @@ fedreg.refineIdPReport = function(refinement) {
         dataType: 'json',
         async:true, 
         success: function(data){
-          fedreg.renderIdPConnectivity(data, true);
+          fr.renderIdPConnectivity(data, true);
         },
         error: function (xhr, ajaxOptions, thrownError) {
           
@@ -1515,7 +1515,7 @@ fedreg.refineIdPReport = function(refinement) {
         dataType: 'json',
         async:true, 
         success: function(data){
-          fedreg.renderIdPTotals(data, true);
+          fr.renderIdPTotals(data, true);
         },
         error: function (xhr, ajaxOptions, thrownError) {
           
@@ -1523,16 +1523,16 @@ fedreg.refineIdPReport = function(refinement) {
       });
     }
   } else {
-    fedreg.toggleReportingContent(false);
+    fr.toggleReportingContent(false);
   }
 };
 
-fedreg.refineSPReport = function(refinement) {
+fr.refineSPReport = function(refinement) {
   if (Modernizr.svg) {
     
-    fedreg.closeRefinement();
+    fr.closeRefinement();
   
-    var data = $("#reportrequirements").serialize() + "&" + refinement.serialize() + fedreg.includeRobotsInReporting(true);
+    var data = $("#reportrequirements").serialize() + "&" + refinement.serialize() + fr.includeRobotsInReporting(true);
   
     if( $(".reporttype option:selected").val() == 'connections') {
       $.ajax({url: spReportsConnectivityEndpoint, 
@@ -1540,7 +1540,7 @@ fedreg.refineSPReport = function(refinement) {
         dataType: 'json',
         async:true, 
         success: function(data){
-          fedreg.renderSPConnectivity(data, true);
+          fr.renderSPConnectivity(data, true);
         },
         error: function (xhr, ajaxOptions, thrownError) {
           
@@ -1554,7 +1554,7 @@ fedreg.refineSPReport = function(refinement) {
         dataType: 'json',
         async:true, 
         success: function(data){
-          fedreg.renderSPTotals(data, true);
+          fr.renderSPTotals(data, true);
         },
         error: function (xhr, ajaxOptions, thrownError) {
           
@@ -1562,17 +1562,17 @@ fedreg.refineSPReport = function(refinement) {
       });
     }
   } else {
-    fedreg.toggleReportingContent(false);
+    fr.toggleReportingContent(false);
   }
 };
 
-fedreg.renderFederationReport = function(type) {
+fr.renderFederationReport = function(type) {
   if (Modernizr.svg) {
     
-    fedreg.closeRefinement();
+    fr.closeRefinement();
     $(".revealable").hide();
   
-    var data = $("#reportrequirements").serialize() + fedreg.includeRobotsInReporting(true);
+    var data = $("#reportrequirements").serialize() + fr.includeRobotsInReporting(true);
   
     if( type == 'logins') {
       $.ajax({url: federationReportsLoginsEndpoint, 
@@ -1580,7 +1580,7 @@ fedreg.renderFederationReport = function(type) {
         dataType: 'json',
         async:true, 
         success: function(data){
-          fedreg.renderFederationLogins(data);
+          fr.renderFederationLogins(data);
         },
         error: function (xhr, ajaxOptions, thrownError) {
           
@@ -1594,7 +1594,7 @@ fedreg.renderFederationReport = function(type) {
         dataType: 'json',
         async:true, 
         success: function(data){
-          fedreg.renderFederationSessions(data);
+          fr.renderFederationSessions(data);
         },
         error: function (xhr, ajaxOptions, thrownError) {
           
@@ -1608,7 +1608,7 @@ fedreg.renderFederationReport = function(type) {
         dataType: 'json',
         async:true, 
         success: function(data){
-          fedreg.renderFederationServices(data);
+          fr.renderFederationServices(data);
         },
         error: function (xhr, ajaxOptions, thrownError) {
           
@@ -1632,7 +1632,7 @@ fedreg.renderFederationReport = function(type) {
         dataType: 'json',
         async:true, 
         success: function(data){
-          fedreg.renderFederationRegistrations(data, true);
+          fr.renderFederationRegistrations(data, true);
         },
         error: function (xhr, ajaxOptions, thrownError) {
           
@@ -1656,7 +1656,7 @@ fedreg.renderFederationReport = function(type) {
         dataType: 'json',
         async:true, 
         success: function(data){
-          fedreg.renderFederationSubscribers(data, true);
+          fr.renderFederationSubscribers(data, true);
         },
         error: function (xhr, ajaxOptions, thrownError) {
           
@@ -1670,7 +1670,7 @@ fedreg.renderFederationReport = function(type) {
         dataType: 'json',
         async:true, 
         success: function(data){
-          fedreg.renderFederationConnectivity(data);
+          fr.renderFederationConnectivity(data);
         },
         error: function (xhr, ajaxOptions, thrownError) {
           
@@ -1679,16 +1679,16 @@ fedreg.renderFederationReport = function(type) {
     }
     
   } else {
-    fedreg.toggleReportingContent(false);
+    fr.toggleReportingContent(false);
   }
 };
 
-fedreg.refineFederationReport = function(type, refinement) {
+fr.refineFederationReport = function(type, refinement) {
   if (Modernizr.svg) {
     
-    fedreg.closeRefinement();
+    fr.closeRefinement();
   
-    var data = $("#reportrequirements").serialize() + "&" + refinement.serialize() + fedreg.includeRobotsInReporting(true);
+    var data = $("#reportrequirements").serialize() + "&" + refinement.serialize() + fr.includeRobotsInReporting(true);
   
     if( type == 'sessiontotals') {
       $.ajax({url: federationReportsSessionTotalsEndpoint, 
@@ -1696,7 +1696,7 @@ fedreg.refineFederationReport = function(type, refinement) {
         dataType: 'json',
         async:true, 
         success: function(data){
-          fedreg.renderFederationServices(data);
+          fr.renderFederationServices(data);
         },
         error: function (xhr, ajaxOptions, thrownError) {
           
@@ -1704,34 +1704,34 @@ fedreg.refineFederationReport = function(type, refinement) {
       });
     }
   } else {
-    fedreg.toggleReportingContent(false);
+    fr.toggleReportingContent(false);
   }
 };
 
-fedreg.renderFederationSummaryReport = function(type) {
+fr.renderFederationSummaryReport = function(type) {
   if (Modernizr.svg) {
-    fedreg.toggleReportingContent(true);
+    fr.toggleReportingContent(true);
     
   
-    var data = fedreg.includeRobotsInReporting(false);
+    var data = fr.includeRobotsInReporting(false);
   
     $.ajax({url: federationReportsSummaryEndpoint, 
       data: data,
       dataType: 'json',
       async:true, 
       success: function(data){
-        fedreg.renderCreationSummary(data);
+        fr.renderCreationSummary(data);
       },
       error: function (xhr, ajaxOptions, thrownError) {
         
       }
     });
   } else {
-    fedreg.toggleReportingContent(false);
+    fr.toggleReportingContent(false);
   }
 };
 
-fedreg.toggleReportingContent = function(supported) {
+fr.toggleReportingContent = function(supported) {
   if(supported == true) {
     $('.reportingunsupported').hide();
     $('.reportingsupported').show();
@@ -1742,7 +1742,7 @@ fedreg.toggleReportingContent = function(supported) {
 };
 
 
-fedreg.includeRobotsInReporting = function(append) {
-  var robot = fedreg.getParameterByName('robots');
+fr.includeRobotsInReporting = function(append) {
+  var robot = fr.getParameterByName('robots');
   return robot == 'true' ? (append ? "&robot=true" : "robot=true") : "" ;
 };

@@ -383,7 +383,7 @@
         
         $('input.currentimpl').change(function() {
           currentImpl = $(this).val();
-          fedreg.configureServiceProviderSAML($('#hostname').val());
+          fr.configureServiceProviderSAML($('#hostname').val());
         });
         },
         error: function (xhr, ajaxOptions, thrownError) {
@@ -398,7 +398,7 @@
       keyup: false
     });
     jQuery.validator.addMethod("validcert", function(value, element, params) { 
-      fedreg.validateCertificate();
+      fr.validateCertificate();
       return valid_certificate; 
     }, jQuery.format("PEM data invalid"));
     
@@ -415,7 +415,7 @@
       if( val.indexOf('/shibboleth', val.length - 11) !== -1 && val.length > 9)
         val = val.substring(0, val.length - 11);
 
-      fedreg.configureServiceProviderSAML(val);
+      fr.configureServiceProviderSAML(val);
       $(this).val(val);
     });
   });

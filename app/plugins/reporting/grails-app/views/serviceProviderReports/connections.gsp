@@ -33,7 +33,7 @@
       $(".request-sp-connections-report").click(function () {
         $('#spconnectivity').hide();
         $('#noconnectivity').addClass('hidden');
-        fedreg.showspinner();
+        fr.showspinner();
 
         var form = $('#sp-connections-report-parameters');
         if(form.valid()) { 
@@ -47,7 +47,7 @@
 
       function renderSpConnectivity(data) {
         if(!data.populated) {
-          fedreg.hidespinner();
+          fr.hidespinner();
           $('#noconnectivity').removeClass('hidden');
           return;
         }
@@ -70,7 +70,7 @@
 
         arc.label.add(pv.Label)
         vis.render();
-        fedreg.hidespinner();
+        fr.hidespinner();
         $('#spconnectivity').show();
       };
 

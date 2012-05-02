@@ -51,7 +51,7 @@
               </td>
               <td>
                 <g:form action="approve" id="${instance.id}" name="submitapproval${i}"></g:form>
-                <n:confirmaction action="\$('#working').trigger('fedreg.working'); \$('#submitapproval${i}').submit();" title="${message(code: 'views.fr.workflow.approval.approve.confirm.title')}" msg="${message(code: 'views.fr.workflow.approval.approve.confirm.descriptive', args:[instance.task.name, instance.processInstance.description])}" accept="${message(code: 'label.confirm')}" cancel="${message(code: 'label.cancel')}" label="${message(code: 'label.approve')}" class="update-button" />
+                <n:confirmaction action="\$('#working').trigger('fr.working'); \$('#submitapproval${i}').submit();" title="${message(code: 'views.fr.workflow.approval.approve.confirm.title')}" msg="${message(code: 'views.fr.workflow.approval.approve.confirm.descriptive', args:[instance.task.name, instance.processInstance.description])}" accept="${message(code: 'label.confirm')}" cancel="${message(code: 'label.cancel')}" label="${message(code: 'label.approve')}" class="update-button" />
                 <h5>or reject due to:</h5>
                 <ul class="clean">
                   <g:each in="${instance.task.rejections}" var="rej">
@@ -59,7 +59,7 @@
                       <g:form action="reject" id="${instance.id}" name="submitrejection${i}">
                         <g:hiddenField name="rejection" value="${rej.key}" />
                       </g:form>
-                      <n:confirmaction action="\$('#working').trigger('fedreg.working'); \$('#submitrejection${i}').submit();" title="${message(code: 'views.fr.workflow.approval.rejection.confirm.title')}" msg="${message(code: 'views.fr.workflow.approval.rejection.confirm.descriptive', args:[instance.task.name, instance.processInstance.description, rej.value.description])}" accept="${message(code: 'label.confirm')}" cancel="${message(code: 'label.cancel')}" label="${rej.value.name}" class="close-button" />
+                      <n:confirmaction action="\$('#working').trigger('fr.working'); \$('#submitrejection${i}').submit();" title="${message(code: 'views.fr.workflow.approval.rejection.confirm.title')}" msg="${message(code: 'views.fr.workflow.approval.rejection.confirm.descriptive', args:[instance.task.name, instance.processInstance.description, rej.value.description])}" accept="${message(code: 'label.confirm')}" cancel="${message(code: 'label.cancel')}" label="${rej.value.name}" class="close-button" />
                     </li>
                   </g:each>
                 </ul>

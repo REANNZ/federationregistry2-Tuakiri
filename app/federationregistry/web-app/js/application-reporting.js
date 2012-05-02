@@ -112,7 +112,7 @@ fr.summary_subscriber_growth_report = function(target) {
       options.series.push(series);
     });
 
-    fedreg.hidelocalspinner(target);
+    fr.hidelocalspinner(target);
     var growth = new Highcharts.Chart(options);
   });  
 };
@@ -195,7 +195,7 @@ $(".request-detailed-registration-report").click(function () {
     organizationregistrations.html('');
     idpregistrations.html('');
     spregistrations.html('');
-    fedreg.showspinner();
+    fr.showspinner();
 
     var options = {
       chart: {
@@ -264,7 +264,7 @@ $(".request-detailed-registration-report").click(function () {
         spregistrations.append("<tr><td>"+v.displayName+"</td><td>"+v.dateCreated+"</td><td><a href='"+v.url+"' class='btn'>view</td></tr>");
       });
 
-      fedreg.hidespinner();
+      fr.hidespinner();
       detailedregistrations = new Highcharts.Chart(options);
       registrationDetails.removeClass('hidden');
       exportBut.removeClass('hidden');
@@ -287,7 +287,7 @@ $(".request-detailed-growth-report").click(function () {
     if(detailedsubscribergrowth)
       detailedsubscribergrowth.destroy();
 
-    fedreg.showspinner();
+    fr.showspinner();
 
     var options = {
       chart: {
@@ -345,7 +345,7 @@ $(".request-detailed-growth-report").click(function () {
         options.series.push(series);
       });
 
-      fedreg.hidespinner();
+      fr.hidespinner();
       detailedsubscribergrowth = new Highcharts.Chart(options);
       exportBut.removeClass('hidden');
     });
@@ -367,7 +367,7 @@ $(".request-detailed-sessions-report").click(function () {
     if(detailedsessions) {
       detailedsessions.destroy();
     }
-    fedreg.showspinner();
+    fr.showspinner();
 
     var options = {
       chart: {
@@ -423,7 +423,7 @@ $(".request-detailed-sessions-report").click(function () {
       options.series.push(series);
 
 
-      fedreg.hidespinner();
+      fr.hidespinner();
       detailedsessions = new Highcharts.Chart(options);
       exportBut.removeClass('hidden');
     });
@@ -451,14 +451,14 @@ $(".unselect-all-remaining-services").click(function () {
 });
 
 $(".request-refine-detailedserviceutilization-content").click(function () {
-  fedreg.set_button($(this));
+  fr.set_button($(this));
   var form = $('#detailed-detailedserviceutilization-report-parameters');
   if(form.valid()) { 
     var params = form.serialize();
     params = params + '&' + $('#refine-detailedserviceutilization-report-parameters').serialize();
     requestServiceUtilization(params);
   }
-  fedreg.reset_button($(this));
+  fr.reset_button($(this));
 });
 
 $(".request-detailed-detailedserviceutilization-reports").click(function () {
@@ -499,7 +499,7 @@ function requestServiceUtilization(params) {
     exportBut.addClass('hidden');
     topTen.html('');
     remainder.html(''); 
-    fedreg.showspinner();
+    fr.showspinner();
 
     var options = {
       chart: {
@@ -628,7 +628,7 @@ function requestServiceUtilization(params) {
       options.series.push(series); 
       options2.series.push(totals);
       
-      fedreg.hidespinner();
+      fr.hidespinner();
       serviceutilization = new Highcharts.Chart(options);
       serviceutilizationtotals = new Highcharts.Chart(options2);
     });
@@ -655,14 +655,14 @@ $(".unselect-all-remaining-idps").click(function () {
 });
 
 $(".request-refine-detailedidputilization-content").click(function () {
-  fedreg.set_button($(this));
+  fr.set_button($(this));
   var form = $('#detailed-detailedidputilization-report-parameters');
   if(form.valid()) { 
     var params = form.serialize();
     params = params + '&' + $('#refine-detailedidputilization-report-parameters').serialize();
     requestIdPUtilization(params);
   }
-  fedreg.reset_button($(this));
+  fr.reset_button($(this));
 });
 
 $(".request-detailedidputilization-reports").click(function () {
@@ -703,7 +703,7 @@ function requestIdPUtilization(params) {
     exportBut.addClass('hidden');
     topTen.html('');
     remainder.html(''); 
-    fedreg.showspinner();
+    fr.showspinner();
 
     var options = {
       chart: {
@@ -831,7 +831,7 @@ function requestIdPUtilization(params) {
       options.series.push(series); 
       options2.series.push(totals);
       
-      fedreg.hidespinner();
+      fr.hidespinner();
       idputilization = new Highcharts.Chart(options);
       idputilizationtotals = new Highcharts.Chart(options2);
     });
@@ -854,7 +854,7 @@ $(".request-detailed-demand-report").click(function () {
     if(detaileddemand) {
       detaileddemand.destroy();
     }
-    fedreg.showspinner();
+    fr.showspinner();
 
     var options = {
       chart: {
@@ -911,7 +911,7 @@ $(".request-detailed-demand-report").click(function () {
       options.series.push(series);
 
 
-      fedreg.hidespinner();
+      fr.hidespinner();
       exportBut.removeClass('hidden');
       detaileddemand = new Highcharts.Chart(options);
     });
@@ -935,7 +935,7 @@ $(".request-detailed-dsutilization-reports").click(function () {
       dsutilizationaccesses.destroy();
       dsutilizationtotals.destroy();
     }
-    fedreg.showspinner();
+    fr.showspinner();
 
     var options2 = {
       chart: {
@@ -1036,7 +1036,7 @@ $(".request-detailed-dsutilization-reports").click(function () {
       });
       options3.series.push(totals);
 
-      fedreg.hidespinner();
+      fr.hidespinner();
       dsutilizationaccesses = new Highcharts.Chart(options2);
       dsutilizationtotals = new Highcharts.Chart(options3);
       exportBut.removeClass('hidden');
@@ -1046,7 +1046,7 @@ $(".request-detailed-dsutilization-reports").click(function () {
 
 // Compliance
 fr.attributesupport_compliance_report = function(target) {
-  fedreg.showspinner();
+  fr.showspinner();
 
     var options = {
       chart: {
@@ -1119,14 +1119,14 @@ fr.attributesupport_compliance_report = function(target) {
       });
       
       options.series.reverse();
-      fedreg.hidespinner();
+      fr.hidespinner();
       attributesupport = new Highcharts.Chart(options);
     });
 };
 
 fr.detailed_attributesupport_compliance_report = function(target) {
   var exportBut = $('.export-detailed-attributesupport-report');
-  fedreg.showspinner();
+  fr.showspinner();
 
     $.getJSON(attributesupportEndpoint, function(data) {
 
@@ -1166,7 +1166,7 @@ fr.detailed_attributesupport_compliance_report = function(target) {
         });
       });
       
-      fedreg.hidespinner();
+      fr.hidespinner();
       $('.detailed-idpattributesupport-report-parameters').removeClass('hidden');
       $('#attributesupporttables').removeClass('hidden');
       $(".detailed-idpattributesupport-report").click();
@@ -1189,7 +1189,7 @@ $(".export-detailed-idpattributesupport-report").click(function() {
 
 $(".request-detailed-attributecompatibility-report").click(function(target) {
   $('#attributecompatibility').addClass('hidden');
-  fedreg.showspinner();
+  fr.showspinner();
   $('#attributecompatibility .alert').addClass('hidden');
 
   var form = $('#detailed-attributecompatibility-report-parameters');
@@ -1228,14 +1228,14 @@ $(".request-detailed-attributecompatibility-report").click(function(target) {
         op.append(attr);
       });
 
-      fedreg.hidespinner();
+      fr.hidespinner();
       $('#attributecompatibility').removeClass('hidden');
     });
 });
 
 $(".request-idpprovidingattribute-report").click(function(target) {
   $('#idpprovidingattribute').addClass('hidden');
-  fedreg.showspinner();
+  fr.showspinner();
 
   var form = $('#idpprovidingattribute-report-parameters');
   var params = form.serialize();
@@ -1269,7 +1269,7 @@ $(".request-idpprovidingattribute-report").click(function(target) {
         unsupported.append(markup);
       });
 
-      fedreg.hidespinner();
+      fr.hidespinner();
       $('#idpprovidingattribute').removeClass('hidden');
     });
 });
@@ -1291,7 +1291,7 @@ $(".request-detailed-idpsessions-report").click(function () {
     if(detailedidpsessions) {
       detailedidpsessions.destroy();
     }
-    fedreg.showspinner();
+    fr.showspinner();
 
     var options = {
       chart: {
@@ -1347,7 +1347,7 @@ $(".request-detailed-idpsessions-report").click(function () {
       options.series.push(series);
 
 
-      fedreg.hidespinner();
+      fr.hidespinner();
       detailedidpsessions = new Highcharts.Chart(options);
       exportBut.removeClass('hidden');
     });
@@ -1355,14 +1355,14 @@ $(".request-detailed-idpsessions-report").click(function () {
 });
 
 $(".request-refine-detailedidptoserviceutilization-content").click(function () {
-  fedreg.set_button($(this));
+  fr.set_button($(this));
   var form = $('#detailed-detailedidptoserviceutilization-report-parameters');
   if(form.valid()) { 
     var params = form.serialize();
     params = params + '&' + $('#refine-detailedidptoserviceutilization-report-parameters').serialize();
     requestIdPServiceUtilization(params);
   }
-  fedreg.reset_button($(this));
+  fr.reset_button($(this));
 });
 
 $(".request-detailed-detailedidptoserviceutilization-reports").click(function () {
@@ -1397,14 +1397,14 @@ function requestIdPServiceUtilization(params) {
       idpserviceutilizationtotals.destroy();
     }
     
-    fedreg.showspinner();
+    fr.showspinner();
     refineContent.addClass('hidden');
     topTenContent.addClass('hidden');
     remainderContent.addClass('hidden');
     exportBut.addClass('hidden');
     topTen.html('');
     remainder.html(''); 
-    fedreg.showspinner();
+    fr.showspinner();
 
     var options = {
       chart: {
@@ -1533,7 +1533,7 @@ function requestIdPServiceUtilization(params) {
       options.series.push(series); 
       options2.series.push(totals);
       
-      fedreg.hidespinner();
+      fr.hidespinner();
       idpserviceutilization = new Highcharts.Chart(options);
       idpserviceutilizationtotals = new Highcharts.Chart(options2);
     });
@@ -1558,7 +1558,7 @@ $(".request-detailed-idpdemand-report").click(function () {
     if(detailedidpdemand) {
       detailedidpdemand.destroy();
     }
-    fedreg.showspinner();
+    fr.showspinner();
 
     var options = {
       chart: {
@@ -1615,7 +1615,7 @@ $(".request-detailed-idpdemand-report").click(function () {
       options.series.push(series);
 
 
-      fedreg.hidespinner();
+      fr.hidespinner();
       exportBut.removeClass('hidden');
       detailedidpdemand = new Highcharts.Chart(options);
     });
@@ -1639,7 +1639,7 @@ $(".request-detailed-spsessions-report").click(function () {
     if(detailedspsessions) {
       detailedspsessions.destroy();
     }
-    fedreg.showspinner();
+    fr.showspinner();
 
     var options = {
       chart: {
@@ -1695,7 +1695,7 @@ $(".request-detailed-spsessions-report").click(function () {
       options.series.push(series);
 
 
-      fedreg.hidespinner();
+      fr.hidespinner();
       detailedspsessions = new Highcharts.Chart(options);
       exportBut.removeClass('hidden');
     });
@@ -1703,14 +1703,14 @@ $(".request-detailed-spsessions-report").click(function () {
 });
 
 $(".request-refine-detailedsptoidputilization-content").click(function () {
-  fedreg.set_button($(this));
+  fr.set_button($(this));
   var form = $('#detailed-detailedsptoidputilization-report-parameters');
   if(form.valid()) { 
     var params = form.serialize();
     params = params + '&' + $('#refine-detailedsptoidputilization-report-parameters').serialize();
     requestSptoIdPUtilization(params);
   }
-  fedreg.reset_button($(this));
+  fr.reset_button($(this));
 });
 
 $(".request-detailed-detailedsptoidputilization-reports").click(function () {
@@ -1751,7 +1751,7 @@ function requestSptoIdPUtilization(params) {
     exportBut.addClass('hidden');
     topTen.html('');
     remainder.html(''); 
-    fedreg.showspinner();
+    fr.showspinner();
 
     var options = {
       chart: {
@@ -1880,7 +1880,7 @@ function requestSptoIdPUtilization(params) {
       options.series.push(series); 
       options2.series.push(totals);
       
-      fedreg.hidespinner();
+      fr.hidespinner();
       spserviceutilization = new Highcharts.Chart(options);
       spserviceutilizationtotals = new Highcharts.Chart(options2);
     });
@@ -1905,7 +1905,7 @@ $(".request-detailed-spdemand-report").click(function () {
     if(detailedspdemand) {
       detailedspdemand.destroy();
     }
-    fedreg.showspinner();
+    fr.showspinner();
 
     var options = {
       chart: {
@@ -1962,7 +1962,7 @@ $(".request-detailed-spdemand-report").click(function () {
       options.series.push(series);
 
 
-      fedreg.hidespinner();
+      fr.hidespinner();
       exportBut.removeClass('hidden');
       detailedspdemand = new Highcharts.Chart(options);
     });
@@ -1976,7 +1976,7 @@ $(".request-detailed-frsessions-report").click(function () {
     if(detailedfrsessions) {
       detailedfrsessions.destroy();
     }
-    fedreg.showspinner();
+    fr.showspinner();
 
     var options = {
       chart: {
@@ -2032,7 +2032,7 @@ $(".request-detailed-frsessions-report").click(function () {
       options.series.push(series);
 
 
-      fedreg.hidespinner();
+      fr.hidespinner();
       detailedfrsessions = new Highcharts.Chart(options);
     });
   }  

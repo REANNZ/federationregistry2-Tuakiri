@@ -301,7 +301,7 @@ $(function() {
       
       $('input.currentimpl').change(function() {
         currentImpl = $(this).val();
-        fedreg.configureIdentityProviderSAML($('#hostname').val());
+        fr.configureIdentityProviderSAML($('#hostname').val());
       });
       },
       error: function (xhr, ajaxOptions, thrownError) {
@@ -324,7 +324,7 @@ $(function() {
   });
 
   jQuery.validator.addMethod("validcert", function(value, element, params) { 
-    fedreg.validateCertificate();
+    fr.validateCertificate();
     return valid_certificate; 
   }, jQuery.format("PEM data invalid"));
   
@@ -342,7 +342,7 @@ $(function() {
     if( val.indexOf('/idp/shibboleth', val.length - 15) !== -1 && val.length > 9)
       val = val.substring(0, val.length - 15);
 
-    fedreg.configureIdentityProviderSAML(val);
+    fr.configureIdentityProviderSAML(val);
     $(this).val(val);
   });
 });

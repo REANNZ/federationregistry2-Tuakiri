@@ -20,7 +20,7 @@
 							<label><g:message code="label.month" />: <input name="month" size="2" class="number"/><fr:tooltip code='help.fr.report.month' /></label>
 							<label><g:message code="label.year" />: <input name="year" size="4"  class="required number"/><fr:tooltip code='help.fr.report.year' /></label>
 
-							<a href="#" onClick="if($('#reportrequirements').valid()){ fedreg.renderFederationReport('connectivity'); } return false;" class="search-button"><g:message code="label.generate" /></a>
+							<a href="#" onClick="if($('#reportrequirements').valid()){ fr.renderFederationReport('connectivity'); } return false;" class="search-button"><g:message code="label.generate" /></a>
 						</form>
 
 						<div id="connectivityreport" class="revealable reportdata">
@@ -33,7 +33,7 @@
 						</div>	
 
 						<script type="text/javascript+protovis">
-							fedreg.renderFederationConnectivity = function(data, refine) {
+							fr.renderFederationConnectivity = function(data, refine) {
 								if(refine || data.populated) {
 									$('#connectivitydata').empty();
 									$('#connectivitytitle').html(data.title);

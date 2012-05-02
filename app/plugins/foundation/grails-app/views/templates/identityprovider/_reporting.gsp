@@ -147,7 +147,7 @@
         $(".request-idp-connections-report").click(function () {
           $('#idpconnectivity').hide();
           $('#noconnectivity').addClass('hidden');
-          fedreg.showspinner();
+          fr.showspinner();
 
           var form = $('#idp-connections-report-parameters');
           if(form.valid()) { 
@@ -161,7 +161,7 @@
 
         function renderIdPConnectivity(data) {
           if(!data.populated) {
-            fedreg.hidespinner();
+            fr.hidespinner();
             $('#noconnectivity').removeClass('hidden');
             return;
           }
@@ -184,7 +184,7 @@
 
           arc.label.add(pv.Label)
           vis.render();
-          fedreg.hidespinner();
+          fr.hidespinner();
           $('#idpconnectivity').show();
         };
       </script>
@@ -202,7 +202,7 @@
     });
         
     $(document).ready(function() {
-      fedreg.hidespinner();
+      fr.hidespinner();
 
       var currentTime = new Date()
       var month = currentTime.getMonth() + 1

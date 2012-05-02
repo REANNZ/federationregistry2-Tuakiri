@@ -52,7 +52,7 @@ class AttributeConsumingServiceControllerSpec extends IntegrationSpec {
 		then:
 		acs.requestedAttributes.size() == 1
 		wfDescription == "Approval for addition of the attribute '${attr.name}' (OID: ${attr.oid}) to the service '${acs?.descriptor?.displayName}'"
-		controller.response.contentAsString == "fedreg.attributeconsumingservice.requestedattribute.add.success"
+		controller.response.contentAsString == "fr.attributeconsumingservice.requestedattribute.add.success"
 	}
 	
 	def "Add new requested attribute with incorrect permissions"() {
@@ -98,7 +98,7 @@ class AttributeConsumingServiceControllerSpec extends IntegrationSpec {
 		
 		then:
 		acs.requestedAttributes.size() == 1
-		controller.response.contentAsString == "fedreg.attributeconsumingservice.requestedattribute.add.already.exists"
+		controller.response.contentAsString == "fr.attributeconsumingservice.requestedattribute.add.already.exists"
 	}
 	
 	def "Add new requested attribute fails without reason"() {
@@ -132,7 +132,7 @@ class AttributeConsumingServiceControllerSpec extends IntegrationSpec {
 		
 		then:
 		acs.requestedAttributes.size() == 0
-		controller.response.contentAsString == "fedreg.attributeconsumingservice.requestedattribute.remove.success"
+		controller.response.contentAsString == "fr.attributeconsumingservice.requestedattribute.remove.success"
 	}
 	
 	def "Delete requested attribute fails with wrong permissions"() {

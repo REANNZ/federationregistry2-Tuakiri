@@ -116,7 +116,7 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		
 		then:
 		controller.flash.type == "error"
-		controller.flash.message == "fedreg.controllers.namevalue.missing"
+		controller.flash.message == "fr.controllers.namevalue.missing"
 		controller.response.redirectedUrl == "/"
 	}
 	
@@ -205,7 +205,7 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		
 		then:
 		controller.flash.type == "error"
-		controller.flash.message == "fedreg.controllers.namevalue.missing"
+		controller.flash.message == "fr.controllers.namevalue.missing"
 		controller.response.redirectedUrl == "/"
 	}
 	
@@ -272,7 +272,7 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		
 		then:
 		controller.flash.type == "error"
-		controller.flash.message == "fedreg.controllers.namevalue.missing"
+		controller.flash.message == "fr.controllers.namevalue.missing"
 		controller.response.redirectedUrl == "/"
 	}
 	
