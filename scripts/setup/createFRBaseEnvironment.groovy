@@ -19,7 +19,7 @@ permissionService = ctx.getBean("permissionService")
 // Create federation-administrators role, used in workflows etc
 def adminRole = roleService.createRole("federation-administrators", "Role representing federation level administrators who can make decisions onbehalf of the entire federation, granted global FR access", false)
 
-// Grant administrative 'ALL' permission
+// Grant administrative global access permission
 Permission adminPermission = new Permission(target:'*')
 adminPermission.managed = true
 adminPermission.type = Permission.adminPerm
@@ -46,7 +46,7 @@ contactAdminPermission.type = Permission.adminPerm
 
 permissionService.createPermission(contactAdminPermission, contactManagementRole)
 
-// Populate default administrative account if required
+// Populate default administrative account
 def subject = new aaf.fr.identity.Subject(principal:'internaladministrator', cn:'internal administrator', email:'internaladministrator@not.valid')
 subject.save(flush: true)
 if(subject.hasErrors()) {
