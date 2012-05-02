@@ -670,8 +670,8 @@ class FederationReportsController {
     httpout << "Period:, ${startDate.time}, ${endDate.time}\n\n"
 
     def queryParams = [:]
-    queryParams.startDate = startDate
-    queryParams.endDate = endDate
+    queryParams.startDate = startDate.time
+    queryParams.endDate = endDate.time
     queryParams.robot = false
     queryParams.orgID = params.excludeorg as Long
     def querySessionTotal = "select count(*) from WayfAccessRecord war, RoleDescriptor rd where war.spID = rd.id and rd.organization.id != :orgID and war.dateCreated between :startDate and :endDate and war.robot = :robot"
@@ -695,8 +695,8 @@ class FederationReportsController {
         def queryIdP = new StringBuilder("select count(*), idpID from WayfAccessRecord where spID = :spid and dateCreated between :startDate and :endDate and robot = :robot group by idpID order by count(idpID) desc")
         def queryIdPParams = [:]
         queryIdPParams.spid = sp.id
-        queryIdPParams.startDate = startDate
-        queryIdPParams.endDate = endDate
+        queryIdPParams.startDate = startDate.time
+        queryIdPParams.endDate = endDate.time
         queryIdPParams.robot = false
 
         def idpSessions = WayfAccessRecord.executeQuery(queryIdP.toString(), queryIdPParams, [max:params.idpcount])
