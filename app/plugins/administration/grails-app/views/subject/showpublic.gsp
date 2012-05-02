@@ -46,7 +46,7 @@
               </tr>
             </thead>
             <tbody>
-              <g:each in="${subject.sessionRecords.sort{it.dateCreated}.reverse().subList(0, subject.sessionRecords.size() > 4 ? 5 : subject.sessionRecords.size() - 1)}" status="i" var="session">
+              <g:each in="${subject.sessionRecords.sort{it.dateCreated}.reverse()}" status="i" var="session">
                 <tr>
                   <td>${fieldValue(bean: session, field: "credential")}</td>
                   <td>${fieldValue(bean: session, field: "remoteHost")}</td>
