@@ -7,7 +7,7 @@
   <body>
 
     <h2><g:message code="views.fr.foundation.serviceprovider.list.heading" /></h2>
-    <table class="span11 table borderless table-striped table-sortable">
+    <table class="table borderless table-sortable">
       <thead>
         <tr>
           <th><g:message code="label.serviceprovider" /></th>
@@ -28,7 +28,7 @@
               <g:message code="label.yes"/>
             </g:if>
             <g:else>
-              <span class="not-functioning"><g:message code="label.no"/></span>
+              <span class="label label-important"><g:message code="label.no"/></span>
             </g:else>
           </td>
           <td>

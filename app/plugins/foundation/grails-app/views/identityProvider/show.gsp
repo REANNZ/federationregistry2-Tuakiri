@@ -125,7 +125,7 @@
                       <a class="load-descriptor-metadata btn btn-info"><g:message code="label.load" /></a>
                     </div>
                   </div>
-                  <div id="descriptormetadata"></div>
+                  <pre id="descriptormetadata" class="metadata hidden"></pre>
                 </g:if>
                 <g:else>
                   <div class="alert alert-message">

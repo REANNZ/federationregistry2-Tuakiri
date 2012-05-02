@@ -146,7 +146,7 @@
             </div>
           </div>
         </fieldset>
-        <hr class="span7 offset1">
+        <hr>
         <fieldset>
           <div class="control-group">
             <label for="idp.post"><g:message code="label.httppostendpoint" /></label>
@@ -166,7 +166,7 @@
             </div>
           </div>
         </fieldset>
-        <hr class="span7 offset1">
+        <hr>
         <fieldset>
           <div class="control-group">
             <label for="idp.artifact"><g:message code="label.soapartifactendpoint" /></label>
@@ -180,7 +180,7 @@
             </div>
           </div>
         </fieldset>
-        <hr class="span7 offset1">
+        <hr>
         <fieldset>
           <div class="control-group">
             <label for="aa.attributeservice"><g:message code="label.soapatrributequeryendpoint" /></label>

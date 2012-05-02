@@ -11,7 +11,7 @@
 
     <g:render template="/templates/flash"  plugin="foundation"/>
 
-    <table class="span11 table borderless table-striped table-sortable">
+    <table class="table borderless table-sortable">
       <thead>
         <tr>
           <th><g:message code="label.entitydescriptor" /></th>
@@ -31,7 +31,7 @@
               <g:message code="label.yes"/>
             </g:if>
             <g:else>
-              <span class="not-functioning"><g:message code="label.no"/></span>
+              <span class="label label-important"><g:message code="label.no"/></span>
             </g:else>
           </td>
           <td><a href="${createLink(controller:'entityDescriptor', action:'show', id:entity.id)}" class="btn btn-small" /><g:message code="label.view"/></td>

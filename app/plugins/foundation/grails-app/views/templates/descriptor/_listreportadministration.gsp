@@ -22,7 +22,7 @@
                   <g:hiddenField name="id" value="${descriptor.id}" />
                   <g:hiddenField name="subjectID" value="${admin.id}" />
                   <a href="#" class="btn btn-small ajax-modal" data-load="${createLink(controller:'subject', action:'showpublic', id:admin.id, absolute:true)}" ><g:message code="label.quickview" default="Quick View"/></a>
-                  <g:submitButton name="submit" value="${message(code: 'label.revoke', default: 'Grant')}" class="btn" />
+                  <g:submitButton name="submit" value="${message(code: 'label.revoke', default: 'Revoke')}" class="btn" />
                 </g:form>
               </fr:hasPermission>
             </td>

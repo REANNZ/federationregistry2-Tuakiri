@@ -47,10 +47,10 @@
         <g:link controller="federationReports" action="sessions"><g:message code="fr.branding.nav.reports.sessions" default="Sessions" /></g:link>
       </li>
       <li class="${controllerName == 'federationReports' && actionName == 'idputilization' ? 'active':''}">
-        <g:link controller="federationReports" action="idputilization"><g:message code="fr.branding.nav.reports.idputilization" default="Identity Provider Utilisation" /></g:link>
+        <g:link controller="federationReports" action="idputilization"><g:message code="fr.branding.nav.reports.idputilization" default="IdP Utilisation" /></g:link>
       </li>
       <li class="${controllerName == 'federationReports' && actionName == 'serviceutilization' ? 'active':''}">
-        <g:link controller="federationReports" action="serviceutilization"><g:message code="fr.branding.nav.reports.serviceutilization" default="Service Provider Utilisation"/></g:link>
+        <g:link controller="federationReports" action="serviceutilization"><g:message code="fr.branding.nav.reports.serviceutilization" default="SP Utilisation"/></g:link>
       </li>
       <li class="${controllerName == 'federationReports' && actionName == 'dsutilization' ? 'active':''}">
         <g:link controller="federationReports" action="dsutilization"><g:message code="fr.branding.nav.reports.dsutilization" default="DS Utilisation" /></g:link>

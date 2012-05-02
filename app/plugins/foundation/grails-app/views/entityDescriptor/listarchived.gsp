@@ -8,7 +8,7 @@
 
     <h2><g:message code="views.fr.foundation.entity.listarchived.heading" /></h2>
 
-    <table class="span11 table borderless table-striped table-sortable">
+    <table class="table borderless table-sortable">
       <thead>
         <tr>    
           <th><g:message code="label.entitydescriptor" /></th>

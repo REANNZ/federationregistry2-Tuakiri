@@ -50,7 +50,7 @@
       <div class="span3 well">
         <h3>My Service Providers</h3>
         <g:if test="${serviceProviders}">
-          <ul class="dashlist">
+          <ul class="dashlist clean">
             <g:each in="${serviceProviders}" var="sp">
               <li><a href="${createLink(controller:'serviceProvider', action:'show', id:sp.id)}">${fieldValue(bean: sp, field: 'displayName')}</a></li>
             </g:each>

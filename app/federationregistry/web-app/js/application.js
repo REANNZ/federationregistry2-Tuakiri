@@ -22,7 +22,7 @@ applyBehaviourTo = function(scope) {
 
   if($('.table-sortable').dataTable) {
     $('.table-sortable', scope).dataTable( {
-      "sDom": "<'row'<'span6'l><'span5'f>r>t<'row'<'span6'i><'span5'p>>",
+      "sDom": "<'row'<'span5'l><'span6'f>r>t<'row'<'span6'i><'span5'p>>",
       "sPaginationType": "bootstrap",
       "oLanguage": {
         "sLengthMenu": "_MENU_ records per page"
@@ -32,7 +32,7 @@ applyBehaviourTo = function(scope) {
 
   if($('.table-admin-sortable').dataTable) {
     $('.table-admin-sortable', scope).dataTable( {
-      "sDom": "<'row'<'span5'l><'span4'f>r>t<'row'<'span5'i><'span4'p>>",
+      "sDom": "<'row'<'span5'l><'span6'f>r>t<'row'<'span6'i><'span5'p>>",
       "sPaginationType": "bootstrap",
       "oLanguage": {
         "sLengthMenu": "_MENU_ records per page"
@@ -103,19 +103,23 @@ $(document).on('click', '.show-problems-logging-on', function() {
 // Descriptor Metadata
 $(document).on('click', '.load-descriptor-metadata', function() {
   var target = $("#descriptormetadata");
-  target.hide();
+  target.addClass('hidden');
+  fedreg.set_button($(this));
   $.ajax({
     type: "GET",
     cache: false,
     url: descriptorMetadataEndpoint,
+    dataType: "text",
     success: function(res) {
-      target.html(res);
-      target.show();
+      target.text(res);
+      target.removeClass('hidden');
+      fedreg.reset_button($(this));
     },
     error: function (xhr, ajaxOptions, thrownError) {
-      
+      fedreg.reset_button($(this));
     }
   });
+
 });
 
 // Organization Administrators
@@ -1148,6 +1152,7 @@ fedreg.attribute_list = function() {
 // Attribute Filter
 $(document).on('click', '.load-descriptor-attrfilter', function() {
   $("#descriptorattributefilter").addClass('hidden');
+  fedreg.set_button($(this));
   $.ajax({
     type: "GET",
     cache: false,
@@ -1156,9 +1161,10 @@ $(document).on('click', '.load-descriptor-attrfilter', function() {
     success: function(res) {
       $("#descriptorattributefilter").text(res);
       $("#descriptorattributefilter").removeClass('hidden');
+      fedreg.reset_button($(this));
     },
     error: function (xhr, ajaxOptions, thrownError) {
-    
+      fedreg.reset_button($(this));
     }
   });
 });

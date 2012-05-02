@@ -97,6 +97,12 @@ td.centered, th.centered, .centered {
   font-size: 3.0em;
 }
 
+.dashlist {
+  margin: 0px;
+  padding: 0px;
+  margin-top: 6px;
+}
+
 .table tbody tr:hover td, .table tbody tr:hover th { 
   background-color: #fff;
 }

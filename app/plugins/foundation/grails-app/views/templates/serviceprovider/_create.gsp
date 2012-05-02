@@ -158,7 +158,7 @@
           </div>
         </div>
       </fieldset>
-      <hr class="span7 offset1">
+      <hr>
       <fieldset>
         <div class="control-group">
           <label for="sp.acs.post"><g:message code="label.acspostendpoint" /></label>
@@ -186,7 +186,7 @@
           </div>
         </div>
       </fieldset>
-      <hr class="span7 offset1">
+      <hr>
       <fieldset>
         <div class="control-group">
           <label for="sp.slo.artifact"><g:message code="label.sloartifactendpoint" /></label>
@@ -224,7 +224,7 @@
           </div>
         </div>
       </fieldset>
-      <hr class="span7 offset1">
+      <hr>
       <fieldset>
         <div class="control-group">
           <label for="sp.drs"><g:message code="label.drsendpoint" /></label>
@@ -236,7 +236,7 @@
           </div>
         </div>
       </fieldset>
-      <hr class="span7 offset1">
+      <hr>
       <fieldset>
         <div class="control-group">
           <label for="sp.mnid.artifact"><g:message code="label.mnidartifactendpoint" /></label>

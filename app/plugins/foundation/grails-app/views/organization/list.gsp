@@ -10,13 +10,13 @@
 
     <g:render template="/templates/flash" plugin="foundation"/>
 
-    <table class="span11 table borderless table-striped table-sortable">
+    <table class="table borderless table-sortable">
       <thead>
         <tr>
-          <th>${message(code: 'label.organization')}</th>
-          <th>${message(code: 'label.url')}</th>
-          <th>${message(code: 'label.primarytype')}</th>
-          <th>${message(code: 'label.functioning')}</th>
+          <th><g:message code="label.organization" /></th>
+          <th><g:message code="label.url" /></th>
+          <th><g:message code="label.primarytype" /></th>
+          <th><g:message code="label.functioning" /></th>
           <th />
         </tr>
       </thead>
@@ -31,7 +31,7 @@
               <g:message code="label.yes"/>
             </g:if>
             <g:else>
-              <span class="not-functioning"><g:message code="label.no"/></span>
+              <span class="label label-important"><g:message code="label.no"/></span>
             </g:else>
           </td>
           <td><a href="${createLink(controller:'organization', action:'show', id:organization.id)}" class="btn btn-small" /><g:message code="label.view"/></a></td>
