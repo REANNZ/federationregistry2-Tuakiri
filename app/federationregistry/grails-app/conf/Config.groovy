@@ -2,13 +2,13 @@ import javax.naming.InitialContext
 import javax.naming.Context
 
 // Import externalized configuration for the Federation Registry application
-def externalConf = getFromEnvironment("fr_config")
+def externalConf = getFromEnvironment("fr-config")
 if(externalConf) {
   println( "Including external configuration from: ${externalConf}" )
   grails.config.locations = ["file:${externalConf}/fr-config.groovy"]
 } else {
-  println "No external configuration location specified as environment variable fr_config, terminating startup"
-  throw new RuntimeException("No external configuration location specified as environment variable fr_config")
+  println "No external configuration location specified as environment variable fr-config, terminating startup"
+  throw new RuntimeException("No external configuration location specified as environment variable fr-config")
 }
 
 // Extract user details to append to Audit Table
