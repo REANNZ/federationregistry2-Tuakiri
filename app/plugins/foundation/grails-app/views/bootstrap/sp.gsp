@@ -6,6 +6,6 @@
 	
     <body>
       <h2><g:message code="views.fr.foundation.bootstrap.serviceprovider.heading" /></h2>
-			<g:render template="/templates/serviceprovider/create"  plugin="foundation" />
+			<g:render template="/templates/serviceprovider/create"  plugin="foundation" model="[saveAction:'savesp']"/>
     </body>
 </html>
