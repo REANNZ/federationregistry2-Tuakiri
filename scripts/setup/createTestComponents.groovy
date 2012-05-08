@@ -101,7 +101,8 @@ identityProvider.addToArtifactResolutionServices(soapArtifact)
 def cert = cryptoService.createCertificate(certData)
 cryptoService.validateCertificate(cert)
 def keyInfo = new KeyInfo(certificate: cert)
-def keyDescriptor = new KeyDescriptor(keyInfo:keyInfo, keyType:KeyTypes.signing)
+def keyDescriptor = new KeyDescriptor(keyInfo:keyInfo, keyType:KeyTypes.signing, encryptionMethod:null)
+keyDescriptor.roleDescriptor = identityProvider
 identityProvider.addToKeyDescriptors(keyDescriptor)
 
 def attributeAuthority, soapAttributeService
@@ -194,13 +195,15 @@ serviceProvider.addToDiscoveryResponseServices(discoveryResponseService)
 cert = cryptoService.createCertificate(certData)
 cryptoService.validateCertificate(cert)
 keyInfo = new KeyInfo(certificate: cert)
-keyDescriptor = new KeyDescriptor(keyInfo:keyInfo, keyType:KeyTypes.signing)
+keyDescriptor = new KeyDescriptor(keyInfo:keyInfo, keyType:KeyTypes.signing, encryptionMethod:null)
+keyDescriptor.roleDescriptor = serviceProvider
 serviceProvider.addToKeyDescriptors(keyDescriptor)
 
 def certEnc = cryptoService.createCertificate(certData)
 cryptoService.validateCertificate(certEnc)
 def keyInfoEnc = new KeyInfo(certificate:certEnc)
-def keyDescriptorEnc = new KeyDescriptor(keyInfo:keyInfoEnc, keyType:KeyTypes.encryption)
+def keyDescriptorEnc = new KeyDescriptor(keyInfo:keyInfoEnc, keyType:KeyTypes.encryption), encryptionMethod:null
+keyDescriptorEnc.roleDescriptor = serviceProvider
 serviceProvider.addToKeyDescriptors(keyDescriptorEnc)
 
 def serviceDescription = new ServiceDescription(connectURL: 'https://sp.one.edu.au', descriptor: serviceProvider)

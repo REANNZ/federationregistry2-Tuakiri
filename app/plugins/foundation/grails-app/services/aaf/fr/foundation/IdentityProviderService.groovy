@@ -105,8 +105,9 @@ class IdentityProviderService {
     if(params.idp?.crypto?.sig) {
       def cert = cryptoService.createCertificate(params.cert)
       cryptoService.validateCertificate(cert)
-      def keyInfo = new KeyInfo(certificate: cert)
-      def keyDescriptor = new KeyDescriptor(keyInfo:keyInfo, keyType:KeyTypes.signing, roleDescriptor:identityProvider)
+      def keyInfo = new aaf.fr.foundation.KeyInfo(certificate: cert)
+      def keyDescriptor = new aaf.fr.foundation.KeyDescriptor(keyInfo:keyInfo, keyType:aaf.fr.foundation.KeyTypes.signing, encryptionMethod:null)
+      keyDescriptor.roleDescriptor = identityProvider
       identityProvider.addToKeyDescriptors(keyDescriptor)
     }
   
@@ -115,7 +116,8 @@ class IdentityProviderService {
       def certEnc = cryptoService.createCertificate(params.cert)
       cryptoService.validateCertificate(certEnc)
       def keyInfoEnc = new KeyInfo(certificate:certEnc)
-      def keyDescriptorEnc = new KeyDescriptor(keyInfo:keyInfoEnc, keyType:KeyTypes.encryption, roleDescriptor:identityProvider)
+      def keyDescriptorEnc = new aaf.fr.foundation.KeyDescriptor(keyInfo:keyInfoEnc, keyType:KeyTypes.encryption, encryptionMethod:null)
+      keyDescriptorEnc.roleDescriptor = identityProvider
       identityProvider.addToKeyDescriptors(keyDescriptorEnc)
     }
   

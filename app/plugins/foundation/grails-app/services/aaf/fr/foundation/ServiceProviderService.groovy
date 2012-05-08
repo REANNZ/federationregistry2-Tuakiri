@@ -179,7 +179,8 @@ class ServiceProviderService {
       def cert = cryptoService.createCertificate(params.cert)
       cryptoService.validateCertificate(cert)
       def keyInfo = new KeyInfo(certificate: cert)
-      def keyDescriptor = new KeyDescriptor(keyInfo:keyInfo, keyType:KeyTypes.signing, roleDescriptor:serviceProvider)
+      def keyDescriptor = new KeyDescriptor(keyInfo:keyInfo, keyType:KeyTypes.signing, encryptionMethod:null) 
+      keyDescriptor.roleDescriptor = serviceProvider
       serviceProvider.addToKeyDescriptors(keyDescriptor)
     }
   
@@ -188,7 +189,8 @@ class ServiceProviderService {
       def certEnc = cryptoService.createCertificate(params.cert)
       cryptoService.validateCertificate(certEnc)
       def keyInfoEnc = new KeyInfo(certificate:certEnc)
-      def keyDescriptorEnc = new KeyDescriptor(keyInfo:keyInfoEnc, keyType:KeyTypes.encryption, roleDescriptor:serviceProvider)
+      def keyDescriptorEnc = new KeyDescriptor(keyInfo:keyInfoEnc, keyType:KeyTypes.encryption, encryptionMethod:null) 
+      keyDescriptorEnc.roleDescriptor = serviceProvider
       serviceProvider.addToKeyDescriptors(keyDescriptorEnc)
     }
   
