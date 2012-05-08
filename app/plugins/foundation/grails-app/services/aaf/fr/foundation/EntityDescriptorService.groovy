@@ -88,11 +88,13 @@ class EntityDescriptorService {
     return [true, entityDescriptor]
   }
   
-  def delete (def id) {
+  def delete (def id) {    
     def ed = EntityDescriptor.get(id)
     if(!ed)
       throw new ErronousStateException("Unable to find EntityDescriptor with id $id")
     
+    log.info "$subject attempting to delete $ed and children"
+
     // We have to initialize like this as there is a circular dependency
     def identityProviderService = grailsApplication.mainContext.identityProviderService
     def serviceProviderService = grailsApplication.mainContext.serviceProviderService
@@ -109,7 +111,7 @@ class EntityDescriptorService {
     
     ed.delete()
     
-    log.info "$subject deleted $ed"
+    //log.info "$subject deleted $ed"
   }
   
   def archive (def id) {
