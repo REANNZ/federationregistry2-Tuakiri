@@ -10,18 +10,18 @@ class MonitoringAPIv1Controller {
 		def descriptors, type
 		
 		switch(params.type) {
-			case "identityproviders": 	descriptors = IDPSSODescriptor.list().sort{it.id}
+			case "identityproviders": 	descriptors = IDPSSODescriptor.list().findAll{it.functioning()}.sort{it.id}
 										type = 'identityproviders'
 										listMonitorSources(type, descriptors, results)
 									 	break
-			case "serviceproviders":  	descriptors = SPSSODescriptor.list().sort{it.id}
+			case "serviceproviders":  	descriptors = SPSSODescriptor.list().findAll{it.functioning()}.sort{it.id}
 										type = 'serviceproviders'
 										listMonitorSources(type, descriptors, results)
 										break
-			default: 			descriptors = IDPSSODescriptor.list().sort{it.id}
+			default: 			descriptors = IDPSSODescriptor.list().findAll{it.functioning()}.sort{it.id}
 										type = 'identityproviders'
 										listMonitorSources(type, descriptors, results)
-										descriptors = SPSSODescriptor.list().sort{it.id}
+										descriptors = SPSSODescriptor.list().findAll{it.functioning()}.sort{it.id}
 										type = 'serviceproviders'
 										listMonitorSources(type, descriptors, results)										
 		}
@@ -88,8 +88,8 @@ class MonitoringAPIv1Controller {
       def admin = [:]
       admin.givenName = cp.contact.givenName
       admin.surname = cp.contact.surname 
-      admin.email = cp.contact.email?.uri
-      admin.mobilePhone = cp.contact.mobilePhone?.uri
+      admin.email = cp.contact.email
+      admin.mobilePhone = cp.contact.mobilePhone
       result.contacts.administrative.add(admin)
     }
 
@@ -98,8 +98,8 @@ class MonitoringAPIv1Controller {
       def tech = [:]
       tech.givenName = cp.contact.givenName
       tech.surname = cp.contact.surname 
-      tech.email = cp.contact.email?.uri
-      tech.mobilePhone = cp.contact.mobilePhone?.uri
+      tech.email = cp.contact.email
+      tech.mobilePhone = cp.contact.mobilePhone
       result.contacts.technical.add(tech)
     }
 	

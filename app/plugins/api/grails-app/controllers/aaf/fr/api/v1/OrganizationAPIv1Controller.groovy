@@ -72,7 +72,7 @@ class OrganizationAPIv1Controller {
       result.serviceproviders.add(r)
     }
 
-    result.url = org.url.uri
+    result.url = org.url
     result.functioning = org.functioning()
     result.archived = org.archived
     result.format = "json"
