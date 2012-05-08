@@ -256,6 +256,9 @@ class WorkflowTaskService {
       throw new ErronousWorkflowStateException("Unable to save when finalizing ${taskInstance}")
     }
     log.info "Finalized $taskInstance for ${taskInstance.processInstance}"
+
+    taskInstance.processInstance.status = ProcessStatus.COMPLETED
+    log.info "Finalized ${taskInstance.processInstance} as nothing left to execute in this branch of the decision tree"
   }
   
   def requestApproval(def taskInstanceID) {
@@ -306,8 +309,9 @@ class WorkflowTaskService {
       if(role) {
         log.debug "Identified ${role} as a name match of the identifier '${identifier}', adding subjects to approval notification"
         role.subjects.each { sb -> 
-          if (!subjectList.contains(sb))
-            subjectList.add(sb)
+          def s = aaf.fr.identity.Subject.get(sb.id)
+          if (!subjectList.contains(s))
+            subjectList.add(s)
         }
       }
       else {
@@ -341,13 +345,13 @@ class WorkflowTaskService {
     }
   }
   
-  void messageApprovalRequest(Subject sb, TaskInstance taskInstance) {
+  void messageApprovalRequest(def sb, TaskInstance taskInstance) {
     log.debug "Sending approval request to $sb for $taskInstance"
     
     Object[] args = [taskInstance.task.name]
     mailService.sendMail {
       to sb.email   
-      subject messageSource.getMessage('templates.fr.mail.workflow.requestapproval.subject', args, 'templates.fr.mail.workflow.requestapproval.subject', new Locale("EN"))
+      subject messageSource.getMessage('branding.fr.mail.workflow.requestapproval.subject', args, 'branding.fr.mail.workflow.requestapproval.subject', new Locale("EN"))
       body(view: '/templates/mail/_workflow_requestapproval', plugin: "federationworkflow", model: [taskInstance: taskInstance])
     }
   }
@@ -384,6 +388,22 @@ class WorkflowTaskService {
   }
   
   def retrieveTasksAwaitingApproval(def subject) {
+    def c = TaskInstance.createCriteria()
+    def tasks = c.listDistinct {
+      and {
+        eq("status", TaskStatus.APPROVALREQUIRED)
+        potentialApprovers {
+          eq("principal", subject.principal)
+        }
+        processInstance {
+          eq("status", ProcessStatus.INPROGRESS)
+        }
+      }
+    }
+    tasks
+  }
+
+  def retrieveTasksSubmittedForApproval(def subject) {
     def c = TaskInstance.createCriteria()
     def tasks = c.listDistinct {
       and {

@@ -1,16 +1,39 @@
 <%@ page contentType="text/html"%>
-<meta name="layout" content="main"/>
 
+<g:applyLayout name="email">
 
-	<g:message code="templates.fr.mail.workflow.requestapproval.descriptive" />
+  An important task <strong>requiring your approval</strong> is waiting for your input within <g:link controller="workflowApproval" action="list" absolute="true">Federation Registry workflows</g:link>.
+  <br><br>
 
-	<g:link controller="workflowApproval" action="list" absolute="true"><g:message code="templates.fr.mail.workflow.requestapproval.access" /></g:link>
+  <h4 class="h4">Task Details</h4>
+  <table>
+    <tr>
+      <td>
+        Name:
+      </td>
+      <td>
+        ${fieldValue(bean: taskInstance, field: "task.name")} (ID: ${fieldValue(bean: taskInstance, field: "id")})
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Description:
+      </td>
+      <td>
+        ${fieldValue(bean: taskInstance, field: "task.description")}
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Process Instance:
+      </td>
+      <td>
+        ${fieldValue(bean: taskInstance, field: "processInstance.description")}
+      </td>
+    </tr>
+  </table>
 
-	<p><strong><g:message code="label.name" /></strong>: ${fieldValue(bean: taskInstance, field: "task.name")} (ID: ${fieldValue(bean: taskInstance, field: "id")})</p>
+  <br><br>
+  Please <g:link controller="workflowApproval" action="list" absolute="true"><strong>action approvals</strong></g:link> waiting on your input at your earliest convenience.
 
-	<p><strong><g:message code="label.description" /></strong>: ${fieldValue(bean: taskInstance, field: "task.description")}</p>
-
-	<p><strong><g:message code="label.processinstance" /></strong>: ${fieldValue(bean: taskInstance, field: "processInstance.description")}</p>
-
-	<p><g:message code="templates.fr.mail.get.support" /></p>
-
+</g:applyLayout>

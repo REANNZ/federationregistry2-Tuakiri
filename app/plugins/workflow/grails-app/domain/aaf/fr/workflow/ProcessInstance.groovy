@@ -4,7 +4,7 @@ class ProcessInstance {
 
 	String description
 	ProcessStatus status
-    ProcessPriority priority
+  ProcessPriority priority
 
 	Date dateCreated
 	Date lastUpdated
@@ -15,7 +15,7 @@ class ProcessInstance {
 	Map params
 
 	static hasMany = [taskInstances: TaskInstance, messages: WorkflowMessage]
-    static belongsTo = [process: Process]
+  static belongsTo = [process: Process]
 
 	static constraints = {
 		dateCreated(nullable: true)

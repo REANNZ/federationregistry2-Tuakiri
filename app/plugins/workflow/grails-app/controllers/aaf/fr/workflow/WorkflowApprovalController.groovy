@@ -54,7 +54,7 @@ class WorkflowApprovalController {
 			return
 		}
 		
-		if(taskInstance.potentialApprovers.contains(principal) || SecurityUtils.subject.hasRole(AdminsService.ADMIN_ROLE)) {
+		if(taskInstance.potentialApprovers.contains(principal) || SecurityUtils.subject.isPermitted("federation:globaladministrator")) {
 			log.info "$principal is approving $taskInstance"
 			workflowTaskService.approve(taskInstance.id)
 			flash.type = "success"
@@ -101,7 +101,7 @@ class WorkflowApprovalController {
 			return
 		}
 		
-		if(taskInstance.potentialApprovers.contains(principal) || SecurityUtils.subject.hasRole(AdminsService.ADMIN_ROLE)) {
+		if(taskInstance.potentialApprovers.contains(principal) || SecurityUtils.subject.isPermitted("federation:globaladministrator")) {
 			log.info "$principal is rejecting $taskInstance"
 			workflowTaskService.reject(taskInstance.id, params.rejection)
 			flash.type = "success"

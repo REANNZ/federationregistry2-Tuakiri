@@ -9,12 +9,11 @@
 
     <g:if test="${tasks}">
       <p><g:message code="views.fr.workflow.approval.administrator.descriptive" /></p>
-      <table>
+      <table class="table">
         <thead>
           <tr>
             <th><g:message code="label.name" /></th>
             <th><g:message code="label.created" /></th>
-            <th><g:message code="label.description" /></th>
             <th><g:message code="label.processinstance" /></th>
             <th><g:message code="label.waitingon" /></th>
             <th><g:message code="label.action" /></th>
@@ -25,7 +24,6 @@
             <tr>
               <td>${fieldValue(bean: instance, field: "task.name")}</td>
               <td>${fieldValue(bean: instance, field: "dateCreated")}</td>
-              <td>${fieldValue(bean: instance, field: "task.description")}</td>
               <td>
                 ${fieldValue(bean: instance, field: "processInstance.description")}
                 <br><br>
@@ -44,24 +42,20 @@
               <td>
                 <ul class="clean">
                 <g:each in="${instance.potentialApprovers}" var="approver">
-                  <li><g:link controller="user" action="show" id="${approver.id}">${fieldValue(bean: approver, field: "profile.email")}</g:link></li>
+                  <li><g:link controller="subject" action="show" id="${approver.id}">${fieldValue(bean: approver, field: "email")}</g:link></li>
                 </g:each>
                 </ul>
               </td>
               <td>
-                <g:form action="approve" id="${instance.id}" name="submitapproval${i}"></g:form>
-                <n:confirmaction action="\$('#submitapproval${i}').submit();" title="${message(code: 'views.fr.workflow.approval.approve.confirm.title')}" msg="${message(code: 'views.fr.workflow.approval.approve.confirm.descriptive', args:[instance.task.name, instance.processInstance.description])}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" label="${message(code: 'label.approve')}" class="update-button" />
-                <h5>or reject due to:</h5>
-                <ul class="clean">
-                  <g:each in="${instance.task.rejections}" var="rej">
-                    <li>
-                      <g:form action="reject" id="${instance.id}" name="submitrejection${i}">
-                        <g:hiddenField name="rejection" value="${rej.key}" />
-                      </g:form>
-                      <n:confirmaction action="\$('#submitrejection${i}').submit();" title="${message(code: 'views.fr.workflow.approval.rejection.confirm.title')}" msg="${message(code: 'views.fr.workflow.approval.rejection.confirm.descriptive', args:[instance.task.name, instance.processInstance.description, rej.value.description])}" accept="${message(code: 'label.accept')}" cancel="${message(code: 'label.cancel')}" label="${rej.value.name}" class="close-button" />
-                    </li>
-                  </g:each>
-                </ul>
+                <g:form action="approve" id="${instance.id}" name="submitapproval${i}" style="margin-bottom:24px; padding:0;">
+                  <g:submitButton name="submit" class="btn btn-success" value="${g.message(code:'label.approve')}"/>
+                </g:form>
+                <g:each in="${instance.task.rejections}" var="rej">
+                    <g:form action="reject" id="${instance.id}" name="submitrejection${i}" style="margin:1px; padding:0;">
+                      <g:hiddenField name="rejection" value="${rej.key}" />
+                      <g:submitButton name="submit" class="btn btn-danger" value="${rej.value.name}"/>
+                    </g:form>
+                </g:each>
               </td>
             </tr>
             <g:if test="${i+1 != tasks.size()}">
