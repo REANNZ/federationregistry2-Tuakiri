@@ -252,16 +252,18 @@ class IdentityProviderService {
     def identityProvider = IDPSSODescriptor.get(id)
     if(!identityProvider)
       throw new ErronousStateException("Unable to delete identity provider, no such instance")
-      
+
     log.info "Deleting $identityProvider on request of $subject"
 
     def entityDescriptor = identityProvider.entityDescriptor
     def aa = identityProvider.collaborator
 
-    if(aa) {  // Untangle this linkage - horrible but necessay GORM delete sucks.
-      identityProvider.collaborator = null
-      aa.collaborator = null
-      
+    if(aa) {  // Untangle this linkage - horrible but required evil as GORM delete sucks.
+      IDPSSODescriptor.withTransaction {
+        AttributeAuthorityDescriptor.executeUpdate('update AttributeAuthorityDescriptor aa set aa.collaborator = NULL where aa.collaborator = ?', [identityProvider])
+        IDPSSODescriptor.executeUpdate('update IDPSSODescriptor idp set idp.collaborator = NULL where idp.collaborator = ?', [identityProvider.collaborator])
+      }
+
       aa.attributeServices?.each { it.delete() }
       aa.assertionIDRequestServices?.each { it.delete() }
       aa.attributes?.each { it.delete() }
@@ -272,19 +274,18 @@ class IdentityProviderService {
       entityDescriptor.attributeAuthorityDescriptors.remove(aa)
 
       log.info "$subject deleted $aa" 
-
       aa.delete()
     }
-    
+
     identityProvider.attributeProfiles?.each { it.delete() }
     identityProvider.attributes?.each { it.delete() }
     identityProvider.contacts?.each { it.delete() }
     identityProvider.keyDescriptors?.each { it.delete() }
     identityProvider.monitors?.each { it.delete() }
-      
+
     entityDescriptor.idpDescriptors.remove(identityProvider)
     identityProvider.delete()
-    
+
     log.info "$subject deleted $identityProvider"
   }
   
