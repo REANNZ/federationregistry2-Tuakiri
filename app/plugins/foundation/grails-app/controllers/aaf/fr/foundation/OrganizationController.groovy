@@ -16,6 +16,7 @@ class OrganizationController {
     
   def organizationService
   def roleService
+  def invitationService
 
   def list = {
     [organizationList: Organization.findAllWhere(archived:false), organizationTotal: Organization.count()]
@@ -235,6 +236,34 @@ class OrganizationController {
     else {
       log.warn("Attempt to assign complete administrative control for $organization to $subj by $subject was denied, incorrect permission set")
       response.sendError(403)
+    }
+  }
+
+  def grantFullAdministrationToken = {
+    def organization = Organization.get(params.id)
+    if (!organization) {
+      log.error "No organization exists for ${params.id}"
+      response.sendError(500)
+      return
+    }  
+
+    if(!params.token) {
+      log.error "No token supplied in request"
+      response.sendError(500)
+      return
+    } 
+    
+    def invite = invitationService.claim(params.token, organization.id)
+    if(invite) {
+      log.info "$subject successfully claimed $invite"
+      flash.type="success"
+      flash.message="Token was applied successfully" 
+      redirect(action: "show", id:organization.id, fragment:"tab-admins")
+    } else {
+      log.info "$subject failed in claiming invite code $params.token"
+      flash.type="error"
+      flash.message="Code was not applied, it has been used before, is associated with a different provider or an internal error occured. Please verify correctness of entered code. Please contact support if you continue to have issues." 
+      redirect(action: "show", id:organization.id, fragment:"tab-admins")
     }
   }
 
