@@ -22,12 +22,12 @@
           <td><g:link controller="entityDescriptor" action="show" id="${identityProvider.entityDescriptor.id}">${fieldValue(bean: identityProvider, field: "entityDescriptor.entityID")}</g:link></td>
         </tr>
       </fr:hasPermission>
-      <n:lacksPermission target="saml:advanced">
+      <fr:lacksPermission target="saml:advanced">
         <tr>
           <th><g:message code="label.entitydescriptor"/></th>
           <td>${fieldValue(bean: identityProvider, field: "entityDescriptor.entityID")}</td>
         </tr>
-      </n:lacksPermission>
+      </fr:lacksPermission>
       <tr>
         <th><g:message code="label.protocolsupport"/></th>
         <td>
