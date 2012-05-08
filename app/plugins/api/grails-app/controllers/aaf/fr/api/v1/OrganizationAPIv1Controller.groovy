@@ -3,6 +3,8 @@ package aaf.fr.api.v1
 import grails.converters.JSON
 import groovy.xml.MarkupBuilder
 
+import aaf.fr.foundation.*
+
 class OrganizationAPIv1Controller {
   
   def list = {  
@@ -51,7 +53,7 @@ class OrganizationAPIv1Controller {
 
     result.secondarytypes = []
     org.types.each { type ->
-      result.types.add(type.name)
+      result.secondarytypes.add(type.name)
     }
 
     result.identityproviders = []
