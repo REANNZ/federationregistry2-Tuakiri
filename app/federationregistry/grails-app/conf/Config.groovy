@@ -2,13 +2,13 @@ import javax.naming.InitialContext
 import javax.naming.Context
 
 // Import externalized configuration for the Federation Registry application
-def externalConf = getFromEnvironment("fr-config")
+def externalConf = getFromEnvironment("fr_config")
 if(externalConf) {
   println( "Including external configuration from: ${externalConf}" )
   grails.config.locations = ["file:${externalConf}/fr-config.groovy"]
 } else {
-  println "No external configuration location specified as environment variable fr-config, terminating startup"
-  throw new RuntimeException("No external configuration location specified as environment variable fr-config")
+  println "No external configuration location specified as environment variable fr_config, terminating startup"
+  throw new RuntimeException("No external configuration location specified as environment variable fr_config")
 }
 
 // Extract user details to append to Audit Table
@@ -42,28 +42,9 @@ grails.converters.encoding = "UTF-8"
 grails.enable.native2ascii = true
 grails.views.gsp.sitemesh.preprocess = true
 
-// Environmental configuration
-environments {
-  test {
-    testDataConfig {
-    enabled = true
-    }
-    grails.mail.port = com.icegreen.greenmail.util.ServerSetupTest.SMTP.port
-  }
-  development {
-    grails.resources.debug = true
-    grails.gsp.enable.reload = true
-    testDataConfig {
-      enabled = false
-    }
-
-    grails.mail.port = com.icegreen.greenmail.util.ServerSetupTest.SMTP.port
-  }
-}
-
 /**
-* This is a little hacky but lets us move away from environment variables in production scenarios
-* while maintaining flexibility in local development.
+* This is allows usage of environment variables in production
+* while maintaining flexibility in development.
 */
 public String getFromEnvironment(final String name) {
   if(name == null) return null;
