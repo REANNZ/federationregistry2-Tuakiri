@@ -45,7 +45,7 @@
               <g:textField name="contact.surname"  class="required" value="${contact?.surname}"/>
             </g:if>
             <g:else>
-              <g:textField name="contact.givenName"  class="required" value="${fr?.subject() ? fr.subject().surname:''}"/>
+              <g:textField name="contact.surname"  class="required" value="${fr?.subject() ? fr.subject().surname:''}"/>
             </g:else>
           </div>
         </div>
@@ -57,7 +57,7 @@
               <g:textField name="contact.email"  class="required email" value="${contact?.email}"/>
             </g:if>
             <g:else>
-              <g:textField name="contact.givenName"  class="required" value="${fr?.subject() ? fr.subject().email:''}"/>
+              <g:textField name="contact.email"  class="required" value="${fr?.subject() ? fr.subject().email:''}"/>
             </g:else>
           </div>
         </div>
