@@ -1,12 +1,54 @@
 import org.apache.log4j.DailyRollingFileAppender
 
 appName=federationregistry
-grails.serverURL = "https://example.com/federationregistry"
+grails.serverURL = "https://example.edu.au/federationregistry"
+grails.mail.default.from="fr-noreply@example.edu.au"
 
-// Federation Registry internal configuration
+// Environment configuration
+environments {
+  production {
+    greenmail.disabled = true
+    testDataConfig.enabled = false
+
+    /* 
+    Example when using gmail, configure to suit your own environment
+    Per: http://grails.org/plugin/mail
+
+    grails {
+      mail {
+          host = 'smtp.gmail.com'
+          port = 465
+          username = '...@gmail.com'
+          password = '...'
+          props = [
+              'mail.smtp.auth': 'true',
+              'mail.smtp.socketFactory.port': '465',
+              'mail.smtp.socketFactory.class': 'javax.net.ssl.SSLSocketFactory',
+              'mail.smtp.socketFactory.fallback': 'false'
+          ]
+      }
+    */
+  }
+  test {
+    testDataConfig.enabled = true
+    grails.mail.port = com.icegreen.greenmail.util.ServerSetupTest.SMTP.port
+  }
+  development {
+    grails {
+      resources.debug = true  
+      gsp.enable.reload = true
+      mail {
+        port = com.icegreen.greenmail.util.ServerSetupTest.SMTP.port
+      }
+    }
+
+    testDataConfig.enabled = false
+  }
+}  
+
+// Federation Registry Internal Configuration
 aaf {
   fr {
-    deployment.environment = "development"
     bootstrap = false
     enabledemonstration = true
 
