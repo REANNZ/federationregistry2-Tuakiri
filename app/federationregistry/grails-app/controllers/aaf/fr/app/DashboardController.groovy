@@ -1,6 +1,7 @@
 package aaf.fr.app
 
 import aaf.fr.foundation.*
+import aaf.fr.workflow.*
 import org.apache.shiro.SecurityUtils
 
 /**
@@ -13,6 +14,18 @@ class DashboardController {
   def workflowTaskService
 
   def index = {
+
+    def submittedTasks = []
+    if(subject.contact.id) {
+      def pi = ProcessInstance.executeQuery("from aaf.fr.workflow.ProcessInstance as pi where pi.status = 'INPROGRESS' and pi.params['creator']=?", [subject.contact.id])
+      pi.each { instance ->
+        def currentTask = instance.taskInstances.findAll{it.status == TaskStatus.APPROVALREQUIRED}
+        submittedTasks.add(currentTask[0])
+        println currentTask[0].potentialApprovers
+      }
+    }
+    println "SUBMITTED TASKS: ---- $submittedTasks"
+
     def organizations = []
     def identityProviders = []
     def serviceProviders = []
@@ -42,7 +55,7 @@ class DashboardController {
 
     def tasks = workflowTaskService.retrieveTasksAwaitingApproval(subject)
     
-    [orgCount:orgCount, idpCount:idpCount, spCount:spCount, organizations: organizations, tasks:tasks, identityProviders:identityProviders, serviceProviders:serviceProviders, subject:subject]
+    [orgCount:orgCount, idpCount:idpCount, spCount:spCount, organizations: organizations, tasks:tasks, submittedTasks:submittedTasks, identityProviders:identityProviders, serviceProviders:serviceProviders, subject:subject]
   }
 
 }
