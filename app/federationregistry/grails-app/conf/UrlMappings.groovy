@@ -61,22 +61,6 @@ class UrlMappings {
     "/dashboard/$action?/$id?"{
       controller = "dashboard"
     }
-    
-    "/reporting/federation/$action/$id?" {
-      controller = "federationReports"
-    }
-
-    "/reporting/compliance/$action/$id?" {
-      controller = "complianceReports" 
-    }
-    
-    "/reporting/identityprovider/$action/$id?" {
-      controller = "identityProviderReports"
-    }
-
-    "/reporting/serviceprovider/$action/$id?" {
-      controller = "serviceProviderReports"
-    }
   
     "/compliance/identityprovider/attributes/$action?/$id?"{
       controller = "identityProviderAttributeCompliance"
