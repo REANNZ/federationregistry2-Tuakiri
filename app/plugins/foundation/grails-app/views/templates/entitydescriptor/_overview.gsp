@@ -1,9 +1,9 @@
 <div id="overview-entitydescriptor">
   <g:render template="/templates/entitydescriptor/overview_editable" plugin="foundation" model="[entity:entity]" />
-  <fr:hasPermission target="descriptor:${entity.id}:update">
+  <fr:hasPermission target="federation:management:descriptor:${entity.id}:update">
     <a class="show-edit-entitydescriptor btn btn-small btn-info"><g:message code="label.edit"/></a>
   </fr:hasPermission>
-  <fr:hasPermission target="federation:management:advanced">
+  <fr:hasPermission target="federation:managementment:advanced">
     <a class="show-migrate-organisation btn btn-small"><g:message code="label.migrateorg"/></a>
     <g:if test="${entity.archived}"> 
       <g:if test="${!entity.organization.archived}"> 

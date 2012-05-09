@@ -25,7 +25,7 @@
   					</g:else>
   				</td>
   				<td>
-  					<fr:hasPermission target="descriptor:${roleDescriptor.id}:monitor:delete">
+  					<fr:hasPermission target="federation:management:descriptor:${roleDescriptor.id}:monitor:delete">
               <a class="confirm-delete-monitor btn btn-mini" data-monitorid="${m.id}"><g:message code="label.delete"/></a>
   					</fr:hasPermission>
   				</td>

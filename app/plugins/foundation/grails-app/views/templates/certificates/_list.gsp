@@ -52,7 +52,7 @@
               </tr>
               <tr>
                 <td>
-                  <fr:hasPermission target="descriptor:${descriptor.id}:crypto:delete">
+                  <fr:hasPermission target="federation:management:descriptor:${descriptor.id}:crypto:delete">
                     <a class="confirm-delete-certificate btn btn-mini" data-certificate="${kd.id}"><g:message code='label.delete'/></a>
                   </fr:hasPermission>
                 </td>

@@ -45,7 +45,7 @@ class OrganizationContactController {
 			return
 		}
 		
-		if(SecurityUtils.subject.isPermitted("organization:${organization.id}:contact:add") || SecurityUtils.subject.isPermitted("federation:management:contacts")) {
+		if(SecurityUtils.subject.isPermitted("federation:management:organization:${organization.id}:contact:add") || SecurityUtils.subject.isPermitted("federation:managementment:contacts")) {
 			def contact = Contact.get(params.contactID)
 			if(!contact) {
 				log.warn "Contact identified by id $params.contactID was not located"
@@ -100,7 +100,7 @@ class OrganizationContactController {
 		}
 		
 		def organization = contactPerson.organization
-		if(SecurityUtils.subject.isPermitted("organization:${organization.id}:contact:remove") || SecurityUtils.subject.isPermitted("federation:management:contacts")) {
+		if(SecurityUtils.subject.isPermitted("federation:management:organization:${organization.id}:contact:remove") || SecurityUtils.subject.isPermitted("federation:managementment:contacts")) {
 			contactPerson.delete();
 			
 			log.debug "$subject deleted $contactPerson from $organization"

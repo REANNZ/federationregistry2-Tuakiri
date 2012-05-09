@@ -17,7 +17,7 @@
             <td>${fieldValue(bean: admin, field: "cn")}</td>
             <td><g:link controller='organization' action='show' id="${admin.contact?.organization?.id}">${fieldValue(bean: admin, field: "contact.organization.displayName")}</g:link></td>
             <td>
-              <fr:hasPermission target="descriptor:${descriptor.id}:manage:administrators">
+              <fr:hasPermission target="federation:management:descriptor:${descriptor.id}:manage:administrators">
                 <g:form controller="descriptorAdministration" action="revokeReportAdministration" method="DELETE">
                   <g:hiddenField name="id" value="${descriptor.id}" />
                   <g:hiddenField name="subjectID" value="${admin.id}" />
@@ -35,7 +35,7 @@
     <p class="alert alert-info"><g:message code="templates.fr.descriptor.reportadministrator.noresults" default="No user has been granted report viewing rights at this time." /></p>
   </g:else>
 
-  <fr:hasPermission target="descriptor:${descriptor.id}:manage:administrators">
+  <fr:hasPermission target="federation:management:descriptor:${descriptor.id}:manage:administrators">
     <a href="#" class="show-manage-reportadmins btn"><g:message code="label.addreportmembers" default="Add Viewer"/></a>
     <div class="manage-reportadmins revealable row-spacer">
       <g:if test="${subjects && subjects.size() > 0}">

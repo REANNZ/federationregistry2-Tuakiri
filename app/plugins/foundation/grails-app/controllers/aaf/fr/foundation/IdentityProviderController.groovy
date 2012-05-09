@@ -93,7 +93,7 @@ class IdentityProviderController {
       return
     }
     
-    if(SecurityUtils.subject.isPermitted("descriptor:${identityProvider_.id}:update")) {
+    if(SecurityUtils.subject.isPermitted("federation:management:descriptor:${identityProvider_.id}:update")) {
       def (updated, identityProvider) = IdentityProviderService.update(params)
       if(updated) {
         log.info "$subject updated $identityProvider"

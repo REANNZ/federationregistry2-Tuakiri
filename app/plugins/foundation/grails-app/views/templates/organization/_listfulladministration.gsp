@@ -16,7 +16,7 @@
             <td>${fieldValue(bean: admin, field: "cn")}</td>
             <td><g:link controller='organization' action='show' id="${admin.contact?.organization?.id}">${fieldValue(bean: admin, field: "contact.organization.displayName")}</g:link></td>
             <td>
-              <fr:hasPermission target="descriptor:${organization.id}:manage:administrators">
+              <fr:hasPermission target="federation:management:descriptor:${organization.id}:manage:administrators">
                 <g:form controller="organization" action="revokeFullAdministration" method="DELETE">
                   <g:hiddenField name="id" value="${organization.id}" />
                   <g:hiddenField name="subjectID" value="${admin.id}" />
@@ -48,7 +48,7 @@
       <p><strong><g:message code="templates.fr.organization.administrator.nocode" default="If you have not been provided a code or cannot locate it please log a support request using the links above." /></strong><br><br><br></p>
     </div>
   </g:else>
-  <fr:hasPermission target="descriptor:${organization.id}:manage:administrators">
+  <fr:hasPermission target="federation:management:descriptor:${organization.id}:manage:administrators">
     <a href="#" class="show-manage-members btn"><g:message code="label.addadministrator" default="Add Administrator"/></a>
     <div class="manage-role-members revealable row-spacer">
       <g:if test="${subjects && subjects.size() > 0}">

@@ -169,7 +169,7 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		def identityProvider = IDPSSODescriptor.build(entityDescriptor:entityDescriptor).save()
 		
 		controller.params.id = identityProvider.id
-		user.permissions.add("descriptor:${identityProvider.id}:update")
+		user.permissions.add("federation:management:descriptor:${identityProvider.id}:update")
         idpssoDescriptorService.metaClass.update = { def p -> 
             return [true, identityProvider]
         } 
@@ -188,7 +188,7 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
         def identityProvider = IDPSSODescriptor.build(entityDescriptor:entityDescriptor).save()
         
         controller.params.id = identityProvider.id
-        user.permissions.add("descriptor:-1:update")
+        user.permissions.add("federation:management:descriptor:-1:update")
 
         when:
         controller.update()
@@ -204,7 +204,7 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
 		def identityProvider = IDPSSODescriptor.build(entityDescriptor:entityDescriptor).save()
 		
 		controller.params.id = identityProvider.id
-        user.permissions.add("descriptor:${identityProvider.id}:update")
+        user.permissions.add("federation:management:descriptor:${identityProvider.id}:update")
 		idpssoDescriptorService.metaClass.update = { def p -> 
             return [false, identityProvider]
         } 

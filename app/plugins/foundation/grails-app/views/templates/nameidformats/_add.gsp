@@ -1,7 +1,7 @@
 <%@page import="aaf.fr.foundation.SamlURI" %>
 <%@page import="aaf.fr.foundation.SamlURIType" %>
 
-<fr:hasPermission target="descriptor:${descriptor.id}:nameidformat:add">
+<fr:hasPermission target="federation:management:descriptor:${descriptor.id}:nameidformat:add">
   <hr>
 
   <div id="addnameidformat" class="searcharea">

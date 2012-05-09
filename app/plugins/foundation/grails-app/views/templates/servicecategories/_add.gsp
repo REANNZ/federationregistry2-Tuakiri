@@ -1,5 +1,5 @@
 <%@page import="aaf.fr.foundation.ServiceCategory" %>
-<fr:hasPermission target="descriptor:${descriptor.id}:category:add">
+<fr:hasPermission target="federation:management:descriptor:${descriptor.id}:category:add">
   <hr>
 
   <div id="addcategory" class="">

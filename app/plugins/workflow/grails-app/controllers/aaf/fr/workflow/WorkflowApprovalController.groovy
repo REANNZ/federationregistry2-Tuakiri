@@ -19,7 +19,7 @@ class WorkflowApprovalController {
 	}
 	
 	def administrative = {
-		if(SecurityUtils.subject.isPermitted("workflow:approval:administrator")) {
+		if(SecurityUtils.subject.isPermitted("federation:management:workflow:approval:administrator")) {
 			def c = TaskInstance.createCriteria()
 			def tasks = c.listDistinct {
 				and {

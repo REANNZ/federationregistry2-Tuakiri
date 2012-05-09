@@ -1,6 +1,6 @@
 <%@page import="aaf.fr.foundation.MonitorType" %>
 
-<fr:hasPermission target="descriptor:${descriptor.id}:monitor:create">
+<fr:hasPermission target="federation:management:descriptor:${descriptor.id}:monitor:create">
   <hr>
 
   <div id="addmonitor">

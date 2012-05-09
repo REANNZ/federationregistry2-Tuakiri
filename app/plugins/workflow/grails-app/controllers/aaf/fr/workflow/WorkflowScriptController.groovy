@@ -11,7 +11,7 @@ class WorkflowScriptController {
 	def defaultAction = "list"
 
 	def list = {
-		if(SecurityUtils.subject.isPermitted("workflow:scripts:view")) {
+		if(SecurityUtils.subject.isPermitted("federation:management:workflow:scripts:view")) {
 			def scriptList = WorkflowScript.getAll()
 			[scriptList: scriptList]
 		}
@@ -22,7 +22,7 @@ class WorkflowScriptController {
 	}
 	
 	def create = {
-		if(SecurityUtils.subject.isPermitted("workflow:script:create")) {
+		if(SecurityUtils.subject.isPermitted("federation:management:workflow:script:create")) {
 			def script = new WorkflowScript()
 			[script: script]
 		}
@@ -33,7 +33,7 @@ class WorkflowScriptController {
 	}
 	
 	def save = {
-		if(SecurityUtils.subject.isPermitted("workflow:script:create")) {
+		if(SecurityUtils.subject.isPermitted("federation:management:workflow:script:create")) {
 			if(!params.definition) {
 				log.warn "Script definition was not present"
 				render message(code: 'controllers.fr.generic.namevalue.missing')
@@ -60,7 +60,7 @@ class WorkflowScriptController {
 	}
 
 	def show = {
-		if(SecurityUtils.subject.isPermitted("workflow:scripts:view")) {
+		if(SecurityUtils.subject.isPermitted("federation:management:workflow:scripts:view")) {
 			if(!params.id) {
 				log.warn "Workflow Script ID was not present"
 				render message(code: 'controllers.fr.generic.namevalue.missing')
@@ -100,7 +100,7 @@ class WorkflowScriptController {
 			return
 		}
 		
-		if(SecurityUtils.subject.isPermitted("workflow:script:${script.id}:update")) {
+		if(SecurityUtils.subject.isPermitted("federation:management:workflow:script:${script.id}:update")) {
 			[script:script]
 		}
 		else {
@@ -125,7 +125,7 @@ class WorkflowScriptController {
 			return
 		}
 		
-		if(SecurityUtils.subject.isPermitted("workflow:script:${script.id}:update")) {
+		if(SecurityUtils.subject.isPermitted("federation:management:workflow:script:${script.id}:update")) {
 			script.properties = params
 			script.save()
 			if(script.hasErrors()) {

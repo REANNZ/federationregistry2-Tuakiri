@@ -33,7 +33,7 @@ class DescriptorAttributeController {
 			return
 		}
 		
-		if(SecurityUtils.subject.isPermitted("descriptor:${descriptor.id}:attribute:remove")) {	
+		if(SecurityUtils.subject.isPermitted("federation:management:descriptor:${descriptor.id}:attribute:remove")) {	
 			def attribute = Attribute.get(params.attrid)
 			if(!attribute) {
 				log.warn "Attribute identified by id ${params.attrid} was not located"
@@ -112,7 +112,7 @@ class DescriptorAttributeController {
 			return
 		}
 		
-		if(SecurityUtils.subject.isPermitted("descriptor:${descriptor.id}:attribute:add")) {
+		if(SecurityUtils.subject.isPermitted("federation:management:descriptor:${descriptor.id}:attribute:add")) {
 			def base = AttributeBase.get(params.attrid)
 			if(!base) {
 				log.warn "Attribute Base identified by id ${params.attrid} was not located"

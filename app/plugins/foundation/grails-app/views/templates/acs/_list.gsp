@@ -8,7 +8,7 @@
 
     
 
-    <fr:hasPermission target="descriptor:${acs.descriptor.id}:attribute:add">
+    <fr:hasPermission target="federation:management:descriptor:${acs.descriptor.id}:attribute:add">
       <hr>
       
       <div id="addattribute${acs.id}">

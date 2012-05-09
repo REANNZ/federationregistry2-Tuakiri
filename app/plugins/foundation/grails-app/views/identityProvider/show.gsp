@@ -20,7 +20,7 @@
       <li class="active"><a href="#tab-overview" data-toggle="tab"><g:message code="label.overview" /></a></li>
       <li><a href="#tab-contacts" data-toggle="tab"><g:message code="label.contacts" /></a></li>
       <li class="level"><a href="#tab-saml" data-toggle="tab"><g:message code="label.saml" /></a></li>
-      <fr:hasAnyPermission in='["federation:management:descriptor:${identityProvider.id}:reporting" , "federation:management:reporting"]'>
+      <fr:hasAnyPermission in='["federation:managementment:descriptor:${identityProvider.id}:reporting" , "federation:managementment:reporting"]'>
         <li><a href="#tab-reports" data-toggle="tab"><g:message code="label.reporting" /></a></li>
       </fr:hasAnyPermission>
       <li><a href="#tab-monitors" data-toggle="tab"><g:message code="label.monitoring" /></a></li>
@@ -47,7 +47,7 @@
             <li><a href="#tab-attributes" data-toggle="tab"><g:message code="label.supportedattributes" /></a></li>
             <li><a href="#tab-nameidformats" data-toggle="tab"><g:message code="label.supportednameidformats" /></a></li>
 
-            <fr:hasPermission target="descriptor:${identityProvider.id}:manage">
+            <fr:hasPermission target="federation:management:descriptor:${identityProvider.id}:manage">
               <li><a href="#tab-metadata" data-toggle="tab"><g:message code="label.metadata" /></a></li>
               <li><a href="#tab-attrfilpol" data-toggle="tab"><g:message code="label.attributefilter" /></a></li>
             </fr:hasPermission>
@@ -114,7 +114,7 @@
               <g:render template="/templates/nameidformats/add" plugin="foundation" model="[descriptor:identityProvider, containerID:'nameidformats']"/>
             </div>
 
-            <fr:hasPermission target="descriptor:${identityProvider.id}:manage">
+            <fr:hasPermission target="federation:management:descriptor:${identityProvider.id}:manage">
               <div id="tab-metadata" class="tab-pane">
                 <g:if test="${identityProvider.functioning()}">
                   <div class="row">
@@ -151,7 +151,7 @@
         </div>
       </div>
 
-      <fr:hasAnyPermission in='["federation:management:descriptor:${identityProvider.id}:reporting" , "federation:management:reporting"]'>
+      <fr:hasAnyPermission in='["federation:managementment:descriptor:${identityProvider.id}:reporting" , "federation:managementment:reporting"]'>
         <div id="tab-reports" class="tab-pane">
           <g:render template="/templates/identityprovider/reporting" model="[idpID:identityProvider.id]" />
         </div>
@@ -159,7 +159,7 @@
 
       <div id="tab-monitors" class="tab-pane">
         <g:render template="/templates/monitor/list" plugin="foundation" model="[roleDescriptor:identityProvider]" />
-        <fr:hasPermission target="descriptor:${identityProvider.id}:manage:monitors">
+        <fr:hasPermission target="federation:management:descriptor:${identityProvider.id}:manage:monitors">
           <g:render template="/templates/monitor/create" plugin="foundation" model="[descriptor:identityProvider]" />
         </fr:hasPermission>
       </div>

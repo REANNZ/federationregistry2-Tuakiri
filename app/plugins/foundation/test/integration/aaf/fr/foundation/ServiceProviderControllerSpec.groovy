@@ -139,7 +139,7 @@ class ServiceProviderControllerSpec extends IntegrationSpec {
 		def serviceProvider = SPSSODescriptor.build(entityDescriptor:entityDescriptor).save()
 		
 		controller.params.id = serviceProvider.id
-        user.permissions.add("descriptor:${serviceProvider.id}:update")
+        user.permissions.add("federation:management:descriptor:${serviceProvider.id}:update")
 		spssoDescriptorService.metaClass.update = { def p -> 
             return [true, serviceProvider]
         } 
@@ -159,7 +159,7 @@ class ServiceProviderControllerSpec extends IntegrationSpec {
         
         controller.params.id = serviceProvider.id
 
-        user.permissions.add("descriptor:-1:update")
+        user.permissions.add("federation:management:descriptor:-1:update")
         
         when:
         def model = controller.update()
@@ -188,7 +188,7 @@ class ServiceProviderControllerSpec extends IntegrationSpec {
 		def serviceProvider = SPSSODescriptor.build(entityDescriptor:entityDescriptor)
 		
 		controller.params.id = serviceProvider.id
-        user.permissions.add("descriptor:${serviceProvider.id}:update")
+        user.permissions.add("federation:management:descriptor:${serviceProvider.id}:update")
 		spssoDescriptorService.metaClass.update = { def p -> 
             return [false, serviceProvider]
         } 

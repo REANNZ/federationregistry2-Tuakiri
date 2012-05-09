@@ -1,7 +1,7 @@
 
 <%@page import="aaf.fr.foundation.SPSSODescriptor" %>
 
-<fr:hasPermission target="descriptor:${descriptor.id}:crypto:create">
+<fr:hasPermission target="federation:management:descriptor:${descriptor.id}:crypto:create">
   <hr>
   
   <div id="addcertificate">

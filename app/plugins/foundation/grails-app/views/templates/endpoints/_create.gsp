@@ -1,7 +1,7 @@
 <%@page import="aaf.fr.foundation.SamlURI" %>
 <%@page import="aaf.fr.foundation.SamlURIType" %>
 
-<fr:hasPermission target="descriptor:${descriptor.id}:endpoint:create">
+<fr:hasPermission target="federation:management:descriptor:${descriptor.id}:endpoint:create">
   <hr>
 
   <div id="add-${endpointType}">

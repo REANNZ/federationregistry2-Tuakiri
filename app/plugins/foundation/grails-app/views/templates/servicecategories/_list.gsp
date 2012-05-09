@@ -15,7 +15,7 @@
         <td>${cat.name.encodeAsHTML()}</td>
         <td>${cat.description?.encodeAsHTML()}</td>
         <td>
-          <fr:hasPermission target="descriptor:${descriptor.id}:category:remove">
+          <fr:hasPermission target="federation:management:descriptor:${descriptor.id}:category:remove">
             <a class="confirm-unlink-category btn btn-small" data-category="${cat.id}"><g:message code='label.delete'/></a>
           </fr:hasPermission>
         </td>

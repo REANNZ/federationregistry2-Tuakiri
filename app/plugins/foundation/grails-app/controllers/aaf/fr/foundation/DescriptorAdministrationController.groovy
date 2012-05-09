@@ -35,7 +35,7 @@ class DescriptorAdministrationController {
       return
     }
     
-    if(SecurityUtils.subject.isPermitted("descriptor:${descriptor.id}:manage:administrators")) {
+    if(SecurityUtils.subject.isPermitted("federation:management:descriptor:${descriptor.id}:manage:administrators")) {
       def adminRole = Role.findByName("descriptor-${descriptor.id}-report-administrators")
       
       if(!adminRole) {
@@ -43,7 +43,7 @@ class DescriptorAdministrationController {
 
         def permission = new Permission()
         permission.type = Permission.defaultPerm
-        permission.target = "federation:management:descriptor:${descriptor.id}:reporting"
+        permission.target = "federation:managementment:descriptor:${descriptor.id}:reporting"
         permission.owner = adminRole
         
         permissionService.createPermission(permission, adminRole)
@@ -76,7 +76,7 @@ class DescriptorAdministrationController {
       return
     }
     
-    if(SecurityUtils.subject.isPermitted("descriptor:${descriptor.id}:manage:administrators")) {
+    if(SecurityUtils.subject.isPermitted("federation:management:descriptor:${descriptor.id}:manage:administrators")) {
       def adminRole = Role.findByName("descriptor-${descriptor.id}-administrators")
       
       if(adminRole) {
@@ -142,7 +142,7 @@ class DescriptorAdministrationController {
       return
     }
     
-    if(SecurityUtils.subject.isPermitted("descriptor:${descriptor.id}:manage:administrators")) {      
+    if(SecurityUtils.subject.isPermitted("federation:management:descriptor:${descriptor.id}:manage:administrators")) {      
       def adminRole = Role.findByName("descriptor-${descriptor.id}-report-administrators")
       roleService.deleteMember(subj, adminRole)
       
@@ -172,7 +172,7 @@ class DescriptorAdministrationController {
       return
     }
     
-    if(SecurityUtils.subject.isPermitted("descriptor:${descriptor.id}:manage:administrators")) {
+    if(SecurityUtils.subject.isPermitted("federation:management:descriptor:${descriptor.id}:manage:administrators")) {
       if(subj == subject) {
         flash.type="error"
         flash.message = message(code: 'controller.descriptoradministration.selfedit', default:"Admins can't remove their own privileged access.")

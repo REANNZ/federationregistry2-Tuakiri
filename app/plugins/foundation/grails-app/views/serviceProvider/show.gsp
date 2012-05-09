@@ -22,7 +22,7 @@
       <li><a href="#tab-contacts" data-toggle="tab"><g:message code="label.contacts" /></a></li>
       <li><a href="#tab-saml" data-toggle="tab"><g:message code="label.saml" /></a></li>
       
-      <fr:hasAnyPermission in='["federation:management:descriptor:${serviceProvider.id}:reporting" , "federation:management:reporting"]'>
+      <fr:hasAnyPermission in='["federation:managementment:descriptor:${serviceProvider.id}:reporting" , "federation:managementment:reporting"]'>
         <li><a href="#tab-reports" data-toggle="tab"><g:message code="label.reporting" /></a></li>
       </fr:hasAnyPermission>
       <li><a href="#tab-monitors" data-toggle="tab"><g:message code="label.monitoring" /></a></li>
@@ -57,7 +57,7 @@
               <li><a href="#tab-endpoints" data-toggle="tab"><g:message code="label.endpoints" /></a></li>
               <li><a href="#tab-attributes" data-toggle="tab"><g:message code="label.attributeconsumingservices" /></a></li>
               <li><a href="#tab-nameidformats" data-toggle="tab"><g:message code="label.supportednameidformats" /></a></li>
-              <fr:hasPermission target="descriptor:${serviceProvider.id}:manage">
+              <fr:hasPermission target="federation:management:descriptor:${serviceProvider.id}:manage">
                 <li><a href="#tab-metadata"data-toggle="tab"><g:message code="label.metadata" /></a></li>
               </fr:hasPermission>
             </ul>
@@ -126,7 +126,7 @@
                 <g:render template="/templates/nameidformats/add" plugin="foundation" model="[descriptor:serviceProvider]"/>
               </div>
 
-              <fr:hasPermission target="descriptor:${serviceProvider.id}:manage">
+              <fr:hasPermission target="federation:management:descriptor:${serviceProvider.id}:manage">
                 <div id="tab-metadata" class="tab-pane">
                   <g:if test="${serviceProvider.functioning()}">
                     <div class="row">
@@ -150,7 +150,7 @@
           </div>
       </div>
 
-      <fr:hasAnyPermission in='["federation:management:descriptor:${serviceProvider.id}:reporting" , "federation:management:reporting"]'>
+      <fr:hasAnyPermission in='["federation:managementment:descriptor:${serviceProvider.id}:reporting" , "federation:managementment:reporting"]'>
         <div id="tab-reports" class="tab-pane">
           <g:render template="/templates/serviceprovider/reporting" model="[spID:serviceProvider.id]" />
         </div>
@@ -158,7 +158,7 @@
 
       <div id="tab-monitors" class="tab-pane">
         <g:render template="/templates/monitor/list" plugin="foundation" model="[roleDescriptor:serviceProvider]" />
-        <fr:hasPermission target="descriptor:${serviceProvider.id}:manage:monitors">
+        <fr:hasPermission target="federation:management:descriptor:${serviceProvider.id}:manage:monitors">
           <g:render template="/templates/monitor/create" plugin="foundation" model="[descriptor:serviceProvider]" />
         </fr:hasPermission>
       </div>

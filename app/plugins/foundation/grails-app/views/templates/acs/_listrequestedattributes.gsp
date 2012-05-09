@@ -81,19 +81,19 @@
           <td colspan="5">
             <div class="manage-ra" data-raid="${ra.id}">
               <g:if test="${specificationAttributes.contains(ra.base)}">
-                <fr:hasPermission target="descriptor:${ra.attributeConsumingService.descriptor.id}:attribute:value:add">
+                <fr:hasPermission target="federation:management:descriptor:${ra.attributeConsumingService.descriptor.id}:attribute:value:add">
                   <a class="show-add-ra-value btn btn-small" data-raid="${ra.id}"><g:message code="label.addvalue"/></a>
                 </fr:hasPermission>
               </g:if>
-              <fr:hasPermission target="descriptor:${ra.attributeConsumingService.descriptor.id}:attribute:edit">
+              <fr:hasPermission target="federation:management:descriptor:${ra.attributeConsumingService.descriptor.id}:attribute:edit">
                 <a data-raid="${ra.id}" class="btn btn-small btn-info edit-ra"><g:message code="label.edit" /></a>
               </fr:hasPermission>
-              <fr:hasPermission target="descriptor:${ra.attributeConsumingService.descriptor.id}:attribute:remove">
+              <fr:hasPermission target="federation:management:descriptor:${ra.attributeConsumingService.descriptor.id}:attribute:remove">
                 <a class="confirm-delete-ra btn btn-small" data-raid="${ra.id}" data-acsid="${ra.attributeConsumingService.id}"><g:message code="label.remove" /></a>
               </fr:hasPermission>
             </div>
 
-            <fr:hasPermission target="descriptor:${ra.attributeConsumingService.descriptor.id}:attribute:edit">
+            <fr:hasPermission target="federation:management:descriptor:${ra.attributeConsumingService.descriptor.id}:attribute:edit">
             <div class="manage-update-ra revealable form-actions" data-raid="${ra.id}">
               <a class="update-ra btn btn-success" data-raid="${ra.id}" data-acsid="${ra.attributeConsumingService.id}"><g:message code="label.update"/></a>
               <a class="cancel-edit-ra btn"><g:message code="label.cancel"/></a>
@@ -101,7 +101,7 @@
             </fr:hasPermission>
 
             <g:if test="${specificationAttributes.contains(ra.base)}">
-            <fr:hasPermission target="descriptor:${ra.attributeConsumingService.descriptor.id}:attribute:value:add">
+            <fr:hasPermission target="federation:management:descriptor:${ra.attributeConsumingService.descriptor.id}:attribute:value:add">
             <div id="newspecattributeval${ra.id}" class="revealable">
               <p>
                 <g:message code="templates.fr.acs.specattributes.add.details"/>

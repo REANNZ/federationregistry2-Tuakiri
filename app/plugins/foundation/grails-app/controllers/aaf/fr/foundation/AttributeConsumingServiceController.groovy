@@ -75,7 +75,7 @@ class AttributeConsumingServiceController {
 			return
 		}
 
-		if(SecurityUtils.subject.isPermitted("descriptor:${reqAttr.attributeConsumingService.descriptor.id}:attribute:value:add")) {
+		if(SecurityUtils.subject.isPermitted("federation:management:descriptor:${reqAttr.attributeConsumingService.descriptor.id}:attribute:value:add")) {
 			reqAttr.addToValues(new AttributeValue(value:params.value))
 			reqAttr.save(flush:true)
 			if(reqAttr.hasErrors()) {
@@ -117,7 +117,7 @@ class AttributeConsumingServiceController {
 			response.setStatus(500)
 			return
 		}
-		if(SecurityUtils.subject.isPermitted("descriptor:${reqAttr.attributeConsumingService.descriptor.id}:attribute:value:remove")) {
+		if(SecurityUtils.subject.isPermitted("federation:management:descriptor:${reqAttr.attributeConsumingService.descriptor.id}:attribute:value:remove")) {
 			def val
 			for(v in reqAttr.values) {
 				if(v.id == params.valueid.toLong()) {
@@ -180,7 +180,7 @@ class AttributeConsumingServiceController {
 			return
 		}
 		
-		if(SecurityUtils.subject.isPermitted("descriptor:${acs.descriptor.id}:attribute:add")) {			
+		if(SecurityUtils.subject.isPermitted("federation:management:descriptor:${acs.descriptor.id}:attribute:add")) {			
 			def attr = AttributeBase.get(params.attrid)
 			if(!attr) {
 				log.warn "Attribute identified by id ${params.attrid} was not located"
@@ -249,7 +249,7 @@ class AttributeConsumingServiceController {
 			return
 		}
 		
-		if(SecurityUtils.subject.isPermitted("descriptor:${ra.attributeConsumingService.descriptor.id}:attribute:update")) {
+		if(SecurityUtils.subject.isPermitted("federation:management:descriptor:${ra.attributeConsumingService.descriptor.id}:attribute:update")) {
 			ra.reasoning = params.reasoning
 			ra.isRequired = params.required.equalsIgnoreCase('true')
 			
@@ -288,7 +288,7 @@ class AttributeConsumingServiceController {
 		
 		def acs = requestedAttribute.attributeConsumingService
 		
-		if(SecurityUtils.subject.isPermitted("descriptor:${acs.descriptor.id}:attribute:remove")) {
+		if(SecurityUtils.subject.isPermitted("federation:management:descriptor:${acs.descriptor.id}:attribute:remove")) {
 			acs.removeFromRequestedAttributes(requestedAttribute)
 			acs.save()
 			if(acs.hasErrors()) {

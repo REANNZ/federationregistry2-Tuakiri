@@ -1,6 +1,6 @@
 <div id="overview-serviceprovider">
   <g:render template="/templates/serviceprovider/overview_editable" plugin="foundation" model="[descriptor:serviceProvider]" />
-  <fr:hasPermission target="descriptor:${serviceProvider.id}:update">
+  <fr:hasPermission target="federation:management:descriptor:${serviceProvider.id}:update">
     <a class="show-edit-serviceprovider btn btn-small btn-info"><g:message code="label.edit"/></a>
   </fr:hasPermission>
 </div>
@@ -16,13 +16,13 @@
         <th><g:message code="label.organization"/></th>
         <td><g:link controller="organization" action="show" id="${serviceProvider.organization.id}">${fieldValue(bean: serviceProvider, field: "organization.displayName")}</g:link></td>
       </tr>
-      <fr:hasPermission target="saml:advanced">
+      <fr:hasPermission target="federation:managementment:saml:advanced">
         <tr>
           <th><g:message code="label.entitydescriptor"/></th>
           <td><g:link controller="entityDescriptor" action="show" id="${serviceProvider.entityDescriptor.id}">${fieldValue(bean: serviceProvider, field: "entityDescriptor.entityID")}</g:link></td>
         </tr>
       </fr:hasPermission>
-      <fr:lacksPermission target="saml:advanced">
+      <fr:lacksPermission target="federation:managementment:saml:advanced">
         <tr>
           <th><g:message code="label.entitydescriptor"/></th>
           <td>${fieldValue(bean: serviceProvider, field: "entityDescriptor.entityID")}</td>

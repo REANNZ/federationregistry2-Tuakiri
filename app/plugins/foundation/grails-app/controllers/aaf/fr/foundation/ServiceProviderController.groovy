@@ -40,7 +40,7 @@ class ServiceProviderController {
     }
     
     def attributes, specAttr
-    if(SecurityUtils.subject.isPermitted("modify:restricted:attributes")) {
+    if(SecurityUtils.subject.isPermitted("federation:management:modify:restricted:attributes")) {
       attributes = AttributeBase.list()
       specAttr = AttributeBase.findAllWhere(specificationRequired:true)
     } else {
@@ -105,7 +105,7 @@ class ServiceProviderController {
       return
     }
 
-    if(SecurityUtils.subject.isPermitted("descriptor:${serviceProvider_.id}:update")) {
+    if(SecurityUtils.subject.isPermitted("federation:management:descriptor:${serviceProvider_.id}:update")) {
       def (updated, serviceProvider) = ServiceProviderService.update(params)
       if(updated) {
         log.info "$subject updated $serviceProvider"

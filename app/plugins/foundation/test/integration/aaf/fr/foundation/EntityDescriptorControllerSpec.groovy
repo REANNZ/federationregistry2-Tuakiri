@@ -110,7 +110,7 @@ class EntityDescriptorControllerSpec extends IntegrationSpec {
 		def entityDescriptor = EntityDescriptor.build(organization:organization)
 		
 		controller.params.id = entityDescriptor.id
-		user.permissions.add("descriptor:${entityDescriptor.id}:update")
+		user.permissions.add("federation:management:descriptor:${entityDescriptor.id}:update")
 		
 		when:
 		entityDescriptorService.metaClass.update = { def p -> 
@@ -141,7 +141,7 @@ class EntityDescriptorControllerSpec extends IntegrationSpec {
 		def entityDescriptor = EntityDescriptor.build(organization:organization)
 		
 		controller.params.id = entityDescriptor.id
-		user.permissions.add("descriptor:${entityDescriptor.id}:update")
+		user.permissions.add("federation:management:descriptor:${entityDescriptor.id}:update")
 		
 		when:
 		entityDescriptorService.metaClass.update = { def p -> 

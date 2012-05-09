@@ -31,7 +31,7 @@ class AttributeConsumingServiceControllerSpec extends IntegrationSpec {
 		
 		def wfProcessName, wfDescription, wfPriority, wfParams
 		
-		user.permissions.add("descriptor:${acs.descriptor.id}:attribute:add")
+		user.permissions.add("federation:management:descriptor:${acs.descriptor.id}:attribute:add")
 		
 		controller.params.id = acs.id
 		controller.params.attrid = attr.id
@@ -83,7 +83,7 @@ class AttributeConsumingServiceControllerSpec extends IntegrationSpec {
 		controller.params.attrid = ra1.base.id
 		controller.params.reasoning = "I really need it!"
 		
-		user.permissions.add("descriptor:${acs.descriptor.id}:attribute:add")
+		user.permissions.add("federation:management:descriptor:${acs.descriptor.id}:attribute:add")
 		WorkflowProcessService.metaClass.initiate =  { String processName, String instanceDescription, ProcessPriority priority, Map params ->
 			wfProcessName = processName
 			wfDescription = instanceDescription
@@ -125,7 +125,7 @@ class AttributeConsumingServiceControllerSpec extends IntegrationSpec {
 		acs.save()
 		
 		controller.params.raid = ra1.id
-		user.permissions.add("descriptor:${acs.descriptor.id}:attribute:remove")
+		user.permissions.add("federation:management:descriptor:${acs.descriptor.id}:attribute:remove")
 		
 		when:
 		def model = controller.removeRequestedAttribute()

@@ -1,5 +1,5 @@
 <%@page import="aaf.fr.foundation.AttributeBase" %>
-<fr:hasPermission target="descriptor:${descriptor.id}:attribute:add">
+<fr:hasPermission target="federation:management:descriptor:${descriptor.id}:attribute:add">
   <hr>
 
   <div id="add-attribute" class="searcharea">

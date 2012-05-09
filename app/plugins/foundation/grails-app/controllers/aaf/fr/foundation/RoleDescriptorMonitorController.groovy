@@ -39,7 +39,7 @@ class RoleDescriptorMonitorController {
 			return
 		}
 		
-		if(SecurityUtils.subject.isPermitted("descriptor:${roleDescriptor.id}:monitor:add")) {
+		if(SecurityUtils.subject.isPermitted("federation:management:descriptor:${roleDescriptor.id}:monitor:add")) {
 			def serviceMonitor = new ServiceMonitor(type:monitorType, url:params.url, interval:params.interval, node:params.node)
 			roleDescriptor.addToMonitors(serviceMonitor)
 			if(!roleDescriptor.save()) {
@@ -69,7 +69,7 @@ class RoleDescriptorMonitorController {
 			response.sendError(500)
 			return
 		}
-		if(SecurityUtils.subject.isPermitted("descriptor:${serviceMonitor.roleDescriptor.id}:monitor:delete")) {
+		if(SecurityUtils.subject.isPermitted("federation:management:descriptor:${serviceMonitor.roleDescriptor.id}:monitor:delete")) {
 			serviceMonitor.delete()
 			log.info "$subject delete $serviceMonitor from ${serviceMonitor.roleDescriptor}"
 			render message(code: 'aaf.fr.foundation.monitor.delete.success')

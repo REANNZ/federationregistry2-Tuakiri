@@ -13,7 +13,7 @@ class WorkflowProcessController {
 	def workflowProcessService
 
 	def list = {
-		if(SecurityUtils.subject.isPermitted("workflow:processes:view")) {
+		if(SecurityUtils.subject.isPermitted("federation:management:workflow:processes:view")) {
 			def processList = Process.findAllWhere(active: true)
 			[processList: processList]
 		}
@@ -24,7 +24,7 @@ class WorkflowProcessController {
 	}
 	
 	def create = {
-		if(SecurityUtils.subject.isPermitted("workflow:process:create")) {
+		if(SecurityUtils.subject.isPermitted("federation:management:workflow:process:create")) {
 			def process = new Process()
 			[process: process]
 		}
@@ -35,7 +35,7 @@ class WorkflowProcessController {
 	}
 	
 	def save = {
-		if(SecurityUtils.subject.isPermitted("workflow:process:create")) {
+		if(SecurityUtils.subject.isPermitted("federation:management:workflow:process:create")) {
 			if(!params.code) {
 				log.warn "Process definition was not present"
 				render message(code: 'controllers.fr.generic.namevalue.missing')
@@ -73,7 +73,7 @@ class WorkflowProcessController {
 	}
 
 	def show = {
-		if(SecurityUtils.subject.isPermitted("workflow:processes:view")) {
+		if(SecurityUtils.subject.isPermitted("federation:management:workflow:processes:view")) {
 			if(!params.id) {
 				log.warn "Process ID was not present"
 				render message(code: 'controllers.fr.generic.namevalue.missing')
@@ -112,7 +112,7 @@ class WorkflowProcessController {
 			render view: "list"
 			return
 		}
-		if(SecurityUtils.subject.isPermitted("workflow:process:${process.id}:update")) {
+		if(SecurityUtils.subject.isPermitted("federation:management:workflow:process:${process.id}:update")) {
 			[process:process]
 		}
 		else {
@@ -137,7 +137,7 @@ class WorkflowProcessController {
 			return
 		}
 		
-		if(SecurityUtils.subject.isPermitted("workflow:process:${process.id}:update")) {
+		if(SecurityUtils.subject.isPermitted("federation:management:workflow:process:${process.id}:update")) {
 			def updated, process_
 			try {
 				log.info "$principal is updating $process"

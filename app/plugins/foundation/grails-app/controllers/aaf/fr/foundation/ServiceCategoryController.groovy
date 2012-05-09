@@ -96,7 +96,7 @@ class ServiceCategoryController {
 			return
 		}
 		
-		if(SecurityUtils.subject.isPermitted("descriptor:${serviceProvider.id}:category:add")) {
+		if(SecurityUtils.subject.isPermitted("federation:management:descriptor:${serviceProvider.id}:category:add")) {
 			if(!serviceProvider.serviceCategories?.contains(category)) {
 				serviceProvider.addToServiceCategories(category)
 				serviceProvider.save()
@@ -147,7 +147,7 @@ class ServiceCategoryController {
 			return
 		}
 		
-		if(SecurityUtils.subject.isPermitted("descriptor:${serviceProvider.id}:category:remove")) {
+		if(SecurityUtils.subject.isPermitted("federation:management:descriptor:${serviceProvider.id}:category:remove")) {
 			serviceProvider.removeFromServiceCategories(category)
 			serviceProvider.save()
 			if(serviceProvider.hasErrors()) {

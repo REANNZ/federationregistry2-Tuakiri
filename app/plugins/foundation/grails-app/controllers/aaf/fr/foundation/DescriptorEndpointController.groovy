@@ -75,7 +75,7 @@ class DescriptorEndpointController {
       response.setStatus(500)
       return
     }
-    if(SecurityUtils.subject.isPermitted("descriptor:${endpoint.descriptor.id}:endpoint:update")) {
+    if(SecurityUtils.subject.isPermitted("federation:management:descriptor:${endpoint.descriptor.id}:endpoint:update")) {
       endpointService.update(endpoint, binding, params.location, params.int('samlindex'))
     
       log.info "$subject updated $endpoint for ${endpoint.descriptor}"
@@ -111,7 +111,7 @@ class DescriptorEndpointController {
     
     def descriptor = endpoint.descriptor
     
-    if(SecurityUtils.subject.isPermitted("descriptor:${endpoint.descriptor.id}:endpoint:remove")) {
+    if(SecurityUtils.subject.isPermitted("federation:management:descriptor:${endpoint.descriptor.id}:endpoint:remove")) {
       endpointService.delete(endpoint, params.endpointType)
       //endpointService.determineDescriptorProtocolSupport(descriptor)
       render message(code: 'domains.fr.foundation.endpoint.delete.success')
@@ -206,7 +206,7 @@ class DescriptorEndpointController {
       return
     }
     
-    if(SecurityUtils.subject.isPermitted("descriptor:${descriptor.id}:endpoint:create")) {    
+    if(SecurityUtils.subject.isPermitted("federation:management:descriptor:${descriptor.id}:endpoint:create")) {    
       def binding = SamlURI.get(params.binding)
       if (!binding) {
         log.warn "SamURI (binding) was not found for id ${params.id}"
@@ -250,7 +250,7 @@ class DescriptorEndpointController {
       return
     }
   
-    if(SecurityUtils.subject.isPermitted("descriptor:${endpoint.descriptor.id}:endpoint:toggle")) {
+    if(SecurityUtils.subject.isPermitted("federation:management:descriptor:${endpoint.descriptor.id}:endpoint:toggle")) {
       endpointService.toggle(endpoint)
       
       log.info "$subject toggled state of $endpoint now ${endpoint.active}"
@@ -280,7 +280,7 @@ class DescriptorEndpointController {
     
     def endpointType = params.endpointType
   
-    if(SecurityUtils.subject.isPermitted("descriptor:${endpoint.descriptor.id}:endpoint:makedefault")) {
+    if(SecurityUtils.subject.isPermitted("federation:management:descriptor:${endpoint.descriptor.id}:endpoint:makedefault")) {
       def descriptor = endpoint.descriptor
       
       // Determine if we're actually updating the collaborator (useful for AA endpoints on IDP screen)

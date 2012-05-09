@@ -18,7 +18,7 @@
         </td>
         <td>${attr.base.category.name.encodeAsHTML()}</td>
         <td>
-          <fr:hasPermission target="descriptor:${descriptor.id}:attribute:remove">
+          <fr:hasPermission target="federation:management:descriptor:${descriptor.id}:attribute:remove">
             <a class="confirm-delete-attribute btn btn-mini" data-attrid="${attr.id}"><g:message code="label.remove"/></a>
           </fr:hasPermission>
         </td>

@@ -200,7 +200,7 @@ class ServiceProviderReportsController {
       response.setStatus(500)
       return
     }
-    if(true || SecurityUtils.subject.isPermitted("descriptor:${sp.id}:reporting") || SecurityUtils.subject.isPermitted("federation:management:reporting")) {
+    if(true || SecurityUtils.subject.isPermitted("federation:management:descriptor:${sp.id}:reporting") || SecurityUtils.subject.isPermitted("federation:managementment:reporting")) {
       
       def queryParams = [:]
       queryParams.startDate = startDate.time

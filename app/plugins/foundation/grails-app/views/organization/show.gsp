@@ -18,7 +18,7 @@
       <ul class="nav nav-tabs">
         <li class="active"><a href="#tab-overview" data-toggle="tab"><g:message code="label.overview" /></a></li>
         <li><a href="#tab-contacts" data-toggle="tab"><g:message code="label.contacts" /></a></li>
-        <fr:hasPermission target="saml:advanced">
+        <fr:hasPermission target="federation:managementment:saml:advanced">
           <li><a href="#tab-entities" data-toggle="tab"><g:message code="label.entities" /></a></li>
         </fr:hasPermission>
         <li><a href="#tab-idp" data-toggle="tab"><g:message code="label.identityproviders" /></a></li>
@@ -39,7 +39,7 @@
           <g:render template="/templates/contacts/create" plugin="foundation" model="[host:organization, hostType:'organization', contactTypes:contactTypes]"/>
         </div>
 
-        <fr:hasPermission target="saml:advanced">
+        <fr:hasPermission target="federation:managementment:saml:advanced">
           <div id="tab-entities" class="tab-pane">
             <g:render template="/templates/organization/entities" plugin="foundation" model="[entities:entities]" />
           </div>

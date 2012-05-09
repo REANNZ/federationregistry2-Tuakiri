@@ -33,7 +33,7 @@ class DescriptorNameIDFormatController {
 			return
 		}
 
-		if(SecurityUtils.subject.isPermitted("descriptor:${descriptor.id}:nameidformat:remove")) {
+		if(SecurityUtils.subject.isPermitted("federation:management:descriptor:${descriptor.id}:nameidformat:remove")) {
 			def nameIDFormat = SamlURI.get(params.formatID)
 			if(!nameIDFormat) {
 				log.warn "NameIDFormat identified by id $params.formatID was not located"
@@ -112,7 +112,7 @@ class DescriptorNameIDFormatController {
 			return
 		}
 		
-		if(SecurityUtils.subject.isPermitted("descriptor:${descriptor.id}:nameidformat:add")) {
+		if(SecurityUtils.subject.isPermitted("federation:management:descriptor:${descriptor.id}:nameidformat:add")) {
 			def nameIDFormat = SamlURI.get(params.formatID)
 			if(!nameIDFormat) {
 				log.warn "NameIDFormat identified by id $params.formatID was not located"

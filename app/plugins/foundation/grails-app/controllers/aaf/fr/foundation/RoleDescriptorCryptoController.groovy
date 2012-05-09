@@ -48,7 +48,7 @@ class RoleDescriptorCryptoController {
 		}
 		
 		def descriptor = keyDescriptor.roleDescriptor
-		if(SecurityUtils.subject.isPermitted("descriptor:${descriptor.id}:crypto:delete")) {
+		if(SecurityUtils.subject.isPermitted("federation:management:descriptor:${descriptor.id}:crypto:delete")) {
 			log.info "Deleting KeyDescriptor"
 			cryptoService.unassociateCertificate(keyDescriptor)
 			
@@ -84,7 +84,7 @@ class RoleDescriptorCryptoController {
 			return
 		}
 		
-		if(SecurityUtils.subject.isPermitted("descriptor:${descriptor.id}:crypto:create")) {
+		if(SecurityUtils.subject.isPermitted("federation:management:descriptor:${descriptor.id}:crypto:create")) {
 			def associated
 			if(params.signing == "on") {
 				associated = cryptoService.associateCertificate(descriptor, params.cert, params.certname, KeyTypes.signing)
