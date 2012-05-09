@@ -60,15 +60,21 @@ class ReportingSecurityFilters {
   }
 
   private idpGuard(def params) {
+    // Allows the basic user interface to be loaded
+    if(params.action in ['sessions', 'utilization', 'demand', 'connections']) {
+      log.info("Allowing $subject to load base IdP reporting UI")
+      return true
+    }
+
     if(!params.idpID) {
       log.warn "idpID was not present"
-      //return false
+      return false
     }
     
     def idp = IDPSSODescriptor.get(params.idpID)
     if (!idp) {
-      log.error "No idp for $params.idpID exists"
-      //return false
+      log.error "No IdP for $params.idpID exists"
+      return false
     }
 
    if(SecurityUtils.subject.isPermitted("federation:management:reporting") || SecurityUtils.subject.isPermitted("federation:management:descriptor:${idp.id}:reporting")) {
@@ -82,15 +88,21 @@ class ReportingSecurityFilters {
   }
 
   private spGuard(def params) {
+    // Allows the basic user interface to be loaded
+    if(params.action in ['sessions', 'utilization', 'demand', 'connections']) {
+      log.info("Allowing $subject to load base SP reporting UI")
+      return true
+    }
+
     if(!params.spID) {
       log.warn "spID was not present"
-      //return false
+      return false
     }
     
     def sp = SPSSODescriptor.get(params.spID)
     if (!sp) {
-      log.error "No idp for $params.spID exists"
-      //return false
+      log.error "No SP for $params.spID exists"
+      return false
     }
 
    if(SecurityUtils.subject.isPermitted("federation:management:reporting") || SecurityUtils.subject.isPermitted("federation:management:descriptor:${sp.id}:reporting")) {

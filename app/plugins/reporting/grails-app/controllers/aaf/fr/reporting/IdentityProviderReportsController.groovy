@@ -10,7 +10,7 @@ import aaf.fr.foundation.*
 import aaf.fr.reporting.ReportingHelpers
 
 /**
- * Provides IdP reporting data
+ * Provides Identity Provider reporting
  *
  * @author Bradley Beddoes
  */

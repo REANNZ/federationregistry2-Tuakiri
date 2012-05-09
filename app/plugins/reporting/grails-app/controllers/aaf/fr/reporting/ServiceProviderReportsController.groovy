@@ -10,7 +10,7 @@ import aaf.fr.foundation.*
 import aaf.fr.reporting.ReportingHelpers
 
 /**
- * Provides Sp reporting data
+ * Provides Service Provider reporting
  *
  * @author Bradley Beddoes
  */
