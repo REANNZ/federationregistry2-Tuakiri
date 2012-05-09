@@ -1,14 +1,20 @@
-   Federation Registry
-   Copyright 2009-2011 and beyond The Australian Access Federation (http://www.aaf.edu.au)
+  Federation Registry v2
+  Copyright 2009-2012 and beyond The Australian Access Federation (http://www.aaf.edu.au).
 
-   This product includes software developed at
-   The Apache Software Foundation (http://www.apache.org/).
+  This product includes software developed at
+  Highcharts (http://www.highcharts.com). 
 
-   This product includes software developed at
-   Spring Source (http://www.springsource.com/).
+  This is used by the AAF under the Highcharts 'Non-commercial - Free' license
+  defined by http://creativecommons.org/licenses/by-nc/3.0/ as the Australian Access Federation Inc is both a not for profit and Australian University sector organisation. Other organisations deploying Federation Registry must decide how licensing for Highcharts applies to them at the http://shop.highsoft.com/highcharts.html and obtain any licenses that are necessary.
 
-   This product includes software developed at
-   Spring Source (http://www.grails.org/)
+  This product includes software developed at
+  The Apache Software Foundation (http://www.apache.org/).
 
-   This product includes software developed at
-   Codehaus (http://groovy.codehaus.org/).
+  This product includes software developed at
+  Spring Source (http://www.springsource.com/).
+
+  This product includes software developed at
+  Spring Source (http://www.grails.org/)
+
+  This product includes software developed at
+  Codehaus (http://groovy.codehaus.org/).
