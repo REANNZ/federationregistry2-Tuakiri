@@ -1,10 +1,12 @@
 import groovy.sql.Sql
 
-sql = Sql.newInstance("jdbc:mysql://localhost:3306/fr1_migtest", "fr", "password", "com.mysql.jdbc.Driver")
+sql = Sql.newInstance("jdbc:mysql://localhost:3306/<my fr database>", "fr", "password", "com.mysql.jdbc.Driver")
 
 def output = new StringBuffer()
 def excludedSubjects = []
 def excludedRoles = []
+
+output.append("\n-- Subjects\n")
 
 // Subjects
 sql.eachRow("select * from profile_base inner join _user on profile_base.id = _user.profile_id", {s ->
@@ -14,7 +16,7 @@ sql.eachRow("select * from profile_base inner join _user on profile_base.id = _u
     excludedSubjects.add(s.id)
 })
 
-output.append("\n\n")
+output.append("\n-- Roles\n")
 
 // Roles
 sql.eachRow("select * from _role", { r ->
@@ -32,7 +34,7 @@ sql.eachRow("select * from _role_users", { r ->
     output.append("insert into role_subjects (role_id, subject_base_id) values($r.role_id, $r.user_base_id);\n")
 })
 
-output.append("\n\n")
+output.append("\n-- Permissions\n")
 
 //Permissions
 output.append("update permission set type='grails.plugins.federatedgrails.WildcardPermission';\n")
@@ -52,6 +54,8 @@ output.append("delete from permission where target regexp 'federation:reporting'
 
 output.append("\n\n")
 
+output.append("alter table permission drop column class;\n\n")
+
 output.append("update permission\n")
 output.append("set target = concat('federation:management:',target)\n")
 output.append("where target regexp 'descriptor:.*:*';\n\n")
@@ -60,11 +64,13 @@ output.append("update permission\n")
 output.append("set target = concat('federation:management:',target)\n")
 output.append("where target regexp 'organization:.*:*';\n")
 
-output.append("\n\n")
+output.append("\n-- Attributes\n")
 
 // Attributes
 output.append("update attribute set class='aaf.fr.foundation.Attribute' where class='fedreg.core.Attribute';\n")
 output.append("update attribute set class='aaf.fr.foundation.RequestedAttribute' where class='fedreg.core.RequestedAttribute';\n\n")
+
+output.append("\n-- Contacts\n")
 
 // Contact
 sql.eachRow("select * from contact", { ct ->
@@ -87,7 +93,7 @@ sql.eachRow("select * from contact", { ct ->
 
 })
 
-output.append("\n\n")
+output.append("\n-- AdditionalMetadataLocation\n")
 
 // AdditionalMetadataLocation
 sql.eachRow("select * from additional_metadata_location", { am ->
@@ -100,7 +106,7 @@ sql.eachRow("select * from additional_metadata_location", { am ->
 
 })
 
-output.append("\n\n")
+output.append("\n-- SamlURI\n")
 
 // SamlURI
 sql.eachRow("select * from samluri", { su ->
@@ -117,7 +123,7 @@ sql.eachRow("select * from samluri", { su ->
 
 })
 
-output.append("\n\n")
+output.append("\n-- Endpoints\n")
 
 // Endpoints
 sql.eachRow("select * from endpoint", { e ->
@@ -136,7 +142,7 @@ sql.eachRow("select * from endpoint", { e ->
 
 })
 
-output.append("\n\n")
+output.append("\n-- Organisations\n")
 
 // Organisations
 sql.eachRow("select * from organization", { o ->
@@ -147,7 +153,7 @@ sql.eachRow("select * from organization", { o ->
   }
 })
 
-output.append("\n\n")
+output.append("\n-- Role Descriptors\n")
 
 // Role Descriptors
 sql.eachRow("select * from role_descriptor", { rd ->
@@ -158,7 +164,25 @@ sql.eachRow("select * from role_descriptor", { rd ->
   }
 })
 
-output.append("\n\n")
+output.append("\n-- Identity Providers\n")
+
+// IdP
+output.append("update idpssodescriptor set auto_accept_services = false;\n\n")
+
+output.append("\n-- Audit\n")
+
+// Audit
+output.append("delete from audit_log;\n\n")
+
+output.append("\n-- Workflow\n")
+
+// Workflow
+output.append("delete from task_instance_subject;\n")
+output.append("delete from task_instance;\n")
+output.append("delete from process_instance_params;\n")
+output.append("delete from process_instance;\n")
+
+output.append("\n-- Apply unique constraints\n")
 
 // Uniques
 output.append("ALTER TABLE `contact` ADD UNIQUE `email` USING BTREE (email);\n")
