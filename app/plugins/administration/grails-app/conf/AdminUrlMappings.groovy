@@ -42,13 +42,14 @@ class AdminUrlMappings {
       controller = "samlURI" 
     }
 
-    "/administration/console/$action?/$id?"{
+    "/administration/adminconsole/$action?/$id?"{
       controller = "adminConsole"
     }
-  
-    "/console/$action?/$id?"{
+
+    "/administration/console/$action?/$id?"{
       controller = "console"
     }
+
   }
 
 }

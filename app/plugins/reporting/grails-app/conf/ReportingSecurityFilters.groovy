@@ -7,12 +7,12 @@ class ReportingSecurityFilters {
 
   def filters = {
 
-    authn(controller: "(federationReports|complianceReports|identityProviderReports|serviceProviderReports)") {
+    authn(uri:"/reporting/**") {
       before = {
         accessControl { true }
       }
       after = {
-        log.info("Completed authenticated access for $subject to $params.controller/$params.action ${params.type == 'csv' ? 'exporting CSV':''}")
+        log.info("secfilter:[$subject.id]$subject.principal|${request.remoteAddr}|$params.controller/$params.action${params.type == 'csv' ? '|CSV export':''}")
       }
     }
 

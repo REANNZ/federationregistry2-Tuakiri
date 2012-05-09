@@ -5,8 +5,8 @@ class FoundationUrlMappings {
       controller = "initialBootstrap"
     }
 
-    "/coreutils/$action?/$id?"{
-      controller = "coreUtilities"
+    "/registration/$action?/$id?"{
+      controller = "bootstrap"
     }
 
     "/membership/organization/$action?/$id?"{
@@ -27,6 +27,10 @@ class FoundationUrlMappings {
   
     "/membership/contacts/$action?/$id?"{
       controller = "contacts"
+    }
+
+    "/membership/backend/coreutils/$action?/$id?"{
+      controller = "coreUtilities"
     }
   
     "/membership/backend/organizationadministration/$action?/$id?"{
@@ -72,18 +76,10 @@ class FoundationUrlMappings {
     "/membership/backend/monitors/$action?/$id?"{
       controller = "roleDescriptorMonitor"
     }
-  
-    "/confirmadministrator/$action?/$id?"{
-      controller = "invitation"
-    }
     
-    "/servicecategories/json/$id" {
+    "/membership/backend/servicecategories/json/$id" {
       controller = "serviceCategory"
       action = "json"
-    }
-  
-    "/registration/$action?/$id?"{
-      controller = "bootstrap"
     }
   }
   

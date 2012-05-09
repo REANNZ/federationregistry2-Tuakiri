@@ -1,103 +1,44 @@
-import aaf.fr.identity.AdminsService
-import aaf.fr.identity.SubjectService
 
-/**
- * Filter that works with shiro security model to protect controllers, actions, views for Federation Registry
- *
- * @author Bradley Beddoes
- */
 public class SecurityFilters {
 
-	def grailsApplication
+  def grailsApplication
 
-	def filters = {
-	
-		// Undertake bootstrap
-		//all(controller: '*') {
-		//	before = {
-		//		if( !['initialBootstrap','console'].contains(controllerName) && grailsApplication.config.fedreg.bootstrap)
-		//			redirect (controller: "initialBootstrap")
-		//	}
-		//}
-		
-		// Invitations
-		invitations(controller: "invitation") {
-			before = {
-				accessControl { true }
-			}
-		}
+  def filters = {
 
-		// Dashboard
-		dashboard(controller: "dashboard") {
-			before = {
-				accessControl { true }
-			}
-		}
+    all(uri:"/**") {
+      before = {
+        log.info "request:${request.requestURI}|${request.remoteAddr}"
+      }
+    }
 
-		// Members
-		members(controller: "(organization|entityDescriptor|serviceProvider|contacts)") {
-			before = {
-				accessControl { true }
-			}
-		}
+    welcome(controller: "welcome") {
+      after = {
+        log.info("secfilter:unauthenticated|${request.remoteAddr}|$params.controller")
+      }
+    }
 
-		// Members Backend
-		membersbackend(controller: "(attributeConsumingSerivce|descriptorAdministration|descriptorAttribute|descriptorContact|descriptorEndpoint|descriptorNameIDFormat|organizationAdministration|organizationContact|roleDescriptorCrypto|roleDescriptorMonitor)") {
-			before = {
-				accessControl { true }
-			}
-		}
-		
-		// Service Categories
-		servicecategories(controller: "serviceCategory", action:"(list|add|remove)") {
-			before = {
-				accessControl { true }
-			}
-		}
+    dashboard(controller: "dashboard") {
+      before = {
+        accessControl { true }
+      }
+      after = {
+        log.info("secfilter:[$subject.id]$subject.principal|${request.remoteAddr}|$params.controller/$params.action")
+      }
+    }
 
-		// Workflow
-		workflow(controller: "workflow*") {
-			before = {
-				accessControl { true }
-			}
-		}
+    bootstrap(controller: "initialBootstrap") {
+      before = {
+        if( !grailsApplication.config.aaf.fr.bootstrap ) {
+          log.info("secfilter-alert:[$subject.id]$subject.principal|${request.remoteAddr}|$params.controller")
+          response.sendError(403)
+          return
+        }
+      }
+      after = {
+        log.info("secfilter:unauthenticated|${request.remoteAddr}|$params.controller")
+      }
+    }
 
-		// Metadata
-		metadata(controller: "metadata", action:"(view|viewall)") {
-			before = {
-				accessControl { true }
-			}
-		}
-
-		// Monitoring functionality
-		monitoring(controller: "monitor") {
-			before = {
-				accessControl { true }
-			}
-		}
-
-		// Administrative components
-		administration(controller: "(admins|user|role)") {
-			before = {
-				accessControl { true }
-			}
-		}
-
-		// Console and initial bootstrap
-		console(controller: "(code|console|initialBootstrap)") {
-			before = {
-				if( ['initialBootstrap'].contains(controllerName) && !grailsApplication.config.fedreg.bootstrap)
-					redirect (controller: "dashboard")
-				else {	
-					if(!grailsApplication.config.fedreg.bootstrap) {
-						accessControl {
-							role(AdminsService.ADMIN_ROLE)
-						}
-					}
-				}
-			}
-		}
-
-	}
+  }
 
 }
