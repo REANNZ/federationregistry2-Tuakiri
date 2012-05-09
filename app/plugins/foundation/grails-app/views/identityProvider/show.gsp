@@ -35,8 +35,8 @@
       </div>
 
       <div id="tab-contacts" class="tab-pane">
-        <g:render template="/templates/contacts/list" plugin="foundation" model="[host:identityProvider]" />
-        <g:render template="/templates/contacts/create" plugin="foundation" model="[host:identityProvider, contactTypes:contactTypes]"/>
+        <g:render template="/templates/contacts/list" plugin="foundation" model="[host:identityProvider, hostType:'descriptor']" />
+        <g:render template="/templates/contacts/create" plugin="foundation" model="[host:identityProvider, hostType:'descriptor', contactTypes:contactTypes]"/>
       </div>
 
       <div id="tab-saml" class="tab-pane">

@@ -31,9 +31,8 @@
       </div>
       
       <div id="tab-contacts" class="tab-pane">
-        <g:render template="/templates/contacts/list" plugin="foundation" model="[host:entity, allowremove:true]" />
-        
-        <g:render template="/templates/contacts/create" plugin="foundation" model="[host:entity, contactTypes:contactTypes]"/>
+        <g:render template="/templates/contacts/list" plugin="foundation" model="[host:entity, hostType:'descriptor', allowremove:true]" />
+        <g:render template="/templates/contacts/create" plugin="foundation" model="[host:entity, hostType:'descriptor', contactTypes:contactTypes]"/>
       </div>
 
       <div id="tab-idp" class="tab-pane">

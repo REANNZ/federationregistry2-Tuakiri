@@ -17,7 +17,7 @@
             <td>${contactPerson.type.displayName.encodeAsHTML()}</td>
             <td>
               <a href="${createLink(controller:'contacts', action:'show', id: contactPerson.contact.id)}" class="btn btn-small"><g:message code='label.view'/></a>
-              <fr:hasAnyPermission in='["federation:management:organization:${host.id}:contact:remove", "federation:management:contacts"]'>
+              <fr:hasAnyPermission in='["federation:management:${hostType}:${host.id}:contact:remove", "federation:management:contacts"]'>
                 <a class="confirm-delete-contact btn btn-small" data-contact="${contactPerson.id}"><g:message code='label.delete'/></a>
               </fr:hasAnyPermission>
             </td>
