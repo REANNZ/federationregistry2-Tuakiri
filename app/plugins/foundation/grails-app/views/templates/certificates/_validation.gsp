@@ -2,6 +2,9 @@
 <g:if test="${corrupt}">
 	<div class="alert alert-message alert-danger">
 		<p><g:message code="templates.fr.certificates.validation.corrupt" /></p>
+    <g:each in="${certerrors}" var="ce">
+      <g:message code="${ce}"/>
+    </g:each>
 	</div>
 </g:if>
 <g:else>

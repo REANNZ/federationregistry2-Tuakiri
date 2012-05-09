@@ -30,8 +30,15 @@ class CoreUtilitiesController {
 		}
 		
 		log.debug "About to validate new certificate:\n${params.cert}"
+    def data = params.cert.trim()
 		try {
-			def certificate = cryptoService.createCertificate(params.cert.trim().normalize())
+      if(!(data.startsWith('-----BEGIN CERTIFICATE-----')) || !(data.endsWith('-----END CERTIFICATE-----'))){
+        render template:"/templates/certificates/validation", contextPath: pluginContextPath, model:[corrupt:true, certerrors:["templates.fr.certificates.validation.banners"]]
+        response.setStatus(500)
+        return
+      }
+
+			def certificate = cryptoService.createCertificate(data.normalize())
 			def subject = cryptoService.subject(certificate);
 			def issuer = cryptoService.issuer(certificate);
 			def expires = cryptoService.expiryDate(certificate);
