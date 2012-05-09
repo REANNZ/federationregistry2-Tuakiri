@@ -16,7 +16,7 @@ class WorkflowScriptController {
 			[scriptList: scriptList]
 		}
 		else {
-			log.warn("Attempt to list workflow scripts by $principal was denied, incorrect permission set")
+			log.warn("Attempt to list workflow scripts by $subject was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}
@@ -27,7 +27,7 @@ class WorkflowScriptController {
 			[script: script]
 		}
 		else {
-			log.warn("Attempt to create workflow script by $principal was denied, incorrect permission set")
+			log.warn("Attempt to create workflow script by $subject was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}
@@ -54,7 +54,7 @@ class WorkflowScriptController {
 			redirect action: "show", id: script.id
 		}
 		else {
-			log.warn("Attempt to save workflow script by $principal was denied, incorrect permission set")
+			log.warn("Attempt to save workflow script by $subject was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}
@@ -79,7 +79,7 @@ class WorkflowScriptController {
 			[script:script]
 		}
 		else {
-			log.warn("Attempt to show workflow script by $principal was denied, incorrect permission set")
+			log.warn("Attempt to show workflow script by $subject was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}
@@ -104,7 +104,7 @@ class WorkflowScriptController {
 			[script:script]
 		}
 		else {
-			log.warn("Attempt to edit $script by $principal was denied, incorrect permission set")
+			log.warn("Attempt to edit $script by $subject was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}
@@ -139,7 +139,7 @@ class WorkflowScriptController {
 			redirect action: "show", id: script.id
 		}
 		else {
-			log.warn("Attempt to update $script by $principal was denied, incorrect permission set")
+			log.warn("Attempt to update $script by $subject was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}

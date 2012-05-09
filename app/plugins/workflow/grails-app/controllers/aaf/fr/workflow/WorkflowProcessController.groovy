@@ -18,7 +18,7 @@ class WorkflowProcessController {
 			[processList: processList]
 		}
 		else {
-			log.warn("Attempt to list workflow processes by $principal was denied, incorrect permission set")
+			log.warn("Attempt to list workflow processes by $subject was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}
@@ -29,7 +29,7 @@ class WorkflowProcessController {
 			[process: process]
 		}
 		else {
-			log.warn("Attempt to create workflow process by $principal was denied, incorrect permission set")
+			log.warn("Attempt to create workflow process by $subject was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}
@@ -67,7 +67,7 @@ class WorkflowProcessController {
 			}
 		}
 		else {
-			log.warn("Attempt to save workflow process by $principal was denied, incorrect permission set")
+			log.warn("Attempt to save workflow process by $subject was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}
@@ -92,7 +92,7 @@ class WorkflowProcessController {
 			[process:process]
 		}
 		else {
-			log.warn("Attempt to view workflow process by $principal was denied, incorrect permission set")
+			log.warn("Attempt to view workflow process by $subject was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}
@@ -116,7 +116,7 @@ class WorkflowProcessController {
 			[process:process]
 		}
 		else {
-			log.warn("Attempt to edit $process by $principal was denied, incorrect permission set")
+			log.warn("Attempt to edit $process by $subject was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}
@@ -164,7 +164,7 @@ class WorkflowProcessController {
 			}
 		}
 		else {
-			log.warn("Attempt to update $process by $principal was denied, incorrect permission set")
+			log.warn("Attempt to update $process by $subject was denied, incorrect permission set")
 			response.sendError(403)
 		}
 	}
