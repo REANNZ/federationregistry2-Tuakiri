@@ -24,7 +24,6 @@ class DashboardController {
         println currentTask[0].potentialApprovers
       }
     }
-    println "SUBMITTED TASKS: ---- $submittedTasks"
 
     def organizations = []
     def identityProviders = []
