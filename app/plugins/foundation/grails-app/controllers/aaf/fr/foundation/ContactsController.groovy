@@ -106,7 +106,7 @@ class ContactsController {
 			return
 		}
 		
-		if(SecurityUtils.subject.isPermitted("contact:${contact.id}:update") || SecurityUtils.subject.isPermitted("federation:managementment:contacts")) {
+		if(SecurityUtils.subject.isPermitted("contact:${contact.id}:update") || SecurityUtils.subject.isPermitted("federation:management:contacts")) {
 			def organizations = Organization.list()
 			[contact: contact, organizations:organizations]
 		} else {
@@ -131,7 +131,7 @@ class ContactsController {
 			return
 		}
 
-		if(SecurityUtils.subject.isPermitted("federation:managementment:contacts") || SecurityUtils.subject.isPermitted("federation:managementment:contacts")) {
+		if(SecurityUtils.subject.isPermitted("federation:management:contacts") || SecurityUtils.subject.isPermitted("federation:management:contacts")) {
 			contact.givenName = params.givenname
 			contact.surname = params.surname
 			contact.email = params.email

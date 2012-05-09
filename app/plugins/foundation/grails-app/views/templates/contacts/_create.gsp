@@ -1,4 +1,5 @@
-<fr:hasAnyPermission in='["federation:managementment:${hostType}:${host.id}:contact:add", "federation:managementment:contacts"]'>
+
+<fr:hasAnyPermission in='["federation:management:${hostType}:${host.id}:contact:add", "federation:management:contacts"]'>
   <hr>
   
   <div class="search-contacts">

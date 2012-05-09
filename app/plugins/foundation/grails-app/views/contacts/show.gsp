@@ -42,7 +42,7 @@
       </tbody>
     </table>
 
-    <fr:hasAnyPermission in='["federation:managementment:contacts"]'>
+    <fr:hasAnyPermission in='["federation:management:contacts"]'>
       <g:link action="edit" id="${contact.id}" class="btn btn-info btn-small"><g:message code="label.edit" default="Edit"/></g:link>
     </fr:hasAnyPermission>
 

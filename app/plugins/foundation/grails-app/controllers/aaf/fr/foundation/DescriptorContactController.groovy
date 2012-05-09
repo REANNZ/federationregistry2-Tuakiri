@@ -48,7 +48,7 @@ class DescriptorContactController {
 			return
 		}
 		
-		if(SecurityUtils.subject.isPermitted("federation:managementment:descriptor:${descriptor.id}:contact:add") || SecurityUtils.subject.isPermitted("federation:managementment:contacts")) {
+		if(SecurityUtils.subject.isPermitted("federation:management:descriptor:${descriptor.id}:contact:add") || SecurityUtils.subject.isPermitted("federation:management:contacts")) {
 			def contact = Contact.get(params.contactID)
 			if(!contact) {
 				log.warn "Contact identified by id $params.contactID was not located"
@@ -113,7 +113,7 @@ class DescriptorContactController {
 		else
 			descriptor = contactPerson.entity
 		
-		if(SecurityUtils.subject.isPermitted("federation:managementment:descriptor:${descriptor.id}:contact:remove") || SecurityUtils.subject.isPermitted("federation:managementment:contacts")) {
+		if(SecurityUtils.subject.isPermitted("federation:management:descriptor:${descriptor.id}:contact:remove") || SecurityUtils.subject.isPermitted("federation:management:contacts")) {
 			contactPerson.delete();
 			
 			log.debug "$subject deleted $contactPerson from $descriptor"

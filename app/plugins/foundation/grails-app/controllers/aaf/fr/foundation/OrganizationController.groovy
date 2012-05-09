@@ -129,7 +129,7 @@ class OrganizationController {
       redirect(action: "list")
     }
     
-    if(SecurityUtils.subject.isPermitted("federation:managementment:advanced")) {
+    if(SecurityUtils.subject.isPermitted("federation:management:advanced")) {
       organizationService.archive(organization.id)
       log.info "$subject archive $organization"
 
@@ -159,7 +159,7 @@ class OrganizationController {
       redirect(action: "list")
     }
     
-    if(SecurityUtils.subject.isPermitted("federation:managementment:advanced")) {
+    if(SecurityUtils.subject.isPermitted("federation:management:advanced")) {
       organizationService.unarchive(organization.id)
       log.info "$subject unarchived $organization"
 
@@ -189,7 +189,7 @@ class OrganizationController {
       redirect(action: "list")
     }
     
-    if(SecurityUtils.subject.isPermitted("federation:managementment:advanced")) {
+    if(SecurityUtils.subject.isPermitted("federation:management:advanced")) {
       organizationService.delete(organization.id)
 
       log.info "$subject deleted $organization"
@@ -220,7 +220,7 @@ class OrganizationController {
       return
     }
     
-    if(SecurityUtils.subject.isPermitted("federation:managementment:organization:${organization.id}:administrators")) {
+    if(SecurityUtils.subject.isPermitted("federation:management:organization:${organization.id}:administrators")) {
       def adminRole = Role.findByName("organization-${organization.id}-administrators")
       
       if(adminRole) {
@@ -283,7 +283,7 @@ class OrganizationController {
       return
     }
     
-    if(SecurityUtils.subject.isPermitted("federation:managementment:organization:${organization.id}:administrators")) {
+    if(SecurityUtils.subject.isPermitted("federation:management:organization:${organization.id}:administrators")) {
       if(subj == subject) {
         flash.type="error"
         flash.message = message(code: 'controller.organizationadministration.selfedit', default:"Admins can't remove their own privileged access.")

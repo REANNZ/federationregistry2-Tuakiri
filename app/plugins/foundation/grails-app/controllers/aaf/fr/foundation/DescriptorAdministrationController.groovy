@@ -43,7 +43,7 @@ class DescriptorAdministrationController {
 
         def permission = new Permission()
         permission.type = Permission.defaultPerm
-        permission.target = "federation:managementment:descriptor:${descriptor.id}:reporting"
+        permission.target = "federation:management:descriptor:${descriptor.id}:reporting"
         permission.owner = adminRole
         
         permissionService.createPermission(permission, adminRole)

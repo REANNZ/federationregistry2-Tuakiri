@@ -16,13 +16,13 @@
         <th><g:message code="label.organization"/></th>
         <td><g:link controller="organization" action="show" id="${serviceProvider.organization.id}">${fieldValue(bean: serviceProvider, field: "organization.displayName")}</g:link></td>
       </tr>
-      <fr:hasPermission target="federation:managementment:saml:advanced">
+      <fr:hasPermission target="federation:management:saml:advanced">
         <tr>
           <th><g:message code="label.entitydescriptor"/></th>
           <td><g:link controller="entityDescriptor" action="show" id="${serviceProvider.entityDescriptor.id}">${fieldValue(bean: serviceProvider, field: "entityDescriptor.entityID")}</g:link></td>
         </tr>
       </fr:hasPermission>
-      <fr:lacksPermission target="federation:managementment:saml:advanced">
+      <fr:lacksPermission target="federation:management:saml:advanced">
         <tr>
           <th><g:message code="label.entitydescriptor"/></th>
           <td>${fieldValue(bean: serviceProvider, field: "entityDescriptor.entityID")}</td>

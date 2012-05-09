@@ -129,7 +129,7 @@ class EntityDescriptorController {
       return
     }
     
-    if(SecurityUtils.subject.isPermitted("federation:managementment:advanced")) {
+    if(SecurityUtils.subject.isPermitted("federation:management:advanced")) {
       entityDescriptorService.archive(entityDescriptor.id)
       log.info "$subject archived $entityDescriptor"
 
@@ -169,7 +169,7 @@ class EntityDescriptorController {
       return
     }
     
-    if(SecurityUtils.subject.isPermitted("federation:managementment:advanced")) {
+    if(SecurityUtils.subject.isPermitted("federation:management:advanced")) {
       entityDescriptorService.unarchive(entityDescriptor.id)
       log.info "$subject unarchive $entityDescriptor"
 
@@ -202,7 +202,7 @@ class EntityDescriptorController {
       return
     }
     
-    if(SecurityUtils.subject.isPermitted("federation:managementment:advanced")) {
+    if(SecurityUtils.subject.isPermitted("federation:management:advanced")) {
       entityDescriptorService.delete(entityDescriptor.id)
       log.info "$subject deleted $entityDescriptor"
 
@@ -251,7 +251,7 @@ class EntityDescriptorController {
       return
     }
     
-    if(SecurityUtils.subject.isPermitted("federation:managementment:advanced")) {
+    if(SecurityUtils.subject.isPermitted("federation:management:advanced")) {
       entityDescriptorService.migrateOrganization(entityDescriptor.id, organization.id)
       log.info "$subject migrated $entityDescriptor to $organization"
 
