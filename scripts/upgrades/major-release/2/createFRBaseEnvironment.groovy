@@ -8,13 +8,22 @@ import aaf.fr.foundation.*
 import aaf.fr.identity.*
 
 /*
-This script re-establishes the base FR environment once all database manipulations have been completed.
+This script re-establishes the base FR environment once all database manipulations have been completed. You need to migrate workflow scripts following
+the successful execution of this script.
 
 In addition it re-assigns the first global administrator to continue to have access privileges. Once FR is fully operational
 the UI should then be used to further assign permissions.
 */
 
 def administratorsTargetedID = ""
+
+// Populate default administrative account
+def subject = new aaf.fr.identity.Subject(principal:'internaladministrator', cn:'internal administrator', email:'internaladministrator@not.valid')
+subject.save(flush: true)
+if(subject.hasErrors()) {
+  subject.errors.each { println it }
+  return false
+}
 
 roleService = ctx.getBean("roleService")
 permissionService = ctx.getBean("permissionService")
