@@ -46,7 +46,7 @@ class AdminUrlMappings {
       controller = "adminConsole"
     }
 
-    "/administration/console/$action?/$id?"{
+    "/internal/console/$action?/$id?"{
       controller = "console"
     }
 

@@ -29,8 +29,8 @@ public class SecurityFilters {
     bootstrap(controller: "initialBootstrap") {
       before = {
         if( !grailsApplication.config.aaf.fr.bootstrap ) {
-          log.info("secfilter-alert:[$subject.id]$subject.principal|${request.remoteAddr}|$params.controller")
-          response.sendError(403)
+          log.info("secfilter-alert:[$subject?.id]$subject?.principal|${request.remoteAddr}|$params.controller")
+          response.sendError(404) // Deliberately not 403.
           return
         }
       }
