@@ -23,7 +23,7 @@
           <div class="span12">
             <ul class="level1">
               <li class="${controllerName == 'initialBootstrap' ? 'directactive':''}">
-                <g:link controller="initialBootstrap"><g:message code="fr.branding.nav.bootstrap" Default="Bootstrap"/></g:link>
+                <g:link controller="initialBootstrap"><g:message code="branding.fr.nav.bootstrap" default="Bootstrap"/></g:link>
               </li>
             </ul>
           </div>
