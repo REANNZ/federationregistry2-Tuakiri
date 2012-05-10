@@ -96,23 +96,6 @@ aaf {
       maxlifeindays = 7800
     }
     
-    shibboleth {
-      federationprovider {
-        spactive = false
-        enabled = true
-        autoprovision = true
-        ssoendpoint = "/Shibboleth.sso/DS"
-      }
-
-      headers {
-        entityID = "Shib-Identity-Provider"
-        uniqueID = "persistent-id"
-        email= "mail"
-        commonName = "cn"
-        sharedToken = "auEduPersonSharedToken"
-      }
-    }
-    
     knownimplementations {
       identityproviders {
         shib22 {
