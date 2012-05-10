@@ -15,7 +15,6 @@ DROP TABLE `login_record`;
 DROP TABLE `mailuri`;
 DROP TABLE `profile_base`;
 DROP TABLE `task_approver_groups`;
-DROP TABLE `task_instance__user`;
 DROP TABLE `tel_numuri`;
 DROP TABLE `uri`;
 DROP TABLE `url`;

@@ -1,6 +1,6 @@
 import groovy.sql.Sql
 
-sql = Sql.newInstance("jdbc:mysql://localhost:3306/<my fr database>", "fr", "password", "com.mysql.jdbc.Driver")
+sql = Sql.newInstance("jdbc:mysql://localhost:3306/federationregistry2", "fr", "password", "com.mysql.jdbc.Driver")
 
 def output = new StringBuffer()
 def excludedSubjects = []
@@ -177,6 +177,7 @@ output.append("delete from audit_log;\n\n")
 output.append("\n-- Workflow\n")
 
 // Workflow
+output.append("drop table task_instance__user;\n")
 output.append("delete from task_instance_subject;\n")
 output.append("delete from task_instance;\n")
 output.append("delete from process_instance_params;\n")
