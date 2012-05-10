@@ -42,7 +42,7 @@ class AuthController {
     }
 
   def echo = {
-      def attr = [:]
+    def attr = [:]
     if(grailsApplication.config.federation.request.attributes) {
       request.attributeNames.each {
         attr.put(it, (String)request.getAttribute(it))
@@ -57,7 +57,7 @@ class AuthController {
   
   def federatedlogin = {
     if (!grailsApplication.config.federation.federationactive) {
-      log.error("Attempt to do federated login when Apache SP is not marked active in local configuration")
+      log.error("Attempt to do federated login when Shibboleth SP is not marked active in local configuration")
       response.sendError(403)
       return
     }
@@ -70,29 +70,37 @@ class AuthController {
     
     def attributes = [:]  
     
-    /*
-    Depending on your application requirements you can request as many or as few attributes as necessary,
-    the below gives an example of what is possible. Refer to the AAF core attributes for a complete set of possibilities.
-    
     attributes.entityID = federatedAttributeValue(grailsApplication, grailsApplication.config.federation.mapping.entityID)
-    attributes.displayName =  federatedAttributeValue(grailsApplication, grailsApplication.config.federation.mapping.displayName)
+    attributes.cn =  federatedAttributeValue(grailsApplication, grailsApplication.config.federation.mapping.cn)
     attributes.email = federatedAttributeValue(grailsApplication, grailsApplication.config.federation.mapping.email)
-    attributes.entitlements = federatedAttributeValue(grailsApplication, grailsApplication.config.federation.mapping.entitlement)
-    attributes.homeOrganization = federatedAttributeValue(grailsApplication, grailsApplication.config.federation.mapping.homeOrganization)
-    attributes.homeOrganizationType = federatedAttributeValue(grailsApplication, grailsApplication.config.federation.mapping.homeOrganizationType)
-    */
+    attributes.sharedToken = federatedAttributeValue(grailsApplication, grailsApplication.config.federation.mapping.sharedToken)
     
     if (!principal) {
       incomplete = true
-      errors.add "Unique subject identifier (principal) was not presented"
+      errors.add "Your unique account identifier (persistent-id, urn:oid:1.3.6.1.4.1.5923.1.1.1.10) was unable to be obtained from the provided assertion"
     }
 
     if (!credential) {
       incomplete = true
-      errors.add "Internal SAML session identifier (credential) was not presented"
+      errors.add "An internal SAML session identifier (Shib-Session-ID) was unable to be obtained from the provided assertion"
     }
     
-    // Add additional checks for any other attribute your application can't live without here. For example displayName or email.
+    if (!attributes.entityID) {
+      incomplete = true
+      errors.add "An EntityID was unable to be obtained from the provided assertion"
+    }
+    if (!attributes.cn) {
+      incomplete = true
+      errors.add "Your common name (cn, urn:oid:2.5.4.3) was unable to be obtained from the provided assertion"
+    }
+    if (!attributes.email) {
+      incomplete = true
+      errors.add "Your email address (mail, urn:oid:0.9.2342.19200300.100.1.3) was unable to be obtained from the provided assertion"
+    }
+    if (!attributes.sharedToken) {
+      incomplete = true
+      errors.add "Your unique shared token (auEduPersonSharedToken, urn:oid:1.3.6.1.4.1.27856.1.2.5) was unable to be obtained from the provided assertion"
+    }
     
     if(incomplete) {
       log.warn "Incomplete federated authentication attempt was aborted"
