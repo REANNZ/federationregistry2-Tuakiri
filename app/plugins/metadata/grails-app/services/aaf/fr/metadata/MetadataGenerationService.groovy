@@ -268,7 +268,7 @@ class MetadataGenerationService {
 		ssoDescriptor.artifactResolutionServices?.sort{it.id}.each{ars -> indexedEndpoint(builder, all, minimal, "ArtifactResolutionService", ars)}
 		ssoDescriptor.singleLogoutServices?.sort{it.id}.each{sls -> endpoint(builder, all, minimal, "SingleLogoutService", sls)}
 		ssoDescriptor.manageNameIDServices?.sort{it.id}.each{mnids -> endpoint(builder, all, minimal, "ManageNameIDService", mnids)}
-		ssoDescriptor.nameIDFormats?.sort{it}.each{nidf -> samlURI(builder, "NameIDFormat", nidf)}
+		ssoDescriptor.nameIDFormats?.sort{it.id}.each{nidf -> samlURI(builder, "NameIDFormat", nidf)}
 	}
 	
 	def idpSSODescriptor(builder, all, minimal, roleExtensions, idpSSODescriptor) {
@@ -346,7 +346,7 @@ class MetadataGenerationService {
 			builder.Extensions() {
 				spSSODescriptor.discoveryResponseServices?.sort{it.id}.each { endpoint ->
 					if(all || endpoint.functioning() ) {
-						builder."dsr:DiscoveryResponse"("xmlns:dsr":"urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol", Binding: endpoint.binding, Location:endpoint.location, index:endpoint.index, isDefault:endpoint.isDefault)
+						builder."dsr:DiscoveryResponse"("xmlns:dsr":"urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol", Binding: endpoint.binding.uri, Location:endpoint.location, index:endpoint.index, isDefault:endpoint.isDefault)
 					}
 				}
 			}
