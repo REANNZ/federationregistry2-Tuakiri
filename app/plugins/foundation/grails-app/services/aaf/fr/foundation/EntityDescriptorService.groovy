@@ -2,7 +2,7 @@ package aaf.fr.foundation
 
 import org.springframework.transaction.interceptor.TransactionAspectSupport
 
-import grails.plugins.federatedgrails.LevelPermission
+import grails.plugins.federatedgrails.Permission
 import aaf.fr.identity.Subject
 
 /**
@@ -54,9 +54,9 @@ class EntityDescriptorService {
     }
     
     def adminRole = roleService.createRole("descriptor-${savedEntityDescriptor.id}-administrators", "Global administrators for the entity ${savedEntityDescriptor.entityID}", false)
-    LevelPermission permission = new LevelPermission()
-      permission.populate("descriptor", "${savedEntityDescriptor.id}", "*", null, null, null)
-      permission.managed = false
+    Permission permission = new Permission(target:"descriptor:${idp.entityDescriptor.id}:*")
+    permission.managed = false
+    permission.type = Permission.defaultPerm
     permissionService.createPermission(permission, adminRole)
     
     roleService.addMember(subject, adminRole)
