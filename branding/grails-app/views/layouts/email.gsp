@@ -235,7 +235,7 @@
                             <table border="0" cellpadding="0" cellspacing="0" width="600" id="templateHeader">
                               <tr>
                                 <td class="headerContent"> 
-                                  <img src="http://grails.dev.bradleybeddoes.com:8080/federationregistry/images/emailbranding.gif" alt="AAF banner, Federation Registry"/>
+                                  <img src="${resource(dir: 'images', file: 'emailbranding.gif', absolute:true)}" alt="AAF banner, Federation Registry"/>
                                 </td>
                               </tr>
                             </table>
