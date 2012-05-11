@@ -683,7 +683,7 @@ $(document).on('click', '.edit-endpoint', function() {
       var target = $("#endpoint-"+edit_endpoint);
       target.hide();
       target.after(res);
-      applyBehaviourTo(target);
+      applyBehaviourTo($("#endpoint-edit-" + edit_endpoint));
     },
     error: function (xhr, ajaxOptions, thrownError) {
     }
