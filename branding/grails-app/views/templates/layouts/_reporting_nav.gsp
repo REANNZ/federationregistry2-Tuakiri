@@ -25,9 +25,11 @@
     <li class="${actionName == 'compatability' ? 'active':''}">
       <g:link controller="complianceReports" action="compatability"><g:message code="fr.branding.nav.reports.compliance.compatability" default="Compatability"/></g:link>
     </li>
-    <li class="${actionName == 'causage' ? 'active':''}">
-      <g:link controller="complianceReports" action="causage"><g:message code="fr.branding.nav.reports.compliance.causage" default="CA Usage"/></g:link>
-    </li>
+    <fr:hasPermission target="federation:management:reporting">
+      <li class="${actionName == 'causage' ? 'active':''}">
+        <g:link controller="complianceReports" action="causage"><g:message code="fr.branding.nav.reports.compliance.causage" default="CA Usage"/></g:link>
+      </li>
+    </fr:hasPermission>
   </ul>
 </g:if>
 

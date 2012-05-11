@@ -168,19 +168,23 @@ class ComplianceReportsController {
   def causage = {
     def ca = [:]
     Certificate.list().each { cert ->
-      def subject = cryptoService.subject(cert)
-      def issuer = cryptoService.issuer(cert)
-      
-      // External CA only
-      if(issuer != subject){
-        def members = ca.get(issuer)
-        if(members) {
-          if(!members.contains(cert.keyInfo.keyDescriptor.roleDescriptor.entityDescriptor))
-            members.add(cert.keyInfo.keyDescriptor.roleDescriptor.entityDescriptor)
+      try {
+        def subject = cryptoService.subject(cert)
+        def issuer = cryptoService.issuer(cert)
+        
+        // External CA only
+        if(issuer != subject){
+          def members = ca.get(issuer)
+          if(members) {
+            if(!members.contains(cert.keyInfo.keyDescriptor.roleDescriptor.entityDescriptor))
+              members.add(cert.keyInfo.keyDescriptor.roleDescriptor.entityDescriptor)
+          }
+          else {
+            ca.put(issuer,[cert.keyInfo.keyDescriptor.roleDescriptor.entityDescriptor])
+          }
         }
-        else {
-          ca.put(issuer,[cert.keyInfo.keyDescriptor.roleDescriptor.entityDescriptor])
-        }
+      } catch (Exception e) {
+        log.error "$cert was considered invalid $cert when generating causage report and should be revistied - $e"
       }
     }
 
