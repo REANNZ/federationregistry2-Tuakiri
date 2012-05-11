@@ -50,7 +50,7 @@ class WorkflowScriptController {
 				return
 			}
 		
-			log.info "$principal created $script"
+			log.info "$subject created $script"
 			redirect action: "show", id: script.id
 		}
 		else {
@@ -135,7 +135,7 @@ class WorkflowScriptController {
 				return
 			}
 		
-			log.info "$principal updated $script"
+			log.info "$subject updated $script"
 			redirect action: "show", id: script.id
 		}
 		else {

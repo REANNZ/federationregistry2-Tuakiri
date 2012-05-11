@@ -32,7 +32,7 @@ class WorkflowApprovalController {
 			[tasks:tasks]
 		}
 		else {
-			log.warn("Attempt to do administrative taskInstance listing by $principal was denied, not administrative user")
+			log.warn("Attempt to do administrative taskInstance listing by $subject was denied, not administrative user")
 			response.sendError(403)
 		}
 	}
@@ -54,17 +54,17 @@ class WorkflowApprovalController {
 			return
 		}
 		
-		if(taskInstance.potentialApprovers.contains(principal) || SecurityUtils.subject.isPermitted("federation:globaladministrator")) {
-			log.info "$principal is approving $taskInstance"
+		if(taskInstance.potentialApprovers.contains(subject) || SecurityUtils.subject.isPermitted("federation:globaladministrator")) {
+			log.info "$subject is approving $taskInstance"
 			workflowTaskService.approve(taskInstance.id)
 			flash.type = "success"
 		    flash.message = message(code: 'domains.fr.workflow.taskinstance.successfully.approved')
 		
-			log.info "$principal approval of $taskInstance completed"
+			log.info "$subject approval of $taskInstance completed"
 			redirect action: "list"
 		}
 		else {
-			log.warn("Attempt to approve $taskInstance by $principal was denied, no permission to modify this record")
+			log.warn("Attempt to approve $taskInstance by $subject was denied, no permission to modify this record")
 			response.sendError(403)
 		}
 	}
@@ -101,17 +101,17 @@ class WorkflowApprovalController {
 			return
 		}
 		
-		if(taskInstance.potentialApprovers.contains(principal) || SecurityUtils.subject.isPermitted("federation:globaladministrator")) {
-			log.info "$principal is rejecting $taskInstance"
+		if(taskInstance.potentialApprovers.contains(subject) || SecurityUtils.subject.isPermitted("federation:globaladministrator")) {
+			log.info "$subject is rejecting $taskInstance"
 			workflowTaskService.reject(taskInstance.id, params.rejection)
 			flash.type = "success"
 		    flash.message = message(code: 'domains.fr.workflow.taskinstance.successfully.rejected')
 		
-			log.info "$principal rejection of $taskInstance completed"
+			log.info "$subject rejection of $taskInstance completed"
 			redirect action: "list"
 		}
 		else {
-			log.warn("Attempt to reject $taskInstance with ${params.rejection} by $principal was denied, no permission to modify this record")
+			log.warn("Attempt to reject $taskInstance with ${params.rejection} by $subject was denied, no permission to modify this record")
 			response.sendError(403)
 		}
 	}

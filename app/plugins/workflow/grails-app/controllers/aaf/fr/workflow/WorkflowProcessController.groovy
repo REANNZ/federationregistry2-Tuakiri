@@ -56,7 +56,7 @@ class WorkflowProcessController {
 					return
 				}
 		
-				log.info "$principal created $process"
+				log.info "$subject created $process"
 				redirect action: "show", id: process.id
 			}
 			catch(Exception e) {
@@ -140,7 +140,7 @@ class WorkflowProcessController {
 		if(SecurityUtils.subject.isPermitted("federation:management:workflow:process:${process.id}:update")) {
 			def updated, process_
 			try {
-				log.info "$principal is updating $process"
+				log.info "$subject is updating $process"
 				(updated, process_) = workflowProcessService.update(process.name, params.code)
 		
 				if(!updated) {
@@ -153,7 +153,7 @@ class WorkflowProcessController {
 					return
 				}
 		
-				log.info "$principal updated $process_"
+				log.info "$subject updated $process_"
 				redirect action: "show", id: process_.id
 			
 			}
