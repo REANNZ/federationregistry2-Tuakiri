@@ -315,7 +315,7 @@ class MetadataGenerationService {
 						roleDescriptor(builder, all, minimal, roleExtensions, aaDescriptor.collaborator)	
 						aaDescriptor.attributeServices?.sort{it.id}.each{ attrserv -> endpoint(builder, all, minimal, "AttributeService", attrserv) }
 						aaDescriptor.collaborator.assertionIDRequestServices?.sort{it.id}.each{ aidrs -> endpoint(builder, all, minimal, "AssertionIDRequestService", aidrs) }
-						aaDescriptor.collaborator.nameIDFormats?.sort{it}.each{ nidf -> samlURI(builder, "NameIDFormat", nidf) }
+						aaDescriptor.collaborator.nameIDFormats?.sort{it.id}.each{ nidf -> samlURI(builder, "NameIDFormat", nidf) }
 						aaDescriptor.collaborator.attributeProfiles?.sort{it.id}.each{ ap -> samlURI(builder, "AttributeProfile", ap) }
 						if(!minimal)
 							aaDescriptor.collaborator.attributes?.sort{it.base.name}.each{ attr -> attribute(builder, attr) }
@@ -328,7 +328,7 @@ class MetadataGenerationService {
 					aaDescriptor.attributeServices?.sort{it.id}.each{ attrserv -> endpoint(builder, all, minimal, "AttributeService", attrserv) }
 					aaDescriptor.assertionIDRequestServices?.sort{it.id}.each{ aidrs -> endpoint(builder, all, minimal, "AssertionIDRequestService", aidrs) }
 					aaDescriptor.nameIDFormats?.sort{it.id}.each{ nidf -> samlURI(builder, "NameIDFormat", nidf) }
-					aaDescriptor.attributeProfiles?.sort{it}.each{ ap -> samlURI(builder, "AttributeProfile", ap) }
+					aaDescriptor.attributeProfiles?.sort{it.id}.each{ ap -> samlURI(builder, "AttributeProfile", ap) }
 					aaDescriptor.attributes?.sort{it.base.name}.each{ attr -> attribute(builder, attr) }
 				}
 			}
