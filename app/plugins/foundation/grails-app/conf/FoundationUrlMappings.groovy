@@ -5,6 +5,10 @@ class FoundationUrlMappings {
       controller = "initialBootstrap"
     }
 
+    "/public/coreutils/$action?/$id?"{
+      controller = "coreUtilities"
+    }
+
     "/registration/$action?/$id?"{
       controller = "bootstrap"
     }
@@ -27,10 +31,6 @@ class FoundationUrlMappings {
   
     "/membership/contacts/$action?/$id?"{
       controller = "contacts"
-    }
-
-    "/membership/backend/coreutils/$action?/$id?"{
-      controller = "coreUtilities"
     }
   
     "/membership/backend/organizationadministration/$action?/$id?"{
