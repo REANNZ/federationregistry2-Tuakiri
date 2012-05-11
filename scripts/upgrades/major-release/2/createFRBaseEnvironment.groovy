@@ -17,14 +17,6 @@ the UI should then be used to further assign permissions.
 
 def administratorsTargetedID = ""
 
-// Populate default administrative account
-def subject = new aaf.fr.identity.Subject(principal:'internaladministrator', cn:'internal administrator', email:'internaladministrator@not.valid')
-subject.save(flush: true)
-if(subject.hasErrors()) {
-  subject.errors.each { println it }
-  return false
-}
-
 roleService = ctx.getBean("roleService")
 permissionService = ctx.getBean("permissionService")
 
