@@ -21,7 +21,6 @@ class DashboardController {
       pi.each { instance ->
         def currentTask = instance.taskInstances.findAll{it.status == TaskStatus.APPROVALREQUIRED}
         submittedTasks.add(currentTask[0])
-        println currentTask[0].potentialApprovers
       }
     }
 

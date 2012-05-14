@@ -42,7 +42,7 @@
                 <strong>Submitted</strong>: ${fieldValue(bean: instance, field: "dateCreated")}<br>
                 <strong>Waiting on</strong>: 
                 <ul class="clean">
-                  <g:each in="${instance.potentialApprovers}" var="approver">
+                  <g:each in="${instance?.potentialApprovers}" var="approver">
                     <li>${fieldValue(bean: approver, field: "cn")} - <a href="mailto:${approver.email}">${fieldValue(bean: approver, field: "email")}</a></li>
                   </g:each>
                 </ul>
