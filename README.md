@@ -1,18 +1,15 @@
+# README - Version 2 of Federation Registry
+
 (c) Australian Access Federation
 Author: Bradley Beddoes, Australian Access Federation
 Project License: Apache 2.0, utilised software per their licensing, see NOTICE for more.
 
-Version 2 of Federation Registry
-
 See more details and documentation at http://wiki.aaf.edu.au/federationregistry/
 
-Overview
---------
+## Overview
 The Federation Registry project provides an extensible, open web application that provides a central point of registration, management and reporting for identity and service providers participating in a standards compliant SAML 2 identity federation.
 
-
-Key Features
-------------
+## Key Features
 A focus on Organisations as the key building block for the federation
 Management for all aspects of SAML 2 compliant Identity and Service Providers
 SAML 2.x compliant metadata generation
@@ -25,8 +22,7 @@ A fully customisable workflow engine to handle registrations and other critical 
 In-depth reporting to gain insight to the workings of the entire federation
 Federation integrated, automatically provisioned user accounts with fine grained access control
 
-License Notice
---------------
+## License Notice
 This product includes software developed at Highcharts - http://www.highcharts.com 
 
 This is used by the AAF under the Highcharts 'Non-commercial - Free' license
