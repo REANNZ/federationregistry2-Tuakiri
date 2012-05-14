@@ -17,7 +17,7 @@ Thanks to http://www.openembedded.org/wiki/Commit_Patch_Message_Guidelines from 
 As part oF FR 2 we've made a number of changes to allow others to introduce plugins and core code more readily.
 
 One key part of making this happen smoothly is the move to the aaf.fr namespace for all core code so other federations can now create plugin code in
-a <federation>.fr namespace. Code outside of aaf.fr will continue to be maintained by the respective federations. Changes within aaf.fr will
+a [federation-name].fr namespace. Code outside of aaf.fr will continue to be maintained by the respective federations. Changes within aaf.fr will
 continue to be supported by the AAF (or core FR developers if that spreads outside the AAF) moving forward.
 
 The second part of this is making heavier use of Git.
@@ -35,7 +35,8 @@ You must then have a full description of the change. Specifying the intent of yo
 As mentioned above this is intended to answer the "what were you thinking" questions down the road and to know what other impacts are likely to result of the change needs to be reverted. It also allows for better solutions if someone comes along later and agrees with paragraph 1 (the problem statement) and either disagrees with paragraph 2 (the design) or paragraph 3 (the implementation).
 
 FORMAT:
-    <indicator>: Short log / Statement of what needed to be changed.
+
+    [indicator]: Short log / Statement of what needed to be changed.
       
     Optional pointer to issue tracking.
       
@@ -45,6 +46,7 @@ FORMAT:
     issues in the first part.
 
 EXAMPLE:
+
     branding: Corrects production fault relating to image in email layout.
 
     Closes #31.
@@ -70,6 +72,7 @@ It is also required that the origin of the work be fully documented. The origin 
 If changes were required to resolve conflicts, they should be documented as well. When incorporating a commit or patch from an external source, changes to the functionality not related to resolving conflicts should be made in a second commit or patch. This preserves the original external commit, and makes the modifications clearly visible, and prevents confusion over the author of the code.
 
 EXAMPLE:
+
     branding: Corrects production fault relating to image in email layout.
 
     Closes #31.
@@ -90,13 +93,13 @@ EXAMPLE:
     resolved by preserving the bootstrap version from core.
 
 ## Common Errors
-Don't simply translate your change into English for a commit log. The log "Change compare from zero to one" is bad because it describes only the code change in the patch; we can see that from reading the patch itself. Let the code tell the story of the mechanics of the change (as much as possible), and let your comment tell the other details -- i.e. what the problem was, how it manifested itself (symptoms), and if necessary, the justification for why the fix was done in manner that it was. In other words, the long commit message must describe *why* the change was needed (instead of what has changed).
+- Don't simply translate your change into English for a commit log. The log "Change compare from zero to one" is bad because it describes only the code change in the patch; we can see that from reading the patch itself. Let the code tell the story of the mechanics of the change (as much as possible), and let your comment tell the other details -- i.e. what the problem was, how it manifested itself (symptoms), and if necessary, the justification for why the fix was done in manner that it was. In other words, the long commit message must describe *why* the change was needed (instead of what has changed).
 
-Don't have one huge patch, split your change into logical subparts. It's easier to track down problems afterward using tools such as git bisect. It also makes it easy for people to cherry-pick changes into things like stable branches.
+- Don't have one huge patch, split your change into logical subparts. It's easier to track down problems afterward using tools such as git bisect. It also makes it easy for people to cherry-pick changes into things like stable branches.
 
-Don't repeat your short log in the long log. If you really really don't have anything new and informational to add in as a long log, then don't put a long log at all. This should be uncommon -- i.e. the only acceptable cases for no long log would be something like "Documentation/README: Fix spelling mistakes".
+- Don't repeat your short log in the long log. If you really really don't have anything new and informational to add in as a long log, then don't put a long log at all. This should be uncommon -- i.e. the only acceptable cases for no long log would be something like "Documentation/README: Fix spelling mistakes".
 
-Don't use links to temporary resources like pastebin and friends. The commit message may be read long after this resource timed out.
+- Don't use links to temporary resources like pastebin and friends. The commit message may be read long after this resource timed out.
 
-Always use the most significant ramification of the change in the words of your subject/shortlog. For example, don't say "fix compile warning in foo" when the compiler warning was really telling us that we were dereferencing complete garbage off in the weeds that could in theory cause an OOPS under some circumstances. When people are choosing commits for backports to stable or distro kernels, the shortlog will be what they use for an initial sorting selection. If they see "Fix possible OOPS in...." then these people will look closer, whereas they most likely will skip over simple warning fixes.
+- Always use the most significant ramification of the change in the words of your subject/shortlog. For example, don't say "fix compile warning in foo" when the compiler warning was really telling us that we were dereferencing complete garbage off in the weeds that could in theory cause an OOPS under some circumstances. When people are choosing commits for backports to stable or distro kernels, the shortlog will be what they use for an initial sorting selection. If they see "Fix possible OOPS in...." then these people will look closer, whereas they most likely will skip over simple warning fixes.
 
