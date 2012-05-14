@@ -25,7 +25,10 @@ The second part of this is making heavier use of Git.
 ## Commit Messages
 Up to and including early FR 2 beta releases development has largely been undertaken by bradleybeddoes@075cb41f855c738ed08899d5df70f63e01791d1f as such I am terribly guilty of doing 'git commit -m <one liner>' in commit messages which is hardly best practice so I need to wrap myself on the knuckles for that one.
 
-For all commits going forward hoever the following general rules will apply, those being that there is a single line short log or summary of the change, then a reference to related issue in tracking (if available) and then the more detailed long log.
+Going forward on the 'develop' branch for all patches/bugfixes being applied directly and all merge commits, the following formatting rules be applied:
+- There is a single line short log or summary of the change
+- Followed by an optional reference to related issue in tracking
+- Then the more detailed long log (The only acceptable cases for no long log would be something like "Documentation/README: Fix spelling mistakes)
 
 The single short log message indicates what needed to be changed. It should begin with an indicator as to the primary item changed by this work (indicators are the major areas with FR e.g: branding, app, foundation, workflow etc)  followed by a short summary of the change. The single short log message is analogous to the git "commit summary". While no maximum line length is specified by this policy, it is suggested that it remains under 78 characters wherever possible.
 
