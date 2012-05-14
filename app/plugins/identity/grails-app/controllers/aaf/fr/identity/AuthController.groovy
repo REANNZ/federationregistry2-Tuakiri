@@ -97,10 +97,11 @@ class AuthController {
       incomplete = true
       errors.add "Your email address (mail, urn:oid:0.9.2342.19200300.100.1.3) was unable to be obtained from the provided assertion"
     }
-    if (!attributes.sharedToken) {
-      incomplete = true
-      errors.add "Your unique shared token (auEduPersonSharedToken, urn:oid:1.3.6.1.4.1.27856.1.2.5) was unable to be obtained from the provided assertion"
-    }
+    // Re-Enable once AEPST is made mandatory
+    //if (!attributes.sharedToken) {
+    //  incomplete = true
+    //  errors.add "Your unique shared token (auEduPersonSharedToken, urn:oid:1.3.6.1.4.1.27856.1.2.5) was unable to be obtained from the provided assertion"
+    //}
     
     if(incomplete) {
       log.warn "Incomplete federated authentication attempt was aborted"
