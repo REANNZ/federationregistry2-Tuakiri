@@ -16,7 +16,7 @@ Having run createFRBaseEnvironment this process will now remove all existing wor
 output.append("""def scripts = WorkflowScript.list()
 
 scripts.each {
-   it.delete()
+   it.delete(flush:true)
 }
 
 println 'Removed all exisiting scripts'
@@ -39,7 +39,7 @@ if(!wfs${sc}.save()) {
     wfs${sc}.errors.each {
         println it
     }
-    throw new RuntimeException("Unable to import wfs$sc")
+    return false
 }
 else {
     println \"Loaded valid workflow script wfs$sc\"
