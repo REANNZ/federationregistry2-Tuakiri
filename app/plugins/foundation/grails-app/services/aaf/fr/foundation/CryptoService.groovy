@@ -16,7 +16,8 @@ class CryptoService {
 		def cert = createCertificate(data)	
 		if(validateCertificate(cert, false)) {		
 			def keyInfo = new KeyInfo(certificate:cert, keyName:name)
-			def keyDescriptor = new KeyDescriptor(keyInfo:keyInfo, keyType:type, roleDescriptor:descriptor)
+			def keyDescriptor = new KeyDescriptor(keyInfo:keyInfo, keyType:type, encryptionMethod:null)
+      keyDescriptor.roleDescriptor = descriptor
 		
 			descriptor.addToKeyDescriptors(keyDescriptor)
 			descriptor.save()
