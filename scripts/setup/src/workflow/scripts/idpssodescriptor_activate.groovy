@@ -47,7 +47,7 @@ if(idp) {
   if(!edRole){  // Generally expected state
     edRole = roleService.createRole("descriptor-${idp.entityDescriptor.id}-administrators", "Global administrators for ${idp.entityDescriptor}", false)
   
-    Permission permission = new Permission(target:"descriptor:${idp.entityDescriptor.id}:*")
+    Permission permission = new Permission(target:"federation:management:descriptor:${idp.entityDescriptor.id}:*")
     permission.managed = false
     permission.type = Permission.defaultPerm
     permissionService.createPermission(permission, edRole)
@@ -61,13 +61,13 @@ if(idp) {
   
   // In our model the IDP role has permissions to edit the IDP and the AA
   // Manage IDP
-  Permission permission = new Permission(target:"descriptor:${idp.id}:*")
+  Permission permission = new Permission(target:"federation:management:descriptor:${idp.id}:*")
   permission.managed = false
   permission.type = Permission.defaultPerm
   permissionService.createPermission(permission, role)
   
   // Manage collaborating AA
-  def aaPermission = new Permission(target:"descriptor:${idp.collaborator.id}:*")       
+  def aaPermission = new Permission(target:"federation:management:descriptor:${idp.collaborator.id}:*")       
   aaPermission.managed = false
   aaPermission.type = Permission.defaultPerm
   permissionService.createPermission(aaPermission, role)

@@ -28,7 +28,7 @@ if(org) {
     role = roleService.createRole("organization-${org.id}-administrators", "Global administrators for $org", false)
   }
   
-  Permission permission = new Permission(target:"organization:${org.id}:*")
+  Permission permission = new Permission(target:"federation:management:organization:${org.id}:*")
   permission.managed = false
   permission.type = Permission.defaultPerm
   permissionService.createPermission(permission, role)

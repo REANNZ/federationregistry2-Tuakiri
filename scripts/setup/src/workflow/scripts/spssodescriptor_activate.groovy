@@ -36,7 +36,7 @@ if(sp) {
   if(!edRole){  // Generally expected state
     edRole = roleService.createRole("descriptor-${sp.entityDescriptor.id}-administrators", "Global administrators for ${sp.entityDescriptor}", false)
   
-    Permission permission = new Permission(target:"descriptor:${sp.entityDescriptor.id}:*")
+    Permission permission = new Permission(target:"federation:management:descriptor:${sp.entityDescriptor.id}:*")
     permission.managed = false
     permission.type = Permission.defaultPerm
     permissionService.createPermission(permission, edRole)
@@ -49,7 +49,7 @@ if(sp) {
   }
   
   // Manage SP
-  Permission permission = new Permission(target:"descriptor:${sp.id}:*")
+  Permission permission = new Permission(target:"federation:management:descriptor:${sp.id}:*")
   permission.managed = false
   permission.type = Permission.defaultPerm
   permissionService.createPermission(permission, role)
