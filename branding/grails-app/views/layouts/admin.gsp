@@ -3,7 +3,7 @@
 <html>
   <head>
     <title><g:message code='fr.branding.title' default='Federation Registry'/></title>
-    <r:require modules="bootstrap, bootstrap-datepicker, validate, datatables, alphanumeric, zenbox, app"/>
+    <r:require modules="modernizr, bootstrap, bootstrap-datepicker, validate, datatables, alphanumeric, zenbox, app"/>
     <r:layoutResources/>
     <g:layoutHead />
   </head>
