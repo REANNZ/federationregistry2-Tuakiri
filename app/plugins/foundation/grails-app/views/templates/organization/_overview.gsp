@@ -1,6 +1,6 @@
 <div id="overview-organization">
   <g:render template="/templates/organization/overview_editable" plugin="foundation" model="[organization:organization]" />
-  <fr:hasPermission target="organization:${organization.id}:update">
+  <fr:hasPermission target="federation:management:organization:${organization.id}:update">
     <a class="show-edit-organization btn btn-small btn-info"><g:message code="label.edit"/></a>
   </fr:hasPermission>
   <fr:hasPermission target="federation:management:advanced">
