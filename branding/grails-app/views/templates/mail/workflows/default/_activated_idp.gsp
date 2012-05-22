@@ -86,7 +86,7 @@
       
       4. Claim your administrative access
           <br>
-          Navigate to your <g:link controller='identityProvider' action='show' id="${identityProvider.id}" absolute="true">Identity Provider's management page</g:link> and access the administrator tab. Enter the unique code provided below in the box labelled <strong>CODE</strong>. This can only be used once. Once applied you can then provide access to other administrators on your team.
+          Navigate to your <g:link controller='identityProvider' action='show' id="${identityProvider.id}" absolute='true'>Identity Provider's management page</g:link> and access the administrator tab. Enter the unique code provided below in the box labelled <strong>CODE</strong>. This can only be used once. Once applied you can then provide access to other administrators on your team.
           <br><br>
           <strong>Your unique code for administrative access in Federation Registry:</strong>
           <div id="admincode" style="color:#E36C0A; font-size: 22px; padding: 6px; border: 1px solid #CCCCCC; text-align: center;">
