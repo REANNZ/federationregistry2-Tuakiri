@@ -41,7 +41,7 @@ class ComplianceReportsController {
       results.attributes.put(it.id, it.name)
     }
 
-    def idpList = IDPSSODescriptor.list().sort{it.displayName}
+    def idpList = IDPSSODescriptor.list().sort{it.displayName.toLowerCase()}
     def categories = AttributeCategory.list()
 
     idpList.each { i ->     
