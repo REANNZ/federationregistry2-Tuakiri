@@ -51,7 +51,7 @@ class MetadataController {
     
     def entity = EntityDescriptor.get(params.id)
     if (!entity) {
-      render message(code: 'domains.fr.endpoint.nonexistant', args: [params.id])
+      render message(code: 'domains.fr.foundation.endpoint.nonexistant', args: [params.id])
       response.setStatus(500)
       return
     }
