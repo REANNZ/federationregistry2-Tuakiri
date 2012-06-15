@@ -86,7 +86,12 @@ td.centered, th.centered, .centered {
 }
 
 .cert {
-  width: 500px;
+  width: 550px;
+}
+
+textarea.cert{
+  font: courier;
+  font-size: 10px;
 }
 
 .metadata {
