@@ -263,7 +263,7 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		
 		then:
 		controller.flash.type == "error"
-		controller.flash.message == "aaf.fr.foundation.organization.register.validation.error"	
+		controller.flash.message == "domains.fr.foundation.organization.register.validation.error"	
 	}
 	
 	def "Validate Organization Registered with no supplied ID"() {		
@@ -285,7 +285,7 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		
 		then:
 		controller.flash.type == "error"
-		controller.flash.message == "aaf.fr.foundation.organization.nonexistant"
+		controller.flash.message == "domains.fr.foundation.organization.nonexistant"
 		controller.response.redirectedUrl == "/"
 	}
 

@@ -125,7 +125,7 @@ class BootstrapController {
 		}
 		else {
 			flash.type="error"
-			flash.message = message(code: 'aaf.fr.foundation.organization.register.validation.error')
+			flash.message = message(code: 'domains.fr.foundation.organization.register.validation.error')
 			render (view:'organization', model:[organization:organization, contact:contact, organizationTypes: OrganizationType.list()])
 		}
 	}
@@ -142,7 +142,7 @@ class BootstrapController {
 		def organization = Organization.get(params.id)
 		if (!organization) {
 			flash.type = "error"
-			flash.message = message(code: 'aaf.fr.foundation.organization.nonexistant')
+			flash.message = message(code: 'domains.fr.foundation.organization.nonexistant')
 			redirect uri: "/"
 			return
 		}

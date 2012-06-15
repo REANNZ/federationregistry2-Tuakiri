@@ -53,7 +53,7 @@ class OrganizationControllerSpec extends IntegrationSpec {
 		
 		then:
 		controller.flash.type == "error"
-		controller.flash.message == "aaf.fr.foundation.organization.nonexistant"
+		controller.flash.message == "domains.fr.foundation.organization.nonexistant"
 		controller.response.redirectedUrl == "/organization/list"
 	}
 	
@@ -98,7 +98,7 @@ class OrganizationControllerSpec extends IntegrationSpec {
 		
 		then:
 		controller.flash.type == "error"
-		controller.flash.message == "aaf.fr.foundation.organization.save.validation.error"	
+		controller.flash.message == "domains.fr.foundation.organization.save.validation.error"	
 	}
 	
 	def "Validate successful update"() {
@@ -142,7 +142,7 @@ class OrganizationControllerSpec extends IntegrationSpec {
 		then:
 		controller.response.redirectedUrl == "/organization/list"	
 		controller.flash.type == "error"
-		controller.flash.message == "aaf.fr.foundation.organization.nonexistant"
+		controller.flash.message == "domains.fr.foundation.organization.nonexistant"
 	}
 	
 	def "Invalid organization data fails update"() {
@@ -160,6 +160,6 @@ class OrganizationControllerSpec extends IntegrationSpec {
 		
 		then:		
 		controller.flash.type == "error"
-		controller.flash.message == "aaf.fr.foundation.organization.update.validation.error"	
+		controller.flash.message == "domains.fr.foundation.organization.update.validation.error"	
 	}
 }

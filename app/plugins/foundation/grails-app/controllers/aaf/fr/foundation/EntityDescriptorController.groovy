@@ -246,7 +246,7 @@ class EntityDescriptorController {
     def organization = Organization.get(params.newOrgId)
     if (!organization) {
       flash.type="error"
-      flash.message = message(code: 'aaf.fr.foundation.organization.nonexistant')
+      flash.message = message(code: 'domains.fr.foundation.organization.nonexistant')
       redirect (action: "show", id: entityDescriptor.id)
       return
     }

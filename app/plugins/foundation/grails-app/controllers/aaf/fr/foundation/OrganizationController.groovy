@@ -52,7 +52,7 @@ class OrganizationController {
     }
     else {
       flash.type="error"
-      flash.message = message(code: 'aaf.fr.foundation.organization.nonexistant')
+      flash.message = message(code: 'domains.fr.foundation.organization.nonexistant')
       redirect(action: "list")
     }
   }
@@ -72,7 +72,7 @@ class OrganizationController {
       log.info "$subject failed to create $organization"
       
       flash.type="error"
-      flash.message = message(code: 'aaf.fr.foundation.organization.save.validation.error')
+      flash.message = message(code: 'domains.fr.foundation.organization.save.validation.error')
       render (view:'create', model:[organization:organization, contact:contact, organizationTypes: OrganizationType.list()])
     }
   }
@@ -88,7 +88,7 @@ class OrganizationController {
     def organization_ = Organization.get(params.id)
     if (!organization_) {
       flash.type="error"
-      flash.message = message(code: 'aaf.fr.foundation.organization.nonexistant')
+      flash.message = message(code: 'domains.fr.foundation.organization.nonexistant')
       redirect(action: "list")
     }
     
@@ -104,7 +104,7 @@ class OrganizationController {
           log.debug it
         }
         flash.type="error"
-        flash.message = message(code: 'aaf.fr.foundation.organization.save.validation.error')
+        flash.message = message(code: 'domains.fr.foundation.organization.save.validation.error')
         redirect (action: "show", id: organization.id)
       }
     }
@@ -125,7 +125,7 @@ class OrganizationController {
     def organization = Organization.get(params.id)
     if (!organization) {
       flash.type="error"
-      flash.message = message(code: 'aaf.fr.foundation.organization.nonexistant')
+      flash.message = message(code: 'domains.fr.foundation.organization.nonexistant')
       redirect(action: "list")
     }
     
@@ -155,7 +155,7 @@ class OrganizationController {
     def organization = Organization.get(params.id)
     if (!organization) {
       flash.type="error"
-      flash.message = message(code: 'aaf.fr.foundation.organization.nonexistant')
+      flash.message = message(code: 'domains.fr.foundation.organization.nonexistant')
       redirect(action: "list")
     }
     
@@ -185,7 +185,7 @@ class OrganizationController {
     def organization = Organization.get(params.id)
     if (!organization) {
       flash.type="error"
-      flash.message = message(code: 'aaf.fr.foundation.organization.nonexistant')
+      flash.message = message(code: 'domains.fr.foundation.organization.nonexistant')
       redirect(action: "list")
     }
     
