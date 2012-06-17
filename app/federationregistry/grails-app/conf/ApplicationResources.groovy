@@ -1,33 +1,55 @@
+def jqver = org.codehaus.groovy.grails.plugins.jquery.JQueryConfig.SHIPPED_VERSION
 
 modules = { 
+  overrides {
+    'jquery' {
+      resource id:'js', url:[plugin: 'jquery', dir:'js/jquery', file:"jquery-${jqver}.min.js"], disposition:'head', nominify: true
+    }
+    'modernizr' {
+      defaultBundle 'app'
+    }
+    'bootstrap-js' {
+      defaultBundle 'app'
+    }
+    'bootstrap-less' {
+      defaultBundle 'app'
+    }
+    'bootstrap-css' {
+      defaultBundle 'app'
+    }
+  }
+
   'validate' {
     dependsOn 'jquery'
     defaultBundle false
     resource url:[dir:'js/jquery', file:'jquery.validate.min.js']
     resource url:[dir:'js/jquery', file:'jquery.validate.additional.js']
   }
+
   'datatables' {
-    dependsOn 'jquery' 
-    defaultBundle false
-    resource url:[dir:'js/jquery', file:'jquery.datatables.min.js'], disposition:'head', bundle: 'extjs'
-    resource url:[dir:'js/jquery', file:'jquery.datatables.bootstrap.js'], disposition:'head', bundle: 'extjs' 
+    defaultBundle 'app'
+
+    dependsOn 'jquery, codemirror' 
+    resource url:[dir:'js/jquery', file:'jquery.datatables.min.js'], disposition: 'head', nominify: true
+    resource url:[dir:'js/jquery', file:'jquery.datatables.bootstrap.js'], disposition: 'head', nominify: true
   }
   'alphanumeric' {
+    defaultBundle 'app'
+
     dependsOn 'jquery'
-    defaultBundle false
-    resource url:[dir:'js/jquery', file:'jquery.alphanumeric.min.js'], bundle: 'extjs'
+    resource url:[dir:'js/jquery', file:'jquery.alphanumeric.min.js']
   }
-  'zenbox' { 
-    defaultBundle false
-    resource url:'js/zenbox.js', disposition:'head' // 2.0
-    resource url:'css/zenbox.css', bundle: 'css'
+  'zenbox' {
+    defaultBundle 'app'
+
+    resource url:'js/zenbox.js', disposition: 'head'
+    resource url:'css/zenbox.css'
   }
-  'codemirror' {  // 0.9.2
-    defaultBundle 'codemirror' 
-    resource url: [dir:'/js/codemirror/js', file:'codemirror.min.js'], disposition:'head'
+  'codemirror' {
+    resource url: [dir:'/js/codemirror/js', file:'codemirror.min.js'], disposition:'head', nominify: true
   }
   'codemirror-groovy' {
-    resource url: [dir:'/js/codemirror/js', file:'codemirror.groovy.inframe.min.js']
+    resource url: [dir:'/js/codemirror/js', file:'codemirror.groovy.inframe.min.js'], disposition:'head', nominify: true
     resource url: [dir:'/js/codemirror/css', file:'groovycolors.css']
   }
   'images' {
@@ -35,23 +57,31 @@ modules = {
     resource url:[dir:'images', file:'spinner.gif'], disposition:'image', attrs:[width:20, height:20]
   }
   'protovis' {
-    resource url:'js/protovis-r3.2.js', disposition:'head'
-    resource url:'js/protovis-tipsy.js', disposition:'head'
+    defaultBundle 'protovis'
+
+    resource url:'js/protovis-r3.2.js'
+    resource url:'js/protovis-tipsy.js'
   }
   'highcharts' {
-    resource url:'js/highcharts-2.2.0.js', disposition:'head'
+    defaultBundle 'app'
+
+    resource url:'js/highcharts-2.2.0.js'
   }
   'bootstrap-datepicker' {
+    defaultBundle 'app'
+
     // borrowed from http://dl.dropbox.com/u/143355/datepicker/datepicker.html until support official
-    resource url:'js/bootstrap-datepicker.js', disposition:'head'
-    resource url:'css/bootstrap-datepicker.css', disposition:'head'
+    resource url:'js/bootstrap-datepicker.js'
+    resource url:'css/bootstrap-datepicker.css'
   }
   'app' {
-   resource url: 'css/application.css', disposition:'head', attrs:[rel:'stylesheet/less']
-   resource url:'js/application.js'
-   resource url:'js/application-reporting.js'
-   resource url:'js/application-administration.js'
-   resource url:'js/less.min.js', disposition:'head'    // 1.0.35
-   dependsOn(['jquery', 'protovis', 'highcharts'])
+    defaultBundle 'app'
+
+    resource url: 'css/application.css', attrs:[rel:'stylesheet/less']
+    resource url:'js/application.js'
+    resource url:'js/application-reporting.js'
+    resource url:'js/application-administration.js'
+    resource url:'js/less.min.js'
+    dependsOn(['jquery', 'protovis', 'highcharts'])
   }
 }
