@@ -18,7 +18,13 @@ modules = {
       defaultBundle 'app'
     }
   }
+  'jreject' {
+    defaultBundle 'app'
+    dependsOn 'jquery'
 
+    resource url:'js/jquery.reject.min.js', disposition: 'head'
+    resource url:'css/jquery.reject.css'
+  }
   'validate' {
     dependsOn 'jquery'
     defaultBundle false

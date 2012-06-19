@@ -3,7 +3,8 @@
 <html>
   <head>
     <title><g:message code='fr.branding.title' default='Federation Registry'/></title>
-    <r:require modules="modernizr, bootstrap, validate, highcharts, zenbox, app"/>
+    <r:require modules="modernizr, bootstrap, validate, highcharts, zenbox, jreject, app"/>
+    <g:render template='/templates/frbrowsercheck' />
     <r:layoutResources/>
     <g:layoutHead />
   </head>
