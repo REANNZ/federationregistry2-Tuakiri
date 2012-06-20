@@ -70,7 +70,7 @@
 <div id="unarchive-organization-modal" class="modal hide fade">
   <div class="modal-header">
     <a class="close close-modal">&times;</a>
-    <h3><g:message code="templates.fr.organization.unarchive.confirm.title"/></h3>
+    <h3><g:message code="templates.fr.organization.unarchive.confirm.title" /></h3>
   </div>
   <div class="modal-body">
     <p><g:message code="templates.fr.organization.unarchive.confirm.descriptive"/></p>
@@ -80,7 +80,7 @@
 
     <g:form controller="organization" action="unarchive" id="${organization.id}" style="padding: 0px;">
       <input name="_method" type="hidden" value="put" />
-      <button type="submit" class="btn btn-warning"><g:message code="label.unarchive" /></a>
+      <button type="submit" class="btn btn-warning"><g:message code="label.unarchive" /></button>
     </g:form>
   </div>
 </div>
@@ -98,7 +98,7 @@
 
     <g:form controller="organization" action="archive" id="${organization.id}" style="padding: 0px;">
       <input name="_method" type="hidden" value="put" />
-      <button type="submit" class="btn btn-warning"><g:message code="label.archive" /></a>
+      <button type="submit" class="btn btn-warning"><g:message code="label.archive" /></button>
     </g:form>
   </div>
 </div>
@@ -115,7 +115,7 @@
     <a class="btn close-modal"><g:message code="label.cancel" /></a>
     <g:form controller="organization" action="delete" id="${organization.id}" style="padding: 0px;">
       <input name="_method" type="hidden" value="delete" />
-      <button type="submit" class="btn btn-danger"><g:message code="label.delete" /></a>
+      <button type="submit" class="btn btn-danger"><g:message code="label.delete" /></button>
     </g:form>
   </div>
 </div>
