@@ -48,6 +48,7 @@ environments {
 
 // Federated Identity Configuration
 federation {
+  environment = "production"  // test | production
   enabled = true
   automatelogin = true
   federationactive = true

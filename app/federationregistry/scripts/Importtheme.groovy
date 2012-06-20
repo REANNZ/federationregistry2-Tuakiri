@@ -48,7 +48,8 @@ target(main: "This script imports custom themes for FR deployment from the direc
 					"grails-app/views/templates/mail/workflows/default/_rejected_sp.gsp",
 					"web-app/css/application.css",
 					"web-app/images/logo.jpg",
-          "web-app/images/emailbranding.gif"	]
+          "web-app/images/emailbranding_test.gif",
+          "web-app/images/emailbranding_production.gif"	]
 				
 	def ant = new AntBuilder()
 	

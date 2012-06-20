@@ -235,7 +235,7 @@
                             <table border="0" cellpadding="0" cellspacing="0" width="600" id="templateHeader">
                               <tr>
                                 <td class="headerContent"> 
-                                  <img src="${grailsApplication.config.grails.serverURL}/images/emailbranding.gif" alt="AAF banner, Federation Registry"/>
+                                  <img src="${grailsApplication.config.grails.serverURL}/images/emailbranding_${grailsApplication.config.federation.environment}.gif" alt="AAF Federation Registry (${grailsApplication.config.federation.environment})"/>
                                 </td>
                               </tr>
                             </table>
@@ -287,5 +287,6 @@
             </tr>
         </table>
       </center>
+      <br>
   </body>
 </html>
