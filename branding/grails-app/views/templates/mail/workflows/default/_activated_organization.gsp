@@ -36,7 +36,7 @@
       <br></br>
 
       <h4 class="h4">Next Steps</h4>
-      1. Gain acccess to Federation Registry
+      1. Gain access to Federation Registry
          <br>
          Before you can access Federation Registry you need an account that works with the federation. There are two ways to do this:
          <br><br>
