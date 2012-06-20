@@ -33,7 +33,7 @@
       <tr>
         <td colspan="5"><strong><g:message code="label.archived"/></strong></td>
       </tr>
-      <g:each in="${entities.findAll{!it.archived}}" var="ent">
+      <g:each in="${entities.findAll{it.archived}}" var="ent">
         <tr>
           <td/>
           <td>${fieldValue(bean: ent, field: "entityID")}</td>
