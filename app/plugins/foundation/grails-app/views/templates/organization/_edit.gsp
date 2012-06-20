@@ -40,7 +40,7 @@
       <div class="control-group">
         <label for="organization.primary"><g:message code="label.organizationtype" /></label>
         <div class="controls">
-          <g:select name="organization.primary" from="${organizationTypes}" optionKey="id" optionValue="displayName" value="${organization.primary.id}"/>
+          <g:select name="organization.primary" from="${organizationTypes.findAll{it.discoveryServiceCategory == true}.sort{it.displayName}}" optionKey="id" optionValue="displayName" value="${organization.primary.id}"/>
           <fr:tooltip code='help.fr.organization.edit.type' />
         </div>
       </div>
@@ -49,7 +49,7 @@
         <label for="organization.types"><g:message code="label.organizationsecondarytypes" /></label>
         <div class="controls">
           <ul class="clean">
-            <g:each in="${organizationTypes}" var="t">
+            <g:each in="${organizationTypes.findAll{it.discoveryServiceCategory == true}.sort{it.displayName}}" var="t">
               <g:if test="${t.name != organization.primary.name}">
                 <li><g:checkBox name="organization.types.${t.id}" value="on" checked="${organization.types.contains(t)}"/> ${fieldValue(bean: t, field: "displayName")}</li>
               </g:if>

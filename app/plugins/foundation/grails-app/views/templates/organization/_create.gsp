@@ -97,7 +97,7 @@
       <div class="control-group">
       <label for="organization.primary"><g:message code="label.organizationtype" /></label>
         <div class="controls">
-          <g:select name="organization.primary" from="${organizationTypes}" optionKey="id" optionValue="displayName" value="${organization?.primary?.id}" class="span4" />
+          <g:select name="organization.primary" from="${organizationTypes.findAll{it.discoveryServiceCategory == true}.sort{it.displayName}}" optionKey="id" optionValue="displayName" value="${organization?.primary?.id}" class="span4" />
           <fr:tooltip code='help.fr.organization.type' />
         </div>
       </div>
