@@ -67,17 +67,12 @@ class IdentityProviderService {
         }
       }
     }
-    
-    def supportedNameIDFormats = []
-    params.idp.nameidformats.each { nameFormatID -> 
-      if(nameFormatID.value == "on") {
-        def nameid = SamlURI.get(nameFormatID.key)
-        if(nameid) {
-          supportedNameIDFormats.add(nameid)
-          identityProvider.addToNameIDFormats(nameid)
-        }
-      }
+
+    def nameID = SamlURI.findWhere(uri:'urn:oasis:names:tc:SAML:2.0:nameid-format:transient')
+    if(nameID) {
+      identityProvider.addToNameIDFormats(nameID)
     }
+
     def idpContactPerson = new ContactPerson(contact:contact, type:ContactType.findByName(ct))
     identityProvider.addToContacts(idpContactPerson)  
   
@@ -148,7 +143,6 @@ class IdentityProviderService {
     ret.soapAttributeService = soapAttributeService
     ret.contact = contact
     ret.certificate = params.cert
-    ret.supportedNameIDFormats = supportedNameIDFormats
     ret.supportedAttributes = supportedAttributes
 
     entityDescriptor.addToIdpDescriptors(identityProvider)

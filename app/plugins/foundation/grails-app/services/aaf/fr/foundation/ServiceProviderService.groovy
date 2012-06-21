@@ -51,7 +51,9 @@ class ServiceProviderService {
     serviceProvider.addToProtocolSupportEnumerations(saml2Namespace)
 
     def nameID = SamlURI.findWhere(uri:'urn:oasis:names:tc:SAML:2.0:nameid-format:transient')
-    serviceProvider.addToNameIDFormats(nameID)
+    if(nameID) {
+      serviceProvider.addToNameIDFormats(nameID)
+    }
   
     def acs = new AttributeConsumingService(approved:true, lang:params.lang ?:'en')
     if(params.sp?.displayName)
