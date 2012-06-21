@@ -137,7 +137,14 @@
               <div id="tab-attrfilpol" class="tab-pane">                        
                 <div class="row">
                   <p class="span8">
-                    <g:message code="views.fr.foundation.identityprovider.show.attributefilter.description" /></p>
+                    <g:message code="views.fr.foundation.identityprovider.show.attributefilter.description" />
+                  </p>
+                  <p class="span8">
+                    <g:message code="views.fr.foundation.identityprovider.show.attributefilter.configuration" />
+                  </p>
+                  <p class="span8">
+                    <strong><g:message code="views.fr.foundation.identityprovider.show.attributefilter.configurationurl" /></strong>: <g:link controller='attributeFilter' action='generate' id="${identityProvider.id}" absolute='true'>${g.createLink(controller:'attributeFilter', action:'generate', id:identityProvider.id, absolute:'true')}</g:link>
+                  </p>
                   <span class="span1 offset1">
                     <a class="load-descriptor-attrfilter btn btn-info">
                       <g:message code="label.load"/>
