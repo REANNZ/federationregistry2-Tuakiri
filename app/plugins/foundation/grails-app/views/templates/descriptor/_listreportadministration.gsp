@@ -36,42 +36,7 @@
   </g:else>
 
   <fr:hasPermission target="federation:management:descriptor:${descriptor.id}:manage:administrators">
-    <a href="#" class="show-manage-reportadmins btn"><g:message code="label.addreportmembers" default="Add Viewer"/></a>
-    <div class="manage-reportadmins revealable row-spacer">
-      <g:if test="${subjects && subjects.size() > 0}">
-        <table class="table table-sortable borderless">
-          <thead>
-            <tr>
-              <th><g:message code="label.id" default="ID"/></th>
-              <th><g:message code="label.name" default="Name"/></th>
-              <th><g:message code="label.principal" default="Principal"/></th>
-              <th/>
-            </tr>
-          </thead>
-          <tbody>
-            <g:each in="${subjects.sort{it.id}}" var="subject">
-              <g:if test="${subject.enabled}">
-                <tr>
-                  <td><g:fieldValue bean="${subject}" field="id"/></td>
-                  <td><g:fieldValue bean="${subject}" field="cn"/></td>
-                  <td><g:fieldValue bean="${subject}" field="principal"/></td>
-                  <td>
-                    <g:form controller="descriptorAdministration" action="grantReportAdministration">
-                      <g:hiddenField name="id" value="${descriptor.id}" />
-                      <g:hiddenField name="subjectID" value="${subject.id}" />
-                      <a href="#" class="btn btn-small ajax-modal" data-load="${createLink(controller:'subject', action:'showpublic', id:subject.id, absolute:true)}" ><g:message code="label.quickview" default="Quick View"/></a>
-                      <g:submitButton name="submit" class="btn" value="${message(code: 'label.grant', default: 'Grant')}" />
-                    </g:form>
-                  </td>
-                </tr>
-              </g:if>
-            </g:each>
-          </tbody>
-        </table>
-      </g:if>
-      <g:else>
-        <p class="alert alert-info"><g:message code="templates.fr.descriptor.administrator.alladded" default="All subjects are currently administrators" /></p>
-      </g:else>
-    </div>
+    <a href="#" class="show-manage-report-viewers btn"><g:message code="label.addreportmembers" default="Add Viewer"/></a>
+    <div id="manage-report-viewers" class="revealable row-spacer"></div>
   </fr:hasPermission>
 </div>

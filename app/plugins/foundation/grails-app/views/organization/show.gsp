@@ -57,6 +57,7 @@
            <g:render template="/templates/organization/registrations" plugin="foundation" model="[registrations:registrations]" />         
         </div>
 
+        <!-- HOUSTON WE HAVE A PROBLEM :( -->
         <g:if test="${organization.approved}">
           <div id="tab-admins" class="tab-pane">
             <g:render template="/templates/organization/listfulladministration" plugin="foundation" />
@@ -72,10 +73,11 @@
       var contactListEndpoint = "${createLink(controller:'organizationContact', action:'list', id:organization.id ) }";
       var contactSearchEndpoint = "${createLink(controller:'organizationContact', action:'search')}";
     
-      var organizationFullAdministratorGrantEndpoint = "${createLink(controller:'organizationAdministration', action:'grantFullAdministration', id:organization.id)}";
-      var organizationFullAdministratorRevokeEndpoint = "${createLink(controller:'organizationAdministration', action:'revokeFullAdministration', id:organization.id)}";
-      var organizationFullAdministratorListEndpoint = "${createLink(controller:'organizationAdministration', action:'listFullAdministration', id:organization.id)}";
-      var organizationFullAdministratorSearchEndpoint = "${createLink(controller:'organizationAdministration', action:'searchFullAdministration', id:organization.id)}";
+      var searchNewAdministratorsEndpoint = "${createLink(controller:'organization', action:'searchNewAdministrators', id:organization.id)}";
+      var organizationFullAdministratorGrantEndpoint = "${createLink(controller:'organization', action:'grantFullAdministration', id:organization.id)}";
+      var organizationFullAdministratorRevokeEndpoint = "${createLink(controller:'organization', action:'revokeFullAdministration', id:organization.id)}";
+      var organizationFullAdministratorListEndpoint = "${createLink(controller:'organization', action:'listFullAdministration', id:organization.id)}";
+      var organizationFullAdministratorSearchEndpoint = "${createLink(controller:'organization', action:'searchFullAdministration', id:organization.id)}";
     </r:script>
   </body>
 </html>

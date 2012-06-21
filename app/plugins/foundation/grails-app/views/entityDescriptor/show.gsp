@@ -21,8 +21,6 @@
       <li><a href="#tab-contacts" data-toggle="tab"><g:message code="label.contacts" /></a></li>
       <li><a href="#tab-idp" data-toggle="tab"><g:message code="label.identityproviders" /></a></li>
       <li><a href="#tab-sp" data-toggle="tab"><g:message code="label.serviceproviders" /></a></li>
-      
-      <li><a href="#tab-admins" data-toggle="tab"><g:message code="label.administrators" /></a></li>
     </ul>
 
     <div class="tab-content">
@@ -42,7 +40,6 @@
       <div id="tab-sp" class="tab-pane">
         <g:render template="/templates/entitydescriptor/sp_list" plugin="foundation" model="[entity:entity]" />
       </div>
-
     </div>
 
     <r:script>

@@ -203,6 +203,8 @@
       var attributeListEndpoint = "${createLink(controller:'descriptorAttribute', action:'list', id:identityProvider.id )}";
       var attributeAddEndpoint = "${createLink(controller:'descriptorAttribute', action:'add', id:identityProvider.id )}";
       
+      var searchNewAdministratorsEndpoint = "${createLink(controller:'descriptorAdministration', action:'searchNewAdministrators', id:identityProvider.id)}";
+      var searchNewReportViewersEndpoint = "${createLink(controller:'descriptorAdministration', action:'searchNewReportViewers', id:identityProvider.id)}";
       var descriptorFullAdministratorGrantEndpoint = "${createLink(controller:'descriptorAdministration', action:'grantFullAdministration', id:identityProvider.id)}";
       var descriptorFullAdministratorRevokeEndpoint = "${createLink(controller:'descriptorAdministration', action:'revokeFullAdministration', id:identityProvider.id)}";
       var descriptorFullAdministratorListEndpoint = "${createLink(controller:'descriptorAdministration', action:'listFullAdministration', id:identityProvider.id)}";

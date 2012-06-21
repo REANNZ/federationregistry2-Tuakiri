@@ -47,8 +47,7 @@ class OrganizationController {
         e.spDescriptors.each { sp -> serviceproviders.add(sp) }
       }
       
-      def subjects = aaf.fr.identity.Subject.list()
-      [organization: organization, registrations:organization.buildStatistics(), entities:entities, identityproviders:identityproviders, serviceproviders:serviceproviders, administrators:adminRole?.subjects, subjects:subjects, contactTypes:ContactType.list(), organizationTypes: OrganizationType.list()]
+      [organization: organization, registrations:organization.buildStatistics(), entities:entities, identityproviders:identityproviders, serviceproviders:serviceproviders, administrators:adminRole?.subjects, contactTypes:ContactType.list(), organizationTypes: OrganizationType.list()]
     }
     else {
       flash.type="error"
@@ -202,6 +201,19 @@ class OrganizationController {
       log.warn("Attempt to archive $organization by $subject was denied, incorrect permission set")
       response.sendError(403)
     }
+  }
+
+  def searchNewAdministrators = {
+    def organization = Organization.get(params.id)
+    if (!organization) {
+      log.error "No organization exists for ${params.id}"
+      response.sendError(500)
+      return
+    }
+
+    def subjects = aaf.fr.identity.Subject.list()
+
+    render template: "/templates/organization/searchnewadministrators", plugin: 'foundation', model:[subjects:subjects, organization:organization]
   }
 
   def grantFullAdministration = {

@@ -18,6 +18,32 @@ class DescriptorAdministrationController {
   def permissionService
   def invitationService
 
+  def searchNewAdministrators = {
+    def descriptor = Descriptor.get(params.id)
+    if (!descriptor) {
+      log.error "No descriptor exists for ${params.id}"
+      response.sendError(500)
+      return
+    }
+
+    def subjects = aaf.fr.identity.Subject.list()
+
+    render template: "/templates/descriptor/searchnewadministrators", plugin: 'foundation', model:[subjects:subjects, descriptor:descriptor]
+  }
+
+  def searchNewReportViewers = {
+    def descriptor = Descriptor.get(params.id)
+    if (!descriptor) {
+      log.error "No descriptor exists for ${params.id}"
+      response.sendError(500)
+      return
+    }
+
+    def subjects = aaf.fr.identity.Subject.list()
+
+    render template: "/templates/descriptor/searchnewreportviewers", plugin: 'foundation', model:[subjects:subjects, descriptor:descriptor]
+  }
+
   def grantReportAdministration = {
     def descriptor = Descriptor.get(params.id)
     if (!descriptor) {
