@@ -4,17 +4,6 @@
     <meta name="layout" content="dashboard" />
   </head>
   <body>
-    <br>
-    <div class="span11">
-      <div class="alert alert-block alert-success"><a class="close" data-dismiss="alert" href="#">&times;</a>
-        <h3 class="alert-heading">Welcome to the Federation Registry 2.0 beta test</h3>
-        You're currently working with a beta release of Federation Registry, version <strong><g:meta name="app.version"/></strong>.<br><br>
-        As we're running this directly on the AAF test federation changes you make here <strong>are real and will flow out to the test federation metadata</strong>. In addition you might come across some <em>bugs, faults, spelling mistakes, grammatical errors, things that are hard to use or something that just doesn't seem to work right</em>.<br><br>
-        If you run into such troubles or have any feedback at all please  
-        <a href="http://support.aaf.edu.au">let us know about it by creating a new support ticket</a>. Please include as much detail as possible as well the version number above as part of your submission. We'll do our best to get things fixed up and working as they should so you can try it again.<br><br>
-        <strong>We appreciate your help!</strong>.
-      </div>
-    </div>
 
     <g:if test="${tasks}">
       <div class="span11">
