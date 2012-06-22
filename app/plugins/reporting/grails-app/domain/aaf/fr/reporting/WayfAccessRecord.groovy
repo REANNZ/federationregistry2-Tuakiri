@@ -1,8 +1,5 @@
 package aaf.fr.reporting
 
-/**
- * @author Bradley Beddoes
- */
 class WayfAccessRecord {
   static auditable = true
   
@@ -25,7 +22,6 @@ class WayfAccessRecord {
 
   static constraints = {
     dateCreated(nullable: true)
-    robot(nullable: true)
   }
 
 }

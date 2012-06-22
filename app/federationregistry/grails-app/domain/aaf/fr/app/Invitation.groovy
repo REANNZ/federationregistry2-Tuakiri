@@ -17,13 +17,9 @@ class Invitation {
   
   static constraints = {
     inviteCode(nullable:false, unique:true)
-    
     role(nullable:true)
-    
     controller(nullable:true)
     action(nullable:true)
-    objID(nullable:true)
-    
     utilizedBy(nullable:true)
   }
   
