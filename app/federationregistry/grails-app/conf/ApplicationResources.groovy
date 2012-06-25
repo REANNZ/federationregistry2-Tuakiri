@@ -68,14 +68,14 @@ modules = {
     resource url:'js/highcharts-2.2.0.js'
   }
   'bootstrap-datepicker' {
+    // Source: http://www.eyecon.ro/bootstrap-datepicker/
     defaultBundle 'app'
 
-    // borrowed from http://dl.dropbox.com/u/143355/datepicker/datepicker.html until support official
     resource url:'js/bootstrap-datepicker.js'
     resource url:'css/bootstrap-datepicker.css'
   }
   'bootstrap-notify' {
-    // Sourced: http://nijikokun.github.com/bootstrap-notify/
+    // Source: http://nijikokun.github.com/bootstrap-notify/
     defaultBundle 'app'
 
     resource url:'js/bootstrap-notify.js'

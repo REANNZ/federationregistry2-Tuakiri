@@ -64,7 +64,7 @@ fr.hide_modals = function() {
 fr.getParameterByName = function(name) {
   var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
   return match ? decodeURIComponent(match[1].replace(/\+/g, ' ')) : null;
-}
+};
 
 fr.set_button = function(b) {
   btn = b; 
@@ -78,26 +78,26 @@ fr.reset_button = function() {
 
 fr.showspinner= function() {
   $('.spinner').show();
-}
+};
 
 fr.hidespinner= function() {
   $('.spinner').hide();
-}
+};
 
 fr.showlocalspinner= function(scope) {
   $(scope + ' .spinner').show();
-}
+};
 
 fr.hidelocalspinner= function(scope) {
   $(scope + ' .spinner').hide();
-}
+};
 
 fr.popuperror= function() {
   $('.top-right').notify({type:'error', closable:true, 
     message: { html: '<b>Error</b><br>An error occured communicating with the server.<br>This has been logged for review.<br>If you continue to have problems please <b>contact support</b>.' },
     fadeOut: { enabled: true, delay: 5000 },
     }).show();
-}
+};
 
 $(document).ajaxComplete(function(event, request, settings){
    fr.reset_button();

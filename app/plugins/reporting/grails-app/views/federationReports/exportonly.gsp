@@ -15,14 +15,14 @@
           <div class="control-group">
             <label for="startDate"><g:message code="label.startdate"/> </label>
             <div class="controls">
-            <input name="startDate" placeholder="start date (YYYY-MM-DD)" data-datepicker="datepicker" class="required span2 date-value" type="text"/>
-          </div>
+              <input name="startDate" placeholder="Start Date (YYYY-MM-DD)" class="datepicker required span2" type="text"/>
+            </div>
           </div>
 
           <div class="control-group">
             <label for="startDate"><g:message code="label.enddate"/> </label>
             <div class="controls">
-              <input name="endDate" placeholder="end date (YYYY-MM-DD)" data-datepicker="datepicker" class="required span2 date-value" type="text"/>
+              <input name="endDate" placeholder="End Date (YYYY-MM-DD)" class="datepicker required span2" type="text"/>
             </div>
           </div>
 
@@ -52,5 +52,10 @@
         </g:form>
       </div>
     </div>
+    <r:script>
+      $(document).ready(function() {
+        fr.setup_date_range();
+      });
+    </r:script>
   </body>
 </html>

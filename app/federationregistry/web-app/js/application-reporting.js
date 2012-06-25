@@ -2,6 +2,20 @@
 window.fr = window.fr || {};
 var fr = window.fr;
 
+fr.setup_date_range = function() {
+  var currentTime = new Date();
+  var month = currentTime.getMonth() + 1;
+  var day = currentTime.getDate();
+  var year = currentTime.getFullYear();
+
+  $('input[name="startDate"]').attr('value', year - 1 + "-" + month + "-" + day);   
+  $('input[name="endDate"]').attr('value', year + "-" + month + "-" + day); 
+
+  $('.datepicker').datepicker({
+    format: 'yyyy-mm-dd'
+  });
+};
+
 $(".date-value").change(function() {
   $('.export-button').addClass('hidden');
 });

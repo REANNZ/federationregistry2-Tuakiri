@@ -6,10 +6,10 @@
     <div class="centered">
       <form id="detailed-detailedidputilization-report-parameters" class="form-inline report-parameters well validating">
         <label for="startDate"><g:message code="label.startdate"/></label>
-        <input name="startDate" placeholder="start date (YYYY-MM-DD)" data-datepicker="datepicker" class="required span2 date-value" type="text"/>
+        <input name="startDate" placeholder="Start Date (YYYY-MM-DD)" class="datepicker required span2" type="text"/>
 
-        <label for="startDate"><g:message code="label.enddate"/></label>
-        <input name="endDate" placeholder="end date (YYYY-MM-DD)" data-datepicker="datepicker" class="required span2 date-value" type="text"/>
+        <label for="endDate"><g:message code="label.enddate"/></label>
+        <input name="endDate" placeholder="End Date (YYYY-MM-DD)" class="datepicker required span2" type="text"/>
 
         <a class="request-detailedidputilization-reports btn"><g:message code="label.generate"/></a>
         <a class="export-detailedidputilization-reports export-button btn btn-info hidden" rel="tooltip" title="${g.message(code:'label.exportexcel')}"><i class="icon-edit icon-white"></i></a>
@@ -56,12 +56,7 @@
       var detailedidputilizationEndpoint = "${createLink(controller:'federationReports', action:'reportidputilization')}"
 
       $(document).ready(function() {
-        var currentTime = new Date()
-        var month = currentTime.getMonth() + 1
-        var day = currentTime.getDate()
-        var year = currentTime.getFullYear()
-        $('input[name="startDate"]').val(year - 1 + "-" + month + "-" + day);   
-        $('input[name="endDate"]').val(year + "-" + month + "-" + day); 
+        fr.setup_date_range();
         $('.request-detailedidputilization-reports').click();
       });
     </r:script>
