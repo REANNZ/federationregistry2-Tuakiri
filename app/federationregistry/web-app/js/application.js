@@ -92,6 +92,13 @@ fr.hidelocalspinner= function(scope) {
   $(scope + ' .spinner').hide();
 }
 
+fr.popuperror= function() {
+  $('.top-right').notify({type:'error', closable:true, 
+    message: { html: '<b>Error</b><br>An error occured communicating with the server.<br>This has been logged for review.<br>If you continue to have problems please <b>contact support</b>.' },
+    fadeOut: { enabled: true, delay: 5000 },
+    }).show();
+}
+
 $(document).ajaxComplete(function(event, request, settings){
    fr.reset_button();
 });
@@ -117,6 +124,7 @@ $(document).on('click', '.load-descriptor-metadata', function() {
     },
     error: function (xhr, ajaxOptions, thrownError) {
       fr.reset_button($(this));
+      fr.popuperror();
     }
   });
 
@@ -131,13 +139,12 @@ fr.organization_fulladministrator_grant = function(userID) {
     url: organizationFullAdministratorGrantEndpoint,
     data: data,
     success: function(res) {
-      
       fr.organization_fulladministrator_list();
       fr.organization_fulladministrator_search();
-      },
-      error: function (xhr, ajaxOptions, thrownError) {
-      
-      }
+    },
+    error: function (xhr, ajaxOptions, thrownError) {
+      fr.popuperror();
+    }
   });
 };
 
@@ -148,13 +155,12 @@ fr.organization_fulladministrator_revoke = function(userID) {
     type: "POST",
     url: organizationFullAdministratorRevokeEndpoint,
     data: data  + "&_method=delete",
-    success: function(res) {
-      
+    success: function(res) {  
       fr.organization_fulladministrator_list();
-      },
-      error: function (xhr, ajaxOptions, thrownError) {
-      
-      }
+    },
+    error: function (xhr, ajaxOptions, thrownError) {
+      fr.popuperror();
+    }
   });
 };
 
@@ -169,10 +175,10 @@ fr.organization_fulladministrator_list = function() {
       target.append(res);
       applyBehaviourTo(target);
       target.fadeIn();
-      },
-      error: function (xhr, ajaxOptions, thrownError) {
-      
-      }
+    },
+    error: function (xhr, ajaxOptions, thrownError) {
+      fr.popuperror();
+    }
   });
 };
 
@@ -188,11 +194,10 @@ fr.organization_fulladministrator_search = function() {
       target.html(res);
       applyBehaviourTo(target);
       target.fadeIn();
-      
-      },
-      error: function (xhr, ajaxOptions, thrownError) {
-      
-      }
+    },
+    error: function (xhr, ajaxOptions, thrownError) {
+      fr.popuperror();
+    }
   });
 }
 
@@ -205,13 +210,12 @@ fr.descriptor_fulladministrator_grant = function(userID) {
     url: descriptorFullAdministratorGrantEndpoint,
     data: data,
     success: function(res) {
-      
       fr.descriptor_fulladministrator_list();
       fr.descriptor_fulladministrator_search();
-      },
-      error: function (xhr, ajaxOptions, thrownError) {
-      
-      }
+    },
+    error: function (xhr, ajaxOptions, thrownError) {
+      fr.popuperror();
+    }
   });
 }
 
@@ -223,12 +227,11 @@ fr.descriptor_fulladministrator_revoke = function(userID) {
     url: descriptorFullAdministratorRevokeEndpoint,
     data: data + "&_method=delete",
     success: function(res) {
-      
       fr.descriptor_fulladministrator_list();
-      },
-      error: function (xhr, ajaxOptions, thrownError) {
-      
-      }
+    },
+    error: function (xhr, ajaxOptions, thrownError) {
+      fr.popuperror();
+    }
   });
 }
 
@@ -241,10 +244,10 @@ fr.descriptor_fulladministrator_list = function() {
       var target = $("#descriptorfulladministratorlist")
       target.html(res);
       applyBehaviourTo(target);
-      },
-      error: function (xhr, ajaxOptions, thrownError) {
-      
-      }
+    },
+    error: function (xhr, ajaxOptions, thrownError) {
+      fr.popuperror();
+    }
   });
 };
 
@@ -260,10 +263,10 @@ fr.descriptor_fulladministrator_search = function() {
       target.html(res);
       applyBehaviourTo(target);
       target.fadeIn();
-      },
-      error: function (xhr, ajaxOptions, thrownError) {
-      
-      }
+    },
+    error: function (xhr, ajaxOptions, thrownError) {
+      fr.popuperror();
+    }
   });
 }
 
@@ -386,9 +389,10 @@ $(document).on('click', '.add-new-certificate', function(entity) {
         $('#validcertificate').hide();
         $("#addcertificate").fadeIn();
         fr.keyDescriptor_list();
-        },
-        error: function (xhr, ajaxOptions, thrownError) {
-        }
+      },
+      error: function (xhr, ajaxOptions, thrownError) {
+        fr.popuperror();
+      }
     });
   }
 });
@@ -408,9 +412,10 @@ $(document).on('click', '.delete-certificate', function() {
     data: data + "&_method=delete",
     success: function(res) {
       fr.keyDescriptor_list()
-      },
-      error: function (xhr, ajaxOptions, thrownError) {
-      }
+    },
+    error: function (xhr, ajaxOptions, thrownError) {
+      fr.popuperror();
+    }
   });
 });
 
@@ -428,10 +433,10 @@ fr.keyDescriptor_verify = function(entity) {
       applyBehaviourTo(target);
       valid_certificate = true;
       },
-      error: function (xhr, ajaxOptions, thrownError) {
+    error: function (xhr, ajaxOptions, thrownError) {
       $("#newcertificatedetails").html(xhr.responseText);
       valid_certificate = false;
-      }
+    }
   });
 };
 
@@ -493,10 +498,10 @@ $('.submit-search-for-contact').click(function() {
       applyBehaviourTo(target);
       p.children('.search-contacts-form').hide();
       target.fadeIn();
-      },
-      error: function (xhr, ajaxOptions, thrownError) {
-      
-      }
+    },
+    error: function (xhr, ajaxOptions, thrownError) {
+      fr.popuperror();
+    }
   });
 });
 
@@ -505,7 +510,6 @@ $(document).on('click', '.confirm-link-contact', function(contactID, name, email
   link_contact = $(this).attr('data-contact');
   $("#contactnameconfirmation").html($(this).attr('data-name'));
   $("#contactemailconfirmation").html($(this).attr('data-email'));
-  
   $("#link-contact-modal").modal('show');
 });
 
@@ -518,9 +522,10 @@ $(document).on('click', '.link-contact', function(contactType) {
     data: data,
     success: function(res) {
       fr.contact_list();
-      },
-      error: function (xhr, ajaxOptions, thrownError) {
-      }
+    },
+    error: function (xhr, ajaxOptions, thrownError) {
+      fr.popuperror();
+    }
   });
 });
 
@@ -539,9 +544,10 @@ $(document).on('click', '.delete-contact', function() {
     data: data + "&_method=delete",
     success: function(res) {
       fr.contact_list();
-      },
-      error: function (xhr, ajaxOptions, thrownError) {
-      }
+    },
+    error: function (xhr, ajaxOptions, thrownError) {
+      fr.popuperror();
+    }
   });
 });
 
@@ -554,10 +560,10 @@ fr.contact_list = function() {
       var target = $("#contacts");
       target.html(res);
       applyBehaviourTo(target);
-      },
-      error: function (xhr, ajaxOptions, thrownError) {
-      
-      }
+    },
+    error: function (xhr, ajaxOptions, thrownError) {
+      fr.popuperror();
+    }
   });
 };
 
@@ -602,6 +608,7 @@ $(document).on('click', '.toggle-endpoint', function() {
       }
     },
     error: function (xhr, ajaxOptions, thrownError) {
+      fr.popuperror();
     }
   });
 });
@@ -617,6 +624,7 @@ $(document).on('click', '.delete-endpoint', function() {
       fr.endpoint_list(type_endpoint);
     },
     error: function (xhr, ajaxOptions, thrownError) {
+      fr.popuperror();
     }
   });
 });
@@ -632,6 +640,7 @@ $(document).on('click', '.makedefault-endpoint', function() {
       fr.endpoint_list(type_endpoint, container_endpoint);
     },
     error: function (xhr, ajaxOptions, thrownError) {
+      fr.popuperror();
     }
   });
 });
@@ -657,6 +666,7 @@ $(document).on('click', '.create-endpoint', function() {
         fr.endpoint_list(type_endpoint);
       },
       error: function (xhr, ajaxOptions, thrownError) {
+        fr.popuperror();
       }
     });
   } else { fr.reset_button(); }
@@ -664,7 +674,6 @@ $(document).on('click', '.create-endpoint', function() {
 
 $(document).on('click', '.cancel-create-endpoint', function() {
   type_endpoint = $(this).attr('data-type');
-
   $('#new-' + type_endpoint).hide();
   $('#add-' + type_endpoint).fadeIn();
 });
@@ -686,6 +695,7 @@ $(document).on('click', '.edit-endpoint', function() {
       applyBehaviourTo($("#endpoint-edit-" + edit_endpoint));
     },
     error: function (xhr, ajaxOptions, thrownError) {
+      fr.popuperror();
     }
   });
 });
@@ -710,6 +720,7 @@ $(document).on('click', '.update-endpoint', function() {
         fr.endpoint_list(type_endpoint);
       },
       error: function (xhr, ajaxOptions, thrownError) {
+        fr.popuperror();
       }
     });
   } else { fr.reset_button(); }
@@ -728,7 +739,7 @@ fr.endpoint_list = function(endpointType) {
       applyBehaviourTo(target);
       },
       error: function (xhr, ajaxOptions, thrownError) {
-      
+        fr.popuperror();
       }
   });
 };
@@ -790,7 +801,7 @@ $(document).on('click', '.create-ra', function() {
         fr.acs_reqattribute_list(acsID, "#acsreqattr" + acsID);
       },
       error: function (xhr, ajaxOptions, thrownError) {
-      
+        fr.popuperror();
       }
     }); 
   } else { fr.reset_button(); }
@@ -822,7 +833,7 @@ $(document).on('click', '.delete-ra', function() {
       fr.acs_reqattribute_list(acsID);
     },
     error: function (xhr, ajaxOptions, thrownError) {
-    
+      fr.popuperror();
     }
   });
 });
@@ -848,7 +859,7 @@ $(document).on('click', '.add-ra-value', function() {
         fr.acs_reqattribute_list_values(raID);
       },
       error: function (xhr, ajaxOptions, thrownError) {
-
+        fr.popuperror();
       }
     });
   } else { fr.reset_button(); }
@@ -888,7 +899,7 @@ $(document).on('click', '.delete-ra-value', function() {
       fr.acs_reqattribute_list_values(raID);
     },
     error: function (xhr, ajaxOptions, thrownError) {
-
+      fr.popuperror();
     }
   });
 });
@@ -896,7 +907,6 @@ $(document).on('click', '.delete-ra-value', function() {
 fr.close_ra_editor = function() {
   editor_ra.hide();
   update_ra.hide();
-
   manage_ra.show();
   show_ra.fadeIn();
 };
@@ -913,7 +923,7 @@ fr.acs_reqattribute_update = function(acsID, raID, reason, required) {
       fr.acs_reqattribute_list(acsID);
     },
     error: function (xhr, ajaxOptions, thrownError) {
-    
+      fr.popuperror();
     }
   });
 };
@@ -931,7 +941,7 @@ fr.acs_reqattribute_list = function(acsID) {
       applyBehaviourTo(target);
       },
       error: function (xhr, ajaxOptions, thrownError) {
-      
+        fr.popuperror();
       }
   });
 };
@@ -949,7 +959,7 @@ fr.acs_reqattribute_list_values = function(raID) {
       applyBehaviourTo(target);
     },
     error: function (xhr, ajaxOptions, thrownError) {
-    
+      fr.popuperror();
     }
   });
 };
@@ -975,7 +985,7 @@ $(document).on('click', '.add-nameid', function() {
       fr.nameIDFormat_list();
     },
     error: function (xhr, ajaxOptions, thrownError) {
-    
+      fr.popuperror();
     }
   });  
 });
@@ -998,7 +1008,7 @@ $(document).on('click', '.delete-nameid', function() {
       fr.nameIDFormat_list();
     },
     error: function (xhr, ajaxOptions, thrownError) {
-    
+      fr.popuperror();
     }
   });
 });
@@ -1012,10 +1022,10 @@ fr.nameIDFormat_list = function() {
       var target = $("#nameidformats");
       target.html(res);
       applyBehaviourTo(target);
-      },
-      error: function (xhr, ajaxOptions, thrownError) {
-      
-      }
+    },
+    error: function (xhr, ajaxOptions, thrownError) {
+      fr.popuperror();
+    }
   });
 };
 
@@ -1041,10 +1051,10 @@ $(document).on('click', '.link-new-category', function() {
     data: data,
     success: function(res) {
       fr.serviceCategory_list();
-      },
-      error: function (xhr, ajaxOptions, thrownError) {
-      
-      }
+    },
+    error: function (xhr, ajaxOptions, thrownError) {
+      fr.popuperror();
+    }
   });
 });
 
@@ -1063,9 +1073,10 @@ $(document).on('click', '.unlink-category', function() {
     data: data + "&_method=delete",
     success: function(res) {
       fr.serviceCategory_list();
-      },
-      error: function (xhr, ajaxOptions, thrownError) {
-      }
+    },
+    error: function (xhr, ajaxOptions, thrownError) {
+      fr.popuperror();
+    }
   });
 });
 
@@ -1078,9 +1089,10 @@ fr.serviceCategory_list = function() {
       var target = $("#categories");
       target.html(res);
       applyBehaviourTo(target);
-      },
-      error: function (xhr, ajaxOptions, thrownError) {
-      }
+    },
+    error: function (xhr, ajaxOptions, thrownError) {
+      fr.popuperror();
+    }
   });
 };
 
@@ -1106,7 +1118,7 @@ $(document).on('click', '.add-attribute', function() {
       fr.attribute_list();
     },
     error: function (xhr, ajaxOptions, thrownError) {
-    
+      fr.popuperror();
     }
   });
 });
@@ -1128,7 +1140,7 @@ $(document).on('click', '.delete-attribute', function() {
       fr.attribute_list();
     },
     error: function (xhr, ajaxOptions, thrownError) {
-    
+      fr.popuperror();
     }
   });
 });
@@ -1144,7 +1156,7 @@ fr.attribute_list = function() {
       applyBehaviourTo(target);
     },
     error: function (xhr, ajaxOptions, thrownError) {
-    
+      fr.popuperror();
     }
   });
 };
@@ -1165,6 +1177,7 @@ $(document).on('click', '.load-descriptor-attrfilter', function() {
     },
     error: function (xhr, ajaxOptions, thrownError) {
       fr.reset_button($(this));
+      fr.popuperror();
     }
   });
 });
@@ -1193,7 +1206,7 @@ $(document).on('click', '.add-monitor', function() {
         fr.monitor_list(); 
       },
       error: function (xhr, ajaxOptions, thrownError) {
-      
+        fr.popuperror();
       }
     });
   }
@@ -1217,7 +1230,7 @@ $(document).on('click', '.delete-monitor', function() {
       fr.monitor_list();
     },
     error: function (xhr, ajaxOptions, thrownError) {
-    
+      fr.popuperror();
     }
   });
 });
@@ -1231,10 +1244,10 @@ fr.monitor_list = function(containerID) {
       var target = $("#monitors");
       target.html(res);
       applyBehaviourTo(target);
-      },
-      error: function (xhr, ajaxOptions, thrownError) {
-      
-      }
+    },
+    error: function (xhr, ajaxOptions, thrownError) {
+      fr.popuperror();
+    }
   });
 };
 
@@ -1350,7 +1363,7 @@ $(document).on('click', '.create-sp-report', function() {
             fr.renderSPConnectivity(data, false);
           },
           error: function (xhr, ajaxOptions, thrownError) {
-            
+            fr.popuperror();
           }
         });
       }
@@ -1364,7 +1377,7 @@ $(document).on('click', '.create-sp-report', function() {
             fr.renderSPSessions(data, false);
           },
           error: function (xhr, ajaxOptions, thrownError) {
-            
+            fr.popuperror();
           }
         });
       }
@@ -1378,7 +1391,7 @@ $(document).on('click', '.create-sp-report', function() {
             fr.renderSPTotals(data, false);
           },
           error: function (xhr, ajaxOptions, thrownError) {
-            
+            fr.popuperror();
           }
         });
       }
@@ -1392,7 +1405,7 @@ $(document).on('click', '.create-sp-report', function() {
             fr.renderSPLogins(data);
           },
           error: function (xhr, ajaxOptions, thrownError) {
-            
+            fr.popuperror();
           }
         });
       }
@@ -1436,7 +1449,7 @@ $(document).on('click', '.create-idp-report', function() {
             fr.renderIdPConnectivity(data, false);
           },
           error: function (xhr, ajaxOptions, thrownError) {
-            
+            fr.popuperror();
           }
         });
       }
@@ -1450,7 +1463,7 @@ $(document).on('click', '.create-idp-report', function() {
             fr.renderIdPSessions(data, false);
           },
           error: function (xhr, ajaxOptions, thrownError) {
-            
+            fr.popuperror();
           }
         });
       }
@@ -1464,7 +1477,7 @@ $(document).on('click', '.create-idp-report', function() {
             fr.renderIdPTotals(data, false);
           },
           error: function (xhr, ajaxOptions, thrownError) {
-            
+            fr.popuperror();
           }
         });
       }
@@ -1478,7 +1491,7 @@ $(document).on('click', '.create-idp-report', function() {
             fr.renderIdPLogins(data);
           },
           error: function (xhr, ajaxOptions, thrownError) {
-            
+            fr.popuperror();
           }
         });
       }
@@ -1504,7 +1517,7 @@ fr.refineIdPReport = function(refinement) {
           fr.renderIdPConnectivity(data, true);
         },
         error: function (xhr, ajaxOptions, thrownError) {
-          
+          fr.popuperror();
         }
       });
     }
@@ -1518,7 +1531,7 @@ fr.refineIdPReport = function(refinement) {
           fr.renderIdPTotals(data, true);
         },
         error: function (xhr, ajaxOptions, thrownError) {
-          
+          fr.popuperror();
         }
       });
     }
@@ -1543,7 +1556,7 @@ fr.refineSPReport = function(refinement) {
           fr.renderSPConnectivity(data, true);
         },
         error: function (xhr, ajaxOptions, thrownError) {
-          
+          fr.popuperror();
         }
       });
     }
@@ -1557,7 +1570,7 @@ fr.refineSPReport = function(refinement) {
           fr.renderSPTotals(data, true);
         },
         error: function (xhr, ajaxOptions, thrownError) {
-          
+          fr.popuperror();
         }
       });
     }
@@ -1583,7 +1596,7 @@ fr.renderFederationReport = function(type) {
           fr.renderFederationLogins(data);
         },
         error: function (xhr, ajaxOptions, thrownError) {
-          
+          fr.popuperror();
         }
       });
     }
@@ -1597,7 +1610,7 @@ fr.renderFederationReport = function(type) {
           fr.renderFederationSessions(data);
         },
         error: function (xhr, ajaxOptions, thrownError) {
-          
+          fr.popuperror();
         }
       });
     }
@@ -1611,7 +1624,7 @@ fr.renderFederationReport = function(type) {
           fr.renderFederationServices(data);
         },
         error: function (xhr, ajaxOptions, thrownError) {
-          
+          fr.popuperror();
         }
       });
     }
@@ -1635,7 +1648,7 @@ fr.renderFederationReport = function(type) {
           fr.renderFederationRegistrations(data, true);
         },
         error: function (xhr, ajaxOptions, thrownError) {
-          
+          fr.popuperror();
         }
       });
     }
@@ -1659,7 +1672,7 @@ fr.renderFederationReport = function(type) {
           fr.renderFederationSubscribers(data, true);
         },
         error: function (xhr, ajaxOptions, thrownError) {
-          
+          fr.popuperror();
         }
       });
     }
@@ -1673,7 +1686,7 @@ fr.renderFederationReport = function(type) {
           fr.renderFederationConnectivity(data);
         },
         error: function (xhr, ajaxOptions, thrownError) {
-          
+          fr.popuperror();
         }
       });
     }
@@ -1699,7 +1712,7 @@ fr.refineFederationReport = function(type, refinement) {
           fr.renderFederationServices(data);
         },
         error: function (xhr, ajaxOptions, thrownError) {
-          
+          fr.popuperror();
         }
       });
     }
@@ -1723,7 +1736,7 @@ fr.renderFederationSummaryReport = function(type) {
         fr.renderCreationSummary(data);
       },
       error: function (xhr, ajaxOptions, thrownError) {
-        
+        fr.popuperror();
       }
     });
   } else {

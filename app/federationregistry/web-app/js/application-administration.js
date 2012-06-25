@@ -29,6 +29,7 @@ $(".show-manage-members").click(function() {
     },
     error: function (xhr, ajaxOptions, thrownError) {
       fr.reset_button(btn);
+      fr.popuperror();
     }
   });
   
@@ -52,6 +53,7 @@ $(".show-manage-report-viewers").click(function() {
     },
     error: function (xhr, ajaxOptions, thrownError) {
       fr.reset_button(btn);
+      fr.popuperror();
     }
   });
   

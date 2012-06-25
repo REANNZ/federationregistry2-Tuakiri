@@ -8,13 +8,7 @@ modules = {
     'modernizr' {
       defaultBundle 'app'
     }
-    'bootstrap-js' {
-      defaultBundle 'app'
-    }
-    'bootstrap-less' {
-      defaultBundle 'app'
-    }
-    'bootstrap-css' {
+    'bootstrap' {
       defaultBundle 'app'
     }
   }
@@ -79,6 +73,13 @@ modules = {
     // borrowed from http://dl.dropbox.com/u/143355/datepicker/datepicker.html until support official
     resource url:'js/bootstrap-datepicker.js'
     resource url:'css/bootstrap-datepicker.css'
+  }
+  'bootstrap-notify' {
+    // Sourced: http://nijikokun.github.com/bootstrap-notify/
+    defaultBundle 'app'
+
+    resource url:'js/bootstrap-notify.js'
+    resource url:'css/bootstrap-notify.css'
   }
   'app' {
     defaultBundle 'app'

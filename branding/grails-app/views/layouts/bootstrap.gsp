@@ -3,7 +3,7 @@
 <html>
   <head>
     <title><g:message code='fr.branding.title' default='Federation Registry'/></title>
-    <r:require modules="modernizr, bootstrap, bootstrap-datepicker, validate, datatables, alphanumeric, zenbox, jreject, app"/>
+    <r:require modules="modernizr, bootstrap, bootstrap-notify, bootstrap-datepicker, validate, datatables, alphanumeric, zenbox, jreject, app"/>
     <g:render template='/templates/frbrowsercheck' />
     <r:layoutResources/>
     <g:layoutHead />
@@ -32,6 +32,7 @@
       </nav>
 
       <section>
+        <div class='notifications top-right'></div>
         <g:layoutBody/>
       </section>
 
