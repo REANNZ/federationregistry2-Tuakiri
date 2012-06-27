@@ -83,7 +83,7 @@ aaf {
     bootstrap = false
 
     metadata {
-      federation = "urn:mace:federation:name"
+      federation = "aaf.edu.au"
       current {
         validForDays = 7
       }
@@ -201,7 +201,7 @@ dataSource {
   dbCreate = "update"
   loggingSql = false
   
-  url = "jdbc:mysql://localhost/federationregistry"
+  url = "jdbc:mysql://localhost/federationregistry2"
   username = "fr"
   password = "password"
 }
