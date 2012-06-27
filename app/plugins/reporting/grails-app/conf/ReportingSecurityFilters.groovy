@@ -13,7 +13,7 @@ class ReportingSecurityFilters {
       }
     }
 
-    compliance(controller: 'compliance') {
+    compliance(controller: 'complianceReports') {
       before = {
         log.info("secfilter: ALLOWED - [$subject.id]$subject.principal|${request.remoteAddr}|$params.controller/$params.action${params.type == 'csv' ? '|CSV export':''}")
       }
