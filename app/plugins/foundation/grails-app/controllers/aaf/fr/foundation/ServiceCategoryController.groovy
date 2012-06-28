@@ -12,44 +12,7 @@ import grails.converters.JSON
  */
 class ServiceCategoryController {
 	def allowedMethods = [add: 'POST', update: 'PUT', delete: 'DELETE']
-	
-	def json = {
-		if(!params.id) {
-			log.warn "Service Category ID was not present"
-			render message(code: 'controllers.fr.generic.namevalue.missing')
-			response.setStatus(500)
-			return
-		}
 		
-		def result = []
-		def serviceCategory = ServiceCategory.get(params.id)
-		
-		def c = SPSSODescriptor.createCriteria()
-		def serviceProviders = c.list {
-			serviceCategories {
-				idEq(serviceCategory.id)
-			}
-		}
-		
-		serviceProviders.each { sp -> 
-			if(sp.functioning()) {
-				def data = [:]
-				data.id = sp.id
-				data.displayName = sp.displayName
-				data.description=sp.description
-				data.organization=sp.organization.displayName
-				data.organizationURL=sp.organization.url
-				data.url = sp.serviceDescription?.connectURL
-				data.logoURL = sp.serviceDescription?.logoURL
-				data.frURL = createLink(controller:'SPSSODescriptor', action:'show', id:sp.id, absolute:true )
-				
-				result.add(data)
-			}
-		}
-		
-		render result as JSON
-	}
-	
 	def list = {
 		if(!params.id) {
 			log.warn "SPSSODescriptor ID was not present"
