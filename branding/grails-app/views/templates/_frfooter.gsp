@@ -8,12 +8,5 @@ Developed for the <a href="http://www.aaf.edu.au">Australian Access Federation</
 Powered by Grails <g:meta name="app.grails.version"/>
 
 <r:script>
-  if (typeof(Zenbox) !== "undefined") {
-    Zenbox.init({
-      dropboxID:   "6875",
-      url:         "australianaccessfederation.zendesk.com",
-      tabID:       "support",
-      hide_tab:	   true
-    });
-  }
+  if(typeof Zenbox!=="undefined"){Zenbox.init({dropboxID:"6875",url:"australianaccessfederation.zendesk.com",tabID:"support",hide_tab:true})}
 </r:script>
