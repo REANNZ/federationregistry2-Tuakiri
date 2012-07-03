@@ -11,6 +11,30 @@ $(".cancel-edit-role").click(function() {
   $("#overview-role").fadeIn();
 });
 
+$("#show-manage-role-members").click(function() {
+  fr.set_button($(this));
+  var btn = $(this);
+  $.ajax({
+    type: "GET",
+    cache: false,
+    url: searchNewMembersEndpoint,
+    success: function(res) {
+      var target = $("#manage-role-members");
+      target.html(res);
+      applyBehaviourTo(target);
+      target.fadeIn();
+      
+      fr.reset_button(btn);
+      btn.hide();     
+    },
+    error: function (xhr, ajaxOptions, thrownError) {
+      fr.reset_button(btn);
+      fr.popuperror();
+    }
+  });
+  
+});
+
 $(".show-manage-members").click(function() {
   fr.set_button($(this));
   var btn = $(this);
