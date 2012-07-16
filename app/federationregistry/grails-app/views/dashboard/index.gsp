@@ -1,90 +1,195 @@
 
 <html>
-	<head>
-		<meta name="layout" content="dashboard" />
-		<title><g:message code="fedreg.view.dashboard.title" /></title>
-	</head>
-	<body>
-		<div id="dashboardcontent">
-			<h2><g:message code="fedreg.view.dashboard.welcome" args="[authenticatedUser.profile.fullName]" /></h2>
-			<p><g:message code="fedreg.view.dashboard.welcome.descriptive"/></p>
-			
-			<div class="dashrow dashrowinternal">
-				<div class="dashcol3">
-					<h3><g:message code="fedreg.view.dashboard.myorganizations"/></h3>
-					<g:if test="${organizations}">
-					<ul  class="dashlist">
-						<g:each in="${organizations}" var="org">
-							<li><a href="${createLink(controller:'organization', action:'show', id:org?.id)}">${fieldValue(bean: org, field: 'displayName')} </a></li>
-						</g:each>
-					</ul>
-					</g:if>
-					<g:else>
-						<p><g:message code="fedreg.view.dashboard.myorganizations.none"/></p>
-					</g:else>
-				</div>
-				<div class="dashcol3">
-					<h3><g:message code="fedreg.view.dashboard.myidentityproviders"/></h3>
-					<g:if test="${identityProviders}">
-					<ul class="dashlist">
-						<g:each in="${identityProviders}" var="idp">
-							<li><a href="${createLink(controller:'IDPSSODescriptor', action:'show', id:idp.id)}">${fieldValue(bean: idp, field: 'displayName')}</a></li>
-						</g:each>
-					</ul>
-					</g:if>
-					<g:else>
-						<p><g:message code="fedreg.view.dashboard.myidentityproviders.none"/></p> 
-					</g:else>
-				</div>
-				<div class="dashcol3">
-					<h3><g:message code="fedreg.view.dashboard.myserviceproviders"/></h3>
-					<g:if test="${serviceProviders}">
-					<ul class="dashlist">
-						<g:each in="${serviceProviders}" var="sp">
-							<li><a href="${createLink(controller:'SPSSODescriptor', action:'show', id:sp.id)}">${fieldValue(bean: sp, field: 'displayName')}</a></li>
-						</g:each>
-					</ul>
-					</g:if>
-					<g:else>
-						<p><g:message code="fedreg.view.dashboard.myserviceproviders.none"/></p> 
-					</g:else>
-				</div>
-			</div>
-			
-			<div class="dashrow">
-				<div class="dashcol3 dashstats">
-					<h3><g:message code="fedreg.view.dashboard.federation.statistics"/></h3>
-					<p><strong>${orgCount}</strong> <g:message code="label.organizations"/> - <g:link controller="organization" action="list" class=""><g:message code="label.viewall"/></g:link></p>
-					<p><strong>${idpCount}</strong> <g:message code="label.identityproviders"/> - <g:link controller="IDPSSODescriptor" action="list" class=""><g:message code="label.viewall"/></g:link></p>
-					<p><strong>${spCount}</strong> <g:message code="label.serviceproviders"/> - <g:link controller="SPSSODescriptor" action="list" class=""><g:message code="label.viewall"/>l</g:link></p>
-					<p><strong>${endpointCount}</strong> <g:message code="label.activeendpoints"/></p>
-					<p><strong>${certCounts}</strong> <g:message code="label.activecertificates"/></p>
-				</div>
-				<div class="dashcol3"></div>
-				<div class="dashcol3">
-					<div class="user">
-						<div class="userlogo">
-							<a href="http://gravatar.com"><avatar:gravatar email="${authenticatedUser.profile.email}" size="50" /></a>
-							<br>
-							<a href="http://gravatar.com"><g:message code="label.change"/></a>
-						</div>
-						<div class="userdetails">
-							<h3><n:principalName /></h3>
-							<h4><g:message code="fedreg.view.dashboard.outstanding.tasks"/></h4>
-							<g:if test="${tasks}">
-								<g:link controller="workflowApproval" action="list"><g:message code="fedreg.view.dashboard.outstanding.tasks.required" args="[tasks.size()]"/></g:link>
-							</g:if>
-							<g:else>
-								<g:message code="fedreg.view.dashboard.outstanding.tasks.none"/>
-							</g:else>
-							<h4><g:message code="fedreg.view.dashboard.targetedid"/></h4>
-							${fieldValue(bean: authenticatedUser, field: 'username')}
-							<h4><g:message code="fedreg.view.dashboard.email"/></h4>
-							${fieldValue(bean: authenticatedUser, field: 'profile.email')}
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</body>
+  <head>
+    <meta name="layout" content="dashboard" />
+  </head>
+  <body>
+
+    <g:if test="${tasks}">
+      <div class="span11">
+        <div class="alert alert-block alert-info"><a class="close" data-dismiss="alert" href="#">&times;</a>
+          <h3 class="alert-heading">Workflows requiring YOUR action&nbsp;&nbsp;<span class="label label-important">Important!</span></h3>
+          <ol>
+            <g:each in="${tasks}" status="i" var="instance">
+              <li>
+                <strong>Submitted</strong>: ${fieldValue(bean: instance, field: "dateCreated")}<br>
+                <strong>Description</strong>: <g:link controller="workflowApproval" action="list">${fieldValue(bean: instance, field: "processInstance.description")}</g:link>
+              </li>
+            </g:each>
+          </ol>
+        </div>
+      </div>
+    </g:if>
+
+    <g:if test="${submittedTasks}">
+      <div class="span11">
+        <div class="alert alert-block alert-infol"><a class="close" data-dismiss="alert" href="#">&times;</a>
+          <h3 class="alert-heading">Workflows you've submitted</h3>
+          <ol>
+            <g:each in="${submittedTasks}" status="i" var="instance">
+              <li>
+                <strong>Submitted</strong>: ${fieldValue(bean: instance, field: "dateCreated")}<br>
+                <strong>Waiting on</strong>: 
+                <ul class="clean">
+                  <g:each in="${instance?.potentialApprovers}" var="approver">
+                    <li>${fieldValue(bean: approver, field: "cn")} - <a href="mailto:${approver.email}">${fieldValue(bean: approver, field: "email")}</a></li>
+                  </g:each>
+                </ul>
+              </li>
+            </g:each>
+          </ol>
+          <p>If your workflow has not been actioned by the above people <strong>please contact them directly</strong> for an update on progress.</p>
+        </div>
+      </div>
+    </g:if>
+
+    <div class="span12">
+      <div class="span3 well">
+        <h3>My Organisations</h3>
+        <g:if test="${organizations}">
+          <div class="dashadmincol">
+            <ul class="dashlist clean">
+              <g:each in="${organizations}" var="org">
+                <li><a href="${createLink(controller:'organization', action:'show', id:org?.id)}">${fieldValue(bean: org, field: 'displayName')} </a></li>
+              </g:each>
+            </ul>
+          </div>
+        </g:if>
+        <g:else>
+          <p>You're not managing any organisations.</p>
+        </g:else>
+        <hr>
+        <a href="${createLink(controller:'organization', action:'list')}" class="btn btn-small btn-info">View All</a>
+      </div>
+
+      <div class="span3 well">
+        <h3>My Identity Providers</h3>
+        <g:if test="${identityProviders}">
+          <div class="dashadmincol">
+            <ul class="dashlist clean">
+              <g:each in="${identityProviders}" var="idp">
+                <li><a href="${createLink(controller:'identityProvider', action:'show', id:idp.id)}">${fieldValue(bean: idp, field: 'displayName')}</a></li>
+              </g:each>
+            </ul>
+          </div>
+        </g:if>
+        <g:else>
+          <p>You're not managing any Identity Providers</p> 
+        </g:else>
+        <hr>
+        <a href="${createLink(controller:'identityProvider', action:'list')}" class="btn btn-small btn-info">View All</a>
+      </div>
+
+      <div class="span3 well">
+        <h3>My Service Providers</h3>
+        <g:if test="${serviceProviders}">
+          <div class="dashadmincol">
+            <ul class="dashlist clean">
+              <g:each in="${serviceProviders}" var="sp">
+                <li><a href="${createLink(controller:'serviceProvider', action:'show', id:sp.id)}">${fieldValue(bean: sp, field: 'displayName')}</a></li>
+              </g:each>
+            </ul>
+          </div>
+        </g:if>
+        <g:else>
+          <p>You're not managing any Service Providers</p> 
+        </g:else>
+        <hr>
+        <a href="${createLink(controller:'serviceProvider', action:'list')}" class="btn btn-small btn-info">View All</a>
+      </div>
+    </div>
+
+    <div class="row span12">
+      <hr class="span8 offset1"/>
+      <div class="span3 well centered">
+        <strong class="dashboard-wow">${orgCount}</strong><hr><h4>Organisations</h4>
+      </div>
+      <div class="span3 well centered">
+        <strong class="dashboard-wow">${idpCount}</strong><hr><h4>Identity Providers</h4>
+      </div>
+      <div class="span3 well centered">
+        <strong class="dashboard-wow">${spCount}</strong><hr><h4>Service Providers</h4>
+      </div>
+    </div>
+
+    <div class="row row-spacer">
+      <div class="span11">
+        <div id="sessions">
+          <div class="span9 spinner centered"><r:img dir="images" file="spinner.gif"/></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row row-spacer">
+      <div class="span11">
+        <div id="registrations">
+          <div class="span9 spinner centered"><r:img dir="images" file="spinner.gif"/></div>
+        </div>
+      </div>
+    </div>
+
+    <r:script>
+      var summaryregistrationsEndpoint = "${createLink(controller:'federationReports', action:'reportsummaryregistrations')}"
+      var summarysessionsEndpoint = "${createLink(controller:'federationReports', action:'reportsummarysessions')}"
+      $(document).ready(function() {
+        fr.summary_registrations_report('registrations');
+        fr.summary_sessions_report('sessions');
+      });
+
+      <!-- Wonderful trick from http://stephenakins.blogspot.com.au/2011/01/uniform-div-heights-for-liquid-css-p.html -->
+      var currentTallest = 0;
+      var currentRowStart = 0;
+      var rowDivs = new Array();
+
+      function setConformingHeight(el, newHeight) {
+       // set the height to something new, but remember the original height in case things change
+       el.data("originalHeight", (el.data("originalHeight") == undefined) ? (el.height()) : (el.data("originalHeight")));
+       el.height(newHeight);
+      }
+
+      function getOriginalHeight(el) {
+       // if the height has changed, send the originalHeight
+       return (el.data("originalHeight") == undefined) ? (el.height()) : (el.data("originalHeight"));
+      }
+
+      function columnConform() {
+
+       // find the tallest DIV in the row, and set the heights of all of the DIVs to match it.
+       $('div.dashadmincol').each(function(index) {
+
+        if(currentRowStart != $(this).position().top) {
+
+         // we just came to a new row.  Set all the heights on the completed row
+         for(currentDiv = 0 ; currentDiv < rowDivs.length ; currentDiv++) setConformingHeight(rowDivs[currentDiv], currentTallest);
+
+         // set the variables for the new row
+         rowDivs.length = 0; // empty the array
+         currentRowStart = $(this).position().top;
+         currentTallest = getOriginalHeight($(this));
+         rowDivs.push($(this));
+
+        } else {
+
+         // another div on the current row.  Add it to the list and check if it's taller
+         rowDivs.push($(this));
+         currentTallest = (currentTallest < getOriginalHeight($(this))) ? (getOriginalHeight($(this))) : (currentTallest);
+
+        }
+        // do the last row
+        for(currentDiv = 0 ; currentDiv < rowDivs.length ; currentDiv++) setConformingHeight(rowDivs[currentDiv], currentTallest);
+
+       });
+      }
+
+      $(window).resize(function() {
+       columnConform();
+      });
+
+      $(document).ready(function() {
+       columnConform();
+      });
+    </r:script>
+
+  </body>
+
 </html>

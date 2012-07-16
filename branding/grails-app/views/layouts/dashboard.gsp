@@ -1,32 +1,50 @@
 <!DOCTYPE html>
 
 <html>
-	<head>
-		<title><g:message code="fedreg.title.${grailsApplication.config.fedreg.deployment.environment}" /> | <g:layoutTitle /></title>
-		<r:use modules="html5, tiptip, blockui, jgrowl, zenbox, app"/>
-		<r:layoutResources/>
-		<g:layoutHead />
-	</head>
+  <head>
+    <title><g:message code='fr.branding.title' default='Federation Registry'/></title>
+    <r:require modules="modernizr, bootstrap, bootstrap-notify, validate, highcharts, zenbox, jreject, app"/>
+    <g:render template='/templates/frbrowsercheck' />
+    <r:layoutResources/>
+    <g:layoutHead />
+  </head>
 
-	<body>
-	    <header>
-			<g:render template='/templates/frheader' />
-	    </header>
+  <body>
 
-		<nav>
-			<n:isLoggedIn>
-				<g:render template='/templates/frtopnavigation'/>
-			</n:isLoggedIn>
-		</nav>
-	
-		<section>
-			<g:layoutBody/>
-	    </section>
+    <div class="container">
+      <header>
+        <div class="row">
+          <div class="span12">
+            <g:render template='/templates/frheader' />
+          </div>
+        </div>
+      </header>
 
-		<footer>
-			<g:render template='/templates/frfooter' />
-		</footer>
-		
-		<r:layoutResources/>
-	</body>
+      <nav>
+        <div class="row">
+          <div class="span12">
+            <g:render template='/templates/frtopnavigation'/>  
+          </div>
+        </div>
+      </nav>
+
+      <section>
+        <div class='notifications top-right'></div>
+        <g:layoutBody/>
+      </section>
+
+      <footer>
+        <div class="row">
+          <div class="span12">
+            <g:render template='/templates/frfooter' />
+          </div>
+        </div>
+      </footer>
+
+    </div>
+
+    <r:layoutResources/>
+
+  </body>
+
 </html>

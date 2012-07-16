@@ -1,11 +1,8 @@
 
 class BootStrap {
-	def nimbleService
+  def init = { servletContext ->
+  }
 
-     def init = { servletContext ->
-		nimbleService.init()
-     }
-
-     def destroy = {
-     }
+  def destroy = {
+  }
 } 

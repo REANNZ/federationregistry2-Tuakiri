@@ -1,32 +1,36 @@
 <%@ page contentType="text/html"%>
 
 <g:applyLayout name="email">
-	<html>
-		<head></head>
-		<body>
-			<p><g:message code="fedreg.templates.mail.workflow.org.rejected.description" /></p>
-			
-			<table>
-				<tr>
-					<td>
-						<strong><g:message code="label.internalid" /></strong>: 
-					</td>
-					<td>
-						${fieldValue(bean: organization, field: "id")}
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<strong><g:message code="label.displayname" /></strong>: 
-					</td>
-					<td>
-						${fieldValue(bean: organization, field: "displayName")}
-					</td>
-				</tr>
-			</table>
-		
-			<p><g:message code="fedreg.templates.mail.get.support" /></p>
-		
-		</body>
-	</html>
+  <html>
+    <head></head>
+    <body>
+
+      Unfortunately the Organisation you've registered has not been accepted to join the federation at this time.
+      <br><br>
+      The details of the Organisation that was rejected are shown below.
+      <br><br>
+      <table>
+        <tr>
+          <td>
+            <strong>Internal ID</strong>: 
+          </td>
+          <td>
+            ${fieldValue(bean: organization, field: "id")}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <strong>Display Name</strong>: 
+          </td>
+          <td>
+            ${fieldValue(bean: organization, field: "displayName")}
+          </td>
+        </tr>
+      </table>
+    
+      <br><br>
+      If you have any questions about why this Organisation was not accepted please contact the <a href="http://support.aaf.edu.au">AAF support desk</a>.
+    
+    </body>
+  </html>
 </g:applyLayout>

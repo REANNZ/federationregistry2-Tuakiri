@@ -8,9 +8,6 @@ fr-config.groovy
 FedRegConfig.groovy
 NimbleConfig.groovy
 
-# Ignore the login page incase we test with non standard DB
-grails-app/views/auth/login.gsp
-
 *~
 *.ipr
 *.iml
@@ -25,7 +22,7 @@ plugin.xml
 
 src/docs
 
-grails-app/i18n/messages-deployment*
+grails-app/i18n/messages-branding*
 grails-app/i18n/shiro.properties
 
 web-app/plugins/*
@@ -37,6 +34,7 @@ web-app/images/grails_logo.jpg
 web-app/images/grails_logo.png
 web-app/images/leftnav_btm.png
 web-app/images/leftnav_midstretch.png
+web-app/images/emailbranding*
 web-app/WEB-INF/tld/c.tld
 web-app/WEB-INF/tld/fmt.tld
 web-app/css/main.css
@@ -45,27 +43,12 @@ web-app/js/prototype/
 
 # These are important files but supplied externally to allow other federations to customize
 grails-app/i18n/messages-deployment.properties
-grails-app/views/layouts/access.gsp
-grails-app/views/layouts/bootstrap.gsp
-grails-app/views/layouts/compliance.gsp
-grails-app/views/layouts/dashboard.gsp
-grails-app/views/layouts/email.gsp
-grails-app/views/layouts/members.gsp
-grails-app/views/layouts/metadata.gsp
-grails-app/views/layouts/monitoring.gsp
-grails-app/views/layouts/public.gsp
-grails-app/views/layouts/workflow.gsp
-grails-app/views/templates/_frfooter.gsp
+grails-app/views/layouts/*
+grails-app/views/templates/layouts/*
 grails-app/views/templates/_frheader.gsp
+grails-app/views/templates/_frfooter.gsp
 grails-app/views/templates/_frtopnavigation.gsp
-grails-app/views/templates/mail/workflows/default/_activated_idp.gsp
-grails-app/views/templates/mail/workflows/default/_activated_organization.gsp
-grails-app/views/templates/mail/workflows/default/_activated_sp.gsp
-grails-app/views/templates/mail/workflows/default/_registered_idp.gsp
-grails-app/views/templates/mail/workflows/default/_registered_organization.gsp
-grails-app/views/templates/mail/workflows/default/_registered_sp.gsp
-grails-app/views/templates/mail/workflows/default/_rejected_idp.gsp
-grails-app/views/templates/mail/workflows/default/_rejected_organization.gsp
-grails-app/views/templates/mail/workflows/default/_rejected_sp.gsp
+grails-app/views/templates/_frbrowsercheck.gsp
+grails-app/views/templates/mail/workflows/*
 web-app/css/frtheme.less
 web-app/images/logo.jpg

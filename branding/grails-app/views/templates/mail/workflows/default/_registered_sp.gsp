@@ -1,56 +1,62 @@
 <%@ page contentType="text/html"%>
 
 <g:applyLayout name="email">
-	<html>
-		<head></head>
-		<body>
-			<p><g:message code="fedreg.templates.mail.workflow.sp.registered.description" /></p>
-			
-			<table>
-				<tr>
-					<td>
-						<strong><g:message code="label.internalid" /></strong>: 
-					</td>
-					<td>
-						${fieldValue(bean: serviceProvider, field: "id")}
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<strong><g:message code="label.displayname" /></strong>: 
-					</td>
-					<td>
-						${fieldValue(bean: serviceProvider, field: "displayName")}
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<strong><g:message code="label.description" /></strong>: 
-					</td>
-					<td>
-						${fieldValue(bean: serviceProvider, field: "description")}
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<strong><g:message code="label.entitydescriptor" /></strong>: 
-					</td>
-					<td>
-						${fieldValue(bean: serviceProvider, field: "entityDescriptor.entityID")}
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<strong><g:message code="label.organization" /></strong>: 
-					</td>
-					<td>
-						${fieldValue(bean: serviceProvider, field: "organization.displayName")}
-					</td>
-				</tr>
-			</table>
-		
-			<p><g:message code="fedreg.templates.mail.get.support" /></p>
-		
-		</body>
-	</html>
+  <html>
+    <head></head>
+    <body>
+      This email confirms that the Service Provider which you've registered with the Australian Access Federation has been <strong>received but is not yet ready for use</strong>. 
+      <br/><br/>
+      Your Service Provider will now move through a workflow process that requires approvals by AAF staff and potentially your organisation.
+      <br/><br/>
+      Please allow <strong>up to 48 hours for this to occur</strong>. Upon completion of the process you will receive another email confirming activation of your Service Provider and further instructions for completing your deployment.
+      <br/><br/>
+      <h4 class="h4">Important Details</h4>
+      <table>
+        <tr>
+          <td>
+            <strong>Internal ID</strong>: 
+          </td>
+          <td>
+            ${fieldValue(bean: serviceProvider, field: "id")}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <strong>Entity ID</strong>: 
+          </td>
+          <td>
+            ${fieldValue(bean: serviceProvider, field: "entityDescriptor.entityID")}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <strong>Display Name</strong>: 
+          </td>
+          <td>
+            ${fieldValue(bean: serviceProvider, field: "displayName")}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <strong>Description</strong>: 
+          </td>
+          <td>
+            ${fieldValue(bean: serviceProvider, field: "description")}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <strong>Owner</strong>: 
+          </td>
+          <td>
+            ${fieldValue(bean: serviceProvider, field: "organization.displayName")}
+          </td>
+        </tr>
+      </table>
+
+      <br><br>
+      Please contact the <a href="http://support.aaf.edu.au">AAF support desk</a> if the details are incorrect or if you have not received a response within 48 hours.
+    
+    </body>
+  </html>
 </g:applyLayout>

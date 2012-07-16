@@ -1,234 +1,255 @@
 import org.apache.log4j.DailyRollingFileAppender
 
 appName=federationregistry
-grails.serverURL = "http://localhost:8080/federationregistry"
+grails.serverURL = "https://example.edu.au/federationregistry"
+grails.mail.default.from="fr-noreply@example.edu.au"
 
-// Federation Registry internal configuration
-fedreg {
-	deployment.environment = "development"
-	bootstrap = false
-	enabledemonstration = false
-	
-	certificates {
-		maxlifeindays = 7800	// shib default of 20 years for assertion certs
-	}
-	
-	shibboleth {
-		name = "fedreg.templates.federation.shibboleth.name"
-        displayname = "fedreg.templates.federation.shibboleth.displayname"
-        description = "fedreg.templates.federation.shibboleth.description"
-        url = "http://www.aaf.edu.au"
-        alttext = "fedreg.templates.federation.shibboleth.alttext"
+// Environment configuration
+environments {
+  production {
+    greenmail.disabled = true
+    testDataConfig.enabled = false
 
-        federationprovider {
-			spactive = false
-            enabled = true
-            autoprovision = true
-			ssoendpoint = "/Shibboleth.sso/DS"
-        }
+    /* 
+    Example when using gmail, configure to suit your own environment
+    Per: http://grails.org/plugin/mail
 
-		headers {
-			homeOrganization = "homeOrganization"
-			homeOrganizationType = "homeOrganizationType"
-			entityID = "Shib-Identity-Provider"
-			uniqueID = "persistent-id"
-			givenName= "givenName"
-			surname= "sn"
-			email= "mail"
-			displayName = "displayName"
-		}
+    grails {
+      mail {
+          host = 'smtp.gmail.com'
+          port = 465
+          username = '...@gmail.com'
+          password = '...'
+          props = [
+              'mail.smtp.auth': 'true',
+              'mail.smtp.socketFactory.port': '465',
+              'mail.smtp.socketFactory.class': 'javax.net.ssl.SSLSocketFactory',
+              'mail.smtp.socketFactory.fallback': 'false'
+          ]
+      }
+    */
+  }
+  test {
+    testDataConfig.enabled = true
+    grails.mail.port = com.icegreen.greenmail.util.ServerSetupTest.SMTP.port
+  }
+  development {
+    grails {
+      resources.debug = true  
+      gsp.enable.reload = true
+      mail {
+        port = com.icegreen.greenmail.util.ServerSetupTest.SMTP.port
+      }
     }
 
-	metadata {
-		federation = "aaf.edu.au"
-		current {
-			validForDays = 7
-		}
-		all {
-			validForDays = 7
-		}
-		wayf {
-			generateconfig {
-				orgtypes = ['university', 'nzuniversity', 'marcs', 'vho', 'others'] as List
-			}
-		}
-	}
-	
-	knownimplementations {
-		identityproviders {
-			shib22 {
-				displayName = 'Shibboleth Identity Provider (2.2.x)'
-				selected = false
-				entitydescriptor = '$host/idp/shibboleth'
-				post.uri = '$host/idp/profile/SAML2/POST/SSO'
-				redirect.uri = '$host/idp/profile/SAML2/Redirect/SSO'
-				artifact {
-					uri = '$host:8443/idp/profile/SAML2/SOAP/ArtifactResolution'
-					index = 2
-				}
-				attributeservice.uri = '$host:8443/idp/profile/SAML2/SOAP/AttributeQuery'
-			}
-			shib23 {
-				displayName = 'Shibboleth Identity Provider (2.3.x)'
-				selected = true
-				entitydescriptor = '$host/idp/shibboleth'
-				post.uri = '$host/idp/profile/SAML2/POST/SSO'
-				redirect.uri = '$host/idp/profile/SAML2/Redirect/SSO'
-				artifact {
-					uri = '$host:8443/idp/profile/SAML2/SOAP/ArtifactResolution'
-					index = 2
-				}
-				attributeservice.uri = '$host:8443/idp/profile/SAML2/SOAP/AttributeQuery'
-			}
-		}
-		serviceproviders {
-			shib23 {
-				displayName = "Shibboleth Service Provider (2.3.x)"
-				selected = true
-				entitydescriptor = '$host/shibboleth'
-				acs {
-					post {
-						uri = '$host/Shibboleth.sso/SAML2/POST'
-						index = 1
-					}
-					artifact {
-						uri = '$host/Shibboleth.sso/SAML2/Artifact'
-						index = 3
-					}
-				}
-				drs {
-					uri = '$host/Shibboleth.sso/DS'
-					index = 1
-				}
-				slo {
-					artifact.uri = '$host/Shibboleth.sso/SLO/Artifact'
-					slo.redirect.uri = '$host/Shibboleth.sso/SLO/Redirect'
-					soap.uri = '$host/Shibboleth.sso/SLO/SOAP' 
-					post.uri = '$host/Shibboleth.sso/SLO/POST'
-				}
-				mnid {
-					artifact.uri = '$host/Shibboleth.sso/NIM/Artifact'
-					redirect.uri = '$host/Shibboleth.sso/NIM/Redirect' 
-					soap.uri = '$host/Shibboleth.sso/NIM/SOAP'
-					post.uri = '$host/Shibboleth.sso/NIM/POST'
-				}
-			}
-			shib24 {
-				displayName = "Shibboleth Service Provider (2.4.x)"
-				selected = false
-				entitydescriptor = '$host/shibboleth'
-				acs {
-					post {
-						uri = '$host/Shibboleth.sso/SAML2/POST'
-						index = 1
-					}
-					artifact {
-						uri = '$host/Shibboleth.sso/SAML2/Artifact'
-						index = 3
-					}
-				}
-				drs {
-					uri = '$host/Shibboleth.sso/Login'
-					index = 1
-				}
-				slo {
-					artifact.uri = '$host/Shibboleth.sso/SLO/Artifact'
-					slo.redirect.uri = '$host/Shibboleth.sso/SLO/Redirect'
-					soap.uri = '$host/Shibboleth.sso/SLO/SOAP' 
-					post.uri = '$host/Shibboleth.sso/SLO/POST'
-				}
-				mnid {
-					artifact.uri = '$host/Shibboleth.sso/NIM/Artifact'
-					redirect.uri = '$host/Shibboleth.sso/NIM/Redirect' 
-					soap.uri = '$host/Shibboleth.sso/NIM/SOAP'
-					post.uri = '$host/Shibboleth.sso/NIM/POST'
-				}
-			}
-		}
-	}
+    testDataConfig.enabled = false
+  }
+} 
+
+// Federated Identity Configuration
+federation {
+  environment = "test"  // test | production
+  enabled = true
+  automatelogin = true
+  federationactive = true
+  developmentactive = false
+  autoprovision = true
+  
+  // Supported as fallback for problematic webservers but should usually be true
+  // See https://wiki.shibboleth.net/confluence/display/SHIB2/NativeSPAttributeAccess for more
+  request.attributes = false 
+  ssoendpoint = "/Shibboleth.sso/Login"
+  
+  // The subject class being utilized by the host application
+  app.subject = "aaf.fr.identity.Subject"
+  
+  mapping {
+    principal = "persistent-id"   // The unique and persistent ID used to identify this principal for current and subsequent sessions (eduPersonTargetedID)
+    credential = "Shib-Session-ID"  // The internal session key assigned to the session associated with the request and hence the credential used
+    entityID = "Shib-Identity-Provider" // The entityID of the IdP that authenticated the subject associated with the request.
+    
+    applicationID = "Shib-Application-ID" // The applicationId property derived for the request.     
+    idpAuthenticationInstant = "Shib-Authentication-Instant" // The ISO timestamp provided by the IdP indicating the time of authentication. 
+    
+    cn = "cn"
+    email= "mail"
+    sharedToken = "auEduPersonSharedToken"
+  }
 }
 
-// Shiro internal configuration
-security.shiro.authc.required = false
+// Federation Registry Internal Configuration
+aaf {
+  fr {
+    bootstrap = false
 
-// Nimble internal configuration
-nimble {
-	layout {
-        administration = 'access'
-		login = 'public'
+    metadata {
+      federation = "aaf.edu.au"
+      current {
+        validForDays = 7
+      }
+      all {
+        validForDays = 7
+      }
     }
-
-    resources {
-        jslibrary = 'jquery'
-        usejsdev = false
-        usecssdev = false
+    
+    certificates {
+      // shib default of 20 years for assertion certs so this must be large
+      maxlifeindays = 7800
     }
-
-    messaging {
-		enabled = false
-		
-        mail {
-            from = "noreply@aaf.edu.au"
-            host = ""
-            port = com.icegreen.greenmail.util.ServerSetupTest.SMTP.port
-            username = ""
-            password = ""
-            props = ["mail.smtp.auth": "false"]
+    
+    knownimplementations {
+      identityproviders {
+        shib22 {
+          displayName = 'Shibboleth Identity Provider (2.2.x)'
+          selected = false
+          entitydescriptor = '$host/idp/shibboleth'
+          post.uri = '$host/idp/profile/SAML2/POST/SSO'
+          redirect.uri = '$host/idp/profile/SAML2/Redirect/SSO'
+          artifact {
+            uri = '$host:8443/idp/profile/SAML2/SOAP/ArtifactResolution'
+            index = 2
+          }
+          attributeservice.uri = '$host:8443/idp/profile/SAML2/SOAP/AttributeQuery'
         }
+        shib23 {
+          displayName = 'Shibboleth Identity Provider (2.3.x)'
+          selected = true
+          entitydescriptor = '$host/idp/shibboleth'
+          post.uri = '$host/idp/profile/SAML2/POST/SSO'
+          redirect.uri = '$host/idp/profile/SAML2/Redirect/SSO'
+          artifact {
+            uri = '$host:8443/idp/profile/SAML2/SOAP/ArtifactResolution'
+            index = 2
+          }
+          attributeservice.uri = '$host:8443/idp/profile/SAML2/SOAP/AttributeQuery'
+        }
+      }
+      serviceproviders {
+        shib23 {
+          displayName = "Shibboleth Service Provider (2.3.x)"
+          selected = true
+          entitydescriptor = '$host/shibboleth'
+          acs {
+            post {
+              uri = '$host/Shibboleth.sso/SAML2/POST'
+              index = 1
+            }
+            artifact {
+              uri = '$host/Shibboleth.sso/SAML2/Artifact'
+              index = 3
+            }
+          }
+          drs {
+            uri = '$host/Shibboleth.sso/DS'
+            index = 1
+          }
+          slo {
+            artifact.uri = '$host/Shibboleth.sso/SLO/Artifact'
+            slo.redirect.uri = '$host/Shibboleth.sso/SLO/Redirect'
+            soap.uri = '$host/Shibboleth.sso/SLO/SOAP' 
+            post.uri = '$host/Shibboleth.sso/SLO/POST'
+          }
+          mnid {
+            artifact.uri = '$host/Shibboleth.sso/NIM/Artifact'
+            redirect.uri = '$host/Shibboleth.sso/NIM/Redirect' 
+            soap.uri = '$host/Shibboleth.sso/NIM/SOAP'
+            post.uri = '$host/Shibboleth.sso/NIM/POST'
+          }
+        }
+        shib24 {
+          displayName = "Shibboleth Service Provider (2.4.x)"
+          selected = false
+          entitydescriptor = '$host/shibboleth'
+          acs {
+            post {
+              uri = '$host/Shibboleth.sso/SAML2/POST'
+              index = 1
+            }
+            artifact {
+              uri = '$host/Shibboleth.sso/SAML2/Artifact'
+              index = 3
+            }
+          }
+          drs {
+            uri = '$host/Shibboleth.sso/Login'
+            index = 1
+          }
+          slo {
+            artifact.uri = '$host/Shibboleth.sso/SLO/Artifact'
+            slo.redirect.uri = '$host/Shibboleth.sso/SLO/Redirect'
+            soap.uri = '$host/Shibboleth.sso/SLO/SOAP' 
+            post.uri = '$host/Shibboleth.sso/SLO/POST'
+          }
+          mnid {
+            artifact.uri = '$host/Shibboleth.sso/NIM/Artifact'
+            redirect.uri = '$host/Shibboleth.sso/NIM/Redirect' 
+            soap.uri = '$host/Shibboleth.sso/NIM/SOAP'
+            post.uri = '$host/Shibboleth.sso/NIM/POST'
+          }
+        }
+      }
     }
-
-    implementation {
-    	user = "fedreg.host.User"
-    	profile = "fedreg.host.Profile"
-    }
+  }
 }
 
 //Data repository
 /** - USE FOR DEVELOPMENT - NON JNDI
 dataSource {
-	pooled = true
-	driverClassName = "com.mysql.jdbc.Driver"
-	dialect = org.hibernate.dialect.MySQL5InnoDBDialect
-	dbCreate = "update"
-	loggingSql = false
-	
-	url = "jdbc:mysql://localhost/federationregistry"
-	username = "fr"
-	password =  "password"
+  pooled = true
+  driverClassName = "com.mysql.jdbc.Driver"
+  dialect = org.hibernate.dialect.MySQL5InnoDBDialect
+  dbCreate = "update"
+  loggingSql = false
+  
+  url = "jdbc:mysql://localhost/federationregistry2"
+  username = "fr"
+  password = "password"
 }
 **/
 
 /** - USE FOR PRODUCTION - JNDI Datasource
 dataSource {
-	dbCreate = "update"
-	dialect= org.hibernate.dialect.MySQL5InnoDBDialect
-	jndiName= "java:comp/env/jdbc/FEDERATIONREGISTRY"	
+  dbCreate = "update"
+  dialect= org.hibernate.dialect.MySQL5InnoDBDialect
+  jndiName= "java:comp/env/jdbc/FEDERATIONREGISTRY" 
 }
 **/
 
+// Shiro internal configuration
+security.shiro.authc.required = false
+
 // Logging configuration
 log4j = {
-	appenders {
-		appender new DailyRollingFileAppender(name:"fr-app", layout:pattern(conversionPattern: "%d{[ dd.MM.yy HH:mm:ss.SSS]} %-5p %c %x - %m%n"), file:"/tmp/fr-app.log", datePattern:"'.'yyyy-MM-dd")
-		appender new DailyRollingFileAppender(name:"fr-md", layout:pattern(conversionPattern: "%d{[ dd.MM.yy HH:mm:ss.SSS]} %-5p %c %x - %m%n"), file:"/tmp/fr-md.log", datePattern:"'.'yyyy-MM-dd")
-		appender new DailyRollingFileAppender(name:"stacktrace", layout:pattern(conversionPattern: "%d{[ dd.MM.yy HH:mm:ss.SSS]} %-5p %c %x - %m%n"), file:"/tmp/stacktrace.log", datePattern:"'.'yyyy-MM-dd")
-	}
-	
-	info	'fr-md':    ['grails.app.controller.fedreg.metadata.MetadataController',
-						 'grails.app.service.fedreg.metadata.MetadataGenerationService'], additivity: false
-						
-    warn 	'fr-app': 	['org.codehaus.groovy.grails.web.servlet',
-						 'org.codehaus.groovy.grails.web.pages',
-						 'org.codehaus.groovy.grails.web.sitemesh',
-						 'org.codehaus.groovy.grails.web.mapping.filter',
-						 'org.codehaus.groovy.grails.web.mapping',
-						 'org.codehaus.groovy.grails.commons',
-						 'org.codehaus.groovy.grails.plugins',												
-						 'org.apache.shiro']
- 
-    info 	'fr-app': 	['grails.plugins.nimble', 
-						 'grails.app.controller',
-						 'grails.app.domain',
-						 'grails.app.service',
-						 'grails.app.realm']
+  appenders {
+    appender new DailyRollingFileAppender(name:"fr-metadata", layout:pattern(conversionPattern: "%d{[ dd.MM.yy HH:mm:ss.SSS]} %-5p %c %x - %m%n"), file:"/tmp/fr-metadata.log", datePattern:"'.'yyyy-MM-dd")
+    appender new DailyRollingFileAppender(name:"fr-security", layout:pattern(conversionPattern: "%d{[ dd.MM.yy HH:mm:ss.SSS]} %-5p %c %x - %m%n"), file:"/tmp/fr-security.log", datePattern:"'.'yyyy-MM-dd")
+    appender new DailyRollingFileAppender(name:"fr-app", layout:pattern(conversionPattern: "%d{[ dd.MM.yy HH:mm:ss.SSS]} %-5p %c %x - %m%n"), file:"/tmp/fr-app.log", datePattern:"'.'yyyy-MM-dd")
+    appender new DailyRollingFileAppender(name:"fr-grails", layout:pattern(conversionPattern: "%d{[ dd.MM.yy HH:mm:ss.SSS]} %-5p %c %x - %m%n"), file:"/tmp/fr-grails.log", datePattern:"'.'yyyy-MM-dd")
+    appender new DailyRollingFileAppender(name:"stacktrace", layout:pattern(conversionPattern: "%d{[ dd.MM.yy HH:mm:ss.SSS]} %-5p %c %x - %m%n"), file:"/tmp/fr-stacktrace.log", datePattern:"'.'yyyy-MM-dd")
+  }
+
+  root {
+    info 'stdout'
+    additivity = true
+  }
+
+  info  'fr-metadata' :['grails.app.services.aaf.fr.metadata',
+                        'grails.app.controllers.aaf.fr.metadata'], additivity: false
+
+  info  'fr-security' :['grails.app.filters'], additivity: false
+
+  info  'fr-app'      :['grails.app.controllers',
+                        'grails.app.domains',
+                        'grails.app.services',
+                        'grails.app.realms',
+                        'aaf.fr',                       
+                        'org.apache.shiro'], additivity: false
+          
+  warn  'fr-grails'   :['org.codehaus.groovy.grails.web.servlet',
+                        'org.codehaus.groovy.grails.web.pages',
+                        'org.codehaus.groovy.grails.web.sitemesh',
+                        'org.codehaus.groovy.grails.web.mapping.filter',
+                        'org.codehaus.groovy.grails.web.mapping',
+                        'org.codehaus.groovy.grails.commons',
+                        'org.codehaus.groovy.grails.plugins'], additivity: false
 }
