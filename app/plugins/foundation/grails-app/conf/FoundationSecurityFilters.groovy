@@ -3,18 +3,21 @@ public class FoundationSecurityFilters {
 
   def filters = {
 
-    membership(uri: "/membership/**") {
+    authn(uri:"/membership/**") {
       before = {
         accessControl { true }
       }
-      after = {
-        log.info("secfilter:[$subject.id]$subject.principal|${request.remoteAddr}|$params.controller/$params.action")
+    }
+
+    membership(uri: "/membership/**") {
+      before = {
+        log.info("secfilter: ALLOWED - [$subject.id]$subject.principal|${request.remoteAddr}|$params.controller/$params.action")
       }
     }
 
     registration(uri: "/registration/**") {
-      after = {
-        log.info("secfilter:unauthenticated|${request.remoteAddr}|$params.controller/$params.action")
+      before = {
+        log.info("secfilter: PUBLIC - unauthenticated|${request.remoteAddr}|$params.controller/$params.action")
       }
     }
 

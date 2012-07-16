@@ -80,6 +80,19 @@ class RoleController {
       redirect(action: "list")
     }
 
+    def searchNewMembers() {
+      def role = Role.get(params.id)
+      if (!role) {
+        log.warn "No role for $params.id located when attempting to addmember"
+        response.sendError(500)
+        return
+      }
+
+      def subjects = aaf.fr.identity.Subject.list()
+
+      render template: "/templates/role/searchnewmembers", plugin: 'administration', model:[subjects:subjects, role:role]
+    }
+
     def addmember() {
       def role = Role.get(params.id)
       if (!role) {

@@ -54,19 +54,26 @@ class MetadataGenerationService {
 				TelephoneNumber(contactPerson.contact.mobilePhone)
 		}
 	}
+
+  private String processCertificateData(String certData) {
+    def data = certData.trim().normalize()
+    if(data.startsWith('-----BEGIN CERTIFICATE-----'))
+      data = data.replace('-----BEGIN CERTIFICATE-----', '')
+    if(data.endsWith('-----END CERTIFICATE-----'))
+      data = data.replace('-----END CERTIFICATE-----', '')
+
+    // Ensure any hanging new lines are gone and make XML neat with
+    // leading and trailing newlines.
+    "\n${data.trim()}\n"  
+  }
 	
 	def caKeyInfo(builder, keyInfo) {
 		builder.'ds:KeyInfo'('xmlns:ds':'http://www.w3.org/2000/09/xmldsig#') {
 			if(keyInfo.keyName)
 				'ds:KeyName'(keyInfo.keyName)
 			'ds:X509Data'() {
-				def data = keyInfo.certificate.data
-				if(data.startsWith('-----BEGIN CERTIFICATE-----'))
-					data = data.replace('-----BEGIN CERTIFICATE-----', '')
-				if(data.endsWith('-----END CERTIFICATE-----'))
-					data = data.replace('-----END CERTIFICATE-----', '')
-					
-				'ds:X509Certificate'(data.normalize())
+				def data = processCertificateData(keyInfo.certificate.data)
+				'ds:X509Certificate'(data)
 			}
 		}
 	}
@@ -76,12 +83,8 @@ class MetadataGenerationService {
 			if(keyInfo.keyName)
 				'ds:KeyName'(keyInfo.keyName)
 			'ds:X509Data'() {
-				def data = keyInfo.certificate.data
-				if(data?.startsWith('-----BEGIN CERTIFICATE-----'))
-					data = data.replace('-----BEGIN CERTIFICATE-----', '')
-				if(data?.endsWith('-----END CERTIFICATE-----'))
-					data = data.replace('-----END CERTIFICATE-----', '')
-				'ds:X509Certificate'(data)
+				def data = processCertificateData(keyInfo.certificate.data)
+        'ds:X509Certificate'(data)
 			}
 		}
 	}

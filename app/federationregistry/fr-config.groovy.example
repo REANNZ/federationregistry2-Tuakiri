@@ -44,11 +44,11 @@ environments {
 
     testDataConfig.enabled = false
   }
-}  
+} 
 
 // Federated Identity Configuration
 federation {
-  environment = "production"  // test | production
+  environment = "test"  // test | production
   enabled = true
   automatelogin = true
   federationactive = true
@@ -83,7 +83,7 @@ aaf {
     bootstrap = false
 
     metadata {
-      federation = "urn:mace:federation:name"
+      federation = "aaf.edu.au"
       current {
         validForDays = 7
       }
@@ -201,7 +201,7 @@ dataSource {
   dbCreate = "update"
   loggingSql = false
   
-  url = "jdbc:mysql://localhost/federationregistry"
+  url = "jdbc:mysql://localhost/federationregistry2"
   username = "fr"
   password = "password"
 }
@@ -221,31 +221,35 @@ security.shiro.authc.required = false
 // Logging configuration
 log4j = {
   appenders {
+    appender new DailyRollingFileAppender(name:"fr-metadata", layout:pattern(conversionPattern: "%d{[ dd.MM.yy HH:mm:ss.SSS]} %-5p %c %x - %m%n"), file:"/tmp/fr-metadata.log", datePattern:"'.'yyyy-MM-dd")
+    appender new DailyRollingFileAppender(name:"fr-security", layout:pattern(conversionPattern: "%d{[ dd.MM.yy HH:mm:ss.SSS]} %-5p %c %x - %m%n"), file:"/tmp/fr-security.log", datePattern:"'.'yyyy-MM-dd")
     appender new DailyRollingFileAppender(name:"fr-app", layout:pattern(conversionPattern: "%d{[ dd.MM.yy HH:mm:ss.SSS]} %-5p %c %x - %m%n"), file:"/tmp/fr-app.log", datePattern:"'.'yyyy-MM-dd")
-    appender new DailyRollingFileAppender(name:"fr-md", layout:pattern(conversionPattern: "%d{[ dd.MM.yy HH:mm:ss.SSS]} %-5p %c %x - %m%n"), file:"/tmp/fr-md.log", datePattern:"'.'yyyy-MM-dd")
-    appender new DailyRollingFileAppender(name:"stacktrace", layout:pattern(conversionPattern: "%d{[ dd.MM.yy HH:mm:ss.SSS]} %-5p %c %x - %m%n"), file:"/tmp/stacktrace.log", datePattern:"'.'yyyy-MM-dd")
+    appender new DailyRollingFileAppender(name:"fr-grails", layout:pattern(conversionPattern: "%d{[ dd.MM.yy HH:mm:ss.SSS]} %-5p %c %x - %m%n"), file:"/tmp/fr-grails.log", datePattern:"'.'yyyy-MM-dd")
+    appender new DailyRollingFileAppender(name:"stacktrace", layout:pattern(conversionPattern: "%d{[ dd.MM.yy HH:mm:ss.SSS]} %-5p %c %x - %m%n"), file:"/tmp/fr-stacktrace.log", datePattern:"'.'yyyy-MM-dd")
   }
 
   root {
     info 'stdout'
     additivity = true
   }
-  
-  debug 'fr-md': ['grails.app.controller.aaf.fr.metadata.MetadataController',
-                  'grails.app.service.aaf.fr.metadata.MetadataGenerationService'], additivity: false
-          
-  warn  'fr-app':['org.codehaus.groovy.grails.web.servlet',
-                  'org.codehaus.groovy.grails.web.pages',
-                  'org.codehaus.groovy.grails.web.sitemesh',
-                  'org.codehaus.groovy.grails.web.mapping.filter',
-                  'org.codehaus.groovy.grails.web.mapping',
-                  'org.codehaus.groovy.grails.commons',
-                  'org.codehaus.groovy.grails.plugins',                       
-                  'org.apache.shiro']
 
-  debug 'fr-app':['grails.app.controller',
-                  'grails.app.domain',
-                  'grails.app.service',
-                  'grails.app.realm',
-                  'aaf.fr']
+  info  'fr-metadata' :['grails.app.services.aaf.fr.metadata',
+                        'grails.app.controllers.aaf.fr.metadata'], additivity: false
+
+  info  'fr-security' :['grails.app.filters'], additivity: false
+
+  info  'fr-app'      :['grails.app.controllers',
+                        'grails.app.domains',
+                        'grails.app.services',
+                        'grails.app.realms',
+                        'aaf.fr',                       
+                        'org.apache.shiro'], additivity: false
+          
+  warn  'fr-grails'   :['org.codehaus.groovy.grails.web.servlet',
+                        'org.codehaus.groovy.grails.web.pages',
+                        'org.codehaus.groovy.grails.web.sitemesh',
+                        'org.codehaus.groovy.grails.web.mapping.filter',
+                        'org.codehaus.groovy.grails.web.mapping',
+                        'org.codehaus.groovy.grails.commons',
+                        'org.codehaus.groovy.grails.plugins'], additivity: false
 }

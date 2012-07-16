@@ -38,6 +38,12 @@ class CoreUtilitiesController {
         return
       }
 
+      if(data.count('-----BEGIN CERTIFICATE-----') > 1 || data.count('-----END CERTIFICATE-----') > 1 ){
+        render template:"/templates/certificates/validation", contextPath: pluginContextPath, model:[corrupt:true, certerrors:["templates.fr.certificates.validation.chain"]]
+        response.setStatus(500)
+        return
+      }
+
 			def certificate = cryptoService.createCertificate(data.normalize())
 			def subject = cryptoService.subject(certificate);
 			def issuer = cryptoService.issuer(certificate);

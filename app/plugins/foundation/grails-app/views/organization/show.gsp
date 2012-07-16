@@ -57,7 +57,6 @@
            <g:render template="/templates/organization/registrations" plugin="foundation" model="[registrations:registrations]" />         
         </div>
 
-        <!-- HOUSTON WE HAVE A PROBLEM :( -->
         <g:if test="${organization.approved}">
           <div id="tab-admins" class="tab-pane">
             <g:render template="/templates/organization/listfulladministration" plugin="foundation" />

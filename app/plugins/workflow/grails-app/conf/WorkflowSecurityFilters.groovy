@@ -2,12 +2,15 @@
 public class WorkflowSecurityFilters {
 
   def filters = {
-    workflow(uri: "/workflow/**") {
+    authn(uri:"/workflow/**") {
       before = {
         accessControl { true }
       }
-      after = {
-        log.info("secfilter:[$subject.id]$subject.principal|${request.remoteAddr}|$params.controller/$params.action")
+    }
+
+    workflow(uri:"/workflow/**") {
+      before = {
+        log.info("secfilter: ALLOWED - [$subject.id]$subject.principal|${request.remoteAddr}|$params.controller/$params.action")
       }
     }
   }

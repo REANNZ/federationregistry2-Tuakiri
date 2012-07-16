@@ -202,7 +202,7 @@ serviceProvider.addToKeyDescriptors(keyDescriptor)
 def certEnc = cryptoService.createCertificate(certData)
 cryptoService.validateCertificate(certEnc)
 def keyInfoEnc = new KeyInfo(certificate:certEnc)
-def keyDescriptorEnc = new KeyDescriptor(keyInfo:keyInfoEnc, keyType:KeyTypes.encryption), encryptionMethod:null
+def keyDescriptorEnc = new KeyDescriptor(keyInfo:keyInfoEnc, keyType:KeyTypes.encryption, encryptionMethod:null)
 keyDescriptorEnc.roleDescriptor = serviceProvider
 serviceProvider.addToKeyDescriptors(keyDescriptorEnc)
 

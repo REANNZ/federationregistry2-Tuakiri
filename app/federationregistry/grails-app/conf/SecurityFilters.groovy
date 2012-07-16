@@ -5,15 +5,9 @@ public class SecurityFilters {
 
   def filters = {
 
-    all(uri:"/**") {
-      before = {
-        log.info "request:${request.requestURI}|${request.remoteAddr}"
-      }
-    }
-
     welcome(controller: "welcome") {
       after = {
-        log.info("secfilter:unauthenticated|${request.remoteAddr}|$params.controller")
+        log.info("secfilter: PUBLIC - unauthenticated|${request.remoteAddr}|$params.controller")
       }
     }
 
@@ -22,23 +16,20 @@ public class SecurityFilters {
         accessControl { true }
       }
       after = {
-        log.info("secfilter:[$subject.id]$subject.principal|${request.remoteAddr}|$params.controller/$params.action")
+        log.info("secfilter: ALLOWED - [$subject.id]$subject.principal|${request.remoteAddr}|$params.controller/$params.action")
       }
     }
 
     bootstrap(controller: "initialBootstrap") {
       before = {
         if( !grailsApplication.config.aaf.fr.bootstrap ) {
-          log.info("secfilter-alert:[$subject?.id]$subject?.principal|${request.remoteAddr}|$params.controller")
+          log.info("secfilter: DENIED - [$subject?.id]$subject?.principal|${request.remoteAddr}|$params.controller")
           response.sendError(404) // Deliberately not 403.
           return
         }
-      }
-      after = {
-        log.info("secfilter:unauthenticated|${request.remoteAddr}|$params.controller")
+        log.info("secfilter: ALERT - unauthenticated|${request.remoteAddr}|$params.controller/$params.action")
       }
     }
-
   }
 
 }

@@ -26,7 +26,6 @@
           <g:link class="btn btn-info btn-large" controller="bootstrap" action="organization">Create an Organisation</g:link>
           <br><br>
           <g:link class="btn btn-info btn-large" controller="bootstrap" action="idp">Create an Identity Provider</g:link>
-          </a>
           <br><br>
           <g:link class="btn btn-info btn-large" controller="bootstrap" action="sp">Create a Service Provider</g:link>
         </div>
@@ -46,14 +45,14 @@
       </p>
       <h3>3. Required Attributes</h3>
       <p>
-        In order to get access to the Federation Registry, you need an account provided by an Identity Provider that is active within the federation. Your Identity Provider <strong>must be configured to release the following attributes</strong> to this service:
-        <ul>
-          <li>commonName</li>
-          <li>mail</li>
-          <li>eduPersonTargetedID</li>
-          <li>auEduPersonSharedToken</li>
-        </ul>
+        In order to get access to the Federation Registry, you need an account provided by an Identity Provider that is active within the federation. Your Identity Provider <strong>must be configured to release the following attributes</strong> to this service.
       </p>
+      <ul>
+        <li>commonName</li>
+        <li>mail</li>
+        <li>eduPersonTargetedID</li>
+        <li>auEduPersonSharedToken</li>
+      </ul>
       <p>
         Within the AAF we recommend automating this process, take a look at this guide for more information <a href="http://support.aaf.edu.au/entries/321600-automating-attribute-release">http://support.aaf.edu.au/entries/321600-automating-attribute-release</a>. Don't know the value for [YOUR UNIQUE URL]? Get in touch with AAF support who'll be able to help you out.
       </p>
