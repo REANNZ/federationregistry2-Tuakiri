@@ -69,16 +69,16 @@ class FederationReportsController {
 
       results.categories.add(year)
       
-      count = Organization.executeQuery("select count(*) as count from aaf.fr.foundation.Organization where year(dateCreated) = ?", [year])[0]
+      count = Organization.executeQuery("select count(*) as count from aaf.fr.foundation.Organization where year(dateCreated) = ?", [year], [readOnly:true, cache:true])[0]
       results.series.org.counts.add(count);
       tot = tot + count
 
-      count = IDPSSODescriptor.executeQuery("select count(*) from aaf.fr.foundation.IDPSSODescriptor where year(dateCreated) = ?", [year])[0]
+      count = IDPSSODescriptor.executeQuery("select count(*) from aaf.fr.foundation.IDPSSODescriptor where year(dateCreated) = ?", [year], [readOnly:true, cache:true])[0]
       results.series.idp.counts.add(count);
       
       tot = tot + count
 
-      count = SPSSODescriptor.executeQuery("select count(*) from aaf.fr.foundation.SPSSODescriptor where year(dateCreated) = ?", [year])[0]
+      count = SPSSODescriptor.executeQuery("select count(*) from aaf.fr.foundation.SPSSODescriptor where year(dateCreated) = ?", [year], [readOnly:true, cache:true])[0]
       results.series.sp.counts.add(count);
       tot = tot + count
 
@@ -261,7 +261,7 @@ class FederationReportsController {
       results.categories.add(year)
       results.series.name = g.message(code:'label.sessions')
       
-      count = WayfAccessRecord.executeQuery("select count(*) as count from aaf.fr.reporting.WayfAccessRecord where year(dateCreated) = ? and robot = false", [year])[0]
+      count = WayfAccessRecord.executeQuery("select count(*) as count from aaf.fr.reporting.WayfAccessRecord where year(dateCreated) = ? and robot = false", [year], [readOnly:true, cache:true])[0]
       results.series.count.add(count);
     }
 
@@ -450,15 +450,15 @@ class FederationReportsController {
     (minYear..maxYear).each { year ->
       results.categories.add(year)
       
-      count = Organization.executeQuery("select count(*) as count from aaf.fr.foundation.Organization where year(dateCreated) = ?", [year])[0]
+      count = Organization.executeQuery("select count(*) as count from aaf.fr.foundation.Organization where year(dateCreated) = ?", [year], [readOnly:true, cache:true])[0]
       o = o + count
       results.series.org.counts.add(o)
 
-      count = IDPSSODescriptor.executeQuery("select count(*) from aaf.fr.foundation.IDPSSODescriptor where year(dateCreated) = ?", [year])[0]
+      count = IDPSSODescriptor.executeQuery("select count(*) from aaf.fr.foundation.IDPSSODescriptor where year(dateCreated) = ?", [year], [readOnly:true, cache:true])[0]
       idp = idp + count
       results.series.idp.counts.add(idp)
 
-      count = SPSSODescriptor.executeQuery("select count(*) from aaf.fr.foundation.SPSSODescriptor where year(dateCreated) = ?", [year])[0]
+      count = SPSSODescriptor.executeQuery("select count(*) from aaf.fr.foundation.SPSSODescriptor where year(dateCreated) = ?", [year], [readOnly:true, cache:true])[0]
       sp = sp + count
       results.series.sp.counts.add(sp)
     }
