@@ -154,7 +154,7 @@ class ComplianceReportsController {
     def attribute = AttributeBase.get(params.attrid)
     results.attribute = "$attribute.name ($attribute.oid)"
 
-    IDPSSODescriptor.list().each { i->
+    IDPSSODescriptor.list().sort{it.displayName}.each { i->
       if( i.attributes.collect{it.base}.contains(attribute) ) {
         results.supported.add([name:i.displayName, automatedRelease:i.autoAcceptServices, url:g.createLink(controller:'identityProvider', action:'show', id:i.id)])
       } else {

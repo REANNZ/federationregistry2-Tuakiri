@@ -142,7 +142,7 @@ class FederationReportsController {
         def o = [:]
         o.id = org[0]
         o.displayName = org[1]
-        o.dateCreated = org[2]
+        o.dateCreated = org[2].format( 'yyyy-MM-dd' )
         o.url = g.createLink(absolute: true, controller:'organization', action:'show', id:o.id)
         results.detail.org.add(o)
       }
@@ -157,7 +157,7 @@ class FederationReportsController {
         def i = [:]
         i.id = idp[0]
         i.displayName = idp[1]
-        i.dateCreated = idp[2]
+        i.dateCreated = idp[2].format( 'yyyy-MM-dd' )
         i.url = g.createLink(absolute: true, controller:'organization', action:'show', id:i.id)
         results.detail.idp.add(i)
       }
@@ -172,7 +172,7 @@ class FederationReportsController {
         def s = [:]
         s.id = sp[0]
         s.displayName = sp[1]
-        s.dateCreated = sp[2]
+        s.dateCreated = sp[2].format( 'yyyy-MM-dd' )
         s.url = g.createLink(absolute: true, controller:'organization', action:'show', id:s.id)
         results.detail.sp.add(s)
       }
