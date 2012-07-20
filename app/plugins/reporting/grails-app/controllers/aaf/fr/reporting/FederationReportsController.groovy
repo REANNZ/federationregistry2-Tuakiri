@@ -142,7 +142,7 @@ class FederationReportsController {
         def o = [:]
         o.id = org[0]
         o.displayName = org[1]
-        o.dateCreated = org[2]
+        o.dateCreated = org[2].format( 'yyyy-MM-dd' )
         o.url = g.createLink(absolute: true, controller:'organization', action:'show', id:o.id)
         results.detail.org.add(o)
       }
@@ -157,7 +157,7 @@ class FederationReportsController {
         def i = [:]
         i.id = idp[0]
         i.displayName = idp[1]
-        i.dateCreated = idp[2]
+        i.dateCreated = idp[2].format( 'yyyy-MM-dd' )
         i.url = g.createLink(absolute: true, controller:'organization', action:'show', id:i.id)
         results.detail.idp.add(i)
       }
@@ -172,7 +172,7 @@ class FederationReportsController {
         def s = [:]
         s.id = sp[0]
         s.displayName = sp[1]
-        s.dateCreated = sp[2]
+        s.dateCreated = sp[2].format( 'yyyy-MM-dd' )
         s.url = g.createLink(absolute: true, controller:'organization', action:'show', id:s.id)
         results.detail.sp.add(s)
       }
@@ -379,13 +379,13 @@ class FederationReportsController {
     dsNodes.each { node ->
       def series = [:]
       series.name = node
-      def knownDailyTotals = WayfAccessRecord.executeQuery("select count(*), dateCreated from aaf.fr.reporting.WayfAccessRecord where dsHost='${node}' and dateCreated between ? and ? and robot = false group by year(dateCreated), month(dateCreated), day(dateCreated) order by year(dateCreated), month(dateCreated), day(dateCreated)", [startDate.time, endDate.time])
+      def knownDailyTotals = WayfAccessRecord.executeQuery("select count(*), dateCreated from aaf.fr.reporting.WayfAccessRecord where dsHost=? and dateCreated between ? and ? and robot = false group by year(dateCreated), month(dateCreated), day(dateCreated) order by year(dateCreated), month(dateCreated), day(dateCreated)", [node, startDate.time, endDate.time])
       series.counts = populateDaily(knownDailyTotals, startDate, endDate)
       results.series.add(series)
 
       def totals = [:]
       totals.name = node
-      totals.count = WayfAccessRecord.executeQuery("select count(*) from aaf.fr.reporting.WayfAccessRecord where dsHost='${node}' and dateCreated between ? and ? and robot = false", [startDate.time, endDate.time])[0]
+      totals.count = WayfAccessRecord.executeQuery("select count(*) from aaf.fr.reporting.WayfAccessRecord where dsHost=? and dateCreated between ? and ? and robot = false", [node, startDate.time, endDate.time])[0]
       results.totals.add(totals)
     }
 
@@ -575,15 +575,18 @@ class FederationReportsController {
     ]
 
     def requestedSP = params.get('activesp') as List
-    def spList = SPSSODescriptor.listOrderByDisplayName()
+    def spList = SPSSODescriptor.list()
     spList.each { sp ->
-        def series = [:]
-        series.id = sp.id
-        series.name = sp.displayName
-        def sessionTotal = WayfAccessRecord.executeQuery("select count(*) from aaf.fr.reporting.WayfAccessRecord where spID=${sp.id} and dateCreated between ? and ? and robot = false", [startDate.time, endDate.time])
-        series.count = sessionTotal[0]
-        series.excluded = (!requestedSP || requestedSP?.contains(sp.id.toString())) ? false:true
-        results.series.add(series)
+        def sessionTotal = WayfAccessRecord.executeQuery("select count(*) from aaf.fr.reporting.WayfAccessRecord where spID=? and dateCreated between ? and ? and robot = false", [sp.id, startDate.time, endDate.time])
+        if(sessionTotal[0] > 0) {
+          def series = [:]
+          series.id = sp.id
+          series.name = sp.displayName
+          
+          series.count = sessionTotal[0]
+          series.excluded = (!requestedSP || requestedSP?.contains(sp.id.toString())) ? false:true
+          results.series.add(series)
+        }
     }
     results.series.sort { -it.count }
 
@@ -626,15 +629,18 @@ class FederationReportsController {
     ]
 
     def requestedIdP = params.get('activeidp') as List
-    def idPList = IDPSSODescriptor.listOrderByDisplayName()
+    def idPList = IDPSSODescriptor.list()
     idPList.each { idp ->
-        def series = [:]
-        series.id = idp.id
-        series.name = idp.displayName
-        def sessionTotal = WayfAccessRecord.executeQuery("select count(*) from aaf.fr.reporting.WayfAccessRecord where idpID=${idp.id} and dateCreated between ? and ? and robot = false", [startDate.time, endDate.time])
-        series.count = sessionTotal[0]
-        series.excluded = (!requestedIdP || requestedIdP?.contains(idp.id.toString())) ? false:true
-        results.series.add(series)
+        
+        def sessionTotal = WayfAccessRecord.executeQuery("select count(*) from aaf.fr.reporting.WayfAccessRecord where idpID=? and dateCreated between ? and ? and robot = false", [idp.id, startDate.time, endDate.time])
+        if(sessionTotal[0] > 0) {
+          def series = [:]
+          series.id = idp.id
+          series.name = idp.displayName
+          series.count = sessionTotal[0]
+          series.excluded = (!requestedIdP || requestedIdP?.contains(idp.id.toString())) ? false:true
+          results.series.add(series)
+        }
     }
     results.series.sort { -it.count }
 

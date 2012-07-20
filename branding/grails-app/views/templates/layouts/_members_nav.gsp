@@ -78,10 +78,9 @@
   <g:if test="${controllerName == 'contacts'}">
     <ul class="level3a">
       <li class="${actionName == 'list' ? 'active':''}"><g:link controller="contacts" action="list"><g:message code="fr.branding.nav.members.list" default="List"/></g:link></li>
-      <li class="${actionName == 'create' ? 'active':''}"><g:link controller="contacts" action="create"><g:message code="fr.branding.nav.members.create" default="Create"/></g:link></li>
-      <li class="${actionName == 'show' ? 'active':''}"><g:message code="fr.branding.nav.members.view" default="View"/></li>
-      <g:if test="${actionName in ['edit']}">
-        <li class="${actionName == 'edit' ? 'active':''}"><g:message code="fr.branding.nav.members.edit" default="Edit"/></li>
+      <li class="${actionName in ['create', 'save'] ? 'active':''}"><g:link controller="contacts" action="create"><g:message code="fr.branding.nav.members.create" default="Create"/></g:link></li>
+      <g:if test="${actionName in ['show']}">
+        <li class="active"><g:message code="fr.branding.nav.members.view" default="View"/></li>
       </g:if>
     </ul>
   </g:if>
