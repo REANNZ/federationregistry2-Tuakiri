@@ -24,6 +24,8 @@ class FederatedRealm {
       log.error "Authentication attempt for federated provider, denying attempt as federation integration disabled"
       throw new UnknownAccountException ("Authentication attempt for federated provider, denying attempt as federation disabled")
     }
+
+    log.info "FederatedRealm starting authentication for subject identified in $token"
     if (!token.principal) {
       log.error "Authentication attempt for federated provider, denying attempt as no persistent identifier was provided"
       throw new UnknownAccountException("Authentication attempt for federated provider, denying attempt as no persistent identifier was provided")
