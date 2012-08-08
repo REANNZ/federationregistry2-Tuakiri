@@ -407,7 +407,8 @@ class AttributeFilterGenerationServiceSpec extends IntegrationSpec {
 		def sp = new SPSSODescriptor(displayName: "Test SP Display - ${unique}", description:"Test SP Description - ${unique}", protocolSupportEnumerations:protocolSupportEnumerations, organization:organization, approved:true, active:true, entityDescriptor:entityDescriptor)
 		
 		sp.addToAttributeConsumingServices(attrService)
-		sp.serviceDescription = ServiceDescription.build()
+    def servDesc = new ServiceDescription()
+		sp.serviceDescription = servDesc
 		
 		sp
 	}
