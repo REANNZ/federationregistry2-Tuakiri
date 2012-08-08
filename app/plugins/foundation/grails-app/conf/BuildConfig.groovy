@@ -16,7 +16,7 @@ grails.project.dependency.resolution = {
     grailsCentral()
   }
   dependencies {
-    compile 'org.grails.plugins:federated-grails:0.2.1'
+    compile 'org.grails.plugins:federated-grails:0.2.2'
   }
 
   plugins {
