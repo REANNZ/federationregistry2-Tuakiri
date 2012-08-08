@@ -254,8 +254,8 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def work = "(567) 222 22222"
 		def mobile = "0413 867 208"
 		def contact = Contact.build(givenName:"Test", surname:"User", email:email, homePhone:home, workPhone:work, mobilePhone:mobile)
-		def admin = ContactType.build(name:"administrative")
-		def contactPerson = ContactPerson.build(contact:contact, type:admin)
+		def ct = ContactType.build(name:"administrative")
+		def contactPerson = ContactPerson.build(contact:contact, type:ct)
 		def expected = loadExpected('testvalidcontact')
 		
 		when:
@@ -266,31 +266,30 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		xml == expected
 	}
 
-    def "Test valid contact person generation with non SAML type"() {
-        setup:
-        def email = "test@example.com"
-        def home = "(07) 1111 1111"
-        def work = "(567) 222 22222"
-        def contact = Contact.build(givenName:"Test", surname:"User", email:email, homePhone:home, workPhone:work)
-        def admin = ContactType.build(name:"businessowner")
-        def contactPerson = ContactPerson.build(contact:contact, type:admin)
-        def expected = loadExpected('testvalidcontactnonsaml')
-        
-        when:
-        metadataGenerationService.contactPerson(builder, contactPerson)
-        
-        then:
-        def xml = writer.toString()
-        xml == expected
-    }
+  def "Test valid contact person generation with non SAML type"() {
+      setup:
+      def email = "test@example.com"
+      def home = "(07) 1111 1111"
+      def work = "(567) 222 22222"
+      def contact = Contact.build(givenName:"Test", surname:"User", email:email, homePhone:home, workPhone:work)
+      def ct = ContactType.build(name:"businessowner")
+      def contactPerson = ContactPerson.build(contact:contact, type:ct)
+      
+      when:
+      metadataGenerationService.contactPerson(builder, contactPerson)
+      
+      then:
+      def xml = writer.toString()
+      xml.length() == 0
+  }
 	
 	def "Test valid contact person generation with only mobile phone"() {
 		setup:
 		def email = "test@example.com"
 		def mobile = "0413 867 208"
 		def contact = Contact.build(givenName:"Test", surname:"User", email:email, mobilePhone:mobile)
-		def admin = ContactType.build(name:"administrative")
-		def contactPerson = ContactPerson.build(contact:contact, type:admin)
+		def ct = ContactType.build(name:"administrative")
+		def contactPerson = ContactPerson.build(contact:contact, type:ct)
 		def expected = loadExpected('testvalidcontactonlymobile')
 		
 		when:
@@ -321,10 +320,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 			entityDescriptor.addToAttributeAuthorityDescriptors(AttributeAuthorityDescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true))
 			
 			entitiesDescriptor.addToEntityDescriptors(entityDescriptor)
-
-            entityDescriptor.validate()
-            println "326"
-            entityDescriptor.errors?.each { println it }
+      entityDescriptor.validate()
 		}
 		
 		def keyInfo = new CAKeyInfo(certificate:new CACertificate(data:loadPK()))
