@@ -18,14 +18,14 @@ if(!savedEDS) {
 
 // AAF supported organisation types
 def federationOrgTypes = [
-  [name:'university', displayName:'Australian University', description:'Australian University', discoverServiceCategory:'true'],
-  [name:'hospital', displayName:'Hospital', description:'Hospital', discoverServiceCategory:'true'],
-  [name:'library', displayName:'Library', description:'Library', discoverServiceCategory:'true'],
-  [name:'vho', displayName:'VHO', description:'Virtual Home Organization', discoverServiceCategory:'true'],
-  [name:'others', displayName:'Others', description:'Others', discoverServiceCategory:'true'],
-  [name:'eresearch', displayName:'eResearch', description:'eResearch Organisations', discoverServiceCategory:'true'],
-  [name:'nzuniversity', displayName:'New Zealan Uuniversity', description:'New Zealand University', discoverServiceCategory:'true'],
-  [name:'standaloneaa', displayName:'Standalone AA', description:'Standalone AA only', discoverServiceCategory:'false']
+  [name:'university', displayName:'Australian University', description:'Australian University', discoverServiceCategory:true],
+  [name:'hospital', displayName:'Hospital', description:'Hospital', discoverServiceCategory:true],
+  [name:'library', displayName:'Library', description:'Library', discoverServiceCategory:true],
+  [name:'vho', displayName:'VHO', description:'Virtual Home Organization', discoverServiceCategory:true],
+  [name:'others', displayName:'Others', description:'Others', discoverServiceCategory:true],
+  [name:'eresearch', displayName:'eResearch', description:'eResearch Organisations', discoverServiceCategory:true],
+  [name:'nzuniversity', displayName:'New Zealan Uuniversity', description:'New Zealand University', discoverServiceCategory:true],
+  [name:'standaloneaa', displayName:'Standalone AA', description:'Standalone AA only', discoverServiceCategory:false]
 ] as List
 federationOrgTypes.each {
   def ot = new OrganizationType(it)
