@@ -212,7 +212,7 @@ class AuthController {
         log.debug e
     }
     
-    redirect(action: "login")
+    redirect(action: "federatederror")
   }
   
   private String federatedAttributeValue(def grailsApplication, String attr) {
