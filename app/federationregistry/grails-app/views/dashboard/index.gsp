@@ -24,7 +24,7 @@
     <g:if test="${submittedTasks}">
       <div class="span11">
         <div class="alert alert-block alert-infol"><a class="close" data-dismiss="alert" href="#">&times;</a>
-          <h3 class="alert-heading">Workflows you've submitted</h3>
+          <h3 class="alert-heading">Workflows you have submitted</h3>
           <ol>
             <g:each in="${submittedTasks}" status="i" var="instance">
               <li>
@@ -43,7 +43,8 @@
       </div>
     </g:if>
 
-    <div class="span12">
+
+    <div class="row span12 row-spacer clearfix">
       <div class="span3 well">
         <h3>My Organisations</h3>
         <g:if test="${organizations}">
@@ -97,36 +98,30 @@
         <hr>
         <a href="${createLink(controller:'serviceProvider', action:'list')}" class="btn btn-small btn-info">View All</a>
       </div>
-    </div>
 
-    <div class="row span12">
-      <hr class="span8 offset1"/>
-      <div class="span3 well centered">
+
+      <hr class="span9 offset1"/>
+    
+
+      <div class="span3 centered well">
         <strong class="dashboard-wow">${orgCount}</strong><hr><h4>Organisations</h4>
       </div>
-      <div class="span3 well centered">
+      <div class="span3 centered well">
         <strong class="dashboard-wow">${idpCount}</strong><hr><h4>Identity Providers</h4>
       </div>
-      <div class="span3 well centered">
+      <div class="span3 centered well">
         <strong class="dashboard-wow">${spCount}</strong><hr><h4>Service Providers</h4>
       </div>
+
+      <div id="sessions" class="row-spacer span10 centered">
+        <div class="spinner"><r:img dir="images" file="spinner.gif"/></div>
+      </div> 
+      <div id="registrations" class="row-spacer span10 centered">
+        <div class="spinner"><r:img dir="images" file="spinner.gif"/></div>
+      </div> 
     </div>
 
-    <div class="row row-spacer">
-      <div class="span11">
-        <div id="sessions">
-          <div class="span9 spinner centered"><r:img dir="images" file="spinner.gif"/></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="row row-spacer">
-      <div class="span11">
-        <div id="registrations">
-          <div class="span9 spinner centered"><r:img dir="images" file="spinner.gif"/></div>
-        </div>
-      </div>
-    </div>
+    <span style="color:#fff">.</span>
 
     <r:script>
       var summaryregistrationsEndpoint = "${createLink(controller:'federationReports', action:'reportsummaryregistrations')}"
@@ -189,7 +184,6 @@
        columnConform();
       });
     </r:script>
-
   </body>
 
 </html>

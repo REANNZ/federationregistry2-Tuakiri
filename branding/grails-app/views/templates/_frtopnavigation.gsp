@@ -28,9 +28,11 @@
         <g:link controller="complianceReports" action="attributesupport"><g:message code="fr.branding.nav.reporting" default="Reporting" /></g:link>
       </fr:lacksPermission>
     </li>
-    <li class="${['metadata'].contains(controllerName) ? 'active' : ''}">
-      <g:link controller="metadata" action="view"><g:message code="fr.branding.nav.metadats" default="Metadata" /></g:link>
-    </li>
+    <fr:isAdministrator>
+      <li class="${['metadata'].contains(controllerName) ? 'active' : ''}">
+        <g:link controller="metadata" action="view"><g:message code="fr.branding.nav.metadats" default="Metadata" /></g:link>
+      </li>
+    </fr:isAdministrator>
     <li class="${['workflowInstance', 'workflowProcess', 'workflowScript', 'workflowApproval'].contains(controllerName) ? 'active' : ''}">
       <g:link controller="workflowApproval"><g:message code="fr.branding.nav.workflow" default="Workflow" /></g:link>
     </li>
@@ -40,6 +42,7 @@
       </li>
     </fr:isAdministrator>
   </fr:isLoggedIn>
+  <li><a style="color: #fff;" href="/federationmonitoring" target="_blank"><g:message code="fr.branding.nav.monitoring" default="Monitoring" /></a></li>
   <li><a style="color: #fff;" href="#" onClick="script: Zenbox.show(); return false;"><g:message code="fr.branding.nav.support" default="Support" /></a></li>
   <fr:isLoggedIn>
     <li>

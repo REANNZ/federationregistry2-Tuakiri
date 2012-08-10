@@ -5,7 +5,7 @@
 @navColor: #37404B;
 
 .row-spacer {
-  margin-top: 48px;
+  margin-top: 24px;
 }
 
 .alert-spacer {
@@ -274,6 +274,16 @@ body header {
     font-weight: normal;
     padding-top: 6px;
   }
+
+  h2 {
+    .zero;
+    float: right;
+    color: #DD7727;
+    font-size: 1.4em;
+    font-weight: normal;
+    padding-top: 6px;
+    padding-right: 12px;
+  }
 }
 
 body nav {
@@ -346,8 +356,7 @@ body nav {
 body section {
   .zero;
   .rounded-bottom;
-  padding: 12px;
-  padding-top: 6px;
+  padding: 6px;
   background-color: #fff;
   border-left: 1px solid #d2d2d2;
   border-right: 1px solid #d2d2d2;

@@ -31,9 +31,7 @@
       <section>
         <div class='notifications top-right'></div>
         <g:if test="${controllerName == 'adminDashboard' || controllerName == 'adminConsole' || controllerName == 'role' || controllerName == 'subject'}">
-          <div>
-            <g:layoutBody/>
-          </div>
+          <g:layoutBody/>
         </g:if>
         <g:else>
           <div class="row">
