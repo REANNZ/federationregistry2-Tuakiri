@@ -25,7 +25,10 @@ grails.project.dependency.resolution = {
     }
 
     dependencies {
+        build 'org.grails.plugins:constraintkeys:0.1'
+
         test 'mysql:mysql-connector-java:5.1.18'
+
     }
 }
 

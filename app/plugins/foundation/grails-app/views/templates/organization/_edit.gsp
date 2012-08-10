@@ -4,7 +4,7 @@
     
     <fieldset>
       <div class="control-group">
-        <label for="organization.status"><g:message code="label.status" /></label>
+        <label class="control-label" for="organization.status"><g:message code="label.status" /></label>
         <div class="controls">
           <g:radioGroup name="organization.active" values="['true', 'false']" labels="['label.active', 'label.inactive']" value="${organization.active}">
              ${it.radio} <g:message code="${it.label}" />
@@ -14,7 +14,7 @@
       </div>
 
       <div class="control-group">
-        <label for="organization.name"><g:message code="label.name" /></label>
+        <label class="control-label" for="organization.name"><g:message code="label.name" /></label>
         <div class="controls">
           <g:textField name="organization.name"  value="${organization.name}" class="required span4" minlength="4" maxlength="255"/>
           <fr:tooltip code='help.fr.organization.name' />
@@ -22,7 +22,7 @@
       </div>
 
       <div class="control-group">
-        <label for="organization.displayName"><g:message code="label.displayname" /></label>
+        <label class="control-label" for="organization.displayName"><g:message code="label.displayname" /></label>
         <div class="controls">
           <g:textField name="organization.displayName"  value="${organization.displayName}" class="required span4" minlength="4" maxlength="255" />
           <fr:tooltip code='help.fr.organization.displayName' />
@@ -30,7 +30,7 @@
       </div>
 
       <div class="control-group">
-        <label for="organization.url"><g:message code="label.url" /></label>
+        <label class="control-label" for="organization.url"><g:message code="label.url" /></label>
         <div class="controls">
           <g:textField name="organization.url"  class="required url span4" minlength="4" maxlength="255" value="${organization.url}"/>
           <fr:tooltip code='help.fr.organization.url' />
@@ -38,7 +38,7 @@
       </div>
 
       <div class="control-group">
-        <label for="organization.primary"><g:message code="label.organizationtype" /></label>
+        <label class="control-label" for="organization.primary"><g:message code="label.organizationtype" /></label>
         <div class="controls">
           <g:select name="organization.primary" from="${organizationTypes.findAll{it.discoveryServiceCategory == true}.sort{it.displayName}}" optionKey="id" optionValue="displayName" value="${organization.primary.id}"/>
           <fr:tooltip code='help.fr.organization.edit.type' />
@@ -46,7 +46,7 @@
       </div>
 
       <div class="control-group">
-        <label for="organization.types"><g:message code="label.organizationsecondarytypes" /></label>
+        <label class="control-label" for="organization.types"><g:message code="label.organizationsecondarytypes" /></label>
         <div class="controls">
           <ul class="clean">
             <g:each in="${organizationTypes.findAll{it.discoveryServiceCategory == true}.sort{it.displayName}}" var="t">

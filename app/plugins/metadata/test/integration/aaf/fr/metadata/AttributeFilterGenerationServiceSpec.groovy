@@ -393,6 +393,57 @@ class AttributeFilterGenerationServiceSpec extends IntegrationSpec {
 		then:
 		similarExcludingID(diff)
 	}
+
+  def 'Test generation with multiple SP requesting attributes that IDP only supports 1 of (givenName) with one SP having forceAttributesInFilter set true'() {
+    setup:
+    setupSAML()
+    def expected = loadResult("testmultiplespmissingforce")
+    def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: "http://example.com")
+    def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.example.com/myuniqueID1", active:true, approved:true)
+    def idp = IDPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true).save()
+
+    if(!idp)
+      throw new Exception("IDP save failed")
+    
+    def ba1 =  new AttributeBase(oid:'2.5.4.3', nameFormat: attrUri, legacyName:'urn:mace:dir:attribute-def:cn', name:'commonName', description:'An individuals common name, typically their full name. This attribute should not be used in transactions where it is desirable to maintain user anonymity.', category:coreCategory, specificationRequired:false).save()
+    def ba2 =  new AttributeBase(oid:'2.5.4.4', nameFormat: attrUri, legacyName:'urn:mace:dir:attribute-def:sn', name:'surname', description:'Surname or family name', category:optionalCategory, specificationRequired:false).save()
+    def ba3 =  new AttributeBase(oid:'2.5.4.42', nameFormat: attrUri, legacyName:'urn:mace:dir:attribute-def:givenName', name:'givenName', description:'Given name of a person', category:optionalCategory, specificationRequired:false).save()
+    
+    
+    def a1 = new Attribute(base:ba3).save()
+    idp.addToAttributes(a1).save()
+    
+    (1..5).each { i ->
+      def sp = baseSP("$i").save()
+      if(!sp) {
+        sp.errors.each {println it}
+        throw new Exception("SP save failed")
+      }
+
+      if(i == 1){
+        sp.forceAttributesInFilter = true
+        sp.save()
+      }
+      
+      def ra1 = new RequestedAttribute(base:ba1, isRequired:true, approved:true, reasoning:"valid test case")
+      def ra2 = new RequestedAttribute(base:ba2, isRequired:false, approved:true, reasoning:"valid test case")
+      def ra3 = new RequestedAttribute(base:ba3, isRequired:false, approved:true, reasoning:"valid test case")
+      def attrService = sp.attributeConsumingServices.toList().get(0)
+      attrService.addToRequestedAttributes(ra1)
+      if(i == 1 || i == 2 || i == 4)
+        attrService.addToRequestedAttributes(ra2)
+      if(i == 1 || i == 3 || i == 5)
+      attrService.addToRequestedAttributes(ra3)
+    }
+    
+    when:
+    attributeFilterGenerationService.generate(builder, "test.aaf.edu.au", idp.id)
+    def xml = writer.toString()
+    def diff = new Diff(expected, xml)
+    
+    then:
+    similarExcludingID(diff)
+  }
 	
 	def baseSP(unique) {
 		def protocolSupportEnumerations = [saml1Prot, saml2Prot]
@@ -407,7 +458,8 @@ class AttributeFilterGenerationServiceSpec extends IntegrationSpec {
 		def sp = new SPSSODescriptor(displayName: "Test SP Display - ${unique}", description:"Test SP Description - ${unique}", protocolSupportEnumerations:protocolSupportEnumerations, organization:organization, approved:true, active:true, entityDescriptor:entityDescriptor)
 		
 		sp.addToAttributeConsumingServices(attrService)
-		sp.serviceDescription = ServiceDescription.build()
+    def servDesc = new ServiceDescription()
+		sp.serviceDescription = servDesc
 		
 		sp
 	}

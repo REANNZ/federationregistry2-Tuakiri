@@ -33,14 +33,14 @@
 
         <fieldset>
           <div class="control-group">
-            <label for="organization.id"><g:message code="label.organization" /></label>
+            <label class="control-label" for="organization.id"><g:message code="label.organization" /></label>
             <div class="controls">
               <g:select name="organization.id" from="${organizationList.sort{it.displayName}}" optionKey="id" optionValue="displayName" value="${organization?.id}"/>
             </div>
           </div>
 
           <div class="control-group">
-            <label for="entity.identifier"><g:message code="label.entityid" /></label>
+            <label class="control-label" for="entity.identifier"><g:message code="label.entityid" /></label>
             <div class="controls">
               <g:textField name="entity.identifier" value="${entity.entityID}" class="required span4"/>
             </div>    

@@ -17,7 +17,7 @@
     <form id="newcryptoform" class="form-horizontal">
       <fieldset>
         <div class="control-group">
-          <label for="certname"><g:message code="label.name"/></label>
+          <label class="control-label" for="certname"><g:message code="label.name"/></label>
           <div class="controls">
             <g:textField name="certname" size="50"/>
             <fr:tooltip code='help.fr.certificate.name' />
@@ -25,7 +25,7 @@
         </div>
 
         <div class="control-group">
-          <label for="cert"><g:message code="label.certificate"/></label>
+          <label class="control-label" for="cert"><g:message code="label.certificate"/></label>
           <div class="controls">
             <g:textArea name="cert" class="cert" rows="25" cols="60"/>
             <fr:tooltip code='help.fr.certificate' />
@@ -33,7 +33,7 @@
         </div>
 
         <div class="control-group">
-          <label for="signing"><g:message code="label.signing" /></label>
+          <label class="control-label" for="signing"><g:message code="label.signing" /></label>
           <div class="controls"> 
             <g:checkBox name="signing" value="${true}" />
             <fr:tooltip code='help.fr.certificate.sign' />
@@ -41,7 +41,7 @@
         </div>
         <br>
         <div class="control-group">
-          <label for="encryption"><g:message code="label.encryption" /></label>
+          <label class="control-label" for="encryption"><g:message code="label.encryption" /></label>
           <div class="controls">
             <g:checkBox name="encryption" value="${descriptor.instanceOf(SPSSODescriptor)}"/>
             <fr:tooltip code='help.fr.certificate.enc' />

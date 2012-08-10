@@ -70,10 +70,14 @@ class AttributeFilterGenerationService {
 				"basic:Rule"("xsi:type":"basic:AttributeRequesterString", value:"${serviceProvider.entityDescriptor.entityID}")
 				"basic:Rule"("xsi:type":"saml:AttributeRequesterInEntityGroup", groupID:groupID)
 			}
+
+      if(serviceProvider.forceAttributesInFilter)
+        comment builder, "Federation pillar service. Thus all attributes are requested regardless of indicated IdP attribute support FR."
+
 			serviceProvider.attributeConsumingServices.each { acs ->
 				acs.requestedAttributes.sort{it.base.name}.each { ra ->
 					if(ra.approved) {
-						if(identityProvider.attributes.findAll{it.base == ra.base}.size() == 1) {
+						if(identityProvider.attributes.findAll{it.base == ra.base}.size() == 1 || serviceProvider.forceAttributesInFilter) {
 							if(ra.base.specificationRequired) {
 								if(ra.values?.size() > 0) {
 									AttributeRule(attributeID:ra.base.name){

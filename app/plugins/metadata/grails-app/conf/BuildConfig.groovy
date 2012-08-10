@@ -15,9 +15,10 @@ grails.project.dependency.resolution = {
   log "warn"
   repositories {
     grailsCentral()
+    mavenCentral()
   }
   dependencies {
-    compile 'org.grails.plugins:federated-grails:0.2.1'
+    compile 'org.grails.plugins:federated-grails:0.2.2'
   }
 
   plugins {
@@ -25,5 +26,9 @@ grails.project.dependency.resolution = {
           ":release:1.0.0.RC3") {
       export = false
     }
+
+    compile   ":build-test-data:2.0.3"
+    test      ":spock:0.6"
+
   }
 }

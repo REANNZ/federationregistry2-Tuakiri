@@ -43,7 +43,7 @@
       <p><g:message code="templates.fr.contacts.confirmaddition"/></p>
       <strong><g:message code="templates.fr.contacts.selecttype"/></strong>
       <div class="controls">
-        <g:select id="contactselectedtype" name="contactType" from="${contactTypes}" optionKey="name" optionValue="displayName"/>
+        <g:select id="contactselectedtype" name="contactType" from="${contactTypes.sort{it.displayName}}" optionKey="name" optionValue="displayName"/>
       </div>
     </div>
     <div class="modal-footer">

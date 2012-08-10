@@ -27,7 +27,7 @@
       <p><g:message code="templates.fr.identityprovider.create.contact.details" /></p>
       <fieldset>
         <div class="control-group">
-          <label for="contact.givenName"><g:message code="label.givenname" /></label>
+          <label class="control-label" for="contact.givenName"><g:message code="label.givenname" /></label>
           <div class="controls">
             <g:if test="${contact?.givenName}">
               <g:textField name="contact.givenName"  class="required" value="${contact?.givenName}"/>
@@ -39,7 +39,7 @@
         </div>
 
         <div class="control-group">
-          <label for="contact.surname"><g:message code="label.surname" /></label>
+          <label class="control-label" for="contact.surname"><g:message code="label.surname" /></label>
           <div class="controls">
             <g:if test="${contact?.surname}">
               <g:textField name="contact.surname"  class="required" value="${contact?.surname}"/>
@@ -51,7 +51,7 @@
         </div>
 
         <div class="control-group">
-          <label for="contact.email"><g:message code="label.email" /></label>
+          <label class="control-label" for="contact.email"><g:message code="label.email" /></label>
           <div class="controls">
             <g:if test="${contact?.email}">
               <g:textField name="contact.email"  class="required email" value="${contact?.email}"/>
@@ -72,14 +72,14 @@
 
       <fieldset>
         <div class="control-group">
-          <label for="organization.id"><g:message code="label.organization" /></label>
+          <label class="control-label" for="organization.id"><g:message code="label.organization" /></label>
           <div class="controls">
             <g:select name="organization.id" from="${organizationList.sort{it.displayName}}" optionKey="id" optionValue="displayName" value="${organization?.id}" class="span4" />
           </div>
         </div>
 
         <div class="control-group">
-          <label for="idp.displayName"><g:message code="label.displayname" /></label>
+          <label class="control-label" for="idp.displayName"><g:message code="label.displayname" /></label>
           <div class="controls">
             <g:hiddenField name="aa.displayName" value=""/>
             <g:textField name="idp.displayName" class="required span4" value="${identityProvider?.displayName}"/>
@@ -88,7 +88,7 @@
         </div>
 
         <div class="control-group">
-          <label for="idp.description"><g:message code="label.description" /></label>
+          <label class="control-label" for="idp.description"><g:message code="label.description" /></label>
           <div class="controls">
             <g:hiddenField name="aa.description" />
             <g:textArea name="idp.description"  class="required span4" rows="8" value="${identityProvider?.description}"/>
@@ -113,14 +113,14 @@
 
         <fieldset>
           <div class="control-group">
-            <label for="knownimpl"><g:message code="label.implementation" /></label>
+            <label class="control-label" for="knownimpl"><g:message code="label.implementation" /></label>
             <div class="controls">
               <span id="knownimpl"></span>
             </div>
           </div>
 
           <div class="control-group">
-            <label for="hostname"><g:message code="label.url" /></label>
+            <label class="control-label" for="hostname"><g:message code="label.url" /></label>
             <div class="controls">
               <g:textField name="hostname" class="url span4" value="${hostname}" placeholder="https://idp.example.edu.au" />
               <fr:tooltip code='help.fr.identityprovider.hostname' />
@@ -139,7 +139,7 @@
 
         <fieldset>
           <div class="control-group">
-            <label for="entity.identifier"><g:message code="label.entityid" /></label>
+            <label class="control-label" for="entity.identifier"><g:message code="label.entityid" /></label>
             <div class="controls">
               <g:textField name="entity.identifier" size="64" class="required url span4" value="${entityDescriptor?.entityID}"/>
               <fr:tooltip code='help.fr.identityprovider.entitydescriptor' />
@@ -149,7 +149,7 @@
         <hr>
         <fieldset>
           <div class="control-group">
-            <label for="idp.post"><g:message code="label.httppostendpoint" /></label>
+            <label class="control-label" for="idp.post"><g:message code="label.httppostendpoint" /></label>
             <div class="controls">
               <g:textField name="idp.post" size="64" class="required url span4" value="${httpPost?.location}"/>
               <fr:tooltip code='help.fr.identityprovider.authpost' />
@@ -158,7 +158,7 @@
           </div>
 
           <div class="control-group">
-            <label for="idp.redirect"><g:message code="label.httpredirectendpoint" /></label>
+            <label class="control-label" for="idp.redirect"><g:message code="label.httpredirectendpoint" /></label>
             <div class="controls">
               <g:textField name="idp.redirect" size="64" class="required url span4" value="${httpRedirect?.location}"/>
               <fr:tooltip code='help.fr.identityprovider.authredirect' />
@@ -169,7 +169,7 @@
         <hr>
         <fieldset>
           <div class="control-group">
-            <label for="idp.artifact"><g:message code="label.soapartifactendpoint" /></label>
+            <label class="control-label" for="idp.artifact"><g:message code="label.soapartifactendpoint" /></label>
             <div class="controls">
               <g:textField name="idp.artifact" size="64" class="required url span4" value="${soapArtifact?.location}"/>
 
@@ -183,7 +183,7 @@
         <hr>
         <fieldset>
           <div class="control-group">
-            <label for="aa.attributeservice"><g:message code="label.soapatrributequeryendpoint" /></label>
+            <label class="control-label" for="aa.attributeservice"><g:message code="label.soapatrributequeryendpoint" /></label>
             
             <div class="controls">
               <g:textField name="aa.attributeservice" size="64" class="required url span4" value="${soapAttributeService?.location}"/>
@@ -204,7 +204,7 @@
 
       <fieldset>
         <div class="control-group">
-            <label for="scope"><g:message code="label.scope" /></label>
+            <label class="control-label" for="scope"><g:message code="label.scope" /></label>
             <div class="controls">
               <g:textField name="idp.scope" class="required span4" value="${scope}" placeholder="example.edu.au"/>
               <fr:tooltip code='help.fr.identityprovider.scope' />
@@ -221,7 +221,7 @@
 
       <fieldset>
         <div class="control-group">
-            <label for="newcertificatedata"><g:message code="label.certificate" /></label>
+            <label class="control-label" for="newcertificatedata"><g:message code="label.certificate" /></label>
             <div class="controls">
               <div id="newcertificatedetails">
               </div>

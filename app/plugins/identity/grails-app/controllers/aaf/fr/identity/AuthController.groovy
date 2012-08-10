@@ -110,7 +110,7 @@ class AuthController {
       return
     }
     
-    log.debug "Attempting Federation invoked based authentication event for subject $principal based on credential provided in $credential"
+    
     
     try {
       def remoteHost = request.getRemoteHost()
@@ -119,9 +119,10 @@ class AuthController {
       
       def token = new FederatedToken(principal:principal, credential:credential, attributes:attributes, remoteHost:remoteHost, userAgent:ua ) 
       
+      log.info "Attempting Federation invoked based authentication event for subject identified in $token"
       SecurityUtils.subject.login(token)
-      log.info "Successfully processed federation based authentication event for subject $principal based on credential provided in $credential, redirecting to content"
       
+      log.info "Successfully processed federation based authentication event for subject $principal based on credential provided in $credential, redirecting to content"
       def targetUri = session.getAttribute(TARGET)
             session.removeAttribute(TARGET)
       targetUri ? redirect(uri: targetUri) : redirect(uri:"/")
@@ -211,7 +212,7 @@ class AuthController {
         log.debug e
     }
     
-    redirect(action: "login")
+    redirect(action: "federatederror")
   }
   
   private String federatedAttributeValue(def grailsApplication, String attr) {

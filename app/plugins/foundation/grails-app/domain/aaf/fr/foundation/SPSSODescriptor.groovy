@@ -11,6 +11,7 @@ class SPSSODescriptor extends SSODescriptor {
 
  	boolean authnRequestsSigned
  	boolean wantAssertionsSigned
+  boolean forceAttributesInFilter = false
 
 	ServiceDescription serviceDescription
 

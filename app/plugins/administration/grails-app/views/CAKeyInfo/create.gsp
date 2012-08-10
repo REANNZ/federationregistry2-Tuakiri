@@ -7,7 +7,7 @@
   </head>
   <body>
     <div id="create-CAKeyInfo" class="content scaffold-create" role="main">
-      <h3><g:message code="default.create.label" args="[entityName]" /></h3>
+      <h3><g:message code="label.createspecific" args="[entityName]" /></h3>
 
       <div class="alert alert-warning">
         <p>

@@ -21,7 +21,7 @@ class ComplianceReportsController {
   def detailedattributesupport = {}
   def idpprovidingattribute = {}
   def compatability = {
-    [idpList: IDPSSODescriptor.list(), spList:SPSSODescriptor.list()]
+    [idpList: IDPSSODescriptor.findAllWhere(active:true), spList:SPSSODescriptor.findAllWhere(active:true)]
   }
 
   def reportattributeavailability = {
@@ -41,7 +41,7 @@ class ComplianceReportsController {
       results.attributes.put(it.id, it.name)
     }
 
-    def idpList = IDPSSODescriptor.list().sort{it.displayName.toLowerCase()}
+    def idpList = IDPSSODescriptor.findAllWhere(active:true).sort{it.displayName.toLowerCase()}
     def categories = AttributeCategory.list()
 
     idpList.each { i ->     
@@ -154,7 +154,7 @@ class ComplianceReportsController {
     def attribute = AttributeBase.get(params.attrid)
     results.attribute = "$attribute.name ($attribute.oid)"
 
-    IDPSSODescriptor.list().each { i->
+    IDPSSODescriptor.findAllWhere(active:true).sort{it.displayName}.each { i->
       if( i.attributes.collect{it.base}.contains(attribute) ) {
         results.supported.add([name:i.displayName, automatedRelease:i.autoAcceptServices, url:g.createLink(controller:'identityProvider', action:'show', id:i.id)])
       } else {

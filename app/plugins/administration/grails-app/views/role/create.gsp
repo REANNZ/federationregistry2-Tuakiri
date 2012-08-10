@@ -15,7 +15,7 @@
           </g:eachError>
         </ul>
       </g:hasErrors>
-      <g:form action="save" class="validating">
+      <g:form action="save" class="form form-horizontal validating">
         <fieldset>
           <g:render template="form"/>
         </fieldset>

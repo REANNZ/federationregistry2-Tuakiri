@@ -26,7 +26,7 @@
     <p><g:message code="templates.fr.serviceprovider.create.contact.details" /></p>
     <fieldset>
       <div class="control-group">
-        <label for="contact.givenName"><g:message code="label.givenname" /></label>
+        <label class="control-label" for="contact.givenName"><g:message code="label.givenname" /></label>
         <div class="controls">
           <g:if test="${contact?.givenName}">
             <g:textField name="contact.givenName"  class="required" value="${contact?.givenName}"/>
@@ -38,7 +38,7 @@
       </div>
 
       <div class="control-group">
-        <label for="contact.surname"><g:message code="label.surname" /></label>
+        <label class="control-label" for="contact.surname"><g:message code="label.surname" /></label>
         <div class="controls">
           <g:if test="${contact?.surname}">
             <g:textField name="contact.surname"  class="required" value="${contact?.surname}"/>
@@ -50,7 +50,7 @@
       </div>
 
       <div class="control-group">
-        <label for="contact.email"><g:message code="label.email" /></label>
+        <label class="control-label" for="contact.email"><g:message code="label.email" /></label>
         <div class="controls">
           <g:if test="${contact?.email}">
             <g:textField name="contact.email"  class="required email" value="${contact?.email}"/>
@@ -71,14 +71,14 @@
 
     <fieldset>
       <div class="control-group">
-        <label for="organization.id"><g:message code="label.organization" /></label>
+        <label class="control-label" for="organization.id"><g:message code="label.organization" /></label>
         <div class="controls">
           <g:select name="organization.id" from="${organizationList.sort{it.displayName}}" optionKey="id" optionValue="displayName" value="${organization?.id}" class="span4"/>
         </div>
       </div>
       
       <div class="control-group">
-        <label for="sp.displayName"><g:message code="label.displayname" /></label>
+        <label class="control-label" for="sp.displayName"><g:message code="label.displayname" /></label>
         <div class="controls">
           <g:textField name="sp.displayName" class="required span4" value="${serviceProvider?.displayName}"/>
           <fr:tooltip code='help.fr.serviceprovider.displayname' />
@@ -86,7 +86,7 @@
       </div>
       
       <div class="control-group">
-        <label for="sp.description"><g:message code="label.description" /></label>
+        <label class="control-label" for="sp.description"><g:message code="label.description" /></label>
         <div class="controls">
           <g:textArea name="sp.description"  class="required span4" rows="8" value="${serviceProvider?.description}"/>
           <fr:tooltip code='help.fr.serviceprovider.description' />
@@ -94,7 +94,7 @@
       </div>
       
       <div class="control-group">
-        <label for="sp.servicedescription.connecturl"><g:message code="label.serviceurl" /></label>
+        <label class="control-label" for="sp.servicedescription.connecturl"><g:message code="label.serviceurl" /></label>
         <div class="controls">
           <g:textField name="sp.servicedescription.connecturl" class="required url span4" value="${servicedescription?.connecturl}"/>
           <fr:tooltip code='help.fr.serviceprovider.connecturl' />
@@ -102,7 +102,7 @@
       </div>
       
       <div class="control-group">
-        <label for="sp.servicedescription.logourl"><g:message code="label.servicelogourl" /></label>
+        <label class="control-label" for="sp.servicedescription.logourl"><g:message code="label.servicelogourl" /></label>
         <div class="controls">
           <g:textField name="sp.servicedescription.logourl" class="url span4" value="${servicedescription?.logourl}"/>
           <fr:tooltip code='help.fr.serviceprovider.logourl' />
@@ -123,7 +123,7 @@
 
       <fieldset>
         <div class="control-group">
-          <label for="knownimpl"><g:message code="label.implementation" /></label>
+          <label class="control-label" for="knownimpl"><g:message code="label.implementation" /></label>
           <div class="controls">
             <div id="knownimpl">
               <strong>&nbsp;&nbsp;&nbsp;&nbsp;<g:message code="templates.fr.serviceprovider.create.saml.known.shib13" /></strong>&nbsp;&nbsp;<span class="label important"><g:message code="templates.fr.serviceprovider.create.saml.known.shib13.descriptive" /></span></span><br>
@@ -132,7 +132,7 @@
         </div>
 
         <div class="control-group">
-          <label for="hostname"><g:message code="label.url" /></label>
+          <label class="control-label" for="hostname"><g:message code="label.url" /></label>
           <div class="controls">
             <g:textField name="hostname" id="hostname" class="url span4" value="${hostname}" placeholder="https://sp.example.edu.au"/>
             <fr:tooltip code='help.fr.serviceprovider.hostname' />
@@ -151,7 +151,7 @@
 
       <fieldset>
         <div class="control-group">
-          <label for="entity.identifier"><g:message code="label.entitydescriptor" /></label>
+          <label class="control-label" for="entity.identifier"><g:message code="label.entitydescriptor" /></label>
           <div class="controls">
             <g:textField name="entity.identifier" class="required url span4" value="${entityDescriptor?.entityID}"/>
             <fr:tooltip code='help.fr.serviceprovider.entitydescriptor' />
@@ -161,7 +161,7 @@
       <hr>
       <fieldset>
         <div class="control-group">
-          <label for="sp.acs.post"><g:message code="label.acspostendpoint" /></label>
+          <label class="control-label" for="sp.acs.post"><g:message code="label.acspostendpoint" /></label>
           <div class="controls">
             <g:hiddenField name="sp.acs.post-isdefault" value="true" />
             <g:textField name="sp.acs.post" class="required url span4"  value="${httpPostACS?.location}"/>
@@ -174,7 +174,7 @@
         </div>
         
         <div class="control-group">
-          <label for="sp.acs.artifact"><g:message code="label.acsartifactendpoint" /></label>
+          <label class="control-label" for="sp.acs.artifact"><g:message code="label.acsartifactendpoint" /></label>
           <div class="controls">
             <g:hiddenField name="sp.acs.artifact-isdefault" value="false" />
             <g:textField name="sp.acs.artifact" class="required url span4" value="${httpArtifactACS?.location}"/>
@@ -189,7 +189,7 @@
       <hr>
       <fieldset>
         <div class="control-group">
-          <label for="sp.slo.artifact"><g:message code="label.sloartifactendpoint" /></label>
+          <label class="control-label" for="sp.slo.artifact"><g:message code="label.sloartifactendpoint" /></label>
           <div class="controls">
             <g:textField name="sp.slo.artifact" class="samloptional url span4" value="${sloArtifact?.location}"/>
             <fr:tooltip code='help.fr.serviceprovider.sloartifact' />
@@ -198,7 +198,7 @@
         </div>
 
         <div class="control-group">
-          <label for="sp.slo.redirect"><g:message code="label.sloredirectendpoint" /></label>
+          <label class="control-label" for="sp.slo.redirect"><g:message code="label.sloredirectendpoint" /></label>
           <div class="controls">
             <g:textField name="sp.slo.redirect" class="samloptional url span4" value="${sloRedirect?.location}"/>
             <fr:tooltip code='help.fr.serviceprovider.sloredriect' />
@@ -207,7 +207,7 @@
         </div>
         
         <div class="control-group">
-          <label for="sp.slo.soap"><g:message code="label.slosoapendpoint" /></label>
+          <label class="control-label" for="sp.slo.soap"><g:message code="label.slosoapendpoint" /></label>
           <div class="controls">
             <g:textField name="sp.slo.soap" class="samloptional url span4" value="${sloSOAP?.location}"/>
             <fr:tooltip code='help.fr.serviceprovider.slosoap' />
@@ -216,7 +216,7 @@
         </div>
         
         <div class="control-group">
-          <label for="sp.slo.post"><g:message code="label.slopostendpoint" /></label>
+          <label class="control-label" for="sp.slo.post"><g:message code="label.slopostendpoint" /></label>
           <div class="controls">
             <g:textField name="sp.slo.post" class="samloptional url span4"  value="${sloPost?.location}"/>
             <fr:tooltip code='help.fr.serviceprovider.slopost' />
@@ -227,7 +227,7 @@
       <hr>
       <fieldset>
         <div class="control-group">
-          <label for="sp.drs"><g:message code="label.drsendpoint" /></label>
+          <label class="control-label" for="sp.drs"><g:message code="label.drsendpoint" /></label>
           <div class="controls">
             <g:textField name="sp.drs" class="samloptional url span4" value="${discoveryResponseService?.location}"/>
             <g:hiddenField name="sp.drs-isdefault" value="true" />
@@ -239,7 +239,7 @@
       <hr>
       <fieldset>
         <div class="control-group">
-          <label for="sp.mnid.artifact"><g:message code="label.mnidartifactendpoint" /></label>
+          <label class="control-label" for="sp.mnid.artifact"><g:message code="label.mnidartifactendpoint" /></label>
           <div class="controls">
             <g:textField name="sp.mnid.artifact" class="samloptional url span4" value="${mnidArtifact?.location}"/>
             <fr:tooltip code='help.fr.serviceprovider.mnidaritfact' />
@@ -248,7 +248,7 @@
         </div>
 
         <div class="control-group">
-          <label for="sp.mnid.redirect"><g:message code="label.mnidredirectendpoint" /></label>
+          <label class="control-label" for="sp.mnid.redirect"><g:message code="label.mnidredirectendpoint" /></label>
           <div class="controls">
             <g:textField name="sp.mnid.redirect" class="samloptional url span4" value="${mnidRedirect?.location}"/>
             <fr:tooltip code='help.fr.serviceprovider.mnidredirect' />
@@ -257,7 +257,7 @@
         </div>
 
         <div class="control-group">
-          <label for="sp.mnid.soap"><g:message code="label.mnidsoapendpoint" /></label>
+          <label class="control-label" for="sp.mnid.soap"><g:message code="label.mnidsoapendpoint" /></label>
           <div class="controls">
             <g:textField name="sp.mnid.soap" class="samloptional url span4" value="${mnidSOAP?.location}"/>
             <fr:tooltip code='help.fr.serviceprovider.mnidsoap' />
@@ -266,7 +266,7 @@
         </div>
 
         <div class="control-group">
-          <label for="sp.mnid.post"><g:message code="label.mnidpostendpoint" /></label>
+          <label class="control-label" for="sp.mnid.post"><g:message code="label.mnidpostendpoint" /></label>
           <div class="controls">
             <g:textField name="sp.mnid.post" class="samloptional url span4" value="${mnidPost?.location}"/>
             <fr:tooltip code='help.fr.serviceprovider.mnidpost' />
@@ -285,7 +285,7 @@
 
     <fieldset>
       <div class="control-group">
-          <label for="newcertificatedata"><g:message code="label.certificate" /></label>
+          <label class="control-label" for="newcertificatedata"><g:message code="label.certificate" /></label>
         <div class="controls">
           <div id="newcertificatedetails">
           </div>

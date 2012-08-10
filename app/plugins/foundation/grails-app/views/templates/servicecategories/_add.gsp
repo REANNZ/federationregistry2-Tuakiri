@@ -13,7 +13,7 @@
         <input type="hidden" name="id" value="${descriptor.id}"/>
         
         <div class="control-group">
-          <label for="categoryID"><g:message code="label.category"/></label>
+          <label class="control-label" for="categoryID"><g:message code="label.category"/></label>
           <div class="controls">
                 <g:select name="categoryID" from="${ServiceCategory.list()}" optionKey="id" optionValue="name"/>
           </div>

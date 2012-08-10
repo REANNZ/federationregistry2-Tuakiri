@@ -1,6 +1,7 @@
 package aaf.fr.api.v1
 
 import aaf.fr.foundation.*
+import grails.plugins.federatedgrails.Role
 import grails.converters.JSON
 import groovy.xml.MarkupBuilder
 
@@ -54,6 +55,22 @@ class ServiceProvidersAPIv1Controller {
 		result.entityid = sp.entityDescriptor.entityID
 		result.categories = []
 		sp.serviceCategories.each { result.categories.add(it.name) }
+
+    def adminRole = Role.findByName("descriptor-${sp.id}-administrators")
+    if(adminRole) {
+      result.administrators = []
+      adminRole.subjects.each {ars ->
+        if(ars.enabled) {
+          def admin = [:]
+          admin.id = ars.id
+          admin.cn = ars.cn
+          admin.email = ars.email
+          admin.sharedtoken = ars.sharedToken
+
+          result.administrators.add(admin)
+        }
+      }
+    }
 		
 		def protocolSupportEnumerations = []
 		sp.protocolSupportEnumerations.each { protocolSupportEnumerations.add(it.uri) }
