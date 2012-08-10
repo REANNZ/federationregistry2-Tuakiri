@@ -14,7 +14,7 @@
        <g:hiddenField name="interval" value="0" />
 
         <div class="control-group">
-          <label for="type"><g:message code="label.monitortype"/></label>
+          <label class="control-label" for="type"><g:message code="label.monitortype"/></label>
           <div class="controls">
             <g:select name="type" from="${MonitorType.list()}" optionKey="id" optionValue="name" class="span2"/>
             <fr:tooltip code='help.fr.monitor.type' />
@@ -22,7 +22,7 @@
         </div>
 
         <div class="control-group">
-          <label for="url"><g:message code="label.location"/></label>
+          <label class="control-label" for="url"><g:message code="label.location"/></label>
           <div class="controls">
             <input name="url" type="text" class="required span4" />
             <fr:tooltip code='help.fr.monitor.location' />
@@ -30,7 +30,7 @@
         </div>
 
         <div class="control-group">
-          <label for="node"><g:message code="label.node"/></label>
+          <label class="control-label" for="node"><g:message code="label.node"/></label>
           <div class="controls">
             <input name="node" type="text" class="span2" />
             <fr:tooltip code="help.fr.monitor.node" />

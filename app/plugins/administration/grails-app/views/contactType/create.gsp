@@ -7,7 +7,7 @@
   </head>
   <body>
     <div id="create-contactType" class="content scaffold-create" role="main">
-      <h3><g:message code="default.create.label" args="[entityName]" /></h3>
+      <h3><g:message code="label.createspecific" args="[entityName]" /></h3>
       <g:if test="${flash.message}">
       <div class="message" role="status">${flash.message}</div>
       </g:if>

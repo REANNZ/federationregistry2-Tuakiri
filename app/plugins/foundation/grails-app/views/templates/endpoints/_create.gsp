@@ -16,7 +16,7 @@
  name="endpointType" value="${endpointType}">
 
         <div class="control-group">
-          <label for="binding"><g:message code="label.binding"/></label>
+          <label class="control-label" for="binding"><g:message code="label.binding"/></label>
           <div class="controls">
             <g:select name="binding" from="${SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding)}" optionKey="id" optionValue="uri" class="span4"/>
             <fr:tooltip code='help.fr.endpoint.binding' />
@@ -24,7 +24,7 @@
         </div>
 
         <div class="control-group">
-          <label for="location"><g:message code="label.location"/></label>
+          <label class="control-label" for="location"><g:message code="label.location"/></label>
           <div class="controls">
             <input name="location" type="text" class="required url span4"/>
             <fr:tooltip code='help.fr.endpoint.location' />
@@ -33,7 +33,7 @@
 
         <g:if test="${resloc}">
           <div class="control-group">
-            <label for="responselocation"><g:message code="label.responselocation"/></label>
+            <label class="control-label" for="responselocation"><g:message code="label.responselocation"/></label>
             <div class="controls">
               <input name="responselocation" type="text" class="span4"/>
             </div>
@@ -42,7 +42,7 @@
 
         <g:if test="${indexed}">
           <div class="control-group">
-            <label for="index"><g:message code="label.index" /></label>
+            <label class="control-label" for="index"><g:message code="label.index" /></label>
             <div class="controls">
               <input name="samlindex" type="text" class="required number span1" />
               <fr:tooltip code='help.fr.endpoint.index' />
@@ -51,7 +51,7 @@
         </g:if>
 
         <div class="control-group">
-          <label for="active"><g:message code="label.active"/></label>
+          <label class="control-label" for="active"><g:message code="label.active"/></label>
           <div class="controls">
             <g:checkBox name="active" value="true" />
             <fr:tooltip code='help.fr.endpoint.active' />

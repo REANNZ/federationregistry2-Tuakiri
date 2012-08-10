@@ -12,7 +12,7 @@
     <h4><g:message code="templates.fr.nameidformats.add.heading"/></h4>
     <form id="newnameidformatdata" class="form-horizontal">
       <div class="control-group">
-        <label for="formatID"><g:message code="label.nameidformat"/></label>
+        <label class="control-label" for="formatID"><g:message code="label.nameidformat"/></label>
         <div class="controls">
           <g:select name="formatID" from="${SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)}" optionKey="id" optionValue="uri" class="span4"/>
         </div>

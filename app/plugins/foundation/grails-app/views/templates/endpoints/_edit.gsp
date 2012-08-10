@@ -8,7 +8,7 @@
       <g:hiddenField name="id" value="${endpoint.id}" />
       
       <div class="control-group">
-        <label for="uri"><g:message code="label.binding"/></label>
+        <label class="control-label" for="uri"><g:message code="label.binding"/></label>
         <div class="controls">
           <g:select name="binding" from="${SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding)}" optionKey="id" optionValue="uri" value="${endpoint.binding.id}" class="span4"/>
           <fr:tooltip code='help.fr.endpoint.binding' />
@@ -16,7 +16,7 @@
       </div>
 
       <div class="control-group">
-        <label for="location"><g:message code="label.location"/></label>
+        <label class="control-label" for="location"><g:message code="label.location"/></label>
         <div class="controls">
           <input name="location" type="text" class="required url span4" size="60" value="${endpoint.location}"/>
           <fr:tooltip code='help.fr.endpoint.location' />
@@ -25,7 +25,7 @@
 
       <g:if test="${endpoint.instanceOf(aaf.fr.foundation.IndexedEndpoint)}">
         <div class="control-group">
-          <label for="samlindex"><g:message code="label.index" /></label>
+          <label class="control-label" for="samlindex"><g:message code="label.index" /></label>
           <div class="controls">
             <input name="samlindex" type="text" class="required number span1" value="${endpoint.index}"/>
             <fr:tooltip code='help.fr.endpoint.index' />

@@ -23,14 +23,14 @@
         <form id="newattributedata${acs.id}" class="form-horizontal validating">
           <fieldset>
             <div class="control-group">
-              <label for="attrid"><g:message code="label.attribute"/></label>
+              <label class="control-label" for="attrid"><g:message code="label.attribute"/></label>
               <div class="controls">
                 <fr:attributeSelection />
               </div>
             </div>
 
             <div class="control-group">
-              <label for="reasoning"><g:message code="label.reason"/></label>
+              <label class="control-label" for="reasoning"><g:message code="label.reason"/></label>
               <div class="controls">
                 <input name="reasoning" type="text" class="required span4"/>
                 <fr:tooltip code='help.fr.acs.reason' />
@@ -38,7 +38,7 @@
             </div>
 
             <div class="control-group">
-              <label for="isrequired"><g:message code="label.required"/></label>
+              <label class="control-label" for="isrequired"><g:message code="label.required"/></label>
               <div class="controls">
                 <g:checkBox name="isrequired" />
                 <fr:tooltip code='help.fr.acs.isrequired' />

@@ -11,7 +11,7 @@
 
     <form id="newattributedata" class="form-horizontal">
       <div class="control-group">
-        <label for="attributeID"><g:message code="label.attribute"/></label>
+        <label class="control-label" for="attributeID"><g:message code="label.attribute"/></label>
         <div class="controls">
           <fr:attributeSelection />
         </div>

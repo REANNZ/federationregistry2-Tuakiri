@@ -59,7 +59,7 @@
             </g:eachError>
           </ul>
           </g:hasErrors>
-          <g:form method="post" class="form">
+          <g:form method="post" class="form form-horizontal">
             <g:hiddenField name="id" value="${role?.id}" />
             <g:hiddenField name="version" value="${role?.version}" />
             <fieldset class="form">

@@ -110,7 +110,7 @@
                 <input type="hidden" name="id" value="${ra.id}">
                 <fieldset>
                   <div class="control-group">
-                    <label for="value"><g:message code="label.value"/></label>
+                    <label class="control-label" for="value"><g:message code="label.value"/></label>
                     <div class="controls">
                       <input name="value" type="text" class="required" size="60"/>
                       <fr:tooltip code='help.fr.acs.specvalue' />

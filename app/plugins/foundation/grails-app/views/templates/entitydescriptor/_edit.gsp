@@ -4,7 +4,7 @@
     <fieldset>
 
       <div class="control-group">
-        <label for="entity.status"><g:message code="label.status" /></label>
+        <label class="control-label" for="entity.status"><g:message code="label.status" /></label>
         <div class="controls">
           <g:radioGroup name="entity.active" values="['true', 'false']" labels="['label.active', 'label.inactive']" value="${entity.active}">
              ${it.radio} <g:message code="${it.label}" />
@@ -14,14 +14,14 @@
       </div>
     
       <div class="control-group">
-        <label for="entity.identifier"><g:message code="label.entitydescriptor" /></label>
+        <label class="control-label" for="entity.identifier"><g:message code="label.entitydescriptor" /></label>
         <div class="controls">
           <g:textField name="entity.identifier" value="${entity.entityID}" class="required span4"/>
         </div>
       </div>
 
       <div class="control-group">
-        <label for="entity.extensions"><g:message code="label.extensions" /></label>
+        <label class="control-label" for="entity.extensions"><g:message code="label.extensions" /></label>
         <div class="controls">
           <g:textArea name="entity.extensions" value="${entity.extensions}" class="span4"/>
         </div>

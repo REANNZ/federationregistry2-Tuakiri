@@ -25,7 +25,7 @@
     <p><g:message code="templates.fr.organization.create.contact.details" /></p>
     <fieldset>
       <div class="control-group">
-        <label for="contact.givenName"><g:message code="label.givenname" /></label>
+        <label class="control-label" for="contact.givenName"><g:message code="label.givenname" /></label>
         <div class="controls">
           <g:if test="${contact?.givenName}">
             <g:textField name="contact.givenName"  class="required" value="${contact?.givenName}"/>
@@ -37,7 +37,7 @@
       </div>
 
       <div class="control-group">
-        <label for="contact.surname"><g:message code="label.surname" /></label>
+        <label class="control-label" for="contact.surname"><g:message code="label.surname" /></label>
         <div class="controls">
           <g:if test="${contact?.surname}">
             <g:textField name="contact.surname"  class="required" value="${contact?.surname}"/>
@@ -49,7 +49,7 @@
       </div>
 
       <div class="control-group">
-        <label for="contact.email"><g:message code="label.email" /></label>
+        <label class="control-label" for="contact.email"><g:message code="label.email" /></label>
         <div class="controls">
           <g:if test="${contact?.email}">
             <g:textField name="contact.email"  class="required email" value="${contact?.email}"/>
@@ -71,7 +71,7 @@
     </p>
     <fieldset>
       <div class="control-group">
-      <label for="organization.name"><g:message code="label.name" /></label>
+      <label class="control-label" for="organization.name"><g:message code="label.name" /></label>
         <div class="controls">
           <g:textField name="organization.name" class="required span4" value="${organization?.name}" placeholder="example.edu.au" />
           <fr:tooltip code='help.fr.organization.name' />
@@ -79,7 +79,7 @@
       </div>
 
       <div class="control-group">
-      <label for="organization.displayName"><g:message code="label.displayname" /></label>
+      <label class="control-label" for="organization.displayName"><g:message code="label.displayname" /></label>
         <div class="controls">
           <g:textField name="organization.displayName" class="required span4" value="${organization?.displayName}" placeholder="Example University"/>
           <fr:tooltip code='help.fr.organization.displayName' />
@@ -87,7 +87,7 @@
       </div>
 
       <div class="control-group">
-      <label for="organization.url"><g:message code="label.organizationurl" /></label>
+      <label class="control-label" for="organization.url"><g:message code="label.organizationurl" /></label>
         <div class="controls">
           <g:textField name="organization.url" class="required url span4" value="${organization?.url}" placeholder="http://www.example.edu.au"/>
           <fr:tooltip code='help.fr.organization.url' />
@@ -95,7 +95,7 @@
       </div>
 
       <div class="control-group">
-      <label for="organization.primary"><g:message code="label.organizationtype" /></label>
+      <label class="control-label" for="organization.primary"><g:message code="label.organizationtype" /></label>
         <div class="controls">
           <g:select name="organization.primary" from="${organizationTypes.findAll{it.discoveryServiceCategory == true}.sort{it.displayName}}" optionKey="id" optionValue="displayName" value="${organization?.primary?.id}" class="span4" />
           <fr:tooltip code='help.fr.organization.type' />
