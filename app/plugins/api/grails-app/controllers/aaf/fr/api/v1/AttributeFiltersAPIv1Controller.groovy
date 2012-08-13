@@ -24,7 +24,7 @@ class AttributeFiltersAPIv1Controller {
 		}
 		
 		def response = [attributefilters:results]
-		render response as JSON		
+		render response as JSON
 	}
 	
 	def show = {		
