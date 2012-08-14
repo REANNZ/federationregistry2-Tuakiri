@@ -110,8 +110,6 @@ class AuthController {
       return
     }
     
-    
-    
     try {
       def remoteHost = request.getRemoteHost()
       def ua = request.getHeader("User-Agent")
@@ -119,7 +117,7 @@ class AuthController {
       
       def token = new FederatedToken(principal:principal, credential:credential, attributes:attributes, remoteHost:remoteHost, userAgent:ua ) 
       
-      log.info "Attempting Federation invoked based authentication event for subject identified in $token"
+      log.info "Attempting federation based authentication event for subject identified in $token"
       SecurityUtils.subject.login(token)
       
       log.info "Successfully processed federation based authentication event for subject $principal based on credential provided in $credential, redirecting to content"
@@ -133,7 +131,7 @@ class AuthController {
       log.debug e
     }
     catch (DisabledAccountException e) {
-      log.warn "Federated credentials failure for subject $principal, account disabled locally"
+      log.warn "Federated credentials failure for subject $principal"
       log.debug e
     }
     catch (AuthenticationException e) {
