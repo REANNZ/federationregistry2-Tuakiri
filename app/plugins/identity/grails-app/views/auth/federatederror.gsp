@@ -34,6 +34,9 @@
       <p>
         Within the AAF we recommend automating this process, take a look at this guide for more information <a href="http://support.aaf.edu.au/entries/321600-automating-attribute-release">http://support.aaf.edu.au/entries/321600-automating-attribute-release</a>. Don't know the value for [YOUR UNIQUE URL]? Get in touch with AAF support who'll be able to help you out.
       </p>
+      <h3>4. auEduPersonSharedToken value change</h3>
+      <p>If you've previously used Federation Registry it is possible that this error has occured because your Identity Provider has supplied a changed value for your auEduPersonSharedToken.</p>
+      <p>However this should <strong>never be the case</strong> and must be investigated further. If you believe this to be the case please contact AAF support for resolution.</p>
     </div>
     
     <div class="row-spacer">
