@@ -6,45 +6,49 @@
   <body>
 
     <g:if test="${tasks}">
-      <div class="span11">
-        <div class="alert alert-block alert-info"><a class="close" data-dismiss="alert" href="#">&times;</a>
-          <h3 class="alert-heading">Workflows requiring YOUR action&nbsp;&nbsp;<span class="label label-important">Important!</span></h3>
-          <ol>
-            <g:each in="${tasks}" status="i" var="instance">
-              <li>
-                <strong>Submitted</strong>: ${fieldValue(bean: instance, field: "dateCreated")}<br>
-                <strong>Description</strong>: <g:link controller="workflowApproval" action="list">${fieldValue(bean: instance, field: "processInstance.description")}</g:link>
-              </li>
-            </g:each>
-          </ol>
+      <div class="row row-spacer">
+        <div class="span8 offset2">
+          <div class="alert alert-block alert-info">
+            <h3 class="alert-heading">Workflows requiring your action</h3>
+            <ol>
+              <g:each in="${tasks}" status="i" var="instance">
+                <li>
+                  <strong>Submitted</strong>: ${fieldValue(bean: instance, field: "dateCreated")}<br>
+                  <strong>Description</strong>: <g:link controller="workflowApproval" action="list">${fieldValue(bean: instance, field: "processInstance.description")}</g:link>
+                </li>
+              </g:each>
+            </ol>
+          </div>
         </div>
       </div>
     </g:if>
 
     <g:if test="${submittedTasks}">
-      <div class="span11">
-        <div class="alert alert-block alert-infol"><a class="close" data-dismiss="alert" href="#">&times;</a>
-          <h3 class="alert-heading">Workflows you have submitted</h3>
-          <ol>
-            <g:each in="${submittedTasks}" status="i" var="instance">
-              <li>
-                <strong>Submitted</strong>: ${fieldValue(bean: instance, field: "dateCreated")}<br>
-                <strong>Waiting on</strong>: 
-                <ul class="clean">
-                  <g:each in="${instance?.potentialApprovers}" var="approver">
-                    <li>${fieldValue(bean: approver, field: "cn")} - <a href="mailto:${approver.email}">${fieldValue(bean: approver, field: "email")}</a></li>
-                  </g:each>
-                </ul>
-              </li>
-            </g:each>
-          </ol>
-          <p>If your workflow has not been actioned by the above people <strong>please contact them directly</strong> for an update on progress.</p>
+      <div class="row row-spacer">
+        <div class="span8 offset2">
+          <div class="alert alert-block alert-infol">
+            <h3 class="alert-heading">Workflows you have submitted</h3>
+            <ol>
+              <g:each in="${submittedTasks}" status="i" var="instance">
+                <li>
+                  <strong>Submitted</strong>: ${fieldValue(bean: instance, field: "dateCreated")}<br>
+                  <strong>Waiting on</strong>: 
+                  <ul class="clean">
+                    <g:each in="${instance?.potentialApprovers}" var="approver">
+                      <li>${fieldValue(bean: approver, field: "cn")} - <a href="mailto:${approver.email}">${fieldValue(bean: approver, field: "email")}</a></li>
+                    </g:each>
+                  </ul>
+                </li>
+              </g:each>
+            </ol>
+            <p>If your workflow has not been actioned by the above people <strong>please contact them directly</strong> for an update on progress.</p>
+          </div>
+          <span style="color:#fff">.</span>
         </div>
       </div>
     </g:if>
 
-
-    <div class="row span12 row-spacer clearfix">
+    <div class="row span12 row-spacer">
       <div class="span3 well">
         <h3>My Organisations</h3>
         <g:if test="${organizations}">
