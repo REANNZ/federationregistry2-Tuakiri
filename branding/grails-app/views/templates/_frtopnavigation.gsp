@@ -42,7 +42,7 @@
       </li>
     </fr:isAdministrator>
   </fr:isLoggedIn>
-  <li><a style="color: #fff;" href="/federationmonitoring" target="_blank"><g:message code="fr.branding.nav.monitoring" default="Monitoring" /></a></li>
+  <li><a style="color: #fff;" href="/federationmonitoring" target="_blank"><g:message code="fr.branding.nav.monitoring" default="Federation Monitoring" /></a></li>
   <li><a style="color: #fff;" href="#" onClick="script: Zenbox.show(); return false;"><g:message code="fr.branding.nav.support" default="Support" /></a></li>
   <fr:isLoggedIn>
     <li>

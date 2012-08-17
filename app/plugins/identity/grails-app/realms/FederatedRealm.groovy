@@ -102,6 +102,14 @@ class FederatedRealm {
           subject.contact.email = token.attributes.email.toLowerCase()
         }
 
+        // We've just started collecting these so update previously stored accounts
+        if(!subject.sharedToken) {
+          subject.sharedToken = token.attributes.sharedToken
+        } else if (subject.sharedToken != token.attributes.sharedToken) {
+          log.error("Authentication halted for ${subject} as current sharedToken ${subject.sharedToken} does not match incoming token ${token.attributes.sharedToken}")
+          throw new IncorrectCredentialsException("${subject} authentication halted as current sharedToken ${subject.sharedToken} does not match incoming token ${token.attributes.sharedToken}")
+        }
+
         // Store in data repository
         if(!subject.save()) {
           subject.errors.each { err ->
@@ -113,8 +121,8 @@ class FederatedRealm {
       }
       
       if (!subject.enabled) {
-        log.warn("Attempt to authenticate using using federated principal mapped to a locally disabled account [${subject.id}]${subject.principal}")
-        throw new DisabledAccountException("Attempt to authenticate using using federated principal mapped to a locally disabled account [${subject.id}]${subject.principal}")
+        log.warn("Attempt to authenticate using federated principal mapped to a locally disabled account [${subject.id}]${subject.principal}")
+        throw new DisabledAccountException("Attempt to authenticate using federated principal mapped to a locally disabled account [${subject.id}]${subject.principal}")
       }
       
       // All done the security context is successfully established
