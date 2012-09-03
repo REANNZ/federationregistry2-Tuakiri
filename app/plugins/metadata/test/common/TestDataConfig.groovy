@@ -1,5 +1,3 @@
-package aaf.fr.metadata
-
 testDataConfig {
     sampleData {
         'aaf.fr.foundation.Organization' {
