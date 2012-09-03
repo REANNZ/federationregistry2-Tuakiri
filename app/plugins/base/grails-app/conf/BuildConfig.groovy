@@ -1,6 +1,3 @@
-grails.plugin.location.base = "../base"
-
-
 grails.project.class.dir = "target/classes"
 grails.project.test.class.dir = "target/test-classes"
 grails.project.test.reports.dir = "target/test-reports"
@@ -27,7 +24,7 @@ grails.project.dependency.resolution = {
     mavenRepo "http://download.java.net/maven/2/"
     mavenRepo "http://repository.jboss.com/maven2/"
   }
-  
+
   dependencies {
     test 'mysql:mysql-connector-java:5.1.18'
   }
@@ -35,6 +32,7 @@ grails.project.dependency.resolution = {
   plugins {
     build ":tomcat:$grailsVersion"
     
+    compile ":federated-grails:0.2.4"
     compile ":build-test-data:2.0.3"
 
     runtime ":hibernate:$grailsVersion"
