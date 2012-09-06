@@ -80,8 +80,13 @@ def homeOrganization = new AttributeBase(oid:'1.3.6.1.4.1.25178.1.2.9', nameForm
 def homeOrganizationType = new AttributeBase(oid:'1.3.6.1.4.1.25178.1.2.10', nameFormat: attrUri, legacyName:'urn:oid:1.3.6.1.4.1.25178.1.2.10', name:'homeOrganizationType', description:'Type of Organization the user belongs too', category:optionalCategory, specificationRequired:false).save()
 
 // Default Service Category
+// TODO - erronous?
 def sc = new ServiceCategory(name:'General', description:'Default category that suits majority of federation provided services')
-sc.save()​
+if (!sc.save()) {
+  sc.errors.each {
+    println it
+  }
+}
 
 // AAF supported Monitors
 def federationMonitors = [
