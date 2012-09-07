@@ -11,7 +11,7 @@
       <div class="row">
         <div class="span5">
           <h2>Federated Login</h2>
-          <a href="" class="btn btn-info btn-large">Federated Login</a>
+          <a href="${spsession_url}" class="btn btn-info btn-large">Federated Login</a>
         </div>
         <div class="span5">
           <h2>Local Accounts</h2>
