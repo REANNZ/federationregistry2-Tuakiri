@@ -3,6 +3,7 @@
 <html>
   <head>
     <title><g:message code='fr.branding.title' default='Federation Registry'/></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <r:require modules="modernizr, bootstrap, bootstrap-notify, zenbox, jreject, app"/>
     <g:render template='/templates/frbrowsercheck' />
     <r:layoutResources/>
