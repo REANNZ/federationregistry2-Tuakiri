@@ -1,8 +1,4 @@
-
-// Local plugins
-grails.plugin.location.foundation="../foundation"
-grails.plugin.location.identity="../identity"
-grails.plugin.location.workflow="../workflow"
+grails.plugin.location.base="../base"
 
 grails.project.class.dir = "target/classes"
 grails.project.test.class.dir = "target/test-classes"

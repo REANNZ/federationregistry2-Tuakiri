@@ -7,10 +7,8 @@ grails.project.target.level = 1.6
 grails.project.source.level = 1.6
 
 // Local Plugins
-grails.plugin.location.identity = "../plugins/identity"
-grails.plugin.location.foundation = "../plugins/foundation"
+grails.plugin.location.base = "../plugins/base"
 grails.plugin.location.reporting = "../plugins/reporting"
-grails.plugin.location.workflow = "../plugins/workflow"
 grails.plugin.location.metadata = "../plugins/metadata"
 grails.plugin.location.administration = "../plugins/administration"
 grails.plugin.location.api = "../plugins/api"
