@@ -1,6 +1,6 @@
 import groovy.sql.Sql
 
-sql = Sql.newInstance("jdbc:mysql://localhost:3306/federationregistry2", "fr", "password", "com.mysql.jdbc.Driver")
+sql = Sql.newInstance("jdbc:mysql://localhost:3306/federationregistry2?useUnicode=yes&characterEncoding=UTF-8", "fr", "password", "com.mysql.jdbc.Driver")
 
 def output = new StringBuffer()
 def excludedSubjects = []
