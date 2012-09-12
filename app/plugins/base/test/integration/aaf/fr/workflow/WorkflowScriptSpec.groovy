@@ -13,7 +13,7 @@ class WorkflowScriptSpec extends IntegrationSpec {
 	
 	def setup() {
 		def role = new Role(name:'allsubjects')
-    user = new Subject(principal:'testuser', email:'test@testdomain.com')
+    user = new Subject(principal:'testuser', cn:'test user', email:'test@testdomain.com')
     role.addToSubjects(user)
     user.save()
 	}

@@ -34,9 +34,12 @@ grails.project.dependency.resolution = {
     
     compile ":federated-grails:0.2.4"
     compile ":build-test-data:2.0.3"
+    compile ":mail:1.0"
 
     runtime ":hibernate:$grailsVersion"
 
     test ":spock:0.6"
+    test ":resources:1.1.6"
+    provided ":greenmail:1.3.2"
   }
 }

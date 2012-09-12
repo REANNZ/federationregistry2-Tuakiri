@@ -34,6 +34,7 @@ class OrganizationServiceSpec extends IntegrationSpec {
 	def "Create succeeds when valid organization data and valid new contact data is provided"() {
 		setup:
 		def ot = OrganizationType.build().save()
+    def ct = new ContactType(name:"technical",displayName:"technical",description:"technical contacts").save()
 		
 		params.active = true
 		params.organization = [name:"test org", displayName:"Test Org Pty Ltd", url:"http://test.org", primary:ot.id, lang:'en']
@@ -73,11 +74,12 @@ class OrganizationServiceSpec extends IntegrationSpec {
 	def "Create succeeds when valid organization data and existing contact is provided"() {
 		setup:
 		def ot = OrganizationType.build().save()
-		def contact = Contact.build().save()
+		def ct = new ContactType(name:"technical",displayName:"technical",description:"technical contacts").save()
+    def contact = Contact.build().save()
 		
 		params.active = true
 		params.organization = [name:"test org2", displayName:"Test Org2 Pty Ltd", url:"http://test.org", primary:ot.id, lang:'en']
-		params.contact = [id:contact.id]
+		params.contact = [email:contact.email]
 		
 		def wfProcessName, wfDescription, wfPriority, wfParams
 		WorkflowProcessService.metaClass.initiate =  { String processName, String instanceDescription, ProcessPriority priority, Map params ->
@@ -115,11 +117,12 @@ class OrganizationServiceSpec extends IntegrationSpec {
 	def "Create fails when invalid organization data and existing contact is provided"() {
 		setup:
 		def ot = OrganizationType.build().save()
+    def ct = new ContactType(name:"technical",displayName:"technical",description:"technical contacts").save()
 		def contact = Contact.build().save()
 		
 		params.active = true
 		params.organization = [displayName:"Test Org3 Pty Ltd", url:"http://test.org", primary:ot.id, lang:'en']
-		params.contact = [id:contact.id]
+		params.contact = [email:contact.email]
 		
 		when:
 		def (created, organization_, contact_) = organizationService.create(params)

@@ -22,6 +22,9 @@ environments {
             dbCreate = "update"
             url = "jdbc:h2:mem:testDb;MVCC=TRUE;LOCK_TIMEOUT=10000"
         }
+        grails.mail.port = com.icegreen.greenmail.util.ServerSetupTest.SMTP.port
+        greenmail.disabled = false
+       // grails.views.gsp.sitemesh.preprocess=false
     }
     production {
         dataSource {

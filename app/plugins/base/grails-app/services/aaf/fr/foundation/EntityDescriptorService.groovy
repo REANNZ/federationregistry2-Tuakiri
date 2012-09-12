@@ -54,7 +54,7 @@ class EntityDescriptorService {
     }
     
     def adminRole = roleService.createRole("descriptor-${savedEntityDescriptor.id}-administrators", "Global administrators for the entity ${savedEntityDescriptor.entityID}", false)
-    Permission permission = new Permission(target:"descriptor:${idp.entityDescriptor.id}:*")
+    Permission permission = new Permission(target:"descriptor:${entityDescriptor.id}:*")
     permission.managed = false
     permission.type = Permission.defaultPerm
     permissionService.createPermission(permission, adminRole)

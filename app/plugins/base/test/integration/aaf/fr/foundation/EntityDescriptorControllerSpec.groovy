@@ -41,8 +41,8 @@ class EntityDescriptorControllerSpec extends IntegrationSpec {
 		
 		then:
 		controller.flash.type == "error"
-		controller.flash.message == "fr.controllers.namevalue.missing"
-		controller.response.redirectedUrl == "/entityDescriptor/list"
+		controller.flash.message == "controllers.fr.generic.namevalue.missing"
+		controller.response.redirectedUrl == "/membership/entitydescriptor/list"
 	}
 	
 	def "Show with invalid EntityDescriptor ID"() {
@@ -55,7 +55,7 @@ class EntityDescriptorControllerSpec extends IntegrationSpec {
 		then:
 		controller.flash.type == "error"
 		controller.flash.message == "aaf.fr.foundation.entitydescriptor.nonexistant"
-		controller.response.redirectedUrl == "/entityDescriptor/list"
+		controller.response.redirectedUrl == "/membership/entitydescriptor/list"
 	}
 	
 	def "Validate create"() {
@@ -85,7 +85,7 @@ class EntityDescriptorControllerSpec extends IntegrationSpec {
 		def model = controller.save()
 		
 		then:
-		controller.response.redirectedUrl == "/entityDescriptor/show/${entityDescriptor.id}"
+		controller.response.redirectedUrl == "/membership/entitydescriptor/show/${entityDescriptor.id}"
 	}
 	
 	def "Validate failed save"() {
@@ -119,7 +119,7 @@ class EntityDescriptorControllerSpec extends IntegrationSpec {
 		def model = controller.update()
 		
 		then:
-		controller.response.redirectedUrl == "/entityDescriptor/show/${entityDescriptor.id}"
+		controller.response.redirectedUrl == "/membership/entitydescriptor/show/${entityDescriptor.id}"
 	}
 	
 	def "Invalid or non existing EntityDescriptor fails update"() {
@@ -130,7 +130,7 @@ class EntityDescriptorControllerSpec extends IntegrationSpec {
 		def model = controller.update()
 		
 		then:
-		controller.response.redirectedUrl == "/entityDescriptor/list"	
+		controller.response.redirectedUrl == "/membership/entitydescriptor/list"	
 		controller.flash.type == "error"
 		controller.flash.message == "aaf.fr.foundation.entitydescriptor.nonexistant"
 	}
