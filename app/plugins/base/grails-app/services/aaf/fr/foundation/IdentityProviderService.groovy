@@ -43,7 +43,7 @@ class IdentityProviderService {
   
     // Entity Descriptor
     def entityDescriptor
-    if(params.entity?.id) {   
+    if(params.entity?.id && EntityDescriptor.exists(params.entity?.id)) {   
       entityDescriptor = EntityDescriptor.lock(params.entity?.id)
     }
   

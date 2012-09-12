@@ -21,6 +21,8 @@ class WorkflowTaskService {
   def grailsApplication
   def messageSource
   def mailService
+  def groovyPageRenderer
+  def grailsLinkGenerator
   
   def initiate (def processInstanceID, def taskID) {
     def processInstance = ProcessInstance.get(processInstanceID)
@@ -348,10 +350,15 @@ class WorkflowTaskService {
   void messageApprovalRequest(def sb, TaskInstance taskInstance) {
     log.debug "Sending approval request to $sb for $taskInstance"
     
-    Object[] args = [taskInstance.task.name]
+    Object[] args = [taskInstance.task.name]/*
+    def waListLink = grailsLinkGenerator.link(controller:"workflowApproval", action:"list", absolute:"true")
+    def contents = groovyPageRenderer.render(view: '/templates/mail/_workflow_requestapproval', plugin: "base", model: [taskInstance: taskInstance, waListLink:waListLink])
+    def email_msg = groovyPageRenderer.render(view: '/layouts/email')
+    email_msg = email_msg.replace("<g:layoutBody/>", contents)*/
     mailService.sendMail {
       to sb.email   
       subject messageSource.getMessage('branding.fr.mail.workflow.requestapproval.subject', args, 'branding.fr.mail.workflow.requestapproval.subject', new Locale("EN"))
+      //body email_msg
       body(view: '/templates/mail/_workflow_requestapproval', plugin: "federationworkflow", model: [taskInstance: taskInstance])
     }
   }

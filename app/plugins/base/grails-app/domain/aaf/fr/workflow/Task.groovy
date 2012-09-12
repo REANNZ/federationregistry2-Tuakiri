@@ -135,9 +135,10 @@ class Task {
         }
       }
     }
-    else
+    else {
       return ['task.validation.invalid.directive.set', name]
-      
+    }
+
     // Task meets spec
     true
   }

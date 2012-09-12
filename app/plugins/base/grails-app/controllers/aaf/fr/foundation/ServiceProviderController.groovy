@@ -100,7 +100,7 @@ class ServiceProviderController {
     if (!serviceProvider_) {
       log.error "SPSSODescriptor for id ${params.id} does not exist"
       flash.type="error"
-      flash.message = message(code: 'aaf.fr.foundation.serviceprovider.nonexistant')
+      flash.message = message(code: 'aaf.fr.foundation.spssoroledescriptor.nonexistant')
       redirect(action: "list")
       return
     }
@@ -116,8 +116,8 @@ class ServiceProviderController {
           log.debug it
         }
         flash.type="error"
-        flash.message = message(code: 'aaf.fr.foundation.serviceprovider.save.validation.error')
-        redirect (action: "show", id: entityDescriptor.id)
+        flash.message = message(code: 'aaf.fr.foundation.spssoroledescriptor.update.validation.error')
+        redirect (action: "show", id: serviceProvider_.id)
         return
       }
     }

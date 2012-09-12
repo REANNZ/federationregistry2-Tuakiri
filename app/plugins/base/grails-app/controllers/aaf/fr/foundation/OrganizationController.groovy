@@ -89,6 +89,7 @@ class OrganizationController {
       flash.type="error"
       flash.message = message(code: 'domains.fr.foundation.organization.nonexistant')
       redirect(action: "list")
+      return
     }
     
     if(SecurityUtils.subject.isPermitted("federation:management:organization:${organization_.id}:update")) {
@@ -103,7 +104,7 @@ class OrganizationController {
           log.debug it
         }
         flash.type="error"
-        flash.message = message(code: 'domains.fr.foundation.organization.save.validation.error')
+        flash.message = message(code: 'domains.fr.foundation.organization.update.validation.error')
         redirect (action: "show", id: organization.id)
       }
     }
@@ -119,6 +120,7 @@ class OrganizationController {
       flash.type="error"
       flash.message = message(code: 'controllers.fr.generic.namevalue.missing')
       redirect(action: "list")
+      return
     }
     
     def organization = Organization.get(params.id)
@@ -126,6 +128,7 @@ class OrganizationController {
       flash.type="error"
       flash.message = message(code: 'domains.fr.foundation.organization.nonexistant')
       redirect(action: "list")
+      return
     }
     
     if(SecurityUtils.subject.isPermitted("federation:management:advanced")) {
@@ -149,6 +152,7 @@ class OrganizationController {
       flash.type="error"
       flash.message = message(code: 'controllers.fr.generic.namevalue.missing')
       redirect(action: "list")
+      return
     }
     
     def organization = Organization.get(params.id)
@@ -156,6 +160,7 @@ class OrganizationController {
       flash.type="error"
       flash.message = message(code: 'domains.fr.foundation.organization.nonexistant')
       redirect(action: "list")
+      return
     }
     
     if(SecurityUtils.subject.isPermitted("federation:management:advanced")) {
@@ -179,6 +184,7 @@ class OrganizationController {
       flash.type="error"
       flash.message = message(code: 'controllers.fr.generic.namevalue.missing')
       redirect(action: "list")
+      return
     }
     
     def organization = Organization.get(params.id)
@@ -186,6 +192,7 @@ class OrganizationController {
       flash.type="error"
       flash.message = message(code: 'domains.fr.foundation.organization.nonexistant')
       redirect(action: "list")
+      return
     }
     
     if(SecurityUtils.subject.isPermitted("federation:management:advanced")) {

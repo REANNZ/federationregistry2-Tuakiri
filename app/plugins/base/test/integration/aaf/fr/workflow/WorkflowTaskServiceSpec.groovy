@@ -25,17 +25,17 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 	def grailsApplication
 	def greenMail
 	
-	def user
+	def subject
 	
 	def setup() {
 		savedMetaClasses = [:]
     		
     def role = new Role(name:'allsubjects')
-    user = new Subject(principal:'testuser', email:'test@testdomain.com')
-    role.addToSubjects(user)
-    user.save()
+    subject = new Subject(principal:'testsubject', cn:'test subject', email:'test@testdomain.com')
+    role.addToSubjects(subject)
+    subject.save()
 
-		SpecHelpers.setupShiroEnv(user)
+		SpecHelpers.setupShiroEnv(subject)
 
     new Role(name:'VALUE_1').save()
     new Role(name:'VALUE_2').save()
@@ -49,17 +49,17 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 	def cleanup() {
 		greenMail.deleteAllMessages()
 		
-		user = null
+		subject = null
 	}
 	
 	def "Validate first task in minimal process requires approval when process is run"() {
 		setup:
-		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:user)
+		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:subject)
     testScript.save()
 
 		minimalDefinition = new File('test/data/minimal.pr').getText()
 		
-		WorkflowTaskService.metaClass.messageApprovalRequest = { def user, def taskInstance -> } // Not rendering due to bug in Grails 1.3.6, try removing this in future versions
+		WorkflowTaskService.metaClass.messageApprovalRequest = { def subject, def taskInstance -> } // Not rendering due to bug in Grails 1.3.6, try removing this in future versions
 		def initiated, processInstance	// Spock bug, tuple assignment combined with cleanup explodes so we need to pre-declare
 		
 		when:
@@ -77,23 +77,23 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 		message.subject == 'branding.fr.mail.workflow.requestapproval.subject'
 	}
 
-	def "Validate first task in minimal process requires approval when process is run and approval is provided to users in role1, also validates correct variable substition to workflow script"() {
+	def "Validate first task in minimal process requires approval when process is run and approval is provided to subjects in role1, also validates correct variable substition to workflow script"() {
 		setup:
 		SpecHelpers.registerMetaClass(WorkflowTaskService, savedMetaClasses)
 		workflowTaskService.metaClass = WorkflowTaskService.metaClass
 		
-		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:user).save()
+		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:subject).save()
 		minimalDefinition = new File('test/data/minimal.pr').getText()
 		workflowProcessService.create(minimalDefinition)
 		def initiated, processInstance
 		(initiated, processInstance) = workflowProcessService.initiate('Minimal Test Process', "Approving XYZ Widget", ProcessPriority.LOW, ['TEST_VAR':'role1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3'])
 		
 		def role = new Role(name: 'role1')
-		def user2 = new Subject(principal:'testuser2', email:'test2@testdomain.com').save()
-		role.addToSubjects(user2)
+		def subject2 = new Subject(principal:'testsubject2', cn:'test subject2', email:'test2@testdomain.com').save()
+		role.addToSubjects(subject2)
 		role.save()
 		
-		WorkflowTaskService.metaClass.messageApprovalRequest = { def user, def taskInstance -> } // Not rendering due to bug in Grails 1.3.6, try removing this in future versions
+		WorkflowTaskService.metaClass.messageApprovalRequest = { def subject, def taskInstance -> } // Not rendering due to bug in Grails 1.3.6, try removing this in future versions
 		
 		when:				
 		workflowProcessService.run(processInstance)
@@ -121,7 +121,7 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 		workflowTaskService.metaClass = WorkflowTaskService.metaClass
 		BlockingVariables block = new BlockingVariables(4, TimeUnit.SECONDS)
 		
-		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:user).save()
+		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:subject).save()
 		minimalDefinition = new File('test/data/minimal.pr').getText()
 		workflowProcessService.create(minimalDefinition)
 		def env = ['TEST_VAR':'VALUE_1', 'TEST_VAR2':'VALUE_2', 'TEST_VAR3':'VALUE_3']
@@ -140,7 +140,7 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 			block.executed = true
 		}
 		
-		WorkflowTaskService.metaClass.messageApprovalRequest = { def user, def taskInstance -> } // Not rendering due to bug in Grails 1.3.6, try removing this in future versions
+		WorkflowTaskService.metaClass.messageApprovalRequest = { def subject, def taskInstance -> } // Not rendering due to bug in Grails 1.3.6, try removing this in future versions
 		
 		when:				
 		workflowProcessService.run(processInstance)
@@ -163,7 +163,7 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 		SpecHelpers.registerMetaClass(WorkflowTaskService, savedMetaClasses)
 		workflowTaskService.metaClass = WorkflowTaskService.metaClass
 		
-		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:user).save()
+		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:subject).save()
 		minimalDefinition = new File('test/data/minimal.pr').getText()
 		workflowProcessService.create(minimalDefinition)
 		def initiated, processInstance
@@ -185,7 +185,7 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 			block.startTask6 = reaction.start.contains('task6')
 		}
 		
-		WorkflowTaskService.metaClass.messageApprovalRequest = { def user, def taskInstance -> } // Not rendering due to bug in Grails 1.3.6, try removing this in future versions
+		WorkflowTaskService.metaClass.messageApprovalRequest = { def subject, def taskInstance -> } // Not rendering due to bug in Grails 1.3.6, try removing this in future versions
 		
 		when:				
 		workflowProcessService.run(processInstance)
@@ -211,7 +211,7 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 		SpecHelpers.registerMetaClass(WorkflowTaskService, savedMetaClasses)
 		workflowTaskService.metaClass = WorkflowTaskService.metaClass
 		
-		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:user).save()
+		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:subject).save()
 		minimalDefinition = new File('test/data/minimal.pr').getText()
 		workflowProcessService.create(minimalDefinition)
 		def initiated, processInstance
@@ -237,7 +237,7 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 			block.outcome = outcomeName
 		}
 		
-		WorkflowTaskService.metaClass.messageApprovalRequest = { def user, def taskInstance -> } // Not rendering due to bug in Grails 1.3.6, try removing this in future versions
+		WorkflowTaskService.metaClass.messageApprovalRequest = { def subject, def taskInstance -> } // Not rendering due to bug in Grails 1.3.6, try removing this in future versions
 		
 		when:				
 		workflowProcessService.run(processInstance)
@@ -263,7 +263,7 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 		SpecHelpers.registerMetaClass(WorkflowTaskService, savedMetaClasses)
 		workflowTaskService.metaClass = WorkflowTaskService.metaClass
 		
-		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:user).save()
+		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:subject).save()
 		minimalDefinition = new File('test/data/minimal.pr').getText()
 		workflowProcessService.create(minimalDefinition)
 		def initiated, processInstance
@@ -295,7 +295,7 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 			completeCount++
 		}
 		
-		WorkflowTaskService.metaClass.messageApprovalRequest = { def user, def taskInstance -> } // Not rendering due to bug in Grails 1.3.6, try removing this in future versions
+		WorkflowTaskService.metaClass.messageApprovalRequest = { def subject, def taskInstance -> } // Not rendering due to bug in Grails 1.3.6, try removing this in future versions
 		
 		when:				
 		workflowProcessService.run(processInstance)
@@ -326,7 +326,7 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 		SpecHelpers.registerMetaClass(WorkflowTaskService, savedMetaClasses)
 		workflowTaskService.metaClass = WorkflowTaskService.metaClass
 		
-		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:user).save()
+		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:subject).save()
 		minimalDefinition = new File('test/data/minimal.pr').getText()
 		workflowProcessService.create(minimalDefinition)
 		def initiated, processInstance
@@ -358,7 +358,7 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 			completeCount++
 		}
 		
-		WorkflowTaskService.metaClass.messageApprovalRequest = { def user, def taskInstance -> } // Not rendering due to bug in Grails 1.3.6, try removing this in future versions
+		WorkflowTaskService.metaClass.messageApprovalRequest = { def subject, def taskInstance -> } // Not rendering due to bug in Grails 1.3.6, try removing this in future versions
 			
 		when:		
 		workflowProcessService.run(processInstance)
@@ -398,7 +398,7 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 		SpecHelpers.registerMetaClass(WorkflowTaskService, savedMetaClasses)
 		workflowTaskService.metaClass = WorkflowTaskService.metaClass
 		
-		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:user).save()
+		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:subject).save()
 		minimalDefinition = new File('test/data/minimal.pr').getText()
 		workflowProcessService.create(minimalDefinition)
 		def initiated, processInstance
@@ -430,7 +430,7 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 			completeCount++
 		}
 		
-		WorkflowTaskService.metaClass.messageApprovalRequest = { def user, def taskInstance -> } // Not rendering due to bug in Grails 1.3.6, try removing this in future versions
+		WorkflowTaskService.metaClass.messageApprovalRequest = { def subject, def taskInstance -> } // Not rendering due to bug in Grails 1.3.6, try removing this in future versions
 			
 		when:		
 		workflowProcessService.run(processInstance)
@@ -476,7 +476,7 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 		SpecHelpers.registerMetaClass(WorkflowTaskService, savedMetaClasses)
 		workflowTaskService.metaClass = WorkflowTaskService.metaClass
 		
-		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:user).save()
+		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:subject).save()
 		minimalDefinition = new File('test/data/minimal.pr').getText()
 		workflowProcessService.create(minimalDefinition)
 		def initiated, processInstance
@@ -508,7 +508,7 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 			completeCount++
 		}
 		
-		WorkflowTaskService.metaClass.messageApprovalRequest = { def user, def taskInstance -> } // Not rendering due to bug in Grails 1.3.6, try removing this in future versions
+		WorkflowTaskService.metaClass.messageApprovalRequest = { def subject, def taskInstance -> } // Not rendering due to bug in Grails 1.3.6, try removing this in future versions
 			
 		when:		
 		workflowProcessService.run(processInstance)
@@ -560,7 +560,7 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 		SpecHelpers.registerMetaClass(WorkflowTaskService, savedMetaClasses)
 		workflowTaskService.metaClass = WorkflowTaskService.metaClass
 		
-		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:user).save()
+		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:subject).save()
 		minimalDefinition = new File('test/data/minimal.pr').getText()
 		workflowProcessService.create(minimalDefinition)
 		def initiated, processInstance
@@ -592,7 +592,7 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 			completeCount++
 		}
 		
-		WorkflowTaskService.metaClass.messageApprovalRequest = { def user, def taskInstance -> } // Not rendering due to bug in Grails 1.3.6, try removing this in future versions
+		WorkflowTaskService.metaClass.messageApprovalRequest = { def subject, def taskInstance -> } // Not rendering due to bug in Grails 1.3.6, try removing this in future versions
 			
 		when:		
 		workflowProcessService.run(processInstance)
@@ -648,7 +648,7 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 		SpecHelpers.registerMetaClass(WorkflowTaskService, savedMetaClasses)
 		workflowTaskService.metaClass = WorkflowTaskService.metaClass
 		
-		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:user).save()
+		def testScript = new WorkflowScript(name:'TestScript', description:'A script used in testing', definition:'return true', creator:subject).save()
 		minimalDefinition = new File('test/data/minimal.pr').getText()
 		def updatedDefinition = new File('test/data/minimal4.pr').getText()
 		workflowProcessService.create(minimalDefinition)
@@ -681,7 +681,7 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 			completeCount++
 		}
 		
-		WorkflowTaskService.metaClass.messageApprovalRequest = { def user, def taskInstance -> } // Not rendering due to bug in Grails 1.3.6, try removing this in future versions
+		WorkflowTaskService.metaClass.messageApprovalRequest = { def subject, def taskInstance -> } // Not rendering due to bug in Grails 1.3.6, try removing this in future versions
 			
 		when:		
 		workflowProcessService.run(processInstance)
@@ -737,12 +737,12 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 		workflowTaskService.metaClass = WorkflowTaskService.metaClass
 	}
 	
-	def "Ensure all task instances that a user can approve are returned when requested"() {
+	def "Ensure all task instances that a subject can approve are returned when requested"() {
 		setup:
-		def user2 = new Subject(principal:'testuser2', email:'test2@testdomain.com')
-		user2.save()
+		def subject2 = new Subject(principal:'testsubject2', cn:'test subject', email:'test2@testdomain.com')
+		subject2.save()
 		
-		def process = new Process(name:'test', description:'test description', processVersion:1, definition: 'return true', creator: user)
+		def process = new Process(name:'test', description:'test description', processVersion:1, definition: 'return true', creator: subject)
 		def task = new Task(process:process, name:"test task", description:"test task description", finishOnThisTask:true)
 		process.addToTasks(task)
 		process.save()
@@ -750,25 +750,25 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 		def processInstance = new ProcessInstance(process:process, description: "process instance description", priority: ProcessPriority.LOW, status:ProcessStatus.INPROGRESS)
 		(1..5).each { i ->					
 			def ti = new TaskInstance(processInstance:processInstance, task:task, status:TaskStatus.DEPENDENCYWAIT)
-			ti.addToPotentialApprovers(user)
+			ti.addToPotentialApprovers(subject)
 			processInstance.addToTaskInstances(ti)
 		}
 	
 		(1..5).each { i ->					
 			def ti = new TaskInstance(processInstance:processInstance, task:task, status:TaskStatus.APPROVALREQUIRED)
-			ti.addToPotentialApprovers(user)
+			ti.addToPotentialApprovers(subject)
 			processInstance.addToTaskInstances(ti)
 		}
 			
 		(1..5).each { i ->					
 			def ti = new TaskInstance(processInstance:processInstance, task:task, status:TaskStatus.APPROVALREQUIRED)
-			ti.addToPotentialApprovers(user2)
+			ti.addToPotentialApprovers(subject2)
 			processInstance.addToTaskInstances(ti)
 		}
 		
 		(1..5).each { i ->					
 			def ti = new TaskInstance(processInstance:processInstance, task:task, status:TaskStatus.APPROVALGRANTED)
-			ti.addToPotentialApprovers(user)
+			ti.addToPotentialApprovers(subject)
 			processInstance.addToTaskInstances(ti)
 		}
 		
@@ -776,7 +776,7 @@ class WorkflowTaskServiceSpec extends IntegrationSpec {
 		
 		
 		when:
-		def tasks = workflowTaskService.retrieveTasksAwaitingApproval(user)
+		def tasks = workflowTaskService.retrieveTasksAwaitingApproval(subject)
 		
 		then:
 		TaskInstance.count() == 20

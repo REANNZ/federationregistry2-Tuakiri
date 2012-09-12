@@ -94,7 +94,7 @@ class EntityDescriptorController {
           log.debug it
         }
         flash.type="error"
-        flash.message = message(code: 'aaf.fr.foundation.entitydescriptor.save.validation.error')
+        flash.message = message(code: 'aaf.fr.foundation.entitydescriptor.update.validation.error')
         redirect (action: "show", id: entityDescriptor.id)
         return
       }
