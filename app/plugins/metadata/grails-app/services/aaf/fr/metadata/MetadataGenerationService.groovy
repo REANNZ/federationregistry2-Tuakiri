@@ -312,7 +312,6 @@ class MetadataGenerationService {
           builder.AttributeAuthorityDescriptor(protocolSupportEnumeration: aaDescriptor.protocolSupportEnumerations.sort{it.uri}.collect({it.uri}).join(' ')) {
             // We don't currently provide direct AA manipulation to reduce general end user complexity.
             // So where a collaborative relationship exists we use all common data from the IDP to render the AA
-            // If it isn't collaborative we'll assume manual DB intervention and render direct ;-).
             roleDescriptor(builder, all, minimal, roleExtensions, aaDescriptor.collaborator)  
             aaDescriptor.attributeServices?.sort{it.id}.each{ attrserv -> endpoint(builder, all, minimal, "AttributeService", attrserv) }
             aaDescriptor.collaborator.assertionIDRequestServices?.sort{it.id}.each{ aidrs -> endpoint(builder, all, minimal, "AssertionIDRequestService", aidrs) }
