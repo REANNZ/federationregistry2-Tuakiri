@@ -214,11 +214,13 @@ class AuthController {
   }
   
   private String federatedAttributeValue(def grailsApplication, String attr) {
-    def value
+    def value = null
     if(grailsApplication.config.federation.request.attributes) {
-      value = new String(request.getAttribute(attr).getBytes("ISO-8859-1"))
+      if(request.getAttribute(attr))
+        value = new String(request.getAttribute(attr).getBytes("ISO-8859-1"))
     } else {
-      value = new String(request.getHeader(attr).getBytes("ISO-8859-1"))  // Not as secure
+      if(request.getHeader(attr))
+        value = new String(request.getHeader(attr).getBytes("ISO-8859-1"))  // Not as secure
     }
     
     value
