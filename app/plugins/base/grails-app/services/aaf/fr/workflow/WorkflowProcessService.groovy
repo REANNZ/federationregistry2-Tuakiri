@@ -115,7 +115,7 @@ class WorkflowProcessService {
 			throw new ErronousWorkflowStateException("Unable to save ${processInstance} when initiating instance of ${process}")
 		}
 		
-        [true, processInstance_]
+    [true, processInstance_]
 	}
 	
 	def run(ProcessInstance processInstance) {

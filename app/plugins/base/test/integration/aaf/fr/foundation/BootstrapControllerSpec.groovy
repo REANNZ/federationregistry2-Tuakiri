@@ -73,7 +73,7 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		def model = controller.saveidp()
 		
 		then:
-		controller.response.redirectedUrl == "/bootstrap/idpregistered/${identityProvider.id}"
+		controller.response.redirectedUrl == "/registration/idpregistered/${identityProvider.id}"
 	}
 	
 	def "Validate failed IDP registration"() {
@@ -116,7 +116,7 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		
 		then:
 		controller.flash.type == "error"
-		controller.flash.message == "fr.controllers.namevalue.missing"
+		controller.flash.message == "controllers.fr.generic.namevalue.missing"
 		controller.response.redirectedUrl == "/"
 	}
 	
@@ -174,7 +174,7 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		def model = controller.savesp()
 		
 		then:
-		controller.response.redirectedUrl == "/bootstrap/spregistered/${serviceProvider.id}"	
+		controller.response.redirectedUrl == "/registration/spregistered/${serviceProvider.id}"	
 	}
 	
 	def "Validate failed SP registration"() {
@@ -205,7 +205,7 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		
 		then:
 		controller.flash.type == "error"
-		controller.flash.message == "fr.controllers.namevalue.missing"
+		controller.flash.message == "controllers.fr.generic.namevalue.missing"
 		controller.response.redirectedUrl == "/"
 	}
 	
@@ -248,7 +248,7 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		def model = controller.saveorganization()
 		
 		then:
-		controller.response.redirectedUrl == "/bootstrap/organizationregistered/${organization.id}"	
+		controller.response.redirectedUrl == "/registration/organizationregistered/${organization.id}"	
 	}
 	
 	def "Validate failed organization register"() {
@@ -272,7 +272,7 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		
 		then:
 		controller.flash.type == "error"
-		controller.flash.message == "fr.controllers.namevalue.missing"
+		controller.flash.message == "controllers.fr.generic.namevalue.missing"
 		controller.response.redirectedUrl == "/"
 	}
 	

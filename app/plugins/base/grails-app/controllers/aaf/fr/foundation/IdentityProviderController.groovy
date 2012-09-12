@@ -104,7 +104,7 @@ class IdentityProviderController {
           log.debug it
         }
         flash.type="error"
-        flash.message = message(code: 'aaf.fr.foundation.identityprovider.save.validation.error')
+        flash.message = message(code: 'aaf.fr.foundation.identityprovider.update.validation.error')
         redirect (action: "show", id: identityProvider.id)
       }
     }
