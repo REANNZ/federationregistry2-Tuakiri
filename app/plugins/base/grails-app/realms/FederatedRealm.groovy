@@ -59,7 +59,7 @@ class FederatedRealm {
         
         subject.cn = token.attributes.cn
         if(token.attributes.email.contains(';')) {
-          log.warn "Email porvided for ${token.principal} is multivalued (${token.email}) attempting to split on ; and use first returned value."
+          log.warn "Email porvided for ${token.principal} is multivalued (${token.attributes.email}) attempting to split on ; and use first returned value."
           subject.email = token.attributes.email.toLowerCase().split(';')[0]
         } else {
           subject.email = token.attributes.email.toLowerCase()
@@ -94,7 +94,7 @@ class FederatedRealm {
         subject.contact.surname = subject.surname
         
         if(token.attributes.email.contains(';')) {
-          log.warn "Email provided for ${token.principal} is multivalued (${token.email}) attempting to split on ; and use first returned value."
+          log.warn "Email provided for ${token.principal} is multivalued (${token.attributes.email}) attempting to split on ; and use first returned value."
           subject.email = token.attributes.email.toLowerCase().split(';')[0]
           subject.contact.email = token.attributes.email.toLowerCase().split(';')[0]
         } else {
