@@ -3,6 +3,12 @@ window.fr = window.fr || {};
 var fr = window.fr;
 var btn;
 
+fr.escapeHtml = function(str) {
+    var div = document.createElement('div');
+    div.appendChild(document.createTextNode(str));
+    return div.innerHTML;
+};
+
 $(function() {
   applyBehaviourTo(document);
 });
@@ -172,7 +178,7 @@ fr.organization_fulladministrator_list = function() {
     success: function(res) {
       var target = $("#organizationfulladministratorlist");
       target.empty();
-      target.append(res);
+      target.html(res);
       applyBehaviourTo(target);
       target.fadeIn();
     },

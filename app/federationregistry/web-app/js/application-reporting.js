@@ -57,13 +57,13 @@ fr.summary_registrations_report = function(target) {
       if(k == 'summary') {
         series = {
           type: 'spline',
-          name: v.name,
+          name: fr.escapeHtml(v.name),
           data: v.avg,
         }; 
       } else {
         series = {
           type: 'column',
-          name: v.name,
+          name: fr.escapeHtml(v.name),
           data: v.counts
         };  
       };
@@ -120,7 +120,7 @@ fr.summary_subscriber_growth_report = function(target) {
     options.series = [];
     $.each(data.series, function(k, v) {
       var series = {
-        name: v.name,
+        name: fr.escapeHtml(v.name),
         data: v.counts
       };  
       options.series.push(series);
@@ -260,22 +260,22 @@ $(".request-detailed-registration-report").click(function () {
           type: 'area',
           pointInterval: 24 * 3600 * 1000,
           pointStart: Date.UTC(data.startdate.year, data.startdate.month, data.startdate.day),
-          name: v.name,
+          name: fr.escapeHtml(v.name),
           data: v.counts
         };  
         options.series.push(series);
       });
 
       $.each(data.detail.org, function(k,v) {
-        organizationregistrations.append("<tr><td>"+v.displayName+"</td><td>"+v.dateCreated+"</td><td><a href='"+v.url+"' class='btn'>view</td></tr>");
+        organizationregistrations.append("<tr><td>"+fr.escapeHtml(v.displayName)+"</td><td>"+v.dateCreated+"</td><td><a href='"+v.url+"' class='btn'>view</td></tr>");
       });
 
       $.each(data.detail.idp, function(k,v) {
-        idpregistrations.append("<tr><td>"+v.displayName+"</td><td>"+v.dateCreated+"</td><td><a href='"+v.url+"' class='btn'>view</td></tr>");
+        idpregistrations.append("<tr><td>"+fr.escapeHtml(v.displayName)+"</td><td>"+v.dateCreated+"</td><td><a href='"+v.url+"' class='btn'>view</td></tr>");
       });
 
       $.each(data.detail.sp, function(k,v) {
-        spregistrations.append("<tr><td>"+v.displayName+"</td><td>"+v.dateCreated+"</td><td><a href='"+v.url+"' class='btn'>view</td></tr>");
+        spregistrations.append("<tr><td>"+fr.escapeHtml(v.displayName)+"</td><td>"+v.dateCreated+"</td><td><a href='"+v.url+"' class='btn'>view</td></tr>");
       });
 
       fr.hidespinner();
@@ -353,7 +353,7 @@ $(".request-detailed-growth-report").click(function () {
           type: 'area',
           pointInterval: 24 * 3600 * 1000,
           pointStart: Date.UTC(data.startdate.year, data.startdate.month, data.startdate.day),
-          name: v.name,
+          name: fr.escapeHtml(v.name),
           data: v.counts
         };  
         options.series.push(series);
@@ -619,19 +619,19 @@ function requestServiceUtilization(params) {
       $.each(data.series, function(k, v) {
         if(!v.excluded) {
           options.chart.height = options.chart.height + 40 // allow room per rendered sp
-          options.xAxis.categories.push(v.name);
+          options.xAxis.categories.push(fr.escapeHtml(v.name));
           series.data.push(v.count);
 
           var data = {
-            name: v.name,
+            name: fr.escapeHtml(v.name),
             y: v.count
           };
           totals.data.push(data);
 
-          var markup = '<label class="span3"><input name="activesp" type="checkbox" checked="checked" value="'+v.id+'"/> ' + v.name + '</label>';
+          var markup = '<label class="span3"><input name="activesp" type="checkbox" checked="checked" value="'+v.id+'"/> ' + fr.escapeHtml(v.name) + '</label>';
         }
         else
-          var markup = '<label class="span3"><input name="activesp" type="checkbox" value="'+v.id+'"/> ' + v.name + '</label>';
+          var markup = '<label class="span3"><input name="activesp" type="checkbox" value="'+v.id+'"/> ' + fr.escapeHtml(v.name) + '</label>';
 
         if(k < 10)
           topTen.append(markup);
@@ -822,19 +822,19 @@ function requestIdPUtilization(params) {
       $.each(data.series, function(k, v) {
         if(!v.excluded) {
           options.chart.height = options.chart.height + 40 // allow room per rendered sp
-          options.xAxis.categories.push(v.name);
+          options.xAxis.categories.push(fr.escapeHtml(v.name));
           series.data.push(v.count);
 
           var data = {
-            name: v.name,
+            name: fr.escapeHtml(v.name),
             y: v.count
           };
           totals.data.push(data);
 
-          var markup = '<label class="span3"><input name="activeidp" type="checkbox" checked="checked" value="'+v.id+'"/> ' + v.name + '</label>';
+          var markup = '<label class="span3"><input name="activeidp" type="checkbox" checked="checked" value="'+v.id+'"/> ' + fr.escapeHtml(v.name) + '</label>';
         }
         else
-          var markup = '<label class="span3"><input name="activeidp" type="checkbox" value="'+v.id+'"/> ' + v.name + '</label>';
+          var markup = '<label class="span3"><input name="activeidp" type="checkbox" value="'+v.id+'"/> ' + fr.escapeHtml(v.name) + '</label>';
 
         if(k < 10)
           topTen.append(markup);
@@ -1029,7 +1029,7 @@ $(".request-detailed-dsutilization-reports").click(function () {
           type: 'area',
           pointInterval: 24 * 3600 * 1000,
           pointStart: Date.UTC(data.startdate.year, data.startdate.month, data.startdate.day),
-          name: v.name,
+          name: fr.escapeHtml(v.name),
           data: v.counts
         };  
         options2.series.push(series);
@@ -1043,7 +1043,7 @@ $(".request-detailed-dsutilization-reports").click(function () {
       };
       $.each(data.totals, function(k, v) {
         var data = {
-          name: v.name,
+          name: fr.escapeHtml(v.name),
           y: v.count
         };
         totals.data.push(data); 
@@ -1113,7 +1113,7 @@ fr.attributesupport_compliance_report = function(target) {
 
       $.each(data.categories, function(k, v){
         options.chart.height = options.chart.height + 40 // allow room per rendered sp
-        options.xAxis.categories.push(v.name);
+        options.xAxis.categories.push(fr.escapeHtml(v.name));
       });
 
       options.series = [];
@@ -1145,14 +1145,14 @@ fr.detailed_attributesupport_compliance_report = function(target) {
     $.getJSON(attributesupportEndpoint, function(data) {
 
       $.each(data.categories, function(k, v){
-        $('#choose-indepth-idp').append($('<option></option>').val('indepth-idp-'+k).html(v.name));
+        $('#choose-indepth-idp').append($('<option></option>').val('indepth-idp-'+k).html(fr.escapeHtml(v.name)));
         var alert
         if(v.automatedRelease) {
           alert = '<div class="span6 alert alert-block alert-success alert-spacer"><h4 class="alert-heading">Automatic Release</h4>This IdP automatically supplies attributes requested by services which it <strong>shows as available</strong> below.</div>'
         } else {
           alert = '<div class="span6 alert alert-block alert-spacer"><h4 class="alert-heading">Warning!</h4>This IdP <strong>does not</strong> automatically supply attributes requested by services. Service administrators will need to contact this IdP if they wish to be compatible with it.</div>'
         }
-        $('#attributesupporttables').append('<div id="indepth-idp-'+k+'" class="span8 hidden idp-indepth"><div class="row"><div class="span4"><h3>'+v.name+'</h3></div><div class="span2 offset2"><a href="'+v.url+'" class="btn">View</a></div></div>'+alert+'<div class="row"><div id="idp-'+k+'" class="span8"></div></div></div>');
+        $('#attributesupporttables').append('<div id="indepth-idp-'+k+'" class="span8 hidden idp-indepth"><div class="row"><div class="span4"><h3>'+fr.escapeHtml(v.name)+'</h3></div><div class="span2 offset2"><a href="'+v.url+'" class="btn">View</a></div></div>'+alert+'<div class="row"><div id="idp-'+k+'" class="span8"></div></div></div>');
       });
 
       $.each(data.series, function(k, v) {        
@@ -1261,7 +1261,7 @@ $(".request-idpprovidingattribute-report").click(function(target) {
       supported.html('');
       $('.supportedcount').html(data.supported.length);
       $.each(data.supported, function(k,v) {
-        var markup = "<tr><td>"+v.name
+        var markup = "<tr><td>"+fr.escapeHtml(v.name);
 
         if(!v.automatedRelease)
           markup = markup + "<br><span class='label label-important'>No automated attribute release</span>";
@@ -1274,7 +1274,7 @@ $(".request-idpprovidingattribute-report").click(function(target) {
       unsupported.html('');
       $('.unsupportedcount').html(data.unsupported.length);
       $.each(data.unsupported, function(k,v) {
-        var markup = "<tr><td>"+v.name
+        var markup = "<tr><td>"+fr.escapeHtml(v.name);
 
         if(!v.automatedRelease)
           markup = markup + "<br><span class='label label-important'>No automated attribute release</span>";
@@ -1524,19 +1524,19 @@ function requestIdPServiceUtilization(params) {
       $.each(data.series, function(k, v) {
         if(!v.excluded) {
           options.chart.height = options.chart.height + 40 // allow room per rendered sp
-          options.xAxis.categories.push(v.name);
+          options.xAxis.categories.push(fr.escapeHtml(v.name));
           series.data.push(v.count);
 
           var data = {
-            name: v.name,
+            name: fr.escapeHtml(v.name),
             y: v.count
           };
           totals.data.push(data);
 
-          var markup = '<label class="span3"><input name="activesp" type="checkbox" checked="checked" value="'+v.id+'"/> ' + v.name + '</label>';
+          var markup = '<label class="span3"><input name="activesp" type="checkbox" checked="checked" value="'+v.id+'"/> ' + fr.escapeHtml(v.name) + '</label>';
         }
         else
-          var markup = '<label class="span3"><input name="activesp" type="checkbox" value="'+v.id+'"/> ' + v.name + '</label>';
+          var markup = '<label class="span3"><input name="activesp" type="checkbox" value="'+v.id+'"/> ' + fr.escapeHtml(v.name) + '</label>';
 
         if(k < 10)
           topTen.append(markup);
@@ -1871,19 +1871,19 @@ function requestSptoIdPUtilization(params) {
       $.each(data.series, function(k, v) {
         if(!v.excluded) {
           options.chart.height = options.chart.height + 40 // allow room per rendered sp
-          options.xAxis.categories.push(v.name);
+          options.xAxis.categories.push(fr.escapeHtml(v.name));
           series.data.push(v.count);
 
           var data = {
-            name: v.name,
+            name: fr.escapeHtml(v.name),
             y: v.count
           };
           totals.data.push(data);
 
-          var markup = '<label class="span3"><input name="activeidp" type="checkbox" checked="checked" value="'+v.id+'"/> ' + v.name + '</label>';
+          var markup = '<label class="span3"><input name="activeidp" type="checkbox" checked="checked" value="'+v.id+'"/> ' + fr.escapeHtml(v.name) + '</label>';
         }
         else
-          var markup = '<label class="span3"><input name="activeidp" type="checkbox" value="'+v.id+'"/> ' + v.name + '</label>';
+          var markup = '<label class="span3"><input name="activeidp" type="checkbox" value="'+v.id+'"/> ' + fr.escapeHtml(v.name) + '</label>';
 
         if(k < 10)
           topTen.append(markup);
