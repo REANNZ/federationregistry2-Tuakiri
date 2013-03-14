@@ -5,9 +5,12 @@
       <div class="control-group">
         <label class="control-label" for="idp.status"><g:message encodeAs="HTML" code="label.status" /></label>
         <div class="controls">
-          <g:radioGroup name="idp.status" values="['true', 'false']" labels="['label.active', 'label.inactive']" value="${identityProvider.active}" >
-             ${it.radio} <g:message encodeAs="HTML" code="${it.label}" />
-          </g:radioGroup>
+          <input type="radio" name="idp.status" value="true" ${identityProvider.active ? "checked" : ''} />
+          <g:message encodeAs="HTML" code="label.active"/>
+        
+          <input type="radio" name="idp.status" value="false" ${identityProvider.active ? '' : "checked"}/>
+          <g:message encodeAs="HTML" code="label.inactive"/>
+
           <fr:tooltip code='help.fr.identityprovider.status' />
         </div>
       </div>
@@ -31,9 +34,13 @@
       <div class="control-group">
         <label class="control-label" for="idp.autoAcceptServices"><g:message encodeAs="HTML" code="label.usesaa" /></label>
         <div class="controls">
-          <g:radioGroup name="idp.autoacceptservices" values="['true', 'false']" labels="['label.yes', 'label.no']" value="${identityProvider.autoAcceptServices}" >
-             ${it.radio} <g:message encodeAs="HTML" code="${it.label}" />
-          </g:radioGroup>
+
+          <input type="radio" name="idp.autoacceptservices" value="true" ${identityProvider.autoAcceptServices ? "checked" : ''} />
+          <g:message encodeAs="HTML" code="label.yes"/>
+        
+          <input type="radio" name="idp.autoacceptservices" value="false" ${identityProvider.autoAcceptServices ? '' : "checked"}/>
+          <g:message encodeAs="HTML" code="label.no"/>
+
           <fr:tooltip code='help.fr.identityprovider.usesaa' />
         </div>
       </div>

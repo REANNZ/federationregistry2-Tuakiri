@@ -6,9 +6,11 @@
       <div class="control-group">
         <label class="control-label" for="entity.status"><g:message encodeAs="HTML" code="label.status" /></label>
         <div class="controls">
-          <g:radioGroup name="entity.active" values="['true', 'false']" labels="['label.active', 'label.inactive']" value="${entity.active}">
-             ${it.radio} <g:message encodeAs="HTML" code="${it.label}" />
-          </g:radioGroup>
+          <input type="radio" name="entity.active" value="true"  ${entity.active ? 'checked' : ''}/>
+          <g:message encodeAs="HTML" code="label.active"/>
+        
+          <input type="radio" name="entity.active" alue="false" ${entity.active ? '' : 'checked'}/>
+          <g:message encodeAs="HTML" code="label.inactive"/>
           <fr:tooltip code='help.fr.entity.status' />
         </div>
       </div>

@@ -5,9 +5,12 @@
       <div class="control-group">
         <label class="control-label" for="sp.status"><g:message encodeAs="HTML" code="label.status" /></label>
         <div class="controls">
-          <g:radioGroup name="sp.status" values="['true', 'false']" labels="['label.active', 'label.inactive']" value="${serviceProvider.active}">
-             ${it.radio} <g:message encodeAs="HTML" code="${it.label}" />
-          </g:radioGroup>
+          <input type="radio" name="sp.status" value="true" ${serviceProvider.active ? 'checked' : ''} />
+          <g:message encodeAs="HTML" code="label.active"/>
+        
+          <input type="radio" name="sp.status" value="false" ${serviceProvider.active ? '' : 'checked'}/>
+          <g:message encodeAs="HTML" code="label.inactive"/>
+
           <fr:tooltip code='help.fr.serviceprovider.status' />
         </div>
       </div>
