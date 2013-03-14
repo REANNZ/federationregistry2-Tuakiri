@@ -32,3 +32,5 @@ log4j = {
                       'org.apache.shiro']
     */
 }
+grails.views.default.codec="html" // none, html, base64
+grails.views.gsp.encoding="UTF-8"
