@@ -9,10 +9,10 @@
     <g:each in="${attr}" var="e">
     <tr>
       <td>
-          ${e.key}
+          ${e.key.encodeAsHTML()}
       </td>
       <td>
-        ${e.value}
+        ${e.value.encodeAsHTML()}
       </td>
     </tr>
     </g:each>
