@@ -5,7 +5,7 @@
     <meta name="layout" content="workflow" />
   </head>
   <body>
-    <h2><g:message code="views.fr.workflow.process.create.heading" /></h2>
+    <h2><g:message encodeAs="HTML" code="views.fr.workflow.process.create.heading" /></h2>
 
     <g:render template="/templates/flash" />
   
@@ -22,7 +22,7 @@
     <g:form action="save">
       <g:textArea name="code" value="${(process.definition ?: '// insert workflow here')}" rows="5" cols="40"/>
       <br>
-      <button type="submit" class="btn"/><g:message code="label.add" /></button>
+      <button type="submit" class="btn"/><g:message encodeAs="HTML" code="label.add" /></button>
     </g:form>
 
     <r:script>

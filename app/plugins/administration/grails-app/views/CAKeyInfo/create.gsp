@@ -7,7 +7,7 @@
   </head>
   <body>
     <div id="create-CAKeyInfo" class="content scaffold-create" role="main">
-      <h3><g:message code="label.createspecific" args="[entityName]" /></h3>
+      <h3><g:message encodeAs="HTML" code="label.createspecific" args="[entityName]" /></h3>
 
       <div class="alert alert-warning">
         <p>
@@ -25,7 +25,7 @@
       <g:hasErrors bean="${CAKeyInfoInstance}">
         <ul class="clean alert alert-error">
           <g:eachError bean="${CAKeyInfoInstance}" var="error">
-          <li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>><g:message error="${error}"/></li>
+          <li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>><g:message encodeAs="HTML" error="${error}"/></li>
           </g:eachError>
         </ul>
       </g:hasErrors>
@@ -36,7 +36,7 @@
         <fieldset>
           <div class="form-actions">
             <g:submitButton name="create" class="save" value="${message(code: 'label.create', default: 'Create')}" class="btn btn-success"/>
-            <g:link action="list" class="btn"><g:message code="label.cancel"/></g:link>
+            <g:link action="list" class="btn"><g:message encodeAs="HTML" code="label.cancel"/></g:link>
           </div>
         </fieldset>
       </g:form>

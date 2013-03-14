@@ -14,7 +14,7 @@
       
         <g:if test="${attributeBaseInstance?.id}">
         <li class="fieldcontain">
-          <strong><span id="id-label" class="property-label"><g:message code="attributeBase.id.label" default="id" /></span></strong>: 
+          <strong><span id="id-label" class="property-label"><g:message encodeAs="HTML" code="attributeBase.id.label" default="id" /></span></strong>: 
           
             <span class="property-value" aria-labelledby="id-label"><g:fieldValue bean="${attributeBaseInstance}" field="id"/></span>
           
@@ -23,7 +23,7 @@
       
         <g:if test="${attributeBaseInstance?.name}">
         <li class="fieldcontain">
-          <strong><span id="name-label" class="property-label"><g:message code="attributeBase.name.label" default="Name" /></span></strong>: 
+          <strong><span id="name-label" class="property-label"><g:message encodeAs="HTML" code="attributeBase.name.label" default="Name" /></span></strong>: 
           
             <span class="property-value" aria-labelledby="name-label"><g:fieldValue bean="${attributeBaseInstance}" field="name"/></span>
           
@@ -31,7 +31,7 @@
         </g:if>
         <g:if test="${attributeBaseInstance?.oid}">
         <li class="fieldcontain">
-          <strong><span id="oid-label" class="property-label"><g:message code="attributeBase.oid.label" default="oid" /></span></strong>: 
+          <strong><span id="oid-label" class="property-label"><g:message encodeAs="HTML" code="attributeBase.oid.label" default="oid" /></span></strong>: 
           
             <span class="property-value" aria-labelledby="oid-label"><g:fieldValue bean="${attributeBaseInstance}" field="oid"/></span>
           
@@ -39,7 +39,7 @@
         </g:if>      
         <g:if test="${attributeBaseInstance?.legacyName}">
         <li class="fieldcontain">
-          <strong><span id="legacyName-label" class="property-label"><g:message code="attributeBase.legacyName.label" default="Legacy Name" /></span></strong>: 
+          <strong><span id="legacyName-label" class="property-label"><g:message encodeAs="HTML" code="attributeBase.legacyName.label" default="Legacy Name" /></span></strong>: 
           
             <span class="property-value" aria-labelledby="legacyName-label"><g:fieldValue bean="${attributeBaseInstance}" field="legacyName"/></span>
           
@@ -49,7 +49,7 @@
 
         <g:if test="${attributeBaseInstance?.nameFormat}">
         <li class="fieldcontain">
-          <strong><span id="nameFormat-label" class="property-label"><g:message code="attributeBase.nameFormat.label" default="Name Format" /></span></strong>: 
+          <strong><span id="nameFormat-label" class="property-label"><g:message encodeAs="HTML" code="attributeBase.nameFormat.label" default="Name Format" /></span></strong>: 
           
             <span class="property-value" aria-labelledby="nameFormat-label"><g:link controller="samlURI" action="show" id="${attributeBaseInstance?.nameFormat?.id}">${attributeBaseInstance?.nameFormat?.uri.encodeAsHTML()}</g:link></span>
           
@@ -57,7 +57,7 @@
         </g:if>
         <g:if test="${attributeBaseInstance?.description}">
         <li class="fieldcontain">
-          <strong><span id="description-label" class="property-label"><g:message code="attributeBase.description.label" default="Description" /></span></strong>: 
+          <strong><span id="description-label" class="property-label"><g:message encodeAs="HTML" code="attributeBase.description.label" default="Description" /></span></strong>: 
           
             <span class="property-value" aria-labelledby="description-label"><g:fieldValue bean="${attributeBaseInstance}" field="description"/></span>
           
@@ -66,7 +66,7 @@
 
         <g:if test="${attributeBaseInstance?.specificationRequired}">
         <li class="fieldcontain">
-          <strong><span id="specificationRequired-label" class="property-label"><g:message code="attributeBase.specificationRequired.label" default="Specification Required" /></span></strong>: 
+          <strong><span id="specificationRequired-label" class="property-label"><g:message encodeAs="HTML" code="attributeBase.specificationRequired.label" default="Specification Required" /></span></strong>: 
           
             <span class="property-value" aria-labelledby="specificationRequired-label"><g:formatBoolean boolean="${attributeBaseInstance?.specificationRequired}" /></span>
           
@@ -74,7 +74,7 @@
         </g:if>
         <g:if test="${attributeBaseInstance?.category}">
         <li class="fieldcontain">
-          <strong><span id="category-label" class="property-label"><g:message code="attributeBase.category.label" default="Category" /></span></strong>: 
+          <strong><span id="category-label" class="property-label"><g:message encodeAs="HTML" code="attributeBase.category.label" default="Category" /></span></strong>: 
           
             <span class="property-value" aria-labelledby="category-label"><g:link controller="attributeCategory" action="show" id="${attributeBaseInstance?.category?.id}">${attributeBaseInstance?.category?.name.encodeAsHTML()}</g:link></span>
           
@@ -85,7 +85,7 @@
 
         <g:if test="${attributeBaseInstance?.dateCreated}">
         <li class="fieldcontain">
-          <strong><span id="dateCreated-label" class="property-label"><g:message code="attributeBase.dateCreated.label" default="Date Created" /></span></strong>: 
+          <strong><span id="dateCreated-label" class="property-label"><g:message encodeAs="HTML" code="attributeBase.dateCreated.label" default="Date Created" /></span></strong>: 
           
             <span class="property-value" aria-labelledby="dateCreated-label"><g:formatDate date="${attributeBaseInstance?.dateCreated}" /></span>
           
@@ -93,7 +93,7 @@
         </g:if>      
         <g:if test="${attributeBaseInstance?.lastUpdated}">
         <li class="fieldcontain">
-          <strong><span id="lastUpdated-label" class="property-label"><g:message code="attributeBase.lastUpdated.label" default="Last Updated" /></span></strong>: 
+          <strong><span id="lastUpdated-label" class="property-label"><g:message encodeAs="HTML" code="attributeBase.lastUpdated.label" default="Last Updated" /></span></strong>: 
           
             <span class="property-value" aria-labelledby="lastUpdated-label"><g:formatDate date="${attributeBaseInstance?.lastUpdated}" /></span>
           
@@ -104,7 +104,7 @@
       <g:form>
         <fieldset class="buttons">
           <g:hiddenField name="id" value="${attributeBaseInstance?.id}" />
-          <g:link class="edit" action="edit" id="${attributeBaseInstance?.id}" class="btn btn-info"><g:message code="label.edit" default="Edit" /></g:link>
+          <g:link class="edit" action="edit" id="${attributeBaseInstance?.id}" class="btn btn-info"><g:message encodeAs="HTML" code="label.edit" default="Edit" /></g:link>
           <g:actionSubmit class="delete btn" action="delete" value="${message(code: 'label.delete', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
         </fieldset>
       </g:form>

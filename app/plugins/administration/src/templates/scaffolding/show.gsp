@@ -18,7 +18,7 @@
         props.each { p -> %>
         <g:if test="\${${propertyName}?.${p.name}}">
         <li class="fieldcontain">
-          <strong><span id="${p.name}-label" class="property-label"><g:message code="${domainClass.propertyName}.${p.name}.label" default="${p.naturalName}" /></span></strong>: 
+          <strong><span id="${p.name}-label" class="property-label"><g:message encodeAs="HTML" code="${domainClass.propertyName}.${p.name}.label" default="${p.naturalName}" /></span></strong>: 
           <%  if (p.isEnum()) { %>
             <span class="property-value" aria-labelledby="${p.name}-label"><g:fieldValue bean="\${${propertyName}}" field="${p.name}"/></span>
           <%  } else if (p.oneToMany || p.manyToMany) { %>
@@ -41,7 +41,7 @@
       <g:form>
         <fieldset class="buttons">
           <g:hiddenField name="id" value="\${${propertyName}?.id}" />
-          <g:link class="edit" action="edit" id="\${${propertyName}?.id}" class="btn btn-info"><g:message code="label.edit" default="Edit" /></g:link>
+          <g:link class="edit" action="edit" id="\${${propertyName}?.id}" class="btn btn-info"><g:message encodeAs="HTML" code="label.edit" default="Edit" /></g:link>
           <g:actionSubmit class="delete btn" action="delete" value="\${message(code: 'label.delete', default: 'Delete')}" onclick="return confirm('\${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
         </fieldset>
       </g:form>

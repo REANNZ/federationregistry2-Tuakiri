@@ -1,8 +1,8 @@
 <g:hasErrors>
   <div class="alert alert-message alert-danger">
-    <p><strong><g:message code="templates.fr.organization.create.errors" /></strong></p>
+    <p><strong><g:message encodeAs="HTML" code="templates.fr.organization.create.errors" /></strong></p>
     <p>
-      <g:message code="label.identifiederrors"/>
+      <g:message encodeAs="HTML" code="label.identifiederrors"/>
       <g:renderErrors bean="${organization}" as="list" />
       <g:renderErrors bean="${contact}" as="list"/>
     </p>
@@ -21,11 +21,11 @@
   <hr>
   
   <div id="contact" class="step">
-    <h3>1. <g:message code="templates.fr.organization.create.contact.heading" /></h3>
-    <p><g:message code="templates.fr.organization.create.contact.details" /></p>
+    <h3>1. <g:message encodeAs="HTML" code="templates.fr.organization.create.contact.heading" /></h3>
+    <p><g:message encodeAs="HTML" code="templates.fr.organization.create.contact.details" /></p>
     <fieldset>
       <div class="control-group">
-        <label class="control-label" for="contact.givenName"><g:message code="label.givenname" /></label>
+        <label class="control-label" for="contact.givenName"><g:message encodeAs="HTML" code="label.givenname" /></label>
         <div class="controls">
           <g:if test="${contact?.givenName}">
             <g:textField name="contact.givenName"  class="required" value="${contact?.givenName}"/>
@@ -37,7 +37,7 @@
       </div>
 
       <div class="control-group">
-        <label class="control-label" for="contact.surname"><g:message code="label.surname" /></label>
+        <label class="control-label" for="contact.surname"><g:message encodeAs="HTML" code="label.surname" /></label>
         <div class="controls">
           <g:if test="${contact?.surname}">
             <g:textField name="contact.surname"  class="required" value="${contact?.surname}"/>
@@ -49,7 +49,7 @@
       </div>
 
       <div class="control-group">
-        <label class="control-label" for="contact.email"><g:message code="label.email" /></label>
+        <label class="control-label" for="contact.email"><g:message encodeAs="HTML" code="label.email" /></label>
         <div class="controls">
           <g:if test="${contact?.email}">
             <g:textField name="contact.email"  class="required email" value="${contact?.email}"/>
@@ -65,13 +65,13 @@
   <hr>
   
   <div class="step" id="basicinformation">
-    <h3>2. <g:message code="templates.fr.organization.create.basicinformation.heading" /></h3>
+    <h3>2. <g:message encodeAs="HTML" code="templates.fr.organization.create.basicinformation.heading" /></h3>
     <p>
-      <g:message code="templates.fr.organization.create.basicinformation.details" />
+      <g:message encodeAs="HTML" code="templates.fr.organization.create.basicinformation.details" />
     </p>
     <fieldset>
       <div class="control-group">
-      <label class="control-label" for="organization.name"><g:message code="label.name" /></label>
+      <label class="control-label" for="organization.name"><g:message encodeAs="HTML" code="label.name" /></label>
         <div class="controls">
           <g:textField name="organization.name" class="required span4" value="${organization?.name}" placeholder="example.edu.au" />
           <fr:tooltip code='help.fr.organization.name' />
@@ -79,7 +79,7 @@
       </div>
 
       <div class="control-group">
-      <label class="control-label" for="organization.displayName"><g:message code="label.displayname" /></label>
+      <label class="control-label" for="organization.displayName"><g:message encodeAs="HTML" code="label.displayname" /></label>
         <div class="controls">
           <g:textField name="organization.displayName" class="required span4" value="${organization?.displayName}" placeholder="Example University"/>
           <fr:tooltip code='help.fr.organization.displayName' />
@@ -87,7 +87,7 @@
       </div>
 
       <div class="control-group">
-      <label class="control-label" for="organization.url"><g:message code="label.organizationurl" /></label>
+      <label class="control-label" for="organization.url"><g:message encodeAs="HTML" code="label.organizationurl" /></label>
         <div class="controls">
           <g:textField name="organization.url" class="required url span4" value="${organization?.url}" placeholder="http://www.example.edu.au"/>
           <fr:tooltip code='help.fr.organization.url' />
@@ -95,7 +95,7 @@
       </div>
 
       <div class="control-group">
-      <label class="control-label" for="organization.primary"><g:message code="label.organizationtype" /></label>
+      <label class="control-label" for="organization.primary"><g:message encodeAs="HTML" code="label.organizationtype" /></label>
         <div class="controls">
           <g:select name="organization.primary" from="${organizationTypes.findAll{it.discoveryServiceCategory == true}.sort{it.displayName}}" optionKey="id" optionValue="displayName" value="${organization?.primary?.id}" class="span4" />
           <fr:tooltip code='help.fr.organization.type' />
@@ -107,13 +107,13 @@
   <hr>
   
   <div class="step" id="creationsummary">
-    <h3>3. <g:message code="templates.fr.organization.create.summary.heading" /></h3>
+    <h3>3. <g:message encodeAs="HTML" code="templates.fr.organization.create.summary.heading" /></h3>
     <p>
-      <g:message code="templates.fr.organization.create.summary.details" />
+      <g:message encodeAs="HTML" code="templates.fr.organization.create.summary.details" />
     </p>
 
     <div class="form-action">
-      <button type="submit" name="submit" value="submit" class="btn btn-success btn-large"><g:message code="label.submit"/></button>
+      <button type="submit" name="submit" value="submit" class="btn btn-success btn-large"><g:message encodeAs="HTML" code="label.submit"/></button>
     </div>
   </div>
 

@@ -5,7 +5,7 @@
     <meta name="layout" content="workflow" />
   </head>
   <body>
-      <h2><g:message code="views.fr.workflow.process.edit.heading" args="[process.name]"/></h2>
+      <h2><g:message encodeAs="HTML" code="views.fr.workflow.process.edit.heading" args="[process.name]"/></h2>
       
       <g:render template="/templates/flash" />
 
@@ -22,8 +22,8 @@
       <g:form action="update" id="${process.id}">
         <g:textArea name="code" value="${process.definition}" rows="5" cols="40"/>
         <br>
-        <button type="submit" class="btn"/><g:message code="label.update" default="Update"/></button>
-        <g:link class="btn" controller="workflowProcess" action="show" id="${process.id}"><g:message code="label.cancel" default="Cancel"/></g:link>
+        <button type="submit" class="btn"/><g:message encodeAs="HTML" code="label.update" default="Update"/></button>
+        <g:link class="btn" controller="workflowProcess" action="show" id="${process.id}"><g:message encodeAs="HTML" code="label.cancel" default="Cancel"/></g:link>
       </g:form>
     
       <r:script>

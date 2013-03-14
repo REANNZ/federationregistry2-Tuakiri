@@ -12,25 +12,25 @@
       <hr>
       
       <div id="addattribute${acs.id}">
-        <a class="show-create-ra btn" data-acsid="${acs.id}"><g:message code="label.addattribute"/></a>
+        <a class="show-create-ra btn" data-acsid="${acs.id}"><g:message encodeAs="HTML" code="label.addattribute"/></a>
       </div>
 
       <div id="newattribute${acs.id}" class="revealable">
-        <h3><g:message code="templates.fr.acs.reqattributes.add.heading"/></h3>
+        <h3><g:message encodeAs="HTML" code="templates.fr.acs.reqattributes.add.heading"/></h3>
         <p>
-          <g:message code="templates.fr.acs.reqattributes.add.details"/>
+          <g:message encodeAs="HTML" code="templates.fr.acs.reqattributes.add.details"/>
         </p>
         <form id="newattributedata${acs.id}" class="form-horizontal validating">
           <fieldset>
             <div class="control-group">
-              <label class="control-label" for="attrid"><g:message code="label.attribute"/></label>
+              <label class="control-label" for="attrid"><g:message encodeAs="HTML" code="label.attribute"/></label>
               <div class="controls">
                 <fr:attributeSelection />
               </div>
             </div>
 
             <div class="control-group">
-              <label class="control-label" for="reasoning"><g:message code="label.reason"/></label>
+              <label class="control-label" for="reasoning"><g:message encodeAs="HTML" code="label.reason"/></label>
               <div class="controls">
                 <input name="reasoning" type="text" class="required span4"/>
                 <fr:tooltip code='help.fr.acs.reason' />
@@ -38,7 +38,7 @@
             </div>
 
             <div class="control-group">
-              <label class="control-label" for="isrequired"><g:message code="label.required"/></label>
+              <label class="control-label" for="isrequired"><g:message encodeAs="HTML" code="label.required"/></label>
               <div class="controls">
                 <g:checkBox name="isrequired" />
                 <fr:tooltip code='help.fr.acs.isrequired' />
@@ -46,8 +46,8 @@
             </div>
 
             <div class="form-actions">
-              <a class="create-ra btn btn-success" data-acsid="${acs.id}"><g:message code="label.add"/></a>
-              <a class="cancel-create-ra btn" data-acsid="${acs.id}"><g:message code="label.close"/></a>
+              <a class="create-ra btn btn-success" data-acsid="${acs.id}"><g:message encodeAs="HTML" code="label.add"/></a>
+              <a class="cancel-create-ra btn" data-acsid="${acs.id}"><g:message encodeAs="HTML" code="label.close"/></a>
             </div>
           </fieldset>
         </form>
@@ -59,27 +59,27 @@
 <div id="delete-ra-modal" class="modal hide fade">
   <div class="modal-header">
     <a class="close close-modal">&times;</a>
-    <h3><g:message code="templates.fr.acs.reqattributes.remove.confirm.title"/></h3>
+    <h3><g:message encodeAs="HTML" code="templates.fr.acs.reqattributes.remove.confirm.title"/></h3>
   </div>
   <div class="modal-body">
-    <p><g:message code="templates.fr.acs.reqattributes.remove.confirm.descriptive"/></p>
+    <p><g:message encodeAs="HTML" code="templates.fr.acs.reqattributes.remove.confirm.descriptive"/></p>
   </div>
   <div class="modal-footer">
-    <a class="close-modal btn"><g:message code="label.cancel" /></a>
-    <a class="delete-ra btn btn-danger"/><g:message code="label.remove" /></a>
+    <a class="close-modal btn"><g:message encodeAs="HTML" code="label.cancel" /></a>
+    <a class="delete-ra btn btn-danger"/><g:message encodeAs="HTML" code="label.remove" /></a>
   </div>
 </div>
 
 <div id="delete-ra-value-modal" class="modal hide fade">
   <div class="modal-header">
     <a class="close close-modal">&times;</a>
-    <h3><g:message code="templates.fr.acs.reqattributes.remove.value.confirm.title"/></h3>
+    <h3><g:message encodeAs="HTML" code="templates.fr.acs.reqattributes.remove.value.confirm.title"/></h3>
   </div>
   <div class="modal-body">
-    <p><g:message code="templates.fr.acs.reqattributes.remove.value.confirm.descriptive"/></p>
+    <p><g:message encodeAs="HTML" code="templates.fr.acs.reqattributes.remove.value.confirm.descriptive"/></p>
   </div>
   <div class="modal-footer">
-    <a class="close-modal btn"><g:message code="label.cancel" /></a>
-    <a class="delete-ra-value btn btn-danger"/><g:message code="label.remove" /></a>
+    <a class="close-modal btn"><g:message encodeAs="HTML" code="label.cancel" /></a>
+    <a class="delete-ra-value btn btn-danger"/><g:message encodeAs="HTML" code="label.remove" /></a>
   </div>
 </div>

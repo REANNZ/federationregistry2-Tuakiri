@@ -16,7 +16,7 @@
 
     <div class="row">
       <div id="attributesupporttables" class="span9 offset2 hidden">
-        <h3><g:message code="label.idpattributesupportbreakdown"/></h3>
+        <h3><g:message encodeAs="HTML" code="label.idpattributesupportbreakdown"/></h3>
         <select id="choose-indepth-idp"></select>
       </div>
     </div>

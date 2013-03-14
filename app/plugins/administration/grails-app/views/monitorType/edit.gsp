@@ -12,7 +12,7 @@
       <g:hasErrors bean="${monitorTypeInstance}">
       <ul class="clean alert alert-error">
         <g:eachError bean="${monitorTypeInstance}" var="error">
-        <li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>><g:message error="${error}"/></li>
+        <li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>><g:message encodeAs="HTML" error="${error}"/></li>
         </g:eachError>
       </ul>
       </g:hasErrors>
@@ -25,7 +25,7 @@
         <fieldset>
           <div class="form-actions">
             <g:actionSubmit class="save" action="update" class="btn btn-success" value="${message(code: 'label.update', default: 'Update')}" />
-            <g:link action="show" id="${monitorTypeInstance.id}" class="btn"><g:message code="label.cancel"/></g:link>
+            <g:link action="show" id="${monitorTypeInstance.id}" class="btn"><g:message encodeAs="HTML" code="label.cancel"/></g:link>
           </div>
         </fieldset>
       </g:form>

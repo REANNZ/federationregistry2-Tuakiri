@@ -2,25 +2,25 @@
 <html>
   <head>
     <meta name="layout" content="members" />
-    <title><g:message code="views.fr.foundation.entity.show.title" /></title>    
+    <title><g:message encodeAs="HTML" code="views.fr.foundation.entity.show.title" /></title>    
   </head>
   <body>
       
-    <h2><g:message code="views.fr.foundation.entity.show.heading" args="[entity.entityID]"/></h2>
+    <h2><g:message encodeAs="HTML" code="views.fr.foundation.entity.show.heading" args="[entity.entityID]"/></h2>
 
     <g:if test="${!entity.functioning()}">
       <p class="alert alert-message alert-danger">
-        <g:message code="views.fr.foundation.entity.show.notfunctioning"/>
+        <g:message encodeAs="HTML" code="views.fr.foundation.entity.show.notfunctioning"/>
       </p>
     </g:if>
 
     <g:render template="/templates/flash"  plugin="foundation"/>
 
     <ul class="nav nav-tabs">
-      <li class="active"><a href="#tab-overview" data-toggle="tab"><g:message code="label.overview" /></a></li>
-      <li><a href="#tab-contacts" data-toggle="tab"><g:message code="label.contacts" /></a></li>
-      <li><a href="#tab-idp" data-toggle="tab"><g:message code="label.identityproviders" /></a></li>
-      <li><a href="#tab-sp" data-toggle="tab"><g:message code="label.serviceproviders" /></a></li>
+      <li class="active"><a href="#tab-overview" data-toggle="tab"><g:message encodeAs="HTML" code="label.overview" /></a></li>
+      <li><a href="#tab-contacts" data-toggle="tab"><g:message encodeAs="HTML" code="label.contacts" /></a></li>
+      <li><a href="#tab-idp" data-toggle="tab"><g:message encodeAs="HTML" code="label.identityproviders" /></a></li>
+      <li><a href="#tab-sp" data-toggle="tab"><g:message encodeAs="HTML" code="label.serviceproviders" /></a></li>
     </ul>
 
     <div class="tab-content">

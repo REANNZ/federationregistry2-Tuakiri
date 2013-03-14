@@ -2,30 +2,30 @@
 <html>
   <head>    
     <meta name="layout" content="members" />
-    <title><g:message code="views.fr.foundation.identityprovider.show.title" /></title>
+    <title><g:message encodeAs="HTML" code="views.fr.foundation.identityprovider.show.title" /></title>
   </head>
   <body>
     
-    <h2><g:message code="views.fr.foundation.identityprovider.show.heading" args="[identityProvider.displayName]"/></h2>
+    <h2><g:message encodeAs="HTML" code="views.fr.foundation.identityprovider.show.heading" args="[identityProvider.displayName]"/></h2>
 
     <g:if test="${!identityProvider.functioning()}">
       <p class="alert alert-message alert-danger">
-        <g:message code="views.fr.foundation.identityprovider.show.notfunctioning"/>
+        <g:message encodeAs="HTML" code="views.fr.foundation.identityprovider.show.notfunctioning"/>
       </p>
     </g:if>
 
     <g:render template="/templates/flash" plugin="foundation"/>
       
     <ul class="nav nav-tabs">
-      <li class="active"><a href="#tab-overview" data-toggle="tab"><g:message code="label.overview" /></a></li>
-      <li><a href="#tab-contacts" data-toggle="tab"><g:message code="label.contacts" /></a></li>
-      <li class="level"><a href="#tab-saml" data-toggle="tab"><g:message code="label.saml" /></a></li>
+      <li class="active"><a href="#tab-overview" data-toggle="tab"><g:message encodeAs="HTML" code="label.overview" /></a></li>
+      <li><a href="#tab-contacts" data-toggle="tab"><g:message encodeAs="HTML" code="label.contacts" /></a></li>
+      <li class="level"><a href="#tab-saml" data-toggle="tab"><g:message encodeAs="HTML" code="label.saml" /></a></li>
       <fr:hasAnyPermission in='["federation:management:descriptor:${identityProvider.id}:reporting" , "federation:management:reporting"]'>
-        <li><a href="#tab-reports" data-toggle="tab"><g:message code="label.reporting" /></a></li>
+        <li><a href="#tab-reports" data-toggle="tab"><g:message encodeAs="HTML" code="label.reporting" /></a></li>
       </fr:hasAnyPermission>
-      <li><a href="#tab-monitors" data-toggle="tab"><g:message code="label.monitoring" /></a></li>
+      <li><a href="#tab-monitors" data-toggle="tab"><g:message encodeAs="HTML" code="label.monitoring" /></a></li>
       <g:if test="${identityProvider.approved}">
-        <li><a href="#tab-admins" data-toggle="tab"><g:message code="label.administrators" /></a></li>
+        <li><a href="#tab-admins" data-toggle="tab"><g:message encodeAs="HTML" code="label.administrators" /></a></li>
       </g:if>
     </ul>
 
@@ -42,14 +42,14 @@
       <div id="tab-saml" class="tab-pane">
         <div class="tabbable">
           <ul class="nav nav-tabs">
-            <li class="active"><a href="#tab-crypto" data-toggle="tab"><g:message code="label.crypto" /></a></li>
-            <li><a href="#tab-endpoints" data-toggle="tab"><g:message code="label.endpoints" /></a></li>
-            <li><a href="#tab-attributes" data-toggle="tab"><g:message code="label.supportedattributes" /></a></li>
-            <li><a href="#tab-nameidformats" data-toggle="tab"><g:message code="label.supportednameidformats" /></a></li>
+            <li class="active"><a href="#tab-crypto" data-toggle="tab"><g:message encodeAs="HTML" code="label.crypto" /></a></li>
+            <li><a href="#tab-endpoints" data-toggle="tab"><g:message encodeAs="HTML" code="label.endpoints" /></a></li>
+            <li><a href="#tab-attributes" data-toggle="tab"><g:message encodeAs="HTML" code="label.supportedattributes" /></a></li>
+            <li><a href="#tab-nameidformats" data-toggle="tab"><g:message encodeAs="HTML" code="label.supportednameidformats" /></a></li>
 
             <fr:hasPermission target="federation:management:descriptor:${identityProvider.id}:manage">
-              <li><a href="#tab-metadata" data-toggle="tab"><g:message code="label.metadata" /></a></li>
-              <li><a href="#tab-attrfilpol" data-toggle="tab"><g:message code="label.attributefilter" /></a></li>
+              <li><a href="#tab-metadata" data-toggle="tab"><g:message encodeAs="HTML" code="label.metadata" /></a></li>
+              <li><a href="#tab-attrfilpol" data-toggle="tab"><g:message encodeAs="HTML" code="label.attributefilter" /></a></li>
             </fr:hasPermission>
           </ul>
 
@@ -63,12 +63,12 @@
             <div id="tab-endpoints" class="tab-pane">
               <div class="tabbable tabs-left">
                 <ul class="nav nav-tabs">
-                  <li class="active"><a href="#tab-sso" data-toggle="tab"><g:message code="label.ssoservices" /></a></li>
-                  <li><a href="#tab-ars" data-toggle="tab"><g:message code="label.artifactresolutionservices" /></a></li>
+                  <li class="active"><a href="#tab-sso" data-toggle="tab"><g:message encodeAs="HTML" code="label.ssoservices" /></a></li>
+                  <li><a href="#tab-ars" data-toggle="tab"><g:message encodeAs="HTML" code="label.artifactresolutionservices" /></a></li>
                   <g:if test="${identityProvider.collaborator}">
-                    <li><a href="#tab-attrs" data-toggle="tab"><g:message code="label.attributeservices" /></a></li>
+                    <li><a href="#tab-attrs" data-toggle="tab"><g:message encodeAs="HTML" code="label.attributeservices" /></a></li>
                   </g:if>
-                  <li><a href="#tab-slo" data-toggle="tab"><g:message code="label.sloservices" /></a></li>
+                  <li><a href="#tab-slo" data-toggle="tab"><g:message encodeAs="HTML" code="label.sloservices" /></a></li>
                 </ul>
                 
                 <div class="tab-content span8">
@@ -119,17 +119,17 @@
                 <g:if test="${identityProvider.functioning()}">
                   <div class="row">
                     <div class="span8">
-                      <p><g:message code="views.fr.foundation.identityprovider.show.metadata.details" /></p>
+                      <p><g:message encodeAs="HTML" code="views.fr.foundation.identityprovider.show.metadata.details" /></p>
                     </div>
                     <div class="span1 offset1">
-                      <a class="load-descriptor-metadata btn btn-info"><g:message code="label.load" /></a>
+                      <a class="load-descriptor-metadata btn btn-info"><g:message encodeAs="HTML" code="label.load" /></a>
                     </div>
                   </div>
                   <pre id="descriptormetadata" class="metadata hidden"></pre>
                 </g:if>
                 <g:else>
                   <div class="alert alert-message">
-                    <g:message code="views.fr.foundation.identityprovider.show.metadata.unavailable.details" />
+                    <g:message encodeAs="HTML" code="views.fr.foundation.identityprovider.show.metadata.unavailable.details" />
                   </div>
                 </g:else>
               </div>
@@ -137,17 +137,17 @@
               <div id="tab-attrfilpol" class="tab-pane">                        
                 <div class="row">
                   <p class="span8">
-                    <g:message code="views.fr.foundation.identityprovider.show.attributefilter.description" />
+                    <g:message encodeAs="HTML" code="views.fr.foundation.identityprovider.show.attributefilter.description" />
                   </p>
                   <p class="span8">
-                    <g:message code="views.fr.foundation.identityprovider.show.attributefilter.configuration" />
+                    <g:message encodeAs="HTML" code="views.fr.foundation.identityprovider.show.attributefilter.configuration" />
                   </p>
                   <p class="span8">
-                    <strong><g:message code="views.fr.foundation.identityprovider.show.attributefilter.configurationurl" /></strong>: <g:link controller='attributeFilter' action='generate' id="${identityProvider.id}" absolute='true'>${g.createLink(controller:'attributeFilter', action:'generate', id:identityProvider.id, absolute:'true')}</g:link>
+                    <strong><g:message encodeAs="HTML" code="views.fr.foundation.identityprovider.show.attributefilter.configurationurl" /></strong>: <g:link controller='attributeFilter' action='generate' id="${identityProvider.id}" absolute='true'>${g.createLink(controller:'attributeFilter', action:'generate', id:identityProvider.id, absolute:'true')}</g:link>
                   </p>
                   <span class="span1 offset1">
                     <a class="load-descriptor-attrfilter btn btn-info">
-                      <g:message code="label.load"/>
+                      <g:message encodeAs="HTML" code="label.load"/>
                     </a>
                   </span>
                 </div>

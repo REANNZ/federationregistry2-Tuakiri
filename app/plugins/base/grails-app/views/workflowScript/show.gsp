@@ -5,24 +5,24 @@
   </head>
   
   <body>
-      <h2><g:message code="views.fr.workflow.script.show.heading" args="[script.name]"/></h2>
+      <h2><g:message encodeAs="HTML" code="views.fr.workflow.script.show.heading" args="[script.name]"/></h2>
 
       <table class="table borderless">
         <tbody>   
           <tr>
-            <th><g:message code="label.description" /></th>
+            <th><g:message encodeAs="HTML" code="label.description" /></th>
             <td>${fieldValue(bean: script, field: "description")}</td>
           </tr>
           <tr>
-            <th><g:message code="label.created" /></th>
+            <th><g:message encodeAs="HTML" code="label.created" /></th>
             <td>${fieldValue(bean: script, field: "dateCreated")}</td>
           </tr>
           <tr>
-            <th><g:message code="label.lastupdated" /></th>
+            <th><g:message encodeAs="HTML" code="label.lastupdated" /></th>
             <td>${fieldValue(bean: script, field: "lastUpdated")}</td>
           </tr>
           <tr>
-            <th><g:message code="label.definition" /></th>
+            <th><g:message encodeAs="HTML" code="label.definition" /></th>
             <td></td>
           </tr>
         </tbody>

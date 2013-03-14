@@ -3,31 +3,31 @@
   <head>
     <meta name="layout" content="members" />
 
-    <title><g:message code="views.fr.foundation.serviceprovider.show.title" /></title>
+    <title><g:message encodeAs="HTML" code="views.fr.foundation.serviceprovider.show.title" /></title>
   </head>
   <body>
-    <h2><g:message code="views.fr.foundation.serviceprovider.show.heading" args="[serviceProvider.displayName]"/></h2>
+    <h2><g:message encodeAs="HTML" code="views.fr.foundation.serviceprovider.show.heading" args="[serviceProvider.displayName]"/></h2>
 
     <g:if test="${!serviceProvider.functioning()}">
       <p class="alert alert-message alert-danger">
-        <g:message code="views.fr.foundation.serviceprovider.show.notfunctioning"/>
+        <g:message encodeAs="HTML" code="views.fr.foundation.serviceprovider.show.notfunctioning"/>
       </p>
     </g:if>
 
     <g:render template="/templates/flash" plugin="foundation"/>
     
     <ul class="nav nav-tabs">
-      <li class="active"><a href="#tab-overview" data-toggle="tab"><g:message code="label.overview" /></a></li>
-      <li><a href="#tab-categories" data-toggle="tab"><g:message code="label.categories" /></a></li>
-      <li><a href="#tab-contacts" data-toggle="tab"><g:message code="label.contacts" /></a></li>
-      <li><a href="#tab-saml" data-toggle="tab"><g:message code="label.saml" /></a></li>
+      <li class="active"><a href="#tab-overview" data-toggle="tab"><g:message encodeAs="HTML" code="label.overview" /></a></li>
+      <li><a href="#tab-categories" data-toggle="tab"><g:message encodeAs="HTML" code="label.categories" /></a></li>
+      <li><a href="#tab-contacts" data-toggle="tab"><g:message encodeAs="HTML" code="label.contacts" /></a></li>
+      <li><a href="#tab-saml" data-toggle="tab"><g:message encodeAs="HTML" code="label.saml" /></a></li>
       
       <fr:hasAnyPermission in='["federation:management:descriptor:${serviceProvider.id}:reporting" , "federation:management:reporting"]'>
-        <li><a href="#tab-reports" data-toggle="tab"><g:message code="label.reporting" /></a></li>
+        <li><a href="#tab-reports" data-toggle="tab"><g:message encodeAs="HTML" code="label.reporting" /></a></li>
       </fr:hasAnyPermission>
-      <li><a href="#tab-monitors" data-toggle="tab"><g:message code="label.monitoring" /></a></li>
+      <li><a href="#tab-monitors" data-toggle="tab"><g:message encodeAs="HTML" code="label.monitoring" /></a></li>
       <g:if test="${serviceProvider.approved}">
-        <li><a href="#tab-admins" data-toggle="tab"><g:message code="label.administrators" /></a></li>
+        <li><a href="#tab-admins" data-toggle="tab"><g:message encodeAs="HTML" code="label.administrators" /></a></li>
       </g:if>
     </ul>
 
@@ -53,12 +53,12 @@
       <div id="tab-saml" class="tab-pane">
           <div class="tabbable">
             <ul class="nav nav-tabs">
-              <li class="active"><a href="#tab-crypto" data-toggle="tab"><g:message code="label.crypto" /></a></li>
-              <li><a href="#tab-endpoints" data-toggle="tab"><g:message code="label.endpoints" /></a></li>
-              <li><a href="#tab-attributes" data-toggle="tab"><g:message code="label.attributeconsumingservices" /></a></li>
-              <li><a href="#tab-nameidformats" data-toggle="tab"><g:message code="label.supportednameidformats" /></a></li>
+              <li class="active"><a href="#tab-crypto" data-toggle="tab"><g:message encodeAs="HTML" code="label.crypto" /></a></li>
+              <li><a href="#tab-endpoints" data-toggle="tab"><g:message encodeAs="HTML" code="label.endpoints" /></a></li>
+              <li><a href="#tab-attributes" data-toggle="tab"><g:message encodeAs="HTML" code="label.attributeconsumingservices" /></a></li>
+              <li><a href="#tab-nameidformats" data-toggle="tab"><g:message encodeAs="HTML" code="label.supportednameidformats" /></a></li>
               <fr:hasPermission target="federation:management:descriptor:${serviceProvider.id}:manage">
-                <li><a href="#tab-metadata"data-toggle="tab"><g:message code="label.metadata" /></a></li>
+                <li><a href="#tab-metadata"data-toggle="tab"><g:message encodeAs="HTML" code="label.metadata" /></a></li>
               </fr:hasPermission>
             </ul>
 
@@ -131,17 +131,17 @@
                   <g:if test="${serviceProvider.functioning()}">
                     <div class="row">
                     <div class="span8">
-                      <p><g:message code="views.fr.foundation.serviceprovider.show.metadata.details" /></p>
+                      <p><g:message encodeAs="HTML" code="views.fr.foundation.serviceprovider.show.metadata.details" /></p>
                     </div>
                     <div class="span1 offset1">
-                      <a class="load-descriptor-metadata btn btn-info"><g:message code="label.load" /></a>
+                      <a class="load-descriptor-metadata btn btn-info"><g:message encodeAs="HTML" code="label.load" /></a>
                     </div>
                     </div>
                     <pre id="descriptormetadata" class="metadata hidden"></pre>
                   </g:if>
                   <g:else>
                     <div class="alert alert-message">
-                      <g:message code="views.fr.foundation.serviceprovider.show.metadata.unavailable.details" />
+                      <g:message encodeAs="HTML" code="views.fr.foundation.serviceprovider.show.metadata.unavailable.details" />
                     </div>
                   </g:else>
                 </div>

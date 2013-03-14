@@ -9,12 +9,12 @@
         <div class="span11 spinner centered"><r:img dir="images" file="spinner.gif"/></div>
         <div class="span11 detailed-idpattributesupport-report-parameters hidden">
           <form class="form form-inline well centered">
-            <g:message code="label.identityprovider"/>
+            <g:message encodeAs="HTML" code="label.identityprovider"/>
             <select id="choose-indepth-idp"></select>
 
-            <a class="detailed-idpattributesupport-report btn"><g:message code="label.generate"/></a>
-            <a class="detailed-idpattributesupport-reports btn"><g:message code="label.all"/></a>
-            <a class="export-detailed-idpattributesupport-report export-button btn btn-info" rel="tooltip" title="${g.message(code:'label.exportexcel')}"><i class="icon-edit icon-white"></i></a>
+            <a class="detailed-idpattributesupport-report btn"><g:message encodeAs="HTML" code="label.generate"/></a>
+            <a class="detailed-idpattributesupport-reports btn"><g:message encodeAs="HTML" code="label.all"/></a>
+            <a class="export-detailed-idpattributesupport-report export-button btn btn-info" rel="tooltip" title="${g.message(encodeAs:"HTML", code:'label.exportexcel')}"><i class="icon-edit icon-white"></i></a>
           </form>
       </div>
       </div>

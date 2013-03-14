@@ -26,7 +26,7 @@ class ServiceProviderReportsController {
     (startDate, endDate) = setupDates(params)
 
     def results = [
-      title: g.message(code:'label.detailedspsessionsreport'),
+      title: g.message(encodeAs:"HTML", code:'label.detailedspsessionsreport'),
       categories: [],
       startdate: [
           day: startDate.get(Calendar.DAY_OF_MONTH),
@@ -34,11 +34,11 @@ class ServiceProviderReportsController {
           year: startDate.get(Calendar.YEAR)
       ],
       axis: [
-        y: g.message(code:'label.sessions')
+        y: g.message(encodeAs:"HTML", code:'label.sessions')
       ],
       series: [
         overall: [
-          name: g.message(code:'label.totalsessions')
+          name: g.message(encodeAs:"HTML", code:'label.totalsessions')
         ],
       ]
     ]
@@ -78,7 +78,7 @@ class ServiceProviderReportsController {
     (startDate, endDate) = setupDates(params)
 
     def results = [
-      title: g.message(code:'label.detailedsputilizationreport'),
+      title: g.message(encodeAs:"HTML", code:'label.detailedsputilizationreport'),
       categories: [],
       startdate: [
           day: startDate.get(Calendar.DAY_OF_MONTH),
@@ -86,7 +86,7 @@ class ServiceProviderReportsController {
           year: startDate.get(Calendar.YEAR)
       ],
       axis: [
-        y: g.message(code:'label.sessions')
+        y: g.message(encodeAs:"HTML", code:'label.sessions')
       ],
       series: [],
     ]
@@ -140,7 +140,7 @@ class ServiceProviderReportsController {
     (startDate, endDate) = setupDates(params)
 
     def results = [
-      title: g.message(code:'label.detailedspdemandreport'),
+      title: g.message(encodeAs:"HTML", code:'label.detailedspdemandreport'),
       categories: [],
       startdate: [
           day: startDate.get(Calendar.DAY_OF_MONTH),
@@ -148,7 +148,7 @@ class ServiceProviderReportsController {
           year: startDate.get(Calendar.YEAR)
       ],
       axis: [
-        y: g.message(code:'label.sessions')
+        y: g.message(encodeAs:"HTML", code:'label.sessions')
       ],
       series: [
       ]

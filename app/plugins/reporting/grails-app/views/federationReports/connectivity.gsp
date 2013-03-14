@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta name="layout" content="reportingclean" />
-		<title><g:message code="views.fr.reporting.federation.connectivity.title" /></title>
+		<title><g:message encodeAs="HTML" code="views.fr.reporting.federation.connectivity.title" /></title>
 		
 		<r:script>
 			var federationConnectivtyEndpoint = "${createLink(controller:'federationReports', action:'reportconnectivity')}"
@@ -11,16 +11,16 @@
 	<body>
 		<section>
 			<div class="reportingsupported">
-				<h2><g:message code="views.fr.reporting.federation.connectivity.heading" /></h2>
+				<h2><g:message encodeAs="HTML" code="views.fr.reporting.federation.connectivity.heading" /></h2>
 			
 				<div id="reporting">
 					<div id="reports">
 						<form id="reportrequirements">	
-							<label><g:message code="label.day" />: <input name="day" size="2" class="number"/><fr:tooltip code='help.fr.report.day' /></label>
-							<label><g:message code="label.month" />: <input name="month" size="2" class="number"/><fr:tooltip code='help.fr.report.month' /></label>
-							<label><g:message code="label.year" />: <input name="year" size="4"  class="required number"/><fr:tooltip code='help.fr.report.year' /></label>
+							<label><g:message encodeAs="HTML" code="label.day" />: <input name="day" size="2" class="number"/><fr:tooltip code='help.fr.report.day' /></label>
+							<label><g:message encodeAs="HTML" code="label.month" />: <input name="month" size="2" class="number"/><fr:tooltip code='help.fr.report.month' /></label>
+							<label><g:message encodeAs="HTML" code="label.year" />: <input name="year" size="4"  class="required number"/><fr:tooltip code='help.fr.report.year' /></label>
 
-							<a href="#" onClick="if($('#reportrequirements').valid()){ fr.renderFederationReport('connectivity'); } return false;" class="search-button"><g:message code="label.generate" /></a>
+							<a href="#" onClick="if($('#reportrequirements').valid()){ fr.renderFederationReport('connectivity'); } return false;" class="search-button"><g:message encodeAs="HTML" code="label.generate" /></a>
 						</form>
 
 						<div id="connectivityreport" class="revealable reportdata">
@@ -29,7 +29,7 @@
 						</div>
 
 						<div id="connectivityreportnodata" class="revealable reportdata">
-							<p><em><g:message code="templates.fr.reports.nodata.description"/></em></p>
+							<p><em><g:message encodeAs="HTML" code="templates.fr.reports.nodata.description"/></em></p>
 						</div>	
 
 						<script type="text/javascript+protovis">

@@ -14,7 +14,7 @@
       
         <g:if test="${monitorTypeInstance?.id}">
         <li class="fieldcontain">
-          <strong><span id="id-label" class="property-label"><g:message code="monitorType.id.label" default="Id" /></span></strong>: 
+          <strong><span id="id-label" class="property-label"><g:message encodeAs="HTML" code="monitorType.id.label" default="Id" /></span></strong>: 
           
             <span class="property-value" aria-labelledby="id-label"><g:fieldValue bean="${monitorTypeInstance}" field="id"/></span>
           
@@ -23,7 +23,7 @@
       
         <g:if test="${monitorTypeInstance?.name}">
         <li class="fieldcontain">
-          <strong><span id="name-label" class="property-label"><g:message code="monitorType.name.label" default="Name" /></span></strong>: 
+          <strong><span id="name-label" class="property-label"><g:message encodeAs="HTML" code="monitorType.name.label" default="Name" /></span></strong>: 
           
             <span class="property-value" aria-labelledby="name-label"><g:fieldValue bean="${monitorTypeInstance}" field="name"/></span>
           
@@ -32,7 +32,7 @@
 
         <g:if test="${monitorTypeInstance?.description}">
         <li class="fieldcontain">
-          <strong><span id="description-label" class="property-label"><g:message code="monitorType.description.label" default="Description" /></span></strong>: 
+          <strong><span id="description-label" class="property-label"><g:message encodeAs="HTML" code="monitorType.description.label" default="Description" /></span></strong>: 
           
             <span class="property-value" aria-labelledby="description-label"><g:fieldValue bean="${monitorTypeInstance}" field="description"/></span>
           
@@ -43,7 +43,7 @@
       <g:form>
         <fieldset class="buttons">
           <g:hiddenField name="id" value="${monitorTypeInstance?.id}" />
-          <g:link class="edit" action="edit" id="${monitorTypeInstance?.id}" class="btn btn-info"><g:message code="label.edit" default="Edit" /></g:link>
+          <g:link class="edit" action="edit" id="${monitorTypeInstance?.id}" class="btn btn-info"><g:message encodeAs="HTML" code="label.edit" default="Edit" /></g:link>
           <g:actionSubmit class="delete btn" action="delete" value="${message(code: 'label.delete', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
         </fieldset>
       </g:form>

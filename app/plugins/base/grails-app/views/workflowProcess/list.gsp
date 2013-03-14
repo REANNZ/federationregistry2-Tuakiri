@@ -4,13 +4,13 @@
     <meta name="layout" content="workflow" />
   </head>
   <body>
-    <h2><g:message code="views.fr.workflow.process.list.heading" /></h2>
+    <h2><g:message encodeAs="HTML" code="views.fr.workflow.process.list.heading" /></h2>
   
     <table class="table borderless table-sortable">
       <thead>
         <tr>
-          <th><g:message code="label.name" default="Name"/></th>
-          <th><g:message code="label.description" default="Description"/></th>
+          <th><g:message encodeAs="HTML" code="label.name" default="Name"/></th>
+          <th><g:message encodeAs="HTML" code="label.description" default="Description"/></th>
           <th/>
         </tr>
       </thead>
@@ -20,7 +20,7 @@
           <td>${fieldValue(bean: p, field: "name")}</td>
           <td>${fieldValue(bean: p, field: "description")}</td>
           <td>
-            <a href="${createLink(controller:'workflowProcess', action:'show', id: p.id)}" class="btn"><g:message code="label.view" default="View"/></a>
+            <a href="${createLink(controller:'workflowProcess', action:'show', id: p.id)}" class="btn"><g:message encodeAs="HTML" code="label.view" default="View"/></a>
           </td>
         </tr>
       </g:each>
