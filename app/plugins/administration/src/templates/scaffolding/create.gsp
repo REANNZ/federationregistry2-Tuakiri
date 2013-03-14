@@ -8,8 +8,8 @@
   <body>
     <div id="create-${domainClass.propertyName}" class="content scaffold-create" role="main">
       <h3><g:message encodeAs="HTML" code="default.create.label" args="[entityName]" /></h3>
-      <g:if test="\${flash.message}">
-      <div class="message" role="status">\${flash.message}</div>
+      <g:if test="\${flash.message.encodeAsHTML()}">
+      <div class="message" role="status">\${flash.message.encodeAsHTML()}</div>
       </g:if>
       <g:hasErrors bean="\${${propertyName}}">
         <ul class="clean alert alert-error">
