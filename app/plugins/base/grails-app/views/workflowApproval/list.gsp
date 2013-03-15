@@ -1,4 +1,4 @@
-<%! import aaf.fr.foundation.Contact %>
+<%! import aaf.fr.identity.Subject %>
 <html>
   <head>  
     <meta name="layout" content="workflow" />
@@ -25,9 +25,15 @@
               <td>${fieldValue(bean: instance, field: "task.name")}</td>
               <td>${fieldValue(bean: instance, field: "dateCreated")}</td>
               <td>
+                
                 <g:if test="${instance.processInstance.params.creator}">
-                  <g:set var="contact" value="${Contact.get(instance.processInstance.params.creator)}" />
-                  <g:link controller="contacts" action="show" id="${instance.processInstance.params.creator}">${fieldValue(bean: contact, field: "givenName")} ${fieldValue(bean: contact, field: "surname")}</g:link>
+                <g:set var="subject" value="${Subject.get(instance.processInstance.params.creator)}" />
+                  <g:if test="${subject.contact?.id}">
+                    <g:link controller="contacts" action="show" id="${subject.contact?.id}">${fieldValue(bean: subject, field: "cn")}</g:link>
+                  </g:if>
+                  <g:else>
+                    <g:message encodeAs="HTML" code="label.unknown" />
+                  </g:else>
                 </g:if>
                 <g:else>
                   <g:message encodeAs="HTML" code="label.publiccreation" />
