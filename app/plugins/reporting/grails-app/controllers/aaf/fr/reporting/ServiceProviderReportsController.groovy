@@ -95,13 +95,20 @@ class ServiceProviderReportsController {
     queryParams.startDate = startDate.time
     queryParams.endDate = endDate.time
     queryParams.spID = params.spID as Long
-    def sessionTotals = WayfAccessRecord.executeQuery("select idpID, count(*) from aaf.fr.reporting.WayfAccessRecord where spID = :spID and dateCreated between :startDate and :endDate and robot = false group by idpID", queryParams)
+    List sessionTotals = WayfAccessRecord.executeQuery("select idpID, count(*) from aaf.fr.reporting.WayfAccessRecord where spID = :spID and dateCreated between :startDate and :endDate and robot = false group by idpID", queryParams)
 
     def requestedIDP = params.get('activeidp') as List
     def idpList = IDPSSODescriptor.listOrderByDisplayName()
     idpList.each { idp ->
       if(idp.functioning()) {
-        def sessionTotal = sessionTotals.find{it[0] == idp.id}
+        def sessionTotal // For some reason SessionTotals.find is totally broken in Grails 2.1.4
+        for(List st : sessionTotals) {
+          if(st.get(0) == idp.id) {
+            sessionTotal = st.toArray()
+            break
+          }
+        }
+
         if(sessionTotal && sessionTotal[1] > 0) {
           def series = [:]
           series.id = idp.id

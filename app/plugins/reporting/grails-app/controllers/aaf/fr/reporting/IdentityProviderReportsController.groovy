@@ -101,7 +101,14 @@ class IdentityProviderReportsController {
     def spList = SPSSODescriptor.listOrderByDisplayName()
     spList.each { sp ->
       if(sp.functioning()) {
-        def sessionTotal = sessionTotals.find{it[0] == sp.id}
+        def sessionTotal // For some reason SessionTotals.find is totally broken in Grails 2.1.4
+        for(List st : sessionTotals) {
+          if(st.get(0) == sp.id) {
+            sessionTotal = st.toArray()
+            break
+          }
+        }
+
         if(sessionTotal && sessionTotal[1] > 0) {
           def series = [:]
           series.id = sp.id
