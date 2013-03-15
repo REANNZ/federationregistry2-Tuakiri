@@ -1,5 +1,7 @@
 package aaf.fr.foundation
 
+import org.codehaus.groovy.grails.web.servlet.mvc.SynchronizerTokensHolder
+
 import grails.plugin.spock.*
 import aaf.fr.workflow.*
 import aaf.fr.identity.Subject
@@ -120,6 +122,10 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
     def attributeList = [Attribute.build().save()]
     def nameIDFormatList = [SamlURI.build().save()]
     def contact = Contact.build().save()
+
+    def token = SynchronizerTokensHolder.store(controller.session)
+    controller.params[SynchronizerTokensHolder.TOKEN_URI] = "/identityProvider/save"
+    controller.params[SynchronizerTokensHolder.TOKEN_KEY] = token.generateToken(controller.params[SynchronizerTokensHolder.TOKEN_URI])
     
     when:
     idpssoDescriptorService.metaClass.create = { def p -> 
@@ -145,6 +151,10 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
     def attributeList = [Attribute.build().save()]
     def nameIDFormatList = [SamlURI.build().save()]
     def contact = Contact.build().save()
+
+    def token = SynchronizerTokensHolder.store(controller.session)
+    controller.params[SynchronizerTokensHolder.TOKEN_URI] = "/identityProvider/save"
+    controller.params[SynchronizerTokensHolder.TOKEN_KEY] = token.generateToken(controller.params[SynchronizerTokensHolder.TOKEN_URI])
     
     when:
     idpssoDescriptorService.metaClass.create = { def p -> 

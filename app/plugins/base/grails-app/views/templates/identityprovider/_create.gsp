@@ -10,7 +10,7 @@
 </div>
 </g:hasErrors>
 
-<g:form action="${saveAction}" name="idpssodescriptorcreateform" class="form-horizontal validating">
+<g:form action="${saveAction}" method="post" useToken="true" class="form-horizontal validating">
   <g:hiddenField name="active" value="true"/>
   <g:hiddenField name="idp.autoacceptservices" value="true"/>
   <g:hiddenField name="aa.create" value="true"/>

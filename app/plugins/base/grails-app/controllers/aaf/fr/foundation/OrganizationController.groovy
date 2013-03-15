@@ -62,17 +62,22 @@ class OrganizationController {
   }
   
   def save = {
-    def (created, organization, contact) = organizationService.create(params)
-  
-    if(created) {
-      log.info "$subject created $organization"
-      redirect (action: "show", id: organization.id)
-    } else {
-      log.info "$subject failed to create $organization"
-      
-      flash.type="error"
-      flash.message = message(code: 'domains.fr.foundation.organization.save.validation.error')
-      render (view:'create', model:[organization:organization, contact:contact, organizationTypes: OrganizationType.list()])
+    withForm {
+      def (created, organization, contact) = organizationService.create(params)
+    
+      if(created) {
+        log.info "$subject created $organization"
+        redirect (action: "show", id: organization.id)
+      } else {
+        log.info "$subject failed to create $organization"
+        
+        flash.type="error"
+        flash.message = message(code: 'domains.fr.foundation.organization.save.validation.error')
+        render (view:'create', model:[organization:organization, contact:contact, organizationTypes: OrganizationType.list()])
+      }
+    }.invalidToken {
+      log.warn("Attempt to create organization was denied, incorrect form token")
+      response.sendError(403)
     }
   }
   

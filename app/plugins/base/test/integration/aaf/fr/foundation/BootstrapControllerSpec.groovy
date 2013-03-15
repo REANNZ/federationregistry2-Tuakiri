@@ -1,5 +1,7 @@
 package aaf.fr.foundation
 
+import org.codehaus.groovy.grails.web.servlet.mvc.SynchronizerTokensHolder
+
 import grails.plugin.spock.*
 import aaf.fr.workflow.*
 import aaf.fr.identity.Subject
@@ -65,6 +67,10 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		ret.httpRedirect = httpRedirect
 		ret.soapArtifact = soapArtifact
 		ret.contact = contact
+
+    def token = SynchronizerTokensHolder.store(controller.session)
+    controller.params[SynchronizerTokensHolder.TOKEN_URI] = "/bootstrap/saveidp"
+    controller.params[SynchronizerTokensHolder.TOKEN_KEY] = token.generateToken(controller.params[SynchronizerTokensHolder.TOKEN_URI])
 		
 		when:
 		idpService.metaClass.create = { def p -> 
@@ -98,6 +104,10 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		ret.httpRedirect = httpRedirect
 		ret.soapArtifact = soapArtifact
 		ret.contact = contact
+
+    def token = SynchronizerTokensHolder.store(controller.session)
+    controller.params[SynchronizerTokensHolder.TOKEN_URI] = "/bootstrap/saveidp"
+    controller.params[SynchronizerTokensHolder.TOKEN_KEY] = token.generateToken(controller.params[SynchronizerTokensHolder.TOKEN_URI])
 		
 		when:
 		this.idpService.metaClass.create = { def p -> 
@@ -166,6 +176,10 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		ret.organization = organization
 		ret.entityDescriptor = entityDescriptor
 		ret.serviceProvider = serviceProvider
+
+    def token = SynchronizerTokensHolder.store(controller.session)
+    controller.params[SynchronizerTokensHolder.TOKEN_URI] = "/bootstrap/savesp"
+    controller.params[SynchronizerTokensHolder.TOKEN_KEY] = token.generateToken(controller.params[SynchronizerTokensHolder.TOKEN_URI])
 		
 		when:
 		spService.metaClass.create = { def p -> 
@@ -190,6 +204,10 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		spService.metaClass.create = { def p -> 
 			return [false, ret]	//.. deliberately leaving out other return vals here
 		}
+
+    def token = SynchronizerTokensHolder.store(controller.session)
+    controller.params[SynchronizerTokensHolder.TOKEN_URI] = "/bootstrap/savesp"
+    controller.params[SynchronizerTokensHolder.TOKEN_KEY] = token.generateToken(controller.params[SynchronizerTokensHolder.TOKEN_URI])
 		
 		when:
 		def model = controller.savesp()
@@ -240,6 +258,10 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		setup:
 		def organization = Organization.build(active:true, approved:true)
 		def contact = Contact.build()
+
+    def token = SynchronizerTokensHolder.store(controller.session)
+    controller.params[SynchronizerTokensHolder.TOKEN_URI] = "/bootstrap/saveorganization"
+    controller.params[SynchronizerTokensHolder.TOKEN_KEY] = token.generateToken(controller.params[SynchronizerTokensHolder.TOKEN_URI])
 		
 		when:
 		organizationService.metaClass.create = { def p -> 
@@ -255,6 +277,10 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		setup:
 		def organization = Organization.build(active:true, approved:true)
 		
+    def token = SynchronizerTokensHolder.store(controller.session)
+    controller.params[SynchronizerTokensHolder.TOKEN_URI] = "/bootstrap/saveorganization"
+    controller.params[SynchronizerTokensHolder.TOKEN_KEY] = token.generateToken(controller.params[SynchronizerTokensHolder.TOKEN_URI])
+
 		when:
 		organizationService.metaClass.create = { def p -> 
 			return [false, organization]

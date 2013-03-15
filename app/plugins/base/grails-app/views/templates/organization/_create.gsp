@@ -9,7 +9,7 @@
   </div>
 </g:hasErrors>
 
-<g:form action="${saveAction}" class="form-horizontal">
+<g:form action="${saveAction}" useToken="true" class="form-horizontal">
   <g:hiddenField name="active" value="true"/>
   <g:hiddenField name="contact.type" value="technical" />
   <g:hiddenField name="organization.lang" value="en" />

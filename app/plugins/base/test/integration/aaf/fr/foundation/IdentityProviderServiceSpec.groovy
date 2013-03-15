@@ -651,13 +651,11 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
     identityProvider.singleSignOnServices.contains(ret.httpPost)
     ret.httpPost.location == "http://identityProvider.test.com/SAML2/POST/SSO"
 
-    
+    identityProvider.hasErrors()
     identityProvider.singleSignOnServices.contains(ret.httpRedirect)
     ret.httpRedirect.location == null
     ret.httpRedirect.hasErrors()
     ret.httpRedirect.errors.getFieldError('location').code == 'nullable'
-    identityProvider.hasErrors()
-    identityProvider.errors.getFieldError('singleSignOnServices[1][2].location').code == 'nullable'
     
     identityProvider.artifactResolutionServices.size() == 1
     
