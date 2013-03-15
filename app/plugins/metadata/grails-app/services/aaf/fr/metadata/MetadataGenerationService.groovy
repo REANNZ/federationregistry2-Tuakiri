@@ -336,8 +336,9 @@ class MetadataGenerationService {
   }
   
   def IDPSSODescriptorExtensions(builder, all, roleDescriptor) {
+    boolean isRegex = roleDescriptor.scope.contains('*') || roleDescriptor.scope.contains('+')
     builder.Extensions() {
-      builder."shibmd:Scope" (regexp:false, roleDescriptor.scope)
+      builder."shibmd:Scope" (regexp:isRegex, roleDescriptor.scope)
     }
   }
   
