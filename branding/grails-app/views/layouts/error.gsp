@@ -2,7 +2,7 @@
 
 <html>
   <head>
-    <title><g:message code='fr.branding.title' default='Federation Registry'/></title>
+    <title><g:message encodeAs="HTML"  code='fr.branding.title' default='Federation Registry'/></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <r:require modules="modernizr, bootstrap, bootstrap-notify, zenbox, app"/>
     <r:layoutResources/>
@@ -25,10 +25,10 @@
           <div class="span12">
             <ul class="level1">
               <li class="${controllerName == 'dashboard' ? 'directactive':''}">
-                <g:link controller="dashboard"><g:message code="fr.branding.nav.dashboard" default="Dashboard"/></g:link>
+                <g:link controller="dashboard"><g:message encodeAs="HTML"  code="fr.branding.nav.dashboard" default="Dashboard"/></g:link>
               </li>
-              <li><a style="color: #fff;" href="http://support.aaf.edu.au/forums"><g:message code="fr.branding.nav.help" default="Help"/></a></li>
-              <li><a style="color: #fff;" href="#" onClick="script: Zenbox.show(); return false;"><g:message code="fr.branding.nav.support" default="Support"/></a></li>
+              <li><a style="color: #fff;" href="http://support.aaf.edu.au/forums"><g:message encodeAs="HTML"  code="fr.branding.nav.help" default="Help"/></a></li>
+              <li><a style="color: #fff;" href="#" onClick="script: Zenbox.show(); return false;"><g:message encodeAs="HTML"  code="fr.branding.nav.support" default="Support"/></a></li>
             </ul>
           </div>
         </div>

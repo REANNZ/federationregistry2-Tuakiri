@@ -2,7 +2,7 @@
 
 <html>
   <head>
-    <title><g:message code='fr.branding.title' default='Federation Registry'/></title>
+    <title><g:message encodeAs="HTML"  code='fr.branding.title' default='Federation Registry'/></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <r:require modules="modernizr, bootstrap, bootstrap-notify, zenbox, jreject, app"/>
     <g:render template='/templates/frbrowsercheck' />
@@ -26,8 +26,8 @@
             <g:render template='/templates/frtopnavigation'/>
             <g:if test="${controllerName == 'metadata'}">
               <ul class="level2a">
-                <li class="${actionName == 'view' ? 'active':''}"><g:link controller="metadata" action="view"><g:message code="fr.branding.nav.currentmetadata" default="Current"/></g:link></li>
-                <li class="${actionName == 'viewall' ? 'active':''}"><g:link controller="metadata" action="viewall"><g:message code="fr.branding.nav.allmetadata" default="All"/></g:link></li>
+                <li class="${actionName == 'view' ? 'active':''}"><g:link controller="metadata" action="view"><g:message encodeAs="HTML"  code="fr.branding.nav.currentmetadata" default="Current"/></g:link></li>
+                <li class="${actionName == 'viewall' ? 'active':''}"><g:link controller="metadata" action="viewall"><g:message encodeAs="HTML"  code="fr.branding.nav.allmetadata" default="All"/></g:link></li>
               </ul>
             </g:if>
           </div>

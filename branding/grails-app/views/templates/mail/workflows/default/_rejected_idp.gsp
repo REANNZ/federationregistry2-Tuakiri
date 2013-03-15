@@ -12,7 +12,7 @@
       <table>
         <tr>
           <td>
-            <strong><g:message code="label.internalid" /></strong>: 
+            <strong><g:message encodeAs="HTML"  code="label.internalid" /></strong>: 
           </td>
           <td>
             ${fieldValue(bean: identityProvider, field: "id")}
@@ -20,7 +20,7 @@
         </tr>
         <tr>
           <td>
-            <strong><g:message code="label.displayname" /></strong>: 
+            <strong><g:message encodeAs="HTML"  code="label.displayname" /></strong>: 
           </td>
           <td>
             ${fieldValue(bean: identityProvider, field: "displayName")}
@@ -28,7 +28,7 @@
         </tr>
         <tr>
           <td>
-            <strong><g:message code="label.description" /></strong>: 
+            <strong><g:message encodeAs="HTML"  code="label.description" /></strong>: 
           </td>
           <td>
             ${fieldValue(bean: identityProvider, field: "description")}
@@ -36,7 +36,7 @@
         </tr>
         <tr>
           <td>
-            <strong><g:message code="label.entitydescriptor" /></strong>: 
+            <strong><g:message encodeAs="HTML"  code="label.entitydescriptor" /></strong>: 
           </td>
           <td>
             ${fieldValue(bean: identityProvider, field: "entityDescriptor.entityID")}
@@ -44,7 +44,7 @@
         </tr>
         <tr>
           <td>
-            <strong><g:message code="label.organization" /></strong>: 
+            <strong><g:message encodeAs="HTML"  code="label.organization" /></strong>: 
           </td>
           <td>
             ${fieldValue(bean: identityProvider, field: "organization.displayName")}

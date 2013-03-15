@@ -2,7 +2,7 @@
 
 <html>
   <head>
-    <title><g:message code='fr.branding.title' default='Federation Registry'/></title>
+    <title><g:message encodeAs="HTML"  code='fr.branding.title' default='Federation Registry'/></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <r:require modules="modernizr, bootstrap, bootstrap-notify, bootstrap-datepicker, validate, datatables, alphanumeric, zenbox, jreject, app"/>
     <g:render template='/templates/frbrowsercheck' />
@@ -25,7 +25,7 @@
           <div class="span12">
             <ul class="level1">
               <li class="${controllerName == 'initialBootstrap' ? 'directactive':''}">
-                <g:link controller="initialBootstrap"><g:message code="branding.fr.nav.bootstrap" default="Bootstrap"/></g:link>
+                <g:link controller="initialBootstrap"><g:message encodeAs="HTML"  code="branding.fr.nav.bootstrap" default="Bootstrap"/></g:link>
               </li>
             </ul>
           </div>

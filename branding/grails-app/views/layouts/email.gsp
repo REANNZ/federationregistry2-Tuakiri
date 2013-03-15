@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />        
-    <title><g:message code='fr.branding.title' default='Federation Registry'/></title>
+    <title><g:message encodeAs="HTML"  code='fr.branding.title' default='Federation Registry'/></title>
 
     <style type="text/css">
       /* Client-specific Styles */
