@@ -23,7 +23,7 @@
       <g:link controller="complianceReports" action="idpprovidingattribute"><g:message code="fr.branding.nav.reports.compliance.idpprovidingattribute" default="Providing Attribute"/></g:link>
     </li>
     <li class="${actionName == 'compatability' ? 'active':''}">
-      <g:link controller="complianceReports" action="compatability"><g:message code="fr.branding.nav.reports.compliance.compatability" default="Compatability"/></g:link>
+      <g:link controller="complianceReports" action="compatability"><g:message code="fr.branding.nav.reports.compliance.compatability" default="Compatibility"/></g:link>
     </li>
     <fr:hasPermission target="federation:management:reporting">
       <li class="${actionName == 'causage' ? 'active':''}">
