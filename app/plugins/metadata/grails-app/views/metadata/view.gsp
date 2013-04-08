@@ -4,6 +4,6 @@
   </head>
   <body>
     <p><g:message encodeAs="HTML" code="views.fr.metadata.current.details" /></p>
-    <pre  class="metadata"><code>${md.encodeAsHTML()}</code></pre>
+    <pre  class="metadata"><code>${md}</code></pre>
   </body>
 </html>
