@@ -38,6 +38,7 @@ grails.project.dependency.resolution = {
 
   dependencies {
     test 'mysql:mysql-connector-java:5.1.18'
+    test "org.spockframework:spock-grails-support:0.7-groovy-2.0"
   }
 
   plugins {
@@ -54,8 +55,8 @@ grails.project.dependency.resolution = {
     compile ':cache:1.0.0'
     compile ":mail:1.0"
     compile ":build-test-data:2.0.3"
-
-    runtime ":hibernate:$grailsVersion"
+    compile ":hibernate:$grailsVersion"
+    
     runtime ":resources:1.1.6"
     runtime ":zipped-resources:1.0"
     runtime ":cached-resources:1.0"
@@ -69,7 +70,9 @@ grails.project.dependency.resolution = {
     runtime ":cache-headers:1.1.5"
     runtime ":audit-logging:0.5.4"
 
-    test   ":spock:0.6"
+    test(":spock:0.7") {
+      exclude "spock-grails-support"
+    }
 
     provided ":greenmail:1.3.2"
   }
