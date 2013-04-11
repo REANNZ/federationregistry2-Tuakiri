@@ -586,7 +586,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
     def admin = ContactType.build(name:"administrative")
     def contactPerson = ContactPerson.build(contact:contact, type:admin)
     
-    def idp = IDPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, organization:organization, entityDescriptor:entityDescriptor, approved:true, active:true, scope:'*.test.com')
+    def idp = IDPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerations, organization:organization, entityDescriptor:entityDescriptor, approved:true, active:true, scope:'^([a-zA-Z0-9-]{1,63}\\.){0,2}test.com$')
             
         def certificate = new Certificate(data:loadPK())
         def keyInfo = new KeyInfo(keyName:"key1", certificate:certificate)
@@ -657,7 +657,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
     metadataGenerationService.idpSSODescriptor(builder, false, false, true, idp)
     def xml = writer.toString()
     def strippedXML = xml.replace("shibmd:", "").replace("saml:", "") // dodgy as hell but easiest option presently
-        def diff = new Diff(expected, strippedXML)
+    def diff = new Diff(expected, strippedXML)
 
     then:
     xml.contains('saml:Attribute')

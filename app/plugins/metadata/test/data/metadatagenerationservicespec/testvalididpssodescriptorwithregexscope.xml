@@ -1,6 +1,6 @@
 <IDPSSODescriptor protocolSupportEnumeration='urn:oasis:names:tc:SAML:1.1:protocol urn:mace:shibboleth:1.0 urn:oasis:names:tc:SAML:2.0:protocol'>
   <Extensions>
-    <Scope regexp='true'>*.test.com</Scope>
+    <Scope regexp='true'>^([a-zA-Z0-9-]{1,63}\.){0,2}test.com$</Scope>
   </Extensions>
   <KeyDescriptor use='encryption'>
     <ds:KeyInfo xmlns:ds='http://www.w3.org/2000/09/xmldsig#'>
