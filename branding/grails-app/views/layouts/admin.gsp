@@ -2,9 +2,9 @@
 
 <html>
   <head>
-    <title><g:message code='fr.branding.title' default='Federation Registry'/></title>
+    <title><g:message encodeAs="HTML"  code='fr.branding.title' default='Federation Registry'/></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <r:require modules="modernizr, bootstrap, bootstrap-notify, bootstrap-datepicker, validate, datatables, alphanumeric, zenbox, jreject, app"/>
+    <r:require modules="modernizr, bootstrap, bootstrap-responsive-css, bootstrap-notify, bootstrap-datepicker, validate, datatables, alphanumeric, zenbox, jreject, app"/>
     <g:render template='/templates/frbrowsercheck' />
     <r:layoutResources/>
     <g:layoutHead />
@@ -12,24 +12,28 @@
 
   <body>
 
-    <div class="container">
-      <header>
+    <header>
+      <div class="container">
         <div class="row">
           <div class="span12">
             <g:render template='/templates/frheader' />
           </div>
         </div>
-      </header>
+      </div>
+    </header>
 
-      <nav>
+    <nav>
+      <div class="container">
         <div class="row">
           <div class="span12">
-            <g:render template='/templates/layouts/administration_nav'/>      
+            <g:render template='/templates/layouts/administration_nav' />  
           </div>
         </div>
-      </nav>
+      </div>
+    </nav>
 
-      <section>
+    <section>
+      <div class="container">
         <div class='notifications top-right'></div>
         <g:if test="${controllerName == 'adminDashboard' || controllerName == 'adminConsole' || controllerName == 'role' || controllerName == 'subject'}">
           <g:layoutBody/>
@@ -46,16 +50,18 @@
             </div>
           </div>
         </g:else>
-      </section>
+      </div>
+    </section>
 
-      <footer>
+    <footer>
+      <div class="container">
         <div class="row">
           <div class="span12">
             <g:render template='/templates/frfooter' />
           </div>
         </div>
-      </footer>
-    </div>
+      </div>
+    </footer>
     
     <g:render template="/templates/ajaxload-modal" />
     <r:layoutResources/>

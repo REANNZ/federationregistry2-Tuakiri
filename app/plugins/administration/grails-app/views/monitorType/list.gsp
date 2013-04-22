@@ -14,8 +14,8 @@
         <thead>
           <tr>
           
-            <th><g:message code="monitorType.name.label" default="Name" /></th>
-            <th><g:message code="monitorType.description.label" default="Description" /></th>
+            <th><g:message encodeAs="HTML" code="monitorType.name.label" default="Name" /></th>
+            <th><g:message encodeAs="HTML" code="monitorType.description.label" default="Description" /></th>
           
           <th/>
           </tr>
@@ -26,7 +26,7 @@
           
             <td>${fieldValue(bean: monitorTypeInstance, field: "name")}</td>
             <td>${fieldValue(bean: monitorTypeInstance, field: "description")}</td>
-            <td><g:link action="show" id="${monitorTypeInstance.id}" class="btn btn-small"><g:message code="label.view"/></g:link>
+            <td><g:link action="show" id="${monitorTypeInstance.id}" class="btn btn-small"><g:message encodeAs="HTML" code="label.view"/></g:link>
           </tr>
         </g:each>
         </tbody>

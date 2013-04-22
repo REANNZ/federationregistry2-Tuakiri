@@ -13,7 +13,7 @@
       <table class="table borderless table-admin-sortable">
         <thead>
           <tr>          
-            <th><g:message code="attributeCategory.name.label" default="Name" /></th>   
+            <th><g:message encodeAs="HTML" code="attributeCategory.name.label" default="Name" /></th>   
             <th/>
           </tr>
         </thead>
@@ -22,7 +22,7 @@
           <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">          
             <td>${fieldValue(bean: attributeCategoryInstance, field: "name")}</td>
           
-            <td><g:link action="show" id="${attributeCategoryInstance.id}" class="btn btn-small"><g:message code="label.view"/></g:link>
+            <td><g:link action="show" id="${attributeCategoryInstance.id}" class="btn btn-small"><g:message encodeAs="HTML" code="label.view"/></g:link>
           </tr>
         </g:each>
         </tbody>

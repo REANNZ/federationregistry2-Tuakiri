@@ -14,7 +14,7 @@
       def embeddedPropNames = p.component.persistentProperties*.name
       def embeddedProps = p.component.properties.findAll { embeddedPropNames.contains(it.name) && !excludedProps.contains(it.name) }
       Collections.sort(embeddedProps, comparator.constructors[0].newInstance([p.component] as Object[]))
-      %><fieldset class="embedded"><legend><g:message code="${domainClass.propertyName}.${p.name}.label" default="${p.naturalName}" /></legend><%
+      %><fieldset class="embedded"><legend><g:message encodeAs="HTML" code="${domainClass.propertyName}.${p.name}.label" default="${p.naturalName}" /></legend><%
         for (ep in p.component.properties) {
           renderFieldForProperty(ep, p.component, "${p.name}.")
         }
@@ -36,7 +36,7 @@ private renderFieldForProperty(p, owningClass, prefix = "") {
   if (display) { %>
 <div class="fieldcontain \${hasErrors(bean: ${propertyName}, field: '${prefix}${p.name}', 'error')} ${required ? 'required' : ''}">
   <label for="${prefix}${p.name}">
-    <g:message code="${domainClass.propertyName}.${prefix}${p.name}.label" default="${p.naturalName}" />
+    <g:message encodeAs="HTML" code="${domainClass.propertyName}.${prefix}${p.name}.label" default="${p.naturalName}" />
     <% if (required) { %><span class="required-indicator">*</span><% } %>
   </label>
   ${renderEditor(p)}

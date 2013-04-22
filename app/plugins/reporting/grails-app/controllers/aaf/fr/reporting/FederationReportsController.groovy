@@ -35,27 +35,27 @@ class FederationReportsController {
     def maxYear = currentCal.get(Calendar.YEAR)
 
     def results = [
-      title: g.message(code:'label.summaryregistrationsreport'),      
+      title: g.message(encodeAs:"HTML", code:'label.summaryregistrationsreport'),      
       axis: [
-        x: g.message(code:'label.years'),
-        y: g.message(code:'label.registrations')
+        x: g.message(encodeAs:"HTML", code:'label.years'),
+        y: g.message(encodeAs:"HTML", code:'label.registrations')
       ],
       categories: [],
       series: [
         org: [
-          name: g.message(code:'label.organization'),
+          name: g.message(encodeAs:"HTML", code:'label.organization'),
           counts: []
         ],
         idp: [
-          name: g.message(code:'label.identityprovider'),
+          name: g.message(encodeAs:"HTML", code:'label.identityprovider'),
           counts: []
         ],
         sp: [
-          name: g.message(code:'label.serviceprovider'),
+          name: g.message(encodeAs:"HTML", code:'label.serviceprovider'),
           counts: []
         ],
         summary: [
-          name: g.message(code:'label.average'),
+          name: g.message(encodeAs:"HTML", code:'label.average'),
           avg: [],
           total: []
         ]
@@ -97,10 +97,10 @@ class FederationReportsController {
     def results
     use(groovy.time.TimeCategory) {
       results = [
-        title: g.message(code:'label.detailedregistrationsreport'),
+        title: g.message(encodeAs:"HTML", code:'label.detailedregistrationsreport'),
         axis: [
-          x: g.message(code:'label.years'),
-          y: g.message(code:'label.totals')
+          x: g.message(encodeAs:"HTML", code:'label.years'),
+          y: g.message(encodeAs:"HTML", code:'label.totals')
         ],
         startdate: [
             day: startDate.get(Calendar.DAY_OF_MONTH),
@@ -109,15 +109,15 @@ class FederationReportsController {
         ],
         series: [
           org: [
-            name: g.message(code:'label.organization'),
+            name: g.message(encodeAs:"HTML", code:'label.organization'),
             counts: []
           ],
           idp: [
-            name: g.message(code:'label.identityprovider'),
+            name: g.message(encodeAs:"HTML", code:'label.identityprovider'),
             counts: []
           ],
           sp: [
-            name: g.message(code:'label.serviceprovider'),
+            name: g.message(encodeAs:"HTML", code:'label.serviceprovider'),
             counts: []
           ]
         ],
@@ -244,11 +244,11 @@ class FederationReportsController {
     def maxYear = currentCal.get(Calendar.YEAR)
 
     def results = [
-      title: g.message(code:'label.summarywaysessionsreport'),
+      title: g.message(encodeAs:"HTML", code:'label.summarywaysessionsreport'),
       categories: [],
       axis: [
-        x: g.message(code:'label.years'),
-        y: g.message(code:'label.sessions')
+        x: g.message(encodeAs:"HTML", code:'label.years'),
+        y: g.message(encodeAs:"HTML", code:'label.sessions')
       ],
       series: [
         count: []
@@ -259,7 +259,7 @@ class FederationReportsController {
       def count = 0
 
       results.categories.add(year)
-      results.series.name = g.message(code:'label.sessions')
+      results.series.name = g.message(encodeAs:"HTML", code:'label.sessions')
       
       count = WayfAccessRecord.executeQuery("select count(*) as count from aaf.fr.reporting.WayfAccessRecord where year(dateCreated) = ? and robot = false", [year], [readOnly:true, cache:true])[0]
       results.series.count.add(count);
@@ -273,7 +273,7 @@ class FederationReportsController {
     (startDate, endDate) = setupDates(params)
 
     def results = [
-      title: g.message(code:'label.detailedwaysessionsreport'),
+      title: g.message(encodeAs:"HTML", code:'label.detailedwaysessionsreport'),
       categories: [],
       startdate: [
           day: startDate.get(Calendar.DAY_OF_MONTH),
@@ -281,11 +281,11 @@ class FederationReportsController {
           year: startDate.get(Calendar.YEAR)
       ],
       axis: [
-        y: g.message(code:'label.sessions')
+        y: g.message(encodeAs:"HTML", code:'label.sessions')
       ],
       series: [
         overall: [
-          name: g.message(code:'label.totalsessions')
+          name: g.message(encodeAs:"HTML", code:'label.totalsessions')
         ],
       ]
     ]
@@ -320,7 +320,7 @@ class FederationReportsController {
     (startDate, endDate) = setupDates(params)
 
     def results = [
-      title: g.message(code:'label.detaileddemandreport'),
+      title: g.message(encodeAs:"HTML", code:'label.detaileddemandreport'),
       categories: [],
       startdate: [
           day: startDate.get(Calendar.DAY_OF_MONTH),
@@ -328,7 +328,7 @@ class FederationReportsController {
           year: startDate.get(Calendar.YEAR)
       ],
       axis: [
-        y: g.message(code:'label.sessions')
+        y: g.message(encodeAs:"HTML", code:'label.sessions')
       ],
       series: [
       ]
@@ -361,7 +361,7 @@ class FederationReportsController {
     (startDate, endDate) = setupDates(params)
 
     def results = [
-      title: g.message(code:'label.detailedwayfnodesessionsreport'),
+      title: g.message(encodeAs:"HTML", code:'label.detailedwayfnodesessionsreport'),
       categories: [],
       startdate: [
           day: startDate.get(Calendar.DAY_OF_MONTH),
@@ -369,7 +369,7 @@ class FederationReportsController {
           year: startDate.get(Calendar.YEAR)
       ],
       axis: [
-        y: g.message(code:'label.sessions')
+        y: g.message(encodeAs:"HTML", code:'label.sessions')
       ],
       series: [],
       totals: []
@@ -421,23 +421,23 @@ class FederationReportsController {
     def maxYear = currentCal.get(Calendar.YEAR)
 
     def results = [
-      title: g.message(code:'label.summarysubscribergrowthreport'),
+      title: g.message(encodeAs:"HTML", code:'label.summarysubscribergrowthreport'),
       categories: [],
       axis: [
-        x: g.message(code:'label.years'),
-        y: g.message(code:'label.totals')
+        x: g.message(encodeAs:"HTML", code:'label.years'),
+        y: g.message(encodeAs:"HTML", code:'label.totals')
       ],
       series: [
         org: [
-          name: g.message(code:'label.organization'),
+          name: g.message(encodeAs:"HTML", code:'label.organization'),
           counts: []
         ],
         idp: [
-          name: g.message(code:'label.identityprovider'),
+          name: g.message(encodeAs:"HTML", code:'label.identityprovider'),
           counts: []
         ],
         sp: [
-          name: g.message(code:'label.serviceprovider'),
+          name: g.message(encodeAs:"HTML", code:'label.serviceprovider'),
           counts: []
         ]
       ]
@@ -473,10 +473,10 @@ class FederationReportsController {
     def results
     use(groovy.time.TimeCategory) {
       results = [
-        title: g.message(code:'label.detailedsubscribergrowthreport'),
+        title: g.message(encodeAs:"HTML", code:'label.detailedsubscribergrowthreport'),
         axis: [
-          x: g.message(code:'label.years'),
-          y: g.message(code:'label.totals')
+          x: g.message(encodeAs:"HTML", code:'label.years'),
+          y: g.message(encodeAs:"HTML", code:'label.totals')
         ],
         startdate: [
             day: startDate.get(Calendar.DAY_OF_MONTH),
@@ -485,15 +485,15 @@ class FederationReportsController {
         ],
         series: [
           org: [
-            name: g.message(code:'label.organization'),
+            name: g.message(encodeAs:"HTML", code:'label.organization'),
             counts: []
           ],
           idp: [
-            name: g.message(code:'label.identityprovider'),
+            name: g.message(encodeAs:"HTML", code:'label.identityprovider'),
             counts: []
           ],
           sp: [
-            name: g.message(code:'label.serviceprovider'),
+            name: g.message(encodeAs:"HTML", code:'label.serviceprovider'),
             counts: []
           ]
         ]
@@ -561,7 +561,7 @@ class FederationReportsController {
     (startDate, endDate) = setupDates(params)
 
     def results = [
-      title: g.message(code:'label.detailedserviceutilizationreport'),
+      title: g.message(encodeAs:"HTML", code:'label.detailedserviceutilizationreport'),
       categories: [],
       startdate: [
           day: startDate.get(Calendar.DAY_OF_MONTH),
@@ -569,7 +569,7 @@ class FederationReportsController {
           year: startDate.get(Calendar.YEAR)
       ],
       axis: [
-        y: g.message(code:'label.sessions')
+        y: g.message(encodeAs:"HTML", code:'label.sessions')
       ],
       series: [],
     ]
@@ -615,7 +615,7 @@ class FederationReportsController {
     (startDate, endDate) = setupDates(params)
 
     def results = [
-      title: g.message(code:'label.detailedidputilizationreport'),
+      title: g.message(encodeAs:"HTML", code:'label.detailedidputilizationreport'),
       categories: [],
       startdate: [
           day: startDate.get(Calendar.DAY_OF_MONTH),
@@ -623,7 +623,7 @@ class FederationReportsController {
           year: startDate.get(Calendar.YEAR)
       ],
       axis: [
-        y: g.message(code:'label.sessions')
+        y: g.message(encodeAs:"HTML", code:'label.sessions')
       ],
       series: [],
     ]
@@ -728,7 +728,7 @@ class FederationReportsController {
     (startDate, endDate) = setupDates(params)
 
     def results = [
-      title: g.message(code:'label.detailedfrsessionsreport', default:"Federation Registry Sessions"),
+      title: g.message(encodeAs:"HTML", code:'label.detailedfrsessionsreport', default:"Federation Registry Sessions"),
       categories: [],
       startdate: [
           day: startDate.get(Calendar.DAY_OF_MONTH),
@@ -736,11 +736,11 @@ class FederationReportsController {
           year: startDate.get(Calendar.YEAR)
       ],
       axis: [
-        y: g.message(code:'label.sessions')
+        y: g.message(encodeAs:"HTML", code:'label.sessions')
       ],
       series: [
         overall: [
-          name: g.message(code:'label.totalsessions')
+          name: g.message(encodeAs:"HTML", code:'label.totalsessions')
         ],
       ]
     ]

@@ -13,8 +13,8 @@
       <table class="table borderless table-admin-sortable">
         <thead>
           <tr>
-            <th><g:message code="samlURI.uri.label" default="Uri" /></th>
-            <th><g:message code="samlURI.type.label" default="Type" /></th>
+            <th><g:message encodeAs="HTML" code="samlURI.uri.label" default="Uri" /></th>
+            <th><g:message encodeAs="HTML" code="samlURI.type.label" default="Type" /></th>
             <th/>
           </tr>
         </thead>
@@ -23,7 +23,7 @@
           <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
             <td>${fieldValue(bean: samlURIInstance, field: "uri")}</td>
             <td>${fieldValue(bean: samlURIInstance, field: "type")}</td>
-            <td><g:link action="show" id="${samlURIInstance.id}" class="btn btn-small"><g:message code="label.view"/></g:link>
+            <td><g:link action="show" id="${samlURIInstance.id}" class="btn btn-small"><g:message encodeAs="HTML" code="label.view"/></g:link>
           </tr>
         </g:each>
         </tbody>

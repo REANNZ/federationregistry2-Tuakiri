@@ -53,28 +53,6 @@ class CoreUtilitiesController {
 			def certerrors = []
 			
 			log.info "Attempting to validate certificate data:\n$certificate"
-		
-			// Wilcard certificate
-			if(subject.contains('*')) {
-				valid = false
-				certerrors.add("templates.fr.certificates.validation.wildcard")
-				log.warn "Certificate contains wildcard"
-			}
-
-			// CN has hostname as value
-			def matcher =  subject =~ /^(?:.*,)*[cC][nN]=([^,]+)(?:,.*)*$/
-			if(matcher.matches()) {
-				def cn = matcher[0][1]
-				log.info "Certificate CN is $cn and entity is ${params.entity}"
-				if(!params.entity.contains(cn)) {
-					valid = false
-					certerrors.add("templates.fr.certificates.validation.subject.doesnot.contain.host")
-					log.warn "Certificate CN does not contain hostname"
-				}
-			} else {
-				certerrors.add("templates.fr.certificates.validation.subject.doesnot.contain.cn")
-				log.warn "Certificate CN does not exist"
-			}
 			
 			// Max validity matches configured allowable value
 			def today = new Date()

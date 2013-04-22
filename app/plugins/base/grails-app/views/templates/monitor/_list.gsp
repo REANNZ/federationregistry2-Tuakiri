@@ -3,10 +3,10 @@
   	<table class="table borderless">
   		<thead>
   			<tr>
-  				<th><g:message code="label.type"/></th>
-  				<th><g:message code="label.url"/></th>
-          <th><g:message code="label.node"/></th>
-  				<th><g:message code="label.interval"/></th>
+  				<th><g:message encodeAs="HTML" code="label.type"/></th>
+  				<th><g:message encodeAs="HTML" code="label.url"/></th>
+          <th><g:message encodeAs="HTML" code="label.node"/></th>
+  				<th><g:message encodeAs="HTML" code="label.interval"/></th>
   				<th/>
   			</tr>	
   		</thead>
@@ -18,15 +18,15 @@
           <td>${m.node}</td>
   				<td>
   					<g:if test="${m.checkPeriod == 0}">
-  						<g:message code="label.externallydefined"/>
+  						<g:message encodeAs="HTML" code="label.externallydefined"/>
   					</g:if>
   					<g:else>
-  						${m.checkPeriod} <g:message code="label.seconds"/>
+  						${m.checkPeriod} <g:message encodeAs="HTML" code="label.seconds"/>
   					</g:else>
   				</td>
   				<td>
   					<fr:hasPermission target="federation:management:descriptor:${roleDescriptor.id}:monitor:delete">
-              <a class="confirm-delete-monitor btn btn-mini" data-monitorid="${m.id}"><g:message code="label.delete"/></a>
+              <a class="confirm-delete-monitor btn btn-mini" data-monitorid="${m.id}"><g:message encodeAs="HTML" code="label.delete"/></a>
   					</fr:hasPermission>
   				</td>
   			</tr>
@@ -35,6 +35,6 @@
   	</table>
   </g:if>
   <g:else>
-  	<p class="alert alert-message"><g:message code="templates.fr.monitor.none"/></p>
+  	<p class="alert alert-message"><g:message encodeAs="HTML" code="templates.fr.monitor.none"/></p>
   </g:else>
 </div>

@@ -105,7 +105,6 @@ textarea.cert{
 .dashlist {
   margin: 0px;
   padding: 0px;
-  margin-top: 6px;
 }
 
 .table tbody tr:hover td, .table tbody tr:hover th { 
@@ -120,7 +119,7 @@ textarea.cert{
 }
 
 .hero-unit {
-  margin-top: 24px;
+  margin-top: 6px;
 }
 
 .nav .nav-sectionheader {
@@ -248,16 +247,18 @@ ul.clean {
   list-style: none;
 }
 
+
+
 body {
-  background-color: #f1f1f1;
+  background-color: #fff;
 }
 
 body header {  
+
   background-color: #495666;
   color: @headFontColor;
   padding-top: 12px;
-  padding-bottom: 18px;
-
+  padding-bottom: 56px;
 
   img {
     float: left;
@@ -287,70 +288,75 @@ body header {
 }
 
 body nav {
-    font-size: 1.0em;
-    font-weight: normal;
+  margin-top: -44px;
+  font-size: 1.0em;
+  font-weight: normal;
 
-    ul {
+  ul {
+    .zero;
+    
+    li {
       .zero;
-      padding-top: 9px;
-      padding-bottom: 3px;
-      li {
+      .horizitem;
+      margin-left: 2px;
+      text-align: center;
+      a {
         .zero;
-        .horizitem;
-        margin-left: 4px;
-        text-align: center;
-        a {
-          .zero;
-          text-decoration: none;
-          font-weight: normal;
-          color: #fff;
-        }
-        a:hover {
-          text-decoration: underline;
-          color: #fff;
-        }
+        text-decoration: none;
+        font-weight: normal;
+        color: #fff;
+      }
+      a:hover {
+        text-decoration: underline;
+        color: #fff;
       }
     }
-    
-    .level1 {
-      background-color: #495666;
-      .active { .rounded-top; background-color: #8f9a99;  }
-    }
-    
-    .level2 {
-      background-color: #8f9a99;
-      .active { .rounded-top; background-color: #f1f1f1; a { color: #555; }}
-    }
-    
-    .level2a {
-      background-color: #8f9a99;
-      .active { .rounded-top; background-color: #fff; a { color: #555; } }
-    }
-    
-    .level3 {
-      background-color: #f1f1f1;
-      color: #555;
-      border-left: 1px solid #d2d2d2;
-      border-right: 1px solid #d2d2d2;
-      .active { .rounded-top; background-color: #979C9C;}
-      li { a{ color: #555; } a:hover{ color: #555; }}
-    }
-    
-    .level3a {
-      background-color: #f1f1f1;
-      color: #555;
-      border-left: 1px solid #d2d2d2;
-      border-right: 1px solid #d2d2d2;
-      .active { .rounded-top; background-color: #FFF; a{ color: #555; }}
-      li { a{ color: #555; } a:hover{ color: #555; }}
-    }
-    
-    .directactive {
-      .rounded-top; 
-      background-color: #FFF;
-      a { color: #555; }
-      a:hover { color: #555;}
-    }
+  }
+  
+  .level1 {
+    .rounded-top(5px);
+
+    padding-top: 12px;
+    padding-bottom: 12px;
+
+    background-color: #3D4754;
+    /*.active { .rounded-top; background-color: #8f9a99;  }*/
+  }
+  
+  .level2 {
+    padding-top: 6px;
+    padding-bottom: 3px;
+
+    background-color: #8f9a99;
+    .active { .rounded-top; background-color: #f2f2f2; a { color: #555; }}
+    .directactive { .rounded-top; background-color: #fff; a {color: #555;}}
+  }
+  
+  .level2a {
+    padding-top: 6px;
+    padding-bottom: 3px;
+    background-color: #8f9a99;
+    .active { .rounded-top; background-color: #fff; a { color: #555; } }
+  }
+  
+  .level3 {
+    padding-top: 6px;
+    padding-bottom: 3px;
+    background-color: #f2f2f2;
+    color: #555;
+    .active { .rounded-top; background-color: #979C9C;}
+    .directactive { .rounded-top; background-color: #fff;}
+    li { a{ color: #555; } a:hover{ color: #555; }}
+  }
+  
+  .level3a {
+    padding-top: 6px;
+    padding-bottom: 3px;
+    background-color: #f2f2f2;
+    color: #555;
+    .active { .rounded-top; background-color: #FFF; a{ color: #555; }}
+    li { a{ color: #555; } a:hover{ color: #555; }}
+  }
 }
 
 body section {
@@ -358,9 +364,6 @@ body section {
   .rounded-bottom;
   padding: 6px;
   background-color: #fff;
-  border-left: 1px solid #d2d2d2;
-  border-right: 1px solid #d2d2d2;
-  border-bottom: 1px solid #d2d2d2;
 }
 
 body.plain {
@@ -369,13 +372,17 @@ body.plain {
 
 body footer {
   .zero;
-  padding: 6px;
-  padding-top: 12px;
+  padding-top: 48px;
   padding-bottom: 12px;
-  
-  font-size:0.9em;
-  color: #aaa;
-  a {
+
+  .span12 {
+    padding: 6px;
+    border-top: 1px solid #E1E1E1;
+    
+    font-size:0.9em;
     color: #aaa;
+    a {
+      color: #aaa;
+    }
   }
 }

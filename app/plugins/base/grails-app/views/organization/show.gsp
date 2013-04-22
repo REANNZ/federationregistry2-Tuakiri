@@ -2,30 +2,30 @@
 <html>
   <head>
     <meta name="layout" content="members" />
-    <title><g:message code="views.fr.foundation.organization.show.title" /></title>
+    <title><g:message encodeAs="HTML" code="views.fr.foundation.organization.show.title" /></title>
   </head>
   <body>
-    <h2><g:message code="views.fr.foundation.organization.show.heading" args="[organization.displayName]"/></h2>
+    <h2><g:message encodeAs="HTML" code="views.fr.foundation.organization.show.heading" args="[organization.displayName]"/></h2>
 
     <g:if test="${!organization.functioning()}">
       <p class="alert alert-message alert-danger">
-        <g:message code="views.fr.foundation.organization.show.notfunctioning"/>
+        <g:message encodeAs="HTML" code="views.fr.foundation.organization.show.notfunctioning"/>
       </p>
     </g:if>
 
     <g:render template="/templates/flash" plugin="foundation"/>
     
     <ul class="nav nav-tabs">
-      <li class="active"><a href="#tab-overview" data-toggle="tab"><g:message code="label.overview" /></a></li>
-      <li><a href="#tab-contacts" data-toggle="tab"><g:message code="label.contacts" /></a></li>
+      <li class="active"><a href="#tab-overview" data-toggle="tab"><g:message encodeAs="HTML" code="label.overview" /></a></li>
+      <li><a href="#tab-contacts" data-toggle="tab"><g:message encodeAs="HTML" code="label.contacts" /></a></li>
       <fr:hasPermission target="federation:management:saml:advanced">
-        <li><a href="#tab-entities" data-toggle="tab"><g:message code="label.entities" /></a></li>
+        <li><a href="#tab-entities" data-toggle="tab"><g:message encodeAs="HTML" code="label.entities" /></a></li>
       </fr:hasPermission>
-      <li><a href="#tab-idp" data-toggle="tab"><g:message code="label.identityproviders" /></a></li>
-      <li><a href="#tab-sp" data-toggle="tab"><g:message code="label.serviceproviders" /></a></li>
-      <li><a href="#tab-registrations" data-toggle="tab"><g:message code="label.registrations" /></a></li>
+      <li><a href="#tab-idp" data-toggle="tab"><g:message encodeAs="HTML" code="label.identityproviders" /></a></li>
+      <li><a href="#tab-sp" data-toggle="tab"><g:message encodeAs="HTML" code="label.serviceproviders" /></a></li>
+      <li><a href="#tab-registrations" data-toggle="tab"><g:message encodeAs="HTML" code="label.registrations" /></a></li>
       <g:if test="${organization.approved}">
-        <li><a href="#tab-admins" data-toggle="tab"><g:message code="label.administrators" /></a></li>
+        <li><a href="#tab-admins" data-toggle="tab"><g:message encodeAs="HTML" code="label.administrators" /></a></li>
       </g:if>
     </ul>
     

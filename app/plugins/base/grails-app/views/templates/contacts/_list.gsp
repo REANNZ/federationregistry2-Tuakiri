@@ -3,9 +3,9 @@
     <table class="table borderless">
       <thead>
         <tr>
-          <th><g:message code="label.name" /></th>
-          <th><g:message code="label.email" /></th>
-          <th><g:message code="label.type" /></th>
+          <th><g:message encodeAs="HTML" code="label.name" /></th>
+          <th><g:message encodeAs="HTML" code="label.email" /></th>
+          <th><g:message encodeAs="HTML" code="label.type" /></th>
           <th/>
         </tr>
       </thead>
@@ -16,9 +16,9 @@
             <td><a href="mailto:${contactPerson.contact.email?.encodeAsHTML()}">${contactPerson.contact.email?.encodeAsHTML()}</a></td>
             <td>${contactPerson.type.displayName.encodeAsHTML()}</td>
             <td>
-              <a href="${createLink(controller:'contacts', action:'show', id: contactPerson.contact.id)}" class="btn btn-small"><g:message code='label.view'/></a>
+              <a href="${createLink(controller:'contacts', action:'show', id: contactPerson.contact.id)}" class="btn btn-small"><g:message encodeAs="HTML" code='label.view'/></a>
               <fr:hasAnyPermission in='["federation:management:${hostType}:${host.id}:contact:remove", "federation:management:contacts"]'>
-                <a class="confirm-delete-contact btn btn-small" data-contact="${contactPerson.id}"><g:message code='label.delete'/></a>
+                <a class="confirm-delete-contact btn btn-small" data-contact="${contactPerson.id}"><g:message encodeAs="HTML" code='label.delete'/></a>
               </fr:hasAnyPermission>
             </td>
           </tr>
@@ -27,6 +27,6 @@
     </table>
   </g:if>
   <g:else>
-    <p class="alert alert-message"><g:message code="templates.fr.contacts.noresults" /></p>
+    <p class="alert alert-message"><g:message encodeAs="HTML" code="templates.fr.contacts.noresults" /></p>
   </g:else>
 </div>

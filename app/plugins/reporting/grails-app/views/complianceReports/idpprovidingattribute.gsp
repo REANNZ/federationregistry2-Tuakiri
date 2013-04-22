@@ -5,9 +5,9 @@
   <body>
     <div class="centered">
       <form id="idpprovidingattribute-report-parameters" class="form-inline report-parameters well validating">
-        <label for="attribute"><g:message code="label.attribute"/></label>
+        <label for="attribute"><g:message encodeAs="HTML" code="label.attribute"/></label>
         <fr:attributeSelection/>
-        <a class="request-idpprovidingattribute-report btn"><g:message code="label.generate"/></a>
+        <a class="request-idpprovidingattribute-report btn"><g:message encodeAs="HTML" code="label.generate"/></a>
       </form>
     </div>
 
@@ -20,7 +20,7 @@
             <p><strong>Please note that capability does not mean any one specific Identity Provider will provide your service values.</strong> This is particuarly true if they are noted as not automatically releasing attribute values below. If your service is not recieving an attribute from an Identity Provider capable of providing it please contact the administrators of that Identity Provider directly.
           </div>
           <div class="span5">
-            <h4><g:message code="label.supportedby"/></h4>
+            <h4><g:message encodeAs="HTML" code="label.supportedby"/></h4>
             <table class="table borderless">
               <tbody class="supported">
               </tbody>
@@ -28,7 +28,7 @@
           </div>
           
           <div class="span5">
-            <h4><g:message code="label.unsupportedby"/></h4>
+            <h4><g:message encodeAs="HTML" code="label.unsupportedby"/></h4>
             <table class="table borderless">
               <tbody class="unsupported">
               </tbody>

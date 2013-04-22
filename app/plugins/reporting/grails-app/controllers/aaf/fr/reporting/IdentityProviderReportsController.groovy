@@ -26,7 +26,7 @@ class IdentityProviderReportsController {
     (startDate, endDate) = setupDates(params)
 
     def results = [
-      title: g.message(code:'label.detailedidpsessionsreport'),
+      title: g.message(encodeAs:"HTML", code:'label.detailedidpsessionsreport'),
       categories: [],
       startdate: [
           day: startDate.get(Calendar.DAY_OF_MONTH),
@@ -34,11 +34,11 @@ class IdentityProviderReportsController {
           year: startDate.get(Calendar.YEAR)
       ],
       axis: [
-        y: g.message(code:'label.sessions')
+        y: g.message(encodeAs:"HTML", code:'label.sessions')
       ],
       series: [
         overall: [
-          name: g.message(code:'label.totalsessions')
+          name: g.message(encodeAs:"HTML", code:'label.totalsessions')
         ],
       ]
     ]
@@ -78,7 +78,7 @@ class IdentityProviderReportsController {
     (startDate, endDate) = setupDates(params)
 
     def results = [
-      title: g.message(code:'label.detailedidputilizationreport'),
+      title: g.message(encodeAs:"HTML", code:'label.detailedidputilizationreport'),
       categories: [],
       startdate: [
           day: startDate.get(Calendar.DAY_OF_MONTH),
@@ -86,7 +86,7 @@ class IdentityProviderReportsController {
           year: startDate.get(Calendar.YEAR)
       ],
       axis: [
-        y: g.message(code:'label.sessions')
+        y: g.message(encodeAs:"HTML", code:'label.sessions')
       ],
       series: [],
     ]
@@ -101,7 +101,14 @@ class IdentityProviderReportsController {
     def spList = SPSSODescriptor.listOrderByDisplayName()
     spList.each { sp ->
       if(sp.functioning()) {
-        def sessionTotal = sessionTotals.find{it[0] == sp.id}
+        def sessionTotal // For some reason SessionTotals.find is totally broken in Grails 2.1.4
+        for(List st : sessionTotals) {
+          if(st.get(0) == sp.id) {
+            sessionTotal = st.toArray()
+            break
+          }
+        }
+
         if(sessionTotal && sessionTotal[1] > 0) {
           def series = [:]
           series.id = sp.id
@@ -140,7 +147,7 @@ class IdentityProviderReportsController {
     (startDate, endDate) = setupDates(params)
 
     def results = [
-      title: g.message(code:'label.detailedidpdemandreport'),
+      title: g.message(encodeAs:"HTML", code:'label.detailedidpdemandreport'),
       categories: [],
       startdate: [
           day: startDate.get(Calendar.DAY_OF_MONTH),
@@ -148,7 +155,7 @@ class IdentityProviderReportsController {
           year: startDate.get(Calendar.YEAR)
       ],
       axis: [
-        y: g.message(code:'label.sessions')
+        y: g.message(encodeAs:"HTML", code:'label.sessions')
       ],
       series: [
       ]

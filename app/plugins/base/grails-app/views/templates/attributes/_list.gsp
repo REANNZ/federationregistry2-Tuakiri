@@ -3,8 +3,8 @@
   <table class="table borderless">
     <thead>
       <tr>
-        <th><g:message code="label.attribute" /></th>
-        <th><g:message code="label.category" /></th>
+        <th><g:message encodeAs="HTML" code="label.attribute" /></th>
+        <th><g:message encodeAs="HTML" code="label.category" /></th>
         <th/>
       </tr>
     </thead>
@@ -19,7 +19,7 @@
         <td>${attr.base.category.name.encodeAsHTML()}</td>
         <td>
           <fr:hasPermission target="federation:management:descriptor:${descriptor.id}:attribute:remove">
-            <a class="confirm-delete-attribute btn btn-mini" data-attrid="${attr.id}"><g:message code="label.remove"/></a>
+            <a class="confirm-delete-attribute btn btn-mini" data-attrid="${attr.id}"><g:message encodeAs="HTML" code="label.remove"/></a>
           </fr:hasPermission>
         </td>
       </tr>
@@ -29,7 +29,7 @@
   </g:if>
   <g:else>
     <div>
-      <p class="alert alert-message"><g:message code="templates.fr.attributes.noresults"/></p>
+      <p class="alert alert-message"><g:message encodeAs="HTML" code="templates.fr.attributes.noresults"/></p>
     </div>
   </g:else>
 </div>

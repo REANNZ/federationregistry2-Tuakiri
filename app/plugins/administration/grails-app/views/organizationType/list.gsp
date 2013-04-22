@@ -13,9 +13,9 @@
       <table class="table borderless table-admin-sortable">
         <thead>
           <tr>
-            <th><g:message code="organizationType.name.label" default="Name" /></th>
-            <th><g:message code="organizationType.displayName.label" default="Display Name" /></th>
-            <th><g:message code="organizationType.discoveryServiceCategory.label" default="Discovery Service Category" /></th>
+            <th><g:message encodeAs="HTML" code="organizationType.name.label" default="Name" /></th>
+            <th><g:message encodeAs="HTML" code="organizationType.displayName.label" default="Display Name" /></th>
+            <th><g:message encodeAs="HTML" code="organizationType.discoveryServiceCategory.label" default="Discovery Service Category" /></th>
             <th/>
           </tr>
         </thead>
@@ -25,7 +25,7 @@
             <td>${fieldValue(bean: organizationTypeInstance, field: "name")}</td>
             <td>${fieldValue(bean: organizationTypeInstance, field: "displayName")}</td>
             <td><g:formatBoolean boolean="${organizationTypeInstance.discoveryServiceCategory}" /></td>
-            <td><g:link action="show" id="${organizationTypeInstance.id}" class="btn btn-small"><g:message code="label.view"/></g:link>
+            <td><g:link action="show" id="${organizationTypeInstance.id}" class="btn btn-small"><g:message encodeAs="HTML" code="label.view"/></g:link>
           </tr>
         </g:each>
         </tbody>

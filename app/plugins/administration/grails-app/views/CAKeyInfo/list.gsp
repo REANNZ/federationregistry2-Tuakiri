@@ -13,8 +13,8 @@
       <table class="table borderless table-admin-sortable">
         <thead>
           <tr>
-            <th><g:message code="CAKeyInfo.keyName.label" default="Key Name" /></th>
-            <th><g:message code="CAKeyInfo.expiryDate.label" default="Expiry Date" /></th>
+            <th><g:message encodeAs="HTML" code="CAKeyInfo.keyName.label" default="Key Name" /></th>
+            <th><g:message encodeAs="HTML" code="CAKeyInfo.expiryDate.label" default="Expiry Date" /></th>
             <th/>
           </tr>
         </thead>
@@ -23,7 +23,7 @@
           <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
             <td>${CAKeyInfoInstance.keyName ? fieldValue(bean: CAKeyInfoInstance, field: "keyName") : 'Not Defined'}</td>
             <td><g:formatDate date="${CAKeyInfoInstance.expiryDate}" /></td>          
-            <td><g:link action="show" id="${CAKeyInfoInstance.id}" class="btn btn-small"><g:message code="label.view"/></g:link>
+            <td><g:link action="show" id="${CAKeyInfoInstance.id}" class="btn btn-small"><g:message encodeAs="HTML" code="label.view"/></g:link>
           </tr>
         </g:each>
         </tbody>

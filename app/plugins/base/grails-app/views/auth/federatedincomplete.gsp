@@ -10,7 +10,7 @@
     
       <ul>
         <g:each in="${errors}">
-          <li><g:message code="${it}" /></li>
+          <li><g:message encodeAs="HTML" code="${it}" /></li>
         </g:each>
       </ul>
     </div>

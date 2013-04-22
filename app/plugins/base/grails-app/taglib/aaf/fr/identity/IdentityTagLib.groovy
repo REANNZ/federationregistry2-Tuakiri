@@ -78,7 +78,7 @@ class IdentityTagLib {
     if (id) {
       def subject = Subject.get(id)
       if (subject)
-        out << subject.principal
+        out << subject.principal.encodeAsHTML()
     }
   }
 
@@ -87,7 +87,7 @@ class IdentityTagLib {
     Long id = SecurityUtils.getSubject()?.getPrincipal()
     if (id) {
       def subject = Subject.get(id)
-      out << subject.cn
+      out << subject.cn.encodeAsHTML()
     }
   }
 
