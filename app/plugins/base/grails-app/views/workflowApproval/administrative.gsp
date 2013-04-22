@@ -58,11 +58,6 @@
                 </g:each>
               </td>
             </tr>
-            <g:if test="${i+1 != tasks.size()}">
-            <tr>
-              <td colspan="4"><hr></td>
-            </tr>
-            </g:if>
           </g:each>
         </tbody>
       </table>

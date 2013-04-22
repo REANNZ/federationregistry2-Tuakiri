@@ -4,7 +4,7 @@
   <head>
     <title><g:message encodeAs="HTML"  code='fr.branding.title' default='Federation Registry'/></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <r:require modules="modernizr, bootstrap, bootstrap-notify, validate, highcharts, zenbox, jreject, app"/>
+    <r:require modules="modernizr, bootstrap, bootstrap-responsive-css, bootstrap-notify, validate, highcharts, zenbox, jreject, app"/>
     <g:render template='/templates/frbrowsercheck' />
     <r:layoutResources/>
     <g:layoutHead />
@@ -12,38 +12,46 @@
 
   <body>
 
-    <div class="container">
-      <header>
+    <header>
+      <div class="container">
         <div class="row">
           <div class="span12">
             <g:render template='/templates/frheader' />
           </div>
         </div>
-      </header>
+      </div>
+    </header>
 
-      <nav>
+    <nav>
+      <div class="container">
         <div class="row">
           <div class="span12">
-            <g:render template='/templates/frtopnavigation'/>  
+            <g:render template='/templates/frtopnavigation' />  
           </div>
         </div>
-      </nav>
+      </div>
+    </nav>
 
-      <section>
+    <section>
+      <div class="container">
         <div class='notifications top-right'></div>
+        <div class="row">
+          <div class="span12">
         <g:layoutBody/>
-      </section>
+          </div>
+        </div>
+      </div>
+    </section>
 
-      <footer>
+    <footer>
+      <div class="container">
         <div class="row">
           <div class="span12">
             <g:render template='/templates/frfooter' />
           </div>
         </div>
-      </footer>
-
-    </div>
-
+      </div>
+    </footer>
     <r:layoutResources/>
 
   </body>

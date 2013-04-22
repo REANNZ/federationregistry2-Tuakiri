@@ -1,5 +1,5 @@
 <fr:isLoggedIn>
-  Logged in as <strong><fr:principalName /></strong> ( TargetedID: <fr:principal /> )<br><br>
+  Logged in as <strong><fr:principalName /></strong> ( TargetedID: <small><fr:principal /></small> )<br><br>
 </fr:isLoggedIn>
 Federation Registry <strong>version <g:meta name="app.version"/></strong>
 <br>
