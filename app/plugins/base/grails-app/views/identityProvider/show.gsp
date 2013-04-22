@@ -117,15 +117,15 @@
             <fr:hasPermission target="federation:management:descriptor:${identityProvider.id}:manage">
               <div id="tab-metadata" class="tab-pane">
                 <g:if test="${identityProvider.functioning()}">
-                  <div class="row">
-                    <div class="span8">
-                      <p><g:message encodeAs="HTML" code="views.fr.foundation.identityprovider.show.metadata.details" /></p>
-                    </div>
-                    <div class="span1 offset1">
-                      <a class="load-descriptor-metadata btn btn-info"><g:message encodeAs="HTML" code="label.load" /></a>
-                    </div>
+                  <div class="span8">
+                    <p><g:message encodeAs="HTML" code="views.fr.foundation.identityprovider.show.metadata.details" /></p>
                   </div>
-                  <pre id="descriptormetadata" class="metadata hidden"></pre>
+                  <div class="span1 offset2">
+                    <a class="load-descriptor-metadata btn btn-info"><g:message encodeAs="HTML" code="label.load" /></a>
+                  </div>
+                  <div class="span11">
+                    <pre id="descriptormetadata" class="metadata hidden"></pre>
+                  </div>
                 </g:if>
                 <g:else>
                   <div class="alert alert-message">
@@ -135,23 +135,22 @@
               </div>
               
               <div id="tab-attrfilpol" class="tab-pane">                        
-                <div class="row">
-                  <p class="span8">
+                <div class="span8">
+                  <p>
                     <g:message encodeAs="HTML" code="views.fr.foundation.identityprovider.show.attributefilter.description" />
                   </p>
-                  <p class="span8">
-                    <g:message encodeAs="HTML" code="views.fr.foundation.identityprovider.show.attributefilter.configuration" />
+                  <p>
+                    <g:message code="views.fr.foundation.identityprovider.show.attributefilter.configurationurl" />
                   </p>
-                  <p class="span8">
-                    <strong><g:message encodeAs="HTML" code="views.fr.foundation.identityprovider.show.attributefilter.configurationurl" /></strong>: <g:link controller='attributeFilter' action='generate' id="${identityProvider.id}" absolute='true'>${g.createLink(controller:'attributeFilter', action:'generate', id:identityProvider.id, absolute:'true')}</g:link>
-                  </p>
-                  <span class="span1 offset1">
-                    <a class="load-descriptor-attrfilter btn btn-info">
-                      <g:message encodeAs="HTML" code="label.load"/>
-                    </a>
-                  </span>
                 </div>
-                <pre id="descriptorattributefilter" class="metadata hidden"></pre>
+                <div class="span1 offset2">
+                  <a class="load-descriptor-attrfilter btn btn-info">
+                    <g:message encodeAs="HTML" code="label.load"/>
+                  </a>
+                </div>
+                <div class="span11">
+                  <pre id="descriptorattributefilter" class="metadata hidden"></pre>
+                </div>
               </div>
             </fr:hasPermission>
           </div>
