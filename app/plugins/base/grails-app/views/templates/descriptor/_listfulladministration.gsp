@@ -6,7 +6,7 @@
       <thead>
         <tr>
           <th><g:message encodeAs="HTML" code="label.name" default="Name"/></th>
-          <th><g:message encodeAs="HTML" code="label.organization" default="Organisation"/></th>
+          <th><g:message encodeAs="HTML" code="label.principal" default="Principal"/></th>
           <th/>
         </tr>
       </thead>
@@ -14,13 +14,15 @@
         <g:each in="${administrators.sort{it.principal}}" var="admin" status="i">
           <tr>
             <td>${fieldValue(bean: admin, field: "cn")}</td>
-            <td><g:link controller='organization' action='show' id="${admin.contact?.organization?.id}">${fieldValue(bean: admin, field: "contact.organization.displayName")}</g:link></td>
+            <td>${fieldValue(bean: admin, field: "principal")}</td>
             <td>
               <fr:hasPermission target="federation:management:descriptor:${descriptor.id}:manage:administrators">
                 <g:form controller="descriptorAdministration" action="revokeFullAdministration" method="DELETE">
                   <g:hiddenField name="id" value="${descriptor.id}" />
                   <g:hiddenField name="subjectID" value="${admin.id}" />
-                  <a href="#" class="btn btn-small ajax-modal" data-load="${createLink(controller:'subject', action:'showpublic', id:admin.id, absolute:true)}" ><g:message encodeAs="HTML" code="label.quickview" default="Quick View"/></a>
+                  <fr:hasPermission target="app:administration">
+                    <a href="#" class="btn btn-small ajax-modal" data-load="${createLink(controller:'subject', action:'showpublic', id:admin.id, absolute:true)}" ><g:message encodeAs="HTML" code="label.quickview" default="Quick View"/></a>
+                  </fr:hasPermission>
                   <g:submitButton name="submit" value="${message(code: 'label.revoke', default: 'Revoke')}" class="btn" />
                 </g:form>
               </fr:hasPermission>

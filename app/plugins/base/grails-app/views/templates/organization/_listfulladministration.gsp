@@ -20,7 +20,9 @@
                 <g:form controller="organization" action="revokeFullAdministration" method="DELETE">
                   <g:hiddenField name="id" value="${organization.id}" />
                   <g:hiddenField name="subjectID" value="${admin.id}" />
-                  <a href="#" class="btn btn-small ajax-modal" data-load="${createLink(controller:'subject', action:'showpublic', id:admin.id, absolute:true)}" ><g:message encodeAs="HTML" code="label.quickview" default="Quick View"/></a>
+                  <fr:hasPermission target="app:administration">
+                    <a href="#" class="btn btn-small ajax-modal" data-load="${createLink(controller:'subject', action:'showpublic', id:admin.id, absolute:true)}" ><g:message encodeAs="HTML" code="label.quickview" default="Quick View"/></a>
+                  </fr:hasPermission>
                   <g:submitButton name="submit" value="${message(code: 'label.revoke', default: 'Revoke')}" class="btn" />
                 </g:form>
               </fr:hasPermission>
