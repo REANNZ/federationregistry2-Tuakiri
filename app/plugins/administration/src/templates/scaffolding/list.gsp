@@ -19,7 +19,7 @@
             Collections.sort(props, comparator.constructors[0].newInstance([domainClass] as Object[]))
             props.eachWithIndex { p, i ->
               if (i < 6) { %>
-            <th><g:message code="${domainClass.propertyName}.${p.name}.label" default="${p.naturalName}" /></th>
+            <th><g:message encodeAs="HTML" code="${domainClass.propertyName}.${p.name}.label" default="${p.naturalName}" /></th>
           <%  }   } %>
           <th/>
           </tr>
@@ -38,7 +38,7 @@
           <%          } else { %>
             <td>\${fieldValue(bean: ${propertyName}, field: "${p.name}")}</td>
           <%  }   }   } %>
-            <td><g:link action="show" id="\${${propertyName}.id}" class="btn btn-small"><g:message code="label.view"/></g:link>
+            <td><g:link action="show" id="\${${propertyName}.id}" class="btn btn-small"><g:message encodeAs="HTML" code="label.view"/></g:link>
           </tr>
         </g:each>
         </tbody>

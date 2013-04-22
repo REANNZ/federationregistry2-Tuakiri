@@ -14,7 +14,7 @@
       
         <g:if test="${samlURIInstance?.id}">
         <li class="fieldcontain">
-          <strong><span id="id-label" class="property-label"><g:message code="samlURI.id.label" default="Id" /></span></strong>: 
+          <strong><span id="id-label" class="property-label"><g:message encodeAs="HTML" code="samlURI.id.label" default="Id" /></span></strong>: 
           
             <span class="property-value" aria-labelledby="id-label"><g:fieldValue bean="${samlURIInstance}" field="id"/></span>
           
@@ -22,7 +22,7 @@
         </g:if>
         <g:if test="${samlURIInstance?.uri}">
         <li class="fieldcontain">
-          <strong><span id="uri-label" class="property-label"><g:message code="samlURI.uri.label" default="Uri" /></span></strong>: 
+          <strong><span id="uri-label" class="property-label"><g:message encodeAs="HTML" code="samlURI.uri.label" default="Uri" /></span></strong>: 
           
             <span class="property-value" aria-labelledby="uri-label"><g:fieldValue bean="${samlURIInstance}" field="uri"/></span>
           
@@ -30,7 +30,7 @@
         </g:if>
         <g:if test="${samlURIInstance?.description}">
         <li class="fieldcontain">
-          <strong><span id="description-label" class="property-label"><g:message code="samlURI.description.label" default="Description" /></span></strong>: 
+          <strong><span id="description-label" class="property-label"><g:message encodeAs="HTML" code="samlURI.description.label" default="Description" /></span></strong>: 
           
             <span class="property-value" aria-labelledby="description-label"><g:fieldValue bean="${samlURIInstance}" field="description"/></span>
           
@@ -38,7 +38,7 @@
         </g:if>
         <g:if test="${samlURIInstance?.type}">
         <li class="fieldcontain">
-          <strong><span id="type-label" class="property-label"><g:message code="samlURI.type.label" default="Type" /></span></strong>: 
+          <strong><span id="type-label" class="property-label"><g:message encodeAs="HTML" code="samlURI.type.label" default="Type" /></span></strong>: 
           
             <span class="property-value" aria-labelledby="type-label"><g:fieldValue bean="${samlURIInstance}" field="type"/></span>
           
@@ -48,7 +48,7 @@
       <g:form>
         <fieldset class="buttons">
           <g:hiddenField name="id" value="${samlURIInstance?.id}" />
-          <g:link class="edit" action="edit" id="${samlURIInstance?.id}" class="btn btn-info"><g:message code="label.edit" default="Edit" /></g:link>
+          <g:link class="edit" action="edit" id="${samlURIInstance?.id}" class="btn btn-info"><g:message encodeAs="HTML" code="label.edit" default="Edit" /></g:link>
           <g:actionSubmit class="delete btn" action="delete" value="${message(code: 'label.delete', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
         </fieldset>
       </g:form>

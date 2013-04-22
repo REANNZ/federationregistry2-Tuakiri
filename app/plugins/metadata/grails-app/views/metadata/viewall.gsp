@@ -3,7 +3,7 @@
     <meta name="layout" content="metadata" />
   </head>
   <body>
-    <p><g:message code="views.fr.metadata.all.details" /></p>
-    <pre  class="metadata"><code>${md.encodeAsHTML()}</code></pre>
+    <p><g:message encodeAs="HTML" code="views.fr.metadata.all.details" /></p>
+    <pre  class="metadata"><code>${md}</code></pre>
   </body>
 </html>

@@ -21,12 +21,12 @@ class TagLib {
 
     def attributeCategories = AttributeCategory.list()
     attributeCategories.each { category ->
-      markup << "<optgroup label='${category.name}'>"
+      markup << "<optgroup label='${category.name.encodeAsHTML()}'>"
       
       def categoryAttributes = AttributeBase.findAllWhere(category:category).sort{it.name}
       categoryAttributes.each {
         if(!it.adminRestricted || provideAdminRestricted)
-        markup << "<option value='${it.id}'>${it.name} (${it.oid})</option>"
+        markup << "<option value='${it.id}'>${it.name.encodeAsHTML()} (${it.oid.encodeAsHTML()})</option>"
       }
       
     }

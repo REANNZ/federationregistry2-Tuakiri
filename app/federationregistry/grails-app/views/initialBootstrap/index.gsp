@@ -3,9 +3,9 @@
     <meta name="layout" content="bootstrap" />
   </head>
   <body>
-      <h2><g:message code="views.fr.initialbootstrap.heading"/></h2>
+      <h2><g:message encodeAs="HTML" code="views.fr.initialbootstrap.heading"/></h2>
       
-      <p><g:message code="views.fr.initialbootstrap.details"/></p>
+      <p><g:message encodeAs="HTML" code="views.fr.initialbootstrap.details"/></p>
 
       <p>
           <strong>This product includes software <a href="http://www.highcharts.com">developed at Highcharts</a>.

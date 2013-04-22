@@ -2,18 +2,18 @@
 <html>
   <head>
     <meta name="layout" content="members" />
-    <title><g:message code="views.fr.foundation.serviceprovider.list.title" /></title>
+    <title><g:message encodeAs="HTML" code="views.fr.foundation.serviceprovider.list.title" /></title>
   </head>
   <body>
 
-    <h2><g:message code="views.fr.foundation.serviceprovider.list.heading" /></h2>
+    <h2><g:message encodeAs="HTML" code="views.fr.foundation.serviceprovider.list.heading" /></h2>
     <table class="table borderless table-sortable">
       <thead>
         <tr>
-          <th><g:message code="label.serviceprovider" /></th>
-          <th><g:message code="label.organization" /></th>
-          <th><g:message code="label.entitydescriptor" /></th>
-          <th><g:message code="label.functioning" /></th>
+          <th><g:message encodeAs="HTML" code="label.serviceprovider" /></th>
+          <th><g:message encodeAs="HTML" code="label.organization" /></th>
+          <th><g:message encodeAs="HTML" code="label.entitydescriptor" /></th>
+          <th><g:message encodeAs="HTML" code="label.functioning" /></th>
           <th/>
         </tr>
       </thead>
@@ -25,14 +25,14 @@
           <td>${fieldValue(bean: serviceProvider, field: "entityDescriptor.entityID")}</td>
           <td>
             <g:if test="${serviceProvider.functioning()}">
-              <g:message code="label.yes"/>
+              <g:message encodeAs="HTML" code="label.yes"/>
             </g:if>
             <g:else>
-              <span class="label label-important"><g:message code="label.no"/></span>
+              <span class="label label-important"><g:message encodeAs="HTML" code="label.no"/></span>
             </g:else>
           </td>
           <td>
-            <a href="${createLink(controller:'serviceProvider', action:'show', id: serviceProvider.id)}" class="btn btn-small"><g:message code='label.view'/></a>
+            <a href="${createLink(controller:'serviceProvider', action:'show', id: serviceProvider.id)}" class="btn btn-small"><g:message encodeAs="HTML" code='label.view'/></a>
           </td>
         </tr>
       </g:each>

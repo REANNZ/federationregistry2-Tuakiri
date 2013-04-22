@@ -4,15 +4,15 @@
   </head>
   <body>
       
-    <h2><g:message code="aaf.fr.admin.subject.show.heading" default="Subject {0}" args="[subject.principal]"/></h2>
+    <h2><g:message encodeAs="HTML" code="aaf.fr.admin.subject.show.heading" default="Subject {0}" args="[subject.principal]"/></h2>
 
     <g:render template="/templates/flash" />
 
     <ul class="nav nav-tabs">
-      <li class="active"><a href="#tab-overview" data-toggle="tab"><g:message code="label.overview" default="Overview" /></a></li>
-      <li><a href="#tab-roles" data-toggle="tab"><g:message code="label.roles" default="Roles"/></a></li>
-      <li><a href="#tab-permissions" data-toggle="tab"><g:message code="label.permissions" default="Permissions" /></a></li>
-      <li><a href="#tab-sessions" data-toggle="tab"><g:message code="label.sessions" default="Sessions"/></a></li>
+      <li class="active"><a href="#tab-overview" data-toggle="tab"><g:message encodeAs="HTML" code="label.overview" default="Overview" /></a></li>
+      <li><a href="#tab-roles" data-toggle="tab"><g:message encodeAs="HTML" code="label.roles" default="Roles"/></a></li>
+      <li><a href="#tab-permissions" data-toggle="tab"><g:message encodeAs="HTML" code="label.permissions" default="Permissions" /></a></li>
+      <li><a href="#tab-sessions" data-toggle="tab"><g:message encodeAs="HTML" code="label.sessions" default="Sessions"/></a></li>
     </ul>
 
     <div class="tab-content">
@@ -20,23 +20,23 @@
         <table class="table borderless fixed">
           <tbody>
             <tr>
-              <th><g:message code="label.id" default="ID"/></th>
+              <th><g:message encodeAs="HTML" code="label.id" default="ID"/></th>
               <td>${fieldValue(bean: subject, field: "id")}</td>
             </tr>
             <tr>
-              <th><g:message code="label.principal" default="Principal"/></th>
+              <th><g:message encodeAs="HTML" code="label.principal" default="Principal"/></th>
               <td>${fieldValue(bean: subject, field: "principal")}</td>
             </tr>
             <tr>
-              <th><g:message code="label.displayname" default="Display Name"/></th>
+              <th><g:message encodeAs="HTML" code="label.displayname" default="Display Name"/></th>
               <td>${fieldValue(bean: subject, field: "cn")}</td>
             </tr>
             <tr>
-              <th><g:message code="label.email" default="Email"/></th>
+              <th><g:message encodeAs="HTML" code="label.email" default="Email"/></th>
               <td>${fieldValue(bean: subject, field: "email")}</td>
             </tr>
             <tr>
-              <th><g:message code="label.enabled" default="Enabled"/></th>
+              <th><g:message encodeAs="HTML" code="label.enabled" default="Enabled"/></th>
               <td>${fieldValue(bean: subject, field: "enabled")}</td>
             </tr>
           </tbody>
@@ -60,8 +60,8 @@
           <table class="table borderless table-sortable">
             <thead>
               <tr>
-                <th><g:message code="label.name" default="Name"/></th>
-                <th><g:message code="label.description" default="Description"/></th>
+                <th><g:message encodeAs="HTML" code="label.name" default="Name"/></th>
+                <th><g:message encodeAs="HTML" code="label.description" default="Description"/></th>
                 <th/>
               </tr>
             </thead>
@@ -70,7 +70,7 @@
                 <tr>
                   <td>${fieldValue(bean: role, field: "name")}</td>
                   <td>${fieldValue(bean: role, field: "description")}</td>
-                  <td><g:link controller="role" action="show" id="${role.id}" class="btn btn-small"><g:message code="label.view" default="View"/></g:link></td>
+                  <td><g:link controller="role" action="show" id="${role.id}" class="btn btn-small"><g:message encodeAs="HTML" code="label.view" default="View"/></g:link></td>
                 </tr>
               </g:each>
             </tbody>
@@ -86,8 +86,8 @@
           <table class="table borderless table-sortable">
             <thead>
               <tr>
-                <th><g:message code="label.type" default="Type"/></th>
-                <th><g:message code="label.target" default="Target"/></th>
+                <th><g:message encodeAs="HTML" code="label.type" default="Type"/></th>
+                <th><g:message encodeAs="HTML" code="label.target" default="Target"/></th>
                 <th/>
               </tr>
             </thead>
@@ -111,15 +111,15 @@
         <g:else>
           <p class="alert alert-info">This subject currently has no directly associated permissions.</p>
         </g:else>
-        <a href="#" class="show-manage-subject-permissions btn"><g:message code="label.addpermissions" default="Add Permissions"/></a>
+        <a href="#" class="show-manage-subject-permissions btn"><g:message encodeAs="HTML" code="label.addpermissions" default="Add Permissions"/></a>
         <div class="manage-subject-permissions revealable row-spacer">
           <hr>
-          <h3><g:message code="label.addpermission" default="Add Permission"/></h3>
+          <h3><g:message encodeAs="HTML" code="label.addpermission" default="Add Permission"/></h3>
           <g:form method="post" class="form validating">
             <g:hiddenField name="id" value="${subject?.id}" />
             <g:hiddenField name="version" value="${subject?.version}" />
             <fieldset class="form">
-              <label><g:message code="label.target" default="Target"/></label>
+              <label><g:message encodeAs="HTML" code="label.target" default="Target"/></label>
               <input name="target" class="span4 required" placeholder="target:must:be:colon:seperated:use:*:for:matchall"></input>
             </fieldset>
             <fieldset>
@@ -133,10 +133,10 @@
         <table class="table borderless table-sortable">
           <thead>
             <tr>
-              <th><g:message code="label.credential" default="Credential"/></th>
-              <th><g:message code="label.remotehost" default="Remote Host"/></th>
-              <th><g:message code="label.useragent" default="User Agent"/></th>
-              <th><g:message code="label.datecreated" default="Date"/></th>
+              <th><g:message encodeAs="HTML" code="label.credential" default="Credential"/></th>
+              <th><g:message encodeAs="HTML" code="label.remotehost" default="Remote Host"/></th>
+              <th><g:message encodeAs="HTML" code="label.useragent" default="User Agent"/></th>
+              <th><g:message encodeAs="HTML" code="label.datecreated" default="Date"/></th>
             </tr>
           </thead>
           <tbody>

@@ -57,21 +57,26 @@ class IdentityProviderController {
   }
   
   def save = {
-    def (created, ret) = IdentityProviderService.create(params)
-  
-    if(created) {
-      log.info "$subject created ${ret.identityProvider}"
-      redirect (action: "show", id: ret.identityProvider.id)
-    }
-    else {
-      flash.type="error"
-      flash.message = message(code: 'aaf.fr.foundation.idpssoroledescriptor.save.validation.error')
-      def c = AttributeBase.createCriteria()
-      def attributeList = c.list {
-        order("category", "asc")
-        order("name", "asc")
+    withForm {
+      def (created, ret) = IdentityProviderService.create(params)
+    
+      if(created) {
+        log.info "$subject created ${ret.identityProvider}"
+        redirect (action: "show", id: ret.identityProvider.id)
       }
-      render (view:'create', model:ret + [organizationList: Organization.findAllWhere(active:true, approved:true), attributeList: attributeList, nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)])
+      else {
+        flash.type="error"
+        flash.message = message(code: 'aaf.fr.foundation.idpssoroledescriptor.save.validation.error')
+        def c = AttributeBase.createCriteria()
+        def attributeList = c.list {
+          order("category", "asc")
+          order("name", "asc")
+        }
+        render (view:'create', model:ret + [organizationList: Organization.findAllWhere(active:true, approved:true), attributeList: attributeList, nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)])
+      }
+    }.invalidToken {
+      log.warn("Attempt to create identity provider was denied, incorrect form token")
+      response.sendError(403)
     }
   }
   

@@ -1,9 +1,9 @@
 <div class="tabbable">
   <ul class="nav nav-tabs">
-    <li class="active"><a href="#tab-sessions" data-toggle="tab"><g:message code="label.sessions" /></a></li>
-    <li><a href="#tab-utilization" data-toggle="tab"><g:message code="label.utilisation" /></a></li>
-    <li><a href="#tab-demand" data-toggle="tab"><g:message code="label.demand" /></a></li>
-    <li><a href="#tab-connections" data-toggle="tab"><g:message code="label.connections" /></a></li>
+    <li class="active"><a href="#tab-sessions" data-toggle="tab"><g:message encodeAs="HTML" code="label.sessions" /></a></li>
+    <li><a href="#tab-utilization" data-toggle="tab"><g:message encodeAs="HTML" code="label.utilisation" /></a></li>
+    <li><a href="#tab-demand" data-toggle="tab"><g:message encodeAs="HTML" code="label.demand" /></a></li>
+    <li><a href="#tab-connections" data-toggle="tab"><g:message encodeAs="HTML" code="label.connections" /></a></li>
   </ul>
 
   <div class="tab-content">
@@ -13,14 +13,14 @@
         <form id="detailed-idpsessions-report-parameters" class="form-inline report-parameters well validating">
           <g:hiddenField name="idpID" value="$idpID" />
 
-          <label for="startDate"><g:message code="label.startdate"/></label>
+          <label for="startDate"><g:message encodeAs="HTML" code="label.startdate"/></label>
           <input name="startDate" placeholder="Start Date (YYYY-MM-DD)" class="datepicker required span2" type="text"/>
 
-          <label for="endDate"><g:message code="label.enddate"/></label>
+          <label for="endDate"><g:message encodeAs="HTML" code="label.enddate"/></label>
           <input name="endDate" placeholder="End Date (YYYY-MM-DD)" class="datepicker required span2" type="text"/>
 
-          <a class="generate-btn request-detailed-idpsessions-report btn"><g:message code="label.generate"/></a>
-          <a class="export-detailed-idpsessions-report export-button btn btn-info hidden" rel="tooltip" title="${g.message(code:'label.exportexcel')}"><i class="icon-edit icon-white"></i></a>
+          <a class="generate-btn request-detailed-idpsessions-report btn"><g:message encodeAs="HTML" code="label.generate"/></a>
+          <a class="export-detailed-idpsessions-report export-button btn btn-info hidden" rel="tooltip" title="${g.message(encodeAs:"HTML", code:'label.exportexcel')}"><i class="icon-edit icon-white"></i></a>
         </form>
       </div>
 
@@ -28,7 +28,7 @@
         <div class="span11">
           <div class="span11 spinner centered"><r:img dir="images" file="spinner.gif"/></div>
           <div id="detailedidpsessionschart">
-            <div class="span9 generate-notice offset1 alert alert-info"><g:message code="templates.fr.identityprovider.reporting.generate"/></div>
+            <div class="span9 generate-notice offset1 alert alert-info"><g:message encodeAs="HTML" code="templates.fr.identityprovider.reporting.generate"/></div>
           </div>
         </div>
       </div>
@@ -39,14 +39,14 @@
         <form id="detailed-detailedidptoserviceutilization-report-parameters" class="form-inline report-parameters well validating">
           <g:hiddenField name="idpID" value="$idpID" />
 
-          <label for="startDate"><g:message code="label.startdate"/></label>
+          <label for="startDate"><g:message encodeAs="HTML" code="label.startdate"/></label>
           <input name="startDate" placeholder="Start Date (YYYY-MM-DD)" class="datepicker required span2" type="text"/>
 
-          <label for="endDate"><g:message code="label.enddate"/></label>
+          <label for="endDate"><g:message encodeAs="HTML" code="label.enddate"/></label>
           <input name="endDate" placeholder="End Date (YYYY-MM-DD)" class="datepicker required span2" type="text"/>
 
-          <a class="generate-btn request-detailed-detailedidptoserviceutilization-reports btn"><g:message code="label.generate"/></a>
-          <a class="export-detailed-detailedidptoserviceutilization-reports export-button btn btn-info hidden" rel="tooltip" title="${g.message(code:'label.exportexcel')}"><i class="icon-edit icon-white"></i></a>
+          <a class="generate-btn request-detailed-detailedidptoserviceutilization-reports btn"><g:message encodeAs="HTML" code="label.generate"/></a>
+          <a class="export-detailed-detailedidptoserviceutilization-reports export-button btn btn-info hidden" rel="tooltip" title="${g.message(encodeAs:"HTML", code:'label.exportexcel')}"><i class="icon-edit icon-white"></i></a>
         </form>
       </div>
 
@@ -59,7 +59,7 @@
       <div class="row">
         <div class="span11">
           <div id="detailedidptoserviceutilizationtotals">
-            <div class="span9 offset1 alert alert-info generate-notice"><g:message code="templates.fr.identityprovider.reporting.generate"/></div>
+            <div class="span9 offset1 alert alert-info generate-notice"><g:message encodeAs="HTML" code="templates.fr.identityprovider.reporting.generate"/></div>
           </div>
         </div>
       </div>
@@ -69,20 +69,20 @@
         <form id="refine-detailedidptoserviceutilization-report-parameters" class="form-inline">
           <div class="span11 topten hidden">
             <h4 class="span9">Top Ten Services</h4>
-            <a class="select-all-topten-services"><g:message code="label.addallchecks" /></a> | <a class="unselect-all-topten-services"><g:message code="label.removeallchecks" /></a>
+            <a class="select-all-topten-services"><g:message encodeAs="HTML" code="label.addallchecks" /></a> | <a class="unselect-all-topten-services"><g:message encodeAs="HTML" code="label.removeallchecks" /></a>
             <div id="topten-utilized-services" class="span11 services"></div>
 
             <div class="span2 offset9">
-              <a class="btn btn-success request-refine-detailedidptoserviceutilization-content"><g:message code="label.refine" /></a>
+              <a class="btn btn-success request-refine-detailedidptoserviceutilization-content"><g:message encodeAs="HTML" code="label.refine" /></a>
             </div>
           </div>
           <div class="span11 remainder hidden">
             <hr>
             <h4 class="span9">Remaining Services</h4>
-            <a class="select-all-remaining-services"><g:message code="label.addallchecks" /></a> | <a class="unselect-all-remaining-services"><g:message code="label.removeallchecks" /></a>
+            <a class="select-all-remaining-services"><g:message encodeAs="HTML" code="label.addallchecks" /></a> | <a class="unselect-all-remaining-services"><g:message encodeAs="HTML" code="label.removeallchecks" /></a>
             <div id="remaning-utilized-services" class="span11 services"></div>
             <div class="span2 offset9">
-              <a class="btn btn-success request-refine-detailedidptoserviceutilization-content"><g:message code="label.refine" /></a>
+              <a class="btn btn-success request-refine-detailedidptoserviceutilization-content"><g:message encodeAs="HTML" code="label.refine" /></a>
             </div>
           </div>
         </form>
@@ -94,14 +94,14 @@
         <form id="detailed-idpdemand-report-parameters" class="form-inline report-parameters well validating">
           <g:hiddenField name="idpID" value="$idpID" />
           
-          <label for="startDate"><g:message code="label.startdate"/></label>
+          <label for="startDate"><g:message encodeAs="HTML" code="label.startdate"/></label>
           <input name="startDate" placeholder="Start Date (YYYY-MM-DD)" class="datepicker required span2" type="text"/>
 
-          <label for="endDate"><g:message code="label.enddate"/></label>
+          <label for="endDate"><g:message encodeAs="HTML" code="label.enddate"/></label>
           <input name="endDate" placeholder="End Date (YYYY-MM-DD)" class="datepicker required span2" type="text"/>
 
-          <a class="generate-btn request-detailed-idpdemand-report btn"><g:message code="label.generate"/></a>
-          <a class="export-detailed-idpdemand-report export-button btn btn-info hidden" rel="tooltip" title="${g.message(code:'label.exportexcel')}"><i class="icon-edit icon-white"></i></a>
+          <a class="generate-btn request-detailed-idpdemand-report btn"><g:message encodeAs="HTML" code="label.generate"/></a>
+          <a class="export-detailed-idpdemand-report export-button btn btn-info hidden" rel="tooltip" title="${g.message(encodeAs:"HTML", code:'label.exportexcel')}"><i class="icon-edit icon-white"></i></a>
         </form>
       </div>
 
@@ -109,7 +109,7 @@
         <div class="span11">
           <div class="span11 spinner centered"><r:img dir="images" file="spinner.gif"/></div>
           <div id="idpdemanddetailed">
-            <div class=" span9 offset1 alert alert-info generate-notice"><g:message code="templates.fr.identityprovider.reporting.generate"/></div>
+            <div class=" span9 offset1 alert alert-info generate-notice"><g:message encodeAs="HTML" code="templates.fr.identityprovider.reporting.generate"/></div>
           </div>
         </div>
       </div>
@@ -120,20 +120,20 @@
         <form id="idp-connections-report-parameters" class="form-inline report-parameters well validating">
           <g:hiddenField name="idpID" value="$idpID" />
           
-          <label for="startDate"><g:message code="label.startdate"/></label>
+          <label for="startDate"><g:message encodeAs="HTML" code="label.startdate"/></label>
           <input name="startDate" placeholder="Start Date (YYYY-MM-DD)" class="datepicker required span2" type="text"/>
 
-          <label for="endDate"><g:message code="label.enddate"/></label>
+          <label for="endDate"><g:message encodeAs="HTML" code="label.enddate"/></label>
           <input name="endDate" placeholder="End Date (YYYY-MM-DD)" class="datepicker required span2" type="text"/>
 
-          <a class="generate-btn request-idp-connections-report btn"><g:message code="label.generate"/></a>
+          <a class="generate-btn request-idp-connections-report btn"><g:message encodeAs="HTML" code="label.generate"/></a>
         </form>
       </div>
 
       <div class="row">
         <div class="span11">
           <div class="span11 spinner centered"><r:img dir="images" file="spinner.gif"/></div>
-          <div class="span9 offset1 alert alert-info generate-notice"><g:message code="templates.fr.identityprovider.reporting.generate"/></div>
+          <div class="span9 offset1 alert alert-info generate-notice"><g:message encodeAs="HTML" code="templates.fr.identityprovider.reporting.generate"/></div>
           <div id="idpconnectivity" class="centered">
             
           </div>

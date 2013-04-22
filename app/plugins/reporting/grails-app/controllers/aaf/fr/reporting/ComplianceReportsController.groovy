@@ -27,10 +27,10 @@ class ComplianceReportsController {
   def reportattributeavailability = {
 
     def results = [
-      title: g.message(code:'label.idpsummaryattributesupport'),      
+      title: g.message(encodeAs:"HTML", code:'label.idpsummaryattributesupport'),      
       axis: [
-        x: g.message(code:'label.identityprovider'),
-        y: g.message(code:'label.supported')
+        x: g.message(encodeAs:"HTML", code:'label.identityprovider'),
+        y: g.message(encodeAs:"HTML", code:'label.supported')
       ],
       categories: [],
       series: [:],
@@ -96,7 +96,7 @@ class ComplianceReportsController {
 
   def reportattributecompatibility = {
     def results = [
-      title: g.message(code:'label.attributecompatibility'),
+      title: g.message(encodeAs:"HTML", code:'label.attributecompatibility'),
       minimumRequirements: true, 
       idp:[:],
       sp:[:],     

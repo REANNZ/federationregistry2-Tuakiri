@@ -2,23 +2,23 @@
   <table class="table borderless fixed">
     <tbody>  
       <tr>
-        <th><g:message code="label.status"/></th>
+        <th><g:message encodeAs="HTML" code="label.status"/></th>
         <td>
           <g:if test="${serviceProvider.active}">
-            <g:message code="label.active" />
+            <g:message encodeAs="HTML" code="label.active" />
           </g:if>
           <g:else>
-            <span class="label label-important"><g:message code="label.inactive" /></span><fr:tooltip code='label.warningmetadata'/>
+            <span class="label label-important"><g:message encodeAs="HTML" code="label.inactive" /></span><fr:tooltip code='label.warningmetadata'/>
           </g:else>
         </td>
       </tr> 
       <tr>
-        <th><g:message code="label.displayname"/></th>
+        <th><g:message encodeAs="HTML" code="label.displayname"/></th>
         <td>${fieldValue(bean: serviceProvider, field: "displayName")}</td>
       </tr>
       <tr>
         <th>
-          <g:message code="label.description" />
+          <g:message encodeAs="HTML" code="label.description" />
         </th>
         <td>
           ${fieldValue(bean: serviceProvider, field: "description")}
@@ -26,7 +26,7 @@
       </tr>
       <tr>
         <th>
-          <g:message code="label.serviceurl" />
+          <g:message encodeAs="HTML" code="label.serviceurl" />
         </th>
         <td>
           ${fieldValue(bean: serviceProvider, field: "serviceDescription.connectURL")}
@@ -34,7 +34,7 @@
       </tr>
       <tr>
         <th>
-          <g:message code="label.servicelogourl" />
+          <g:message encodeAs="HTML" code="label.servicelogourl" />
         </th>
         <td>
           ${fieldValue(bean: serviceProvider, field: "serviceDescription.logoURL")}

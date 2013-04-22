@@ -14,9 +14,9 @@
         <thead>
           <tr>
           
-            <th><g:message code="attributeBase.name.label" default="Name" /></th>
-            <th><g:message code="attributeBase.oid.label" default="OID" /></th>
-            <th><g:message code="attributeBase.legacyName.label" default="Legacy Name" /></th>
+            <th><g:message encodeAs="HTML" code="attributeBase.name.label" default="Name" /></th>
+            <th><g:message encodeAs="HTML" code="attributeBase.oid.label" default="OID" /></th>
+            <th><g:message encodeAs="HTML" code="attributeBase.legacyName.label" default="Legacy Name" /></th>
           
           <th/>
           </tr>
@@ -32,7 +32,7 @@
           
             <td>${fieldValue(bean: attributeBaseInstance, field: "legacyName")}</td>
           
-            <td><g:link action="show" id="${attributeBaseInstance.id}" class="btn btn-small"><g:message code="label.view"/></g:link>
+            <td><g:link action="show" id="${attributeBaseInstance.id}" class="btn btn-small"><g:message encodeAs="HTML" code="label.view"/></g:link>
           </tr>
         </g:each>
         </tbody>

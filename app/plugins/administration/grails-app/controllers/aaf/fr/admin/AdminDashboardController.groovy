@@ -1,6 +1,6 @@
 package aaf.fr.admin
 
-import org.codehaus.groovy.runtime.TimeCategory
+import groovy.time.TimeCategory
 
 import grails.plugins.federatedgrails.*
 import aaf.fr.identity.*

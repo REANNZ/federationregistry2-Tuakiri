@@ -24,22 +24,27 @@ class BootstrapController {
 	}
 	
 	def saveidp = {
-		def (created, ret) = IdentityProviderService.create(params)
-		
-		if(created) {	
-			log.info "Sucessfully registered ${ret.identityProvider} from public source"
-			redirect (action: "idpregistered", id: ret.identityProvider.id)
-		}
-		else {
-			flash.type="error"
-			flash.message = message(code: 'aaf.fr.foundation.idpssoroledescriptor.register.validation.error')
-			def c = AttributeBase.createCriteria()
-			def attributeList = c.list {
-				order("category", "asc")
-				order("name", "asc")
-			}
-			render (view:'idp', model:ret + [organizationList: Organization.findAllWhere(active:true, approved:true), attributeList: attributeList, nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)])
-		}
+    withForm {
+  		def (created, ret) = IdentityProviderService.create(params)
+  		
+  		if(created) {	
+  			log.info "Sucessfully registered ${ret.identityProvider} from public source"
+  			redirect (action: "idpregistered", id: ret.identityProvider.id)
+  		}
+  		else {
+  			flash.type="error"
+  			flash.message = message(code: 'aaf.fr.foundation.idpssoroledescriptor.register.validation.error')
+  			def c = AttributeBase.createCriteria()
+  			def attributeList = c.list {
+  				order("category", "asc")
+  				order("name", "asc")
+  			}
+  			render (view:'idp', model:ret + [organizationList: Organization.findAllWhere(active:true, approved:true), attributeList: attributeList, nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)])
+  		}
+    }.invalidToken {
+      log.warn("Attempt to create identity provider was denied, incorrect form token")
+      response.sendError(403)
+    }
 	}
 	
 	def idpregistered = {
@@ -73,22 +78,27 @@ class BootstrapController {
 	}
 	
 	def savesp = {
-		def (created, ret) = ServiceProviderService.create(params)
-		
-		if(created) {
-			log.info "Sucessfully registered ${ret.serviceProvider} from public source"
-			redirect (action: "spregistered", id: ret.serviceProvider.id)
-		}
-		else {
-			flash.type="error"
-			flash.message = message(code: 'aaf.fr.foundation.spssoroledescriptor.register.validation.error')
-			def c = AttributeBase.createCriteria()
-			def attributeList = c.list {
-				order("category", "asc")
-				order("name", "asc")
-			}
-			render (view:'sp', model:ret + [organizationList: Organization.findAllWhere(active:true, approved:true), attributeList: attributeList, nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)])
-		}
+    withForm {
+  		def (created, ret) = ServiceProviderService.create(params)
+  		
+  		if(created) {
+  			log.info "Sucessfully registered ${ret.serviceProvider} from public source"
+  			redirect (action: "spregistered", id: ret.serviceProvider.id)
+  		}
+  		else {
+  			flash.type="error"
+  			flash.message = message(code: 'aaf.fr.foundation.spssoroledescriptor.register.validation.error')
+  			def c = AttributeBase.createCriteria()
+  			def attributeList = c.list {
+  				order("category", "asc")
+  				order("name", "asc")
+  			}
+  			render (view:'sp', model:ret + [organizationList: Organization.findAllWhere(active:true, approved:true), attributeList: attributeList, nameIDFormatList: SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)])
+  		}
+    }.invalidToken {
+      log.warn("Attempt to create serviceprovider was denied, incorrect form token")
+      response.sendError(403)
+    }
 	}
 	
 	def spregistered = {
@@ -117,17 +127,22 @@ class BootstrapController {
 	}
 	
 	def saveorganization = {
-		def (created, organization, contact) = organizationService.create(params)
-		
-		if(created) {
-			log.info "Sucessfully registered $organization from public source"
-			redirect (action: "organizationregistered", id: organization.id)
-		}
-		else {
-			flash.type="error"
-			flash.message = message(code: 'domains.fr.foundation.organization.register.validation.error')
-			render (view:'organization', model:[organization:organization, contact:contact, organizationTypes: OrganizationType.list()])
-		}
+    withForm {
+  		def (created, organization, contact) = organizationService.create(params)
+  		
+  		if(created) {
+  			log.info "Sucessfully registered $organization from public source"
+  			redirect (action: "organizationregistered", id: organization.id)
+  		}
+  		else {
+  			flash.type="error"
+  			flash.message = message(code: 'domains.fr.foundation.organization.register.validation.error')
+  			render (view:'organization', model:[organization:organization, contact:contact, organizationTypes: OrganizationType.list()])
+  		}
+    }.invalidToken {
+      log.warn("Attempt to create organization was denied, incorrect form token")
+      response.sendError(403)
+    }
 	}
 	
 	def organizationregistered = {

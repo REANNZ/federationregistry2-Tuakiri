@@ -211,7 +211,7 @@ dataSource {
 dataSource {
   dbCreate = "update"
   dialect= org.hibernate.dialect.MySQL5InnoDBDialect
-  jndiName= "java:comp/env/jdbc/FEDERATIONREGISTRY" 
+  jndiName= "java:comp/env/jdbc/FEDERATIONREGISTRY2" 
 }
 **/
 

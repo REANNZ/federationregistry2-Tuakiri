@@ -1,5 +1,7 @@
 package aaf.fr.foundation
 
+import org.codehaus.groovy.grails.web.servlet.mvc.SynchronizerTokensHolder
+
 import grails.plugin.spock.*
 import aaf.fr.workflow.*
 import aaf.fr.identity.Subject
@@ -101,6 +103,10 @@ def "Validate successful save"() {
     return [true, [organization:organization, entityDescriptor:entityDescriptor, serviceProvider:serviceProvider]]  
   } 
 
+  def token = SynchronizerTokensHolder.store(controller.session)
+  controller.params[SynchronizerTokensHolder.TOKEN_URI] = "/serviceProvider/save"
+  controller.params[SynchronizerTokensHolder.TOKEN_KEY] = token.generateToken(controller.params[SynchronizerTokensHolder.TOKEN_URI])
+
   when:
   def model = controller.save()
 
@@ -118,6 +124,10 @@ def "Validate failed save"() {
     return [false, [organization:organization, entityDescriptor:entityDescriptor, serviceProvider:serviceProvider]] 
     //.. deliberately leaving out other return vals here
   } 
+
+  def token = SynchronizerTokensHolder.store(controller.session)
+  controller.params[SynchronizerTokensHolder.TOKEN_URI] = "/serviceProvider/save"
+  controller.params[SynchronizerTokensHolder.TOKEN_KEY] = token.generateToken(controller.params[SynchronizerTokensHolder.TOKEN_URI])
 
   when:
   def model = controller.save()

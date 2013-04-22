@@ -27,6 +27,7 @@ grails.project.dependency.resolution = {
 
   dependencies {
     test 'mysql:mysql-connector-java:5.1.18'
+    test "org.spockframework:spock-grails-support:0.7-groovy-2.0"
   }
 
   plugins {
@@ -35,10 +36,11 @@ grails.project.dependency.resolution = {
     compile ":federated-grails:0.2.4"
     compile ":build-test-data:2.0.3"
     compile ":mail:1.0"
+    compile ":hibernate:$grailsVersion"
 
-    runtime ":hibernate:$grailsVersion"
-
-    test ":spock:0.6"
+    test(":spock:0.7") {
+      exclude "spock-grails-support"
+    }
     test ":resources:1.1.6"
     provided ":greenmail:1.3.2"
   }

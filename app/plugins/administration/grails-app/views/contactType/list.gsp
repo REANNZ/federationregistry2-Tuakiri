@@ -13,9 +13,9 @@
       <table class="table borderless table-admin-sortable">
         <thead>
           <tr>
-            <th><g:message code="contactType.name.label" default="Name" /></th>
-            <th><g:message code="contactType.displayName.label" default="Display Name" /></th>
-            <th><g:message code="contactType.description.label" default="Description" /></th>          
+            <th><g:message encodeAs="HTML" code="contactType.name.label" default="Name" /></th>
+            <th><g:message encodeAs="HTML" code="contactType.displayName.label" default="Display Name" /></th>
+            <th><g:message encodeAs="HTML" code="contactType.description.label" default="Description" /></th>          
           <th/>
           </tr>
         </thead>
@@ -25,7 +25,7 @@
             <td>${fieldValue(bean: contactTypeInstance, field: "name")}</td>
             <td>${fieldValue(bean: contactTypeInstance, field: "displayName")}</td>    
             <td>${fieldValue(bean: contactTypeInstance, field: "description")}</td>
-            <td><g:link action="show" id="${contactTypeInstance.id}" class="btn btn-small"><g:message code="label.view"/></g:link>
+            <td><g:link action="show" id="${contactTypeInstance.id}" class="btn btn-small"><g:message encodeAs="HTML" code="label.view"/></g:link>
           </tr>
         </g:each>
         </tbody>

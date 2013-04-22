@@ -5,23 +5,23 @@
 
   <body>
     <div class="hero-unit">
-      <h1>Welcome</h1>
-      <p>Welcome to the AAF management tool, Federation Registry. Here you can view, manage and report on the Organisations, Identity Providers and Service Providers which make up the federation.</p>
+      <h2>Welcome to the AAF Federation Registry</h2>
+      <p>Here you can view, manage and report on the Organisations, Identity Providers and Service Providers which make up the AAF.</p>
 
       <div class="row-spacer">
-        <h2>Are you already able to login to AAF connected services?</h2>
+        <h3>Are you already able to login to AAF connected services?</h3>
       </div>
 
       <div class="row row-spacer">
         <div class="span5">
-          <p><strong>Yes I can!</strong></p>
+          <h4>Yes I can!</h4>
           <g:link class="btn btn-success btn-large" controller="auth">Welcome - Please Login</g:link>
           <br><br>
           <a class="show-problems-logging-on small" href="#problems">Problems logging on?</a>
         </div>
 
         <div class="span5">
-          <p><strong>Not yet :(</strong>.</p>
+          <h4>Not yet :(</h4>
           <p>You can create your organisation, identity provider or service provider with the AAF below without needing to login. Once you submit your details we'll be in touch, easy.</p>
           <g:link class="btn btn-info btn-large" controller="bootstrap" action="organization">Create an Organisation</g:link>
           <br><br>
@@ -38,7 +38,7 @@
       <h2>Problems logging on?</h2>
       <p>Here are some common things you might need to configure at your Identity Provider in order to successfully login.</p>
       <h3>1. Metadata</h3>
-      <p>Ensure you've correctly configured AAF metadata for use with your Identity Provider. Double check by taking a look at this guide <a href="http://support.aaf.edu.au/entries/338216-three-versions-of-the-aaf-metadata-available">http://support.aaf.edu.au/entries/338216-three-versions-of-the-aaf-metadata-available</a>.
+      <p>Ensure you've correctly configured AAF metadata for use with your Identity Provider. Take a look at <a href="http://support.aaf.edu.au/entries/22529592-AAF-Metadata">our helpful Metadata guide</a> for more information.
       <h3>2. Time Synchronization</h3>
       <p>
         Ensure your Identity Provider server is synced to an upstream time server, this is critically important for federated authentication.
@@ -54,7 +54,7 @@
         <li>auEduPersonSharedToken</li>
       </ul>
       <p>
-        Within the AAF we recommend automating this process, take a look at this guide for more information <a href="http://support.aaf.edu.au/entries/321600-automating-attribute-release">http://support.aaf.edu.au/entries/321600-automating-attribute-release</a>. Don't know the value for [YOUR UNIQUE URL]? Get in touch with AAF support who'll be able to help you out.
+        Within the AAF we recommend automating this process. Take a look at <a href="http://support.aaf.edu.au/entries/22545567-Automating-Attribute-Release">our helpful Attribute Release guide</a> for more information.
       </p>
     </div>
   </body>
