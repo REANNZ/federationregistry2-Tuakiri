@@ -187,6 +187,29 @@ aaf {
             post.uri = '$host/Shibboleth.sso/NIM/POST'
           }
         }
+        simplesamlphp {
+          displayName = "SimpleSAMLphp"
+          selected = false
+          entitydescriptor = '$host/simplesaml/module.php/saml/sp/metadata.php/default-sp'
+          acs {
+            post {
+              uri = '$host/simplesaml/module.php/saml/sp/saml2-acs.php/default-sp'
+              index = 0
+            }
+            artifact {
+              uri = '$host/simplesaml/module.php/saml/sp/saml2-acs.php/default-sp'
+              index = 2
+            }
+          }
+          drs {
+            uri = '$host/simplesaml/module.php/saml/sp/discoresp.php'
+            index = 1
+          }
+          slo {
+            redirect.uri = '$host/simplesaml/module.php/saml/sp/saml2-logout.php/default-sp'
+            soap.uri = '$host/simplesaml/module.php/saml/sp/saml2-logout.php/default-sp' 
+          }
+        }
       }
     }
   }
