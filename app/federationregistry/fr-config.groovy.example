@@ -145,7 +145,7 @@ aaf {
           }
           slo {
             artifact.uri = '$host/Shibboleth.sso/SLO/Artifact'
-            slo.redirect.uri = '$host/Shibboleth.sso/SLO/Redirect'
+            redirect.uri = '$host/Shibboleth.sso/SLO/Redirect'
             soap.uri = '$host/Shibboleth.sso/SLO/SOAP' 
             post.uri = '$host/Shibboleth.sso/SLO/POST'
           }
@@ -176,7 +176,7 @@ aaf {
           }
           slo {
             artifact.uri = '$host/Shibboleth.sso/SLO/Artifact'
-            slo.redirect.uri = '$host/Shibboleth.sso/SLO/Redirect'
+            redirect.uri = '$host/Shibboleth.sso/SLO/Redirect'
             soap.uri = '$host/Shibboleth.sso/SLO/SOAP' 
             post.uri = '$host/Shibboleth.sso/SLO/POST'
           }
