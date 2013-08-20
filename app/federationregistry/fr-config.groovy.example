@@ -126,7 +126,7 @@ aaf {
       }
       serviceproviders {
         shib23 {
-          displayName = "Shibboleth Service Provider (2.3.x)"
+          displayName = "Shibboleth Service Provider (2.3.x, 2.4.x)"
           selected = true
           entitydescriptor = '$host/shibboleth'
           acs {
