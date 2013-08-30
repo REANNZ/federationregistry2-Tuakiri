@@ -1,8 +1,8 @@
 @bgColor: #f2f2f2;
 @docColor: #fff;
-@headColor: #495666;
-@headFontColor: #fff;
-@navColor: #37404B;
+@headColor: #fff; /* #495666 */
+@headFontColor: #7CAB1D; /* #fff */
+@navColor: #7FAF1B; /* #37404B */
 
 .row-spacer {
   margin-top: 24px;
@@ -255,7 +255,7 @@ body {
 
 body header {  
 
-  background-color: #495666;
+  background-color: @headColor; /* #495666 */
   color: @headFontColor;
   padding-top: 12px;
   padding-bottom: 56px;
@@ -270,7 +270,7 @@ body header {
   h1 {
     .zero;
     float: left;
-    color: #fff;
+    color: @headFontColor; /* #fff */
     font-size: 1.4em;
     font-weight: normal;
     padding-top: 6px;
@@ -279,7 +279,7 @@ body header {
   h2 {
     .zero;
     float: right;
-    color: #DD7727;
+    color: @headFontColor; /* #DD7727 */
     font-size: 1.4em;
     font-weight: normal;
     padding-top: 6px;
@@ -319,8 +319,8 @@ body nav {
     padding-top: 12px;
     padding-bottom: 12px;
 
-    background-color: #3D4754;
-    /*.active { .rounded-top; background-color: #8f9a99;  }*/
+    background-color: #7FAF1B; /* #3D4754 */
+    /* uncomment this */ .active { .rounded-top; background-color: #8f9a99;  }/* uncommented */
   }
   
   .level2 {
