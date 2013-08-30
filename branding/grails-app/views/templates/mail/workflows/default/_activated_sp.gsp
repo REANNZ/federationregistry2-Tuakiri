@@ -4,7 +4,7 @@
   <html>
     <head></head>
     <body>
-      The Service Provider which you've registered with the <g:message code="branding.fr.federationinfo.federationname.long" /> has been <strong>accepted</strong>. You can now complete final setup tasks.
+      The Service Provider which you've registered with <g:message code="branding.fr.federationinfo.federationname.long" /> has been <strong>accepted</strong>. You can now complete final setup tasks.
       <br><br>
       Please keep this email for future reference.
       <br><br>
@@ -104,7 +104,7 @@
       
         <br><br>
       
-      8. You're all done! Welcome to the <g:message code="branding.fr.federationinfo.federationname.long" />.
+      8. You're all done! Welcome to <g:message code="branding.fr.federationinfo.federationname.long" />.
     
     </body>
   </html>

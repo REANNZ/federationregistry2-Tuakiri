@@ -4,7 +4,7 @@
   <html>
     <head></head>
     <body>
-      This email confirms that the Service Provider which you've registered with the <g:message code="branding.fr.federationinfo.federationname.long" /> has been <strong>received but is not yet ready for use</strong>. 
+      This email confirms that the Service Provider which you've registered with <g:message code="branding.fr.federationinfo.federationname.long" /> has been <strong>received but is not yet ready for use</strong>. 
       <br/><br/>
       Your Service Provider will now move through a workflow process that requires approvals by <g:message code="branding.fr.federationinfo.federationname" /> staff and potentially your organisation.
       <br/><br/>

@@ -215,7 +215,7 @@
                                 <tr>
                                     <td valign="top">
                                         <div >
-                                           An important message from the <g:message code="branding.fr.federationinfo.federationname.long" /> <br> management portal, Federation Registry.
+                                           An important message from <g:message code="branding.fr.federationinfo.federationname.long" /> <br> management portal, Federation Registry.
                                         </div>
                                       </td>
                                       <td valign="top" width="190">
@@ -235,7 +235,7 @@
                             <table border="0" cellpadding="0" cellspacing="0" width="600" id="templateHeader">
                               <tr>
                                 <td class="headerContent"> 
-                                  <img src="${grailsApplication.config.grails.serverURL}/images/emailbranding_${grailsApplication.config.federation.environment}.gif" alt="AAF Federation Registry (${grailsApplication.config.federation.environment})"/>
+                                  <img src="${grailsApplication.config.grails.serverURL}/images/emailbranding_${grailsApplication.config.federation.environment}.gif" alt="Tuakiri Federation Registry (${grailsApplication.config.federation.environment})"/>
                                 </td>
                               </tr>
                             </table>
@@ -271,7 +271,7 @@
                                                 <tr>
                                                     <td colspan="2" valign="middle" id="social" style="background-color:#FAFAFA; border:0;">
                                                         <div style="text-align:center;">
-                                                            &nbsp;<a href="http://twitter.com/ausaccessfed" style="font-weight: bold; color:#E36C0A;">Follow on Twitter</a> | <a href="http://www.facebook.com/ausaccessfed" style="font-weight: bold; color:#E36C0A;">Friend on Facebook</a> | <g:message code="branding.fr.federationinfo.support.link.bottom" /> &nbsp;
+                                                            &nbsp;<g:message code="branding.fr.federationinfo.support.link.bottom" />&nbsp;
                                                         </div>
                                                     </td>
                                                 </tr>
