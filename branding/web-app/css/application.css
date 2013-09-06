@@ -271,7 +271,7 @@ body header {
     .zero;
     float: left;
     color: @headFontColor; /* #fff */
-    font-size: 1.4em;
+    font-size: 2.5em;
     font-weight: normal;
     padding-top: 6px;
   }
@@ -280,7 +280,7 @@ body header {
     .zero;
     float: right;
     color: @headFontColor; /* #DD7727 */
-    font-size: 1.4em;
+    font-size: 2.5em;
     font-weight: normal;
     padding-top: 6px;
     padding-right: 12px;
