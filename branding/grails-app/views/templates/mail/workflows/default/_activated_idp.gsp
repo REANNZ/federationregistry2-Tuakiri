@@ -76,7 +76,7 @@
         <br><br>
       3. Configure Attribute Release
           <br>
-          Configure your Identity Provider to correctly release attributes to the federation as documented in <a href="http://support.aaf.edu.au/entries/321600-automating-attribute-release">Automating Attribute Release</a>. When asked for the value of <strong>[YOUR UNIQUE URL]</strong> please provide ${g.createLink(controller:'attributeFilter', action:'generate', id:identityProvider.id, absolute:true)}.
+          Configure your Identity Provider to correctly release attributes to the federation as documented in the <a href="https://tuakiri.ac.nz/confluence/display/Tuakiri/Configuring+a+Shibboleth+Identity+Provider+to+join+the+Tuakiri+Federation#ConfiguringaShibbolethIdentityProvidertojointheTuakiriFederation-Configureattributerelease%2Ffilteringthroughthefederation%3A">Tuakiri instructions for configuring attribute release on an IdP</a>. When asked for the <strong>[entityID]</strong> of your IdP, please provide ${fieldValue(bean: identityProvider, field: "entityDescriptor.entityID")}.
       
         <br><br><br>
       
