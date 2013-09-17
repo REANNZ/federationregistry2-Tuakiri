@@ -3,6 +3,8 @@ grails.project.test.class.dir = "target/test-classes"
 grails.project.test.reports.dir = "target/test-reports"
 grails.project.target.level = 1.6
 
+grails.plugin.location.fg = "/Users/bradleybeddoes/Development/repositories/federatedgrails"
+
 grails.project.dependency.resolution = {
   inherits("global") {}
 
@@ -32,8 +34,8 @@ grails.project.dependency.resolution = {
 
   plugins {
     build ":tomcat:$grailsVersion"
-    
-    compile ":federated-grails:0.5.1"
+
+    //compile ":federated-grails:0.6.0"
     compile ":build-test-data:2.0.3"
     compile ":mail:1.0"
     compile ":hibernate:$grailsVersion"
