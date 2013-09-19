@@ -867,7 +867,6 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
     def strippedXML = xml.replace("saml:", "")  // dodgy as hell but easiest option presently as namespaces causes problems in validation
 
     then:
-    println strippedXML
     def diff = new Diff(strippedXML, expected)
     diff.similar()
 
