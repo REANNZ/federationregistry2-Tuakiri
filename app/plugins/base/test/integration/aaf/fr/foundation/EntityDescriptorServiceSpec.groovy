@@ -23,9 +23,6 @@ class EntityDescriptorServiceSpec extends IntegrationSpec {
 		params.organization = [id: organization.id]
 		params.active = true
 		params.entity = [identifier:"http://identityProvider.test.com"]
-
-    entityDescriptorService.roleService = new aaf.fr.identity.RoleService()
-    entityDescriptorService.permissionService = new aaf.fr.identity.PermissionService()
 		
 		when:
 		def(created, entityDescriptor_) = entityDescriptorService.create(params)
