@@ -20,7 +20,7 @@ if(contact.hasErrors()) {
 }
 
 // Organisation Creation
-def organization = new Organization(approved:true, active:true, name:'one.edu.au', displayName:'Organisation One', lang: 'en', url: 'http://www.one.edu.au', primary:OrganizationType.get(1))
+def organization = new Organization(approved:true, active:true, name:'one.edu.au', displayName:'Organisation One', lang: 'en', url: 'http://www.one.edu.au', primary:OrganizationType.first())
 
 def contactPerson = new ContactPerson(contact:contact, type:ContactType.findByName(ct))
 organization.addToContacts(contactPerson) 

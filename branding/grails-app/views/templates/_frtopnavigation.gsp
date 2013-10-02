@@ -42,7 +42,6 @@
       </li>
     </fr:isAdministrator>
   </fr:isLoggedIn>
-  <li><a style="color: #fff;" href="/federationstatus" target="_blank"><g:message encodeAs="HTML"  code="fr.branding.nav.monitoring" default="Federation Status" /></a></li>
   <li><a style="color: #fff;" href="#" onClick="script: Zenbox.show(); return false;"><g:message encodeAs="HTML"  code="fr.branding.nav.support" default="Support" /></a></li>
   <fr:isLoggedIn>
     <li>
