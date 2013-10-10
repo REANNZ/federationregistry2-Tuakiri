@@ -76,11 +76,13 @@
         <br><br>
       3. Configure Attribute Release
           <br>
+          Shibboleth Identity Providers can be configured with a dynamic Attribute Filter Policy for attribute release to ease administrative workload.
+          <br>
           Configure your Identity Provider to correctly release attributes to the federation as documented in the <a href="https://tuakiri.ac.nz/confluence/display/Tuakiri/Configuring+a+Shibboleth+Identity+Provider+to+join+the+Tuakiri+Federation#ConfiguringaShibbolethIdentityProvidertojointheTuakiriFederation-Configureattributerelease%2Ffilteringthroughthefederation%3A">Tuakiri instructions for configuring attribute release on an IdP</a>. When asked for the <strong>[entityID]</strong> of your IdP, please provide ${fieldValue(bean: identityProvider, field: "entityDescriptor.entityID")}.
       
         <br><br><br>
       
-          <em>Ensure <strong>at least</strong> an hour has passed since you received this email before continuing. This allows distribution of metadata including details of your new Identity Provider to circulate to the federation.</em>
+          <em>Ensure <strong>at least</strong> two hours have passed since you received this email before continuing. This allows distribution of metadata including details of your new Identity Provider to circulate to the federation.</em>
       
         <br><br><br>
       
