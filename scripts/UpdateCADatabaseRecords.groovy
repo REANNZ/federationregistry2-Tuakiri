@@ -9,14 +9,18 @@ CertificateFactory cf = CertificateFactory.getInstance("X.509", "BC")
 CACertificate.getAll().each {
   def c = cf.generateCertificate(new ByteArrayInputStream(it.data.getBytes("ASCII")))
 
+  keyname = c.getSubjectX500Principal().getName()
+  if(keyname.length() > 254)
+    keyname = keyname.substring(0,254)
+
   /* INTERNAL DETAILS
   println "Issuer: " + c.getIssuerDN()
   println "Subject: " + c.getSubjectDN()
   println "Validity: from " + c.getNotBefore() + " to " + c.getNotAfter()
-  println "KeyName: " + c.getSubjectX500Principal().getName()
+  println "KeyName: " + keyname
   */
 
-  it.caKeyInfo.keyName = c.getSubjectX500Principal().getName()
+  it.caKeyInfo.keyName = keyname
   it.caKeyInfo.expiryDate = c.getNotAfter()
 
   it.save()

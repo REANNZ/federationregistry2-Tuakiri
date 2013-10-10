@@ -10,6 +10,10 @@
   </div>
 </g:hasErrors>
 
+<div id="rapidconnect" class="alert alert-info">
+  <g:message code="branding.aaf.rapid" />
+</div>
+
 <g:form action="${saveAction}" method="post" useToken="true" class="form-horizontal validating">
   <g:hiddenField name="active" value="true"/>
   <g:hiddenField name="aa.create" value="true"/>
