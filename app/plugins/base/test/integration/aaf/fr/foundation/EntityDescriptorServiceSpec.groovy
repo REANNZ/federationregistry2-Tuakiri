@@ -2,13 +2,13 @@ package aaf.fr.foundation
 
 import grails.plugin.spock.*
 import aaf.fr.workflow.*
-import aaf.fr.identity.Subject
+import aaf.fr.identity.*
 
 class EntityDescriptorServiceSpec extends IntegrationSpec {
 	def cryptoService, entityDescriptorService, params
 	
 	def setup () {
-        params = [:]		
+    params = [:]
 		def user = Subject.build()
 		SpecHelpers.setupShiroEnv(user)
 	}

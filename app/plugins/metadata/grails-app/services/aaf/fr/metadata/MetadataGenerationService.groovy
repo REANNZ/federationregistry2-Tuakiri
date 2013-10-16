@@ -42,7 +42,7 @@ class MetadataGenerationService {
           Company(contactPerson.contact.organization.displayName)
         GivenName(contactPerson.contact.givenName)
         SurName(contactPerson.contact.surname)
-        EmailAddress(contactPerson.contact.email)
+        EmailAddress("mailto:${contactPerson.contact.email}")
         if(contactPerson.contact.workPhone)
           TelephoneNumber(contactPerson.contact.workPhone)
         if(contactPerson.contact.homePhone)
@@ -214,10 +214,10 @@ class MetadataGenerationService {
   
   def requestedAttribute(builder, all, minimal, attr) {
     if(all || attr.approved) {
-      if(!attr.base.specificationRequired || (attr.base.specificationRequired && attr.values?.size() > 0)) {
+      if(!attr.base.specificationRequired || attr.functioning()) {
         if(attr.base.nameFormat?.uri) {
           builder.RequestedAttribute(NameFormat:attr.base.nameFormat?.uri, Name: "urn:oid:${attr.base.oid}", FriendlyName:attr.base.name, isRequired:attr.isRequired) {
-            attr.values?.sort{it?.value}.each {
+            attr.values?.findAll{ it.approved }?.sort{it?.value}.each {
               'saml:AttributeValue'(it.value)
             }
           }
@@ -229,7 +229,7 @@ class MetadataGenerationService {
           }
         }
       } else {
-        log.error "Not rendering $attr representing ${attr.base} because no values have been specified"
+        log.error "Not rendering $attr representing ${attr.base}. It requires specifcation but no values have been specified"
       }
     }
   }
@@ -243,7 +243,7 @@ class MetadataGenerationService {
       log.warn "Attribute Consuming Service with no requested attributes can't be populated to metadata"
       return
     }
-    if(acs.requestedAttributes.findAll{ it.approved }.size() < 1 ) {
+    if(acs.requestedAttributes.findAll{ it.functioning() }.size() < 1 ) {
       log.warn "Attribute Consuming Service with no approved requested attributes can't be populated to metadata"
       return
     }
@@ -273,17 +273,19 @@ class MetadataGenerationService {
   }
   
   def idpSSODescriptor(builder, all, minimal, roleExtensions, idpSSODescriptor) {
-    if(all || idpSSODescriptor.functioning() ) {
-      builder.IDPSSODescriptor(protocolSupportEnumeration: idpSSODescriptor.protocolSupportEnumerations.sort{it.uri}.collect({it.uri}).join(' ')) {
-      roleDescriptor(builder, all, minimal, roleExtensions, idpSSODescriptor)
-      ssoDescriptor(builder, all, minimal, idpSSODescriptor)
-      
-      idpSSODescriptor.singleSignOnServices?.sort{it.id}.each{ sso -> endpoint(builder, all, minimal, "SingleSignOnService", sso) }
-      idpSSODescriptor.nameIDMappingServices?.sort{it.id}.each{ nidms -> endpoint(builder, all, minimal, "NameIDMappingService", nidms) }
-      idpSSODescriptor.assertionIDRequestServices?.sort{it.id}.each{ aidrs -> endpoint(builder, all, minimal, "AssertionIDRequestService", aidrs) }
-      idpSSODescriptor.attributeProfiles?.sort{it.id}.each{ ap -> samlURI(builder, "AttributeProfile", ap) }
-      if(!minimal)
-        idpSSODescriptor.attributes?.sort{it.base.name}.each{ attr -> attribute(builder, attr)}
+    if(!idpSSODescriptor.attributeAuthorityOnly) {
+      if(all || idpSSODescriptor.functioning() ) {
+        builder.IDPSSODescriptor(protocolSupportEnumeration: idpSSODescriptor.protocolSupportEnumerations.sort{it.uri}.collect({it.uri}).join(' ')) {
+        roleDescriptor(builder, all, minimal, roleExtensions, idpSSODescriptor)
+        ssoDescriptor(builder, all, minimal, idpSSODescriptor)
+
+        idpSSODescriptor.singleSignOnServices?.sort{it.id}.each{ sso -> endpoint(builder, all, minimal, "SingleSignOnService", sso) }
+        idpSSODescriptor.nameIDMappingServices?.sort{it.id}.each{ nidms -> endpoint(builder, all, minimal, "NameIDMappingService", nidms) }
+        idpSSODescriptor.assertionIDRequestServices?.sort{it.id}.each{ aidrs -> endpoint(builder, all, minimal, "AssertionIDRequestService", aidrs) }
+        idpSSODescriptor.attributeProfiles?.sort{it.id}.each{ ap -> samlURI(builder, "AttributeProfile", ap) }
+        if(!minimal)
+          idpSSODescriptor.attributes?.sort{it.base.name}.each{ attr -> attribute(builder, attr)}
+        }
       }
     }
   }
@@ -343,7 +345,8 @@ class MetadataGenerationService {
   }
   
   def SPSSODescriptorExtensions(builder, all, spSSODescriptor) {
-    if(spSSODescriptor.discoveryResponseServices) {
+    def funcDiscoveryResponseServices = spSSODescriptor.discoveryResponseServices?.findAll{it.functioning()}
+    if(all || funcDiscoveryResponseServices) {
       builder.Extensions() {
         spSSODescriptor.discoveryResponseServices?.sort{it.id}.each { endpoint ->
           if(all || endpoint.functioning() ) {

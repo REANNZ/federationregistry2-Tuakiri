@@ -15,7 +15,7 @@ class WayfController {
     log.info "Generating new Wayf Configuration file for requestor located at $request.remoteAddr / $request.remoteHost"
 
     def organizationTypes = [] as List    
-    def identityProviders = IDPSSODescriptor.list().findAll { idp -> idp.functioning() }.sort { idp -> idp.displayName }
+    def identityProviders = IDPSSODescriptor.list().findAll { idp -> idp.functioning() && !idp.attributeAuthorityOnly }.sort { idp -> idp.displayName }
     
     def ssoPostEndpoints = [:]
 
