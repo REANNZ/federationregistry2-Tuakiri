@@ -8,6 +8,7 @@ use strict; # strongly recommended for DBI
 
 $main::verbose=1;
 $main::debug=1;
+$main::dryrun=0; # if set to 1, skip writing to the database
 
 
 $main::local_hostname = `hostname`; # Override here - used for populating ds_host in wayf_access_record.
@@ -20,11 +21,25 @@ $main::hostname = '';
 $main::user = '';
 $main::password = '';
 
+$main::check_is_spam = '';
+
 # load the config from the directory we are invoked from
 # the c
 my $base_dir = `dirname $0`;
 chomp $base_dir;
 do ($base_dir ne ""?$base_dir:".") . "/dbconfig.pm";
+
+while ($ARGV[0] =~ /^--/ ) {
+  if ($ARGV[0] eq "--verbose") { $main::verbose=1; }
+  elsif ($ARGV[0] eq "--no-verbose") { $main::verbose=0; }
+  elsif ($ARGV[0] eq "--debug") { $main::debug=1; }
+  elsif ($ARGV[0] eq "--no-debug") { $main::debug=0; }
+  elsif ($ARGV[0] eq "--dry-run") { $main::dryrun=1; }
+  elsif ($ARGV[0] eq "--no-dry-run") { $main::dryrun=0; }
+  else { die "Invalid option $ARGV[0]"; };
+  
+  shift;
+}
 
 my $dsn = "DBI:mysql:database=$main::database;host=$main::hostname;mysql_enable_utf8=1";
 #$dsn = "DBI:mysql:database=$database;host=$hostname;port=$port";
@@ -122,8 +137,17 @@ while (<>) {
 	if (defined($DS_session{"idpid"}) && defined($DS_session{"spid"}) ) {
 	    # insert the session into the database now
 
+            # check whether the session passes the spam filter (if we have a filter set)
+            if ( ($main::check_is_spam) && (eval $main::check_is_spam ) ) {
+                if ($main::verbose >= 1) {
+                    printf "Found spam session from %s\n", $DS_session{"source"} ;
+                };
+                next;
+            };
+
 	    if ($main::verbose >= 1) {
-		printf "Complete session found, inserting into database: date_created=\"%s\", ds_host=\"%s\", idpid=%d, request_type=\"%s\", robot=%d, source=\"%s\", spid=%d\n",
+		printf "Complete session found, %s into database: date_created=\"%s\", ds_host=\"%s\", idpid=%d, request_type=\"%s\", robot=%d, source=\"%s\", spid=%d\n",
+                    ( $main::dryrun ? "pretending to insert" : "inserting" ),
 		    $DS_session{"date_created"}, $DS_session{"ds_host"}, $DS_session{"idpid"}, $DS_session{"request_type"}, ( $DS_session{"robot"} ? 1 : 0), $DS_session{"source"}, $DS_session{"spid"};
 	    };
 
@@ -131,8 +155,10 @@ while (<>) {
 	    #
 	    # insert into wayf_access_record (date_created, ds_host, idpid, request_type, robot, source, spid) 
 	    #     values (curdate(), 'ds.aaf.edu.au', 1, 'DS', false, 'bradley-machine.at.home.com', 22);
-	    $sth_wayf->execute($DS_session{"date_created"}, $DS_session{"ds_host"}, $DS_session{"idpid"}, 
-	        $DS_session{"request_type"}, $DS_session{"robot"}, $DS_session{"source"}, $DS_session{"spid"} );
+            if (!$main::dryrun) {
+	        $sth_wayf->execute($DS_session{"date_created"}, $DS_session{"ds_host"}, $DS_session{"idpid"}, 
+	            $DS_session{"request_type"}, $DS_session{"robot"}, $DS_session{"source"}, $DS_session{"spid"} );
+            };
 	} else {
 	    if ($main::debug >= 1) {
 		print "Incomplete session found:\n";
