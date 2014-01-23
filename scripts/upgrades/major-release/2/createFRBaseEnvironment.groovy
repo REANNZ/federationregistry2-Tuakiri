@@ -15,7 +15,7 @@ In addition it re-assigns the first global administrator to continue to have acc
 the UI should then be used to further assign permissions.
 */
 
-def administratorsTargetedID = ""
+def administratorsTargetedIDs = ["EPTID1", "EPTID2" ]
 
 roleService = ctx.getBean("roleService")
 permissionService = ctx.getBean("permissionService")
@@ -80,11 +80,14 @@ if (!subject) {
   }
 }
 
-def adminSubject = aaf.fr.identity.Subject.findWhere(principal:administratorsTargetedID)
-if(adminSubject)
-  roleService.addMember(adminSubject, adminRole)
-else
-  println "Unable to located referenced subject to provide administrative access. Manual intervention required."
+def adminSubject = null
+administratorsTargetedIDs.each {
+  adminSubject = aaf.fr.identity.Subject.findWhere(principal:it)
+  if(adminSubject)
+    roleService.addMember(adminSubject, adminRole)
+  else
+    println "Unable to located referenced subject %s to provide administrative access. Manual intervention required." % (it)
+}
 
 println "Completed creating base FR environment"
 true
