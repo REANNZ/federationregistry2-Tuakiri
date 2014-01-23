@@ -26,7 +26,7 @@ def adminRole = roleService.createRole("federation-administrators", "Role repres
 // Grant administrative global access permission
 Permission adminPermission = new Permission(target:'*')
 adminPermission.managed = true
-adminPermission.type = Permission.adminPerm
+adminPermission.type = Permission.defaultPerm
 
 permissionService.createPermission(adminPermission, adminRole)
 
@@ -36,7 +36,7 @@ def reportingRole = roleService.createRole("federation-reporting", "Access to fe
 // Grant global reports access permission
 Permission reportingAdminPermission = new Permission(target:'federation:management:reporting')
 reportingAdminPermission.managed = true
-reportingAdminPermission.type = Permission.adminPerm
+reportingAdminPermission.type = Permission.defaultPerm
 
 permissionService.createPermission(reportingAdminPermission, reportingRole)
 
@@ -46,7 +46,7 @@ def contactManagementRole = roleService.createRole("federation-contactmanagement
 // Grant global reports access permission
 Permission contactAdminPermission = new Permission(target:'federation:management:contacts')
 contactAdminPermission.managed = true
-contactAdminPermission.type = Permission.adminPerm
+contactAdminPermission.type = Permission.defaultPerm
 
 permissionService.createPermission(contactAdminPermission, contactManagementRole)
 
