@@ -40,6 +40,11 @@ output.append("\n-- Permissions\n")
 output.append("update permission set type='grails.plugins.federatedgrails.WildcardPermission';\n")
 output.append("update permission set class='grails.plugins.federatedgrails.Permission';\n")
 
+// Delete from Permissions table all entries pointing to the excluded roles
+excludedRoles.each {
+    output.append("delete from permission where role_id = $it;\n");
+}
+
 output.append("\n\n")
 
 output.append("drop table level_permission_first;\n")
