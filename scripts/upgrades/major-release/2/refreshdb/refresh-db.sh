@@ -108,6 +108,11 @@ echo "Invoking migrateAAFWorkflowScripts.groovy"
 wget --no-verbose --no-check-certificate -O $FRTMPDIR/migrateAAFWorkflowScripts.out "https://$( hostname)/federationregistry/internal/console/execute?filename=$FRTMPDIR/target/migrateAAFWorkflowScripts.groovy&captureStdout=on"
 $DIR/refresh-db-json-result.py $FRTMPDIR/migrateAAFWorkflowScripts.out
 
+echo "Invoking script to set CA certificate names"
+cp "$FR_SRC_BASE/scripts/UpdateCADatabaseRecords.groovy" "$FRTMPDIR"
+wget --no-verbose --no-check-certificate -O $FRTMPDIR/UpdateCADatabaseRecords.out "https://$( hostname)/federationregistry/internal/console/execute?filename=$FRTMPDIR/UpdateCADatabaseRecords.groovy&captureStdout=on"
+$DIR/refresh-db-json-result.py $FRTMPDIR/UpdateCADatabaseRecords.out
+
 echo "Invoking script to disable bootstrap"
 echo 'config.aaf.fr.bootstrap = false' > $FRTMPDIR/disable-bootstrap.groovy
 wget --no-verbose --no-check-certificate -O $FRTMPDIR/disable-bootstrap.out "https://$( hostname)/federationregistry/internal/console/execute?filename=$FRTMPDIR/disable-bootstrap.groovy&captureStdout=on"
@@ -121,6 +126,8 @@ rm -f "$FRTMPDIR/target/migrateAAFWorkflowScripts.groovy"
 rm -f "$FRTMPDIR/target/customDataMigration.sql"
 rm -f "$FRTMPDIR/disable-bootstrap.groovy"
 rm -f "$FRTMPDIR/disable-bootstrap.out"
+rm -f "$FRTMPDIR/UpdateCADatabaseRecords.groovy"
+rm -f "$FRTMPDIR/UpdateCADatabaseRecords.out"
 rm -f "$FRTMPDIR/migrateAAFWorkflowScripts.out"
 rm -f "$FRTMPDIR/createFRBaseEnvironment.out"
 rm -f "$FRTMPDIR/catalina.out"
