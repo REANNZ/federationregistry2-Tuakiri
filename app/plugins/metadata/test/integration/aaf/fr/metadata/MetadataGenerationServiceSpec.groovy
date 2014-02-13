@@ -332,6 +332,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		certificateAuthorities.add(keyInfo2)
 
 		def validUntil = new GregorianCalendar(2009, Calendar.JULY, 22)
+		validUntil.setTimeZone(TimeZone.getTimeZone("UTC"))
 
 		def expected = loadExpected('testvalidentitiesdescriptor')
 
@@ -371,6 +372,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def certificateAuthorities = []
 		
 		def validUntil = new GregorianCalendar(2009, Calendar.JULY, 22)
+		validUntil.setTimeZone(TimeZone.getTimeZone("UTC"))
 			
 		def expected = loadExpected('testvalidentitiesdescriptorembedded')
 		
