@@ -11,9 +11,38 @@ import aaf.fr.foundation.*
  */
 class MetadataGenerationService {
   
+  def grailsApplication
+
+  def registrationAuthority
+  def registrationPolicy
+  def registrationPolicyLang
+
+  def hasRegistrationAuthority
+  def hasRegistrationPolicy
+
+  def registrationInitialized = false
+
+  def initializeRegInfoConfig() {
+
+      registrationAuthority = grailsApplication.config.aaf.fr.metadata.registrationAuthority
+      registrationPolicy = grailsApplication.config.aaf.fr.metadata.registrationPolicy
+      registrationPolicyLang = grailsApplication.config.aaf.fr.metadata.registrationPolicyLang
+
+      hasRegistrationAuthority = registrationAuthority && registrationAuthority // trick to convert to boolean
+      hasRegistrationPolicy = grailsApplication.config.aaf.fr.metadata.registrationPolicy && grailsApplication.config.aaf.fr.metadata.registrationPolicyLang
+
+      registrationInitialized = true
+  }
+/*
+  def MetadataGenerationService() {
+      initializeRegInfoConfig()
+  }
+*/  
   def populateSchema() {
-    ["xmlns":"urn:oasis:names:tc:SAML:2.0:metadata", "xmlns:xsi":"http://www.w3.org/2001/XMLSchema-instance", 'xmlns:saml':'urn:oasis:names:tc:SAML:2.0:assertion', 'xmlns:shibmd':'urn:mace:shibboleth:metadata:1.0',
+    def namespaces = ["xmlns":"urn:oasis:names:tc:SAML:2.0:metadata", "xmlns:xsi":"http://www.w3.org/2001/XMLSchema-instance", 'xmlns:saml':'urn:oasis:names:tc:SAML:2.0:assertion', 'xmlns:shibmd':'urn:mace:shibboleth:metadata:1.0',
       'xmlns:ds':'http://www.w3.org/2000/09/xmldsig#', "xsi:schemaLocation":"urn:oasis:names:tc:SAML:2.0:metadata saml-schema-metadata-2.0.xsd urn:mace:shibboleth:metadata:1.0 shibboleth-metadata-1.0.xsd http://www.w3.org/2000/09/xmldsig# xmldsig-core-schema.xsd"]
+    if (hasRegistrationAuthority || hasRegistrationPolicy) namespaces.put('xmlns:mdrpi','urn:oasis:names:tc:SAML:metadata:rpi')
+    return namespaces
   }
   
   def localizedName(builder, type, lang, content) {
@@ -106,6 +135,8 @@ class MetadataGenerationService {
   @Transactional(readOnly = true)
   def entitiesDescriptor(builder, all, minimal, roleExtensions, entitiesDescriptor, validUntil, certificateAuthorities) {
     
+    if (!registrationInitialized) { initializeRegInfoConfig() }
+
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
     sdf.setTimeZone(TimeZone.getTimeZone("UTC"))
 
@@ -162,7 +193,23 @@ class MetadataGenerationService {
         params.entityID = entityDescriptor.entityID
         if(schema) params.putAll(populateSchema()) 
           
+        if (!registrationInitialized) { initializeRegInfoConfig() }
+
         builder.EntityDescriptor(params) {
+          if (hasRegistrationAuthority) {
+            builder.Extensions() {
+              def rpiparams = [:]
+              SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+              sdf.setTimeZone(TimeZone.getTimeZone("UTC"))
+              rpiparams.registrationAuthority=registrationAuthority
+              rpiparams.registrationInstant=sdf.format(entityDescriptor.dateCreated) //"2014-02-11T23:59:52Z"
+              builder."mdrpi:RegistrationInfo"(rpiparams) {
+                if (hasRegistrationPolicy) {
+                  localizedUri(builder, "mdrpi:RegistrationPolicy", registrationPolicyLang, registrationPolicy)
+                }
+              }
+            }
+          }
           entityDescriptor.idpDescriptors?.sort{it.id}?.each { idp -> idpSSODescriptor(builder, all, minimal, roleExtensions, idp) }
           entityDescriptor.spDescriptors?.sort{it.id}?.each { sp -> spSSODescriptor(builder, all, minimal, roleExtensions, sp) }
           entityDescriptor.attributeAuthorityDescriptors?.sort{it.id}?.each { aa -> attributeAuthorityDescriptor(builder, all, minimal, roleExtensions, aa)}
