@@ -2,6 +2,7 @@ package aaf.fr.metadata
 
 import java.text.SimpleDateFormat
 import org.springframework.transaction.annotation.*
+import org.springframework.beans.factory.InitializingBean
 import aaf.fr.foundation.*
 
 /**
@@ -9,7 +10,7 @@ import aaf.fr.foundation.*
  *
  * @author Bradley Beddoes
  */
-class MetadataGenerationService {
+class MetadataGenerationService implements InitializingBean {
   
   def grailsApplication
 
@@ -20,24 +21,16 @@ class MetadataGenerationService {
   def hasRegistrationAuthority
   def hasRegistrationPolicy
 
-  def registrationInitialized = false
-
-  def initializeRegInfoConfig() {
-
+  def void afterPropertiesSet() {
+      // initialize registration info from grailsApplication.config
       registrationAuthority = grailsApplication.config.aaf.fr.metadata.registrationAuthority
       registrationPolicy = grailsApplication.config.aaf.fr.metadata.registrationPolicy
       registrationPolicyLang = grailsApplication.config.aaf.fr.metadata.registrationPolicyLang
 
       hasRegistrationAuthority = registrationAuthority && registrationAuthority // trick to convert to boolean
       hasRegistrationPolicy = grailsApplication.config.aaf.fr.metadata.registrationPolicy && grailsApplication.config.aaf.fr.metadata.registrationPolicyLang
+  }
 
-      registrationInitialized = true
-  }
-/*
-  def MetadataGenerationService() {
-      initializeRegInfoConfig()
-  }
-*/  
   def populateSchema() {
     def namespaces = ["xmlns":"urn:oasis:names:tc:SAML:2.0:metadata", "xmlns:xsi":"http://www.w3.org/2001/XMLSchema-instance", 'xmlns:saml':'urn:oasis:names:tc:SAML:2.0:assertion', 'xmlns:shibmd':'urn:mace:shibboleth:metadata:1.0',
       'xmlns:ds':'http://www.w3.org/2000/09/xmldsig#', "xsi:schemaLocation":"urn:oasis:names:tc:SAML:2.0:metadata saml-schema-metadata-2.0.xsd urn:mace:shibboleth:metadata:1.0 shibboleth-metadata-1.0.xsd http://www.w3.org/2000/09/xmldsig# xmldsig-core-schema.xsd"]
@@ -135,8 +128,6 @@ class MetadataGenerationService {
   @Transactional(readOnly = true)
   def entitiesDescriptor(builder, all, minimal, roleExtensions, entitiesDescriptor, validUntil, certificateAuthorities) {
     
-    if (!registrationInitialized) { initializeRegInfoConfig() }
-
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
     sdf.setTimeZone(TimeZone.getTimeZone("UTC"))
 
@@ -193,8 +184,6 @@ class MetadataGenerationService {
         params.entityID = entityDescriptor.entityID
         if(schema) params.putAll(populateSchema()) 
           
-        if (!registrationInitialized) { initializeRegInfoConfig() }
-
         builder.EntityDescriptor(params) {
           if (hasRegistrationAuthority) {
             builder.Extensions() {

@@ -359,7 +359,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		grailsApplication.config.aaf.fr.metadata.registrationPolicy = "https://www.federation.org/RegistrationPolicy/"
 		grailsApplication.config.aaf.fr.metadata.registrationPolicyLang = "en"
 		// force the MetatadataGenerationService to re-initialize
-		metadataGenerationService.registrationInitialized = false
+		metadataGenerationService.afterPropertiesSet()
 
 		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: "http://example.com")
 		def email = "test@example.com"
@@ -412,7 +412,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		grailsApplication.config.aaf.fr.metadata.registrationPolicy = savRegistrationPolicy 
 		grailsApplication.config.aaf.fr.metadata.registrationPolicyLang = savRegistrationPolicyLang 
 		// force the MetatadataGenerationService to re-initialize
-		metadataGenerationService.registrationInitialized = false
+		metadataGenerationService.afterPropertiesSet()
 	}
 	
 	def "Test valid EntitiesDescriptor generation with embedded entitiesdescriptors and no CA"() {
