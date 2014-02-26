@@ -173,7 +173,7 @@ class ComplianceReportsController {
         def issuer = cryptoService.issuer(cert)
         
         // External CA only
-        if(issuer != subject){
+        if(issuer != subject && !cert.keyInfo.keyDescriptor.disabled ){
           def members = ca.get(issuer)
           if(members) {
             if(!members.contains(cert.keyInfo.keyDescriptor.roleDescriptor.entityDescriptor))
