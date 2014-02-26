@@ -31,10 +31,10 @@ class MetadataGenerationService implements InitializingBean {
       hasRegistrationPolicy = grailsApplication.config.aaf.fr.metadata.registrationPolicy && grailsApplication.config.aaf.fr.metadata.registrationPolicyLang
   }
 
-  def populateSchema() {
+  def populateSchema(minimal, roleExtensions) {
     def namespaces = ["xmlns":"urn:oasis:names:tc:SAML:2.0:metadata", "xmlns:xsi":"http://www.w3.org/2001/XMLSchema-instance", 'xmlns:saml':'urn:oasis:names:tc:SAML:2.0:assertion', 'xmlns:shibmd':'urn:mace:shibboleth:metadata:1.0',
       'xmlns:ds':'http://www.w3.org/2000/09/xmldsig#', "xsi:schemaLocation":"urn:oasis:names:tc:SAML:2.0:metadata saml-schema-metadata-2.0.xsd urn:mace:shibboleth:metadata:1.0 shibboleth-metadata-1.0.xsd http://www.w3.org/2000/09/xmldsig# xmldsig-core-schema.xsd"]
-    if (hasRegistrationAuthority || hasRegistrationPolicy) namespaces.put('xmlns:mdrpi','urn:oasis:names:tc:SAML:metadata:rpi')
+    if (hasRegistrationAuthority && !minimal && roleExtensions) namespaces.put('xmlns:mdrpi','urn:oasis:names:tc:SAML:metadata:rpi')
     return namespaces
   }
   
@@ -137,7 +137,7 @@ class MetadataGenerationService implements InitializingBean {
     def currently = new Date()
     
     def params = [:]
-    params.putAll(populateSchema())
+    params.putAll(populateSchema(minimal, roleExtensions))
     params.ID =  idf.format(currently)
     params.validUntil = sdf.format(validUntil)
     params.Name = entitiesDescriptor.name
@@ -182,10 +182,10 @@ class MetadataGenerationService implements InitializingBean {
       else {
         def params = [:]
         params.entityID = entityDescriptor.entityID
-        if(schema) params.putAll(populateSchema()) 
+        if(schema) params.putAll(populateSchema(minimal, roleExtensions)) 
           
         builder.EntityDescriptor(params) {
-          if (hasRegistrationAuthority) {
+          if (hasRegistrationAuthority && !minimal && roleExtensions) {
             builder.Extensions() {
               def rpiparams = [:]
               SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
