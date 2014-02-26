@@ -184,7 +184,7 @@ class ComplianceReportsController {
           }
         }
       } catch (Exception e) {
-        log.error "$cert was considered invalid $cert when generating causage report and should be revistied - $e"
+        log.error "$cert was considered invalid $cert when generating causage report and should be revisited - $e"
       }
     }
 
