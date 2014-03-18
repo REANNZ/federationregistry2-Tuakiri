@@ -34,7 +34,10 @@ class MetadataGenerationService implements InitializingBean {
   def populateSchema(minimal, roleExtensions) {
     def namespaces = ["xmlns":"urn:oasis:names:tc:SAML:2.0:metadata", "xmlns:xsi":"http://www.w3.org/2001/XMLSchema-instance", 'xmlns:saml':'urn:oasis:names:tc:SAML:2.0:assertion', 'xmlns:shibmd':'urn:mace:shibboleth:metadata:1.0',
       'xmlns:ds':'http://www.w3.org/2000/09/xmldsig#', "xsi:schemaLocation":"urn:oasis:names:tc:SAML:2.0:metadata saml-schema-metadata-2.0.xsd urn:mace:shibboleth:metadata:1.0 shibboleth-metadata-1.0.xsd http://www.w3.org/2000/09/xmldsig# xmldsig-core-schema.xsd"]
-    if (hasRegistrationAuthority && !minimal && roleExtensions) namespaces.put('xmlns:mdrpi','urn:oasis:names:tc:SAML:metadata:rpi')
+    if (hasRegistrationAuthority && !minimal && roleExtensions) {
+        namespaces['xmlns:mdrpi'] = 'urn:oasis:names:tc:SAML:metadata:rpi';
+        namespaces["xsi:schemaLocation"] = namespaces["xsi:schemaLocation"] + " urn:oasis:names:tc:SAML:metadata:rpi saml-metadata-rpi-v1.0.xsd"
+    }
     namespaces
   }
   
