@@ -49,7 +49,7 @@ class IdentityProvidersAPIv1Controller {
 		result.updated = idp.lastUpdated
 		result.name = idp.displayName
 		result.description = idp.description
-		result.weblink = g.createLink(controller: 'IDPSSODescriptor', action:'show', id: idp.id, absolute: true)
+		result.weblink = g.createLink(controller: 'identityProvider', action:'show', id: idp.id, absolute: true)
 		result.functioning = idp.functioning()
 		result.archived = idp.archived
 		result.scope = idp.scope

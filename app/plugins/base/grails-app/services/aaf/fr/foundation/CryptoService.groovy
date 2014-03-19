@@ -11,6 +11,8 @@ import java.security.cert.*
  */
 class CryptoService {
   static transactional = true
+
+	def oidMap = ["1.2.840.113549.1.9.1":"E"];
 	
 	def associateCertificate(RoleDescriptor descriptor, String data, String name, KeyTypes type) {
 		def cert = createCertificate(data)	
@@ -113,12 +115,12 @@ class CryptoService {
 	def String issuer(aaf.fr.foundation.Certificate certificate) {
 		CertificateFactory cf = CertificateFactory.getInstance("X.509")
 		def c = cf.generateCertificate(new ByteArrayInputStream(certificate.data.getBytes("ASCII")))
-		c.issuerX500Principal.name
+		c.issuerX500Principal.getName("RFC2253", oidMap)
 	}
 
 	def String subject(aaf.fr.foundation.Certificate certificate) {
 		CertificateFactory cf = CertificateFactory.getInstance("X.509")
 		def c = cf.generateCertificate(new ByteArrayInputStream(certificate.data.getBytes("ASCII")))
-		c.subjectX500Principal.name
+		c.subjectX500Principal.getName("RFC2253", oidMap)
 	}
 }
