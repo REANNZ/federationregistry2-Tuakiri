@@ -10,6 +10,7 @@ import aaf.fr.foundation.*
 class MetadataGenerationServiceSpec extends IntegrationSpec {
 	def metadataGenerationService
 	def cryptoService
+	def grailsApplication
 	
 	def writer
 	def builder
@@ -344,6 +345,74 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 
 		then:
 		similarExcludingID(ddiff)
+	}
+	
+	def "Test valid EntitiesDescriptor generation with registration information"() {
+		setup:
+		setupBindings()
+
+		def savRegistrationAuthority = grailsApplication.config.aaf.fr.metadata.registrationAuthority
+		def savRegistrationPolicy = grailsApplication.config.aaf.fr.metadata.registrationPolicy
+		def savRegistrationPolicyLang = grailsApplication.config.aaf.fr.metadata.registrationPolicyLang
+
+		grailsApplication.config.aaf.fr.metadata.registrationAuthority = "https://www.federation.org/"
+		grailsApplication.config.aaf.fr.metadata.registrationPolicy = "https://www.federation.org/RegistrationPolicy/"
+		grailsApplication.config.aaf.fr.metadata.registrationPolicyLang = "en"
+		// force the MetatadataGenerationService to re-initialize
+		metadataGenerationService.afterPropertiesSet()
+
+		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: "http://example.com")
+		def email = "test@example.com"
+		def home = "(07) 1111 1111"
+		def work = "(567) 222 22222"
+		def mobile = "0413 867 208"
+		def contact = Contact.build(givenName:"Test", surname:"User", email:email, homePhone:home, workPhone:work, mobilePhone:mobile)
+		def admin = ContactType.build(name:"administrative")
+		def contactPerson = ContactPerson.build(contact:contact, type:admin)
+		def dateCreated = new GregorianCalendar(2010, Calendar.JANUARY, 1)
+		dateCreated.setTimeZone(TimeZone.getTimeZone("UTC"))
+
+		def entitiesDescriptor = new EntitiesDescriptor(name:"some.test.name")
+		(1..2).each { i ->
+			def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.example.com/myuniqueID$i", active:true, approved:true)
+			// this was ignored in the build method, so a separate assignment
+			entityDescriptor.dateCreated = dateCreated.getTime()
+
+			entityDescriptor.addToContacts(contactPerson)
+
+			entityDescriptor.addToIdpDescriptors(IDPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true))
+			entityDescriptor.addToSpDescriptors(SPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true))
+
+			entitiesDescriptor.addToEntityDescriptors(entityDescriptor)
+      entityDescriptor.validate()
+		}
+
+		def keyInfo = new CAKeyInfo(certificate:new CACertificate(data:loadPK()))
+		def keyInfo2 = new CAKeyInfo(certificate:new CACertificate(data:loadPK2()))
+		def certificateAuthorities = []
+		certificateAuthorities.add(keyInfo)
+		certificateAuthorities.add(keyInfo2)
+
+		def validUntil = new GregorianCalendar(2009, Calendar.JULY, 22)
+		validUntil.setTimeZone(TimeZone.getTimeZone("UTC"))
+
+		def expected = loadExpected('testvalidentitiesdescriptorwreginfo')
+
+		when:
+		metadataGenerationService.entitiesDescriptor(builder, false, false, true, entitiesDescriptor, validUntil.getTime(), certificateAuthorities)
+		def xml = writer.toString()
+		def diff = new Diff(expected, xml)
+		def ddiff = new DetailedDiff(diff)
+
+		then:
+		similarExcludingID(ddiff)
+
+		cleanup:
+		grailsApplication.config.aaf.fr.metadata.registrationAuthority = savRegistrationAuthority 
+		grailsApplication.config.aaf.fr.metadata.registrationPolicy = savRegistrationPolicy 
+		grailsApplication.config.aaf.fr.metadata.registrationPolicyLang = savRegistrationPolicyLang 
+		// force the MetatadataGenerationService to re-initialize
+		metadataGenerationService.afterPropertiesSet()
 	}
 	
 	def "Test valid EntitiesDescriptor generation with embedded entitiesdescriptors and no CA"() {
