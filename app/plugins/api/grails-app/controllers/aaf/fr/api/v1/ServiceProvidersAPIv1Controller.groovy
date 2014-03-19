@@ -49,7 +49,7 @@ class ServiceProvidersAPIv1Controller {
 		result.updated = sp.lastUpdated
 		result.name = sp.displayName
 		result.description = sp.description
-		result.weblink = g.createLink(controller: 'SPSSODescriptor', action:'show', id: sp.id, absolute: true)
+		result.weblink = g.createLink(controller: 'serviceProvider', action:'show', id: sp.id, absolute: true)
 		result.functioning = sp.functioning()
 		result.archived = sp.archived
 		result.entityid = sp.entityDescriptor.entityID

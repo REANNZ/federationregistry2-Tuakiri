@@ -37,9 +37,8 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		XMLUnit.ignoreWhitespace = true
 	}
 
-	def similarExcludingID(def diff) {
+	def similarExcludingID(def ddiff) {
 		def result = true
-		def ddiff = new DetailedDiff(diff)
 		ddiff.allDifferences.each {
 			// id is time based and subject to change
 	    if(!it.controlNodeDetail.xpathLocation.equals("/EntitiesDescriptor[1]/@ID")) {
@@ -333,6 +332,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		certificateAuthorities.add(keyInfo2)
 
 		def validUntil = new GregorianCalendar(2009, Calendar.JULY, 22)
+		validUntil.setTimeZone(TimeZone.getTimeZone("UTC"))
 
 		def expected = loadExpected('testvalidentitiesdescriptor')
 
@@ -340,9 +340,10 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		metadataGenerationService.entitiesDescriptor(builder, false, false, true, entitiesDescriptor, validUntil.getTime(), certificateAuthorities)
 		def xml = writer.toString()
 		def diff = new Diff(expected, xml)
+		def ddiff = new DetailedDiff(diff)
 
 		then:
-		similarExcludingID(diff)
+		similarExcludingID(ddiff)
 	}
 	
 	def "Test valid EntitiesDescriptor generation with embedded entitiesdescriptors and no CA"() {
@@ -371,6 +372,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def certificateAuthorities = []
 		
 		def validUntil = new GregorianCalendar(2009, Calendar.JULY, 22)
+		validUntil.setTimeZone(TimeZone.getTimeZone("UTC"))
 			
 		def expected = loadExpected('testvalidentitiesdescriptorembedded')
 		
@@ -379,9 +381,10 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		metadataGenerationService.entitiesDescriptor(builder, false, true, true, entitiesDescriptor, validUntil.getTime(), certificateAuthorities)
 		def xml = writer.toString()
 		def diff = new Diff(expected, xml)
+		def ddiff = new DetailedDiff(diff)
 
 		then:
-		similarExcludingID(diff)
+		similarExcludingID(ddiff)
 	}
 	
 	def "Test inactive EntityDescriptor generation"() {
@@ -1662,11 +1665,12 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
     def xml = writer.toString()
     def strippedXML = xml.replace("shibmd:", "").replace("saml:", "") // dodgy as hell but easiest option presently
     def diff = new Diff(expected, strippedXML)
+    def ddiff = new DetailedDiff(diff)
 
     then:
     xml.contains('saml:Attribute')
     xml.contains('shibmd:Scope')
-    similarExcludingID(diff)
+    similarExcludingID(ddiff)
 
     where:
     aaonly << [true, false]
