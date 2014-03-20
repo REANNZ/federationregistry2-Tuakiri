@@ -55,9 +55,8 @@ class AttributeFilterGenerationServiceSpec extends IntegrationSpec {
 		new File('./test/data/selfsigned.pem').text
 	}
 
-	def similarExcludingID(def diff) {
+	def similarExcludingID(def ddiff) {
 		def result = true
-		def ddiff = new DetailedDiff(diff)
 		ddiff.allDifferences.each {
 			// id is time based and subject to change
 	    if(!it.controlNodeDetail.xpathLocation.equals("/AttributeFilterPolicyGroup[1]/@id")) {
@@ -83,9 +82,10 @@ class AttributeFilterGenerationServiceSpec extends IntegrationSpec {
 		attributeFilterGenerationService.generate(builder, "test.aaf.edu.au", idp.id)
 		def xml = writer.toString()
 		def diff = new Diff(expected, xml)
+		def ddiff = new DetailedDiff(diff)
 		
 		then:
-		similarExcludingID(diff)
+		similarExcludingID(ddiff)
 	}
 	
 	def 'Test generation with no active Service Providers'() {
@@ -114,9 +114,10 @@ class AttributeFilterGenerationServiceSpec extends IntegrationSpec {
 		attributeFilterGenerationService.generate(builder, "test.aaf.edu.au", idp.id)
 		def xml = writer.toString()
 		def diff = new Diff(expected, xml)
+		def ddiff = new DetailedDiff(diff)
 		
 		then:
-		similarExcludingID(diff)
+		similarExcludingID(ddiff)
 	}
 	
 	def 'Test generation with no approved Service Providers'() {
@@ -145,9 +146,10 @@ class AttributeFilterGenerationServiceSpec extends IntegrationSpec {
 		attributeFilterGenerationService.generate(builder, "test.aaf.edu.au", idp.id)
 		def xml = writer.toString()
 		def diff = new Diff(expected, xml)
+		def ddiff = new DetailedDiff(diff)
 		
 		then:
-		similarExcludingID(diff)
+		similarExcludingID(ddiff)
 	}
 	
 	def 'Test generation with single SP requesting attributes that IDP fully supports'() {
@@ -193,9 +195,10 @@ class AttributeFilterGenerationServiceSpec extends IntegrationSpec {
 		attributeFilterGenerationService.generate(builder, "test.aaf.edu.au", idp.id)
 		def xml = writer.toString()
 		def diff = new Diff(expected, xml)
+		def ddiff = new DetailedDiff(diff)
 		
 		then:
-		similarExcludingID(diff)
+		similarExcludingID(ddiff)
 	}
 	
 	def 'Test generation with multiple SP requesting attributes that IDP fully supports'() {
@@ -245,9 +248,10 @@ class AttributeFilterGenerationServiceSpec extends IntegrationSpec {
 		attributeFilterGenerationService.generate(builder, "test.aaf.edu.au", idp.id)
 		def xml = writer.toString()
 		def diff = new Diff(expected, xml)
+		def ddiff = new DetailedDiff(diff)
 		
 		then:
-		similarExcludingID(diff)
+		similarExcludingID(ddiff)
 	}
 	
 	def 'Test generation with single SP requesting attributes that IDP only supports 1 of (givenName)'() {
@@ -287,9 +291,10 @@ class AttributeFilterGenerationServiceSpec extends IntegrationSpec {
 		attributeFilterGenerationService.generate(builder, "test.aaf.edu.au", idp.id)
 		def xml = writer.toString()
 		def diff = new Diff(expected, xml)
+		def ddiff = new DetailedDiff(diff)
 		
 		then:
-		similarExcludingID(diff)
+		similarExcludingID(ddiff)
 	}
 	
 	def 'Test generation with multiple SP requesting attributes that IDP only supports 1 of (givenName)'() {
@@ -333,9 +338,10 @@ class AttributeFilterGenerationServiceSpec extends IntegrationSpec {
 		attributeFilterGenerationService.generate(builder, "test.aaf.edu.au", idp.id)
 		def xml = writer.toString()
 		def diff = new Diff(expected, xml)
+		def ddiff = new DetailedDiff(diff)
 		
 		then:
-		similarExcludingID(diff)
+		similarExcludingID(ddiff)
 	}
 	
 	def 'Test generation with single SP requesting attributes that IDP fully supports, additionally SP requests eduPersonEntitlement which requires specification'() {
@@ -389,9 +395,10 @@ class AttributeFilterGenerationServiceSpec extends IntegrationSpec {
 		def xml = writer.toString()
 		println xml
 		def diff = new Diff(expected, xml)
+		def ddiff = new DetailedDiff(diff)
 		
 		then:
-		similarExcludingID(diff)
+		similarExcludingID(ddiff)
 	}
 
   def 'Test generation with multiple SP requesting attributes that IDP only supports 1 of (givenName) with one SP having forceAttributesInFilter set true'() {
@@ -440,9 +447,10 @@ class AttributeFilterGenerationServiceSpec extends IntegrationSpec {
     attributeFilterGenerationService.generate(builder, "test.aaf.edu.au", idp.id)
     def xml = writer.toString()
     def diff = new Diff(expected, xml)
+    def ddiff = new DetailedDiff(diff)
     
     then:
-    similarExcludingID(diff)
+    similarExcludingID(ddiff)
   }
 	
 	def baseSP(unique) {
