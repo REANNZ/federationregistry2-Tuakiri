@@ -8,7 +8,7 @@
       <br><br>
       Please keep this email for future reference.
       <br><br>
-      Your <em>unique code for administrative access</em> (required in <strong>step 4 below</strong>)
+      Your <em>unique code for administrative access</em> (required in <strong>step 3 below</strong>)
       <div id="admincode" style="color:#E36C0A; font-size: 22px; padding: 6px; border: 1px solid #CCCCCC; text-align: center;">
         ${fieldValue(bean: invitation, field: "inviteCode")}
       </div>
@@ -90,21 +90,21 @@
       
         <br><br>
       
-      5. Double check all information associated with your Service Provider that is stored in Federation Registry making changes if you note any inaccuracies.
+      4. Double check all information associated with your Service Provider that is stored in Federation Registry making changes if you note any inaccuracies.
       
         <br><br>
       
-      6. Ensure you've applied appropriate branding to all of your Service Providers' pages including the login screen and <strong>all error pages</strong>.
+      5. Ensure you've applied appropriate branding to all of your Service Providers' pages including the login screen and <strong>all error pages</strong>.
           <br><br>
           Branding should be consistent with that used on your organisation's website.
       
         <br><br>
       
-      7. Test your new Service Provider with Identity Providers connected to the federation. Do allow up to 24 hours for all Identity Providers that use automated attribute release to update themselves to support your services' needs. You will need to <strong>directly contact</strong> Identity Providers who don't automatically update attribute policies. The <g:message code="branding.fr.federationinfo.federationname" /> <g:link controller='complianceReports' action='compatability' absolute='true' plugin="reporting">compliance reports</g:link> will help you identify those Identity Providers who are unlikely to automatically support your service.
+      6. Test your new Service Provider with Identity Providers connected to the federation. Do allow up to 24 hours for all Identity Providers that use automated attribute release to update themselves to support your services' needs. You will need to <strong>directly contact</strong> Identity Providers who don't automatically update attribute policies. The <g:message code="branding.fr.federationinfo.federationname" /> <g:link controller='complianceReports' action='compatability' absolute='true' plugin="reporting">compliance reports</g:link> will help you identify those Identity Providers who are unlikely to automatically support your service.
       
         <br><br>
       
-      8. You're all done! Welcome to the <g:message code="branding.fr.federationinfo.federationname.long" />.
+      7. You're all done! Welcome to the <g:message code="branding.fr.federationinfo.federationname.long" />.
     
     </body>
   </html>
