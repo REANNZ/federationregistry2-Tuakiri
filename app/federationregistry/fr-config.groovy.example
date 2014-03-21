@@ -84,6 +84,15 @@ aaf {
 
     metadata {
       federation = "aaf.edu.au"
+
+      /* registration info - optional 
+      // website of your registration authority (federation)
+      registrationAuthority = "https://www.federation.org/"
+      // link to the registration policy (contents must be immutable)
+      registrationPolicy = "https://www.federation.org/RegistrationPolicy/"
+      // language of the registration policy
+      registrationPolicyLang = "en"
+       */
       current {
         validForDays = 7
       }
