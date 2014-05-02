@@ -55,9 +55,8 @@ class AttributeFilterGenerationServiceSpec extends IntegrationSpec {
 		new File('./test/data/selfsigned.pem').text
 	}
 
-	def similarExcludingID(def diff) {
+	def similarExcludingID(def ddiff) {
 		def result = true
-		def ddiff = new DetailedDiff(diff)
 		ddiff.allDifferences.each {
 			// id is time based and subject to change
 	    if(!it.controlNodeDetail.xpathLocation.equals("/AttributeFilterPolicyGroup[1]/@id")) {
@@ -83,9 +82,10 @@ class AttributeFilterGenerationServiceSpec extends IntegrationSpec {
 		attributeFilterGenerationService.generate(builder, "test.aaf.edu.au", idp.id)
 		def xml = writer.toString()
 		def diff = new Diff(expected, xml)
+		def ddiff = new DetailedDiff(diff)
 		
 		then:
-		similarExcludingID(diff)
+		similarExcludingID(ddiff)
 	}
 	
 	def 'Test generation with no active Service Providers'() {
@@ -114,9 +114,10 @@ class AttributeFilterGenerationServiceSpec extends IntegrationSpec {
 		attributeFilterGenerationService.generate(builder, "test.aaf.edu.au", idp.id)
 		def xml = writer.toString()
 		def diff = new Diff(expected, xml)
+		def ddiff = new DetailedDiff(diff)
 		
 		then:
-		similarExcludingID(diff)
+		similarExcludingID(ddiff)
 	}
 	
 	def 'Test generation with no approved Service Providers'() {
@@ -145,9 +146,10 @@ class AttributeFilterGenerationServiceSpec extends IntegrationSpec {
 		attributeFilterGenerationService.generate(builder, "test.aaf.edu.au", idp.id)
 		def xml = writer.toString()
 		def diff = new Diff(expected, xml)
+		def ddiff = new DetailedDiff(diff)
 		
 		then:
-		similarExcludingID(diff)
+		similarExcludingID(ddiff)
 	}
 	
 	def 'Test generation with single SP requesting attributes that IDP fully supports'() {
@@ -193,9 +195,10 @@ class AttributeFilterGenerationServiceSpec extends IntegrationSpec {
 		attributeFilterGenerationService.generate(builder, "test.aaf.edu.au", idp.id)
 		def xml = writer.toString()
 		def diff = new Diff(expected, xml)
+		def ddiff = new DetailedDiff(diff)
 		
 		then:
-		similarExcludingID(diff)
+		similarExcludingID(ddiff)
 	}
 	
 	def 'Test generation with multiple SP requesting attributes that IDP fully supports'() {
@@ -245,9 +248,10 @@ class AttributeFilterGenerationServiceSpec extends IntegrationSpec {
 		attributeFilterGenerationService.generate(builder, "test.aaf.edu.au", idp.id)
 		def xml = writer.toString()
 		def diff = new Diff(expected, xml)
+		def ddiff = new DetailedDiff(diff)
 		
 		then:
-		similarExcludingID(diff)
+		similarExcludingID(ddiff)
 	}
 	
 	def 'Test generation with single SP requesting attributes that IDP only supports 1 of (givenName)'() {
@@ -287,9 +291,10 @@ class AttributeFilterGenerationServiceSpec extends IntegrationSpec {
 		attributeFilterGenerationService.generate(builder, "test.aaf.edu.au", idp.id)
 		def xml = writer.toString()
 		def diff = new Diff(expected, xml)
+		def ddiff = new DetailedDiff(diff)
 		
 		then:
-		similarExcludingID(diff)
+		similarExcludingID(ddiff)
 	}
 	
 	def 'Test generation with multiple SP requesting attributes that IDP only supports 1 of (givenName)'() {
@@ -333,9 +338,10 @@ class AttributeFilterGenerationServiceSpec extends IntegrationSpec {
 		attributeFilterGenerationService.generate(builder, "test.aaf.edu.au", idp.id)
 		def xml = writer.toString()
 		def diff = new Diff(expected, xml)
+		def ddiff = new DetailedDiff(diff)
 		
 		then:
-		similarExcludingID(diff)
+		similarExcludingID(ddiff)
 	}
 	
 	def 'Test generation with single SP requesting attributes that IDP fully supports, additionally SP requests eduPersonEntitlement which requires specification'() {
@@ -389,9 +395,65 @@ class AttributeFilterGenerationServiceSpec extends IntegrationSpec {
 		def xml = writer.toString()
 		println xml
 		def diff = new Diff(expected, xml)
+		def ddiff = new DetailedDiff(diff)
 		
 		then:
-		similarExcludingID(diff)
+		similarExcludingID(ddiff)
+	}
+
+	def 'Test generation with single SP requesting attributes that IDP fully supports, additionally SP requests eduPersonEntitlement which requires specification and uses a regular expression in the value'() {
+		setup:
+		setupSAML()
+		def expected = loadResult("testsinglespusingentitlementwregexvalue")
+		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: "http://example.com")
+		def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.example.com/myuniqueID1", active:true, approved:true)
+		def idp = IDPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true).save()
+
+		if(!idp)
+			throw new Exception("IDP save failed")
+		
+		def sp = baseSP("1").save()
+		if(!sp) {
+			sp.errors.each {println it}
+			throw new Exception("SP save failed")
+		}
+		
+		def ba1 =  new AttributeBase(oid:'2.5.4.3', nameFormat: attrUri, legacyName:'urn:mace:dir:attribute-def:cn', name:'commonName', description:'An individuals common name, typically their full name. This attribute should not be used in transactions where it is desirable to maintain user anonymity.', category:coreCategory, specificationRequired:false).save()
+		def ba2 =  new AttributeBase(oid:'2.5.4.4', nameFormat: attrUri, legacyName:'urn:mace:dir:attribute-def:sn', name:'surname', description:'Surname or family name', category:optionalCategory, specificationRequired:false).save()
+		def ba3 =  new AttributeBase(oid:'2.5.4.42', nameFormat: attrUri, legacyName:'urn:mace:dir:attribute-def:givenName', name:'givenName', description:'Given name of a person', category:optionalCategory, specificationRequired:false).save()
+		def ba4 =  new AttributeBase(oid:'1.3.6.1.4.1.5923.1.1.1.7', nameFormat: attrUri, legacyName:'urn:mace:dir:attribute-def:eduPersonEntitlement', name:'eduPersonEntitlement', description:'Member of: URI (either URL or URN) that indicates a set of rights to specific resources based on an agreement across the releavant community', category:coreCategory, specificationRequired:true).save()
+		
+		def a1 = new Attribute(base:ba1).save()
+		def a2 = new Attribute(base:ba2).save()
+		def a3 = new Attribute(base:ba3).save()
+		def a4 = new Attribute(base:ba4).save()
+		idp.addToAttributes(a1).save()
+		idp.addToAttributes(a2).save()
+		idp.addToAttributes(a3).save()
+		idp.addToAttributes(a4).save()
+		
+		def ra1 = new RequestedAttribute(base:ba1, isRequired:true, approved:true, reasoning:"valid test case")
+		def ra2 = new RequestedAttribute(base:ba2, isRequired:false, approved:true, reasoning:"valid test case")
+		def ra3 = new RequestedAttribute(base:ba3, isRequired:false, approved:true, reasoning:"valid test case")
+		
+		def ra4 = new RequestedAttribute(base:ba4, isRequired:false, approved:true, reasoning:"valid test case")
+		ra4.addToValues(new AttributeValue(value:'^urn:mace:test:attr:value:[1-3]$'))
+		
+		def attrService = sp.attributeConsumingServices.toList().get(0)
+		attrService.addToRequestedAttributes(ra1)
+		attrService.addToRequestedAttributes(ra2)
+		attrService.addToRequestedAttributes(ra3)
+		attrService.addToRequestedAttributes(ra4)
+		
+		when:
+		attributeFilterGenerationService.generate(builder, "test.aaf.edu.au", idp.id)
+		def xml = writer.toString()
+		println xml
+		def diff = new Diff(expected, xml)
+		def ddiff = new DetailedDiff(diff)
+		
+		then:
+		similarExcludingID(ddiff)
 	}
 
   def 'Test generation with multiple SP requesting attributes that IDP only supports 1 of (givenName) with one SP having forceAttributesInFilter set true'() {
@@ -440,9 +502,10 @@ class AttributeFilterGenerationServiceSpec extends IntegrationSpec {
     attributeFilterGenerationService.generate(builder, "test.aaf.edu.au", idp.id)
     def xml = writer.toString()
     def diff = new Diff(expected, xml)
+    def ddiff = new DetailedDiff(diff)
     
     then:
-    similarExcludingID(diff)
+    similarExcludingID(ddiff)
   }
 	
 	def baseSP(unique) {
