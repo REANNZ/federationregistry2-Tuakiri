@@ -8,6 +8,19 @@ use strict; # strongly recommended for DBI
 
 $main::verbose=1;
 $main::debug=1;
+$main::dryrun=0;
+
+while ($ARGV[0] =~ /^--/ ) {
+  if ($ARGV[0] eq "--verbose") { $main::verbose += 1; }
+  elsif ($ARGV[0] eq "--no-verbose") { $main::verbose=0; }
+  elsif ($ARGV[0] eq "--debug") { $main::debug += 1; }
+  elsif ($ARGV[0] eq "--no-debug") { $main::debug=0; }
+  elsif ($ARGV[0] eq "--dry-run") { $main::dryrun=1; }
+  elsif ($ARGV[0] eq "--no-dry-run") { $main::dryrun=0; }
+  else { die "Invalid option $ARGV[0]"; };
+  
+  shift;
+}
 
 
 $main::local_hostname = `hostname`; # Override here - used for populating ds_host in wayf_access_record.
@@ -180,7 +193,8 @@ while (<>) {
 	    # insert the session into the database now
 
 	    if ($main::verbose >= 1) {
-		printf "Complete session found, inserting into database: date_created=\"%s\", ds_host=\"%s\", idpid=%d, request_type=\"%s\", robot=%d, source=\"%s\", spid=%d\n",
+		printf "Complete session found, %s into database: date_created=\"%s\", ds_host=\"%s\", idpid=%d, request_type=\"%s\", robot=%d, source=\"%s\", spid=%d\n",
+                    ( $main::dryrun ? "pretending to insert" : "inserting" ),
 		    $DS_session{"date_created"}, $DS_session{"ds_host"}, $DS_session{"idpid"}, $DS_session{"request_type"}, ( $DS_session{"robot"} ? 1 : 0), $DS_session{"source"}, $DS_session{"spid"};
 	    };
 
@@ -188,9 +202,11 @@ while (<>) {
 	    #
 	    # insert into wayf_access_record (date_created, ds_host, idpid, request_type, robot, source, spid) 
 	    #     values (curdate(), 'ds.aaf.edu.au', 1, 'DS', false, 'bradley-machine.at.home.com', 22);
-	    $sth_wayf->execute($DS_session{"date_created"}, $DS_session{"ds_host"}, $DS_session{"idpid"}, 
-		$DS_session{"request_type"}, $DS_session{"robot"}, $DS_session{"source"}, $DS_session{"spid"},
-		$DS_session{"idp_name"}, $DS_session{"sp_dsr_url"} );
+            if (!$main::dryrun) {
+		$sth_wayf->execute($DS_session{"date_created"}, $DS_session{"ds_host"}, $DS_session{"idpid"}, 
+		    $DS_session{"request_type"}, $DS_session{"robot"}, $DS_session{"source"}, $DS_session{"spid"},
+		    $DS_session{"idp_name"}, $DS_session{"sp_dsr_url"} );
+            };
 	} else {
 	    if ($main::debug >= 1) {
 		print "Incomplete session found:\n";
