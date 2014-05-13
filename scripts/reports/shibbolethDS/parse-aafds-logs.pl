@@ -44,7 +44,7 @@ my $dsn = "DBI:mysql:database=$main::database;host=$main::hostname;mysql_enable_
 my $dbh = DBI->connect($dsn, $main::user, $main::password, { RaiseError => 1, AutoCommit => 0 });
 
 my $sth_sp  = $dbh->prepare("select spssodescriptor.id from spssodescriptor,entity_descriptor where spssodescriptor.entity_descriptor_id = entity_descriptor.id and entity_descriptor.entityid = ?");
-my $sth_sp_dsr  = $dbh->prepare("select discovery_response_service.descriptor_id from discovery_response_service, endpoint, uri where discovery_response_service.id = endpoint.id and endpoint.location_id = uri.id and uri.uri = ?");
+my $sth_sp_dsr  = $dbh->prepare("select discovery_response_service.descriptor_id from discovery_response_service, endpoint where discovery_response_service.id = endpoint.id and endpoint.location = ?");
 my $sth_idp = $dbh->prepare("select idpssodescriptor.id from idpssodescriptor,entity_descriptor where idpssodescriptor.entity_descriptor_id = entity_descriptor.id and entity_descriptor.entityid = ?");
 my $sth_wayf = $dbh->prepare("insert into wayf_access_record (date_created, ds_host, idpid, request_type, robot, source, spid, idp_entity, sp_endpoint) values (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
