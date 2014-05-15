@@ -11,7 +11,7 @@ class Task {
   
   List approverRoles = []
   List approvers = []
-  List dependenices = []
+  List dependencies = []
     
   boolean finishOnThisTask = false
 
