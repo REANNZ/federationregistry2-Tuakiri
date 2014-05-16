@@ -71,7 +71,7 @@
     </p>
     <fieldset>
       <div class="control-group">
-      <label class="control-label" for="organization.name"><g:message encodeAs="HTML" code="label.name" /></label>
+      <label class="control-label" for="organization.name"><g:message encodeAs="HTML" code="templates.fr.organization.label.name" /></label>
         <div class="controls">
           <g:textField name="organization.name" class="required span4" value="${organization?.name}" placeholder="example.edu.au" />
           <fr:tooltip code='help.fr.organization.name' />
