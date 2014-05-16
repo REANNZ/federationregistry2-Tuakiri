@@ -40,7 +40,7 @@ class WorkflowTaskService {
     def taskInstance
     
     // This will generally only be the case where a task is a join point in 
-    // our flow and must wait for multiple dependenices to complete
+    // our flow and must wait for multiple dependencies to complete
     processInstance.taskInstances.each { ti ->
       if(ti.task.id == task.id && ti.status == TaskStatus.DEPENDENCYWAIT ) {
         log.info "Located existing $ti to represent $task within $processInstance"
