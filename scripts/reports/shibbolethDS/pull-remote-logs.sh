@@ -14,8 +14,8 @@ if [ "$1" == "--dry-run" ] ; then
    shift
 fi
 
-LOGS_BASE="$DIR_BASE/remote-logs"
-#FUTURE: LOGS_BASE="$DIR_BASE/../remote-logs"
+# LOCAL DEV: # LOGS_BASE="$DIR_BASE/remote-logs"
+LOGS_BASE="$DIR_BASE/../remote-logs"
 
 if [ ! -e $LOGS_BASE ] ; then mkdir $LOGS_BASE ; fi
 
