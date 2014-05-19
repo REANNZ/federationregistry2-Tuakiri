@@ -10,6 +10,9 @@ $main::verbose=1;
 $main::debug=1;
 $main::dryrun=0;
 
+$main::local_hostname = `hostname`; # Override here - used for populating ds_host in wayf_access_record.
+chomp $main::local_hostname;
+
 while ($ARGV[0] =~ /^--/ ) {
   if ($ARGV[0] eq "--verbose") { $main::verbose += 1; }
   elsif ($ARGV[0] eq "--no-verbose") { $main::verbose=0; }
@@ -17,14 +20,12 @@ while ($ARGV[0] =~ /^--/ ) {
   elsif ($ARGV[0] eq "--no-debug") { $main::debug=0; }
   elsif ($ARGV[0] eq "--dry-run") { $main::dryrun=1; }
   elsif ($ARGV[0] eq "--no-dry-run") { $main::dryrun=0; }
+  elsif ($ARGV[0] eq "--ds-host") { $main::local_hostname=$ARGV[1]; shift; }
   else { die "Invalid option $ARGV[0]"; };
   
   shift;
 }
 
-
-$main::local_hostname = `hostname`; # Override here - used for populating ds_host in wayf_access_record.
-chomp $main::local_hostname;
 
 # Initialaze connection to FR database
 # set the the connection parameters either here or load them from dbconfig.pm
