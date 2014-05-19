@@ -16,7 +16,7 @@ if [ "$1" == "--dry-run" ] ; then
    shift
 fi
 
-cat $DIR_BASE/pull-aafds.conf | while read URL USERNAME PASSWORD LOCALFILE ; do
+cat $DIR_BASE/pull-aafds.conf | while read URL USERNAME PASSWORD LOCALFILE REMOTE_DS_HOST ; do
     URL_TODAY="$URL-$TODAY"
     LOCALFILE_TODAY="$LOCALFILE-$TODAY"
 
@@ -27,8 +27,8 @@ cat $DIR_BASE/pull-aafds.conf | while read URL USERNAME PASSWORD LOCALFILE ; do
          rm $LOCALFILE_TODAY
          continue
     fi
-    echo "`date` $0: invoking $DIR_BASE/parse-aafds-logs.pl $PARSER_OPTIONS $LOCALFILE_TODAY" >> $PULL_LOG
-    $DIR_BASE/parse-aafds-logs.pl $PARSER_OPTIONS $LOCALFILE_TODAY >> $PULL_LOG 2>&1
+    echo "`date` $0: invoking $DIR_BASE/parse-aafds-logs.pl $PARSER_OPTIONS --ds-host $REMOTE_DS_HOST $LOCALFILE_TODAY" >> $PULL_LOG
+    $DIR_BASE/parse-aafds-logs.pl $PARSER_OPTIONS --ds-host $REMOTE_DS_HOST $LOCALFILE_TODAY >> $PULL_LOG 2>&1
     if [ $? -ne 0 ] ; then
          echo "`date` $0: ERROR: parsing $LOCALFILE_TODAY failed" >> $PULL_LOG
          continue
