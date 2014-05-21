@@ -7,23 +7,27 @@
 
 TODAY=`date +%Y%m%d`
 DIR_BASE=`dirname $0`
+DRY_RUN=""
 
 # read config file
 # must set the following values
 # ERRMAILTO      - email address to send error notifications to
 # MAILFROM       - email address to use as sender in the notifications
 # PARSER_OPTIONS - any options to pass to parser scripts
-# WGET_OPTIONS   - any options to pass to wget
+# WGET_OPTIONS   - any options to pass to wget (on all invocations)
 # LOGS_BASE      - directory where to store remote logs
 # LOG_SOURCE_IDS - define the list of sources (their IDs)
 # define each source as 
 # LOG_SOURCE_<id>="<REMOTE_DS_HOST> <LOG_TYPE> <URL_BASE> <USERNAME PASSWORD>"
+# optionally define local WGET options for the source
+# WGET_OPTIONS_<id>="--no-check-certificate"
 . $DIR_BASE/pull-remote-logs.conf
 
 
 # parse (minimum) options supported
 if [ "$1" == "--dry-run" ] ; then
    PARSER_OPTIONS="$PARSER_OPTIONS --dry-run"
+   DRY_RUN="--dry-run"
    shift
 fi
 
@@ -67,7 +71,6 @@ function report_error {
   fi
   # send an email
   send_email_message "Error report: $0 on `hostname`" "$ERR_MSG" $ERRMAILTO
-  exit 2
 }
 
 # Local function to abort with an error 
@@ -114,8 +117,9 @@ for LOG_ID in $LOG_SOURCE_IDS ; do
            continue
 	fi
 
+        WGET_OPTIONS_LOCAL="$( eval echo "\${WGET_OPTIONS_$LOG_ID}" )"
         INDEX_FILE=`mktemp`
-        wget $WGET_OPTIONS -O "$INDEX_FILE" $URL_BASE/ --user=$USERNAME --password=$PASSWORD 2>> $PULL_LOG 
+        wget $WGET_OPTIONS $WGET_OPTIONS_LOCAL -O "$INDEX_FILE" $URL_BASE/ --user=$USERNAME --password=$PASSWORD >> $PULL_LOG  2>&1
         WGET_RES=$?
 	if [ $WGET_RES -ne 0 ] ; then
 	     report_error "fetching $URL_BASE failed ($WGET_RES)"
@@ -134,22 +138,31 @@ for LOG_ID in $LOG_SOURCE_IDS ; do
 	    LOCAL_LOG_FILE="$LOCAL_LOGS_DIR/$REMOTE_LOG_FILE"
 	    if [ ! -f "$LOCAL_LOG_FILE" ] ; then
 		echo "`date` $0: fetching $URL_BASE/$REMOTE_LOG_FILE into $LOCAL_LOG_FILE" >> $PULL_LOG
-		wget $WGET_OPTIONS -O "$LOCAL_LOG_FILE" --user=$USERNAME --password=$PASSWORD "$URL_BASE/$REMOTE_LOG_FILE" >> $PULL_LOG 2>&1
+		wget $WGET_OPTIONS $WGET_OPTIONS_LOCAL -O "$LOCAL_LOG_FILE" --user=$USERNAME --password=$PASSWORD "$URL_BASE/$REMOTE_LOG_FILE" >> $PULL_LOG 2>&1
                 WGET_RES=$?
 		if [ $WGET_RES -ne 0 ] ; then
-		     report_error "fetching $URL_TODAY failed ($WGET_RES), deleting local file $LOCALFILE_TODAY"
-                     rm "$LOCAL_LOG_FILE"
-		     continue
+		    report_error "fetching $URL_TODAY failed ($WGET_RES), deleting local file $LOCALFILE_TODAY"
+                    rm "$LOCAL_LOG_FILE"
+		    continue
 		fi
 
 		echo "`date` $0: invoking $DIR_BASE/$LOG_PARSER $PARSER_OPTIONS --ds-host $REMOTE_DS_HOST $LOCAL_LOG_FILE" >> $PULL_LOG
 		$DIR_BASE/$LOG_PARSER $PARSER_OPTIONS --ds-host $REMOTE_DS_HOST $LOCAL_LOG_FILE >> $PULL_LOG 2>&1
                 PARSER_RES=$?
-		if [ $PARSER_RES -ne 0 ] ; then
-		     report_error "invoking parser  $DIR_BASE/$LOG_PARSER $PARSER_OPTIONS --ds-host $REMOTE_DS_HOST $LOCAL_LOG_FILE failed ($PARSER_RES)"
-                     rm "$LOCAL_LOG_FILE"
-		     continue
-		fi
+
+                # delete downloaded files if either DRY_RUN or if parser failed
+                if [ $PARSER_RES -ne 0 -o -n "$DRY_RUN" ] ; then
+		    if [ $PARSER_RES -ne 0 ] ; then
+			report_error "invoking parser  $DIR_BASE/$LOG_PARSER $PARSER_OPTIONS --ds-host $REMOTE_DS_HOST $LOCAL_LOG_FILE failed ($PARSER_RES), deleting local file $LOCAL_LOG_FILE"
+		    else # [ -n "$DRY_RUN" ] 
+		        echo "`date` $0: running in dry run mode, deleting local file $LOCAL_LOG_FILE" >> $PULL_LOG
+                    fi
+                    rm "$LOCAL_LOG_FILE"
+		    if [ $PARSER_RES -ne 0 ] ; then
+			continue # next loop - not strictly needed but skip any
+                                 # code that might appear at the end of this loop.
+		    fi
+                fi
 	    fi
 	done
         rm "$INDEX_FILE"
