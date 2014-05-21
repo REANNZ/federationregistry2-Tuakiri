@@ -13,6 +13,7 @@ DIR_BASE=`dirname $0`
 # ERRMAILTO      - email address to send error notifications to
 # MAILFROM       - email address to use as sender in the notifications
 # PARSER_OPTIONS - any options to pass to parser scripts
+# WGET_OPTIONS   - any options to pass to wget
 # LOGS_BASE      - directory where to store remote logs
 # LOG_SOURCE_IDS - define the list of sources (their IDs)
 # define each source as 
@@ -114,7 +115,7 @@ for LOG_ID in $LOG_SOURCE_IDS ; do
 	fi
 
         INDEX_FILE=`mktemp`
-        wget --quiet -O "$INDEX_FILE" $URL_BASE/ --user=$USERNAME --password=$PASSWORD 2>> $PULL_LOG 
+        wget $WGET_OPTIONS -O "$INDEX_FILE" $URL_BASE/ --user=$USERNAME --password=$PASSWORD 2>> $PULL_LOG 
         WGET_RES=$?
 	if [ $WGET_RES -ne 0 ] ; then
 	     report_error "fetching $URL_BASE failed ($WGET_RES)"
@@ -133,7 +134,7 @@ for LOG_ID in $LOG_SOURCE_IDS ; do
 	    LOCAL_LOG_FILE="$LOCAL_LOGS_DIR/$REMOTE_LOG_FILE"
 	    if [ ! -f "$LOCAL_LOG_FILE" ] ; then
 		echo "`date` $0: fetching $URL_BASE/$REMOTE_LOG_FILE into $LOCAL_LOG_FILE" >> $PULL_LOG
-		wget --quiet -O "$LOCAL_LOG_FILE" --user=$USERNAME --password=$PASSWORD "$URL_BASE/$REMOTE_LOG_FILE" >> $PULL_LOG 2>&1
+		wget $WGET_OPTIONS -O "$LOCAL_LOG_FILE" --user=$USERNAME --password=$PASSWORD "$URL_BASE/$REMOTE_LOG_FILE" >> $PULL_LOG 2>&1
                 WGET_RES=$?
 		if [ $WGET_RES -ne 0 ] ; then
 		     report_error "fetching $URL_TODAY failed ($WGET_RES), deleting local file $LOCALFILE_TODAY"
