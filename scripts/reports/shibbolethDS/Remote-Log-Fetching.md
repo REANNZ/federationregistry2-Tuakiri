@@ -1,8 +1,3 @@
-This script can parse logging created by the Shibboleth DS project and inject records into the Federation Registry wayf_access_records for further presentation in the FR reporting user interface.
-
-This was kindly provided by the Tuakiri federation.
-
-
 The Federation Registry (FR) has also features for tracking federation usage (sessions between IdPs and SPs) and visualizing such usage.  For these features to be any useful, the FR database (table wayf_access_record) must be populated with actual session data.  The easiest to reach source of session data are the logs from the Discovery Service (DS).  The DS logs are slightly incomplete (do not cover sessions established outside of the centralized DS) and slightly incorrect (they would also include selections of an IdP that did not result into an actual session - e.g., the user did not authenticate at the IdP), but are a good starting point.
 
 There are several options for getting the DS logs into the FR database - one of them is running the parsers on the DS directly.  However, this means granting the DS machine direct access to the FR database.  And that may not be suitable / scalable when running multiple DS instances, possibly across different administrative domains (and located in remote networks).
