@@ -13,7 +13,7 @@
         </td>
       </tr> 
       <tr>
-        <th><g:message encodeAs="HTML" code="label.name"/></th>
+        <th><g:message encodeAs="HTML" code="templates.fr.organization.label.name"/></th>
         <td>${fieldValue(bean: organization, field: "name")}</td>
       </tr>
       <tr>

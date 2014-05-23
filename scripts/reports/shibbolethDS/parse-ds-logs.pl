@@ -36,6 +36,7 @@ while ($ARGV[0] =~ /^--/ ) {
   elsif ($ARGV[0] eq "--no-debug") { $main::debug=0; }
   elsif ($ARGV[0] eq "--dry-run") { $main::dryrun=1; }
   elsif ($ARGV[0] eq "--no-dry-run") { $main::dryrun=0; }
+  elsif ($ARGV[0] eq "--ds-host") { $main::local_hostname=$ARGV[1]; shift; }
   else { die "Invalid option $ARGV[0]"; };
   
   shift;
