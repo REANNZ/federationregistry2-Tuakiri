@@ -1,8 +1,10 @@
 The Federation Registry (FR) has also features for tracking federation usage (sessions between IdPs and SPs) and visualizing such usage.  For these features to be any useful, the FR database (table wayf_access_record) must be populated with actual session data.  The easiest to reach source of session data are the logs from the Discovery Service (DS).  The DS logs are slightly incomplete (do not cover sessions established outside of the centralized DS) and slightly incorrect (they would also include selections of an IdP that did not result into an actual session - e.g., the user did not authenticate at the IdP), but are a good starting point.
 
-There are several options for getting the DS logs into the FR database - one of them is running the parsers on the DS directly.  However, this means granting the DS machine direct access to the FR database.  And that may not be suitable / scalable when running multiple DS instances, possibly across different administrative domains (and located in remote networks).
+There are several options for getting the DS logs into the FR database:
+* one option is to run the parsers on the DS directly.  However, this means granting the DS machine direct access to the FR database.  And that may not be suitable / scalable when running multiple DS instances, possibly across different administrative domains (and located in remote networks).
+* another option is shipping logs remotely and processing them centrally at an aggregator site - the shipping could be either over SCP/SFTP, HTTP, or other protocols.
 
-The scripts pull-remote-logs.sh provides an alternative solution: Remote Log Fetching.  This solution consists of the following parts:
+This solution, contributed by the [Tuakiri, the New Zealand Access Federation] [1], implements Remote Log Fetching over HTTP.  The solution is implemented in the script pull-remote-logs.sh (together with the configuration file pull-remote-logs.conf) and consists of the following parts:
 
 * Each Discovery Service exports it's logs at an HTTPS URL requiring authenticated access
 * A centralized host (for the time being the Federation Registry itself) periodically scans this directory for new logs, downloads them, and runs the parser that ingests them into the FR database.
@@ -102,3 +104,6 @@ And finally, check the configuration for syntax errors and restart Apache:
 * Create a daily cronjob to run this script (ideally after log rotation happens at all sites): run "crontab -e" and add:
 
         01 7 * * * /opt/logfetcher/bin/pull-remote-logs.sh
+
+[1]: https://tuakiri.ac.nz/ 
+
