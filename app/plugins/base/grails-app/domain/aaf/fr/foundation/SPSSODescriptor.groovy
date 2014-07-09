@@ -84,7 +84,7 @@ class SPSSODescriptor extends SSODescriptor {
 		  categories serviceCategories.collect { [id: it.id, name: it.name] }
 
 		  contacts this.contacts.collect { [id: it.id, type: [id: it.type.id, name: it.type.name]] }
-		  monitors this.monitors.collect { [id: it.id, type: [id: it.type.id, name: it.type.name], url: it.url, node: it.node, enabled: it.enabled, check_period: it.checkPeriod] }
+		  monitors this.monitors.collect { [id: it.id, type: [id: it.type.id, name: it.type.name], url: it.url, node: it.node ?: '', enabled: it.enabled, check_period: it.checkPeriod] }
 
 		  active this.active
 		  archived this.archived

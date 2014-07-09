@@ -78,7 +78,7 @@ abstract class RoleDescriptor extends Descriptor {
 													 ],
     									  ]
     									}
-      error_url errorURL
+      error_url errorURL ?:''
       extensions extensions ?:''
     }
 
