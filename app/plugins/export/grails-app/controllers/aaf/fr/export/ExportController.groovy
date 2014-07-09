@@ -40,5 +40,14 @@ class ExportController {
         response.status = 400
         render([error: 'serviceprovider is unknown'] as JSON)
       }
+  }
+
+  def serviceproviders() {
+    def builder = new groovy.json.JsonBuilder()
+    builder { serviceproviders  SPSSODescriptor.list().collect { sp ->
+                            sp.structureAsJson()
+                          }
     }
+    render text: builder.toPrettyString(), contentType: "text/json"
+  }
 }
