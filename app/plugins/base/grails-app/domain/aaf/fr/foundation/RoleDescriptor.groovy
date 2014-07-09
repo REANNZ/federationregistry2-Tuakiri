@@ -7,16 +7,16 @@ package aaf.fr.foundation
  */
 abstract class RoleDescriptor extends Descriptor {
 	static auditable = true
-	
+
 	def cryptoService
-	
+
 	Organization organization
 	String errorURL
-	
+
 	String displayName
 	String description
 	String extensions
-	
+
 	boolean active
 	boolean archived = false
 	boolean approved = false
@@ -40,7 +40,7 @@ abstract class RoleDescriptor extends Descriptor {
 	static constraints = {
 		displayName(nullable:false, blank:false)
 		description(nullable:false, blank: false, maxSize:2000)
-		
+
 		organization(nullable: false)
 		extensions(nullable: true, maxSize:2000)
 		errorURL(nullable:true)
@@ -50,12 +50,38 @@ abstract class RoleDescriptor extends Descriptor {
 		dateCreated(nullable:true)
 		lastUpdated(nullable:true)
 	}
-	
+
 	public String toString() { "roledescriptor:[id:$id, displayName: $displayName]" }
-	
+
 	// RoleDescriptor is considered abstract but can't be marked as such due to GORM issues
 	// This method should be overlaoded by all subclasses
 	public boolean functioning() {
 		false
 	}
+
+	def structureAsJson() {
+    def json = new groovy.json.JsonBuilder()
+    json {
+    	protocol_support_enumerations protocolSupportEnumerations.collect{ [id: it.id, uri: it.uri]}
+    	key_descriptors keyDescriptors.collect {
+    										[  id: it.id, type: it.keyType, disabled: it.disabled,
+	    										 encryption_method: [ algorithm: it.encryptionMethod?.algorithm ?: '',
+	    										 										  key_size: it.encryptionMethod?.keySize ?: '',
+	    										 										  oae_params: it.encryptionMethod?.oaeParams ?: ''
+	    										 ],
+	    										 key_info: [ name: it.keyInfo.keyName ?: '',
+	    															   certificate:[ expires: it.keyInfo.certificate.expiryDate,
+																								    subject: it.keyInfo.certificate.subject,
+																								    issuer: it.keyInfo.certificate.issuer,
+																								    data: it.keyInfo.certificate.data
+																			  ]
+													 ],
+    									  ]
+    									}
+      error_url errorURL
+      extensions extensions ?:''
+    }
+
+    json.content
+  }
 }

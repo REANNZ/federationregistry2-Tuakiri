@@ -13,7 +13,7 @@ class ExportController {
         def builder = new groovy.json.JsonBuilder()
         builder { organization o.structureAsJson() }
 
-        render builder.toPrettyString()
+        render text: builder.toPrettyString(), contentType: "text/json"
       } else {
         response.status = 404
         render([error: 'organization is unknown'] as JSON)
@@ -26,6 +26,19 @@ class ExportController {
                               o.structureAsJson()
                             }
       }
-      render builder.toPrettyString()
+      render text: builder.toPrettyString(), contentType: "text/json"
+    }
+
+    def serviceprovider(long id) {
+      def sp = SPSSODescriptor.get(id)
+
+      if(sp){
+        def builder = new groovy.json.JsonBuilder()
+        builder { serviceprovider sp.structureAsJson() }
+        render text: builder.toPrettyString(), contentType: "text/json"
+      } else {
+        response.status = 400
+        render([error: 'serviceprovider is unknown'] as JSON)
+      }
     }
 }
