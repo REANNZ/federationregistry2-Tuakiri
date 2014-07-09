@@ -102,10 +102,11 @@ class SPSSODescriptor extends SSODescriptor {
 				attribute_consuming_services attributeConsumingServices.collect { [id: it.id, is_default: it.isDefault, approved: it.approved,
 																			names: it.serviceNames,
 																			descriptions: it.serviceDescriptions,
-																			attributes: it.requestedAttributes.collect { [id:it.base.id, name: it.base.name,
-																									reason: it.reasoning, is_required: it.isRequired,  approved: it.approved
+																			attributes: it.requestedAttributes.collect { [id:it.base.id, name: it.base.name, specification: it.base.specificationRequired,
+																									reason: it.reasoning, is_required: it.isRequired,  approved: it.approved,
+																									values: it.values.collect { [value: it.value, approved: it.approved] }
 																									] }
-																			]}
+																			] }
 				assertion_consumer_services assertionConsumerServices.collect { [id: it.id, location: it.location, binding: [id: it.binding.id, uri: it.binding.uri], functioning: it.functioning(), index: it.index, is_default: it.isDefault ]}
       	discovery_response_services discoveryResponseServices.collect { [id: it.id, location: it.location, binding: [id: it.binding.id, uri: it.binding.uri], functioning: it.functioning(), index: it.index, is_default: it.isDefault ]}
 				sso_descriptor super.structureAsJson()
