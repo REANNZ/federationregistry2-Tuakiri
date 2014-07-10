@@ -9,10 +9,10 @@ class ContactType  {
 	String name
 	String displayName
 	String description
-	
+
 	Date dateCreated
 	Date lastUpdated
-	
+
 	static constraints = {
 		name(nullable:false, displayName: false)
 		displayName(nullable:false, displayName: false)
@@ -20,6 +20,19 @@ class ContactType  {
 		dateCreated(nullable:true)
 		lastUpdated(nullable:true)
 	}
-	
+
 	public String toString() {	"contactType:[id:$id, name: $name]" }
+
+	def structureAsJson() {
+	  def json = new groovy.json.JsonBuilder()
+	  json {
+	    id id
+	    name name
+	    display_name displayName
+	    description description
+	    date_created dateCreated
+	    last_updated lastUpdated
+	  }
+	}
+
 }

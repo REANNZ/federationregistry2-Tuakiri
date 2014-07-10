@@ -70,6 +70,14 @@ class ExportController {
     exportList(Contact, 'contacts')
   }
 
+  def contacttype(long id) {
+    export(ContactType, id, 'contact_type')
+  }
+
+  def contacttypes() {
+    exportList(ContactType, 'contact_types')
+  }
+
   private def export(def clazz, long id, String json_name) {
     def obj = clazz.get(id)
 
