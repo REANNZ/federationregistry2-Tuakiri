@@ -78,6 +78,15 @@ class ExportController {
     exportList(ContactType, 'contact_types')
   }
 
+  def samluri(long id) {
+    export(SamlURI, id, 'saml_uri')
+  }
+
+  def samluris() {
+    exportList(SamlURI, 'saml_uris')
+  }
+
+
   private def export(def clazz, long id, String json_name) {
     def obj = clazz.get(id)
 
