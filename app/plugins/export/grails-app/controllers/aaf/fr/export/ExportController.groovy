@@ -86,6 +86,13 @@ class ExportController {
     exportList(SamlURI, 'saml_uris')
   }
 
+  def monitortype(long id) {
+    export(MonitorType, id, 'monitor_types')
+  }
+
+  def monitortypes() {
+    exportList(MonitorType, 'monitor_types')
+  }
 
   private def export(def clazz, long id, String json_name) {
     def obj = clazz.get(id)
