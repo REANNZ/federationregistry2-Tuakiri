@@ -95,7 +95,10 @@ class SPSSODescriptor extends SSODescriptor {
 		  last_updated this.lastUpdated
 		  administrators adminRole?.subjects.collect { [id: it.id, principal: it.sharedToken] }
 			saml {
-				entity entityDescriptor.entityID
+				entity {
+					id entityDescriptor.id
+					entity_id entityDescriptor.entityID
+				}
 				authnrequests_signed authnRequestsSigned
 				assertions_signed wantAssertionsSigned
 				always_render_attributes_in_filter forceAttributesInFilter

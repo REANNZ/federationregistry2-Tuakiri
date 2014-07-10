@@ -100,7 +100,10 @@ class IDPSSODescriptor extends SSODescriptor  {
 		  last_updated this.lastUpdated
 		  administrators adminRole?.subjects.collect { [id: it.id, principal: it.sharedToken] }
 			saml {
-				entity entityDescriptor.entityID
+				entity {
+					id entityDescriptor.id
+					entity_id entityDescriptor.entityID
+				}
 				attribute_authority_descriptor collaborator?.id
 				scope scope
 				authnrequests_signed wantAuthnRequestsSigned

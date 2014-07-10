@@ -91,6 +91,7 @@ class Organization  {	// Also called a participant in AAF land
 	def structureAsJson() {
 		def adminRole = Role.findByName("organization-${this.id}-administrators")
 
+		def entityDescriptors = EntityDescriptor.findAllWhere(organization: this)
 		def identityProviders = IDPSSODescriptor.findAllWhere(organization: this)
 		def serviceProviders = SPSSODescriptor.findAllWhere(organization: this)
 		def attributeAuthorities = AttributeAuthorityDescriptor.findAllWhere(organization: this, collaborator: null)
@@ -117,9 +118,10 @@ class Organization  {	// Also called a participant in AAF land
 		  sponsors this.sponsors.collect { it.id }
 		  affiliates this.affiliates.collect { it.id }
 		  saml {
-		    identity_providers identityProviders.collect { [id: it.id, entity: it.entityDescriptor.entityID, functioning: it.functioning()] }
-		    service_providers serviceProviders.collect { [id: it.id, entity: it.entityDescriptor.entityID, functioning: it.functioning()] }
-		    attribute_authorities attributeAuthorities.collect { [id: it.id, entity: it.entityDescriptor.entityID, functioning: it.functioning()] }
+		  	entity_descriptors entityDescriptors.collect { [id: it.id, entity_id: it.entityID, functioning: it.functioning()]}
+		    identity_providers identityProviders.collect { [id: it.id, entity: [id: it.entityDescriptor.id, entity_id: it.entityDescriptor.entityID], functioning: it.functioning()] }
+		    service_providers serviceProviders.collect { [id: it.id, entity: [id: it.entityDescriptor.id, entity_id: it.entityDescriptor.entityID], functioning: it.functioning()] }
+		    attribute_authorities attributeAuthorities.collect { [id: it.id, entity: [id: it.entityDescriptor.id, entity_id: it.entityDescriptor.entityID], functioning: it.functioning()] }
 		    extensions this.extensions ?: ''
 		  }
 		  date_created this.dateCreated
