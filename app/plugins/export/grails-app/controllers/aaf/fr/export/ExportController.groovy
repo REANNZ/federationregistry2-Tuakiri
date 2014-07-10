@@ -29,12 +29,34 @@ class ExportController {
     render text: builder.toPrettyString(), contentType: "text/json"
   }
 
+  def entitydescriptor(long id) {
+    def ed = EntityDescriptor.get(id)
+
+    if(ed){
+      def builder = new groovy.json.JsonBuilder()
+      builder { entity_descriptor ed.structureAsJson() }
+      render text: builder.toPrettyString(), contentType: "text/json"
+    } else {
+      response.status = 400
+      render([error: 'entitydescriptor is unknown'] as JSON)
+    }
+  }
+
+  def entitydescriptors() {
+    def builder= new groovy.json.JsonBuilder()
+    builder { entity_descriptors EntityDescriptor.list().collect { ed ->
+                            ed.structureAsJson()
+                          }
+    }
+    render text: builder.toPrettyString(), contentType: "text/json"
+  }
+
   def serviceprovider(long id) {
     def sp = SPSSODescriptor.get(id)
 
     if(sp){
       def builder = new groovy.json.JsonBuilder()
-      builder { serviceprovider sp.structureAsJson() }
+      builder { service_provider sp.structureAsJson() }
       render text: builder.toPrettyString(), contentType: "text/json"
     } else {
       response.status = 400
@@ -44,7 +66,7 @@ class ExportController {
 
   def serviceproviders() {
     def builder = new groovy.json.JsonBuilder()
-    builder { serviceproviders  SPSSODescriptor.list().collect { sp ->
+    builder { service_providers  SPSSODescriptor.list().collect { sp ->
                             sp.structureAsJson()
                           }
     }
@@ -56,7 +78,7 @@ class ExportController {
 
     if(idp){
       def builder = new groovy.json.JsonBuilder()
-      builder { identityprovider idp.structureAsJson() }
+      builder { identity_provider idp.structureAsJson() }
       render text: builder.toPrettyString(), contentType: "text/json"
     } else {
       response.status = 400
@@ -66,7 +88,7 @@ class ExportController {
 
   def identityproviders() {
     def builder = new groovy.json.JsonBuilder()
-    builder { identityproviders  IDPSSODescriptor.list().collect {idp ->
+    builder { identity_providers  IDPSSODescriptor.list().collect {idp ->
                            idp.structureAsJson()
                           }
     }
@@ -78,7 +100,7 @@ class ExportController {
 
     if(aa){
       def builder = new groovy.json.JsonBuilder()
-      builder { attributeauthority aa.structureAsJson() }
+      builder { attribute_authority aa.structureAsJson() }
       render text: builder.toPrettyString(), contentType: "text/json"
     } else {
       response.status = 400
@@ -88,7 +110,7 @@ class ExportController {
 
   def attributeauthorities() {
     def builder = new groovy.json.JsonBuilder()
-    builder { attributeauthorities AttributeAuthorityDescriptor.list().collect {aa ->
+    builder { attribute_authorities AttributeAuthorityDescriptor.list().collect {aa ->
                            aa.structureAsJson()
                           }
     }
