@@ -7,112 +7,61 @@ import groovy.json.JsonSlurper
 
 class ExportController {
   def organization(long id) {
-    def o = Organization.get(id)
-
-    if(o) {
-      def builder = new groovy.json.JsonBuilder()
-      builder { organization o.structureAsJson() }
-
-      render text: builder.toPrettyString(), contentType: "text/json"
-    } else {
-      response.status = 404
-      render([error: 'organization is unknown'] as JSON)
-    }
+    export(Organization, id, 'organization')
   }
 
   def organizations() {
-    def builder = new groovy.json.JsonBuilder()
-    builder { organizations  Organization.list().collect { o ->
-                            o.structureAsJson()
-                          }
-    }
-    render text: builder.toPrettyString(), contentType: "text/json"
+    exportList(Organization, 'organizations')
   }
 
   def entitydescriptor(long id) {
-    def ed = EntityDescriptor.get(id)
-
-    if(ed){
-      def builder = new groovy.json.JsonBuilder()
-      builder { entity_descriptor ed.structureAsJson() }
-      render text: builder.toPrettyString(), contentType: "text/json"
-    } else {
-      response.status = 400
-      render([error: 'entitydescriptor is unknown'] as JSON)
-    }
+    export(EntityDescriptor, id, 'entity_descriptor')
   }
 
   def entitydescriptors() {
-    def builder= new groovy.json.JsonBuilder()
-    builder { entity_descriptors EntityDescriptor.list().collect { ed ->
-                            ed.structureAsJson()
-                          }
-    }
-    render text: builder.toPrettyString(), contentType: "text/json"
+    exportList(EntityDescriptor, 'entity_descriptors')
   }
 
   def serviceprovider(long id) {
-    def sp = SPSSODescriptor.get(id)
-
-    if(sp){
-      def builder = new groovy.json.JsonBuilder()
-      builder { service_provider sp.structureAsJson() }
-      render text: builder.toPrettyString(), contentType: "text/json"
-    } else {
-      response.status = 400
-      render([error: 'serviceprovider is unknown'] as JSON)
-    }
+    export(SPSSODescriptor, id, 'service_provider')
   }
 
   def serviceproviders() {
-    def builder = new groovy.json.JsonBuilder()
-    builder { service_providers  SPSSODescriptor.list().collect { sp ->
-                            sp.structureAsJson()
-                          }
-    }
-    render text: builder.toPrettyString(), contentType: "text/json"
+    exportList(SPSSODescriptor, 'service_providers')
   }
 
   def identityprovider(long id) {
-    def idp = IDPSSODescriptor.get(id)
-
-    if(idp){
-      def builder = new groovy.json.JsonBuilder()
-      builder { identity_provider idp.structureAsJson() }
-      render text: builder.toPrettyString(), contentType: "text/json"
-    } else {
-      response.status = 400
-      render([error: 'identityprovider is unknown'] as JSON)
-    }
+    export(IDPSSODescriptor, id, 'identity_provider')
   }
 
   def identityproviders() {
-    def builder = new groovy.json.JsonBuilder()
-    builder { identity_providers  IDPSSODescriptor.list().collect {idp ->
-                           idp.structureAsJson()
-                          }
-    }
-    render text: builder.toPrettyString(), contentType: "text/json"
+    exportList(IDPSSODescriptor, 'identity_providers')
   }
 
   def attributeauthority(long id) {
-    def aa = AttributeAuthorityDescriptor.get(id)
-
-    if(aa){
-      def builder = new groovy.json.JsonBuilder()
-      builder { attribute_authority aa.structureAsJson() }
-      render text: builder.toPrettyString(), contentType: "text/json"
-    } else {
-      response.status = 400
-      render([error: 'attributeauthority is unknown'] as JSON)
-    }
+    export(AttributeAuthorityDescriptor, id, 'attribute_authority')
   }
 
   def attributeauthorities() {
+    exportList(AttributeAuthorityDescriptor, 'attribute_authorities')
+  }
+
+  private def export(def clazz, long id, String json_name) {
+    def obj = clazz.get(id)
+
+    if(obj){
+      def builder = new groovy.json.JsonBuilder()
+      builder { "${json_name}" obj.structureAsJson() }
+      render text: builder.toPrettyString(), contentType: "text/json"
+    } else {
+      response.status = 400
+      render([error: "${clazz.name} instance is unavailable"] as JSON)
+    }
+  }
+
+  private def exportList(def clazz, String json_name) {
     def builder = new groovy.json.JsonBuilder()
-    builder { attribute_authorities AttributeAuthorityDescriptor.list().collect {aa ->
-                           aa.structureAsJson()
-                          }
+    builder { "${json_name}" clazz.list().collect { it.structureAsJson() }
     }
     render text: builder.toPrettyString(), contentType: "text/json"
   }
