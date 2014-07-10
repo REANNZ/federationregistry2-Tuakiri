@@ -101,6 +101,15 @@ class ExportController {
   def organizationtypes() {
     exportList(OrganizationType, 'organization_types')
   }
+
+  def subject(long id) {
+    export(aaf.fr.identity.Subject, id, 'subject')
+  }
+
+  def subjects() {
+    exportList(aaf.fr.identity.Subject, 'subjects')
+  }
+
   private def export(def clazz, long id, String json_name) {
     def obj = clazz.get(id)
 
