@@ -98,7 +98,7 @@ class Organization  {	// Also called a participant in AAF land
 
 		def json = new groovy.json.JsonBuilder()
 		json {
-		  fr_id this.id
+		  id this.id
 		  domain this.name
 		  display_name this.displayName
 		  description this.description ?: ''

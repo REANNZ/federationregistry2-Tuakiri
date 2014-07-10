@@ -82,7 +82,7 @@ class IDPSSODescriptor extends SSODescriptor  {
 
 		def json = new groovy.json.JsonBuilder()
 		json {
-		  fr_id this.id
+		  id this.id
 		  display_name this.displayName
 		  description this.description ?: ''
 		  organization { id this.organization.id
