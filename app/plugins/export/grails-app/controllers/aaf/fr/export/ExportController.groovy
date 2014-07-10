@@ -72,4 +72,26 @@ class ExportController {
     }
     render text: builder.toPrettyString(), contentType: "text/json"
   }
+
+  def attributeauthority(long id) {
+    def aa = AttributeAuthorityDescriptor.get(id)
+
+    if(aa){
+      def builder = new groovy.json.JsonBuilder()
+      builder { attributeauthority aa.structureAsJson() }
+      render text: builder.toPrettyString(), contentType: "text/json"
+    } else {
+      response.status = 400
+      render([error: 'attributeauthority is unknown'] as JSON)
+    }
+  }
+
+  def attributeauthorities() {
+    def builder = new groovy.json.JsonBuilder()
+    builder { attributeauthorities AttributeAuthorityDescriptor.list().collect {aa ->
+                           aa.structureAsJson()
+                          }
+    }
+    render text: builder.toPrettyString(), contentType: "text/json"
+  }
 }
