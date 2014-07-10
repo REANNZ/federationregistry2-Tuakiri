@@ -87,13 +87,20 @@ class ExportController {
   }
 
   def monitortype(long id) {
-    export(MonitorType, id, 'monitor_types')
+    export(MonitorType, id, 'monitor_type')
   }
 
   def monitortypes() {
     exportList(MonitorType, 'monitor_types')
   }
 
+  def organizationtype(long id) {
+    export(OrganizationType, id, 'organization_type')
+  }
+
+  def organizationtypes() {
+    exportList(OrganizationType, 'organization_types')
+  }
   private def export(def clazz, long id, String json_name) {
     def obj = clazz.get(id)
 
