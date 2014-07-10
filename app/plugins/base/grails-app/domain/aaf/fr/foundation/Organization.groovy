@@ -94,7 +94,7 @@ class Organization  {	// Also called a participant in AAF land
 		def entityDescriptors = EntityDescriptor.findAllWhere(organization: this)
 		def identityProviders = IDPSSODescriptor.findAllWhere(organization: this)
 		def serviceProviders = SPSSODescriptor.findAllWhere(organization: this)
-		def attributeAuthorities = AttributeAuthorityDescriptor.findAllWhere(organization: this, collaborator: null)
+		def attributeAuthorities = AttributeAuthorityDescriptor.findAllWhere(organization: this)
 
 		def json = new groovy.json.JsonBuilder()
 		json {
