@@ -62,6 +62,14 @@ class ExportController {
     exportList(AttributeCategory, 'attribute_categories')
   }
 
+  def contact(long id) {
+    export(Contact, id, 'contact')
+  }
+
+  def contacts() {
+    exportList(Contact, 'contacts')
+  }
+
   private def export(def clazz, long id, String json_name) {
     def obj = clazz.get(id)
 
