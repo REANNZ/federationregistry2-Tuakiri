@@ -5,9 +5,9 @@ import org.apache.commons.lang.builder.HashCodeBuilder
 
 class AttributeCategory {
 	static auditable = true
-	
+
 	String name
-	
+
 	Date dateCreated
 	Date lastUpdated
 
@@ -23,7 +23,7 @@ class AttributeCategory {
     if( this.is(obj) ) return true
     if ( obj == null ) return false
     if ( !obj.instanceOf(AttributeCategory) ) return false
-    
+
     AttributeCategory rhs = (AttributeCategory) obj;
     return new EqualsBuilder()
       .append(name, rhs.name)
@@ -35,5 +35,15 @@ class AttributeCategory {
     return new HashCodeBuilder(33, 123).
     append(name).
     toHashCode()
+  }
+
+  def structureAsJson() {
+    def json = new groovy.json.JsonBuilder()
+    json {
+      id id
+      name name
+      date_created dateCreated
+      last_updated lastUpdated
+    }
   }
 }
