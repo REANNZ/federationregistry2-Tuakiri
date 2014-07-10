@@ -46,6 +46,14 @@ class ExportController {
     exportList(AttributeAuthorityDescriptor, 'attribute_authorities')
   }
 
+  def attribute(long id) {
+    export(AttributeBase, id, 'attribute')
+  }
+
+  def attributes() {
+    exportList(AttributeBase, 'attributes')
+  }
+
   private def export(def clazz, long id, String json_name) {
     def obj = clazz.get(id)
 
