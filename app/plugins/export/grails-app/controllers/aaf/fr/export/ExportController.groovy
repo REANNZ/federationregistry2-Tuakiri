@@ -6,6 +6,11 @@ import aaf.fr.foundation.*
 import groovy.json.JsonSlurper
 
 class ExportController {
+  final def authorizeRegex = ~/AAF-FR-EXPORT service="([^"]+)", key="([^"]*)?"/
+
+  def grailsApplication
+  def beforeInterceptor = [action: this.&auth]
+
   def organization(long id) {
     export(Organization, id, 'organization')
   }
@@ -108,6 +113,37 @@ class ExportController {
 
   def subjects() {
     exportList(aaf.fr.identity.Subject, 'subjects')
+  }
+
+  private auth() {
+    if (!grailsApplication.config.aaf.fr.export.enabled) {
+      log.error "[Requester: ${request.remoteHost}] - Attempt to access export functionality when not enabled"
+      response.status = 404
+      return false
+    }
+
+    // Authorize header in format:
+    // Authorize: AAF-FR-EXPORT service="...", key="..."
+    def authorize = request.getHeader('Authorization')
+    if(!authorize || !(authorize ==~ authorizeRegex)) {
+      response.status = 403
+      render([error: "Invalid Authorization token"] as JSON)
+      log.error "[Requester: ${request.remoteHost}] - Authentication halted as Authorize header provides invalid data for AAF-FR-EXPORT scheme."
+      return false
+    }
+
+    def authorizeTokens = authorize =~ authorizeRegex
+    def service = authorizeTokens[0][1]
+    def key = authorizeTokens[0][2]
+
+    if(key != grailsApplication.config.aaf.fr.export.key) {
+      response.status = 403
+      render([error: "Invalid Authorization header"] as JSON)
+      log.error "[Requester: ${request.remoteHost}] - Authentication halted as Authorize header provided incorrect key."
+      return false
+    }
+
+    log.info "[Requester: ${request.remoteHost}] - authentication approved for $service to access export functionality"
   }
 
   private def export(def clazz, long id, String json_name) {
