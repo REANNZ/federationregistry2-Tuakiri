@@ -152,7 +152,7 @@ class ExportController {
     if(obj){
       def builder = new groovy.json.JsonBuilder()
       builder { "${json_name}" obj.structureAsJson() }
-      render text: builder.toPrettyString(), contentType: "text/json"
+      render text: builder.toString(), contentType: "text/json"
     } else {
       response.status = 400
       render([error: "${clazz.name} instance is unavailable"] as JSON)
@@ -163,6 +163,6 @@ class ExportController {
     def builder = new groovy.json.JsonBuilder()
     builder { "${json_name}" clazz.list().collect { it.structureAsJson() }
     }
-    render text: builder.toPrettyString(), contentType: "text/json"
+    render text: builder.toString(), contentType: "text/json"
   }
 }
