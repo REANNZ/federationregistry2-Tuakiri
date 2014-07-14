@@ -30,8 +30,8 @@ class ContactType  {
 	    name name
 	    display_name displayName
 	    description description
-	    date_created dateCreated
-	    last_updated lastUpdated
+	    created_at dateCreated
+	    updated_at lastUpdated
 	  }
 	}
 

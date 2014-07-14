@@ -76,8 +76,8 @@ class AttributeBase  {
                   name category.name }
       admin_restricted adminRestricted
       specification_required specificationRequired
-      date_created dateCreated
-      last_updated lastUpdated
+      created_at dateCreated
+      updated_at lastUpdated
     }
   }
 }

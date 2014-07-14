@@ -103,8 +103,8 @@ class EntityDescriptor extends Descriptor  {
 		  archived archived
 		  approved approved
 		  functioning functioning()
-		  date_created this.dateCreated
-		  last_updated this.lastUpdated
+		  created_at dateCreated
+		  updated_at lastUpdated
 		  saml {
 		  	idp_sso_descriptor_only this.holdsIDPOnly()
 		  	sp_sso_descriptor_only this.holdsSPOnly()

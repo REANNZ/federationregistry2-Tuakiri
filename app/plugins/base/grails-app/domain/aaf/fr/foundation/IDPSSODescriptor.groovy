@@ -96,8 +96,8 @@ class IDPSSODescriptor extends SSODescriptor  {
 		  approved this.approved
 		  functioning this.functioning()
 		  utilises_attribute_filters autoAcceptServices
-		  date_created this.dateCreated
-		  last_updated this.lastUpdated
+		  created_at dateCreated
+		  updated_at lastUpdated
 		  administrators adminRole?.subjects.collect { [id: it.id, principal: it.sharedToken] }
 			saml {
 				entity {

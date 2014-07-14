@@ -61,8 +61,8 @@ class Contact {
 	    home_phone homePhone ?: ''
 	    mobile_phone mobilePhone ?: ''
 
-	    date_created dateCreated
-	    last_updated lastUpdated
+	    created_at dateCreated
+	    updated_at lastUpdated
 	  }
 	}
 

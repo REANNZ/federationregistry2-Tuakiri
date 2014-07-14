@@ -42,8 +42,8 @@ class AttributeCategory {
     json {
       id id
       name name
-      date_created dateCreated
-      last_updated lastUpdated
+      created_at dateCreated
+      updated_at lastUpdated
     }
   }
 }

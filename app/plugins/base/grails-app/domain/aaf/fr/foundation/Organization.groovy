@@ -124,8 +124,8 @@ class Organization  {	// Also called a participant in AAF land
 		    attribute_authorities attributeAuthorities.collect { [id: it.id, entity: [id: it.entityDescriptor.id, entity_id: it.entityDescriptor.entityID], functioning: it.functioning()] }
 		    extensions this.extensions ?: ''
 		  }
-		  date_created this.dateCreated
-		  last_updated this.lastUpdated
+		  created_at dateCreated
+		  updated_at lastUpdated
 		  administrators adminRole?.subjects.collect { [id: it.id, principal: it.sharedToken] }
 		}
 		json.content

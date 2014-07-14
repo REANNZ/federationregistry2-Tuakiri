@@ -91,8 +91,8 @@ class SPSSODescriptor extends SSODescriptor {
 		  approved this.approved
 		  functioning this.functioning()
 		  reporting this.reporting
-		  date_created this.dateCreated
-		  last_updated this.lastUpdated
+		  created_at dateCreated
+		  updated_at lastUpdated
 		  administrators adminRole?.subjects.collect { [id: it.id, principal: it.sharedToken] }
 			saml {
 				entity {

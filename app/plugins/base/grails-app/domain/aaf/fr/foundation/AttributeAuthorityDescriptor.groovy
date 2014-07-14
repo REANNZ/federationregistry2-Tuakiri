@@ -59,8 +59,8 @@ class AttributeAuthorityDescriptor extends RoleDescriptor {
 			archived this.archived
 			approved this.approved
 			functioning this.functioning()
-			date_created this.dateCreated
-			last_updated this.lastUpdated
+			created_at dateCreated
+			updated_at lastUpdated
 			administrators adminRole?.subjects.collect { [id: it.id, principal: it.sharedToken] }
 
 			saml {
