@@ -68,10 +68,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor {
 					id entityDescriptor.id
 					entity_id entityDescriptor.entityID
 				}
-				if(collaborator) {
-					idp_sso_descriptor collaborator?.id
-					extract_metadata_from_idp_sso_descriptor true
-					} else {
+				if(collaborator?.attributeAuthorityOnly) {
 						scope scope
 						attribute_services attributeServices.collect { [id: it.id, location: it.location, binding: [id: it.binding.id, uri: it.binding.uri], functioning: it.functioning() ]}
 						assertion_id_request_services assertionIDRequestServices.collect { [id: it.id, location: it.location, binding: [id: it.binding.id, uri: it.binding.uri], functioning: it.functioning() ]}
@@ -81,6 +78,9 @@ class AttributeAuthorityDescriptor extends RoleDescriptor {
 																						 values: it.values.collect { [value: it.value, approved: it.approved] }
 																					] }
 						sso_descriptor super.structureAsJson()
+					} else {
+						idp_sso_descriptor collaborator?.id
+						extract_metadata_from_idp_sso_descriptor true
 					}
 			}
 		}
