@@ -20,14 +20,14 @@ This sub-project of FR2 will help deployers get up and running with both a WAR b
 ### Requirements
 1. A **NEW** CentOS 6.5 based VM. This can be via Vagrant/Virtualbox or any VM provider you may have in your environment.
 1. A known IP address for the machine which can accept HTTP and SSH connections (Naturally this can be local to your VirtualBox environment but it **must not** be the default NAT IP that VirtualBox provides)
-1. The IP must be resolveable to some **<dns-entry>**. It is fine if this only 'resolves' on your local machine via */etc/hosts* or DNSMasq which is my prefered poison if you don't have wider DNS access. Something like *fr.dev* is suitable if you are only running locally. Where you see **<dns-entry>** below and in configuration files replace it with your actual server address.
-1. The ability to SSH to the VM as the ROOT user *unimpeded*. To make this as painless as possible I recommend using your default SSH public key for this purpose on the remote VM. Naturally you can do more advanced things in your local ~/.ssh/config file. The point is running "ssh root@<dns-entry>" should log you into the VM as root without restrictions or **prompts**.
+1. The IP must be resolveable to some **{dns-entry}**. It is fine if this only 'resolves' on your local machine via */etc/hosts* or DNSMasq which is my prefered poison if you don't have wider DNS access. Something like *fr.dev* is suitable if you are only running locally. Where you see **{dns-entry}** below and in configuration files replace it with your actual server address.
+1. The ability to SSH to the VM as the ROOT user *unimpeded*. To make this as painless as possible I recommend using your default SSH public key for this purpose on the remote VM. Naturally you can do more advanced things in your local ~/.ssh/config file. The point is running "ssh root@{dns-entry}" should log you into the VM as root without restrictions or **prompts**.
 1. Ansible! via the [Ansible Install](http://docs.ansible.com/intro_installation.html) guide. We run this directly on our OSX machines but you can run it from anywhere you care to install it (and can SSH to your FR machine as described above).
 
    Once installed you should be able to run the following command and get a similar result:
    
-        ansible <dns-entry> -m ping
-		<dns-entry> | success >> {
+        ansible {dns-entry} -m ping
+		{dns-entry} | success >> {
 		    "changed": false, 
 		    "ping": "pong"
 		}
@@ -52,10 +52,10 @@ These should complete without error. Append -vvvv to see full debug output if yo
 
 Once the above complete:
 
-3. Access http://<dns-entry>/federationregistry in your web browser. Click Login and choose 'Fred Bloggs'
+3. Access http://{dns-entry}/federationregistry in your web browser. Click Login and choose 'Fred Bloggs'
 4. You should now be within the FR dashboard and you can view some basic subscriber information.
 5. Get Administrative access for 'Fred Bloggs'
-	1. execute `ssh root@<dns-entry>`
+	1. execute `ssh root@{dns-entry}`
 	2. in the ssh session execute `mysql` 
 	3. run the mysql command 'use federationregistry_exampledb; insert into role_subjects (role_id, subject_base_id) values (1, 2);
 	4. Refresh your browser, 'Fred Bloggs' is now a super administrator and can assign those rights to others via the web interface.

@@ -6,9 +6,9 @@ federationregistry:
   ## service_hostname: fr.example.edu
   ## federation: example.edu
 
-  service_ip: <ip-address>
-  service_hostname: <dns-entry>
-  federation: <federation-identifier-for-metadata-entities-descriptor>
+  service_ip: {ip-address}
+  service_hostname: {dns-entry}
+  federation: {federation-identifier-for-metadata-entities-descriptor}
 
   ### EDIT ABOVE FOR YOUR ENVIRONMENT ###
 
