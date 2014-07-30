@@ -1,0 +1,47 @@
+---
+federationregistry:
+  ### EDIT BELOW FOR YOUR ENVIRONMENT ###
+  ## e.g.
+  ## service_ip: 192.168.1.1
+  ## service_hostname: fr.example.edu
+  ## federation: example.edu
+
+  service_ip: <ip-address>
+  service_hostname: <dns-entry>
+  federation: <federation-identifier-for-metadata-entities-descriptor>
+
+  ### EDIT ABOVE FOR YOUR ENVIRONMENT ###
+
+  version: 2.4.0
+  grails_version: 2.2.4
+  mail_from: noreply-test@example.com
+  tomcat:
+    http_port: 8080
+    ajp_port: 8009
+    control_port: 8005
+    rmi_registry_port: 9010
+    rmi_server_port: 9011
+  db:
+    name: federationregistry_exampledb
+    node: localhost
+    client_ips: 127.0.0.1
+
+apache:
+  extra_modules:
+  - mod_proxy
+
+tomcat:
+  major: 7
+  version: 7.0.42
+  sha256sum: c163f762d7180fc259cc0d8d96e6e05a53b7ffb0120cb2086d6dfadd991c36df
+  jmx_remote_sha256sum: 4306346ade3a37cbd2917bbea977ed99fb373e0fdb6c79b4c48be3d1441b0363
+  mariadb:
+    version: 1.1.5
+    sha256sum: 3bf9a4180ee3991da2cf314673875b4e0a2097f3fb408f2b1edf51a31632d107
+
+gradle:
+  version: 1.7
+  sha256sum: d22a10e39a9594a3d098690af73db1390c83c72963a2a63e8b03149f91e8c406
+  binary: /opt/fr-shared/gradle/current/bin/gradle
+
+federation_bootstrap: true

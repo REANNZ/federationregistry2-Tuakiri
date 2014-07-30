@@ -1,0 +1,467 @@
+import org.apache.shiro.subject.Subject
+import org.apache.shiro.util.ThreadContext
+import org.apache.shiro.SecurityUtils
+import grails.plugins.federatedgrails.*
+import aaf.fr.app.*
+import aaf.fr.workflow.*
+import aaf.fr.foundation.*
+import aaf.fr.identity.*
+
+/*
+Adapted from federationregstry/scripts/setup/* and instructions at
+http://wiki.aaf.edu.au/federationregistry2/getstarted
+
+As at 2013-09-30 and commit e488b4e7
+
+This is intended for development purposes within AAF, so little to no
+customisation will ever be required.
+*/
+
+def getFederationName() { '{{ federationregistry.federation }}' }
+
+def step1() {
+/*
+Bootstrap - Step 1
+
+This step should be performed by all federations deploying FR
+*/
+
+roleService = ctx.getBean("roleService")
+permissionService = ctx.getBean("permissionService")
+
+// Create federation-administrators role, used in workflows etc
+def adminRole = roleService.createRole("federation-administrators", "Role representing federation level administrators who can make decisions onbehalf of the entire federation, granted global FR access", false)
+
+// Grant administrative global access permission
+Permission adminPermission = new Permission(target:'*')
+adminPermission.managed = true
+adminPermission.type = Permission.adminPerm
+
+permissionService.createPermission(adminPermission, adminRole)
+
+// Create federation-reporting role, used to grant full reporting access to non fr wide admins
+def reportingRole = roleService.createRole("federation-reporting", "Access to federation wide reports for executive, management etc.", false)
+
+// Grant global reports access permission
+Permission reportingAdminPermission = new Permission(target:'federation:management:reporting')
+reportingAdminPermission.managed = true
+reportingAdminPermission.type = Permission.adminPerm
+
+permissionService.createPermission(reportingAdminPermission, reportingRole)
+
+// Create contactmanagement-reporting role, used to grant full contact management access to non fr wide admins
+def contactManagementRole = roleService.createRole("federation-contactmanagement", "Access to manage contacts for all IdP and SP", false)
+
+// Grant global reports access permission
+Permission contactAdminPermission = new Permission(target:'federation:management:contacts')
+contactAdminPermission.managed = true
+contactAdminPermission.type = Permission.adminPerm
+
+permissionService.createPermission(contactAdminPermission, contactManagementRole)
+
+// Populate default administrative account
+def subject = new aaf.fr.identity.Subject(principal:'internaladministrator', cn:'internal administrator', email:'internaladministrator@not.valid')
+subject.save(flush: true)
+if(subject.hasErrors()) {
+  subject.errors.each { println it }
+  return false
+}
+
+// Overall SAML2 protocol support, all SAML 2.0 compliant RoleDescriptors need this.
+def saml2Namespace = new SamlURI(type:SamlURIType.ProtocolSupport, uri:'urn:oasis:names:tc:SAML:2.0:protocol').save()
+def saml1Namespace = new SamlURI(type:SamlURIType.ProtocolSupport, uri:'urn:oasis:names:tc:SAML:1.1:protocol').save()
+def shibboleth1Namespace = new SamlURI(type:SamlURIType.ProtocolSupport, uri:'urn:mace:shibboleth:1.0').save()
+
+// Bindings
+def httpRedirect = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect', description:'').save()
+def httpPost = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST', description:'').save()
+def httpArtifact = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact', description:'').save()
+def httpPostSimple = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST-SimpleSign', description:'').save()
+def paos = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:PAOS', description:'').save()
+def soap = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:SOAP', description:'').save()
+def shibAuthn = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:mace:shibboleth:1.0:profiles:AuthnRequest', description:'').save()
+def httpPost1 = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:1.0:profiles:browser-post', description:'').save()
+def httpArtifact1 = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:1.0:profiles:artifact-01', description:'').save()
+def soap1 = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:1.0:bindings:SOAP-binding', description:'').save()
+def drs = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol', description:'').save()
+
+// NameIDFormats
+def unspec = new SamlURI(type:SamlURIType.NameIdentifierFormat, uri:'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified', description:'The interpretation of the content of the element is left to individual implementations.').save()
+def email = new SamlURI(type:SamlURIType.NameIdentifierFormat, uri:'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress', description:'Indicates that the content of the element is in the form of an email address, specifically addr-spec as defined in IETF RFC 2822').save()
+def x509 = new SamlURI(type:SamlURIType.NameIdentifierFormat, uri:'urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName', description:'Indicates that the content of the element is in the form specified for the contents of the <ds:X509SubjectName> element in the XML Signature Recommendation [XMLSig].').save()
+def windows = new SamlURI(type:SamlURIType.NameIdentifierFormat, uri:'urn:oasis:names:tc:SAML:1.1:nameid-format:WindowsDomainQualifiedName', description:'Indicates that the content of the element is a Windows domain qualified name. A Windows domain qualified user name is a string of the form "DomainName\\UserName"').save()
+def kerberos = new SamlURI(type:SamlURIType.NameIdentifierFormat, uri:'urn:oasis:names:tc:SAML:2.0:nameid-format:kerberos', description:'Indicates that the content of the element is in the form of a Kerberos principal name using the format name[/instance]@REALM').save()
+def entity = new SamlURI(type:SamlURIType.NameIdentifierFormat, uri:'urn:oasis:names:tc:SAML:2.0:nameid-format:entity', description:'Indicates that the content of the element is the identifier of an entity that provides SAML-based services or is a participant in SAML profiles.').save()
+def pers = new SamlURI(type:SamlURIType.NameIdentifierFormat, uri:'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', description:'Indicates that the content of the element is a persistent opaque identifier for a principal that is specific to an identity provider and a service provider or affiliation of service providers.').save()
+def trans = new SamlURI(type:SamlURIType.NameIdentifierFormat, uri:'urn:oasis:names:tc:SAML:2.0:nameid-format:transient', description:'Indicates that the content of the element is an identifier with transient semantics and SHOULD be treated as an opaque and temporary value by the relying party.').save()
+def shibNameID = new SamlURI(type:SamlURIType.NameIdentifierFormat, uri:'urn:mace:shibboleth:1.0:nameIdentifier', description:'').save()
+
+// AttributeNameFormats
+def attrUnspec = new SamlURI(type:SamlURIType.AttributeNameFormat, uri:'urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified', description:'').save()
+def attrUri = new SamlURI(type:SamlURIType.AttributeNameFormat, uri:'urn:oasis:names:tc:SAML:2.0:attrname-format:uri', description:'').save()
+def attrBasic = new SamlURI(type:SamlURIType.AttributeNameFormat, uri:'urn:oasis:names:tc:SAML:2.0:attrname-format:basic', description:'').save()
+
+println "Completed creating base FR environment"
+
+}
+
+def step2() {
+/*
+Bootstrap - Step 2
+
+For federations other than the AAF use this as a starting point for initial FR population.
+You'll probably want to customise a lot of the below.
+*/
+
+// Entities Descriptor
+def eds = new EntitiesDescriptor(name:federationName)
+def savedEDS = eds.save()
+if(!savedEDS) {
+  eds.errors.each { println it }
+  return false
+}
+
+// AAF supported organisation types
+def federationOrgTypes = [
+  [name:'university', displayName:'Australian University', description:'Australian University', discoveryServiceCategory:true],
+  [name:'hospital', displayName:'Hospital', description:'Hospital', discoveryServiceCategory:true],
+  [name:'library', displayName:'Library', description:'Library', discoveryServiceCategory:true],
+  [name:'vho', displayName:'VHO', description:'Virtual Home Organization', discoveryServiceCategory:true],
+  [name:'others', displayName:'Others', description:'Others', discoveryServiceCategory:true],
+  [name:'eresearch', displayName:'eResearch', description:'eResearch Organisations', discoveryServiceCategory:true],
+  [name:'nzuniversity', displayName:'New Zealan Uuniversity', description:'New Zealand University', discoveryServiceCategory:true],
+  [name:'standaloneaa', displayName:'Standalone AA', description:'Standalone AA only', discoveryServiceCategory:false]
+] as List
+federationOrgTypes.each {
+  def ot = new OrganizationType(it)
+  savedOT = ot.save()
+  if(!savedOT) {
+    ot.errors.each { println it }
+    return false
+  }
+}
+
+// AAF supported Contact Types (note some deviation from SAML spec here as business requirement - non spec types aren't rendered to Metadata)
+def prodmgr = new ContactType(name:'productservicemgr', displayName:'Product and Services Manager', description: 'Product and services manager in an Organisation').save()
+def prirep = new ContactType(name:'primaryrepresentative', displayName:'Primary Representitive', description: 'Primary organisation representative').save()
+def bill = new ContactType(name:'billing', displayName:'Billing', description: 'Billing contacts').save()
+
+def tech = new ContactType(name:'technical', displayName:'Technical', description: 'Technical contacts').save()
+def supp = new ContactType(name:'support', displayName:'Support', description: 'Support contacts').save()
+def other = new ContactType(name:'other', displayName:'Other', description: 'Other contacts').save()
+
+// AAF supported attributes
+def attrUri = SamlURI.findWhere(uri:'urn:oasis:names:tc:SAML:2.0:attrname-format:uri')
+
+// Core
+def coreCategory = new AttributeCategory(name:'Core')
+coreCategory.save()
+
+def auEduPersonSharedToken = new AttributeBase(oid:'1.3.6.1.4.1.27856.1.2.5', nameFormat: attrUri, legacyName:'urn:oid:1.3.6.1.4.1.27856.1.2.5', name:'auEduPersonSharedToken', description:'A unique identifier enabling federation spanning services such as Grid and Repositories', category:coreCategory, specificationRequired:false).save()
+def cn = new AttributeBase(oid:'2.5.4.3', nameFormat: attrUri, legacyName:'urn:mace:dir:attribute-def:cn', name:'commonName', description:'An individuals common name, typically their full name. This attribute should not be used in transactions where it is desirable to maintain user anonymity.', category:coreCategory, specificationRequired:false).save()
+def displayName = new AttributeBase(oid:'2.16.840.1.113730.3.1.241', nameFormat: attrUri, legacyName:'urn:mace:dir:attribute-def:displayName', name:'displayName', description:'Preferred name of a person to be used when displaying entries. This attribute should not be used in transactions where it is desirable to maintain user anonymity.', category:coreCategory, specificationRequired:false).save()
+def auEduPersonAffiliation = new AttributeBase(oid:'1.3.6.1.4.1.27856.1.2.1', nameFormat: attrUri, legacyName:'urn:oid:1.3.6.1.4.1.27856.1.2.1', name:'auEduPersonAffiliation', description:'Specifies a persons relationship to the institution in broad categories but with a finer-grained set of permissible values than eduPersonAffiliation.', category:coreCategory, specificationRequired:false).save()
+def eduPersonAffiliation = new AttributeBase(oid:'1.3.6.1.4.1.5923.1.1.1.1', nameFormat: attrUri, legacyName:'urn:mace:dir:attribute-def:eduPersonAffiliation', name:'eduPersonAffiliation', description:'Specifies the persons relationship(s) to the institution in broad categories such as student, faculty, staff, alum, etc.', category:coreCategory, specificationRequired:false).save()
+def eduPersonAssurance = new AttributeBase(oid:'1.3.6.1.4.1.5923.1.1.1.11', nameFormat: attrUri, legacyName:'urn:mace:dir:attribute-def:eduPersonAssurance', name:'eduPersonAssurance', description:'This attribute represents identity assurance profiles (IAPs), which are the set of standards that are met by an identity assertion, based on the Identity Providers identity management processes, type of auth credential used, binding strength,  etc.', category:coreCategory, specificationRequired:false).save()
+def eduPersonEntitlement = new AttributeBase(oid:'1.3.6.1.4.1.5923.1.1.1.7', nameFormat: attrUri, legacyName:'urn:mace:dir:attribute-def:eduPersonEntitlement', name:'eduPersonEntitlement', description:'Member of: URI (either URL or URN) that indicates a set of rights to specific resources based on an agreement across the releavant community', category:coreCategory, specificationRequired:true).save()
+def eduPersonScopedAffiliation = new AttributeBase(oid:'1.3.6.1.4.1.5923.1.1.1.9', nameFormat: attrUri, legacyName:'urn:mace:dir:attribute-def:eduPersonScopedAffiliation', name:'eduPersonScopedAffiliation', description:'This attribute enables an organisation to assert its relationship with the user.', category:coreCategory, specificationRequired:false).save()
+def eduPersonTargetedID = new AttributeBase(oid:'1.3.6.1.4.1.5923.1.1.1.10', nameFormat: attrUri, legacyName:'urn:mace:dir:attribute-def:eduPersonTargetedID', name:'eduPersonTargetedID', description:'A persistent, non-reassigned, privacy-preserving identifier for a principal shared between a pair of coordinating entities', category:coreCategory, specificationRequired:false).save()
+def mail = new AttributeBase(oid:'0.9.2342.19200300.100.1.3', nameFormat: attrUri, legacyName:'urn:mace:dir:attribute-def:mail', name:'email', description:'Preferred address for e-mail to be sent to this person', category:coreCategory, specificationRequired:false).save()
+def o = new AttributeBase(oid:'2.5.4.10', nameFormat: attrUri, legacyName:'urn:mace:dir:attribute-def:o'  , name:'organizationName', description:'Standard name of the top-level organization (institution) with which the user is associated.', category:coreCategory, specificationRequired:false).save()
+
+// Optional
+def optionalCategory = new AttributeCategory(name:'Optional')
+optionalCategory.save()
+
+def ou = new AttributeBase(oid:'2.5.4.11', nameFormat: attrUri, legacyName:'urn:mace:dir:attribute-def:ou', name:'organizationalUnit', description:'Organizational Unit currently used for faculty membership of staff', category:optionalCategory, specificationRequired:false).save()
+def postalAddress = new AttributeBase(oid:'2.5.4.16', nameFormat: attrUri, legacyName:'urn:mace:dir:attribute-def:postalAddress', name:'postalAddress', description:'Business postal address: Campus or office address', category:optionalCategory, specificationRequired:false).save()
+def auEduPersonLegalName = new AttributeBase(oid:'1.3.6.1.4.1.27856.1.2.2', nameFormat: attrUri, legacyName:'urn:oid:1.3.6.1.4.1.27856.1.2.2', name:'auEduPersonLegalName', description:'The users legal name, as per their passport, birth certificate, or other legal document', category:optionalCategory, specificationRequired:false).save()
+def eduPersonPrincipalName = new AttributeBase(oid:'1.3.6.1.4.1.5923.1.1.1.6', nameFormat: attrUri, legacyName:'urn:mace:dir:attribute-def:eduPersonPrincipalName', name:'eduPersonPrincipalName', description:'eduPerson per Internet2 and EDUCAUSE', category:optionalCategory, specificationRequired:false).save()
+def eduPersonPrimaryAffiliation = new AttributeBase(oid:'1.3.6.1.4.1.5923.1.1.1.5', nameFormat: attrUri, legacyName:'urn:mace:dir:attribute-def:eduPersonPrimaryAffiliation', name:'eduPersonPrimaryAffiliation', description:'Specifies the persons PRIMARY relationship to the institution in broad categories such as student, faculty, staff, alum, etc.', category:optionalCategory, specificationRequired:false).save()
+def sn = new AttributeBase(oid:'2.5.4.4', nameFormat: attrUri, legacyName:'urn:mace:dir:attribute-def:sn', name:'surname', description:'Surname or family name', category:optionalCategory, specificationRequired:false).save()
+def givenName = new AttributeBase(oid:'2.5.4.42', nameFormat: attrUri, legacyName:'urn:mace:dir:attribute-def:givenName', name:'givenName', description:'Given name of a person', category:optionalCategory, specificationRequired:false).save()
+def telephoneNumber = new AttributeBase(oid:'2.5.4.20', nameFormat: attrUri, legacyName:'urn:mace:dir:attribute-def:telephoneNumber', name:'telephoneNumber', description:'Office or campus phone number of the individual', category:optionalCategory, specificationRequired:false).save()
+def mobile = new AttributeBase(oid:'0.9.2342.19200300.100.1.41', nameFormat: attrUri, legacyName:'urn:mace:dir:attribute-def:mobile', name:'mobileNumber', description:'Mobile phone number', category:optionalCategory, specificationRequired:false).save()
+def homeOrganization = new AttributeBase(oid:'1.3.6.1.4.1.25178.1.2.9', nameFormat: attrUri, legacyName:'urn:oid:1.3.6.1.4.1.25178.1.2.9', name:'homeOrganization', description:'Users Home Organization', category:optionalCategory, specificationRequired:false).save()
+def homeOrganizationType = new AttributeBase(oid:'1.3.6.1.4.1.25178.1.2.10', nameFormat: attrUri, legacyName:'urn:oid:1.3.6.1.4.1.25178.1.2.10', name:'homeOrganizationType', description:'Type of Organization the user belongs too', category:optionalCategory, specificationRequired:false).save()
+
+// Default Service Category
+// TODO - erronous?
+def sc = new ServiceCategory(name:'General', description:'Default category that suits majority of federation provided services')
+if (!sc.save()) {
+  sc.errors.each {
+    println it
+  }
+}
+
+// AAF supported Monitors
+def federationMonitors = [
+  [name:'Ping', description:'Used to test the reach-ability of a host on the network and to measure the round-trip time for messages sent from the monitoring server to a destination server.'],
+  [name:'HTTP', description:'Tests the HTTP service on the specified host. It can test normal (http) and secure (https) servers.'],
+  [name:'SSL Certificate', description:'Tests the number of days a certificate has to be valid.'],
+  [name:'Time Sync', description:'Test the time on the server is in-sync with time from a known and trusted time source.'],
+  [name:'Shib - Basic', description:'Tests the status of the shibboleth server (IdP and SP) using the status end point.'],
+  [name:'Shib - Advanced', description:'Tests the status of the shibboleth server and checks the version numbers of the software components reported in the status response.'],
+  [name:'Port Security Check', description:'Scans for open ports and reports any that have not in the list of ports expected to be open.']
+] as List
+federationMonitors.each {
+  def mon = new MonitorType(it)
+  saveMon = mon.save()
+  if(!saveMon) {
+    mon.errors.each { println it }
+    return false
+  }
+}
+
+println "Completed creating base AAF environment"
+}
+
+def step3() {
+/*
+Bootstrap - Step 3
+
+For federations other than the AAF use this as a starting point for initial FR CA population.
+You'll probably want to customise the below.
+*/
+
+def caList = ["""
+-----BEGIN CERTIFICATE-----
+MIIE2DCCBEGgAwIBAgIEN0rSQzANBgkqhkiG9w0BAQUFADCBwzELMAkGA1UE
+BhMCVVMxFDASBgNVBAoTC0VudHJ1c3QubmV0MTswOQYDVQQLEzJ3d3cuZW50
+cnVzdC5uZXQvQ1BTIGluY29ycC4gYnkgcmVmLiAobGltaXRzIGxpYWIuKTEl
+MCMGA1UECxMcKGMpIDE5OTkgRW50cnVzdC5uZXQgTGltaXRlZDE6MDgGA1UE
+AxMxRW50cnVzdC5uZXQgU2VjdXJlIFNlcnZlciBDZXJ0aWZpY2F0aW9uIEF1
+dGhvcml0eTAeFw05OTA1MjUxNjA5NDBaFw0xOTA1MjUxNjM5NDBaMIHDMQsw
+CQYDVQQGEwJVUzEUMBIGA1UEChMLRW50cnVzdC5uZXQxOzA5BgNVBAsTMnd3
+dy5lbnRydXN0Lm5ldC9DUFMgaW5jb3JwLiBieSByZWYuIChsaW1pdHMgbGlh
+Yi4pMSUwIwYDVQQLExwoYykgMTk5OSBFbnRydXN0Lm5ldCBMaW1pdGVkMTow
+OAYDVQQDEzFFbnRydXN0Lm5ldCBTZWN1cmUgU2VydmVyIENlcnRpZmljYXRp
+b24gQXV0aG9yaXR5MIGdMA0GCSqGSIb3DQEBAQUAA4GLADCBhwKBgQDNKIM0
+VBuJ8w+vN5Ex/68xYMmo6LIQaO2f55M28Qpku0f1BBc/I0dNxScZgSYMVHIN
+iC3ZH5oSn7yzcdOAGT9HZnuMNSjSuQrfJNqc1lB5gXpa0zf3wkrYKZImZNHk
+mGw6AIr1NJtl+O3jEP/9uElY3KDegjlrgbEWGWG5VLbmQwIBA6OCAdcwggHT
+MBEGCWCGSAGG+EIBAQQEAwIABzCCARkGA1UdHwSCARAwggEMMIHeoIHboIHY
+pIHVMIHSMQswCQYDVQQGEwJVUzEUMBIGA1UEChMLRW50cnVzdC5uZXQxOzA5
+BgNVBAsTMnd3dy5lbnRydXN0Lm5ldC9DUFMgaW5jb3JwLiBieSByZWYuIChs
+aW1pdHMgbGlhYi4pMSUwIwYDVQQLExwoYykgMTk5OSBFbnRydXN0Lm5ldCBM
+aW1pdGVkMTowOAYDVQQDEzFFbnRydXN0Lm5ldCBTZWN1cmUgU2VydmVyIENl
+cnRpZmljYXRpb24gQXV0aG9yaXR5MQ0wCwYDVQQDEwRDUkwxMCmgJ6AlhiNo
+dHRwOi8vd3d3LmVudHJ1c3QubmV0L0NSTC9uZXQxLmNybDArBgNVHRAEJDAi
+gA8xOTk5MDUyNTE2MDk0MFqBDzIwMTkwNTI1MTYwOTQwWjALBgNVHQ8EBAMC
+AQYwHwYDVR0jBBgwFoAU8BdiE1U9s/8KAGv7UISX8+1i0BowHQYDVR0OBBYE
+FPAXYhNVPbP/CgBr+1CEl/PtYtAaMAwGA1UdEwQFMAMBAf8wGQYJKoZIhvZ9
+B0EABAwwChsEVjQuMAMCBJAwDQYJKoZIhvcNAQEFBQADgYEAkNwwAvpkdMKn
+CqV8IY00F6j7Rw7/JXyNEwr75Ji174z4xRAN95K+8cPV1ZVqBLssziY2Zcgx
+xufuP+NXdYR6Ee9GTxj005i7qIcyunL2POI9n9cd2cNgQ4xYDiKWL2KjLB+6
+rQXvqzJ4h6BUcxm1XAX5Uj5tLUUL9wqT6u0G+bI=
+-----END CERTIFICATE-----
+"""
+]
+
+caList.each { cert ->
+  def caCertificate = new CACertificate(data:cert)
+  def caKeyInfo = new CAKeyInfo(certificate: caCertificate)
+  if(!caKeyInfo.save(flush:true)) {
+    caKeyInfo.errors.each { println it }
+    return false
+  }
+}
+
+println "Completed creating AAF Supported CA environment"
+}
+
+def step4() {
+/*
+Bootstrap - Step 4
+
+Having run buildAAFWorkflow to create this script the workflow in setup/src/workflow will now be imported to FR database for use.
+*/
+
+def subject = aaf.fr.identity.Subject.findWhere(principal:'internaladministrator')
+
+// Workflow scripts
+def script1 = "aW1wb3J0IGdyYWlscy5wbHVnaW5zLmZlZGVyYXRlZGdyYWlscy4qCmltcG9ydCBhYWYuZnIuZm91bmRhdGlvbi4qCgoKd29ya2Zsb3dUYXNrU2VydmljZSA9IGN0eC5nZXRCZWFuKCJ3b3JrZmxvd1Rhc2tTZXJ2aWNlIikKbWFpbFNlcnZpY2UgPSBjdHguZ2V0QmVhbigibWFpbFNlcnZpY2UiKQppbnZpdGF0aW9uU2VydmljZSA9IGN0eC5nZXRCZWFuKCJpbnZpdGF0aW9uU2VydmljZSIpCnJvbGVTZXJ2aWNlID0gY3R4LmdldEJlYW4oInJvbGVTZXJ2aWNlIikKcGVybWlzc2lvblNlcnZpY2UgPSBjdHguZ2V0QmVhbigicGVybWlzc2lvblNlcnZpY2UiKQptZXNzYWdlU291cmNlID0gY3R4LmdldEJlYW4oIm1lc3NhZ2VTb3VyY2UiKQoKZGVmIGlkcCA9IElEUFNTT0Rlc2NyaXB0b3IuZ2V0KGVudi5pZGVudGl0eVByb3ZpZGVyLnRvTG9uZygpKQoKaWYoaWRwKSB7CgogIGxvZy5pbmZvICJBY3RpdmF0aW5nICRpZHAuIFdvcmtmbG93IGluZGljYXRlcyBpdCBpcyB2YWxpZCBhbmQgYWNjZXB0ZWQgZm9yIG9wZXJhdGlvbi4iCiAgCiAgaWRwLmFwcHJvdmVkID0gdHJ1ZQogIGlkcC5hY3RpdmUgPSB0cnVlCiAgaWRwLnNhdmUoKQogIAogIGlmKGlkcC5oYXNFcnJvcnMoKSkgewogICAgdGhyb3cgbmV3IFJ1bnRpbWVFeGNlcHRpb24oIkF0dGVtcHQgdG8gcHJvY2VzcyBhY3RpdmF0ZSBpbiBzY3JpcHQgaWRwc3NvZGVzY3JpcHRvcl9hY3RpdmF0ZS4gRmFpbGVkIGR1ZSB0byBJRFAgZmF1bHQgb24gc2F2ZSIpCiAgfQogICAgCiAgaWYoaWRwLmNvbGxhYm9yYXRvcikgewogICAgaWRwLmNvbGxhYm9yYXRvci5hY3RpdmUgPSB0cnVlCiAgICBpZHAuY29sbGFib3JhdG9yLmFwcHJvdmVkID0gdHJ1ZQogICAgaWRwLmNvbGxhYm9yYXRvci5zYXZlKCkKICAgIAogICAgaWYoaWRwLmNvbGxhYm9yYXRvci5oYXNFcnJvcnMoKSkgewogICAgICB0aHJvdyBuZXcgUnVudGltZUV4Y2VwdGlvbigiQXR0ZW1wdCB0byBwcm9jZXNzIGFjdGl2YXRlIGluIHNjcmlwdCBpZHBzc29kZXNjcmlwdG9yX2FjdGl2YXRlLiBGYWlsZWQgZHVlIHRvIElEUCBjb2xsYWJvcmF0b3IgZmF1bHQgb24gc2F2ZSIpCiAgICB9CiAgfQoKICBpZihpZHAuZW50aXR5RGVzY3JpcHRvci5hcHByb3ZlZCA9PSBmYWxzZSB8fCBpZHAuZW50aXR5RGVzY3JpcHRvci5hY3RpdmUgPT0gZmFsc2UpIHsKICAgIGlkcC5lbnRpdHlEZXNjcmlwdG9yLmFwcHJvdmVkID0gdHJ1ZQogICAgaWRwLmVudGl0eURlc2NyaXB0b3IuYWN0aXZlID0gdHJ1ZQogICAgaWRwLmVudGl0eURlc2NyaXB0b3Iuc2F2ZSgpCiAgICBpZihpZHAuZW50aXR5RGVzY3JpcHRvci5oYXNFcnJvcnMoKSkgewogICAgICB0aHJvdyBuZXcgUnVudGltZUV4Y2VwdGlvbigiQXR0ZW1wdCB0byBwcm9jZXNzIGFjdGl2YXRlIGluIHNjcmlwdCBpZHBzc29kZXNjcmlwdG9yX2FjdGl2YXRlLiBGYWlsZWQgZHVlIHRvIElEUCBlbnRpdHlEZXNjcmlwdG9yIGZhdWx0IG9uIHNhdmUiKQogICAgfQogIH0KICAKICAvLyBDcmVhdGUgRUQgYWNjZXNzIGNvbnRyb2wgcm9sZQogIGRlZiBlZFJvbGUgPSBSb2xlLmZpbmRXaGVyZShuYW1lOiJkZXNjcmlwdG9yLSR7aWRwLmVudGl0eURlc2NyaXB0b3IuaWR9LWFkbWluaXN0cmF0b3JzIikKICBpZighZWRSb2xlKXsgIC8vIEdlbmVyYWxseSBleHBlY3RlZCBzdGF0ZQogICAgZWRSb2xlID0gcm9sZVNlcnZpY2UuY3JlYXRlUm9sZSgiZGVzY3JpcHRvci0ke2lkcC5lbnRpdHlEZXNjcmlwdG9yLmlkfS1hZG1pbmlzdHJhdG9ycyIsICJHbG9iYWwgYWRtaW5pc3RyYXRvcnMgZm9yICR7aWRwLmVudGl0eURlc2NyaXB0b3J9IiwgZmFsc2UpCiAgCiAgICBQZXJtaXNzaW9uIHBlcm1pc3Npb24gPSBuZXcgUGVybWlzc2lvbih0YXJnZXQ6ImZlZGVyYXRpb246bWFuYWdlbWVudDpkZXNjcmlwdG9yOiR7aWRwLmVudGl0eURlc2NyaXB0b3IuaWR9OioiKQogICAgcGVybWlzc2lvbi5tYW5hZ2VkID0gZmFsc2UKICAgIHBlcm1pc3Npb24udHlwZSA9IFBlcm1pc3Npb24uZGVmYXVsdFBlcm0KICAgIHBlcm1pc3Npb25TZXJ2aWNlLmNyZWF0ZVBlcm1pc3Npb24ocGVybWlzc2lvbiwgZWRSb2xlKQogIH0KICAKICAvLyBDcmVhdGUgSURQIGFjY2VzcyBjb250cm9sIHJvbGUKICBkZWYgcm9sZSA9IFJvbGUuZmluZFdoZXJlKG5hbWU6ImRlc2NyaXB0b3ItJHtpZHAuaWR9LWFkbWluaXN0cmF0b3JzIikKICBpZighcm9sZSl7ICAvLyBFeHBlY3RlZCBzdGF0ZQogICAgcm9sZSA9IHJvbGVTZXJ2aWNlLmNyZWF0ZVJvbGUoImRlc2NyaXB0b3ItJHtpZHAuaWR9LWFkbWluaXN0cmF0b3JzIiwgIkdsb2JhbCBhZG1pbmlzdHJhdG9ycyBmb3IgJGlkcCIsIGZhbHNlKQogIH0KICAKICAvLyBJbiBvdXIgbW9kZWwgdGhlIElEUCByb2xlIGhhcyBwZXJtaXNzaW9ucyB0byBlZGl0IHRoZSBJRFAgYW5kIHRoZSBBQQogIC8vIE1hbmFnZSBJRFAKICBQZXJtaXNzaW9uIHBlcm1pc3Npb24gPSBuZXcgUGVybWlzc2lvbih0YXJnZXQ6ImZlZGVyYXRpb246bWFuYWdlbWVudDpkZXNjcmlwdG9yOiR7aWRwLmlkfToqIikKICBwZXJtaXNzaW9uLm1hbmFnZWQgPSBmYWxzZQogIHBlcm1pc3Npb24udHlwZSA9IFBlcm1pc3Npb24uZGVmYXVsdFBlcm0KICBwZXJtaXNzaW9uU2VydmljZS5jcmVhdGVQZXJtaXNzaW9uKHBlcm1pc3Npb24sIHJvbGUpCiAgCiAgLy8gTWFuYWdlIGNvbGxhYm9yYXRpbmcgQUEKICBkZWYgYWFQZXJtaXNzaW9uID0gbmV3IFBlcm1pc3Npb24odGFyZ2V0OiJmZWRlcmF0aW9uOm1hbmFnZW1lbnQ6ZGVzY3JpcHRvcjoke2lkcC5jb2xsYWJvcmF0b3IuaWR9OioiKSAgICAgICAKICBhYVBlcm1pc3Npb24ubWFuYWdlZCA9IGZhbHNlCiAgYWFQZXJtaXNzaW9uLnR5cGUgPSBQZXJtaXNzaW9uLmRlZmF1bHRQZXJtCiAgcGVybWlzc2lvblNlcnZpY2UuY3JlYXRlUGVybWlzc2lvbihhYVBlcm1pc3Npb24sIHJvbGUpCiAgCiAgZGVmIGludml0YXRpb24gPSBpbnZpdGF0aW9uU2VydmljZS5jcmVhdGUocm9sZS5pZCwgIklEUFNTT0Rlc2NyaXB0b3IiLCAic2hvdyIsIGlkcC5pZC50b1N0cmluZygpKQogIAogIGRlZiBjcmVhdG9yID0gQ29udGFjdC5nZXQoZW52LmNyZWF0b3IudG9Mb25nKCkpCiAgbWFpbFNlcnZpY2Uuc2VuZE1haWwgeyAgICAgICAgICAgIAogICAgdG8gY3JlYXRvci5lbWFpbAogICAgc3ViamVjdCBtZXNzYWdlU291cmNlLmdldE1lc3NhZ2UoImJyYW5kaW5nLmZyLm1haWwud29ya2Zsb3cuaWRwLmFjdGl2YXRlZC5zdWJqZWN0IiwgbnVsbCwgImJyYW5kaW5nLmZyLm1haWwud29ya2Zsb3cuaWRwLmFjdGl2YXRlZC5zdWJqZWN0IiwgbmV3IExvY2FsZShlbnYubG9jYWxlKSkKICAgIGJvZHkgdmlldzoiL3RlbXBsYXRlcy9tYWlsL3dvcmtmbG93cy9kZWZhdWx0L19hY3RpdmF0ZWRfaWRwIiwgbW9kZWw6W2lkZW50aXR5UHJvdmlkZXI6aWRwLCBsb2NhbGU6ZW52LmxvY2FsZSwgaW52aXRhdGlvbjppbnZpdGF0aW9uXQogIH0KCiAgd29ya2Zsb3dUYXNrU2VydmljZS5jb21wbGV0ZShlbnYudGFza0luc3RhbmNlSUQudG9Mb25nKCksICdpZHBzc29kZXNjcmlwdG9yYWN0aXZhdGVkJykKfQplbHNlIHsKICB0aHJvdyBuZXcgUnVudGltZUV4Y2VwdGlvbigiQXR0ZW1wdCB0byBwcm9jZXNzIGFjdGl2YXRlIGluIHNjcmlwdCBpZHBzc29kZXNjcmlwdG9yX2FjdGl2YXRlLiBGYWlsZWQgYmVjYXVzZSByZWZlcmVuY2VkIElEUCBkb2VzIG5vdCBleGlzdCIpCn0="
+def wfs1 = new WorkflowScript(name: "idpssodescriptor_activate", definition: new String(script1.decodeBase64()), creator:subject)
+if(!wfs1.save()) {
+    println "Unable to correctly process workflow script wfs1 during bootstrap"
+    wfs1.errors.each {
+        throw new RuntimeException(it.toString())
+    }
+    throw new RuntimeException("Unable to import wfs1")
+}
+else {
+    println "Loaded valid workflow script wfs1"
+}
+
+def script2 = "aW1wb3J0IGFhZi5mci5mb3VuZGF0aW9uLioKCndvcmtmbG93VGFza1NlcnZpY2UgPSBjdHguZ2V0QmVhbigid29ya2Zsb3dUYXNrU2VydmljZSIpCm1haWxTZXJ2aWNlID0gY3R4LmdldEJlYW4oIm1haWxTZXJ2aWNlIikKbWVzc2FnZVNvdXJjZSA9IGN0eC5nZXRCZWFuKCJtZXNzYWdlU291cmNlIikKCmRlZiBpZHAgPSBJRFBTU09EZXNjcmlwdG9yLmdldChlbnYuaWRlbnRpdHlQcm92aWRlci50b0xvbmcoKSkKCmlmKGlkcCkgeyAgCiAgZGVmIGNyZWF0b3IgPSBDb250YWN0LmdldChlbnYuY3JlYXRvci50b0xvbmcoKSkKICBtYWlsU2VydmljZS5zZW5kTWFpbCB7CiAgICB0byBjcmVhdG9yLmVtYWlsCiAgICBzdWJqZWN0IG1lc3NhZ2VTb3VyY2UuZ2V0TWVzc2FnZSgiYnJhbmRpbmcuZnIubWFpbC53b3JrZmxvdy5pZHAucmVnaXN0ZXJlZC5zdWJqZWN0IiwgbnVsbCwgImJyYW5kaW5nLmZyLm1haWwud29ya2Zsb3cuaWRwLnJlZ2lzdGVyZWQuc3ViamVjdCIsIG5ldyBMb2NhbGUoZW52LmxvY2FsZSkpCiAgICBib2R5IHZpZXc6Ii90ZW1wbGF0ZXMvbWFpbC93b3JrZmxvd3MvZGVmYXVsdC9fcmVnaXN0ZXJlZF9pZHAiLCBtb2RlbDpbaWRlbnRpdHlQcm92aWRlcjppZHAsIGxvY2FsZTplbnYubG9jYWxlXQogIH0KCiAgd29ya2Zsb3dUYXNrU2VydmljZS5jb21wbGV0ZShlbnYudGFza0luc3RhbmNlSUQudG9Mb25nKCksICdjb25maXJtZWRpZHBzc29kZXNjcmlwdG9yJykKfQplbHNlIHsKICB0aHJvdyBuZXcgUnVudGltZUV4Y2VwdGlvbigiQXR0ZW1wdCB0byBlbWFpbCBjb25maXJtYXRpb24gaW4gc2NyaXB0IGlkcHNzb2Rlc2NyaXB0b3JfY29uZmlybS4gRmFpbGVkIGJlY2F1c2UgcmVmZXJlbmNlZCBJRFAgZG9lcyBub3QgZXhpc3QiKQp9"
+def wfs2 = new WorkflowScript(name: "idpssodescriptor_confirm", definition: new String(script2.decodeBase64()), creator:subject)
+if(!wfs2.save()) {
+    println "Unable to correctly process workflow script wfs2 during bootstrap"
+    wfs2.errors.each {
+        println it
+    }
+    throw new RuntimeException("Unable to import wfs2")
+}
+else {
+    println "Loaded valid workflow script wfs2"
+}
+
+def script3 = "aW1wb3J0IGFhZi5mci5mb3VuZGF0aW9uLioKCmVudGl0eURlc2NyaXB0b3JTZXJ2aWNlID0gY3R4LmdldEJlYW4oImVudGl0eURlc2NyaXB0b3JTZXJ2aWNlIikKaWRlbnRpdHlQcm92aWRlclNlcnZpY2UgPSBjdHguZ2V0QmVhbigiaWRlbnRpdHlQcm92aWRlclNlcnZpY2UiKQp3b3JrZmxvd1Rhc2tTZXJ2aWNlID0gY3R4LmdldEJlYW4oIndvcmtmbG93VGFza1NlcnZpY2UiKQptYWlsU2VydmljZSA9IGN0eC5nZXRCZWFuKCJtYWlsU2VydmljZSIpCm1lc3NhZ2VTb3VyY2UgPSBjdHguZ2V0QmVhbigibWVzc2FnZVNvdXJjZSIpCgpkZWYgaWRwID0gSURQU1NPRGVzY3JpcHRvci5yZWFkKGVudi5pZGVudGl0eVByb3ZpZGVyLnRvTG9uZygpKQppZihpZHApIHsKICAKICBkZWYgY3JlYXRvciA9IENvbnRhY3QucmVhZChlbnYuY3JlYXRvci50b0xvbmcoKSkKICBkZWYgYXJncyA9IG5ldyBPYmplY3RbMV0KICBhcmdzWzBdID0gaWRwLmRpc3BsYXlOYW1lCiAgbWFpbFNlcnZpY2Uuc2VuZE1haWwgeyAgICAgICAgICAgIAogICAgdG8gY3JlYXRvci5lbWFpbAogICAgc3ViamVjdCBtZXNzYWdlU291cmNlLmdldE1lc3NhZ2UoImJyYW5kaW5nLmZyLm1haWwud29ya2Zsb3cuaWRwLnJlamVjdGVkLnN1YmplY3QiLCBhcmdzLCAiYnJhbmRpbmcuZnIubWFpbC53b3JrZmxvdy5pZHAucmVqZWN0ZWQuc3ViamVjdCIsIG5ldyBMb2NhbGUoZW52LmxvY2FsZSkpCiAgICBib2R5IHZpZXc6Ii90ZW1wbGF0ZXMvbWFpbC93b3JrZmxvd3MvZGVmYXVsdC9fcmVqZWN0ZWRfaWRwIiwgbW9kZWw6W2lkZW50aXR5UHJvdmlkZXI6aWRwLCBsb2NhbGU6ZW52LmxvY2FsZV0KICB9CiAgCiAgbG9nLndhcm4gIkRlbGV0aW5nICRpZHAuIFdvcmtmbG93IGluZGljYXRlcyBpdCBpcyBpbnZhbGlkIGFuZCBubyBsb25nZXIgbmVlZGVkLiIKICAKICBlbnRpdHlEZXNjcmlwdG9yU2VydmljZS5kZWxldGUoaWRwLmVudGl0eURlc2NyaXB0b3IuaWQpCiAgCiAgd29ya2Zsb3dUYXNrU2VydmljZS5jb21wbGV0ZShlbnYudGFza0luc3RhbmNlSUQudG9Mb25nKCksICdpZHBzc29kZXNjcmlwdG9yZGVsZXRlZCcpCn0KZWxzZSB7CiAgdGhyb3cgbmV3IFJ1bnRpbWVFeGNlcHRpb24oIkF0dGVtcHQgdG8gcHJvY2VzcyBkZWxldGUgaW4gc2NyaXB0IGlkcHNzb2Rlc2NyaXB0b3JfZGVsZXRlLiBGYWlsZWQgYmVjYXVzZSByZWZlcmVuY2VkIElEUCBkb2VzIG5vdCBleGlzdCIpCn0="
+def wfs3 = new WorkflowScript(name: "idpssodescriptor_delete", definition: new String(script3.decodeBase64()), creator:subject)
+if(!wfs3.save()) {
+    println "Unable to correctly process workflow script wfs3 during bootstrap"
+    wfs3.errors.each {
+        println it
+    }
+    throw new RuntimeException("Unable to import wfs3")
+}
+else {
+    println "Loaded valid workflow script wfs3"
+}
+
+def script4 = "aW1wb3J0IGdyYWlscy5wbHVnaW5zLmZlZGVyYXRlZGdyYWlscy4qCmltcG9ydCBhYWYuZnIuZm91bmRhdGlvbi4qCgoKd29ya2Zsb3dUYXNrU2VydmljZSA9IGN0eC5nZXRCZWFuKCJ3b3JrZmxvd1Rhc2tTZXJ2aWNlIikKbWFpbFNlcnZpY2UgPSBjdHguZ2V0QmVhbigibWFpbFNlcnZpY2UiKQppbnZpdGF0aW9uU2VydmljZSA9IGN0eC5nZXRCZWFuKCJpbnZpdGF0aW9uU2VydmljZSIpCnJvbGVTZXJ2aWNlID0gY3R4LmdldEJlYW4oInJvbGVTZXJ2aWNlIikKcGVybWlzc2lvblNlcnZpY2UgPSBjdHguZ2V0QmVhbigicGVybWlzc2lvblNlcnZpY2UiKQptZXNzYWdlU291cmNlID0gY3R4LmdldEJlYW4oIm1lc3NhZ2VTb3VyY2UiKQoKZGVmIG9yZyA9IE9yZ2FuaXphdGlvbi5nZXQoZW52Lm9yZ2FuaXphdGlvbi50b0xvbmcoKSkKCmlmKG9yZykgewoKICBsb2cuaW5mbyAiQWN0aXZhdGluZyAkb3JnLiBXb3JrZmxvdyBpbmRpY2F0ZXMgaXQgaXMgdmFsaWQgYW5kIGFjY2VwdGVkIGZvciBvcGVyYXRpb24uIgogIAogIG9yZy5hcHByb3ZlZCA9IHRydWUKICBvcmcuYWN0aXZlID0gdHJ1ZQogIG9yZy5zYXZlKCkKICAKICBpZihvcmcuaGFzRXJyb3JzKCkpIHsKICAgIHRocm93IG5ldyBSdW50aW1lRXhjZXB0aW9uKCJBdHRlbXB0IHRvIHByb2Nlc3MgYWN0aXZhdGUgaW4gc2NyaXB0IG9yZ2FuaXphdGlvbl9hY3RpdmF0ZS4gRmFpbGVkIGR1ZSB0byAke29yZ30gZmF1bHQgb24gc2F2ZSIpCiAgfQogIAogIGRlZiByb2xlID0gUm9sZS5maW5kV2hlcmUobmFtZToib3JnYW5pemF0aW9uLSR7b3JnLmlkfS1hZG1pbmlzdHJhdG9ycyIpCiAgaWYoIXJvbGUpeyAgLy8gRXhwZWN0ZWQgc3RhdGUKICAgIHJvbGUgPSByb2xlU2VydmljZS5jcmVhdGVSb2xlKCJvcmdhbml6YXRpb24tJHtvcmcuaWR9LWFkbWluaXN0cmF0b3JzIiwgIkdsb2JhbCBhZG1pbmlzdHJhdG9ycyBmb3IgJG9yZyIsIGZhbHNlKQogIH0KICAKICBQZXJtaXNzaW9uIHBlcm1pc3Npb24gPSBuZXcgUGVybWlzc2lvbih0YXJnZXQ6ImZlZGVyYXRpb246bWFuYWdlbWVudDpvcmdhbml6YXRpb246JHtvcmcuaWR9OioiKQogIHBlcm1pc3Npb24ubWFuYWdlZCA9IGZhbHNlCiAgcGVybWlzc2lvbi50eXBlID0gUGVybWlzc2lvbi5kZWZhdWx0UGVybQogIHBlcm1pc3Npb25TZXJ2aWNlLmNyZWF0ZVBlcm1pc3Npb24ocGVybWlzc2lvbiwgcm9sZSkKICAKICBkZWYgaW52aXRhdGlvbiA9IGludml0YXRpb25TZXJ2aWNlLmNyZWF0ZShyb2xlLmlkLCAiT3JnYW5pemF0aW9uIiwgInNob3ciLCBvcmcuaWQudG9TdHJpbmcoKSkKICAKICBkZWYgY3JlYXRvciA9IENvbnRhY3QuZ2V0KGVudi5jcmVhdG9yLnRvTG9uZygpKQogIG1haWxTZXJ2aWNlLnNlbmRNYWlsIHsgICAgICAgICAgICAKICAgIHRvIGNyZWF0b3IuZW1haWwKICAgIHN1YmplY3QgbWVzc2FnZVNvdXJjZS5nZXRNZXNzYWdlKCJicmFuZGluZy5mci5tYWlsLndvcmtmbG93Lm9yZy5hY3RpdmF0ZWQuc3ViamVjdCIsIG51bGwsICJicmFuZGluZy5mci5tYWlsLndvcmtmbG93Lm9yZy5hY3RpdmF0ZWQuc3ViamVjdCIsIG5ldyBMb2NhbGUoZW52LmxvY2FsZSkpCiAgICBib2R5IHZpZXc6Ii90ZW1wbGF0ZXMvbWFpbC93b3JrZmxvd3MvZGVmYXVsdC9fYWN0aXZhdGVkX29yZ2FuaXphdGlvbiIsIG1vZGVsOltvcmdhbml6YXRpb246b3JnLCBsb2NhbGU6ZW52LmxvY2FsZSwgaW52aXRhdGlvbjppbnZpdGF0aW9uXQogIH0KCiAgd29ya2Zsb3dUYXNrU2VydmljZS5jb21wbGV0ZShlbnYudGFza0luc3RhbmNlSUQudG9Mb25nKCksICdvcmdhbml6YXRpb25hY3RpdmF0ZWQnKQp9CmVsc2UgewogIHRocm93IG5ldyBSdW50aW1lRXhjZXB0aW9uKCJBdHRlbXB0IHRvIHByb2Nlc3MgYWN0aXZhdGUgaW4gc2NyaXB0IG9yZ2FuaXphdGlvbl9hY3RpdmF0ZS4gRmFpbGVkIGJlY2F1c2UgcmVmZXJlbmNlZCBvcmdhbml6YXRpb24gZG9lcyBub3QgZXhpc3QiKQp9"
+def wfs4 = new WorkflowScript(name: "organization_activate", definition: new String(script4.decodeBase64()), creator:subject)
+if(!wfs4.save()) {
+    println "Unable to correctly process workflow script wfs4 during bootstrap"
+    wfs4.errors.each {
+        println it
+    }
+    throw new RuntimeException("Unable to import wfs4")
+}
+else {
+    println "Loaded valid workflow script wfs4"
+}
+
+def script5 = "aW1wb3J0IGdyYWlscy5wbHVnaW5zLmZlZGVyYXRlZGdyYWlscy4qCgp3b3JrZmxvd1Rhc2tTZXJ2aWNlID0gY3R4LmdldEJlYW4oIndvcmtmbG93VGFza1NlcnZpY2UiKQoKZGVmIG9yZ0FkbWluUm9sZSA9IFJvbGUuZmluZFdoZXJlKG5hbWU6Im9yZ2FuaXphdGlvbi0ke2Vudi5vcmdhbml6YXRpb259LWFkbWluaXN0cmF0b3JzIikKCmlmKG9yZ0FkbWluUm9sZSkgewogIGlmKG9yZ0FkbWluUm9sZS5zdWJqZWN0cz8uc2l6ZSgpID4gMCkgewogICAgd29ya2Zsb3dUYXNrU2VydmljZS5jb21wbGV0ZShlbnYudGFza0luc3RhbmNlSUQudG9Mb25nKCksICdvcmdhbml6YXRpb25faGFzYWRtaW5pc3RyYXRvcnMnKQogICAgcmV0dXJuCiAgfQp9Cgp3b3JrZmxvd1Rhc2tTZXJ2aWNlLmNvbXBsZXRlKGVudi50YXNrSW5zdGFuY2VJRC50b0xvbmcoKSwgJ29yZ2FuaXphdGlvbl9ub2FkbWluaXN0cmF0b3JzJyk="
+def wfs5 = new WorkflowScript(name: "organization_administrators_populated", definition: new String(script5.decodeBase64()), creator:subject)
+if(!wfs5.save()) {
+    println "Unable to correctly process workflow script wfs5 during bootstrap"
+    wfs5.errors.each {
+        println it
+    }
+    throw new RuntimeException("Unable to import wfs5")
+}
+else {
+    println "Loaded valid workflow script wfs5"
+}
+
+def script6 = "aW1wb3J0IGFhZi5mci5mb3VuZGF0aW9uLioKCndvcmtmbG93VGFza1NlcnZpY2UgPSBjdHguZ2V0QmVhbigid29ya2Zsb3dUYXNrU2VydmljZSIpCm1haWxTZXJ2aWNlID0gY3R4LmdldEJlYW4oIm1haWxTZXJ2aWNlIikKbWVzc2FnZVNvdXJjZSA9IGN0eC5nZXRCZWFuKCJtZXNzYWdlU291cmNlIikKCmRlZiBvcmcgPSBPcmdhbml6YXRpb24uZ2V0KGVudi5vcmdhbml6YXRpb24udG9Mb25nKCkpCgppZihvcmcpIHsgIAogIGRlZiBjcmVhdG9yID0gQ29udGFjdC5nZXQoZW52LmNyZWF0b3IudG9Mb25nKCkpCiAgbWFpbFNlcnZpY2Uuc2VuZE1haWwgewogICAgdG8gY3JlYXRvci5lbWFpbAogICAgc3ViamVjdCBtZXNzYWdlU291cmNlLmdldE1lc3NhZ2UoImJyYW5kaW5nLmZyLm1haWwud29ya2Zsb3cub3JnLnJlZ2lzdGVyZWQuc3ViamVjdCIsIG51bGwsICJicmFuZGluZy5mci5tYWlsLndvcmtmbG93Lm9yZy5yZWdpc3RlcmVkLnN1YmplY3QiLCBuZXcgTG9jYWxlKGVudi5sb2NhbGUpKQogICAgYm9keSB2aWV3OiIvdGVtcGxhdGVzL21haWwvd29ya2Zsb3dzL2RlZmF1bHQvX3JlZ2lzdGVyZWRfb3JnYW5pemF0aW9uIiwgbW9kZWw6W29yZ2FuaXphdGlvbjpvcmcsIGxvY2FsZTplbnYubG9jYWxlXQogIH0KCiAgd29ya2Zsb3dUYXNrU2VydmljZS5jb21wbGV0ZShlbnYudGFza0luc3RhbmNlSUQudG9Mb25nKCksICdjb25maXJtZWRvcmdhbml6YXRpb24nKQp9CmVsc2UgewogIHRocm93IG5ldyBSdW50aW1lRXhjZXB0aW9uKCJBdHRlbXB0IHRvIGVtYWlsIGNvbmZpcm1hdGlvbiBpbiBzY3JpcHQgb3JnYW5pemF0aW9uX2NvbmZpcm0uIEZhaWxlZCBiZWNhdXNlIHJlZmVyZW5jZWQgb3JnYW5pemF0aW9uIGRvZXMgbm90IGV4aXN0IikKfQ=="
+def wfs6 = new WorkflowScript(name: "organization_confirm", definition: new String(script6.decodeBase64()), creator:subject)
+if(!wfs6.save()) {
+    println "Unable to correctly process workflow script wfs6 during bootstrap"
+    wfs6.errors.each {
+        println it
+    }
+    throw new RuntimeException("Unable to import wfs6")
+}
+else {
+    println "Loaded valid workflow script wfs6"
+}
+
+def script7 = "aW1wb3J0IGFhZi5mci5mb3VuZGF0aW9uLioKCm9yZ2FuaXphdGlvblNlcnZpY2UgPSBjdHguZ2V0QmVhbigib3JnYW5pemF0aW9uU2VydmljZSIpCndvcmtmbG93VGFza1NlcnZpY2UgPSBjdHguZ2V0QmVhbigid29ya2Zsb3dUYXNrU2VydmljZSIpCm1haWxTZXJ2aWNlID0gY3R4LmdldEJlYW4oIm1haWxTZXJ2aWNlIikKbWVzc2FnZVNvdXJjZSA9IGN0eC5nZXRCZWFuKCJtZXNzYWdlU291cmNlIikKCmRlZiBvcmcgPSBPcmdhbml6YXRpb24ucmVhZChlbnYub3JnYW5pemF0aW9uLnRvTG9uZygpKQppZihvcmcpIHsKICAKICBkZWYgY3JlYXRvciA9IENvbnRhY3QucmVhZChlbnYuY3JlYXRvci50b0xvbmcoKSkKICBkZWYgYXJncyA9IG5ldyBPYmplY3RbMV0KICBhcmdzWzBdID0gb3JnLmRpc3BsYXlOYW1lCiAgbWFpbFNlcnZpY2Uuc2VuZE1haWwgeyAgICAgICAgICAgIAogICAgdG8gY3JlYXRvci5lbWFpbAogICAgc3ViamVjdCBtZXNzYWdlU291cmNlLmdldE1lc3NhZ2UoImJyYW5kaW5nLmZyLm1haWwud29ya2Zsb3cub3JnLnJlamVjdGVkLnN1YmplY3QiLCBhcmdzLCAiYnJhbmRpbmcuZnIubWFpbC53b3JrZmxvdy5vcmcucmVqZWN0ZWQuc3ViamVjdCIsIG5ldyBMb2NhbGUoZW52LmxvY2FsZSkpCiAgICBib2R5IHZpZXc6Ii90ZW1wbGF0ZXMvbWFpbC93b3JrZmxvd3MvZGVmYXVsdC9fcmVqZWN0ZWRfb3JnYW5pemF0aW9uIiwgbW9kZWw6W29yZ2FuaXphdGlvbjpvcmcsIGxvY2FsZTplbnYubG9jYWxlXQogIH0KICAKICBsb2cud2FybiAiRGVsZXRpbmcgJG9yZy4gV29ya2Zsb3cgaW5kaWNhdGVzIGl0IGlzIGludmFsaWQgYW5kIG5vIGxvbmdlciBuZWVkZWQuIgogIAogIG9yZ2FuaXphdGlvblNlcnZpY2UuZGVsZXRlKG9yZy5pZCkKICB3b3JrZmxvd1Rhc2tTZXJ2aWNlLmNvbXBsZXRlKGVudi50YXNrSW5zdGFuY2VJRC50b0xvbmcoKSwgJ29yZ2FuaXphdGlvbmRlbGV0ZWQnKQp9CmVsc2UgewogIHRocm93IG5ldyBSdW50aW1lRXhjZXB0aW9uKCJBdHRlbXB0IHRvIHByb2Nlc3MgZGVsZXRlIGluIHNjcmlwdCBvcmdhbml6YXRpb25fZGVsZXRlLiBGYWlsZWQgYmVjYXVzZSByZWZlcmVuY2VkIG9yZ2FuaXphdGlvbiBkb2VzIG5vdCBleGlzdCIpCn0="
+def wfs7 = new WorkflowScript(name: "organization_delete", definition: new String(script7.decodeBase64()), creator:subject)
+if(!wfs7.save()) {
+    println "Unable to correctly process workflow script wfs7 during bootstrap"
+    wfs7.errors.each {
+        println it
+    }
+    throw new RuntimeException("Unable to import wfs7")
+}
+else {
+    println "Loaded valid workflow script wfs7"
+}
+
+def script8 = "aW1wb3J0IGdyYWlscy5wbHVnaW5zLmZlZGVyYXRlZGdyYWlscy4qCmltcG9ydCBhYWYuZnIuZm91bmRhdGlvbi4qCgoKd29ya2Zsb3dUYXNrU2VydmljZSA9IGN0eC5nZXRCZWFuKCJ3b3JrZmxvd1Rhc2tTZXJ2aWNlIikKCmRlZiByZXF1ZXN0ZWRBdHRyaWJ1dGUgPSBSZXF1ZXN0ZWRBdHRyaWJ1dGUuZ2V0KGVudi5yZXF1ZXN0ZWRBdHRyaWJ1dGUudG9Mb25nKCkpCgppZihyZXF1ZXN0ZWRBdHRyaWJ1dGUpIHsKCiAgbG9nLmluZm8gIkFjdGl2YXRpbmcgJHJlcXVlc3RlZEF0dHJpYnV0ZS4gV29ya2Zsb3cgaW5kaWNhdGVzIGl0IGlzIHZhbGlkIGFuZCBhY2NlcHRlZCBmb3Igb3BlcmF0aW9uLiIKICAKICByZXF1ZXN0ZWRBdHRyaWJ1dGUuYXBwcm92ZWQgPSB0cnVlCiAgcmVxdWVzdGVkQXR0cmlidXRlLnNhdmUoKQogIAogIGlmKHJlcXVlc3RlZEF0dHJpYnV0ZS5oYXNFcnJvcnMoKSkgewogICAgdGhyb3cgbmV3IFJ1bnRpbWVFeGNlcHRpb24oIkF0dGVtcHQgdG8gcHJvY2VzcyBhY3RpdmF0ZSBpbiBzY3JpcHQgcmVxdWVzdGVkYXR0cmlidXRlX2FjdGl2YXRlLiBGYWlsZWQgZHVlIHRvICR7cmVxdWVzdGVkQXR0cmlidXRlfSBmYXVsdCBvbiBzYXZlIikKICB9CgogIHdvcmtmbG93VGFza1NlcnZpY2UuY29tcGxldGUoZW52LnRhc2tJbnN0YW5jZUlELnRvTG9uZygpLCAncmVxdWVzdGVkYXR0cmlidXRlYWN0aXZhdGVkJykKfQplbHNlIHsKICB0aHJvdyBuZXcgUnVudGltZUV4Y2VwdGlvbigiQXR0ZW1wdCB0byBwcm9jZXNzIGFjdGl2YXRlIGluIHNjcmlwdCByZXF1ZXN0ZWRhdHRyaWJ1dGVfYWN0aXZhdGUuIEZhaWxlZCBiZWNhdXNlIHJlZmVyZW5jZWQgcmVxdWVzdGVkIGF0dHJpYnV0ZSBkb2VzIG5vdCBleGlzdCIpCn0="
+def wfs8 = new WorkflowScript(name: "requestedattribute_activate", definition: new String(script8.decodeBase64()), creator:subject)
+if(!wfs8.save()) {
+    println "Unable to correctly process workflow script wfs8 during bootstrap"
+    wfs8.errors.each {
+        println it
+    }
+    throw new RuntimeException("Unable to import wfs8")
+}
+else {
+    println "Loaded valid workflow script wfs8"
+}
+
+def script9 = "aW1wb3J0IGdyYWlscy5wbHVnaW5zLmZlZGVyYXRlZGdyYWlscy4qCmltcG9ydCBhYWYuZnIuZm91bmRhdGlvbi4qCgoKd29ya2Zsb3dUYXNrU2VydmljZSA9IGN0eC5nZXRCZWFuKCJ3b3JrZmxvd1Rhc2tTZXJ2aWNlIikKCmRlZiByZXF1ZXN0ZWRBdHRyaWJ1dGUgPSBSZXF1ZXN0ZWRBdHRyaWJ1dGUuZ2V0KGVudi5yZXF1ZXN0ZWRBdHRyaWJ1dGUudG9Mb25nKCkpCgppZihyZXF1ZXN0ZWRBdHRyaWJ1dGUpIHsKCiAgbG9nLmluZm8gIkRlbGV0aW5nICRyZXF1ZXN0ZWRBdHRyaWJ1dGUuIFdvcmtmbG93IGluZGljYXRlcyBpdCBpcyBpbnZhbGlkIGFuZCBub3QgYWNjZXB0ZWQgZm9yIG9wZXJhdGlvbi4iCiAgCiAgcmVxdWVzdGVkQXR0cmlidXRlLmRlbGV0ZSgpCgogIHdvcmtmbG93VGFza1NlcnZpY2UuY29tcGxldGUoZW52LnRhc2tJbnN0YW5jZUlELnRvTG9uZygpLCAncmVxdWVzdGVkYXR0cmlidXRlZGVsZXRlZCcpCn0KZWxzZSB7CiAgdGhyb3cgbmV3IFJ1bnRpbWVFeGNlcHRpb24oIkF0dGVtcHQgdG8gcHJvY2VzcyBkZWxldGUgaW4gc2NyaXB0IHJlcXVlc3RlZGF0dHJpYnV0ZV9kZWxldGUuIEZhaWxlZCBiZWNhdXNlIHJlZmVyZW5jZWQgcmVxdWVzdGVkIGF0dHJpYnV0ZSBkb2VzIG5vdCBleGlzdCIpCn0K"
+def wfs9 = new WorkflowScript(name: "requestedattribute_delete", definition: new String(script9.decodeBase64()), creator:subject)
+if(!wfs9.save()) {
+    println "Unable to correctly process workflow script wfs9 during bootstrap"
+    wfs9.errors.each {
+        println it
+    }
+    throw new RuntimeException("Unable to import wfs9")
+}
+else {
+    println "Loaded valid workflow script wfs9"
+}
+
+def script10 = "aW1wb3J0IGdyYWlscy5wbHVnaW5zLmZlZGVyYXRlZGdyYWlscy4qCmltcG9ydCBhYWYuZnIuZm91bmRhdGlvbi4qCgoKd29ya2Zsb3dUYXNrU2VydmljZSA9IGN0eC5nZXRCZWFuKCJ3b3JrZmxvd1Rhc2tTZXJ2aWNlIikKbWFpbFNlcnZpY2UgPSBjdHguZ2V0QmVhbigibWFpbFNlcnZpY2UiKQppbnZpdGF0aW9uU2VydmljZSA9IGN0eC5nZXRCZWFuKCJpbnZpdGF0aW9uU2VydmljZSIpCnJvbGVTZXJ2aWNlID0gY3R4LmdldEJlYW4oInJvbGVTZXJ2aWNlIikKcGVybWlzc2lvblNlcnZpY2UgPSBjdHguZ2V0QmVhbigicGVybWlzc2lvblNlcnZpY2UiKQptZXNzYWdlU291cmNlID0gY3R4LmdldEJlYW4oIm1lc3NhZ2VTb3VyY2UiKQoKZGVmIHNwID0gU1BTU09EZXNjcmlwdG9yLmdldChlbnYuc2VydmljZVByb3ZpZGVyLnRvTG9uZygpKQoKaWYoc3ApIHsKCiAgbG9nLmluZm8gIkFjdGl2YXRpbmcgJHNwLiBXb3JrZmxvdyBpbmRpY2F0ZXMgaXQgaXMgdmFsaWQgYW5kIGFjY2VwdGVkIGZvciBvcGVyYXRpb24uIgogIAogIHNwLmFwcHJvdmVkID0gdHJ1ZQogIHNwLmFjdGl2ZSA9IHRydWUKICBzcC5zYXZlKCkKICAKICBpZihzcC5oYXNFcnJvcnMoKSkgewogICAgdGhyb3cgbmV3IFJ1bnRpbWVFeGNlcHRpb24oIkF0dGVtcHQgdG8gcHJvY2VzcyBhY3RpdmF0ZSBpbiBzY3JpcHQgc3Bzc29kZXNjcmlwdG9yX2FjdGl2YXRlLiBGYWlsZWQgZHVlIHRvIFNQIGZhdWx0IG9uIHNhdmUiKQogIH0KCiAgaWYoc3AuZW50aXR5RGVzY3JpcHRvci5hcHByb3ZlZCA9PSBmYWxzZSB8fCBzcC5lbnRpdHlEZXNjcmlwdG9yLmFjdGl2ZSA9PSBmYWxzZSkgewogICAgc3AuZW50aXR5RGVzY3JpcHRvci5hcHByb3ZlZCA9IHRydWUKICAgIHNwLmVudGl0eURlc2NyaXB0b3IuYWN0aXZlID0gdHJ1ZQogICAgc3AuZW50aXR5RGVzY3JpcHRvci5zYXZlKCkKICAgIGlmKHNwLmVudGl0eURlc2NyaXB0b3IuaGFzRXJyb3JzKCkpIHsKICAgICAgdGhyb3cgbmV3IFJ1bnRpbWVFeGNlcHRpb24oIkF0dGVtcHQgdG8gcHJvY2VzcyBhY3RpdmF0ZSBpbiBzY3JpcHQgc3Bzc29kZXNjcmlwdG9yX2FjdGl2YXRlLiBGYWlsZWQgZHVlIHRvIFNQIGVudGl0eURlc2NyaXB0b3IgZmF1bHQgb24gc2F2ZSIpCiAgICB9CiAgfQogIAogIGRlZiBlZFJvbGUgPSBSb2xlLmZpbmRXaGVyZShuYW1lOiJkZXNjcmlwdG9yLSR7c3AuZW50aXR5RGVzY3JpcHRvci5pZH0tYWRtaW5pc3RyYXRvcnMiKQogIGlmKCFlZFJvbGUpeyAgLy8gR2VuZXJhbGx5IGV4cGVjdGVkIHN0YXRlCiAgICBlZFJvbGUgPSByb2xlU2VydmljZS5jcmVhdGVSb2xlKCJkZXNjcmlwdG9yLSR7c3AuZW50aXR5RGVzY3JpcHRvci5pZH0tYWRtaW5pc3RyYXRvcnMiLCAiR2xvYmFsIGFkbWluaXN0cmF0b3JzIGZvciAke3NwLmVudGl0eURlc2NyaXB0b3J9IiwgZmFsc2UpCiAgCiAgICBQZXJtaXNzaW9uIHBlcm1pc3Npb24gPSBuZXcgUGVybWlzc2lvbih0YXJnZXQ6ImZlZGVyYXRpb246bWFuYWdlbWVudDpkZXNjcmlwdG9yOiR7c3AuZW50aXR5RGVzY3JpcHRvci5pZH06KiIpCiAgICBwZXJtaXNzaW9uLm1hbmFnZWQgPSBmYWxzZQogICAgcGVybWlzc2lvbi50eXBlID0gUGVybWlzc2lvbi5kZWZhdWx0UGVybQogICAgcGVybWlzc2lvblNlcnZpY2UuY3JlYXRlUGVybWlzc2lvbihwZXJtaXNzaW9uLCBlZFJvbGUpCiAgfQogIAogIC8vIENyZWF0ZSBTUCBhY2Nlc3MgY29udHJvbCByb2xlCiAgZGVmIHJvbGUgPSBSb2xlLmZpbmRXaGVyZShuYW1lOiJkZXNjcmlwdG9yLSR7c3AuaWR9LWFkbWluaXN0cmF0b3JzIikKICBpZighcm9sZSl7ICAvLyBFeHBlY3RlZCBzdGF0ZQogICAgcm9sZSA9IHJvbGVTZXJ2aWNlLmNyZWF0ZVJvbGUoImRlc2NyaXB0b3ItJHtzcC5pZH0tYWRtaW5pc3RyYXRvcnMiLCAiR2xvYmFsIGFkbWluaXN0cmF0b3JzIGZvciAkc3AiLCBmYWxzZSkKICB9CiAgCiAgLy8gTWFuYWdlIFNQCiAgUGVybWlzc2lvbiBwZXJtaXNzaW9uID0gbmV3IFBlcm1pc3Npb24odGFyZ2V0OiJmZWRlcmF0aW9uOm1hbmFnZW1lbnQ6ZGVzY3JpcHRvcjoke3NwLmlkfToqIikKICBwZXJtaXNzaW9uLm1hbmFnZWQgPSBmYWxzZQogIHBlcm1pc3Npb24udHlwZSA9IFBlcm1pc3Npb24uZGVmYXVsdFBlcm0KICBwZXJtaXNzaW9uU2VydmljZS5jcmVhdGVQZXJtaXNzaW9uKHBlcm1pc3Npb24sIHJvbGUpCiAgCiAgZGVmIGludml0YXRpb24gPSBpbnZpdGF0aW9uU2VydmljZS5jcmVhdGUocm9sZS5pZCwgIlNQU1NPRGVzY3JpcHRvciIsICJzaG93Iiwgc3AuaWQudG9TdHJpbmcoKSkKICAKICBkZWYgY3JlYXRvciA9IENvbnRhY3QuZ2V0KGVudi5jcmVhdG9yLnRvTG9uZygpKQogIG1haWxTZXJ2aWNlLnNlbmRNYWlsIHsgICAgICAgICAgICAKICAgIHRvIGNyZWF0b3IuZW1haWwKICAgIHN1YmplY3QgbWVzc2FnZVNvdXJjZS5nZXRNZXNzYWdlKCJicmFuZGluZy5mci5tYWlsLndvcmtmbG93LnNwLmFjdGl2YXRlZC5zdWJqZWN0IiwgbnVsbCwgImJyYW5kaW5nLmZyLm1haWwud29ya2Zsb3cuc3AuYWN0aXZhdGVkLnN1YmplY3QiLCBuZXcgTG9jYWxlKGVudi5sb2NhbGUpKQogICAgYm9keSB2aWV3OiIvdGVtcGxhdGVzL21haWwvd29ya2Zsb3dzL2RlZmF1bHQvX2FjdGl2YXRlZF9zcCIsIG1vZGVsOltzZXJ2aWNlUHJvdmlkZXI6c3AsIGxvY2FsZTplbnYubG9jYWxlLCBpbnZpdGF0aW9uOmludml0YXRpb25dCiAgfQoKICB3b3JrZmxvd1Rhc2tTZXJ2aWNlLmNvbXBsZXRlKGVudi50YXNrSW5zdGFuY2VJRC50b0xvbmcoKSwgJ3Nwc3NvZGVzY3JpcHRvcmFjdGl2YXRlZCcpCn0KZWxzZSB7CiAgdGhyb3cgbmV3IFJ1bnRpbWVFeGNlcHRpb24oIkF0dGVtcHQgdG8gcHJvY2VzcyBhY3RpdmF0ZSBpbiBzY3JpcHQgc3Bzc29kZXNjcmlwdG9yX2FjdGl2YXRlLiBGYWlsZWQgYmVjYXVzZSByZWZlcmVuY2VkIFNQIGRvZXMgbm90IGV4aXN0IikKfQ=="
+def wfs10 = new WorkflowScript(name: "spssodescriptor_activate", definition: new String(script10.decodeBase64()), creator:subject)
+if(!wfs10.save()) {
+    println "Unable to correctly process workflow script wfs10 during bootstrap"
+    wfs10.errors.each {
+        println it
+    }
+    throw new RuntimeException("Unable to import wfs10")
+}
+else {
+    println "Loaded valid workflow script wfs10"
+}
+
+def script11 = "aW1wb3J0IGFhZi5mci5mb3VuZGF0aW9uLioKCndvcmtmbG93VGFza1NlcnZpY2UgPSBjdHguZ2V0QmVhbigid29ya2Zsb3dUYXNrU2VydmljZSIpCm1haWxTZXJ2aWNlID0gY3R4LmdldEJlYW4oIm1haWxTZXJ2aWNlIikKbWVzc2FnZVNvdXJjZSA9IGN0eC5nZXRCZWFuKCJtZXNzYWdlU291cmNlIikKCmRlZiBzcCA9IFNQU1NPRGVzY3JpcHRvci5nZXQoZW52LnNlcnZpY2VQcm92aWRlci50b0xvbmcoKSkKCmlmKHNwKSB7ICAKICBkZWYgY3JlYXRvciA9IENvbnRhY3QuZ2V0KGVudi5jcmVhdG9yLnRvTG9uZygpKQogIG1haWxTZXJ2aWNlLnNlbmRNYWlsIHsKICAgIHRvIGNyZWF0b3IuZW1haWwKICAgIHN1YmplY3QgbWVzc2FnZVNvdXJjZS5nZXRNZXNzYWdlKCJicmFuZGluZy5mci5tYWlsLndvcmtmbG93LnNwLnJlZ2lzdGVyZWQuc3ViamVjdCIsIG51bGwsICJicmFuZGluZy5mci5tYWlsLndvcmtmbG93LnNwLnJlZ2lzdGVyZWQuc3ViamVjdCIsIG5ldyBMb2NhbGUoZW52LmxvY2FsZSkpCiAgICBib2R5IHZpZXc6Ii90ZW1wbGF0ZXMvbWFpbC93b3JrZmxvd3MvZGVmYXVsdC9fcmVnaXN0ZXJlZF9zcCIsIG1vZGVsOltzZXJ2aWNlUHJvdmlkZXI6c3AsIGxvY2FsZTplbnYubG9jYWxlXQogIH0KCiAgd29ya2Zsb3dUYXNrU2VydmljZS5jb21wbGV0ZShlbnYudGFza0luc3RhbmNlSUQudG9Mb25nKCksICdjb25maXJtZWRzcHNzb2Rlc2NyaXB0b3InKQp9CmVsc2UgewogIHRocm93IG5ldyBSdW50aW1lRXhjZXB0aW9uKCJBdHRlbXB0IHRvIGVtYWlsIGNvbmZpcm1hdGlvbiBpbiBzY3JpcHQgc3Bzc29kZXNjcmlwdG9yX2NvbmZpcm0uIEZhaWxlZCBiZWNhdXNlIHJlZmVyZW5jZWQgU1AgZG9lcyBub3QgZXhpc3QiKQp9"
+def wfs11 = new WorkflowScript(name: "spssodescriptor_confirm", definition: new String(script11.decodeBase64()), creator:subject)
+if(!wfs11.save()) {
+    println "Unable to correctly process workflow script wfs11 during bootstrap"
+    wfs11.errors.each {
+        println it
+    }
+    throw new RuntimeException("Unable to import wfs11")
+}
+else {
+    println "Loaded valid workflow script wfs11"
+}
+
+def script12 = "aW1wb3J0IGFhZi5mci5mb3VuZGF0aW9uLioKCmVudGl0eURlc2NyaXB0b3JTZXJ2aWNlID0gY3R4LmdldEJlYW4oImVudGl0eURlc2NyaXB0b3JTZXJ2aWNlIikKd29ya2Zsb3dUYXNrU2VydmljZSA9IGN0eC5nZXRCZWFuKCJ3b3JrZmxvd1Rhc2tTZXJ2aWNlIikKbWFpbFNlcnZpY2UgPSBjdHguZ2V0QmVhbigibWFpbFNlcnZpY2UiKQptZXNzYWdlU291cmNlID0gY3R4LmdldEJlYW4oIm1lc3NhZ2VTb3VyY2UiKQoKZGVmIHNwID0gU1BTU09EZXNjcmlwdG9yLnJlYWQoZW52LnNlcnZpY2VQcm92aWRlci50b0xvbmcoKSkKaWYoc3ApIHsKICAKICBkZWYgY3JlYXRvciA9IENvbnRhY3QucmVhZChlbnYuY3JlYXRvci50b0xvbmcoKSkKICBkZWYgYXJncyA9IG5ldyBPYmplY3RbMV0KICBhcmdzWzBdID0gc3AuZGlzcGxheU5hbWUKICBtYWlsU2VydmljZS5zZW5kTWFpbCB7ICAgICAgICAgICAgCiAgICB0byBjcmVhdG9yLmVtYWlsCiAgICBzdWJqZWN0IG1lc3NhZ2VTb3VyY2UuZ2V0TWVzc2FnZSgiYnJhbmRpbmcuZnIubWFpbC53b3JrZmxvdy5zcC5yZWplY3RlZC5zdWJqZWN0IiwgYXJncywgImJyYW5kaW5nLmZyLm1haWwud29ya2Zsb3cuc3AucmVqZWN0ZWQuc3ViamVjdCIsIG5ldyBMb2NhbGUoZW52LmxvY2FsZSkpCiAgICBib2R5IHZpZXc6Ii90ZW1wbGF0ZXMvbWFpbC93b3JrZmxvd3MvZGVmYXVsdC9fcmVqZWN0ZWRfc3AiLCBtb2RlbDpbc2VydmljZVByb3ZpZGVyOnNwLCBsb2NhbGU6ZW52LmxvY2FsZV0KICB9CiAgCiAgbG9nLndhcm4gIkRlbGV0aW5nICRzcC4gV29ya2Zsb3cgaW5kaWNhdGVzIGl0IGlzIGludmFsaWQgYW5kIG5vIGxvbmdlciBuZWVkZWQuIgogIAogIGRlZiBlbnRpdHlEZXNjcmlwdG9yID0gc3AuZW50aXR5RGVzY3JpcHRvcgogIAogIGVudGl0eURlc2NyaXB0b3JTZXJ2aWNlLmRlbGV0ZShlbnRpdHlEZXNjcmlwdG9yLmlkKQogIAogIHdvcmtmbG93VGFza1NlcnZpY2UuY29tcGxldGUoZW52LnRhc2tJbnN0YW5jZUlELnRvTG9uZygpLCAnc3Bzc29kZXNjcmlwdG9yZGVsZXRlZCcpCn0KZWxzZSB7CiAgdGhyb3cgbmV3IFJ1bnRpbWVFeGNlcHRpb24oIkF0dGVtcHQgdG8gcHJvY2VzcyBkZWxldGUgaW4gc2NyaXB0IHNwc3NvZGVzY3JpcHRvcl9kZWxldGUuIEZhaWxlZCBiZWNhdXNlIHJlZmVyZW5jZWQgU1AgZG9lcyBub3QgZXhpc3QiKQp9"
+def wfs12 = new WorkflowScript(name: "spssodescriptor_delete", definition: new String(script12.decodeBase64()), creator:subject)
+if(!wfs12.save()) {
+    println "Unable to correctly process workflow script wfs12 during bootstrap"
+    wfs12.errors.each {
+        println it
+    }
+    throw new RuntimeException("Unable to import wfs12")
+}
+else {
+    println "Loaded valid workflow script wfs12"
+}
+
+// Workflow processes
+workflowProcessService = ctx.getBean('workflowProcessService')
+
+def suMetaClass = new ExpandoMetaClass(SecurityUtils)
+suMetaClass.'static'.getSubject = {[getPrincipal:{subject.id}] as Subject}
+suMetaClass.initialize()
+SecurityUtils.metaClass = suMetaClass
+
+def process1 = "CnByb2Nlc3MobmFtZTonaWRwc3NvZGVzY3JpcHRvcl9jcmVhdGUnLCBkZXNjcmlwdGlvbjogJ1dvcmtmbG93IGRlZmluaW5nIElkZW50aXR5IFByb3ZpZGVyIGNyZWF0aW9uIGFuZCBhcHByb3ZhbCBwcm9jZXNzJykgewoJCgl0YXNrKG5hbWU6ICdTZW5kIGNvbmZpcm1hdGlvbiBtZXNzYWdlJywgZGVzY3JpcHRpb246ICdJbnZva2VzIGEgc2NyaXB0IHRvIGNvbmZpcm0gcmVnaXN0cmF0aW9uIG9mIElEUC4nKSB7CgkJZXhlY3V0ZShzY3JpcHQ6ICdpZHBzc29kZXNjcmlwdG9yX2NvbmZpcm0nKQoJCW91dGNvbWUobmFtZTogJ2NvbmZpcm1lZGlkcHNzb2Rlc2NyaXB0b3InLCBkZXNjcmlwdGlvbjonVXNlciByZWdpc3RlcmluZyB0aGUgSURQIGhhcyBiZWVuIGFkdmlzZWQgb2YgY3JlYXRpb24nKSB7CgkJCXN0YXJ0ICgnQ2hlY2sgZm9yIHZhbGlkIGFwcHJvdmVycycpCgkJfQoJfQoJCgl0YXNrKG5hbWU6ICdDaGVjayBmb3IgdmFsaWQgYXBwcm92ZXJzJywgZGVzY3JpcHRpb246ICdFbnN1cmVzIHRoYXQgb3JnYW5pemF0aW9uLXtvcmdhbml6YXRpb259LWFkbWluaXN0cmF0b3JzIGlzIGFjdHVhbGx5IHBvcHVsYXRlZCB3aXRoIHVzZXJzLCBpZiBub3QgYnlwYXNzZXMgZGlyZWN0bHkgdG8gZmVkZXJhdGlvbiBhZG1pbmlzdHJhdG9ycy4nKSB7CgkJZXhlY3V0ZShzY3JpcHQ6ICdvcmdhbml6YXRpb25fYWRtaW5pc3RyYXRvcnNfcG9wdWxhdGVkJykKCQlvdXRjb21lKG5hbWU6ICdvcmdhbml6YXRpb25faGFzYWRtaW5pc3RyYXRvcnMnLCBkZXNjcmlwdGlvbjonVGhlIE9yZ2FuaXphdGlvbiBoYXMgYWRtaW5pc3RyYXRvcnMgYW5kIHRoZXkgd2lsbCBiZSBhc2tlZCB0byBhcHByb3ZlLicpIHsKCQkJc3RhcnQgKCdSZXF1ZXN0IG9yZ2FuaXphdGlvbiBhcHByb3ZhbCcpCgkJfQoJCW91dGNvbWUobmFtZTogJ29yZ2FuaXphdGlvbl9ub2FkbWluaXN0cmF0b3JzJywgZGVzY3JpcHRpb246J1RoZSBPcmdhbml6YXRpb24gaGFzIG5vIGxvY2FsbHkgcmVnaXN0ZXJlZCBhZG1pbmlzdHJhdG9ycy4gRmVkZXJhdGlvbiBBZG1pbmlzdHJhdG9ycyB3aWxsIHVuZGVydGFrZSBhbiBvdXQgb2YgYmFuZCBhcHByb3ZhbCBwcm9jZXNzLicpIHsKCQkJc3RhcnQgKCdSZXF1ZXN0IGV4ZWN1dGl2ZSBmZWRlcmF0aW9uIGFwcHJvdmFsJykKCQl9Cgl9CgkKCXRhc2sobmFtZTogJ1JlcXVlc3Qgb3JnYW5pemF0aW9uIGFwcHJvdmFsJywgZGVzY3JpcHRpb246ICdSZXF1ZXN0cyB0aGF0IGEgdXNlciB3aG8gaXMgYW4gYWRtaW5pc3RyYXRpdmUgbWVtYmVyIG9mIHRoZSBvd25pbmcgb3JnYW5pemF0aW9uIGFwcHJvdmVzIGNyZWF0aW9uIGFuZCBhc3NvY2lhdGVkIGJpbGxpbmcgYnkgaW50cm9kdWNpbmcgdGhpcyBJZGVudGl0eSBQcm92aWRlci4nKSB7CgkJYXBwcm92ZXIocm9sZTogJ29yZ2FuaXphdGlvbi17b3JnYW5pemF0aW9ufS1hZG1pbmlzdHJhdG9ycycpIHsKCQkJcmVqZWN0KG5hbWU6ICdOb3QgQXNzb2NpYXRlZCcsIGRlc2NyaXB0aW9uOidOb3QgYW4gSWRlbnRpdHkgUHJvdmlkZXIgYXNzb2NpYXRlZCB3aXRoIHRoaXMgb3JnYW5pemF0aW9uIChJZGVudGl0eSBQcm92aWRlciBkZXRhaWxzIHdpbGwgYmUgZGlzY2FyZGVkKScpIHsKCQkJCXN0YXJ0ICgnRGVsZXRlIElkZW50aXR5IFByb3ZpZGVyJykKCQkJfQoJCQlyZWplY3QobmFtZTogJ05vdCBBY2NlcHRlZCcsIGRlc2NyaXB0aW9uOidUaGUgb3JnYW5pemF0aW9uIHdpbGwgbm90IGFjY2VwdCBvd25lcnNoaXAgZm9yIHRoaXMgSWRlbnRpdHkgUHJvdmlkZXIgKElkZW50aXR5IFByb3ZpZGVyIGRldGFpbHMgd2lsbCBiZSBkaXNjYXJkZWQpJykgewoJCQkJc3RhcnQgKCdEZWxldGUgSWRlbnRpdHkgUHJvdmlkZXInKQoJCQl9CgkJfQoJCW91dGNvbWUobmFtZTogJ29yZ2FuaXphdGlvbmFwcHJvdmVkJywgZGVzY3JpcHRpb246J1RoZSBvcmdhbml6YXRpb24gaGFzIGFjY2VwdGVkIHJlc3BvbnNpYmlsaXR5IGZvciB0aGlzIElkZW50aXR5IFByb3ZpZGVyJykgewoJCQlzdGFydCAoJ1JlcXVlc3QgRmVkZXJhdGlvbiBhcHByb3ZhbCcpCgkJfQoJfQoJCgl0YXNrKG5hbWU6ICdSZXF1ZXN0IEZlZGVyYXRpb24gYXBwcm92YWwnLCBkZXNjcmlwdGlvbjogJ1JlcXVlc3RzIHRoYXQgYSB1c2VyIHdobyBpcyBhbiBhZG1pbmlzdHJhdGl2ZSBtZW1iZXIgb2YgdGhlIGZlZGVyYXRpb24gYXBwcm92ZXMgYWN0aXZhdGlvbiBmb3IgdGhpcyBJZGVudGl0eSBQcm92aWRlciBhcyBhIHZhbHVhYmxlIGFkZGl0aW9uIGZvciB0aGUgZmVkZXJhdGlvbi4nKSB7CgkJYXBwcm92ZXIocm9sZTogJ2ZlZGVyYXRpb24tYWRtaW5pc3RyYXRvcnMnKSB7CgkJCXJlamVjdChuYW1lOiAnTm90IEFjY2VwdGVkJywgZGVzY3JpcHRpb246J1RoZSBmZWRlcmF0aW9uIHdpbGwgbm90IGFjY2VwdCBvd25lcnNoaXAgZm9yIHRoaXMgSWRlbnRpdHkgUHJvdmlkZXIgKElkZW50aXR5IFByb3ZpZGVyIGRldGFpbHMgd2lsbCBiZSBkaXNjYXJkZWQpJykgewoJCQkJc3RhcnQgKCdEZWxldGUgSWRlbnRpdHkgUHJvdmlkZXInKQoJCQl9CgkJfQoJCW91dGNvbWUobmFtZTogJ2ZlZGVyYXRpb25hcHByb3ZlZCcsIGRlc2NyaXB0aW9uOidUaGUgb3JnYW5pemF0aW9uIGhhcyBhY2NlcHRlZCByZXNwb25zaWJpbGl0eSBmb3IgdGhpcyBJZGVudGl0eSBQcm92aWRlcicpIHsKCQkJc3RhcnQgKCdBY3RpdmF0ZSBJZGVudGl0eSBQcm92aWRlcicpCgkJfQoJfQoJCgl0YXNrKG5hbWU6ICdSZXF1ZXN0IGV4ZWN1dGl2ZSBmZWRlcmF0aW9uIGFwcHJvdmFsJywgZGVzY3JpcHRpb246ICdSZXF1ZXN0cyB0aGF0IGEgdXNlciB3aG8gaXMgYW4gYWRtaW5pc3RyYXRpdmUgbWVtYmVyIG9mIHRoZSBmZWRlcmF0aW9uIGFwcHJvdmVzIGFjdGl2YXRpb24gZm9yIHRoaXMgSWRlbnRpdHkgUHJvdmlkZXIgZm9yIHRoZSBGZWRlcmF0aW9uIGFuZCBvbiBiZWhhbGYgb2YgdGhlIG93bmluZyBPcmdhbml6YXRpb24uIEV4dGVybmFsIHZlcmlmaWNhdGlvbiBzaG91bGQgYmUgdW5kZXJ0YWtlbi4nKSB7CgkJYXBwcm92ZXIocm9sZTogJ2ZlZGVyYXRpb24tYWRtaW5pc3RyYXRvcnMnKSB7CgkJCXJlamVjdChuYW1lOiAnTm90IEFjY2VwdGVkJywgZGVzY3JpcHRpb246J1RoZSBmZWRlcmF0aW9uIHdpbGwgbm90IGFjY2VwdCBvd25lcnNoaXAgZm9yIHRoaXMgSWRlbnRpdHkgUHJvdmlkZXIgKElkZW50aXR5IFByb3ZpZGVyIGRldGFpbHMgd2lsbCBiZSBkaXNjYXJkZWQpLicpIHsKCQkJCXN0YXJ0ICgnRGVsZXRlIElkZW50aXR5IFByb3ZpZGVyJykKCQkJfQoJCQlyZWplY3QobmFtZTogJ09yZ2FuaXphdGlvbiBOb3QgQWNjZXB0ZWQnLCBkZXNjcmlwdGlvbjonVGhlIG9yZ2FuaXphdGlvbiByZXNwb25zaWJsZSB3aWxsIG5vdCBhY2NlcHQgb3duZXJzaGlwIGZvciB0aGlzIElkZW50aXR5IFByb3ZpZGVyIChJZGVudGl0eSBQcm92aWRlciBkZXRhaWxzIHdpbGwgYmUgZGlzY2FyZGVkKS4nKSB7CgkJCQlzdGFydCAoJ0RlbGV0ZSBJZGVudGl0eSBQcm92aWRlcicpCgkJCX0KCQl9CgkJb3V0Y29tZShuYW1lOiAnZmVkZXJhdGlvbmFwcHJvdmVkJywgZGVzY3JpcHRpb246J1RoZSBvcmdhbml6YXRpb24gaGFzIGFjY2VwdGVkIHJlc3BvbnNpYmlsaXR5IGZvciB0aGlzIElkZW50aXR5IFByb3ZpZGVyJykgewoJCQlzdGFydCAoJ0FjdGl2YXRlIElkZW50aXR5IFByb3ZpZGVyJykKCQl9Cgl9CgkKCXRhc2sobmFtZTogJ0FjdGl2YXRlIElkZW50aXR5IFByb3ZpZGVyJywgZGVzY3JpcHRpb246ICdBY3RpdmF0ZXMgdGhlIElkZW50aXR5IFByb3ZpZGVyIHNvIGl0IGNhbiBiZSByZW5kZXJlZCBpbnRvIE1ldGFkYXRhLicpIHsKCQlleGVjdXRlKHNjcmlwdDogJ2lkcHNzb2Rlc2NyaXB0b3JfYWN0aXZhdGUnKQoJCW91dGNvbWUobmFtZTogJ2lkcHNzb2Rlc2NyaXB0b3JhY3RpdmF0ZWQnLCBkZXNjcmlwdGlvbjonVGhlIElkZW50aXR5IFByb3ZpZGVyIGlzIG5vdyBhY3RpdmF0ZSBhbmQgYmVpbmcgcG9wdWxhdGVkIGludG8gTWV0YWRhdGEnKSB7CgkJCXN0YXJ0ICgnZmluaXNoJykKCQl9Cgl9CgkKCXRhc2sobmFtZTogJ0RlbGV0ZSBJZGVudGl0eSBQcm92aWRlcicsIGRlc2NyaXB0aW9uOiAnRGVsZXRlcyB0aGUgSWRlbnRpdHkgUHJvdmlkZXIgYWZ0ZXIgaXQgaGFzIGJlZW4gcmVqZWN0ZWQuJykgewoJCWV4ZWN1dGUoc2NyaXB0OiAnaWRwc3NvZGVzY3JpcHRvcl9kZWxldGUnKQoJCW91dGNvbWUobmFtZTogJ2lkcHNzb2Rlc2NyaXB0b3JkZWxldGVkJywgZGVzY3JpcHRpb246J1RoZSBJZGVudGl0eSBQcm92aWRlciBkZWZpbml0aW9uIGhhcyBiZWVuIGRlbGV0ZWQnKSB7CgkJCXN0YXJ0ICgnZmluaXNoJykKCQl9Cgl9CgoJdGFzayhuYW1lOiAnZmluaXNoJywgZGVzY3JpcHRpb246ICdDb21wbGV0ZXMgdGhlIGlkcHNzb2Rlc2NyaXB0b3JfY3JlYXRlIHdvcmtmbG93JykgewoJCWZpbmlzaCgpCgl9CgkKfQ=="
+workflowProcessService.create(new String(process1.decodeBase64()))
+
+def process2 = "CnByb2Nlc3MobmFtZTonb3JnYW5pemF0aW9uX2NyZWF0ZScsIGRlc2NyaXB0aW9uOiAnV29ya2Zsb3cgZGVmaW5pbmcgT3JnYW5pemF0aW9uIGNyZWF0aW9uIGFuZCBhcHByb3ZhbCBwcm9jZXNzJykgewoJCgl0YXNrKG5hbWU6ICdTZW5kIGNvbmZpcm1hdGlvbiBtZXNzYWdlJywgZGVzY3JpcHRpb246ICdJbnZva2VzIGEgc2NyaXB0IHRvIGNvbmZpcm0gcmVnaXN0cmF0aW9uIG9mIGFuIE9yZ2FuaXphdGlvbi4nKSB7CgkJZXhlY3V0ZShzY3JpcHQ6ICdvcmdhbml6YXRpb25fY29uZmlybScpCgkJb3V0Y29tZShuYW1lOiAnY29uZmlybWVkb3JnYW5pemF0aW9uJywgZGVzY3JpcHRpb246J1VzZXIgcmVnaXN0ZXJpbmcgdGhlIE9yZ2FuaXphdGlvbiBoYXMgYmVlbiBhZHZpc2VkIG9mIGNyZWF0aW9uJykgewoJCQlzdGFydCAoJ1JlcXVlc3QgRmVkZXJhdGlvbiBhcHByb3ZhbCcpCgkJfQoJfQoJCgl0YXNrKG5hbWU6ICdSZXF1ZXN0IEZlZGVyYXRpb24gYXBwcm92YWwnLCBkZXNjcmlwdGlvbjogJ1JlcXVlc3RzIHRoYXQgYSB1c2VyIHdobyBpcyBhbiBhZG1pbmlzdHJhdGl2ZSBtZW1iZXIgb2YgdGhlIGZlZGVyYXRpb24gYXBwcm92ZXMgYWN0aXZhdGlvbiBmb3IgdGhpcyBPcmdhbml6YXRpb24gYXMgYSB2YWx1YWJsZSBhZGRpdGlvbiBmb3IgdGhlIGZlZGVyYXRpb24uJykgewoJCWFwcHJvdmVyKHJvbGU6ICdmZWRlcmF0aW9uLWFkbWluaXN0cmF0b3JzJykgewoJCQlyZWplY3QobmFtZTogJ05vdCBBY2NlcHRlZCcsIGRlc2NyaXB0aW9uOidUaGUgZmVkZXJhdGlvbiB3aWxsIG5vdCBhY2NlcHQgdGhpcyBPcmdhbml6YXRpb24gKE9yZ2FuaXphdGlvbiBkZXRhaWxzIHdpbGwgYmUgZGlzY2FyZGVkKScpIHsKCQkJCXN0YXJ0ICgnRGVsZXRlIE9yZ2FuaXphdGlvbicpCgkJCX0KCQl9CgkJb3V0Y29tZShuYW1lOiAnZmVkZXJhdGlvbmFwcHJvdmVkJywgZGVzY3JpcHRpb246J1RoZSBvcmdhbml6YXRpb24gaGFzIGFjY2VwdGVkIHJlc3BvbnNpYmlsaXR5IGZvciB0aGlzIElkZW50aXR5IFByb3ZpZGVyJykgewoJCQlzdGFydCAoJ0FjdGl2YXRlIE9yZ2FuaXphdGlvbicpCgkJfQoJfQoJCgl0YXNrKG5hbWU6ICdBY3RpdmF0ZSBPcmdhbml6YXRpb24nLCBkZXNjcmlwdGlvbjogJ0FjdGl2YXRlcyB0aGUgT3JnYW5pemF0aW9uIHNvIGl0IGNhbiByZWdpc3RlciBjb21wb25lbnRzIHdpdGggdGhlIGZlZGVyYXRpb24nKSB7CgkJZXhlY3V0ZShzY3JpcHQ6ICdvcmdhbml6YXRpb25fYWN0aXZhdGUnKQoJCW91dGNvbWUobmFtZTogJ29yZ2FuaXphdGlvbmFjdGl2YXRlZCcsIGRlc2NyaXB0aW9uOidUaGUgT3JnYW5pemF0aW9uIGlzIG5vdyBhY3RpdmF0ZSBhbmQgYmVpbmcgcG9wdWxhdGVkIGludG8gTWV0YWRhdGEnKSB7CgkJCXN0YXJ0ICgnZmluaXNoJykKCQl9Cgl9CgkKCXRhc2sobmFtZTogJ0RlbGV0ZSBPcmdhbml6YXRpb24nLCBkZXNjcmlwdGlvbjogJ0RlbGV0ZXMgdGhlIE9yZ2FuaXphdGlvbiBhZnRlciBpdCBoYXMgYmVlbiByZWplY3RlZC4nKSB7CgkJZXhlY3V0ZShzY3JpcHQ6ICdvcmdhbml6YXRpb25fZGVsZXRlJykKCQlvdXRjb21lKG5hbWU6ICdvcmdhbml6YXRpb25kZWxldGVkJywgZGVzY3JpcHRpb246J1RoZSBPcmdhbml6YXRpb24gZGVmaW5pdGlvbiBoYXMgYmVlbiBkZWxldGVkJykgewoJCQlzdGFydCAoJ2ZpbmlzaCcpCgkJfQoJfQoKCXRhc2sobmFtZTogJ2ZpbmlzaCcsIGRlc2NyaXB0aW9uOiAnQ29tcGxldGVzIHRoZSBvcmdhbml6YXRpb25fY3JlYXRlIHdvcmtmbG93JykgewoJCWZpbmlzaCgpCgl9CgkKfQ=="
+workflowProcessService.create(new String(process2.decodeBase64()))
+
+def process3 = "cHJvY2VzcyhuYW1lOidyZXF1ZXN0ZWRhdHRyaWJ1dGVfY3JlYXRlJywgZGVzY3JpcHRpb246ICdXb3JrZmxvdyBkZWZpbmluZyBSZXF1ZXN0ZWQgQXR0cmlidXRlIGNyZWF0aW9uIGFuZCBhcHByb3ZhbCBwcm9jZXNzIGZvciBTUFNTT0Rlc2NyaXB0b3JzJykgewoJCgl0YXNrKG5hbWU6ICdBdXRvIGFwcHJvdmUnLCBkZXNjcmlwdGlvbjogJ0F1dG9tYXRpY2FsbHkgYXBwcm92ZXMgYWxsIG5ldyBhdHRyaWJ1dGVzIGZvciBTUFNTT2Rlc2NyaXB0b3JzLCB1c2VmdWwgYXMgZGVmYXVsdCBpbiB0ZXN0IGVudmlyb25tZW50cycpIHsKCQlleGVjdXRlKHNjcmlwdDogJ3JlcXVlc3RlZGF0dHJpYnV0ZV9hY3RpdmF0ZScpCgkJb3V0Y29tZShuYW1lOiAncmVxdWVzdGVkYXR0cmlidXRlYWN0aXZhdGVkJywgZGVzY3JpcHRpb246J1RoZSBSZXF1ZXN0ZWQgQXR0cmlidXRlIGlzIG5vdyBhY3RpdmF0ZSBhbmQgYmVpbmcgcG9wdWxhdGVkIGludG8gTWV0YWRhdGEnKSB7CgkJCXN0YXJ0ICgnZmluaXNoJykKCQl9Cgl9CgkKCXRhc2sobmFtZTogJ2ZpbmlzaCcsIGRlc2NyaXB0aW9uOiAnQ29tcGxldGVzIHRoZSByZXF1ZXN0ZWRhdHRyaWJ1dGVfY3JlYXRlIHdvcmtmbG93JykgewoJCWZpbmlzaCgpCgl9Cgp9"
+workflowProcessService.create(new String(process3.decodeBase64()))
+
+def process4 = "CnByb2Nlc3MobmFtZTonc3Bzc29kZXNjcmlwdG9yX2NyZWF0ZScsIGRlc2NyaXB0aW9uOiAnV29ya2Zsb3cgZGVmaW5pbmcgU2VydmljZSBQcm92aWRlciBjcmVhdGlvbiBhbmQgYXBwcm92YWwgcHJvY2VzcycpIHsKCQoJdGFzayhuYW1lOiAnU2VuZCBjb25maXJtYXRpb24gbWVzc2FnZScsIGRlc2NyaXB0aW9uOiAnSW52b2tlcyBhIHNjcmlwdCB0byBjb25maXJtIHJlZ2lzdHJhdGlvbiBvZiBTUC4nKSB7CgkJZXhlY3V0ZShzY3JpcHQ6ICdzcHNzb2Rlc2NyaXB0b3JfY29uZmlybScpCgkJb3V0Y29tZShuYW1lOiAnY29uZmlybWVkc3Bzc29kZXNjcmlwdG9yJywgZGVzY3JpcHRpb246J1VzZXIgcmVnaXN0ZXJpbmcgdGhlIFNQIGhhcyBiZWVuIGFkdmlzZWQgb2YgY3JlYXRpb24nKSB7CgkJCXN0YXJ0ICgnQ2hlY2sgZm9yIHZhbGlkIGFwcHJvdmVycycpCgkJfQoJfQoJCgl0YXNrKG5hbWU6ICdDaGVjayBmb3IgdmFsaWQgYXBwcm92ZXJzJywgZGVzY3JpcHRpb246ICdFbnN1cmVzIHRoYXQgb3JnYW5pemF0aW9uLXtvcmdhbml6YXRpb259LWFkbWluaXN0cmF0b3JzIGlzIGFjdHVhbGx5IHBvcHVsYXRlZCB3aXRoIHVzZXJzLCBpZiBub3QgYnlwYXNzZXMgZGlyZWN0bHkgdG8gZmVkZXJhdGlvbiBhZG1pbmlzdHJhdG9ycy4nKSB7CgkJZXhlY3V0ZShzY3JpcHQ6ICdvcmdhbml6YXRpb25fYWRtaW5pc3RyYXRvcnNfcG9wdWxhdGVkJykKCQlvdXRjb21lKG5hbWU6ICdvcmdhbml6YXRpb25faGFzYWRtaW5pc3RyYXRvcnMnLCBkZXNjcmlwdGlvbjonVGhlIE9yZ2FuaXphdGlvbiBoYXMgYWRtaW5pc3RyYXRvcnMgYW5kIHRoZXkgd2lsbCBiZSBhc2tlZCB0byBhcHByb3ZlLicpIHsKCQkJc3RhcnQgKCdSZXF1ZXN0IG9yZ2FuaXphdGlvbiBhcHByb3ZhbCcpCgkJfQoJCW91dGNvbWUobmFtZTogJ29yZ2FuaXphdGlvbl9ub2FkbWluaXN0cmF0b3JzJywgZGVzY3JpcHRpb246J1RoZSBPcmdhbml6YXRpb24gaGFzIG5vIGxvY2FsbHkgcmVnaXN0ZXJlZCBhZG1pbmlzdHJhdG9ycy4gRmVkZXJhdGlvbiBBZG1pbmlzdHJhdG9ycyB3aWxsIHVuZGVydGFrZSBhbiBvdXQgb2YgYmFuZCBhcHByb3ZhbCBwcm9jZXNzLicpIHsKCQkJc3RhcnQgKCdSZXF1ZXN0IGV4ZWN1dGl2ZSBmZWRlcmF0aW9uIGFwcHJvdmFsJykKCQl9Cgl9CgkKCXRhc2sobmFtZTogJ1JlcXVlc3Qgb3JnYW5pemF0aW9uIGFwcHJvdmFsJywgZGVzY3JpcHRpb246ICdSZXF1ZXN0cyB0aGF0IGEgdXNlciB3aG8gaXMgYW4gYWRtaW5pc3RyYXRpdmUgbWVtYmVyIG9mIHRoZSBvd25pbmcgb3JnYW5pemF0aW9uIGFwcHJvdmVzIGNyZWF0aW9uIGFuZCBhc3NvY2lhdGVkIGJpbGxpbmcgYnkgaW50cm9kdWNpbmcgdGhpcyBTZXJ2aWNlIFByb3ZpZGVyLicpIHsKCQlhcHByb3Zlcihyb2xlOiAnb3JnYW5pemF0aW9uLXtvcmdhbml6YXRpb259LWFkbWluaXN0cmF0b3JzJykgewoJCQlyZWplY3QobmFtZTogJ05vdCBBc3NvY2lhdGVkJywgZGVzY3JpcHRpb246J05vdCBhIFNlcnZpY2UgUHJvdmlkZXIgYXNzb2NpYXRlZCB3aXRoIHRoaXMgb3JnYW5pemF0aW9uIChTZXJ2aWNlIFByb3ZpZGVyIGRldGFpbHMgd2lsbCBiZSBkaXNjYXJkZWQpJykgewoJCQkJc3RhcnQgKCdEZWxldGUgU2VydmljZSBQcm92aWRlcicpCgkJCX0KCQkJcmVqZWN0KG5hbWU6ICdOb3QgQWNjZXB0ZWQnLCBkZXNjcmlwdGlvbjonVGhlIG9yZ2FuaXphdGlvbiB3aWxsIG5vdCBhY2NlcHQgb3duZXJzaGlwIGZvciB0aGlzIFNlcnZpY2UgUHJvdmlkZXIgKFNlcnZpY2UgUHJvdmlkZXIgZGV0YWlscyB3aWxsIGJlIGRpc2NhcmRlZCknKSB7CgkJCQlzdGFydCAoJ0RlbGV0ZSBTZXJ2aWNlIFByb3ZpZGVyJykKCQkJfQoJCX0KCQlvdXRjb21lKG5hbWU6ICdvcmdhbml6YXRpb25hcHByb3ZlZCcsIGRlc2NyaXB0aW9uOidUaGUgb3JnYW5pemF0aW9uIGhhcyBhY2NlcHRlZCByZXNwb25zaWJpbGl0eSBmb3IgdGhpcyBTZXJ2aWNlIFByb3ZpZGVyJykgewoJCQlzdGFydCAoJ1JlcXVlc3QgRmVkZXJhdGlvbiBhcHByb3ZhbCcpCgkJfQoJfQoJCgl0YXNrKG5hbWU6ICdSZXF1ZXN0IEZlZGVyYXRpb24gYXBwcm92YWwnLCBkZXNjcmlwdGlvbjogJ1JlcXVlc3RzIHRoYXQgYSB1c2VyIHdobyBpcyBhbiBhZG1pbmlzdHJhdGl2ZSBtZW1iZXIgb2YgdGhlIGZlZGVyYXRpb24gYXBwcm92ZXMgYWN0aXZhdGlvbiBmb3IgdGhpcyBTZXJ2aWNlIFByb3ZpZGVyIGFzIGEgdmFsdWFibGUgYWRkaXRpb24gZm9yIHRoZSBmZWRlcmF0aW9uLicpIHsKCQlhcHByb3Zlcihyb2xlOiAnZmVkZXJhdGlvbi1hZG1pbmlzdHJhdG9ycycpIHsKCQkJcmVqZWN0KG5hbWU6ICdOb3QgQWNjZXB0ZWQnLCBkZXNjcmlwdGlvbjonVGhlIGZlZGVyYXRpb24gd2lsbCBub3QgYWNjZXB0IG93bmVyc2hpcCBmb3IgdGhpcyBTZXJ2aWNlIFByb3ZpZGVyIChTZXJ2aWNlIFByb3ZpZGVyIGRldGFpbHMgd2lsbCBiZSBkaXNjYXJkZWQpJykgewoJCQkJc3RhcnQgKCdEZWxldGUgU2VydmljZSBQcm92aWRlcicpCgkJCX0KCQl9CgkJb3V0Y29tZShuYW1lOiAnZmVkZXJhdGlvbmFwcHJvdmVkJywgZGVzY3JpcHRpb246J1RoZSBvcmdhbml6YXRpb24gaGFzIGFjY2VwdGVkIHJlc3BvbnNpYmlsaXR5IGZvciB0aGlzIFNlcnZpY2UgUHJvdmlkZXInKSB7CgkJCXN0YXJ0ICgnQWN0aXZhdGUgU2VydmljZSBQcm92aWRlcicpCgkJfQoJfQoJCgl0YXNrKG5hbWU6ICdSZXF1ZXN0IGV4ZWN1dGl2ZSBmZWRlcmF0aW9uIGFwcHJvdmFsJywgZGVzY3JpcHRpb246ICdSZXF1ZXN0cyB0aGF0IGEgdXNlciB3aG8gaXMgYW4gYWRtaW5pc3RyYXRpdmUgbWVtYmVyIG9mIHRoZSBmZWRlcmF0aW9uIGFwcHJvdmVzIGFjdGl2YXRpb24gZm9yIHRoaXMgU2VydmljZSBQcm92aWRlciBmb3IgdGhlIEZlZGVyYXRpb24gYW5kIG9uIGJlaGFsZiBvZiB0aGUgb3duaW5nIE9yZ2FuaXphdGlvbi4gRXh0ZXJuYWwgdmVyaWZpY2F0aW9uIHNob3VsZCBiZSB1bmRlcnRha2VuLicpIHsKCQlhcHByb3Zlcihyb2xlOiAnZmVkZXJhdGlvbi1hZG1pbmlzdHJhdG9ycycpIHsKCQkJcmVqZWN0KG5hbWU6ICdOb3QgQWNjZXB0ZWQnLCBkZXNjcmlwdGlvbjonVGhlIGZlZGVyYXRpb24gd2lsbCBub3QgYWNjZXB0IG93bmVyc2hpcCBmb3IgdGhpcyBTZXJ2aWNlIFByb3ZpZGVyIChTZXJ2aWNlIFByb3ZpZGVyIGRldGFpbHMgd2lsbCBiZSBkaXNjYXJkZWQpLicpIHsKCQkJCXN0YXJ0ICgnRGVsZXRlIFNlcnZpY2UgUHJvdmlkZXInKQoJCQl9CgkJCXJlamVjdChuYW1lOiAnT3JnYW5pemF0aW9uIE5vdCBBY2NlcHRlZCcsIGRlc2NyaXB0aW9uOidUaGUgb3JnYW5pemF0aW9uIHJlc3BvbnNpYmxlIHdpbGwgbm90IGFjY2VwdCBvd25lcnNoaXAgZm9yIHRoaXMgU2VydmljZSBQcm92aWRlciAoU2VydmljZSBQcm92aWRlciBkZXRhaWxzIHdpbGwgYmUgZGlzY2FyZGVkKS4nKSB7CgkJCQlzdGFydCAoJ0RlbGV0ZSBTZXJ2aWNlIFByb3ZpZGVyJykKCQkJfQoJCX0KCQlvdXRjb21lKG5hbWU6ICdleGVjdXRpdmVseWFwcHJvdmVkJywgZGVzY3JpcHRpb246J1RoZSBvcmdhbml6YXRpb24gYW5kIGZlZGVyYXRpb24gY29tYmluZWQgaGF2ZSBhY2NlcHRlZCByZXNwb25zaWJpbGl0eSBmb3IgdGhpcyBTZXJ2aWNlIFByb3ZpZGVyJykgewoJCQlzdGFydCAoJ0FjdGl2YXRlIFNlcnZpY2UgUHJvdmlkZXInKQoJCX0KCX0KCQoJdGFzayhuYW1lOiAnQWN0aXZhdGUgU2VydmljZSBQcm92aWRlcicsIGRlc2NyaXB0aW9uOiAnQWN0aXZhdGVzIHRoZSBTZXJ2aWNlIFByb3ZpZGVyIHNvIGl0IGNhbiBiZSByZW5kZXJlZCBpbnRvIE1ldGFkYXRhLicpIHsKCQlleGVjdXRlKHNjcmlwdDogJ3Nwc3NvZGVzY3JpcHRvcl9hY3RpdmF0ZScpCgkJb3V0Y29tZShuYW1lOiAnc3Bzc29kZXNjcmlwdG9yYWN0aXZhdGVkJywgZGVzY3JpcHRpb246J1RoZSBTZXJ2aWNlIFByb3ZpZGVyIGlzIG5vdyBhY3RpdmF0ZSBhbmQgYmVpbmcgcG9wdWxhdGVkIGludG8gTWV0YWRhdGEnKSB7CgkJCXN0YXJ0ICgnZmluaXNoJykKCQl9Cgl9CgkKCXRhc2sobmFtZTogJ0RlbGV0ZSBTZXJ2aWNlIFByb3ZpZGVyJywgZGVzY3JpcHRpb246ICdEZWxldGVzIHRoZSBTZXJ2aWNlIFByb3ZpZGVyIGFmdGVyIGl0IGhhcyBiZWVuIHJlamVjdGVkLicpIHsKCQlleGVjdXRlKHNjcmlwdDogJ3Nwc3NvZGVzY3JpcHRvcl9kZWxldGUnKQoJCW91dGNvbWUobmFtZTogJ3Nwc3NvZGVzY3JpcHRvcmRlbGV0ZWQnLCBkZXNjcmlwdGlvbjonVGhlIFNlcnZpY2UgUHJvdmlkZXIgZGVmaW5pdGlvbiBoYXMgYmVlbiBkZWxldGVkJykgewoJCQlzdGFydCAoJ2ZpbmlzaCcpCgkJfQoJfQoKCXRhc2sobmFtZTogJ2ZpbmlzaCcsIGRlc2NyaXB0aW9uOiAnQ29tcGxldGVzIHRoZSBzcHNzb2Rlc2NyaXB0b3JfY3JlYXRlIHdvcmtmbG93JykgewoJCWZpbmlzaCgpCgl9CgkKfQ=="
+workflowProcessService.create(new String(process4.decodeBase64()))
+
+SecurityUtils.metaClass = null// Next step
+println 'Completed creation of AAF workflows'
+}
+
+step1()
+step2()
+step3()
+step4()
+true

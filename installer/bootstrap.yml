@@ -1,0 +1,32 @@
+---
+- hosts: fr-servers
+  tasks:
+  - name: Create FR bootstrap directory
+    file: >
+      name=/opt/federationregistry/bootstrap state=directory
+      owner=root group=wheel mode=0700
+  - name: Wait for FR startup
+    shell: 'curl -I http://localhost:{{ federationregistry.tomcat.http_port }}/federationregistry/internal/console'
+    register: result
+    until: result.stdout.startswith("HTTP/1.1 200 OK")
+    retries: 30
+    delay: 5
+    failed_when: not result.stdout.startswith("HTTP/1.1 200 OK")
+    changed_when: false
+  - name: Write configuration script
+    template: >
+      src=bootstrap/{{ item }}.groovy.j2
+      dest=/opt/federationregistry/bootstrap/{{ item }}.groovy
+    with_items:
+    - federationregistry-base
+    - federationregistry-exampledata
+  - name: Run configuration scripts
+    command: >
+      curl --referer 'https://{{ federationregistry.service_hostname }}/federationregistry/'
+        --data-urlencode 'code@/opt/federationregistry/bootstrap/{{ item }}.groovy'
+        --fail --output '/opt/federationregistry/bootstrap/{{ item }}-result.json'
+        'http://localhost:{{ federationregistry.tomcat.http_port }}/federationregistry/internal/console/execute'
+        creates=/opt/federationregistry/bootstrap/{{ item }}-result.json
+    with_items:
+    - federationregistry-base
+    - federationregistry-exampledata
