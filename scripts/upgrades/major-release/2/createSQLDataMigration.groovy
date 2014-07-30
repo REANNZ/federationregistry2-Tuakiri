@@ -11,7 +11,7 @@ output.append("\n-- Subjects\n")
 // Subjects
 sql.eachRow("select * from profile_base inner join _user on profile_base.id = _user.profile_id", {s ->
   if(s.username != 'internaladministrator' && !s.username.contains('NameIDImpl'))   // exclude internal user and clean up some crappy accounts
-    output.append("insert into subject_base (id, enabled, principal, class, cn, contact_id, email) values ($s.id, $s.enabled, '$s.username', 'aaf.fr.identity.Subject', '${s.full_name.replace('\'','')}', $s.contact_id, '$s.email');\n")
+    output.append("insert into subject_base (id, enabled, principal, class, cn, contact_id, email) values ($s.id, $s.enabled, '$s.username', 'aaf.fr.identity.Subject', '${s.full_name.replace('\'','\'\'')}', $s.contact_id, '${s.email.replaceAll('\'','\'\'')}');\n")
   else
     excludedSubjects.add(s.id)
 })
@@ -39,6 +39,11 @@ output.append("\n-- Permissions\n")
 //Permissions
 output.append("update permission set type='grails.plugins.federatedgrails.WildcardPermission';\n")
 output.append("update permission set class='grails.plugins.federatedgrails.Permission';\n")
+
+// Delete from Permissions table all entries pointing to the excluded roles
+excludedRoles.each {
+    output.append("delete from permission where role_id = $it;\n");
+}
 
 output.append("\n\n")
 
@@ -77,7 +82,7 @@ sql.eachRow("select * from contact", { ct ->
 
   x = sql.firstRow("select uri from uri where id=?", ct.email_id)
   if (x)
-    output.append("update contact set email='$x.uri' where id=$ct.id;\n")
+    output.append("update contact set email='${x.uri.replaceAll("'","''")}' where id=$ct.id;\n")
 
   if(ct.work_phone_id){
     x = sql.firstRow("select uri from uri where id=?", ct.work_phone_id)

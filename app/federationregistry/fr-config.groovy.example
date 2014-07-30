@@ -10,7 +10,7 @@ environments {
     greenmail.disabled = true
     testDataConfig.enabled = false
 
-    /* 
+    /*
     Example when using gmail, configure to suit your own environment
     Per: http://grails.org/plugin/mail
 
@@ -35,7 +35,7 @@ environments {
   }
   development {
     grails {
-      resources.debug = true  
+      resources.debug = true
       gsp.enable.reload = true
       mail {
         port = com.icegreen.greenmail.util.ServerSetupTest.SMTP.port
@@ -44,7 +44,7 @@ environments {
 
     testDataConfig.enabled = false
   }
-} 
+}
 
 // Federated Identity Configuration
 federation {
@@ -54,23 +54,23 @@ federation {
   federationactive = true
   developmentactive = false
   autoprovision = true
-  
+
   // Supported as fallback for problematic webservers but should usually be true
   // See https://wiki.shibboleth.net/confluence/display/SHIB2/NativeSPAttributeAccess for more
-  request.attributes = false 
+  request.attributes = false
   ssoendpoint = "/Shibboleth.sso/Login"
-  
+
   // The subject class being utilized by the host application
   app.subject = "aaf.fr.identity.Subject"
-  
+
   mapping {
     principal = "persistent-id"   // The unique and persistent ID used to identify this principal for current and subsequent sessions (eduPersonTargetedID)
     credential = "Shib-Session-ID"  // The internal session key assigned to the session associated with the request and hence the credential used
     entityID = "Shib-Identity-Provider" // The entityID of the IdP that authenticated the subject associated with the request.
-    
-    applicationID = "Shib-Application-ID" // The applicationId property derived for the request.     
-    idpAuthenticationInstant = "Shib-Authentication-Instant" // The ISO timestamp provided by the IdP indicating the time of authentication. 
-    
+
+    applicationID = "Shib-Application-ID" // The applicationId property derived for the request.
+    idpAuthenticationInstant = "Shib-Authentication-Instant" // The ISO timestamp provided by the IdP indicating the time of authentication.
+
     cn = "cn"
     email= "mail"
     sharedToken = "auEduPersonSharedToken"
@@ -82,8 +82,25 @@ aaf {
   fr {
     bootstrap = false
 
+    export {
+      enabled = false
+
+      // This MUST be changed to something UNIQUE for each install
+      // DO NOT USE THE SUPPLIED EXAMPLE VALUE BELOW
+      key = 'RHptv0kF!QcrK45MIrWFOxgQmHyaAZHEymm$SZp1KzbrJfAFDGJGKv6bwY#clCy'
+    }
+
     metadata {
       federation = "aaf.edu.au"
+
+      /* registration info - optional
+      // website of your registration authority (federation)
+      registrationAuthority = "https://www.federation.org/"
+      // link to the registration policy (contents must be immutable)
+      registrationPolicy = "https://www.federation.org/RegistrationPolicy/"
+      // language of the registration policy
+      registrationPolicyLang = "en"
+       */
       current {
         validForDays = 7
       }
@@ -91,12 +108,12 @@ aaf {
         validForDays = 7
       }
     }
-    
+
     certificates {
       // shib default of 20 years for assertion certs so this must be large
       maxlifeindays = 7800
     }
-    
+
     knownimplementations {
       identityproviders {
         shib22 {
@@ -126,8 +143,8 @@ aaf {
       }
       serviceproviders {
         shib23 {
-          displayName = "Shibboleth Service Provider (2.3.x)"
-          selected = true
+          displayName = "Shibboleth Service Provider (2.3.x - legacy)"
+          selected = false
           entitydescriptor = '$host/shibboleth'
           acs {
             post {
@@ -146,19 +163,19 @@ aaf {
           slo {
             artifact.uri = '$host/Shibboleth.sso/SLO/Artifact'
             redirect.uri = '$host/Shibboleth.sso/SLO/Redirect'
-            soap.uri = '$host/Shibboleth.sso/SLO/SOAP' 
+            soap.uri = '$host/Shibboleth.sso/SLO/SOAP'
             post.uri = '$host/Shibboleth.sso/SLO/POST'
           }
           mnid {
             artifact.uri = '$host/Shibboleth.sso/NIM/Artifact'
-            redirect.uri = '$host/Shibboleth.sso/NIM/Redirect' 
+            redirect.uri = '$host/Shibboleth.sso/NIM/Redirect'
             soap.uri = '$host/Shibboleth.sso/NIM/SOAP'
             post.uri = '$host/Shibboleth.sso/NIM/POST'
           }
         }
         shib24 {
           displayName = "Shibboleth Service Provider (2.4.x, 2.5.x)"
-          selected = false
+          selected = true
           entitydescriptor = '$host/shibboleth'
           acs {
             post {
@@ -177,12 +194,12 @@ aaf {
           slo {
             artifact.uri = '$host/Shibboleth.sso/SLO/Artifact'
             redirect.uri = '$host/Shibboleth.sso/SLO/Redirect'
-            soap.uri = '$host/Shibboleth.sso/SLO/SOAP' 
+            soap.uri = '$host/Shibboleth.sso/SLO/SOAP'
             post.uri = '$host/Shibboleth.sso/SLO/POST'
           }
           mnid {
             artifact.uri = '$host/Shibboleth.sso/NIM/Artifact'
-            redirect.uri = '$host/Shibboleth.sso/NIM/Redirect' 
+            redirect.uri = '$host/Shibboleth.sso/NIM/Redirect'
             soap.uri = '$host/Shibboleth.sso/NIM/SOAP'
             post.uri = '$host/Shibboleth.sso/NIM/POST'
           }
@@ -207,7 +224,7 @@ aaf {
           }
           slo {
             redirect.uri = '$host/simplesaml/module.php/saml/sp/saml2-logout.php/default-sp'
-            soap.uri = '$host/simplesaml/module.php/saml/sp/saml2-logout.php/default-sp' 
+            soap.uri = '$host/simplesaml/module.php/saml/sp/saml2-logout.php/default-sp'
           }
         }
       }
@@ -223,7 +240,7 @@ dataSource {
   dialect = org.hibernate.dialect.MySQL5InnoDBDialect
   dbCreate = "update"
   loggingSql = false
-  
+
   url = "jdbc:mysql://localhost/federationregistry2?useUnicode=yes&characterEncoding=UTF-8"
   username = "fr"
   password = "password"
@@ -234,7 +251,7 @@ dataSource {
 dataSource {
   dbCreate = "update"
   dialect= org.hibernate.dialect.MySQL5InnoDBDialect
-  jndiName= "java:comp/env/jdbc/FEDERATIONREGISTRY2" 
+  jndiName= "java:comp/env/jdbc/FEDERATIONREGISTRY2"
 }
 **/
 
@@ -265,9 +282,9 @@ log4j = {
                         'grails.app.domains',
                         'grails.app.services',
                         'grails.app.realms',
-                        'aaf.fr',                       
+                        'aaf.fr',
                         'org.apache.shiro'], additivity: false
-          
+
   warn  'fr-grails'   :['org.codehaus.groovy.grails.web.servlet',
                         'org.codehaus.groovy.grails.web.pages',
                         'org.codehaus.groovy.grails.web.sitemesh',

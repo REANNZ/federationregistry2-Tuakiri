@@ -12,6 +12,7 @@ grails.plugin.location.reporting = "../plugins/reporting"
 grails.plugin.location.metadata = "../plugins/metadata"
 grails.plugin.location.administration = "../plugins/administration"
 grails.plugin.location.api = "../plugins/api"
+grails.plugin.location.export  = "../plugins/export"
 
 grails.project.dependency.resolution = {
   inherits("global") {
@@ -19,7 +20,7 @@ grails.project.dependency.resolution = {
 
   log "warn"
   checksums true
-  
+
   repositories {
     inherits true
 
@@ -56,7 +57,7 @@ grails.project.dependency.resolution = {
     compile ":mail:1.0"
     compile ":build-test-data:2.0.3"
     compile ":hibernate:$grailsVersion"
-    
+
     runtime ":resources:1.1.6"
     runtime ":zipped-resources:1.0"
     runtime ":cached-resources:1.0"
@@ -80,7 +81,7 @@ grails.project.dependency.resolution = {
 
 codenarc.reports = {
     HTMLReport('html') {
-        outputFile = 'target/test-reports/codenarc.html' 
-        title = 'CodeNarc' 
-    } 
+        outputFile = 'target/test-reports/codenarc.html'
+        title = 'CodeNarc'
+    }
 }

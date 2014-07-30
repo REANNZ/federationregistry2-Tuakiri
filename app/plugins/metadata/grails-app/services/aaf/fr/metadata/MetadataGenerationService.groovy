@@ -2,6 +2,7 @@ package aaf.fr.metadata
 
 import java.text.SimpleDateFormat
 import org.springframework.transaction.annotation.*
+import org.springframework.beans.factory.InitializingBean
 import aaf.fr.foundation.*
 
 /**
@@ -9,11 +10,35 @@ import aaf.fr.foundation.*
  *
  * @author Bradley Beddoes
  */
-class MetadataGenerationService {
+class MetadataGenerationService implements InitializingBean {
   
-  def populateSchema() {
-    ["xmlns":"urn:oasis:names:tc:SAML:2.0:metadata", "xmlns:xsi":"http://www.w3.org/2001/XMLSchema-instance", 'xmlns:saml':'urn:oasis:names:tc:SAML:2.0:assertion', 'xmlns:shibmd':'urn:mace:shibboleth:metadata:1.0',
+  def grailsApplication
+
+  def registrationAuthority
+  def registrationPolicy
+  def registrationPolicyLang
+
+  def hasRegistrationAuthority
+  def hasRegistrationPolicy
+
+  def void afterPropertiesSet() {
+      // initialize registration info from grailsApplication.config
+      registrationAuthority = grailsApplication.config.aaf.fr.metadata.registrationAuthority
+      registrationPolicy = grailsApplication.config.aaf.fr.metadata.registrationPolicy
+      registrationPolicyLang = grailsApplication.config.aaf.fr.metadata.registrationPolicyLang
+
+      hasRegistrationAuthority = registrationAuthority && !registrationAuthority.isEmpty()
+      hasRegistrationPolicy = registrationPolicy && registrationPolicyLang
+  }
+
+  def populateSchema(minimal, roleExtensions) {
+    def namespaces = ["xmlns":"urn:oasis:names:tc:SAML:2.0:metadata", "xmlns:xsi":"http://www.w3.org/2001/XMLSchema-instance", 'xmlns:saml':'urn:oasis:names:tc:SAML:2.0:assertion', 'xmlns:shibmd':'urn:mace:shibboleth:metadata:1.0',
       'xmlns:ds':'http://www.w3.org/2000/09/xmldsig#', "xsi:schemaLocation":"urn:oasis:names:tc:SAML:2.0:metadata saml-schema-metadata-2.0.xsd urn:mace:shibboleth:metadata:1.0 shibboleth-metadata-1.0.xsd http://www.w3.org/2000/09/xmldsig# xmldsig-core-schema.xsd"]
+    if (hasRegistrationAuthority && !minimal && roleExtensions) {
+        namespaces['xmlns:mdrpi'] = 'urn:oasis:names:tc:SAML:metadata:rpi';
+        namespaces["xsi:schemaLocation"] = namespaces["xsi:schemaLocation"] + " urn:oasis:names:tc:SAML:metadata:rpi saml-metadata-rpi-v1.0.xsd"
+    }
+    namespaces
   }
   
   def localizedName(builder, type, lang, content) {
@@ -115,7 +140,7 @@ class MetadataGenerationService {
     def currently = new Date()
     
     def params = [:]
-    params.putAll(populateSchema())
+    params.putAll(populateSchema(minimal, roleExtensions))
     params.ID =  idf.format(currently)
     params.validUntil = sdf.format(validUntil)
     params.Name = entitiesDescriptor.name
@@ -160,9 +185,23 @@ class MetadataGenerationService {
       else {
         def params = [:]
         params.entityID = entityDescriptor.entityID
-        if(schema) params.putAll(populateSchema()) 
+        if(schema) params.putAll(populateSchema(minimal, roleExtensions)) 
           
         builder.EntityDescriptor(params) {
+          if (hasRegistrationAuthority && !minimal && roleExtensions) {
+            builder.Extensions() {
+              def rpiparams = [:]
+              SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+              sdf.setTimeZone(TimeZone.getTimeZone("UTC"))
+              rpiparams.registrationAuthority=registrationAuthority
+              rpiparams.registrationInstant=sdf.format(entityDescriptor.dateCreated) //"2014-02-11T23:59:52Z"
+              builder."mdrpi:RegistrationInfo"(rpiparams) {
+                if (hasRegistrationPolicy) {
+                  localizedUri(builder, "mdrpi:RegistrationPolicy", registrationPolicyLang, registrationPolicy)
+                }
+              }
+            }
+          }
           entityDescriptor.idpDescriptors?.sort{it.id}?.each { idp -> idpSSODescriptor(builder, all, minimal, roleExtensions, idp) }
           entityDescriptor.spDescriptors?.sort{it.id}?.each { sp -> spSSODescriptor(builder, all, minimal, roleExtensions, sp) }
           entityDescriptor.attributeAuthorityDescriptors?.sort{it.id}?.each { aa -> attributeAuthorityDescriptor(builder, all, minimal, roleExtensions, aa)}

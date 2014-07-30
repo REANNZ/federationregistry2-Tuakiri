@@ -61,6 +61,16 @@ class AttributeFilterGenerationService {
 			}
 		}
 	}
+
+        def attributeValue(builder, v) {
+		boolean isRegex = v.value.startsWith('^') && v.value.endsWith('$')
+
+		if (isRegex) {
+			builder."basic:Rule" ("xsi:type":"basic:AttributeValueRegex", regex:v.value)
+		} else {
+			builder."basic:Rule" ("xsi:type":"basic:AttributeValueString", value:v.value, ignoreCase:"true")
+		}
+        }
 	
 	def servicePolicy(builder, identityProvider, serviceProvider, groupID) {
 		builder.mkp.yield "\n"
@@ -84,12 +94,12 @@ class AttributeFilterGenerationService {
 										PermitValueRule("xsi:type":"basic:OR") {
 											if(ra.values.size() == 1) {
 												def v = ra.values.toList().get(0)	// OR requires min 2 rules. We add this here to be schema compliant even when only a single value is requested
-												"basic:Rule" ("xsi:type":"basic:AttributeValueString", value:v.value, ignoreCase:"true")
-												"basic:Rule" ("xsi:type":"basic:AttributeValueString", value:v.value, ignoreCase:"true")
+												attributeValue(builder, v)
+												attributeValue(builder, v)
 											}
 											else {
 												ra.values.sort{it.value}.each { v ->
-													"basic:Rule" ("xsi:type":"basic:AttributeValueString", value:v.value, ignoreCase:"true")
+													attributeValue(builder, v)
 												}
 											}
 										}

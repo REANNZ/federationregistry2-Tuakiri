@@ -66,6 +66,12 @@ sub GetSPID {
 # SAML1 SSO request
 # 132.181.65.178 - - [19/Aug/2011:15:03:06 +1200] "GET /ds/DS?target=cookie&shire=https%3A%2F%2Fvirtualhome.test.tuakiri.ac.nz%2FShibboleth.sso%2FSAML%2FPOST&providerId=https%3A%2F%2Fvirtualhome.test.tuakiri.ac.nz%2Fshibboleth&time=1313722980&cache=perm&action=selection&origin=https://idp20test.canterbury.ac.nz/idp/shibboleth HTTP/1.1" 302 -
 
+# Note (TODO): this only detects explicitly established sessions, not sessions established via cookie redirect.
+# However, standard ShibbolethDS does not support cookie redirects, so this
+# script would only be missing cookie sessions with the Tuakiri customized DS.
+# However, the Tuakiri customzied DS now also supports explicit session
+# logging, so please use the parse-ds-logs.pl for parsing logs on such a DS.
+
 while (<>) {
     if ( /^(\S+) \S+ \S+ \[([^\]]+)\] "GET [^\?]+\?([^" ]+) [^" ]+"/ ) {
 	# Match should get:
@@ -125,9 +131,9 @@ while (<>) {
             my @IDres = &GetIdPID($DS_session{"idp_name"});
             if (scalar @IDres == 1) {
 		$DS_session{"idpid"} = $IDres[0];
-		print "Mapped IdP name " . $query_keyvals{"origin"} . " to IdP ID " . $DS_session{"idpid"} . "\n" if ($main::debug>=2);
+		print "Mapped IdP name " . $DS_session{"idp_name"} . " to IdP ID " . $DS_session{"idpid"} . "\n" if ($main::debug>=2);
 	    } else { 
-		print "IdP " . $query_keyvals{"origin"} . " not found in local FR\n" if ($main::verbose>=2);
+		print "IdP " . $DS_session{"idp_name"} . " not found in local FR\n" if ($main::verbose>=2);
 	    };
         };
 

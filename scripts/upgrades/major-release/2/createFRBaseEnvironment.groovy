@@ -21,41 +21,63 @@ roleService = ctx.getBean("roleService")
 permissionService = ctx.getBean("permissionService")
 
 // Create federation-administrators role, used in workflows etc
-def adminRole = roleService.createRole("federation-administrators", "Role representing federation level administrators who can make decisions onbehalf of the entire federation, granted global FR access", false)
+// First check if the role already exists
+def adminRole = Role.findByName("federation-administrators")
+if (!adminRole) {
+  adminRole = roleService.createRole("federation-administrators", "Role representing federation level administrators who can make decisions onbehalf of the entire federation, granted global FR access", false)
+}
 
 // Grant administrative global access permission
-Permission adminPermission = new Permission(target:'*')
-adminPermission.managed = true
-adminPermission.type = Permission.adminPerm
-
-permissionService.createPermission(adminPermission, adminRole)
+// Check first if the role already has the required permission, otherwise create and grant it.
+if (!adminRole.permissions.findAll{it -> it.target == '*'}) {
+    Permission adminPermission = new Permission(target:'*')
+    adminPermission.managed = true
+    adminPermission.type = Permission.defaultPerm
+    permissionService.createPermission(adminPermission, adminRole)
+}
 
 // Create federation-reporting role, used to grant full reporting access to non fr wide admins
-def reportingRole = roleService.createRole("federation-reporting", "Access to federation wide reports for executive, management etc.", false)
+// First check if the role already exists
+def reportingRole = Role.findByName("federation-reporting")
+if (!reportingRole) {
+  reportingRole = roleService.createRole("federation-reporting", "Access to federation wide reports for executive, management etc.", false)
+}
 
 // Grant global reports access permission
-Permission reportingAdminPermission = new Permission(target:'federation:management:reporting')
-reportingAdminPermission.managed = true
-reportingAdminPermission.type = Permission.adminPerm
-
-permissionService.createPermission(reportingAdminPermission, reportingRole)
+// Check first if the role already has the required permission, otherwise create and grant it.
+if (!reportingRole.permissions.findAll{it -> it.target == 'federation:management:reporting'}) {
+  Permission reportingAdminPermission = new Permission(target:'federation:management:reporting')
+  reportingAdminPermission.managed = true
+  reportingAdminPermission.type = Permission.defaultPerm
+  permissionService.createPermission(reportingAdminPermission, reportingRole)
+}
 
 // Create contactmanagement-reporting role, used to grant full contact management access to non fr wide admins
-def contactManagementRole = roleService.createRole("federation-contactmanagement", "Access to manage contacts for all IdP and SP", false)
+// First check if the role already exists
+def contactManagementRole = Role.findByName("federation-contactmanagement")
+if (!contactManagementRole) {
+  contactManagementRole = roleService.createRole("federation-contactmanagement", "Access to manage contacts for all IdP and SP", false)
+}
 
 // Grant global reports access permission
-Permission contactAdminPermission = new Permission(target:'federation:management:contacts')
-contactAdminPermission.managed = true
-contactAdminPermission.type = Permission.adminPerm
-
-permissionService.createPermission(contactAdminPermission, contactManagementRole)
+// Check first if the role already has the required permission, otherwise create and grant it.
+if (!contactManagementRole.permissions.findAll{it -> it.target == 'federation:management:contacts'}) {
+  Permission contactAdminPermission = new Permission(target:'federation:management:contacts')
+  contactAdminPermission.managed = true
+  contactAdminPermission.type = Permission.defaultPerm
+  permissionService.createPermission(contactAdminPermission, contactManagementRole)
+}
 
 // Populate default administrative account
-def subject = new aaf.fr.identity.Subject(principal:'internaladministrator', cn:'internal administrator', email:'internaladministrator@not.valid')
-subject.save(flush: true)
-if(subject.hasErrors()) {
-  subject.errors.each { println it }
-  return false
+// First check if the account already exists
+def subject = aaf.fr.identity.Subject.findByPrincipal('internaladministrator')
+if (!subject) {
+  subject = new aaf.fr.identity.Subject(principal:'internaladministrator', cn:'internal administrator', email:'internaladministrator@not.valid')
+  subject.save(flush: true)
+  if(subject.hasErrors()) {
+    subject.errors.each { println it }
+    return false
+  }
 }
 
 def adminSubject = aaf.fr.identity.Subject.findWhere(principal:administratorsTargetedID)

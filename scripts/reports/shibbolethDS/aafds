@@ -1,0 +1,18 @@
+# install this into /etc/logrotate.d/aafds
+
+/var/log/aafds/wayf.log {
+    nocompress
+    create
+    daily
+    dateext
+    # Fix extended permissions on log file after rotating
+    postrotate
+       chcon -t httpd_sys_content_t /var/log/aafds/wayf.log
+       /opt/shibboleth-ds/bin/push-aafds-logs.sh
+    endscript
+    # Keep 10 years worth of logs
+    rotate 3650
+    ifempty
+}
+
+
