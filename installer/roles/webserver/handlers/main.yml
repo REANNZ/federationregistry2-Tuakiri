@@ -1,0 +1,9 @@
+---
+- name: 'Apache: Restart httpd'
+  service: name=httpd state=restarted
+  # Config might not be complete the first time this handler runs
+  ignore_errors: True
+
+- name: 'Apache: Start httpd'
+  service: name=httpd state=started enabled=yes
+  ignore_errors: True

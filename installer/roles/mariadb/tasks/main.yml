@@ -1,0 +1,62 @@
+---
+- name: 'MariaDB: Add MariaDB yum repository'
+  template: >
+    src=mariadb.repo.j2 dest=/etc/yum.repos.d/mariadb.repo
+    owner=root group=wheel mode=0600
+  tags: db
+
+- name: 'MariaDB: Copy GPG key'
+  copy: >
+    src=RPM-GPG-KEY-MariaDB
+    dest=/root/RPM-GPG-KEY-MariaDB
+    owner=root group=wheel mode=0644
+  tags: db
+
+- name: 'MariaDB: Install GPG Key'
+  rpm_key: state=present key=/root/RPM-GPG-KEY-MariaDB
+  tags: db
+
+- name: 'MariaDB: Install required packages'
+  yum: 'pkg=MariaDB-server,MariaDB-client,MariaDB-devel,MySQL-python'
+  tags: db
+
+- name: 'MariaDB: Create /var/lib/mysql/tmp'
+  file: dest=/var/lib/mysql/tmp owner=mysql group=mysql mode=0700 state=directory
+  tags: db
+
+- name: 'MariaDB: Create /var/lib/mysql/binlog'
+  file: dest=/var/lib/mysql/binlog owner=mysql group=mysql mode=0700 state=directory
+  tags: db
+
+- name: 'MariaDB: Create /var/run/mysqld'
+  file: dest=/var/run/mysqld owner=mysql group=mysql mode=0755 state=directory setype=mysqld_var_run_t
+  tags: db
+
+- name: "MariaDB: Start database server"
+  shell: service mysql start
+
+- name: 'MariaDB: Generate password'
+  shell: openssl rand -base64 27 | tr '+/' '-_' > /root/.mysql_password creates=/root/.mysql_password
+  tags: password
+  register: password
+
+- name: 'MariaDB: Retrieve password'
+  command: cat /root/.mysql_password
+  changed_when: false
+  register: mariadb_password_output
+  tags: password
+
+- name: 'MariaDB: Create /root/mysql_secure_installation.sql'
+  template: src=mysql_secure_installation.sql.j2 dest=/root/mysql_secure_installation.sql owner=root group=wheel mode=0600
+  tags: password
+  when: password.changed
+  register: security_sql
+
+- name: 'MariaDB: Run /root/mysql_secure_installation.sql'
+  command: 'mysql -e "source /root/mysql_secure_installation.sql"'
+  tags: password
+  when: security_sql.changed
+
+- name: 'MariaDB: Create /root/.my.cnf'
+  template: src=dot-my.cnf.j2 dest=/root/.my.cnf owner=root group=wheel mode=0600
+  tags: password
