@@ -25,10 +25,10 @@ This sub-project of FR2 will help deployers get up and running with both a WAR b
 1. Ansible! via the [Ansible Install](http://docs.ansible.com/intro_installation.html) guide. We run this directly on our OSX machines but you can run it from anywhere you care to install it (and can SSH to your FR machine as described above).
 
    Once installed you should be able to run the following command and get a similar result:
-   
+
         ansible {dns-entry} -m ping
 		{dns-entry} | success >> {
-		    "changed": false, 
+		    "changed": false,
 		    "ping": "pong"
 		}
 
@@ -56,10 +56,11 @@ Once the above complete:
 4. You should now be within the FR dashboard and you can view some basic subscriber information.
 5. Get Administrative access for 'Fred Bloggs'
 	1. execute `ssh root@{dns-entry}`
-	2. in the ssh session execute `mysql` 
+	2. in the ssh session execute `mysql`
 	3. run the mysql command 'use federationregistry_exampledb; insert into role_subjects (role_id, subject_base_id) values (1, 2);
 	4. Refresh your browser, 'Fred Bloggs' is now a super administrator and can assign those rights to others via the web interface.
 6. Edit both of the `fr-config.groovy` files and set 'aaf.fr.bootstrap=false'
+6. Run `service federationregistry restart`
 6. You're done!.
 
 ## War vs Developer mode
