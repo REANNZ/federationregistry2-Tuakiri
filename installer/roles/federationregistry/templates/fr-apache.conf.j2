@@ -1,0 +1,15 @@
+<VirtualHost {{ federationregistry.service_ip }}:80>
+  ServerName {{ federationregistry.service_hostname }}:80
+  DocumentRoot /var/www/vhosts/{{ federationregistry.service_hostname }}
+
+  <Location /metadata>
+    ExpiresDefault "access"
+  </Location>
+
+  ProxyPass /federationregistry ajp://localhost:{{ federationregistry.tomcat.ajp_port }}/federationregistry retry=2
+  ProxyPassReverse /federationregistry ajp://localhost:{{ federationregistry.tomcat.ajp_port }}/federationregistry
+  <Location /federationregistry>
+    Header set X-UA-Compatible "IE=edge"
+  </Location>
+
+</VirtualHost>

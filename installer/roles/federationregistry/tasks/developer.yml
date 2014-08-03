@@ -1,0 +1,35 @@
+---
+- name: 'Federation Registry Development: Github Checkout'
+  git: repo=https://github.com/ausaccessfed/federationregistry.git
+    dest=/opt/federationregistry-repository
+
+- name: 'Federation Registry Development: Create log directory'
+  file: name=/opt/federationregistry-repository/app/federationregistry/logs state=directory owner=root group=root mode=0755
+
+- name: 'Federation Registry Development: Write fr-config.groovy'
+  template: >
+    src=fr-config-developer.groovy.j2
+    dest=/opt/federationregistry-repository/app/federationregistry/fr-config.groovy
+    owner=root group=root mode=0640
+
+- name: 'Federation Registry Development: Set fr_config'
+  lineinfile:
+    dest=/root/.bashrc
+    line="export fr_config=/opt/federationregistry-repository/app/federationregistry"
+    regexp='^fr_config'
+    owner=root
+    state=present
+    insertafter=EOF
+    create=True
+
+- name: 'Federation Registry Development: Download dependencies and compile FR (this will take some time..... grab a beer.)'
+  shell:
+    source /root/.bashrc;
+    cd /opt/federationregistry-repository/app/federationregistry;
+    grails compile
+
+- name: 'Federation Registry Development: Apply basic AAF theme to get started'
+  shell:
+    source /root/.bashrc;
+    cd /opt/federationregistry-repository/app/federationregistry;
+    grails importtheme

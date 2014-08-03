@@ -1,0 +1,5 @@
+---
+dependencies:
+- { role: webserver, web_server_variant: apache }
+- tomcat
+- gradle

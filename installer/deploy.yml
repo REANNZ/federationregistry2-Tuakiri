@@ -1,0 +1,6 @@
+---
+- hosts: fr-servers
+  roles:
+  - common
+  - mariadb
+  - federationregistry
