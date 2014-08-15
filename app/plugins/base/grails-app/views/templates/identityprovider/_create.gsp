@@ -75,6 +75,7 @@
           <label class="control-label" for="organization.id"><g:message encodeAs="HTML" code="label.organization" /></label>
           <div class="controls">
             <g:select name="organization.id" from="${organizationList.sort{it.displayName}}" optionKey="id" optionValue="displayName" value="${organization?.id}" class="span4" />
+            <fr:tooltip code='help.fr.identityprovider.organization' />
           </div>
         </div>
 
