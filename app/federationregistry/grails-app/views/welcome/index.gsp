@@ -21,10 +21,13 @@
 
         <div class="span5">
           <g:message code="branding.fr.welcome.login.no" />
+	  <g:message code="branding.fr.welcome.login.org.hint" />
           <g:link class="btn btn-info btn-large" controller="bootstrap" action="organization">Create an Organisation</g:link>
           <br><br>
+	  <g:message code="branding.fr.welcome.login.idp.hint" />
           <g:link class="btn btn-info btn-large" controller="bootstrap" action="idp">Create an Identity Provider</g:link>
           <br><br>
+	  <g:message code="branding.fr.welcome.login.sp.hint" />
           <g:link class="btn btn-info btn-large" controller="bootstrap" action="sp">Create a Service Provider</g:link>
         </div>
       </div>
