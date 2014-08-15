@@ -1,0 +1,48 @@
+---
+- name: 'Apache: Install required packages'
+  yum: 'pkg=httpd state=present'
+
+- name: 'Apache: Create virtual host parent directory'
+  file: name=/var/www/vhosts state=directory owner=root group=wheel mode=0755
+
+- name: 'Apache: Remove default /etc/httpd/conf.d/ files'
+  copy: >
+    src=apache/config-blocker.conf dest=/etc/httpd/conf.d/{{item}}
+    owner=root group=wheel mode=0600
+  with_items:
+  - ssl.conf
+  - welcome.conf
+  - fastcgi.conf
+  - php.conf
+  - README
+  notify: 'Apache: Restart httpd'
+
+- name: 'Apache: Create configuration directories'
+  file: 'name=/etc/httpd/{{ item }} owner=root group=wheel mode=0755 state=directory'
+  with_items:
+  - modules.d
+  - ports.d
+
+- name: 'Apache: Write /etc/httpd/conf/httpd.conf'
+  template: 'src=apache/httpd.conf.j2 dest=/etc/httpd/conf/httpd.conf'
+  notify: 'Apache: Restart httpd'
+
+- name: 'Apache: Write localhost status port config'
+  template: 'src=apache/apache-port-80.conf.j2 dest=/etc/httpd/ports.d/127.0.0.1:80.conf'
+  notify: 'Apache: Restart httpd'
+
+- name: 'Apache: Copy files'
+  copy: 'src=apache/{{item}} dest=/etc/httpd/{{item}} owner=root group=wheel mode=0644'
+  with_items:
+  - modules.d/default.conf
+  notify: 'Apache: Restart httpd'
+
+- name: 'Apache: Enable extra modules'
+  copy: 'src=apache/modules.d/{{item}}.conf dest=/etc/httpd/modules.d/{{item}}.conf owner=root group=wheel mode=0644'
+  with_items: apache.extra_modules
+  notify: 'Apache: Restart httpd'
+
+- name: 'Apache: Trigger start'
+  action: ping
+  changed_when: true
+  notify: 'Apache: Start httpd'

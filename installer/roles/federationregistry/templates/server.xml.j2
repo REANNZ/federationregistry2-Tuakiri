@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Server port="{{ federationregistry.tomcat.control_port }}" shutdown="SHUTDOWN">
+  <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />
+  <Listener className="org.apache.catalina.core.JasperListener" />
+  <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" />
+  <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener" />
+  <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener" />
+  <Listener className="org.apache.catalina.mbeans.JmxRemoteLifecycleListener"
+    rmiRegistryPortPlatform="{{ federationregistry.tomcat.rmi_registry_port }}"
+    rmiServerPortPlatform="{{ federationregistry.tomcat.rmi_server_port }}"/>
+
+  <GlobalNamingResources></GlobalNamingResources>
+
+  <Service name="Catalina">
+
+    <Connector port="{{ federationregistry.tomcat.http_port }}" protocol="HTTP/1.1"
+               connectionTimeout="20000"
+               redirectPort="8443" />
+    <Connector port="{{ federationregistry.tomcat.ajp_port }}" protocol="AJP/1.3" redirectPort="8443" />
+
+    <Engine name="Catalina" defaultHost="localhost">
+      <Host name="localhost"  appBase="webapps"
+            unpackWARs="true" autoDeploy="true">
+      </Host>
+    </Engine>
+  </Service>
+</Server>

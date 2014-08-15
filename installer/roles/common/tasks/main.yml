@@ -1,0 +1,45 @@
+---
+- name: 'Common: /opt/fr-shared'
+  file: >
+    name=/opt/fr-shared/{{ item }} state=directory
+    owner=root group=root mode=0755
+  with_items:
+  - .
+  - scripts
+
+- name: 'Common: /opt/fr-shared/downloads'
+  file: name=/opt/fr-shared/downloads state=directory owner=root group=root mode=0755
+
+- name: 'Common: Create base logging directory'
+  file: >
+    name=/var/log/federationregistry state=directory
+    owner=root group=wheel mode=0755
+
+- name: 'Common: Install packages'
+  yum: 'pkg=policycoreutils-python,unzip,git state=present'
+
+- name: 'Common: Install OpenJDK'
+  yum: 'pkg=java-1.7.0-openjdk,java-1.7.0-openjdk-devel state=installed'
+
+- name: 'Common: Set JAVA_HOME'
+  lineinfile:
+    dest=/root/.bashrc
+    line="export JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk.x86_64"
+    regexp='^export JAVA_HOME'
+    owner=root
+    state=present
+    insertafter=EOF
+    create=True
+
+- name: 'Common: Download GVM'
+  get_url: >
+    url=http://get.gvmtool.net
+    dest=/tmp/gvm.bash
+
+- name: 'Common: Install GVM'
+  shell: bash /tmp/gvm.bash
+
+- name: 'Common: Install Grails'
+  shell:
+    source /root/.bashrc;
+    yes '' | gvm install grails {{ federationregistry.grails_version }}

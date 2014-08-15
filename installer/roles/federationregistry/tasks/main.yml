@@ -1,0 +1,165 @@
+---
+- name: 'Federation Registry: Create service user'
+  user: name=federationregistry home=/opt/federationregistry state=present
+
+- name: 'Federation Registry: Create virtual host directory'
+  file: >
+    name=/var/www/vhosts/{{ federationregistry.service_hostname }}
+    state=directory owner=root group=wheel mode=0755
+
+- name: 'Federation Registry: Write Apache configuration'
+  template: >
+    src=fr-apache.conf.j2
+    dest=/etc/httpd/conf.d/fr-{{ federationregistry.service_hostname }}.conf
+    owner=root group=wheel mode=0644
+  notify: 'Apache: Restart httpd'
+
+- name: 'Federation Registry: Write Apache port configuration'
+  template: >
+    src=apache-port-{{item}}.conf.j2
+    dest=/etc/httpd/ports.d/{{ federationregistry.service_ip }}:{{item}}.conf
+    owner=root group=wheel mode=0644
+  notify: 'Apache: Restart httpd'
+  with_items:
+  - 80
+
+- name: 'Federation Registry: Create accessible directories'
+  file: >
+    name=/opt/federationregistry/{{item}} state=directory
+    owner=root group=federationregistry mode=0755
+  with_items:
+  - .
+
+- name: 'Federation Registry: Create required directories'
+  file: >
+    name=/opt/federationregistry/{{item}} state=directory
+    owner=root group=federationregistry mode=0750
+  with_items:
+  - application
+  - application/config
+  - application/war
+  - keypairs
+  - tomcat
+  - tomcat/context
+  - "tomcat/{{tomcat.version}}"
+  - "tomcat/{{tomcat.version}}/conf"
+  - "tomcat/{{tomcat.version}}/conf/Catalina"
+  - "tomcat/{{tomcat.version}}/conf/Catalina/localhost"
+
+- name: 'Federation Registry: Create required writable directories'
+  file: 'name=/opt/federationregistry/{{item}} state=directory owner=federationregistry group=federationregistry mode=0700'
+  with_items:
+  - "tomcat/{{tomcat.version}}/temp"
+  - "tomcat/{{tomcat.version}}/webapps"
+  - "tomcat/{{tomcat.version}}/work"
+
+- name: 'Federation Registry: Create logging directories'
+  file: >
+    name=/var/log/federationregistry/{{ item }} state=directory
+    owner=federationregistry group=federationregistry mode=0700
+  with_items:
+  - tomcat
+  - application
+
+- name: 'Federation Registry: Symlink application logging directory'
+  file: >
+    name=/opt/federationregistry/application/logs
+    src=/var/log/federationregistry/application
+    state=link owner=federationregistry group=federationregistry
+
+- name: 'Federation Registry: Symlink tomcat logging directory'
+  file: >
+    name=/opt/federationregistry/tomcat/{{tomcat.version}}/logs
+    src=/var/log/federationregistry/tomcat
+    state=link owner=federationregistry group=federationregistry
+
+- name: 'Federation Registry: Create directory symbolic links for Tomcat installation'
+  file: >
+    dest=/opt/federationregistry/tomcat/{{tomcat.version}}/{{item}}
+    src=/opt/fr-shared/apache-tomcat-{{tomcat.version}}/{{item}}
+    state=link owner=root group=federationregistry
+  with_items:
+  - bin
+  - lib
+
+- name: 'Federation Registry: Create file symbolic links for Tomcat installation'
+  file: >
+    dest=/opt/federationregistry/tomcat/{{tomcat.version}}/{{item}}
+    src=/opt/fr-shared/apache-tomcat-{{tomcat.version}}/{{item}}
+    state=link owner=root group=federationregistry
+  with_items:
+  - conf/catalina.policy
+  - conf/catalina.properties
+  - conf/context.xml
+  - conf/logging.properties
+  - conf/web.xml
+
+- name: 'Federation Registry: Write Tomcat conf/server.xml'
+  template: >
+    src=server.xml.j2 dest=/opt/federationregistry/tomcat/{{tomcat.version}}/conf/server.xml
+    owner=root group=federationregistry mode=0640
+  notify: 'Federation Registry: Restart Tomcat'
+
+- name: 'Federation Registry: Create current version symlink for Tomcat'
+  file: >
+    dest=/opt/federationregistry/tomcat/current
+    src=/opt/federationregistry/tomcat/{{tomcat.version}}
+    state=link owner=root group=federationregistry
+  notify: 'Federation Registry: Restart Tomcat'
+
+- include: db.yml
+
+- name: 'Federation Registry: Create /opt/federationregistry/.my.cnf'
+  template: >
+    src=dot-my.cnf.j2 dest=/opt/federationregistry/.my.cnf
+    owner=root group=federationregistry mode=0640
+
+- name: 'Federation Registry: Generate fr_export_api_secret'
+  set_fact: 'fr_export_api_secret={{ item }}'
+  with_password: '../../../credentials/{{ federationregistry.service_hostname }}/fr_export_api_secret chars=letters,digits length=48'
+
+- name: 'Federation Registry: Write fr-config.groovy'
+  template: >
+    src=fr-config.groovy.j2
+    dest=/opt/federationregistry/application/config/fr-config.groovy
+    owner=root group=federationregistry mode=0640
+  notify: 'Federation Registry: Restart Tomcat'
+
+- name: 'Federation Registry: Download release war'
+  get_url: >
+    url=https://dl.dropboxusercontent.com/u/34540902/federationregistry-{{ federationregistry.version }}.war
+    dest=/opt/federationregistry/application/war/federationregistry-{{ federationregistry.version }}.war
+
+- name: 'Federation Registry: Symlink release WAR'
+  file: >
+    dest=/opt/federationregistry/application/war/current
+    src=/opt/federationregistry/application/war/federationregistry-{{ federationregistry.version }}.war
+    state=link owner=root group=federationregistry
+  notify: 'Federation Registry: Restart Tomcat'
+
+- name: 'Federation Registry: Copy init script'
+  copy: >
+    src=init-federationregistry.sh dest=/etc/init.d/federationregistry
+    owner=root group=wheel mode=0700
+  notify: 'Federation Registry: Restart Tomcat'
+
+- name: 'Federation Registry: Enable federationregistry service'
+  service: name=federationregistry enabled=yes
+
+- name: 'Federation Registry: Write context configuration'
+  template: >
+    src=federationregistry.xml.j2 dest=/opt/federationregistry/tomcat/context/federationregistry.xml
+    owner=root group=federationregistry mode=0640
+  notify: 'Federation Registry: Restart Tomcat'
+
+- name: 'Federation Registry: Symlink context configuration'
+  file: >
+    dest=/opt/federationregistry/tomcat/{{ tomcat.version }}/conf/Catalina/localhost/federationregistry.xml
+    src=/opt/federationregistry/tomcat/context/federationregistry.xml
+    state=link owner=root group=federationregistry
+  notify: 'Federation Registry: Restart Tomcat'
+
+- name: 'Federation Registry: Install HTTP/HTTPS firewall rules'
+  command: lokkit --service=http
+
+- include: developer.yml
