@@ -2,20 +2,20 @@ package aaf.fr.foundation
 
 class Contact {
 	static auditable = true
-	
+
 	String givenName
 	String surname
 	String description
-	
+
 	Organization organization
-	
+
 	String email
 	String secondaryEmail
-	
-	String workPhone 
-	String homePhone 
+
+	String workPhone
+	String homePhone
 	String mobilePhone
-	
+
 	Date dateCreated
 	Date lastUpdated
 
@@ -36,11 +36,34 @@ class Contact {
 		dateCreated(nullable:true)
 		lastUpdated(nullable:true)
 	}
-	
+
 	static mapping = {
 		autoImport false
 		sort "surname"
 	}
-	
+
 	public String toString() { "contact:[id:$id, givenName: $givenName, surname: $surname, email: $email]" }
+
+	def structureAsJson() {
+	  def json = new groovy.json.JsonBuilder()
+	  json {
+	    id id
+	    given_name givenName
+	    surname surname
+	    description description ?: ''
+
+	    organization { id this.organization.id
+	    							 name this.organization.displayName }
+
+	    email email
+	    secondary_email secondaryEmail ?: ''
+	    work_phone workPhone ?: ''
+	    home_phone homePhone ?: ''
+	    mobile_phone mobilePhone ?: ''
+
+	    created_at dateCreated
+	    updated_at lastUpdated
+	  }
+	}
+
 }

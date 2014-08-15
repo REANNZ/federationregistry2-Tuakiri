@@ -1,0 +1,15 @@
+---
+- name: 'Federation Registry: Database: Create FR database'
+  mysql_db: >
+    name={{ federationregistry.db.name }}
+    collation=utf8_general_ci encoding=utf8 state=present
+
+- name: 'Federation Registry: Database: Generate password fr_webapp'
+  set_fact: 'fr_webapp_password={{ item }}'
+  with_password: '../../../credentials/{{ federationregistry.service_hostname }}/fr_webapp_password chars=letters,digits length=32'
+
+- name: 'Federation Registry: Database: Create fr_webapp user'
+  mysql_user: >
+    host={{ item }} name=fr_webapp password={{ fr_webapp_password }}
+    priv={{ federationregistry.db.name }}.*:ALL state=present
+  with_items: '{{ federationregistry.db.client_ips }}'

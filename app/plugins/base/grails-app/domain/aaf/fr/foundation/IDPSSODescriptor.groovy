@@ -3,16 +3,18 @@ package aaf.fr.foundation
 import org.apache.commons.lang.builder.EqualsBuilder
 import org.apache.commons.lang.builder.HashCodeBuilder
 
+import grails.plugins.federatedgrails.Role
+
 /**
  * @author Bradley Beddoes
  */
 class IDPSSODescriptor extends SSODescriptor  {
 	static auditable = true
-	
+
 	String scope
-	
+
 	AttributeAuthorityDescriptor collaborator
-		
+
 	boolean wantAuthnRequestsSigned = false
 	boolean autoAcceptServices = false
   boolean attributeAuthorityOnly = false
@@ -38,13 +40,13 @@ class IDPSSODescriptor extends SSODescriptor  {
 		attributeProfiles(nullable: true)
 		attributes(nullable: true)
 	}
-	
+
 	public String toString() {	"idpssodescriptor:[id:$id, displayName: $displayName]" }
-	
+
 	public boolean functioning() {
 		( !archived && active && approved && entityDescriptor.functioning() )
 	}
-	
+
 	public List sortedAttributes() {
 		def c = Attribute.createCriteria()
 		def attributeList = c.list {
@@ -54,12 +56,12 @@ class IDPSSODescriptor extends SSODescriptor  {
 			order("_base.name", "asc")
 		}
 	}
-	
+
 	public boolean equals(Object obj) {
 		if( this.is(obj) ) return true
 		if ( obj == null ) return false
 		if ( !obj.instanceOf(IDPSSODescriptor) ) return false
-		
+
 		IDPSSODescriptor rhs = (IDPSSODescriptor) obj
 		return new EqualsBuilder()
 			.append(this.id, rhs.id)
@@ -73,5 +75,48 @@ class IDPSSODescriptor extends SSODescriptor  {
 		// hard-coded, randomly chosen, non-zero, odd number different for each class
 		return new HashCodeBuilder(21, 123).
 		toHashCode();
+	}
+
+	def structureAsJson() {
+		def adminRole = Role.findByName("descriptor-${this.id}-administrators")
+
+		def json = new groovy.json.JsonBuilder()
+		json {
+		  id this.id
+		  display_name this.displayName
+		  description this.description ?: ''
+		  organization { id this.organization.id
+		  							 name this.organization.displayName }
+
+			contacts this.contacts.collect { [id: it.id, type: [id: it.type.id, name: it.type.name]] }
+			monitors this.monitors.collect { [id: it.id, type: [id: it.type.id, name: it.type.name], url: it.url, node: it.node ?: '', enabled: it.enabled, check_period: it.checkPeriod] }
+
+		  active this.active
+		  archived this.archived
+		  approved this.approved
+		  functioning this.functioning()
+		  utilises_attribute_filters autoAcceptServices
+		  created_at dateCreated
+		  updated_at lastUpdated
+		  administrators adminRole?.subjects.collect { [id: it.id, principal: it.sharedToken] }
+			saml {
+				entity {
+					id entityDescriptor.id
+					entity_id entityDescriptor.entityID
+				}
+				attribute_authority_descriptor collaborator?.id
+				scope scope
+				authnrequests_signed wantAuthnRequestsSigned
+				single_sign_on_services singleSignOnServices.collect { [id: it.id, location: it.location, binding: [id: it.binding.id, uri: it.binding.uri], functioning: it.functioning() ]}
+				name_id_mapping_services nameIDMappingServices.collect { [id: it.id, location: it.location, binding: [id: it.binding.id, uri: it.binding.uri], functioning: it.functioning() ]}
+				assertion_id_request_services assertionIDRequestServices.collect { [id: it.id, location: it.location, binding: [id: it.binding.id, uri: it.binding.uri], functioning: it.functioning() ]}
+				attribute_profiles attributeProfiles.collect { [id:it.id, uri: it.uri]}
+				attributes attributes.collect { [id:it.base.id, name: it.base.name, specification: it.base.specificationRequired,
+																				 values: it.values.collect { [value: it.value, approved: it.approved] }
+																			] }
+				sso_descriptor super.structureAsJson()
+			}
+		}
+		json.content
 	}
 }

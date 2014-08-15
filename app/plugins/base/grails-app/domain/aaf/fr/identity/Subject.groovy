@@ -44,4 +44,15 @@ class Subject extends SubjectBase {
     } else
       'INVALID_CN'
   }
+
+  def structureAsJson() {
+    def json = new groovy.json.JsonBuilder()
+    json {
+      id id
+      cn cn
+      email email
+      shared_token sharedToken
+    }
+  }
+
 }
