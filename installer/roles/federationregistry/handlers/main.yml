@@ -1,0 +1,4 @@
+---
+- include: ../../../roles/webserver/handlers/main.yml
+- name: 'Federation Registry: Restart Tomcat'
+  service: name=federationregistry state=restarted

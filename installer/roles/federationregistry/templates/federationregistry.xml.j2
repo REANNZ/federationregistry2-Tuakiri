@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Context docBase="/opt/federationregistry/application/war/current"
+  privileged="true"
+  antiResourceLocking="false"
+  antiJARLocking="false"
+  unpackWAR="true"
+  swallowOutput="true"
+  reloadable="true">
+
+  <Resource name="jdbc/FR"
+    auth="Container"
+    type="javax.sql.DataSource"
+    driverClassName="org.mariadb.jdbc.Driver"
+    url="jdbc:mysql://localhost:3306/{{ federationregistry.db.name }}?useUnicode=yes&amp;characterEncoding=UTF-8"
+    username="fr_webapp"
+    password="{{ fr_webapp_password }}"
+    maxActive="20"
+    maxIdle="10"
+    maxWait="3500"
+    validationQuery="select 1 from dual"
+    testOnBorrow="true"
+    factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
+    jmxEnabled="true"
+  />
+
+  <Environment name="fr_config" value="/opt/federationregistry/application/config" type="java.lang.String"/>
+
+</Context>

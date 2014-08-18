@@ -1,0 +1,3 @@
+---
+- include: apache.yml
+  when: web_server_variant == 'apache'

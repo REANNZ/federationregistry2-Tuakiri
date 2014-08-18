@@ -1,0 +1,48 @@
+---
+- name: 'Tomcat: Download Tomcat'
+  get_url: >
+    url=http://archive.apache.org/dist/tomcat/tomcat-{{tomcat.major}}/v{{tomcat.version}}/bin/apache-tomcat-{{tomcat.version}}.tar.gz
+    dest=/opt/fr-shared/downloads/apache-tomcat-{{tomcat.version}}.tar.gz
+    sha256sum={{tomcat.sha256sum}}
+
+- name: 'Tomcat: /opt/fr-shared'
+  file: name=/opt/fr-shared state=directory owner=root group=root mode=0755
+
+- name: 'Tomcat: Extract Tomcat Distribution'
+  shell: >
+    umask 0022;
+    tar zx -C /opt/fr-shared -f /opt/fr-shared/downloads/apache-tomcat-{{tomcat.version}}.tar.gz
+    creates=/opt/fr-shared/apache-tomcat-{{tomcat.version}}/
+
+- name: 'Tomcat: Install MariaDB connector library'
+  get_url: >
+    url=http://mirror.aarnet.edu.au/pub/MariaDB/client-java-{{ tomcat.mariadb.version }}/mariadb-java-client-{{ tomcat.mariadb.version }}.jar
+    dest=/opt/fr-shared/downloads/mariadb-java-client-{{ tomcat.mariadb.version }}.jar
+    sha256sum={{ tomcat.mariadb.sha256sum }}
+    owner=root group=wheel mode=0644
+
+- name: 'Tomcat: Symlink MariaDB connector library'
+  file: >
+    name=/opt/fr-shared/apache-tomcat-{{tomcat.version}}/lib/mariadb-java-client.jar
+    src=/opt/fr-shared/downloads/mariadb-java-client-{{ tomcat.mariadb.version }}.jar
+    owner=root group=wheel state=link force=yes
+
+- name: 'Tomcat: Install JMX lifecycle library'
+  get_url: >
+    url=http://archive.apache.org/dist/tomcat/tomcat-{{tomcat.major}}/v{{tomcat.version}}/bin/extras/catalina-jmx-remote.jar
+    dest=/opt/fr-shared/apache-tomcat-{{tomcat.version}}/lib/catalina-jmx-remote.jar
+    sha256sum={{tomcat.jmx_remote_sha256sum}}
+
+- name: 'Tomcat: Fix file permissions'
+  file: 'name=/opt/fr-shared/apache-tomcat-{{tomcat.version}}/{{item}} mode=0644'
+  with_items:
+  - conf/catalina.policy
+  - conf/catalina.properties
+  - conf/context.xml
+  - conf/logging.properties
+  - conf/web.xml
+
+- name: 'Tomcat: Install init.d helper script'
+  copy: >
+    src=tomcat-init.sh dest=/opt/fr-shared/apache-tomcat-{{tomcat.version}}/bin/tomcat-init.sh
+    owner=root group=wheel mode=0755

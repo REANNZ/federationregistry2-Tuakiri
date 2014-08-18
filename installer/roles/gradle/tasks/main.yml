@@ -1,0 +1,29 @@
+---
+- name: 'Gradle: Download distribution archive'
+  get_url: >
+    url=http://services.gradle.org/distributions/gradle-{{ gradle.version }}-all.zip
+    dest=/opt/fr-shared/downloads/gradle-{{ gradle.version }}-all.zip
+    sha256sum={{ gradle.sha256sum }}
+
+- name: 'Gradle: Make required directory'
+  file: >
+    name=/opt/fr-shared/gradle state=directory
+    owner=root group=wheel mode=0755
+
+- name: 'Gradle: Extract distribution archive'
+  # We don't need src, samples, doc
+  command: >
+    unzip /opt/fr-shared/downloads/gradle-{{ gradle.version }}-all.zip
+    gradle-{{ gradle.version }}/bin/* gradle-{{ gradle.version }}/lib/*
+    -d /opt/fr-shared/gradle/
+    creates=/opt/fr-shared/gradle/gradle-{{ gradle.version }}/
+
+- name: 'Gradle: Symlink current version'
+  file: >
+    name=/opt/fr-shared/gradle/current src=/opt/fr-shared/gradle/gradle-{{ gradle.version }}
+    state=link owner=root group=wheel
+
+- name: 'Gradle: Set mode on executable'
+  file: >
+    name=/opt/fr-shared/gradle/gradle-{{ gradle.version }}/bin/gradle state=file
+    owner=root group=wheel mode=0755

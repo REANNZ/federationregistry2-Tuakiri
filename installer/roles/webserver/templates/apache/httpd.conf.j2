@@ -1,0 +1,117 @@
+User apache
+Group apache
+
+ServerRoot "/etc/httpd"
+ServerAdmin http://www.example.com
+{% if federationregistry.service_hostname %}
+ServerName {{federationregistry.service_hostname}}
+{% else %}
+ServerName {{ansible_fqdn}}
+{% endif %}
+
+PidFile run/httpd.pid
+Timeout 60
+KeepAlive Off
+MaxKeepAliveRequests 100
+KeepAliveTimeout 15
+
+StartServers       8
+MinSpareServers    5
+MaxSpareServers   20
+ServerLimit      256
+MaxClients       256
+MaxRequestsPerChild  4000
+DefaultLanguage en
+AddDefaultCharset UTF-8
+
+ServerTokens ProductOnly
+ServerSignature Off
+HostnameLookups Off
+EnableMMAP on
+EnableSendfile on
+
+LogLevel warn
+
+LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" combined
+LogFormat "%h %l %u %t \"%r\" %>s %b" common
+LogFormat "%{Referer}i -> %U" referer
+LogFormat "%{User-agent}i" agent
+
+CustomLog logs/access_log combined
+ErrorLog logs/error_log
+
+Include modules.d/*.conf
+Include ports.d/*.conf
+Include conf.d/*.conf
+
+<IfModule mod_userdir.c>
+    UserDir disabled
+</IfModule>
+
+AccessFileName .htaccess
+
+<Files ~ "^\.ht">
+    Order allow,deny
+    Deny from all
+    Satisfy All
+</Files>
+
+TypesConfig /etc/mime.types
+DefaultType text/plain
+
+AddType application/x-compress .Z
+AddType application/x-gzip .gz .tgz
+AddType application/x-x509-ca-cert .crt
+AddType application/x-pkcs7-crl    .crl
+
+Alias /error/ "/var/www/error/"
+
+<IfModule mod_negotiation.c>
+  <IfModule mod_include.c>
+      <Directory "/var/www/error">
+        AllowOverride None
+        Options IncludesNoExec
+        AddOutputFilter Includes html
+        AddHandler type-map var
+        Order allow,deny
+        Allow from all
+        LanguagePriority en es de fr
+        ForceLanguagePriority Prefer Fallback
+      </Directory>
+
+#    ErrorDocument 400 /error/HTTP_BAD_REQUEST.html.var
+#    ErrorDocument 404 /error/HTTP_NOT_FOUND.html.var
+#    ErrorDocument 500 /error/HTTP_INTERNAL_SERVER_ERROR.html.var
+#    ErrorDocument 501 /error/HTTP_NOT_IMPLEMENTED.html.var
+#    ErrorDocument 502 /error/HTTP_BAD_GATEWAY.html.var
+#    ErrorDocument 503 /error/HTTP_SERVICE_UNAVAILABLE.html.var
+
+  </IfModule>
+</IfModule>
+
+BrowserMatch "Mozilla/2" nokeepalive
+BrowserMatch "MSIE 4\.0b2;" nokeepalive downgrade-1.0 force-response-1.0
+BrowserMatch "RealPlayer 4\.0" force-response-1.0
+BrowserMatch "Java/1\.0" force-response-1.0
+BrowserMatch "JDK/1\.0" force-response-1.0
+
+BrowserMatch "Microsoft Data Access Internet Publishing Provider" redirect-carefully
+BrowserMatch "MS FrontPage" redirect-carefully
+BrowserMatch "^WebDrive" redirect-carefully
+BrowserMatch "^WebDAVFS/1.[0123]" redirect-carefully
+BrowserMatch "^gnome-vfs/1.0" redirect-carefully
+BrowserMatch "^XML Spy" redirect-carefully
+BrowserMatch "^Dreamweaver-WebDAV-SCM1" redirect-carefully
+
+BrowserMatch MSIE ie
+Header set X-UA-Compatible "IE=Edge,chrome=1" env=ie
+
+ExtendedStatus On
+
+<VirtualHost 127.0.0.1:80>
+  <Location /mod_status>
+    SetHandler server-status
+  </Location>
+</VirtualHost>
+
+TraceEnable off
