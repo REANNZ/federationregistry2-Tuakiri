@@ -1,0 +1,26 @@
+h1 {
+    	font-size: 26px;
+        font-weight: bold;
+        font-family: "Trebuchet MS", "Tahoma", "Helvetica", "Arial", sans-serif;
+        color: #969678;
+	margin: 20px;
+}
+
+body {
+        background-color: #F2F2F2;
+        text-align: center;
+        color: #000000;
+        text-align: left;
+        font-family: "Trebuchet MS", "Tahoma", "Helvetica", "Arial", sans-serif;
+        font-size: 14px;
+}
+
+.background {
+	background-color: #FFF;
+	width:650px;
+	margin:0 auto;
+}
+
+img, p {
+	margin: 20px;
+}
