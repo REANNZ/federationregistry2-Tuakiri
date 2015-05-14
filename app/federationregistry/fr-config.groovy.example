@@ -93,6 +93,16 @@ aaf {
     metadata {
       federation = "aaf.edu.au"
 
+      // MDUI settings
+      mdui {
+        // Language to use for MDUIInfo elements as the xml:lang attribute
+        // (I.e., language the roleDescriptor displayName and Description are stored in)
+        lang = "en"
+        // Control whether render MDUI in metadata - off by default
+        displayName = false
+        description = false
+      }
+
       /* registration info - optional
       // website of your registration authority (federation)
       registrationAuthority = "https://www.federation.org/"
