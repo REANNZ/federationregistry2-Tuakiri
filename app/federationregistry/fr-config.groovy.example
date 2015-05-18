@@ -93,6 +93,16 @@ aaf {
     metadata {
       federation = "aaf.edu.au"
 
+      // MDUI settings
+      mdui {
+        // Language to use for MDUIInfo elements as the xml:lang attribute
+        // (I.e., language the roleDescriptor displayName and Description are stored in)
+        lang = "en"
+        // Control whether render MDUI in metadata - off by default
+        displayName = false
+        description = false
+      }
+
       /* registration info - optional
       // website of your registration authority (federation)
       registrationAuthority = "https://www.federation.org/"
@@ -129,7 +139,7 @@ aaf {
           attributeservice.uri = '$host:8443/idp/profile/SAML2/SOAP/AttributeQuery'
         }
         shib23 {
-          displayName = 'Shibboleth Identity Provider (2.3.x, 2.4.x)'
+          displayName = 'Shibboleth Identity Provider (2.3.x, 2.4.x, 3.0.x, 3.1.x)'
           selected = true
           entitydescriptor = '$host/idp/shibboleth'
           post.uri = '$host/idp/profile/SAML2/POST/SSO'
