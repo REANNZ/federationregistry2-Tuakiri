@@ -49,8 +49,6 @@ my $sth_sp_dsr  = $dbh->prepare("select discovery_response_service.descriptor_id
 my $sth_idp = $dbh->prepare("select idpssodescriptor.id from idpssodescriptor,entity_descriptor where idpssodescriptor.entity_descriptor_id = entity_descriptor.id and entity_descriptor.entityid = ?");
 my $sth_wayf = $dbh->prepare("insert into wayf_access_record (date_created, ds_host, idpid, request_type, robot, source, spid, idp_entity, sp_endpoint) values (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
-my $http_date_parser = 'DateTime::Format::HTTP';
-
 sub GetIdPID {
   my @results = ();
 
