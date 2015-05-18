@@ -42,6 +42,6 @@ grails.project.dependency.resolution = {
       exclude "spock-grails-support"
     }
     test ":resources:1.1.6"
-    provided ":greenmail:1.3.2"
+    provided ":greenmail:1.3.4"
   }
 }

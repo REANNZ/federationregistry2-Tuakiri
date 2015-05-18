@@ -21,6 +21,10 @@ class MetadataGenerationService implements InitializingBean {
   def hasRegistrationAuthority
   def hasRegistrationPolicy
 
+  def mduiLang
+  def renderMDUIDisplayName
+  def renderMDUIDescription
+
   def void afterPropertiesSet() {
       // initialize registration info from grailsApplication.config
       registrationAuthority = grailsApplication.config.aaf.fr.metadata.registrationAuthority
@@ -29,6 +33,11 @@ class MetadataGenerationService implements InitializingBean {
 
       hasRegistrationAuthority = registrationAuthority && !registrationAuthority.isEmpty()
       hasRegistrationPolicy = registrationPolicy && registrationPolicyLang
+
+      // initialize MDUI info from grailsApplication.config
+      mduiLang = grailsApplication.config.aaf.fr.metadata.mdui.lang
+      renderMDUIDisplayName = grailsApplication.config.aaf.fr.metadata.mdui.displayName && mduiLang;
+      renderMDUIDescription = grailsApplication.config.aaf.fr.metadata.mdui.description && mduiLang;
   }
 
   def populateSchema(minimal, roleExtensions) {
@@ -37,6 +46,10 @@ class MetadataGenerationService implements InitializingBean {
     if (hasRegistrationAuthority && !minimal && roleExtensions) {
         namespaces['xmlns:mdrpi'] = 'urn:oasis:names:tc:SAML:metadata:rpi';
         namespaces["xsi:schemaLocation"] = namespaces["xsi:schemaLocation"] + " urn:oasis:names:tc:SAML:metadata:rpi saml-metadata-rpi-v1.0.xsd"
+    }
+    if ((renderMDUIDisplayName||renderMDUIDescription) && !minimal && roleExtensions) {
+        namespaces['xmlns:mdui'] = 'urn:oasis:names:tc:SAML:metadata:ui';
+        namespaces["xsi:schemaLocation"] = namespaces["xsi:schemaLocation"] + " urn:oasis:names:tc:SAML:metadata:ui saml-metadata-ui-v1.0.xsd"
     }
     namespaces
   }
@@ -380,16 +393,38 @@ class MetadataGenerationService implements InitializingBean {
     boolean isRegex = roleDescriptor.scope.startsWith('^') && roleDescriptor.scope.endsWith('$')
     builder.Extensions() {
       builder."shibmd:Scope" (regexp:isRegex, roleDescriptor.scope)
+      if ( (renderMDUIDisplayName && roleDescriptor.displayName) || (renderMDUIDescription && roleDescriptor.description) ) {
+        builder."mdui:UIInfo" {
+          if (renderMDUIDisplayName && roleDescriptor.displayName) {
+            localizedName(builder, "mdui:DisplayName", mduiLang, roleDescriptor.displayName)
+          }
+          if (renderMDUIDescription && roleDescriptor.description) {
+            localizedName(builder, "mdui:Description", mduiLang, roleDescriptor.description)
+          }
+        }
+      }
     }
   }
   
   def SPSSODescriptorExtensions(builder, all, spSSODescriptor) {
     def funcDiscoveryResponseServices = spSSODescriptor.discoveryResponseServices?.findAll{it.functioning()}
-    if(all || funcDiscoveryResponseServices) {
+    if(all || funcDiscoveryResponseServices ||
+            (renderMDUIDisplayName && spSSODescriptor.displayName) ||
+            (renderMDUIDescription && spSSODescriptor.description) ) {
       builder.Extensions() {
         spSSODescriptor.discoveryResponseServices?.sort{it.id}.each { endpoint ->
           if(all || endpoint.functioning() ) {
             builder."dsr:DiscoveryResponse"("xmlns:dsr":"urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol", Binding: endpoint.binding.uri, Location:endpoint.location, index:endpoint.index, isDefault:endpoint.isDefault)
+          }
+        }
+        if ( (renderMDUIDisplayName && spSSODescriptor.displayName) || (renderMDUIDescription && spSSODescriptor.description) ) {
+          builder."mdui:UIInfo" {
+            if (renderMDUIDisplayName && spSSODescriptor.displayName) {
+              localizedName(builder, "mdui:DisplayName", mduiLang, spSSODescriptor.displayName)
+            }
+            if (renderMDUIDescription && spSSODescriptor.description) {
+              localizedName(builder, "mdui:Description", mduiLang, spSSODescriptor.description)
+            }
           }
         }
       }
@@ -397,8 +432,19 @@ class MetadataGenerationService implements InitializingBean {
   }
   
   def AttributeAuthorityDescriptorExtensions(builder, all, roleDescriptor) {
+    boolean isRegex = roleDescriptor.scope.startsWith('^') && roleDescriptor.scope.endsWith('$')
     builder.Extensions() {
-      builder."shibmd:Scope" (regexp:false, roleDescriptor.scope)
+      builder."shibmd:Scope" (regexp:isRegex, roleDescriptor.scope)
+      if ( (renderMDUIDisplayName && roleDescriptor.displayName) || (renderMDUIDescription && roleDescriptor.description) ) {
+        builder."mdui:UIInfo" {
+          if (renderMDUIDisplayName && roleDescriptor.displayName) {
+            localizedName(builder, "mdui:DisplayName", mduiLang, roleDescriptor.displayName)
+          }
+          if (renderMDUIDescription && roleDescriptor.description) {
+            localizedName(builder, "mdui:Description", mduiLang, roleDescriptor.description)
+          }
+        }
+      }
     } 
   }
   
