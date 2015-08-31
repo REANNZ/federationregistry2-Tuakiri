@@ -29,7 +29,7 @@ public class AdminSecurityFilters {
           return  
         }
         else if (!accessControl { permission("federation:globaladministrator") }) {
-          log.info("secfilter: DENIED - [${subject.id}]${subject.principal}|${request.remoteAddr}|$params.controller/$params.action")
+          log.info("secfilter: DENIED - [${subject?.id}]${subject?.principal}|${request.remoteAddr}|$params.controller/$params.action")
           response.sendError(404) // Deliberately not 403.
           return
         }
