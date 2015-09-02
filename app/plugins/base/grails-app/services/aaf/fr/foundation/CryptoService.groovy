@@ -10,20 +10,13 @@ import java.security.cert.*
  *
  * @author Bradley Beddoes
  */
-class CryptoService implements InitializingBean {
+class CryptoService {
   static transactional = true
 
 	def oidMap = ["1.2.840.113549.1.9.1":"E"];
 
         def grailsApplication
 
-        def ignoreIssuerCA
-
-        def void afterPropertiesSet() {
-          // initialize registration info from grailsApplication.config
-          ignoreIssuerCA = grailsApplication.config.aaf.fr.certificates.ignoreIssuerCA
-        }
-	
 	def associateCertificate(RoleDescriptor descriptor, String data, String name, KeyTypes type) {
 		def cert = createCertificate(data)	
 		if(validateCertificate(cert, false)) {		
@@ -75,6 +68,7 @@ class CryptoService implements InitializingBean {
 	
 	def boolean validateCertificate(aaf.fr.foundation.Certificate certificate, boolean requireChain) {
 		log.debug "Validating certificate ${certificate.subject} with issuer ${certificate.issuer}"	
+                def ignoreIssuerCA = grailsApplication.config.aaf.fr.certificates.ignoreIssuerCA
 		if(!requireChain && ( (certificate.subject == certificate.issuer) || ignoreIssuerCA ) ) {
 			log.debug "requireChain is false and cert is either self signed or we ignore CA, valid."
 			return true
