@@ -1,6 +1,5 @@
 package aaf.fr.foundation
 
-import org.springframework.beans.factory.InitializingBean 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import java.security.*
 import java.security.cert.*
