@@ -126,7 +126,7 @@ aaf {
       // Optionally turn off certificate chain validation
       // When true, skips searching for issuer CA certicate in validateCertificate.
       // ... but the search is still on when invoked as 
-      //    validateCertificate(cert, crequireChain = true)
+      //    validateCertificate(cert, requireChain = true)
       ignoreIssuerCA = false
     }
 
