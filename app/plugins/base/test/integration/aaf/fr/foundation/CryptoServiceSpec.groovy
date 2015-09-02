@@ -8,7 +8,7 @@ import grails.plugin.spock.*
 class CryptoServiceSpec extends IntegrationSpec {
 	
 	def cryptoService
-        def grailsApplication
+	def grailsApplication
 	
 	def 'validate signing certificate association with role descriptor'() {
 		setup:
@@ -93,6 +93,29 @@ class CryptoServiceSpec extends IntegrationSpec {
 		idp.keyDescriptors == null
 	}
 	
+	def 'ensure associating a CA-issued certificate with a role descriptor succeeds with ignoreIssuerCA even when the CA chain is missing'() {
+		setup:
+		def ca = new File('./test/integration/data/demoCA/cacertminimal.pem').text
+		def caCert = new CACertificate(data:ca)
+		def caKeyInfo = new CAKeyInfo(certificate:caCert)
+		caKeyInfo.save()
+		def savIgnoreIssuerCA = grailsApplication.config.aaf.fr.certificates.ignoreIssuerCA
+		grailsApplication.config.aaf.fr.certificates.ignoreIssuerCA = true
+		
+		def idp = IDPSSODescriptor.build().save()
+		def data = new File('./test/integration/data/managertestaaf.pem').text
+		
+		when:
+		def created = cryptoService.associateCertificate(idp, data, "testcert", KeyTypes.signing)
+		
+		then:
+		created
+		idp.keyDescriptors.size() == 1
+	
+		cleanup:
+		grailsApplication.config.aaf.fr.certificates.ignoreIssuerCA = savIgnoreIssuerCA
+	}
+	
 	def 'validate certificate unassociation from role descriptor'() {
 		setup:
 		def ca = new File('./test/integration/data/demoCA/cacertminimal.pem').text
@@ -131,7 +154,7 @@ class CryptoServiceSpec extends IntegrationSpec {
 		cryptoService.validateCertificate(testCert) == true
 	}
 	
-	def 'ensure failure with untrusted self signed CA chain'() {
+	def 'ensure failure with untrusted self signed cert when requesting CA chain'() {
 		setup:
 		def ca = new File('./test/integration/data/auscertintermediate.crt').text
 		def caCert = new CACertificate(data:ca)
@@ -145,13 +168,13 @@ class CryptoServiceSpec extends IntegrationSpec {
 		!cryptoService.validateCertificate(testCert, true)
 	}
 	
-	def 'ensure failure with untrusted self signed CA chain, required chain and ignoreIssuerCA'() {
+	def 'ensure failure with untrusted self signed cert, required chain and ignoreIssuerCA'() {
 		setup:
 		def ca = new File('./test/integration/data/auscertintermediate.crt').text
 		def caCert = new CACertificate(data:ca)
 		def caKeyInfo = new CAKeyInfo(certificate:caCert)
-                def savIgnoreIssuerCA = grailsApplication.config.aaf.fr.certificates.ignoreIssuerCA
-                grailsApplication.config.aaf.fr.certificates.ignoreIssuerCA = true
+		def savIgnoreIssuerCA = grailsApplication.config.aaf.fr.certificates.ignoreIssuerCA
+		grailsApplication.config.aaf.fr.certificates.ignoreIssuerCA = true
 		caKeyInfo.save()
 		
 		def pk = new File('./test/integration/data/newcertminimal.pem').text
@@ -159,28 +182,9 @@ class CryptoServiceSpec extends IntegrationSpec {
 		
 		expect:
 		!cryptoService.validateCertificate(testCert, true)
-
-                cleanup:
-                grailsApplication.config.aaf.fr.certificates.ignoreIssuerCA = savIgnoreIssuerCA
-	}
 	
-	def 'ensure success with untrusted self signed CA chain, not required chain and ignoreIssuerCA'() {
-		setup:
-		def ca = new File('./test/integration/data/auscertintermediate.crt').text
-		def caCert = new CACertificate(data:ca)
-		def caKeyInfo = new CAKeyInfo(certificate:caCert)
-                def savIgnoreIssuerCA = grailsApplication.config.aaf.fr.certificates.ignoreIssuerCA
-                grailsApplication.config.aaf.fr.certificates.ignoreIssuerCA = true
-		caKeyInfo.save()
-		
-		def pk = new File('./test/integration/data/newcertminimal.pem').text
-		def testCert = new Certificate(data:pk)
-		
-		expect:
-		cryptoService.validateCertificate(testCert, false)
-
-                cleanup:
-                grailsApplication.config.aaf.fr.certificates.ignoreIssuerCA = savIgnoreIssuerCA
+	        cleanup:
+	        grailsApplication.config.aaf.fr.certificates.ignoreIssuerCA = savIgnoreIssuerCA
 	}
 	
 	def 'ensure validation of multiple certs from different CA chains (Local CA and Auscert intermediate to Comondo)'() {
