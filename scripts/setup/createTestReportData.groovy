@@ -1,4 +1,4 @@
-import org.codehaus.groovy.runtime.TimeCategory
+import groovy.time.TimeCategory
 
 import aaf.fr.reporting.*
 
