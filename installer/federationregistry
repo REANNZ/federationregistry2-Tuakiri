@@ -1,0 +1,2 @@
+[fr-servers]
+manager.aaf.l.z5.io ansible_ssh_user=root
