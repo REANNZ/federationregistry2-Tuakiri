@@ -12,17 +12,17 @@ import aaf.fr.workflow.ProcessPriority
  */
 class IdentityProviderService {
   static transactional = true
-  
+
   def cryptoService
   def workflowProcessService
   def entityDescriptorService
   def attributeAuthorityDescriptorService
-  
+
   def create(def params) {
-      
+
     /* There is a lot of moving parts when creating an IdP (+AA hybrid) so below is more complex then usual,
     you'll note validation calls on most larger objects, this is to get finer grained object error population */
-  
+
     // Organization
     def organization = Organization.lock(params.organization?.id)
 
@@ -30,7 +30,7 @@ class IdentityProviderService {
     def contact
     if(params.contact?.email)
         contact = Contact.findByEmail(params.contact?.email)       // We may already have them referenced by email
-    
+
     if(!contact) {
       contact = new Contact(givenName: params.contact?.givenName, surname: params.contact?.surname, email: params.contact?.email, organization:organization)
       contact.save()
@@ -40,25 +40,25 @@ class IdentityProviderService {
       }
     }
     def ct = params.contact?.type ?: 'technical'
-  
+
     // Entity Descriptor
     def entityDescriptor
-    if(params.entity?.id && EntityDescriptor.exists(params.entity?.id)) {   
+    if(params.entity?.id && EntityDescriptor.exists(params.entity?.id)) {
       entityDescriptor = EntityDescriptor.lock(params.entity?.id)
     }
-  
+
     if(!entityDescriptor) {
       def created
       (created, entityDescriptor) = entityDescriptorService.createNoSave(params)  // Odd issues with transactions cross services not rolling back
     }
-  
+
     // IDP
     def saml2Namespace = SamlURI.findByUri('urn:oasis:names:tc:SAML:2.0:protocol')
     def identityProvider = new IDPSSODescriptor(approved:false, active:params.active, displayName: params.idp?.displayName, description: params.idp?.description, scope: params.idp?.scope, organization: organization)
     identityProvider.addToProtocolSupportEnumerations(saml2Namespace)
-    
+
     def supportedAttributes = []
-    params.idp.attributes.each { a -> 
+    params.idp.attributes.each { a ->
       if(a.value == "on") {
         def attr = AttributeBase.get(a.key)
         if(attr) {
@@ -74,8 +74,8 @@ class IdentityProviderService {
     }
 
     def idpContactPerson = new ContactPerson(contact:contact, type:ContactType.findByName(ct))
-    identityProvider.addToContacts(idpContactPerson)  
-  
+    identityProvider.addToContacts(idpContactPerson)
+
     // Initial endpoints
     def postBinding = SamlURI.findByUri(SamlConstants.httpPost)
     def postLocation = params.idp?.post
@@ -95,6 +95,15 @@ class IdentityProviderService {
     identityProvider.addToArtifactResolutionServices(soapArtifact)
     soapArtifact.validate()
 
+    def ecp = null
+    if(params.idp?.ecp) {
+      def ecpBinding = SamlURI.findByUri(SamlConstants.soap)
+      def ecpLocation = params.idp?.ecp
+      ecp = new SingleSignOnService(approved: true, binding: ecpBinding, location:ecpLocation, active:params.active)
+      identityProvider.addToSingleSignOnServices(ecp)
+      ecp.validate()
+    }
+
     // Cryptography
     // Signing
     if(params.idp?.crypto?.sig) {
@@ -105,7 +114,7 @@ class IdentityProviderService {
       keyDescriptor.roleDescriptor = identityProvider
       identityProvider.addToKeyDescriptors(keyDescriptor)
     }
-  
+
     // Encryption
     if(params.idp?.crypto?.enc) {
       def certEnc = cryptoService.createCertificate(params.cert)
@@ -115,20 +124,20 @@ class IdentityProviderService {
       keyDescriptorEnc.roleDescriptor = identityProvider
       identityProvider.addToKeyDescriptors(keyDescriptorEnc)
     }
-  
+
     // Attribute Authority - collaborates with created IDP
     def attributeAuthority, soapAttributeService
     if(params.aa?.create) {
       attributeAuthority = new AttributeAuthorityDescriptor(approved:false, active:params.active, displayName: params.idp?.displayName, description: params.idp?.description, scope: params.idp?.scope, organization:organization)
       attributeAuthority.addToProtocolSupportEnumerations(saml2Namespace)
-    
+
       def attributeServiceBinding = SamlURI.findByUri('urn:oasis:names:tc:SAML:2.0:bindings:SOAP')
       def attributeServiceLocation = params.aa?.attributeservice
       soapAttributeService = new AttributeService(approved: true, binding: attributeServiceBinding, location:attributeServiceLocation, active:params.active)
       attributeAuthority.addToAttributeServices(soapAttributeService)
             soapAttributeService.validate()
     }
-    
+
     // Generate return map
     def ret = [:]
     ret.organization = organization
@@ -139,6 +148,7 @@ class IdentityProviderService {
     ret.scope = params.idp?.scope
     ret.httpPost = httpPost
     ret.httpRedirect = httpRedirect
+    ret.ecp = ecp
     ret.soapArtifact = soapArtifact
     ret.soapAttributeService = soapAttributeService
     ret.contact = contact
@@ -159,15 +169,15 @@ class IdentityProviderService {
     if(!entityDescriptor.validate() || contact.hasErrors()) {
             log.info "$subject attempted to create $identityProvider but failed input validation"
       entityDescriptor.errors.each {log.debug it}
-      TransactionAspectSupport.currentTransactionStatus().setRollbackOnly() 
+      TransactionAspectSupport.currentTransactionStatus().setRollbackOnly()
             return [false, ret]
     }
-        
+
     // Force flush as we need identifiers
     if(!entityDescriptor.save(flush:true)) {
             log.info "$subject attempted to create $identityProvider but failed save attempt"
       entityDescriptor.errors.each {log.debug it}
-      TransactionAspectSupport.currentTransactionStatus().setRollbackOnly() 
+      TransactionAspectSupport.currentTransactionStatus().setRollbackOnly()
             return [false, ret]
     }
 
@@ -179,7 +189,7 @@ class IdentityProviderService {
       if(!entityDescriptor.save()) {
         log.info "$subject attempted to create $identityProvider but failed collaborator establishment"
         entityDescriptor.errors.each {log.debug it}
-        TransactionAspectSupport.currentTransactionStatus().setRollbackOnly() 
+        TransactionAspectSupport.currentTransactionStatus().setRollbackOnly()
         return [false, ret]
       }
     }
@@ -196,12 +206,12 @@ class IdentityProviderService {
     log.info "$subject created $identityProvider"
     return [true, ret]
   }
-  
+
   def update(def params) {
     def identityProvider = IDPSSODescriptor.get(params.id)
     if(!identityProvider)
       return [false, null]
-    
+
     identityProvider.displayName = params.idp.displayName
     identityProvider.description = params.idp.description
     identityProvider.scope = params.idp.scope
@@ -209,7 +219,7 @@ class IdentityProviderService {
     if(identityProvider.collaborator) {
         identityProvider.collaborator.displayName = params.idp.displayName
         identityProvider.collaborator.description = params.idp.description
-        identityProvider.collaborator.scope = params.idp.scope    
+        identityProvider.collaborator.scope = params.idp.scope
     }
 
     if(params.idp.status == 'true') {
@@ -228,24 +238,24 @@ class IdentityProviderService {
 
     identityProvider.autoAcceptServices = params.idp.autoacceptservices == 'true'
     identityProvider.attributeAuthorityOnly = params.idp.attributeauthorityonly == 'true'
-    
+
     log.debug "Updating $identityProvider active: ${identityProvider.active}, requestSigned: ${identityProvider.wantAuthnRequestsSigned}"
-    
+
     if(!identityProvider.entityDescriptor.validate()) {
       log.info "$subject attempted to update $identityProvider but failed IDPSSODescriptor validation"
       identityProvider.entityDescriptor.errors.each {log.warn it; print it}
       return [false, identityProvider]
     }
-    
-    if(!identityProvider.entityDescriptor.save()) {     
+
+    if(!identityProvider.entityDescriptor.save()) {
       identityProvider.entityDescriptor.errors.each {log.warn it}
       throw new ErronousStateException("Unable to save when updating ${identityProvider}")
     }
-    
+
     log.info "$subject updated $identityProvider"
     return [true, identityProvider]
   }
-  
+
   def delete(long id) {
     def identityProvider = IDPSSODescriptor.get(id)
     if(!identityProvider)
@@ -271,7 +281,7 @@ class IdentityProviderService {
 
       entityDescriptor.attributeAuthorityDescriptors.remove(aa)
 
-      log.info "$subject deleted $aa" 
+      log.info "$subject deleted $aa"
       aa.delete()
     }
 
@@ -286,7 +296,7 @@ class IdentityProviderService {
 
     log.info "$subject deleted $identityProvider"
   }
-  
+
   def archive(long id) {
     def identityProvider = IDPSSODescriptor.get(id)
     if(!identityProvider)
@@ -299,10 +309,10 @@ class IdentityProviderService {
       identityProvider.errors.each { log.error it }
       throw new ErronousStateException("Unable to archive IDPSSODescriptor with id $id")
     }
-    
+
     log.info "$subject successfully archived $identityProvider"
   }
-  
+
   def unarchive(long id) {
     def identityProvider = IDPSSODescriptor.get(id)
     if(!identityProvider)
@@ -314,10 +324,10 @@ class IdentityProviderService {
       identityProvider.errors.each { log.error it }
       throw new ErronousStateException("Unable to unarchive IDPSSODescriptor with id $id")
     }
-    
+
     log.info "$subject successfully unarchived $identityProvider"
   }
-  
+
   def activate(long id) {
     def identityProvider = IDPSSODescriptor.get(id)
     if(!identityProvider)
@@ -329,8 +339,8 @@ class IdentityProviderService {
       identityProvider.errors.each { log.error it }
       throw new ErronousStateException("Unable to activate IDPSSODescriptor with id $id")
     }
-    
+
     log.info "$subject successfully activate $identityProvider"
   }
-  
+
 }
