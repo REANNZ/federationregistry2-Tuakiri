@@ -106,23 +106,42 @@ class IdentityProviderService {
 
     // Cryptography
     // Signing
-    if(params.idp?.crypto?.sig) {
-      def cert = cryptoService.createCertificate(params.cert)
-      cryptoService.validateCertificate(cert)
-      def keyInfo = new aaf.fr.foundation.KeyInfo(certificate: cert)
-      def keyDescriptor = new aaf.fr.foundation.KeyDescriptor(keyInfo:keyInfo, keyType:aaf.fr.foundation.KeyTypes.signing, encryptionMethod:null)
+    def certSIG = cryptoService.createCertificate(params.sigcert)
+    if(certSIG) {
+      def keyInfo = new aaf.fr.foundation.KeyInfo(certificate: certSIG)
+      def keyDescriptor = new aaf.fr.foundation.KeyDescriptor(keyInfo:keyInfo, keyType:KeyTypes.signing, encryptionMethod:null)
       keyDescriptor.roleDescriptor = identityProvider
       identityProvider.addToKeyDescriptors(keyDescriptor)
     }
+    else {
+      identityProvider.errors.rejectValue('keyDescriptors', 'aaf.fr.foundation.IDPSSODescriptor.crypto.signing.invalid')
+    }
+
+    // Backchannel
+    if(params.idp?.crypto?.bc && params.bccert) {
+      def certBC = cryptoService.createCertificate(params.bccert)
+      if(certBC) {
+        def keyInfoBC = new KeyInfo(certificate:certBC)
+        def keyDescriptorBC = new aaf.fr.foundation.KeyDescriptor(keyInfo:keyInfoBC, keyType:KeyTypes.signing, encryptionMethod:null)
+        keyDescriptorBC.roleDescriptor = identityProvider
+        identityProvider.addToKeyDescriptors(keyDescriptorBC)
+      } else {
+        identityProvider.errors.rejectValue('keyDescriptors', 'aaf.fr.foundation.IDPSSODescriptor.crypto.backchannel.invalid')
+      }
+    }
 
     // Encryption
-    if(params.idp?.crypto?.enc) {
-      def certEnc = cryptoService.createCertificate(params.cert)
-      cryptoService.validateCertificate(certEnc)
-      def keyInfoEnc = new KeyInfo(certificate:certEnc)
-      def keyDescriptorEnc = new aaf.fr.foundation.KeyDescriptor(keyInfo:keyInfoEnc, keyType:KeyTypes.encryption, encryptionMethod:null)
-      keyDescriptorEnc.roleDescriptor = identityProvider
-      identityProvider.addToKeyDescriptors(keyDescriptorEnc)
+    if(params.idp?.crypto?.enc && params.enccert) {
+      def certEnc = cryptoService.createCertificate(params.enccert)
+      if(certEnc) {
+        def keyInfoEnc = new KeyInfo(certificate:certEnc)
+        def keyDescriptorEnc = new aaf.fr.foundation.KeyDescriptor(keyInfo:keyInfoEnc, keyType:KeyTypes.encryption, encryptionMethod:null)
+        keyDescriptorEnc.roleDescriptor = identityProvider
+        identityProvider.addToKeyDescriptors(keyDescriptorEnc)
+      }
+      else {
+        identityProvider.errors.rejectValue('keyDescriptors', 'aaf.fr.foundation.IDPSSODescriptor.crypto.encryption.invalid')
+      }
     }
 
     // Attribute Authority - collaborates with created IDP
@@ -152,7 +171,9 @@ class IdentityProviderService {
     ret.soapArtifact = soapArtifact
     ret.soapAttributeService = soapAttributeService
     ret.contact = contact
-    ret.certificate = params.cert
+    ret.sigcert = params.sigcert
+    ret.bccert = params.bccert
+    ret.enccert = params.enccert
     ret.supportedAttributes = supportedAttributes
 
     entityDescriptor.addToIdpDescriptors(identityProvider)
@@ -160,10 +181,14 @@ class IdentityProviderService {
       entityDescriptor.addToAttributeAuthorityDescriptors(attributeAuthority)
     }
 
-    identityProvider.validate()
-    if(params.aa?.create) {
-        attributeAuthority.validate()
+    if(!identityProvider.hasErrors()) {
+      identityProvider.validate()
+      if(params.aa?.create) {
+          attributeAuthority.validate()
+      }
     }
+
+    println identityProvider.errors
 
     // Check contact explicitly to avoid TransientObjectException
     if(!entityDescriptor.validate() || contact.hasErrors()) {

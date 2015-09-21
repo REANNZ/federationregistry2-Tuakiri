@@ -235,15 +235,34 @@
       <p><g:message encodeAs="HTML" code="templates.fr.identityprovider.create.crypto.details" /></p>
 
       <fieldset>
+        <div id="newcertificatedetails"></div>
+
         <div class="control-group">
-            <label class="control-label" for="newcertificatedata"><g:message encodeAs="HTML" code="label.certificate" /></label>
-            <div class="controls">
-              <div id="newcertificatedetails">
-              </div>
-              <g:hiddenField name="idp.crypto.sig" value="${true}" />
-              <g:textArea name="cert" id="cert" class="cert required" rows="25" cols="60" value="${certificate}"/>
-              <fr:tooltip code='help.fr.identityprovider.certificate' />
-            </div>
+          <label class="control-label"><g:message encodeAs="HTML" code="label.certificatesigning" /></label>
+          <div class="controls">
+            <g:hiddenField name="idp.crypto.sig" value="${true}" />
+            <g:textArea name="sigcert" id="sigcert" class="cert required" rows="25" cols="60" value="${sigcert}"/>
+            <fr:tooltip code='help.fr.identityprovider.certificatesigning' />
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label"><g:message encodeAs="HTML" code="label.certificatebackchannel" /></label>
+          <div class="controls">
+            <g:hiddenField name="idp.crypto.bc" value="${true}" />
+            <g:textArea name="bccert" id="bccert" class="cert" rows="25" cols="60" value="${bccert}"/>
+            <fr:tooltip code='help.fr.identityprovider.certificatebackchannel' />
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label"><g:message encodeAs="HTML" code="label.certificateencryption" /></label>
+          <div class="controls">
+            <g:hiddenField name="idp.crypto.enc" value="${true}" />
+            <g:textArea name="enccert" id="enccert" class="cert" rows="25" cols="60" value="${enccert}"/>
+            <fr:tooltip code='help.fr.identityprovider.certificateencryption' />
+          </div>
+        </div>
       </fieldset>
     </div>
 
@@ -336,17 +355,6 @@ $(function() {
         }
       },
       keyup: false,
-  });
-
-  jQuery.validator.addMethod("validcert", function(value, element, params) {
-    fr.validateCertificate();
-    return valid_certificate;
-  }, jQuery.format("PEM data invalid"));
-
-
-  $('#cert').rules("add", {
-       required: true,
-       validcert: true
   });
 
   $('#hostname').bind('change',  function() {
