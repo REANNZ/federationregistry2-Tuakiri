@@ -122,12 +122,6 @@ aaf {
     certificates {
       // shib default of 20 years for assertion certs so this must be large
       maxlifeindays = 7800
-
-      // Optionally turn off certificate chain validation
-      // When true, skips searching for issuer CA certicate in validateCertificate.
-      // ... but the search is still on when invoked as
-      //    validateCertificate(cert, requireChain = true)
-      ignoreIssuerCA = false
     }
 
     knownimplementations {

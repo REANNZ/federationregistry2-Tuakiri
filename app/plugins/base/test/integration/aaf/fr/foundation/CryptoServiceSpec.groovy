@@ -75,29 +75,6 @@ class CryptoServiceSpec extends IntegrationSpec {
 		idp.keyDescriptors.size() == 2
 	}
 
-	def 'ensure associating a CA-issued certificate with a role descriptor succeeds with ignoreIssuerCA even when the CA chain is missing'() {
-		setup:
-		def ca = new File('./test/integration/data/demoCA/cacertminimal.pem').text
-		def caCert = new CACertificate(data:ca)
-		def caKeyInfo = new CAKeyInfo(certificate:caCert)
-		caKeyInfo.save()
-		def savIgnoreIssuerCA = grailsApplication.config.aaf.fr.certificates.ignoreIssuerCA
-		grailsApplication.config.aaf.fr.certificates.ignoreIssuerCA = true
-
-		def idp = IDPSSODescriptor.build().save()
-		def data = new File('./test/integration/data/managertestaaf.pem').text
-
-		when:
-		def created = cryptoService.associateCertificate(idp, data, "testcert", KeyTypes.signing)
-
-		then:
-		created
-		idp.keyDescriptors.size() == 1
-
-		cleanup:
-		grailsApplication.config.aaf.fr.certificates.ignoreIssuerCA = savIgnoreIssuerCA
-	}
-
 	def 'validate certificate unassociation from role descriptor'() {
 		setup:
 		def ca = new File('./test/integration/data/demoCA/cacertminimal.pem').text
