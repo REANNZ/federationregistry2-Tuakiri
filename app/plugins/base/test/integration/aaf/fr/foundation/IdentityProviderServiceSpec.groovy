@@ -48,7 +48,15 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
   }
 
   def String loadPK() {
-    new File('./test/integration/data/newcertminimal.pem').text
+    new File('./test/integration/data/newcertminimal.pem').text.trim()
+  }
+
+  def String loadBackPK() {
+    new File('./test/integration/data/newcertminimal2.pem').text.trim()
+  }
+
+  def String loadEncPK() {
+    new File('./test/integration/data/newcertminimal3.pem').text.trim()
   }
 
   def "Create succeeds when valid initial IDPSSODescriptor and AttributeAuthorityDescriptor data are provided (without existing EntityDescriptor or contact)"() {
@@ -67,7 +75,7 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
 
     params.organization = [id: organization.id]
     params.active = true
-    params.cert = pk
+    params.sigcert = pk
     params.entity = [identifier:"http://identityProvider1.test.com"]
     params.idp = [displayName:"test name", description:"test desc", scope: "test.com", attributes:[(attr1.id):'on', (attr2.id):'on'], crypto:[sig: true, enc:true], post:'http://identityProvider.test.com/SAML2/POST/SSO',
                 redirect:'http://identityProvider.test.com/SAML2/Redirect/SSO', artifact:'http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution', 'artifact-index':1]
@@ -100,9 +108,8 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
 
     identityProvider.displayName == "test name"
     identityProvider.description == "test desc"
-    identityProvider.keyDescriptors.size() == 2
+    identityProvider.keyDescriptors.size() == 1
     identityProvider.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
-    identityProvider.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
 
     identityProvider.singleSignOnServices.size() == 2
     def sso1 = identityProvider.singleSignOnServices.toList().get(0)
@@ -165,7 +172,7 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
 
     params.organization = [id: organization.id]
     params.active = true
-    params.cert = pk
+    params.sigcert = pk
     params.entity = [identifier:"http://identityProvider2.test.com"]
     params.idp = [displayName:"test name", description:"test desc", scope:"test.com", attributes:[(attr1.id):'on', (attr2.id):'on'], crypto:[sig: true, enc:true], post:'http://identityProvider.test.com/SAML2/POST/SSO',
                 redirect:'http://identityProvider.test.com/SAML2/Redirect/SSO', artifact:'http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution', 'artifact-index':1]
@@ -198,9 +205,8 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
 
     identityProvider.displayName == "test name"
     identityProvider.description == "test desc"
-    identityProvider.keyDescriptors.size() == 2
+    identityProvider.keyDescriptors.size() == 1
     identityProvider.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
-    identityProvider.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
 
     identityProvider.singleSignOnServices.size() == 2
     def sso1 = identityProvider.singleSignOnServices.toList().get(0)
@@ -260,7 +266,7 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
 
     params.organization = [id: organization.id]
     params.active = true
-    params.cert = pk
+    params.sigcert = pk
     params.entity = [id: entityDescriptor.id]
     params.idp = [displayName:"test name", description:"test desc", scope:"test.com", attributes:[(attr1.id):'on', (attr2.id):'on'], crypto:[sig: true, enc:true], post:'http://identityProvider.test.com/SAML2/POST/SSO',
                 redirect:'http://identityProvider.test.com/SAML2/Redirect/SSO', artifact:'http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution', 'artifact-index':1]
@@ -294,9 +300,8 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
     identityProvider.description == "test desc"
     identityProvider.active
     !identityProvider.approved
-    identityProvider.keyDescriptors.size() == 2
+    identityProvider.keyDescriptors.size() == 1
     identityProvider.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
-    identityProvider.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
 
     identityProvider.singleSignOnServices.size() == 2
     def sso1 = identityProvider.singleSignOnServices.toList().get(0)
@@ -354,7 +359,7 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
 
     params.organization = [id: organization.id]
     params.active = true
-    params.cert = pk
+    params.sigcert = pk
     params.entity = [id: entityDescriptor.id]
     params.idp = [displayName:"test name", description:"test desc", scope:"test.com", attributes:[(attr1.id):'on', (attr2.id):'on'], crypto:[sig: true, enc:true], post:'http://identityProvider.test.com/SAML2/POST/SSO',
                 redirect:'http://identityProvider.test.com/SAML2/Redirect/SSO', artifact:'http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution', 'artifact-index':1,
@@ -402,7 +407,7 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
 
     params.organization = [id: organization.id]
     params.active = true
-    params.cert = pk
+    params.sigcert = pk
     params.entity = [id: entityDescriptor.id]
     params.idp = [description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], post:'http://identityProvider.test.com/SAML2/POST/SSO',
                 redirect:'http://identityProvider.test.com/SAML2/Redirect/SSO', artifact:'http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution', 'artifact-index':1]
@@ -424,9 +429,8 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
 
     identityProvider.displayName == null
     identityProvider.description == "test desc"
-    identityProvider.keyDescriptors.size() == 2
+    identityProvider.keyDescriptors.size() == 1
     identityProvider.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
-    identityProvider.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
 
     identityProvider.singleSignOnServices.size() == 2
 
@@ -468,7 +472,7 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
 
     params.organization = [id: organization.id]
     params.active = true
-    params.cert = pk
+    params.sigcert = pk
     params.entity = [id: entityDescriptor.id]
     params.idp = [displayName: "test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], post:'/SAML2/POST/SSO',
                 redirect:'http://identityProvider.test.com/SAML2/Redirect/SSO', artifact:'http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution', 'artifact-index':1]
@@ -490,9 +494,8 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
 
     identityProvider.displayName == "test name"
     identityProvider.description == "test desc"
-    identityProvider.keyDescriptors.size() == 2
+    identityProvider.keyDescriptors.size() == 1
     identityProvider.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
-    identityProvider.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
 
     identityProvider.singleSignOnServices.size() == 2
 
@@ -533,7 +536,7 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
 
     params.organization = [id: organization.id]
     params.active = true
-    params.cert = pk
+    params.sigcert = pk
     params.entity = [id: entityDescriptor.id]
     params.idp = [displayName: "test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true],
                 redirect:'http://identityProvider.test.com/SAML2/Redirect/SSO', artifact:'http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution', 'artifact-index':1]
@@ -555,9 +558,8 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
 
     identityProvider.displayName == "test name"
     identityProvider.description == "test desc"
-    identityProvider.keyDescriptors.size() == 2
+    identityProvider.keyDescriptors.size() == 1
     identityProvider.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
-    identityProvider.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
 
     identityProvider.singleSignOnServices.size() == 2
 
@@ -600,7 +602,7 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
 
     params.organization = [id: organization.id]
     params.active = true
-    params.cert = pk
+    params.sigcert = pk
     params.entity = [id: entityDescriptor.id]
     params.idp = [displayName: "test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], post:'http://identityProvider.test.com/SAML2/POST/SSO',
                 redirect:'asdfasdasdf', artifact:'http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution', 'artifact-index':1]
@@ -622,9 +624,8 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
 
     identityProvider.displayName == "test name"
     identityProvider.description == "test desc"
-    identityProvider.keyDescriptors.size() == 2
+    identityProvider.keyDescriptors.size() == 1
     identityProvider.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
-    identityProvider.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
 
     identityProvider.singleSignOnServices.size() == 2
 
@@ -664,7 +665,7 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
 
     params.organization = [id: organization.id]
     params.active = true
-    params.cert = pk
+    params.sigcert = pk
     params.entity = [id: entityDescriptor.id]
     params.idp = [displayName: "test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], post:'http://identityProvider.test.com/SAML2/POST/SSO',
                 artifact:'http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution', 'artifact-index':1]
@@ -686,9 +687,9 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
 
     identityProvider.displayName == "test name"
     identityProvider.description == "test desc"
-    identityProvider.keyDescriptors.size() == 2
+
+    identityProvider.keyDescriptors.size() == 1
     identityProvider.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
-    identityProvider.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
 
     identityProvider.singleSignOnServices.size() == 2
 
@@ -728,7 +729,7 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
 
     params.organization = [id: organization.id]
     params.active = true
-    params.cert = pk
+    params.sigcert = pk
     params.entity = [id: entityDescriptor.id]
     params.idp = [displayName: "test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], post:'http://identityProvider.test.com/SAML2/POST/SSO',
                 redirect:'http://identityProvider.test.com/SAML2/Redirect/SSO', artifact:'/SAML2/SOAP/ArtifactResolution', 'artifact-index':1]
@@ -750,9 +751,9 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
 
     identityProvider.displayName == "test name"
     identityProvider.description == "test desc"
-    identityProvider.keyDescriptors.size() == 2
+
+    identityProvider.keyDescriptors.size() == 1
     identityProvider.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
-    identityProvider.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
 
     identityProvider.singleSignOnServices.size() == 2
 
@@ -793,7 +794,7 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
 
     params.organization = [id: organization.id]
     params.active = true
-    params.cert = pk
+    params.sigcert = pk
     params.entity = [id: entityDescriptor.id]
     params.idp = [displayName: "test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], post:'http://identityProvider.test.com/SAML2/POST/SSO',
                 redirect:'http://identityProvider.test.com/SAML2/Redirect/SSO']
@@ -815,9 +816,9 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
 
     identityProvider.displayName == "test name"
     identityProvider.description == "test desc"
-    identityProvider.keyDescriptors.size() == 2
+
+    identityProvider.keyDescriptors.size() == 1
     identityProvider.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
-    identityProvider.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
 
     identityProvider.singleSignOnServices.size() == 2
 
@@ -859,7 +860,7 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
 
     params.organization = [id: organization.id]
     params.active = true
-    params.cert = pk
+    params.sigcert = pk
     params.entity = [id: entityDescriptor.id]
     params.idp = [displayName: "test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], post:'http://identityProvider.test.com/SAML2/POST/SSO',
                 redirect:'http://identityProvider.test.com/SAML2/Redirect/SSO', artifact:'http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution', 'artifact-index':1,
@@ -955,7 +956,7 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
     wfParams.organization == "${organization.id}"
   }
 
-  def "Create succeeds when AttributeAuthorityDescriptor not required"() {
+  def "Backchannel crypto is correctly registered"() {
     setup:
     setupBindings()
     setupCrypto()
@@ -966,12 +967,61 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
     def attr1 = Attribute.build()
     def attr2 = Attribute.build()
     def pk = loadPK()
+    def backPK = loadBackPK();
     def contact = Contact.build(organization: organization)
     def ct = new ContactType(name:'technical', displayName:'Technical', description: 'Technical contacts').save()
 
     params.organization = [id: organization.id]
     params.active = true
-    params.cert = pk
+    params.sigcert = pk
+    params.bccert = backPK
+    params.entity = [id: entityDescriptor.id]
+    params.idp = [displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, bc:true], post:'http://identityProvider.test.com/SAML2/POST/SSO',
+                redirect:'http://identityProvider.test.com/SAML2/Redirect/SSO', artifact:'http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution', 'artifact-index':1]
+    params.aa = [create: false]
+    params.contact = [email: contact.email, type:'technical']
+
+    def wfProcessName, wfDescription, wfPriority, wfParams
+
+    when:
+    WorkflowProcessService.metaClass.initiate =  { String processName, String instanceDescription, ProcessPriority priority, Map params ->
+      wfProcessName = processName
+      wfDescription = instanceDescription
+      wfPriority = priority
+      wfParams = params
+      [true, [:]]
+    }
+    WorkflowProcessService.metaClass.run = { def processInstance -> }
+    def (created, ret) = IdentityProviderService.create(params)
+
+    then:
+    created
+
+    def identityProvider = ret.identityProvider
+    identityProvider.keyDescriptors.size() == 2
+    identityProvider.keyDescriptors.toList().sort().get(0).keyInfo.certificate.data !=
+    identityProvider.keyDescriptors.toList().sort().get(1).keyInfo.certificate.data
+  }
+
+  def "Encryption crypto is correctly registered"() {
+    setup:
+    setupBindings()
+    setupCrypto()
+
+    def saml2Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:2.0:protocol')
+    def organization = Organization.build()
+    def entityDescriptor = EntityDescriptor.build(organization:organization)
+    def attr1 = Attribute.build()
+    def attr2 = Attribute.build()
+    def pk = loadPK()
+    def encPK = loadEncPK();
+    def contact = Contact.build(organization: organization)
+    def ct = new ContactType(name:'technical', displayName:'Technical', description: 'Technical contacts').save()
+
+    params.organization = [id: organization.id]
+    params.active = true
+    params.sigcert = pk
+    params.enccert = encPK
     params.entity = [id: entityDescriptor.id]
     params.idp = [displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], post:'http://identityProvider.test.com/SAML2/POST/SSO',
                 redirect:'http://identityProvider.test.com/SAML2/Redirect/SSO', artifact:'http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution', 'artifact-index':1]
@@ -994,8 +1044,54 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
     then:
     created
 
-        def identityProvider = ret.identityProvider
-        def attributeAuthority = ret.attributeAuthority
+    def identityProvider = ret.identityProvider
+
+    identityProvider.keyDescriptors.size() == 2
+    identityProvider.keyDescriptors.toList().sort().get(0).keyInfo.certificate.data !=
+    identityProvider.keyDescriptors.toList().sort().get(1).keyInfo.certificate.data
+  }
+
+  def "Create succeeds when AttributeAuthorityDescriptor not required"() {
+    setup:
+    setupBindings()
+    setupCrypto()
+
+    def saml2Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:2.0:protocol')
+    def organization = Organization.build()
+    def entityDescriptor = EntityDescriptor.build(organization:organization)
+    def attr1 = Attribute.build()
+    def attr2 = Attribute.build()
+    def pk = loadPK()
+    def contact = Contact.build(organization: organization)
+    def ct = new ContactType(name:'technical', displayName:'Technical', description: 'Technical contacts').save()
+
+    params.organization = [id: organization.id]
+    params.active = true
+    params.sigcert = pk
+    params.entity = [id: entityDescriptor.id]
+    params.idp = [displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], post:'http://identityProvider.test.com/SAML2/POST/SSO',
+                redirect:'http://identityProvider.test.com/SAML2/Redirect/SSO', artifact:'http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution', 'artifact-index':1]
+    params.aa = [create: false]
+    params.contact = [email: contact.email, type:'technical']
+
+    def wfProcessName, wfDescription, wfPriority, wfParams
+
+    when:
+    WorkflowProcessService.metaClass.initiate =  { String processName, String instanceDescription, ProcessPriority priority, Map params ->
+      wfProcessName = processName
+      wfDescription = instanceDescription
+      wfPriority = priority
+      wfParams = params
+      [true, [:]]
+    }
+    WorkflowProcessService.metaClass.run = { def processInstance -> }
+    def (created, ret) = IdentityProviderService.create(params)
+
+    then:
+    created
+
+    def identityProvider = ret.identityProvider
+    def attributeAuthority = ret.attributeAuthority
 
     identityProvider.organization == organization
     identityProvider.entityDescriptor == entityDescriptor
@@ -1004,7 +1100,7 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
 
     identityProvider.displayName == "test name"
     identityProvider.description == "test desc"
-    identityProvider.keyDescriptors.size() == 2
+    identityProvider.keyDescriptors.size() == 1
     identityProvider.singleSignOnServices.size() == 2
     def sso1 = identityProvider.singleSignOnServices.toList().get(0)
     def sso2 = identityProvider.singleSignOnServices.toList().get(1)
@@ -1045,7 +1141,7 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
 
     params.organization = [id: organization.id]
     params.active = true
-    params.cert = pk
+    params.sigcert = pk
     params.entity = [id: entityDescriptor.id]
     params.idp = [displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], post:'http://identityProvider.test.com/SAML2/POST/SSO',
                 redirect:'http://identityProvider.test.com/SAML2/Redirect/SSO', artifact:'http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution', 'artifact-index':1]
@@ -1077,7 +1173,7 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
 
     identityProvider.displayName == "test name"
     identityProvider.description == "test desc"
-    identityProvider.keyDescriptors.size() == 2
+    identityProvider.keyDescriptors.size() == 1
     identityProvider.singleSignOnServices.size() == 2
     def sso1 = identityProvider.singleSignOnServices.toList().get(0)
     def sso2 = identityProvider.singleSignOnServices.toList().get(1)
@@ -1118,7 +1214,7 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
 
     params.organization = [id: organization.id]
     params.active = true
-    params.cert = pk
+    params.sigcert = pk
     params.entity = [id: entityDescriptor.id]
     params.idp = [displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], post:'http://identityProvider.test.com/SAML2/POST/SSO',
                 redirect:'http://identityProvider.test.com/SAML2/Redirect/SSO', artifact:'http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution', 'artifact-index':1]
@@ -1140,9 +1236,8 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
 
     identityProvider.displayName == "test name"
     identityProvider.description == "test desc"
-    identityProvider.keyDescriptors.size() == 2
+    identityProvider.keyDescriptors.size() == 1
     identityProvider.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
-    identityProvider.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
 
     identityProvider.singleSignOnServices.size() == 2
 
@@ -1177,7 +1272,7 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
 
     params.organization = [id: organization.id]
     params.active = true
-    params.cert = pk
+    params.sigcert = pk
     params.entity = [id: 20000]
     params.idp = [displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], post:'http://identityProvider.test.com/SAML2/POST/SSO',
                 redirect:'http://identityProvider.test.com/SAML2/Redirect/SSO', artifact:'http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution', 'artifact-index':1]
@@ -1198,9 +1293,8 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
 
     identityProvider.displayName == "test name"
     identityProvider.description == "test desc"
-    identityProvider.keyDescriptors.size() == 2
+    identityProvider.keyDescriptors.size() == 1
     identityProvider.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
-    identityProvider.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
 
     identityProvider.singleSignOnServices.size() == 2
 
@@ -1237,7 +1331,7 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
 
     params.organization = [id: organization.id]
     params.active = true
-    params.cert = pk
+    params.sigcert = pk
     params.entity = [identifier:""]
     params.idp = [displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], post:'http://identityProvider.test.com/SAML2/POST/SSO',
                 redirect:'http://identityProvider.test.com/SAML2/Redirect/SSO', artifact:'http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution', 'artifact-index':1]
@@ -1258,9 +1352,8 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
 
     identityProvider.displayName == "test name"
     identityProvider.description == "test desc"
-    identityProvider.keyDescriptors.size() == 2
+    identityProvider.keyDescriptors.size() == 1
     identityProvider.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
-    identityProvider.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
 
     identityProvider.singleSignOnServices.size() == 2
 
@@ -1297,7 +1390,7 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
 
     params.organization = [id: 200000000]
     params.active = true
-    params.cert = pk
+    params.sigcert = pk
     params.entity = [identifier: "http://test.example.com"]
     params.idp = [displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], post:'http://identityProvider.test.com/SAML2/POST/SSO',
                 redirect:'http://identityProvider.test.com/SAML2/Redirect/SSO', artifact:'http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution', 'artifact-index':1]
@@ -1319,9 +1412,8 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
 
     identityProvider.displayName == "test name"
     identityProvider.description == "test desc"
-    identityProvider.keyDescriptors.size() == 2
+    identityProvider.keyDescriptors.size() == 1
     identityProvider.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
-    identityProvider.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
 
     identityProvider.singleSignOnServices.size() == 2
 
@@ -1358,7 +1450,7 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
 
     params.organization = [id: organization.id]
     params.active = true
-    params.cert = pk
+    params.sigcert = pk
     params.entity = [identifier:"http://identityProvider1.test.com"]
     params.idp = [displayName:"test name", description:"test desc", scope: "test.com", attributes:[(attr1.id):'on', (attr2.id):'on'], crypto:[sig: true, enc:true], post:'http://identityProvider.test.com/SAML2/POST/SSO',
                             redirect:'http://identityProvider.test.com/SAML2/Redirect/SSO', artifact:'http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution', 'artifact-index':1]
@@ -1394,9 +1486,8 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
 
     identityProvider.displayName == "test name"
     identityProvider.description == "test desc"
-    identityProvider.keyDescriptors.size() == 2
+    identityProvider.keyDescriptors.size() == 1
     identityProvider.keyDescriptors.toList().get(0).keyInfo.certificate.data == pk
-    identityProvider.keyDescriptors.toList().get(1).keyInfo.certificate.data == pk
 
     identityProvider.singleSignOnServices.size() == 2
     def sso1 = identityProvider.singleSignOnServices.toList().get(0)
