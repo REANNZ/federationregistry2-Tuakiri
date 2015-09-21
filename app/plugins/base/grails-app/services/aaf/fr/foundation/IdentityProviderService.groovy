@@ -188,8 +188,6 @@ class IdentityProviderService {
       }
     }
 
-    println identityProvider.errors
-
     // Check contact explicitly to avoid TransientObjectException
     if(!entityDescriptor.validate() || contact.hasErrors()) {
             log.info "$subject attempted to create $identityProvider but failed input validation"

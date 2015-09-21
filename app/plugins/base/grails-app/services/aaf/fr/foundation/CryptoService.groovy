@@ -57,18 +57,15 @@ class CryptoService {
 		def data = _data?.trim()
 		if(!data) {
 			log.error 'Invalid certificate data, no certificate provided'
-			println "no data"
 			return null
 		}
 
 		if(!(data.startsWith('-----BEGIN CERTIFICATE-----')) || !(data.endsWith('-----END CERTIFICATE-----'))){
-			println "no banners"
 		  log.error 'Invalid certificate data, no banners present'
 		  return null
 		}
 
 		if(data.count('-----BEGIN CERTIFICATE-----') > 1 || data.count('-----END CERTIFICATE-----') > 1 ){
-			println "multiple banners"
 		  log.error 'Invalid certificate data multiple certificates provided'
 		  return null
 		}
