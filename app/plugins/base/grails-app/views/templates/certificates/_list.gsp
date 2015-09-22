@@ -1,6 +1,6 @@
 <div id="certificates">
   <g:if test="${descriptor.keyDescriptors && descriptor.keyDescriptors.findAll{it.disabled == false}.size() > 0}">
-    <g:each in="${descriptor.keyDescriptors.sort{it.id}}" status="i" var="kd">  
+    <g:each in="${descriptor.keyDescriptors.sort{it.id}}" status="i" var="kd">
       <g:if test="${!kd.disabled}">
         <div class="certificate">
           <table class="table borderless">
@@ -51,16 +51,30 @@
                 </td>
               </tr>
               <tr>
+                <th><g:message encodeAs="HTML" code="label.review"/></th>
+                <td>
+          <pre>${kd.keyInfo.certificate.data.trim()}
+
+To review this certificate save it as cert.pem and run:
+
+$> openssl x509 -in cert.pem -noout -text
+</pre>
+                </td>
+              </tr>
+              <tr>
+                <th>Actions</th>
                 <td>
                   <fr:hasPermission target="federation:management:descriptor:${descriptor.id}:crypto:delete">
-                    <a class="confirm-delete-certificate btn btn-mini" data-certificate="${kd.id}"><g:message encodeAs="HTML" code='label.delete'/></a>
+                    <a class="confirm-delete-certificate btn btn-danger" data-certificate="${kd.id}"><g:message encodeAs="HTML" code='label.delete'/></a>
                   </fr:hasPermission>
                 </td>
-                <td/>
               </tr>
             </tbody>
           </table>
         </div>
+        <g:if test="${i + 1 != descriptor.keyDescriptors.size()}">
+          <hr>
+        </g:if>
       </g:if>
     </g:each>
   </g:if>
