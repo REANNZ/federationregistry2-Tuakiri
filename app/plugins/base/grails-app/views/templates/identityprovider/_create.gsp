@@ -72,9 +72,15 @@
 
       <fieldset>
         <div class="control-group">
+	  <g:if test="${g.message(code:'branding.fr.identityproviders.organization.alert') != ''}">
+	    <div id="identityproviders-organization-alert" class="alert alert-info">
+	      <g:message code="branding.fr.identityproviders.organization.alert" />
+	    </div>
+	  </g:if>
           <label class="control-label" for="organization.id"><g:message encodeAs="HTML" code="label.organization" /></label>
           <div class="controls">
             <g:select name="organization.id" from="${organizationList.sort{it.displayName}}" optionKey="id" optionValue="displayName" value="${organization?.id}" class="span4" />
+            <fr:tooltip code='help.fr.identityprovider.organization' />
           </div>
         </div>
 
@@ -84,7 +90,7 @@
             <g:hiddenField name="aa.displayName" value=""/>
             <g:textField name="idp.displayName" class="required span4" value="${identityProvider?.displayName}"/>
             <fr:tooltip code='help.fr.identityprovider.displayname' />
-          </div>    
+          </div>
         </div>
 
         <div class="control-group">
@@ -132,7 +138,7 @@
       <div class="centered">
         <h2>OR</h2>
       </div>
-      
+
       <div id="samladvancedmode" class="hero-unit">
         <h3><g:message encodeAs="HTML" code="templates.fr.identityprovider.create.saml.advanced.heading" /></h3>
         <p><g:message encodeAs="HTML" code="templates.fr.identityprovider.create.saml.advanced.descriptive" /></p>
@@ -165,6 +171,15 @@
               <br><span class="binding"><strong><g:message encodeAs="HTML" code="label.binding" /></strong>: SAML:2.0:bindings:HTTP-Redirect</span>
             </div>
           </div>
+
+          <div class="control-group">
+            <label class="control-label" for="idp.ecp"><g:message encodeAs="HTML" code="label.ecpendpoint" /></label>
+            <div class="controls">
+              <g:textField name="idp.ecp" size="64" class="url span4" value="${ecp?.location}"/>
+              <fr:tooltip code='help.fr.identityprovider.ecp' />
+              <br><span class="binding"><strong><g:message encodeAs="HTML" code="label.binding" /></strong>: SAML:2.0:bindings:SOAP</span>
+            </div>
+          </div>
         </fieldset>
         <hr>
         <fieldset>
@@ -184,7 +199,7 @@
         <fieldset>
           <div class="control-group">
             <label class="control-label" for="aa.attributeservice"><g:message encodeAs="HTML" code="label.soapatrributequeryendpoint" /></label>
-            
+
             <div class="controls">
               <g:textField name="aa.attributeservice" size="64" class="required url span4" value="${soapAttributeService?.location}"/>
               <fr:tooltip code='help.fr.identityprovider.aasoap' />
@@ -220,15 +235,34 @@
       <p><g:message encodeAs="HTML" code="templates.fr.identityprovider.create.crypto.details" /></p>
 
       <fieldset>
+        <div id="newcertificatedetails"></div>
+
         <div class="control-group">
-            <label class="control-label" for="newcertificatedata"><g:message encodeAs="HTML" code="label.certificate" /></label>
-            <div class="controls">
-              <div id="newcertificatedetails">
-              </div>
-              <g:hiddenField name="idp.crypto.sig" value="${true}" />
-              <g:textArea name="cert" id="cert" class="cert required" rows="25" cols="60" value="${certificate}"/>
-              <fr:tooltip code='help.fr.identityprovider.certificate' />
-            </div>
+          <label class="control-label"><g:message encodeAs="HTML" code="label.certificatesigning" /></label>
+          <div class="controls">
+            <g:hiddenField name="idp.crypto.sig" value="${true}" />
+            <g:textArea name="sigcert" id="sigcert" class="cert required" rows="25" cols="60" value="${sigcert}"/>
+            <fr:tooltip code='help.fr.identityprovider.certificatesigning' />
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label"><g:message encodeAs="HTML" code="label.certificatebackchannel" /></label>
+          <div class="controls">
+            <g:hiddenField name="idp.crypto.bc" value="${true}" />
+            <g:textArea name="bccert" id="bccert" class="cert" rows="25" cols="60" value="${bccert}"/>
+            <fr:tooltip code='help.fr.identityprovider.certificatebackchannel' />
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label"><g:message encodeAs="HTML" code="label.certificateencryption" /></label>
+          <div class="controls">
+            <g:hiddenField name="idp.crypto.enc" value="${true}" />
+            <g:textArea name="enccert" id="enccert" class="cert" rows="25" cols="60" value="${enccert}"/>
+            <fr:tooltip code='help.fr.identityprovider.certificateencryption' />
+          </div>
+        </div>
       </fieldset>
     </div>
 
@@ -298,20 +332,20 @@ $(function() {
         else
           $('<input type="radio" class="currentimpl" name="knownimpls" value='+key+'> <strong>' + knownIDPImpl[key].displayName + '</strong><br>').appendTo($("#knownimpl"));
       });
-      
+
       $('input.currentimpl').change(function() {
         currentImpl = $(this).val();
         fr.configureIdentityProviderSAML($('#hostname').val());
       });
       },
       error: function (xhr, ajaxOptions, thrownError) {
-      
+
       }
   });
-  
+
   $('#hostname').alphanumeric({nocaps:true, ichars:';'});
   $('#idp\\.scope').alphanumeric({nocaps:true, allow:'.'});
-  
+
   $('form').validate({
       rules: {
         'hostname': {
@@ -323,17 +357,6 @@ $(function() {
       keyup: false,
   });
 
-  jQuery.validator.addMethod("validcert", function(value, element, params) { 
-    fr.validateCertificate();
-    return valid_certificate; 
-  }, jQuery.format("PEM data invalid"));
-  
-  
-  $('#cert').rules("add", {
-       required: true,
-       validcert: true
-  });
-  
   $('#hostname').bind('change',  function() {
     var val = $.trim($(this).val());
     if( val.indexOf('/', val.length - 1) !== -1 && val.length > 9)

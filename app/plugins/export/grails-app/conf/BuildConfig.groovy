@@ -22,8 +22,7 @@ grails.project.dependency.resolution = {
     mavenLocal()
     mavenCentral()
 
-    mavenRepo "http://snapshots.repository.codehaus.org"
-    mavenRepo "http://repository.codehaus.org"
+    mavenRepo "http://repo.grails.org/grails/repo/"
     mavenRepo "http://download.java.net/maven/2/"
     mavenRepo "http://repository.jboss.com/maven2/"
   }
@@ -45,6 +44,6 @@ grails.project.dependency.resolution = {
       exclude "spock-grails-support"
     }
     test ":resources:1.1.6"
-    provided ":greenmail:1.3.2"
+    provided ":greenmail:1.3.4"
   }
 }
