@@ -85,6 +85,7 @@ class IDPSSODescriptor extends SSODescriptor  {
 		  id this.id
 		  display_name this.displayName
 		  description this.description ?: ''
+		  attribute_authority_only attributeAuthorityOnly
 		  organization { id this.organization.id
 		  							 name this.organization.displayName }
 
