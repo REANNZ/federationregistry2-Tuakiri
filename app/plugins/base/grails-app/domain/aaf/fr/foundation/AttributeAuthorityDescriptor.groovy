@@ -68,20 +68,22 @@ class AttributeAuthorityDescriptor extends RoleDescriptor {
 					id entityDescriptor.id
 					entity_id entityDescriptor.entityID
 				}
-				if(collaborator?.attributeAuthorityOnly) {
-						scope scope
-						attribute_services attributeServices.collect { [id: it.id, location: it.location, binding: [id: it.binding.id, uri: it.binding.uri], functioning: it.functioning() ]}
-						assertion_id_request_services assertionIDRequestServices.collect { [id: it.id, location: it.location, binding: [id: it.binding.id, uri: it.binding.uri], functioning: it.functioning() ]}
-						name_id_formats nameIDFormats.collect{ [id: it.id, uri: it.uri]}
-						attribute_profiles attributeProfiles.collect { [id:it.id, uri: it.uri]}
-						attributes attributes.collect { [id:it.base.id, name: it.base.name, specification: it.base.specificationRequired,
-																						 values: it.values.collect { [value: it.value, approved: it.approved] }
-																					] }
-						sso_descriptor super.structureAsJson()
-					} else {
-						idp_sso_descriptor collaborator?.id
-						extract_metadata_from_idp_sso_descriptor true
-					}
+				if(collaborator) {
+					extract_metadata_from_idp_sso_descriptor true
+					attribute_services attributeServices.collect { [id: it.id, location: it.location, binding: [id: it.binding.id, uri: it.binding.uri], functioning: it.functioning() ]}
+					idp_sso_descriptor collaborator?.id
+				} else {
+					extract_metadata_from_idp_sso_descriptor false
+					scope scope
+					attribute_services attributeServices.collect { [id: it.id, location: it.location, binding: [id: it.binding.id, uri: it.binding.uri], functioning: it.functioning() ]}
+					assertion_id_request_services assertionIDRequestServices.collect { [id: it.id, location: it.location, binding: [id: it.binding.id, uri: it.binding.uri], functioning: it.functioning() ]}
+					name_id_formats nameIDFormats.collect{ [id: it.id, uri: it.uri]}
+					attribute_profiles attributeProfiles.collect { [id:it.id, uri: it.uri]}
+					attributes attributes.collect { [id:it.base.id, name: it.base.name, specification: it.base.specificationRequired,
+																					 values: it.values.collect { [value: it.value, approved: it.approved] }
+																				] }
+					role_descriptor super.structureAsJson()
+				}
 			}
 		}
 	}
