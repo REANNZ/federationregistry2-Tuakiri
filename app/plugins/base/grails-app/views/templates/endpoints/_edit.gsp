@@ -10,7 +10,7 @@
       <div class="control-group">
         <label class="control-label" for="uri"><g:message encodeAs="HTML" code="label.binding"/></label>
         <div class="controls">
-          <g:select name="binding" from="${SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding)}" optionKey="id" optionValue="uri" value="${endpoint.binding.id}" class="span4"/>
+          <g:select name="binding" from="${SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding)}" optionKey="id" optionValue="${{ it.uri?.encodeAsHTML() }}" value="${endpoint.binding.id}" class="span4"/>
           <fr:tooltip code='help.fr.endpoint.binding' />
         </div>
       </div>

@@ -6,7 +6,7 @@
     <div class="centered">
       <form id="detailed-spsessions-report-parameters" class="form-inline report-parameters well validating">
         <label for="spID"><g:message encodeAs="HTML" code="label.serviceprovider"/></label>
-        <g:select name="spID" from="${spList}" optionKey="id" optionValue="displayName" class="span3"/>
+        <g:select name="spID" from="${spList}" optionKey="id" optionValue="${{ it.displayName?.encodeAsHTML() }}" class="span3"/>
 
         <label for="startDate"><g:message encodeAs="HTML" code="label.startdate"/></label>
         <input name="startDate" placeholder="Start Date (YYYY-MM-DD)" class="datepicker required span2" type="text"/>

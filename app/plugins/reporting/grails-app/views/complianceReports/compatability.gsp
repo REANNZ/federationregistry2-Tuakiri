@@ -9,10 +9,10 @@
         <div class="span11">
           <form id="detailed-attributecompatibility-report-parameters" class="form form-inline well centered">
             <g:message encodeAs="HTML" code="label.identityprovider"/>
-            <g:select name="idpID" from="${idpList.sort{it.displayName.toLowerCase()}}" optionKey="id" optionValue="displayName" class="span3"/>
+            <g:select name="idpID" from="${idpList.sort{it.displayName.toLowerCase()}}" optionKey="id" optionValue="${{ it.displayName?.encodeAsHTML() }}" class="span3"/>
             &nbsp;&nbsp;
             <g:message encodeAs="HTML" code="label.serviceprovider"/>
-            <g:select name="spID" from="${spList.sort{it.displayName.toLowerCase()}}" optionKey="id" optionValue="displayName" class="span3"/>
+            <g:select name="spID" from="${spList.sort{it.displayName.toLowerCase()}}" optionKey="id" optionValue="${{ it.displayName?.encodeAsHTML() }}" class="span3"/>
 
             <a class="request-detailed-attributecompatibility-report btn"><g:message encodeAs="HTML" code="label.generate"/></a>
           </form>
