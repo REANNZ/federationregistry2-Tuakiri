@@ -3,15 +3,15 @@
 
 <fr:hasPermission target="federation:management:descriptor:${descriptor.id}:crypto:create">
   <hr>
-  
+
   <div id="addcertificate">
     <a class="show-addnew-certificate btn"><g:message encodeAs="HTML" code="label.addcertificate"/></a>
   </div>
-  
+
   <div id="newcertificate" class="revealable">
     <h4><g:message encodeAs="HTML" code="templates.fr.certificates.certificatemanagement.addnew.heading"/></h4>
     <p><g:message encodeAs="HTML" code="templates.fr.certificates.certificatemanagement.addnew.requestformat" /></p>
-    
+
     <div id="newcertificatedetails"></div>
 
     <form id="newcryptoform" class="form-horizontal">
@@ -34,7 +34,7 @@
 
         <div class="control-group">
           <label class="control-label" for="signing"><g:message encodeAs="HTML" code="label.signing" /></label>
-          <div class="controls"> 
+          <div class="controls">
             <g:checkBox name="signing" value="${true}" />
             <fr:tooltip code='help.fr.certificate.sign' />
           </div>
@@ -49,7 +49,7 @@
         </div>
 
         <div class="form-actions">
-          <a data-entity="${descriptor.entityDescriptor.entityID}" class="add-new-certificate btn btn-success"><g:message encodeAs="HTML" code="label.add"/></a>
+          <a data-entity="${descriptor.entityDescriptor.entityID.encodeAsHTML()}" class="add-new-certificate btn btn-success"><g:message encodeAs="HTML" code="label.add"/></a>
           <a class="hide-addnew-certificate btn"><g:message encodeAs="HTML" code="label.cancel"/></a>
         </div>
       </fieldset>

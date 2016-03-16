@@ -4,8 +4,8 @@
 <fr:hasPermission target="federation:management:descriptor:${descriptor.id}:endpoint:create">
   <hr>
 
-  <div id="add-${endpointType}">
-    <a class="show-create-endpoint btn" data-type="${endpointType}"><g:message encodeAs="HTML" code="label.addendpoint"/></a>
+  <div id="add-${endpointType.encodeAsHTML()}">
+    <a class="show-create-endpoint btn" data-type="${endpointType.encodeAsHTML()}"><g:message encodeAs="HTML" code="label.addendpoint"/></a>
   </div>
 
   <div id="new-${endpointType}" class="revealable">
@@ -59,8 +59,8 @@
         </div>
 
         <div class="form-actions">
-          <a class="create-endpoint btn btn-success" data-type="${endpointType}"><g:message encodeAs="HTML" code="label.add"/></a>
-          <a class="cancel-create-endpoint btn" data-type="${endpointType}"><g:message encodeAs="HTML" code="label.cancel"/></a>
+          <a class="create-endpoint btn btn-success" data-type="${endpointType.encodeAsHTML()}"><g:message encodeAs="HTML" code="label.add"/></a>
+          <a class="cancel-create-endpoint btn" data-type="${endpointType.encodeAsHTML()}"><g:message encodeAs="HTML" code="label.cancel"/></a>
         </div>
 
       </fieldset>
