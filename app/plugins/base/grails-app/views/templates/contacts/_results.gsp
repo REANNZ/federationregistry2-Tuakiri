@@ -18,9 +18,9 @@
           <td>${contact.surname?.encodeAsHTML()}</td>
           <td>${contact.email?.encodeAsHTML()}</td>
           <td>${contact.organization?.displayName?.encodeAsHTML()}</td>
-          <td>            
+          <td>
             <a href="${createLink(controller:'contacts', action:'show', id: contact.id)}" target="_blank" class="btn btn-small"><g:message encodeAs="HTML" code='label.view'/></a>
-            <a class="btn confirm-link-contact" data-contact='${contact.id}' data-name='${contact.givenName} ${contact.surname}' data-email='${contact.email}'><g:message encodeAs="HTML" code="label.add" /></a>
+            <a class="btn confirm-link-contact" data-contact='${contact.id}' data-name='${contact.givenName.encodeAsHTML()} ${contact.surname.encodeAsHTML()}' data-email='${contact.email.encodeAsHTML()}'><g:message encodeAs="HTML" code="label.add" /></a>
           </td>
         </tr>
       </g:each>

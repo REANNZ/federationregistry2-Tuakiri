@@ -6,7 +6,7 @@
       <h2><g:message encodeAs="HTML" code="views.fr.foundation.contacts.edit.heading" args="[contact.givenName, contact.surname]"/></h2>
 
       <g:render template="/templates/flash" plugin="foundation"/>
-      
+
       <g:form action="update" id="${contact.id}" method="PUT" class="form form-horizontal validating">
         <fieldset>
           <div class="control-group">
@@ -15,7 +15,7 @@
               <g:select name="organization"
                         from="${organizations}"
                         value="${contact?.organization?.id}"
-                        optionKey="id" optionValue="name"/>
+                        optionKey="id" optionValue="${{ it.displayName?.encodeAsHTML() }}"/>
             </div>
           </div>
 
@@ -28,14 +28,14 @@
 
           <div class="control-group">
             <label class="control-label" for="surname"><g:message encodeAs="HTML" code="label.surname" /></label>
-            <div class="controls"> 
+            <div class="controls">
               <input type="text" name="surname" value="${fieldValue(bean: contact, field: 'surname')}" class="required"/>
             </div>
           </div>
 
           <div class="control-group">
             <label class="control-label" for="email"><g:message encodeAs="HTML" code="label.email" /></label>
-            <div class="controls"> 
+            <div class="controls">
               <input type="text" name="email" value="${fieldValue(bean: contact, field: 'email')}" class="required email"/>
             </div>
           </div>
@@ -54,7 +54,7 @@
             </div>
           </div>
         </fieldset>
-        
+
         <div class="form-actions">
           <button type="submit" class="btn btn-success"><g:message encodeAs="HTML" code="label.update" default="Update"/></button>
           <g:link action="show" id="${contact.id}" class="btn"><g:message encodeAs="HTML" code="label.cancel" default="Cancel"/></g:link>

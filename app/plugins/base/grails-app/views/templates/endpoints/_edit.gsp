@@ -6,11 +6,11 @@
   <form id="endpoint-edit-${endpoint.id}">
     <fieldset>
       <g:hiddenField name="id" value="${endpoint.id}" />
-      
+
       <div class="control-group">
         <label class="control-label" for="uri"><g:message encodeAs="HTML" code="label.binding"/></label>
         <div class="controls">
-          <g:select name="binding" from="${SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding)}" optionKey="id" optionValue="uri" value="${endpoint.binding.id}" class="span4"/>
+          <g:select name="binding" from="${SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding)}" optionKey="id" optionValue="${{ it.uri?.encodeAsHTML() }}" value="${endpoint.binding.id}" class="span4"/>
           <fr:tooltip code='help.fr.endpoint.binding' />
         </div>
       </div>
@@ -34,7 +34,7 @@
       </g:if>
 
       <div class="form-actions">
-        <a class="update-endpoint btn btn-success" data-id="${endpoint.id}" data-type="${endpointType}"><g:message encodeAs="HTML" code="label.update"/></a>
+        <a class="update-endpoint btn btn-success" data-id="${endpoint.id}" data-type="${endpointType.encodeAsHTML()}"><g:message encodeAs="HTML" code="label.update"/></a>
         <a class="cancel-edit-endpoint btn"><g:message encodeAs="HTML" code="label.cancel"/></a>
       </div>
     </fieldset>
