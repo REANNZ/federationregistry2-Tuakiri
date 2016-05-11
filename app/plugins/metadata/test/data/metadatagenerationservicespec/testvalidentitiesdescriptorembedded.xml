@@ -5,8 +5,11 @@
         <Extensions>
           <shibmd:Scope regexp='false'>scope</shibmd:Scope>
         </Extensions>
+        <SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://test.example.com/sso/POST"/>
       </IDPSSODescriptor>
-      <SPSSODescriptor protocolSupportEnumeration='uri' />
+      <SPSSODescriptor protocolSupportEnumeration='uri'>
+        <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact" Location="https://test.example.com/acs/ART" index="300" isDefault="false"/>
+      </SPSSODescriptor>
       <Organization>
         <OrganizationName xml:lang='en'>Test Organization</OrganizationName>
         <OrganizationDisplayName xml:lang='en'>Test Organization Display</OrganizationDisplayName>
@@ -18,8 +21,11 @@
         <Extensions>
           <shibmd:Scope regexp='false'>scope</shibmd:Scope>
         </Extensions>
+        <SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://test.example.com/sso/POST"/>
       </IDPSSODescriptor>
-      <SPSSODescriptor protocolSupportEnumeration='uri' />
+      <SPSSODescriptor protocolSupportEnumeration='uri'>
+        <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact" Location="https://test.example.com/acs/ART" index="300" isDefault="false"/>
+      </SPSSODescriptor>
       <Organization>
         <OrganizationName xml:lang='en'>Test Organization</OrganizationName>
         <OrganizationDisplayName xml:lang='en'>Test Organization Display</OrganizationDisplayName>

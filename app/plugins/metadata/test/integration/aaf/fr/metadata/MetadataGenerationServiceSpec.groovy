@@ -303,7 +303,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 	
 	def "Test valid EntitiesDescriptor generation"() {
 		setup:
-    setupBindings()
+		setupBindings()
 
 		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: "http://example.com")
 		def email = "test@example.com"
@@ -319,8 +319,14 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 			def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.example.com/myuniqueID$i", active:true, approved:true)
 			entityDescriptor.addToContacts(contactPerson)
 
-			entityDescriptor.addToIdpDescriptors(IDPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true))
-			entityDescriptor.addToSpDescriptors(SPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true))
+			def idp = IDPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true)
+			def sso = new SingleSignOnService(descriptor:idp,active:true, approved:true, binding:httpPost, location:"https://test.example.com/sso/POST")
+			idp.addToSingleSignOnServices(sso)
+			entityDescriptor.addToIdpDescriptors(idp)
+			def sp = SPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true)
+			def acs = new AssertionConsumerService(index:300, active:true, approved:true, binding:httpArtifact, location:"https://test.example.com/acs/ART")
+			sp.addToAssertionConsumerServices(acs)
+			entityDescriptor.addToSpDescriptors(sp)
 
 			entitiesDescriptor.addToEntityDescriptors(entityDescriptor)
       entityDescriptor.validate()
@@ -380,8 +386,14 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 
 			entityDescriptor.addToContacts(contactPerson)
 
-			entityDescriptor.addToIdpDescriptors(IDPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true))
-			entityDescriptor.addToSpDescriptors(SPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true))
+			def idp = IDPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true)
+			def sso = new SingleSignOnService(descriptor:idp,active:true, approved:true, binding:httpPost, location:"https://test.example.com/sso/POST")
+			idp.addToSingleSignOnServices(sso)
+			entityDescriptor.addToIdpDescriptors(idp)
+			def sp = SPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true)
+			def acs = new AssertionConsumerService(index:300, active:true, approved:true, binding:httpArtifact, location:"https://test.example.com/acs/ART")
+			sp.addToAssertionConsumerServices(acs)
+			entityDescriptor.addToSpDescriptors(sp)
 
 			entitiesDescriptor.addToEntityDescriptors(entityDescriptor)
       entityDescriptor.validate()
@@ -448,8 +460,14 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 
 			entityDescriptor.addToContacts(contactPerson)
 
-			entityDescriptor.addToIdpDescriptors(IDPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, displayName: 'Test IdP Name', description: 'Test IdP Description', active:true, approved:true))
-			entityDescriptor.addToSpDescriptors(SPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, displayName: 'Test SP Name', description: 'Test SP Description', active:true, approved:true))
+			def idp = IDPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, displayName: 'Test IdP Name', description: 'Test IdP Description', active:true, approved:true)
+			def sso = new SingleSignOnService(descriptor:idp,active:true, approved:true, binding:httpPost, location:"https://test.example.com/sso/POST")
+			idp.addToSingleSignOnServices(sso)
+			entityDescriptor.addToIdpDescriptors(idp)
+			def sp = SPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, displayName: 'Test SP Name', description: 'Test SP Description', active:true, approved:true)
+			def acs = new AssertionConsumerService(index:300, active:true, approved:true, binding:httpArtifact, location:"https://test.example.com/acs/ART")
+			sp.addToAssertionConsumerServices(acs)
+			entityDescriptor.addToSpDescriptors(sp)
 
 			entitiesDescriptor.addToEntityDescriptors(entityDescriptor)
       entityDescriptor.validate()
@@ -485,6 +503,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 
 	def "Test valid EntitiesDescriptor generation with embedded entitiesdescriptors and no CA"() {
 		setup:
+		setupBindings()
 		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: "http://example.com")
 		def email = "test@example.com"
 		def home = "(07) 1111 1111"
@@ -500,8 +519,15 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		(1..2).each { i ->
 			def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.example.com/myuniqueID$i", active:true, approved:true)
 			entityDescriptor.addToContacts(contactPerson)
-			entityDescriptor.addToIdpDescriptors(IDPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true))
-			entityDescriptor.addToSpDescriptors(SPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true))
+
+			def idp = IDPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true)
+			def sso = new SingleSignOnService(descriptor:idp,active:true, approved:true, binding:httpPost, location:"https://test.example.com/sso/POST")
+			idp.addToSingleSignOnServices(sso)
+			entityDescriptor.addToIdpDescriptors(idp)
+			def sp = SPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true)
+			def acs = new AssertionConsumerService(index:300, active:true, approved:true, binding:httpArtifact, location:"https://test.example.com/acs/ART")
+			sp.addToAssertionConsumerServices(acs)
+			entityDescriptor.addToSpDescriptors(sp)
 
 			entitiesDescriptor1.addToEntityDescriptors(entityDescriptor)
 		}
@@ -565,6 +591,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 
 	def "Test valid EntityDescriptor generation with schema population"() {
 		setup:
+		setupBindings()
 		def organization = Organization.build(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: "http://example.com")
 		def email = "test@example.com"
 		def home = "(07) 1111 1111"
@@ -576,11 +603,31 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		
 		def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.example.com/myuniqueID", active:true, approved:true)
 		entityDescriptor.addToContacts(contactPerson)
-		entityDescriptor.addToIdpDescriptors(IDPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true))
-		entityDescriptor.addToIdpDescriptors(IDPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true))
-		entityDescriptor.addToSpDescriptors(SPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true))
-		entityDescriptor.addToSpDescriptors(SPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true))
-		entityDescriptor.addToSpDescriptors(SPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true))
+
+		def idp1 = IDPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true)
+		def sso1 = new SingleSignOnService(descriptor:idp1,active:true, approved:true, binding:httpPost, location:"https://test.example.com/sso/POST")
+		idp1.addToSingleSignOnServices(sso1)
+		entityDescriptor.addToIdpDescriptors(idp1)
+
+		def idp2 = IDPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true)
+		def sso2 = new SingleSignOnService(descriptor:idp2,active:true, approved:true, binding:httpPost, location:"https://test.example.com/sso/POST")
+		idp2.addToSingleSignOnServices(sso2)
+		entityDescriptor.addToIdpDescriptors(idp2)
+
+		def sp1 = SPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true)
+		def acs1 = new AssertionConsumerService(index:300, active:true, approved:true, binding:httpArtifact, location:"https://test.example.com/acs/ART")
+		sp1.addToAssertionConsumerServices(acs1)
+		entityDescriptor.addToSpDescriptors(sp1)
+
+		def sp2 = SPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true)
+		def acs2 = new AssertionConsumerService(index:300, active:true, approved:true, binding:httpArtifact, location:"https://test.example.com/acs/ART")
+		sp2.addToAssertionConsumerServices(acs2)
+		entityDescriptor.addToSpDescriptors(sp2)
+
+		def sp3 = SPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true)
+		def acs3 = new AssertionConsumerService(index:300, active:true, approved:true, binding:httpArtifact, location:"https://test.example.com/acs/ART")
+		sp3.addToAssertionConsumerServices(acs3)
+		entityDescriptor.addToSpDescriptors(sp3)
 
 		def expected = loadExpected('testvalidentitydescriptorschema')
 		
