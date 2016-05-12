@@ -40,16 +40,8 @@ class AttributeAuthorityDescriptor extends RoleDescriptor {
 	}
 
 	public boolean samlSchemaValid() {
-		def samlSchemaValid = false
 		// Missing mandatory endpoints indicates an incomplete AttributeAuthorityDescriptor not valid according to the SAML schema
-		if(!samlSchemaValid && attributeServices) {
-		 	attributeServices.each {
-				if(it.functioning())
-					samlSchemaValid = true
-			}
-		}
-
-		samlSchemaValid
+		attributeServices.any { it.functioning() }
 	}
 
 	def structureAsJson() {

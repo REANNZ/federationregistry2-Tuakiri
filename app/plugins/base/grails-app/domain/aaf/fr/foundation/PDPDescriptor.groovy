@@ -26,15 +26,7 @@ class PDPDescriptor extends RoleDescriptor {
 	}
 
 	public boolean samlSchemaValid() {
-		def samlSchemaValid = false
 		// Missing mandatory endpoints indicates an incomplete PDPDescriptor not valid according to the SAML schema
-		if(!samlSchemaValid && authzServices) {
-		 	authzServices.each {
-				if(it.functioning())
-					samlSchemaValid = true
-			}
-		}
-
-		samlSchemaValid
+		authzServices.any { it.functioning() }
 	}
 }

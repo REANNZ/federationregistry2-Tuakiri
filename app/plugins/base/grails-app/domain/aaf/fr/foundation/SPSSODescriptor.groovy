@@ -38,16 +38,8 @@ class SPSSODescriptor extends SSODescriptor {
 	}
 
 	public boolean samlSchemaValid() {
-		def samlSchemaValid = false
 		// Missing mandatory endpoints indicates an incomplete SPSSODescriptor not valid according to the SAML schema
-		if(!samlSchemaValid && assertionConsumerServices) {
-		 	assertionConsumerServices.each {
-				if(it.functioning())
-					samlSchemaValid = true
-			}
-		}
-
-		samlSchemaValid
+		assertionConsumerServices.any { it.functioning() }
 	}
 
 	public boolean equals(Object obj) {

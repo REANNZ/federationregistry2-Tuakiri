@@ -48,16 +48,9 @@ class IDPSSODescriptor extends SSODescriptor  {
 	}
 
 	public boolean samlSchemaValid() {
-		def samlSchemaValid = false
 		// Missing mandatory endpoints indicates an incomplete IDPSSODescriptor not valid according to the SAML schema
-		if(!samlSchemaValid && singleSignOnServices) {
-		 	singleSignOnServices.each {
-				if(it.functioning())
-					samlSchemaValid = true
-			}
-		}
+		singleSignOnServices.any { it.functioning() }
 
-		samlSchemaValid
 	}
 
 	public List sortedAttributes() {
