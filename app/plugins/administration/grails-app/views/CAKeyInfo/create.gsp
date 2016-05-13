@@ -19,7 +19,7 @@
         <p><strong>ERRONOUS DATA HERE MAY CAUSE METADATA TO BECOME INVALID</strong></p>
       </div>
 
-      <g:if test="${flash.message.encodeAsHTML()}">
+      <g:if test="${flash.message}">
       <div class="message" role="status">${flash.message.encodeAsHTML()}</div>
       </g:if>
       <g:hasErrors bean="${CAKeyInfoInstance}">

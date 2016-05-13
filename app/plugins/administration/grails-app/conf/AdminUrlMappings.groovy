@@ -7,11 +7,11 @@ class AdminUrlMappings {
     }
 
     "/administration/subjects/$action?/$id?"{
-      controller = "subject" 
+      controller = "subject"
     }
 
     "/administration/roles/$action?/$id?"{
-      controller = "role" 
+      controller = "role"
     }
 
     "/administration/attributes/$action?/$id?"{
@@ -34,12 +34,16 @@ class AdminUrlMappings {
       controller = "contactType"
     }
 
+    "/administration/servicecategory/$action?/$id?"{
+      controller = "adminServiceCategory"
+    }
+
     "/administration/cakeyinfo/$action?/$id?"{
       controller = "CAKeyInfo"
     }
 
    "/administration/samluri/$action?/$id?"{
-      controller = "samlURI" 
+      controller = "samlURI"
     }
 
     "/administration/adminconsole/$action?/$id?"{

@@ -16,7 +16,7 @@
         <div class="control-group">
           <label class="control-label" for="type"><g:message encodeAs="HTML" code="label.monitortype"/></label>
           <div class="controls">
-            <g:select name="type" from="${MonitorType.list()}" optionKey="id" optionValue="name" class="span2"/>
+            <g:select name="type" from="${MonitorType.list()}" optionKey="id" optionValue="${{ it.name?.encodeAsHTML() }}" class="span2"/>
             <fr:tooltip code='help.fr.monitor.type' />
           </div>
         </div>

@@ -14,7 +14,7 @@
       <div class="control-group">
         <label class="control-label" for="formatID"><g:message encodeAs="HTML" code="label.nameidformat"/></label>
         <div class="controls">
-          <g:select name="formatID" from="${SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)}" optionKey="id" optionValue="uri" class="span4"/>
+          <g:select name="formatID" from="${SamlURI.findAllWhere(type:SamlURIType.NameIdentifierFormat)}" optionKey="id" optionValue="${{ it.uri?.encodeAsHTML() }}" class="span4"/>
         </div>
       </div>
 

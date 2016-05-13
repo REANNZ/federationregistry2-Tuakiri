@@ -47,6 +47,12 @@ class IDPSSODescriptor extends SSODescriptor  {
 		( !archived && active && approved && entityDescriptor.functioning() )
 	}
 
+	public boolean samlSchemaValid() {
+		// Missing mandatory endpoints indicates an incomplete IDPSSODescriptor not valid according to the SAML schema
+		singleSignOnServices.any { it.functioning() }
+
+	}
+
 	public List sortedAttributes() {
 		def c = Attribute.createCriteria()
 		def attributeList = c.list {
@@ -85,6 +91,7 @@ class IDPSSODescriptor extends SSODescriptor  {
 		  id this.id
 		  display_name this.displayName
 		  description this.description ?: ''
+		  attribute_authority_only attributeAuthorityOnly
 		  organization { id this.organization.id
 		  							 name this.organization.displayName }
 

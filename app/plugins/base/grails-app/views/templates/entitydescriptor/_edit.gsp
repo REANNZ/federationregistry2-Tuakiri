@@ -55,7 +55,7 @@
       <div class="control-group">
         <label><g:message encodeAs="HTML" code="label.neworganisation"/></label>
         <div class="controls">
-          <g:select name="newOrgId" from="${organizations.sort{it.displayName}}" optionKey="id" optionValue="displayName" />
+          <g:select name="newOrgId" from="${organizations.sort{it.displayName}}" optionKey="id" optionValue="${{ it.displayName?.encodeAsHTML() }}" />
         </div>
       </div>
 
