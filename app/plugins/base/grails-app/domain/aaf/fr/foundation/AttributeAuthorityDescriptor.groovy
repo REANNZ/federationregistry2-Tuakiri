@@ -39,6 +39,11 @@ class AttributeAuthorityDescriptor extends RoleDescriptor {
 			( attributeServices?.findAll{it.selfFunctioning()}?.size() > 0 && !archived && active && approved && entityDescriptor.functioning() )
 	}
 
+	public boolean samlSchemaValid() {
+		// Missing mandatory endpoints indicates an incomplete AttributeAuthorityDescriptor not valid according to the SAML schema
+		attributeServices.any { it.functioning() }
+	}
+
 	def structureAsJson() {
 		def adminRole = Role.findByName("descriptor-${this.id}-administrators")
 

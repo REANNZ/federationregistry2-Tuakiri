@@ -215,9 +215,9 @@ class MetadataGenerationService implements InitializingBean {
               }
             }
           }
-          entityDescriptor.idpDescriptors?.sort{it.id}?.each { idp -> idpSSODescriptor(builder, all, minimal, roleExtensions, idp) }
-          entityDescriptor.spDescriptors?.sort{it.id}?.each { sp -> spSSODescriptor(builder, all, minimal, roleExtensions, sp) }
-          entityDescriptor.attributeAuthorityDescriptors?.sort{it.id}?.each { aa -> attributeAuthorityDescriptor(builder, all, minimal, roleExtensions, aa)}
+          entityDescriptor.idpDescriptors?.findAll{ it.samlSchemaValid() }?.sort{it.id}?.each { idp -> idpSSODescriptor(builder, all, minimal, roleExtensions, idp) }
+          entityDescriptor.spDescriptors?.findAll{ it.samlSchemaValid() }?.sort{it.id}?.each { sp -> spSSODescriptor(builder, all, minimal, roleExtensions, sp) }
+          entityDescriptor.attributeAuthorityDescriptors?.findAll{ it.samlSchemaValid() }?.sort{it.id}?.each { aa -> attributeAuthorityDescriptor(builder, all, minimal, roleExtensions, aa)}
 
           organization(builder, entityDescriptor.organization)
         }

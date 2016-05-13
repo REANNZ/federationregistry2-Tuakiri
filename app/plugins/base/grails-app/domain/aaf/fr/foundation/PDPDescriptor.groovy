@@ -24,4 +24,9 @@ class PDPDescriptor extends RoleDescriptor {
 	public boolean functioning() {
 		( !archived && active && approved && entityDescriptor.functioning() )
 	}
+
+	public boolean samlSchemaValid() {
+		// Missing mandatory endpoints indicates an incomplete PDPDescriptor not valid according to the SAML schema
+		authzServices.any { it.functioning() }
+	}
 }
