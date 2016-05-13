@@ -13,9 +13,9 @@ $(function() {
   applyBehaviourTo(document);
 });
 
-applyBehaviourTo = function(scope) {  
-  $("[rel=twipsy]", scope).tooltip({offset:3}); 
-  $("[rel=tooltip]", scope).tooltip({offset:3}); 
+applyBehaviourTo = function(scope) {
+  $("[rel=twipsy]", scope).tooltip({offset:3});
+  $("[rel=tooltip]", scope).tooltip({offset:3});
 
   if($('form.validating').validate) {
     $('form.validating', scope).validate({
@@ -73,7 +73,7 @@ fr.getParameterByName = function(name) {
 };
 
 fr.set_button = function(b) {
-  btn = b; 
+  btn = b;
   btn.button('loading');
   $('.btn').attr('disabled', '');
 };
@@ -99,7 +99,7 @@ fr.hidelocalspinner= function(scope) {
 };
 
 fr.popuperror= function() {
-  $('.top-right').notify({type:'error', closable:true, 
+  $('.top-right').notify({type:'error', closable:true,
     message: { html: '<b>Error</b><br>An error occured communicating with the server.<br>This has been logged for review.<br>If you continue to have problems please <b>contact support</b>.' },
     fadeOut: { enabled: true, delay: 5000 },
     }).show();
@@ -161,7 +161,7 @@ fr.organization_fulladministrator_revoke = function(userID) {
     type: "POST",
     url: organizationFullAdministratorRevokeEndpoint,
     data: data  + "&_method=delete",
-    success: function(res) {  
+    success: function(res) {
       fr.organization_fulladministrator_list();
     },
     error: function (xhr, ajaxOptions, thrownError) {
@@ -264,7 +264,7 @@ fr.descriptor_fulladministrator_search = function() {
     cache: false,
     url: descriptorFullAdministratorSearchEndpoint,
     data: data,
-    success: function(res) {  
+    success: function(res) {
       var target = $("#availablefulladministrators");
       target.html(res);
       applyBehaviourTo(target);
@@ -369,13 +369,13 @@ $(document).on('click', '.cancel-edit-serviceprovider', function() {
 
 // Key Descriptor
 $(document).on('click', '.show-addnew-certificate', function(entity) {
-  $('#addcertificate').hide(); 
+  $('#addcertificate').hide();
   $('#newcertificate').fadeIn();
 });
 
 $(document).on('click', '.hide-addnew-certificate', function(entity) {
   $('#newcertificate').hide();
-  $('#addcertificate').fadeIn(); 
+  $('#addcertificate').fadeIn();
 });
 
 $(document).on('click', '.add-new-certificate', function(entity) {
@@ -457,7 +457,7 @@ fr.keyDescriptor_list = function() {
       applyBehaviourTo(target);
       },
       error: function (xhr, ajaxOptions, thrownError) {
-      
+
       }
   });
 };
@@ -478,7 +478,7 @@ $(document).on('click', '.search-for-contact', function() {
   var p = $(this).parents('.search-contacts');
   p.children('.add-contact').hide();
   p.children('.potential-contacts').hide();
-  p.children('.search-contacts-form').fadeIn(); 
+  p.children('.search-contacts-form').fadeIn();
 });
 
 $(document).on('click', '.cancel-search-for-contact', function() {
@@ -772,14 +772,14 @@ $(document).on('click', '.cancel-edit-ra', function() {
 });
 
 $(document).on('click', '.update-ra', function() {
-  fr.set_button($(this));  
+  fr.set_button($(this));
   raID = $(this).attr('data-raid');
   acsID = $(this).attr('data-acsid');
   reason_ra = $('.reason-ra[data-raid=' + raID +']');
   required_ra = $('.required-ra[data-raid=' + raID +']');
 
   if(reason_ra.parent().valid()) {
-    fr.acs_reqattribute_update(acsID, raID, reason_ra.val(), required_ra.is(':checked'));   
+    fr.acs_reqattribute_update(acsID, raID, reason_ra.val(), required_ra.is(':checked'));
   }
 });
 
@@ -809,7 +809,7 @@ $(document).on('click', '.create-ra', function() {
       error: function (xhr, ajaxOptions, thrownError) {
         fr.popuperror();
       }
-    }); 
+    });
   } else { fr.reset_button(); }
 });
 
@@ -851,7 +851,7 @@ $(document).on('click', '.add-ra-value', function() {
   acsID = $(this).attr('data-acsid');
 
   var target_form = $("#newspecattributedata" + raID);
-  
+
   if(target_form.valid()) {
     var data = target_form.serialize();
     $.ajax({
@@ -993,14 +993,14 @@ $(document).on('click', '.add-nameid', function() {
     error: function (xhr, ajaxOptions, thrownError) {
       fr.popuperror();
     }
-  });  
+  });
 });
 
 $(document).on('click', '.confirm-delete-nameid', function() {
-  fr.set_button($(this)); 
+  fr.set_button($(this));
   formatID = $(this).attr('data-formatid');
 
-  $("#delete-nameid-modal").modal('show'); 
+  $("#delete-nameid-modal").modal('show');
 });
 
 $(document).on('click', '.delete-nameid', function() {
@@ -1039,7 +1039,7 @@ fr.nameIDFormat_list = function() {
 var delete_category;
 
 $(document).on('click', '.show-addnew-servicecategory', function(entity) {
-  $('#addcategory').hide(); 
+  $('#addcategory').hide();
   $('#newcategory').fadeIn();
 });
 
@@ -1142,7 +1142,7 @@ $(document).on('click', '.delete-attribute', function() {
     type: "POST",
     url: attributeRemoveEndpoint,
     data: data + "&_method=delete",
-    success: function(res) {   
+    success: function(res) {
       fr.attribute_list();
     },
     error: function (xhr, ajaxOptions, thrownError) {
@@ -1209,7 +1209,7 @@ $(document).on('click', '.add-monitor', function() {
       url: monitorCreateEndpoint,
       data: data,
       success: function(res) {
-        fr.monitor_list(); 
+        fr.monitor_list();
       },
       error: function (xhr, ajaxOptions, thrownError) {
         fr.popuperror();
@@ -1262,10 +1262,11 @@ fr.configureIdentityProviderSAML = function(host) {
   $(".samloptional").val("");
   if(host.length > 0) {
     host = host.toLowerCase();
-    
+
     $('#entity\\.identifier').val( knownIDPImpl[currentImpl].entitydescriptor.replace('$host', host));
     $('#idp\\.post').val( knownIDPImpl[currentImpl].post.uri.replace('$host', host) );
     $('#idp\\.redirect').val( knownIDPImpl[currentImpl].redirect.uri.replace('$host', host) );
+    $('#idp\\.ecp').val( knownIDPImpl[currentImpl].ecp.uri.replace('$host', host) );
     $('#idp\\.artifact').val( knownIDPImpl[currentImpl].artifact.uri.replace('$host', host) );
     $('#idp\\.artifact-index').val( knownIDPImpl[currentImpl].artifact.index );
     $('#aa\\.attributeservice').val( knownIDPImpl[currentImpl].attributeservice.uri.replace('$host', host) );
@@ -1276,44 +1277,44 @@ fr.configureServiceProviderSAML = function(host) {
   $(".samloptional").val("");
   if(host.length > 0) {
     host = host.toLowerCase();
-    
+
     $('#entity\\.identifier').val( knownSPImpl[currentImpl].entitydescriptor.replace('$host', host) );
-    
+
     $('#sp\\.acs\\.post').val( knownSPImpl[currentImpl].acs.post.uri.replace('$host', host) );
     $('#sp\\.acs\\.post-index').val( knownSPImpl[currentImpl].acs.post.index );
-    
+
     $('#sp\\.acs\\.artifact').val( knownSPImpl[currentImpl].acs.artifact.uri.replace('$host', host) );
     $('#sp\\.acs\\.artifact-index').val( knownSPImpl[currentImpl].acs.artifact.index );
-    
+
     if(knownSPImpl[currentImpl].drs) {
       $('#sp\\.drs').val( knownSPImpl[currentImpl].drs.uri.replace('$host', host) );
       $('#sp\\.drs\\.index').val( knownSPImpl[currentImpl].drs.index );
     }
-    
+
     if( knownSPImpl[currentImpl].slo ) {
       if( knownSPImpl[currentImpl].slo.artifact )
         $('#sp\\.slo\\.artifact').val( knownSPImpl[currentImpl].slo.artifact.uri.replace('$host', host) );
-    
+
       if( knownSPImpl[currentImpl].slo.redirect )
         $('#sp\\.slo\\.redirect').val( knownSPImpl[currentImpl].slo.redirect.uri.replace('$host', host) );
-    
+
       if( knownSPImpl[currentImpl].slo.soap )
         $('#sp\\.slo\\.soap').val( knownSPImpl[currentImpl].slo.soap.uri.replace('$host', host) );
-    
+
       if( knownSPImpl[currentImpl].slo.post )
         $('#sp\\.slo\\.post').val( knownSPImpl[currentImpl].slo.post.uri.replace('$host', host) );
     }
-    
+
     if( knownSPImpl[currentImpl].mnid ) {
       if( knownSPImpl[currentImpl].mnid.artifact )
         $('#sp\\.mnid\\.artifact').val( knownSPImpl[currentImpl].mnid.artifact.uri.replace('$host', host) );
-    
+
       if( knownSPImpl[currentImpl].mnid.redirect )
         $('#sp\\.mnid\\.redirect').val( knownSPImpl[currentImpl].mnid.redirect.uri.replace('$host', host) );
-    
+
       if( knownSPImpl[currentImpl].mnid.soap )
         $('#sp\\.mnid\\.soap').val( knownSPImpl[currentImpl].mnid.soap.uri.replace('$host', host) );
-    
+
       if( knownSPImpl[currentImpl].mnid.post )
         $('#sp\\.mnid\\.post').val( knownSPImpl[currentImpl].mnid.post.uri.replace('$host', host) );
     }
@@ -1334,7 +1335,7 @@ $(document).on('click', '.request-attribute', function() {
       reason.removeClass('error');
       reason.siblings('.error').remove();  //removes error notice
     } else {
-        reason.addClass('required'); 
+        reason.addClass('required');
     }
 });
 
@@ -1345,7 +1346,7 @@ $(document).on('click', '.require-attribute', function() {
 
     if($(this).is(':checked') && !req.is(':checked')) {
         req.attr('checked', true);
-        reason.addClass('required'); 
+        reason.addClass('required');
     }
 });
 
@@ -1357,14 +1358,14 @@ $(document).on('click', '.create-sp-report', function() {
     if (Modernizr.svg) {
       fr.closeRefinement();
       $(".revealable").hide();
-    
+
       var data = target_form.serialize() + fr.includeRobotsInReporting(true);
-    
+
       if( $(".reporttype option:selected").val() == 'connections') {
-        $.ajax({url: spReportsConnectivityEndpoint, 
+        $.ajax({url: spReportsConnectivityEndpoint,
           data: data,
           dataType: 'json',
-          async:true, 
+          async:true,
           success: function(data){
             fr.renderSPConnectivity(data, false);
           },
@@ -1373,12 +1374,12 @@ $(document).on('click', '.create-sp-report', function() {
           }
         });
       }
-    
+
       if( $(".reporttype option:selected").val() == 'sessions') {
-        $.ajax({url: spReportsSessionsEndpoint, 
+        $.ajax({url: spReportsSessionsEndpoint,
           data: data,
           dataType: 'json',
-          async:true, 
+          async:true,
           success: function(data){
             fr.renderSPSessions(data, false);
           },
@@ -1387,12 +1388,12 @@ $(document).on('click', '.create-sp-report', function() {
           }
         });
       }
-    
+
       if( $(".reporttype option:selected").val() == 'totals') {
-        $.ajax({url: spReportsTotalsEndpoint, 
+        $.ajax({url: spReportsTotalsEndpoint,
           data: data,
           dataType: 'json',
-          async:true, 
+          async:true,
           success: function(data){
             fr.renderSPTotals(data, false);
           },
@@ -1401,12 +1402,12 @@ $(document).on('click', '.create-sp-report', function() {
           }
         });
       }
-    
+
       if( $(".reporttype option:selected").val() == 'logins') {
-        $.ajax({url: spReportsLoginsEndpoint, 
+        $.ajax({url: spReportsLoginsEndpoint,
           data: data,
           dataType: 'json',
-          async:true, 
+          async:true,
           success: function(data){
             fr.renderSPLogins(data);
           },
@@ -1424,14 +1425,14 @@ $(document).on('click', '.create-sp-report', function() {
 fr.openRefinement = function() {
   $(".reportrefinementopen").hide();
   $(".reportrefinementinput").slideDown();
-  
+
   return false;
 };
 
 fr.closeRefinement = function() {
   $(".reportrefinementinput").slideUp();
   $(".reportrefinementopen").show();
-  
+
   return false;
 };
 
@@ -1440,17 +1441,17 @@ $(document).on('click', '.create-idp-report', function() {
 
   if(target_form.valid()) {
     if (Modernizr.svg) {
-      
+
       fr.closeRefinement();
       $(".revealable").hide();
 
       var data = $("#reportrequirements").serialize() + fr.includeRobotsInReporting(true);
-    
+
       if( $(".reporttype option:selected").val() == 'connections') {
-        $.ajax({url: idpReportsConnectivityEndpoint, 
+        $.ajax({url: idpReportsConnectivityEndpoint,
           data: data,
           dataType: 'json',
-          async:true, 
+          async:true,
           success: function(data){
             fr.renderIdPConnectivity(data, false);
           },
@@ -1459,12 +1460,12 @@ $(document).on('click', '.create-idp-report', function() {
           }
         });
       }
-    
+
       if( $(".reporttype option:selected").val() == 'sessions') {
-        $.ajax({url: idpReportsSessionsEndpoint, 
+        $.ajax({url: idpReportsSessionsEndpoint,
           data: data,
           dataType: 'json',
-          async:true, 
+          async:true,
           success: function(data){
             fr.renderIdPSessions(data, false);
           },
@@ -1473,12 +1474,12 @@ $(document).on('click', '.create-idp-report', function() {
           }
         });
       }
-    
+
       if( $(".reporttype option:selected").val() == 'totals') {
-        $.ajax({url: idpReportsTotalsEndpoint, 
+        $.ajax({url: idpReportsTotalsEndpoint,
           data: data,
           dataType: 'json',
-          async:true, 
+          async:true,
           success: function(data){
             fr.renderIdPTotals(data, false);
           },
@@ -1487,12 +1488,12 @@ $(document).on('click', '.create-idp-report', function() {
           }
         });
       }
-    
+
       if( $(".reporttype option:selected").val() == 'logins') {
-        $.ajax({url: idpReportsLoginsEndpoint, 
+        $.ajax({url: idpReportsLoginsEndpoint,
           data: data,
           dataType: 'json',
-          async:true, 
+          async:true,
           success: function(data){
             fr.renderIdPLogins(data);
           },
@@ -1509,16 +1510,16 @@ $(document).on('click', '.create-idp-report', function() {
 
 fr.refineIdPReport = function(refinement) {
   if (Modernizr.svg) {
-    
+
     fr.closeRefinement();
-  
+
     var data = $("#reportrequirements").serialize() + "&" + refinement.serialize() + fr.includeRobotsInReporting(true);
-  
+
     if( $(".reporttype option:selected").val() == 'connections') {
-      $.ajax({url: idpReportsConnectivityEndpoint, 
+      $.ajax({url: idpReportsConnectivityEndpoint,
         data: data,
         dataType: 'json',
-        async:true, 
+        async:true,
         success: function(data){
           fr.renderIdPConnectivity(data, true);
         },
@@ -1527,12 +1528,12 @@ fr.refineIdPReport = function(refinement) {
         }
       });
     }
-  
+
     if( $(".reporttype option:selected").val() == 'totals') {
-      $.ajax({url: idpReportsTotalsEndpoint, 
+      $.ajax({url: idpReportsTotalsEndpoint,
         data: data,
         dataType: 'json',
-        async:true, 
+        async:true,
         success: function(data){
           fr.renderIdPTotals(data, true);
         },
@@ -1548,16 +1549,16 @@ fr.refineIdPReport = function(refinement) {
 
 fr.refineSPReport = function(refinement) {
   if (Modernizr.svg) {
-    
+
     fr.closeRefinement();
-  
+
     var data = $("#reportrequirements").serialize() + "&" + refinement.serialize() + fr.includeRobotsInReporting(true);
-  
+
     if( $(".reporttype option:selected").val() == 'connections') {
-      $.ajax({url: spReportsConnectivityEndpoint, 
+      $.ajax({url: spReportsConnectivityEndpoint,
         data: data,
         dataType: 'json',
-        async:true, 
+        async:true,
         success: function(data){
           fr.renderSPConnectivity(data, true);
         },
@@ -1566,12 +1567,12 @@ fr.refineSPReport = function(refinement) {
         }
       });
     }
-  
+
     if( $(".reporttype option:selected").val() == 'totals') {
-      $.ajax({url: spReportsTotalsEndpoint, 
+      $.ajax({url: spReportsTotalsEndpoint,
         data: data,
         dataType: 'json',
-        async:true, 
+        async:true,
         success: function(data){
           fr.renderSPTotals(data, true);
         },
@@ -1587,17 +1588,17 @@ fr.refineSPReport = function(refinement) {
 
 fr.renderFederationReport = function(type) {
   if (Modernizr.svg) {
-    
+
     fr.closeRefinement();
     $(".revealable").hide();
-  
+
     var data = $("#reportrequirements").serialize() + fr.includeRobotsInReporting(true);
-  
+
     if( type == 'logins') {
-      $.ajax({url: federationReportsLoginsEndpoint, 
+      $.ajax({url: federationReportsLoginsEndpoint,
         data: data,
         dataType: 'json',
-        async:true, 
+        async:true,
         success: function(data){
           fr.renderFederationLogins(data);
         },
@@ -1606,12 +1607,12 @@ fr.renderFederationReport = function(type) {
         }
       });
     }
-  
+
     if( type == 'sessions') {
-      $.ajax({url: federationReportsSessionsEndpoint, 
+      $.ajax({url: federationReportsSessionsEndpoint,
         data: data,
         dataType: 'json',
-        async:true, 
+        async:true,
         success: function(data){
           fr.renderFederationSessions(data);
         },
@@ -1620,12 +1621,12 @@ fr.renderFederationReport = function(type) {
         }
       });
     }
-  
+
     if( type == 'sessiontotals') {
-      $.ajax({url: federationReportsSessionTotalsEndpoint, 
+      $.ajax({url: federationReportsSessionTotalsEndpoint,
         data: data,
         dataType: 'json',
-        async:true, 
+        async:true,
         success: function(data){
           fr.renderFederationServices(data);
         },
@@ -1634,7 +1635,7 @@ fr.renderFederationReport = function(type) {
         }
       });
     }
-    
+
     if( type == 'registrations') {
       if( $("#registrationstype").val() == 'organization') {
         data = data + "&type=org"
@@ -1645,11 +1646,11 @@ fr.renderFederationReport = function(type) {
       if( $("#registrationstype").val() == 'serviceprovider') {
         data = data + "&type=sp"
       }
-      
-      $.ajax({url: federationReportsRegistrationsEndpoint, 
+
+      $.ajax({url: federationReportsRegistrationsEndpoint,
         data: data,
         dataType: 'json',
-        async:true, 
+        async:true,
         success: function(data){
           fr.renderFederationRegistrations(data, true);
         },
@@ -1658,7 +1659,7 @@ fr.renderFederationReport = function(type) {
         }
       });
     }
-    
+
     if( type == 'subscribers') {
       if( $("#subscriberstype").val() == 'organization') {
         data = data + "&type=org"
@@ -1669,11 +1670,11 @@ fr.renderFederationReport = function(type) {
       if( $("#subscriberstype").val() == 'serviceprovider') {
         data = data + "&type=sp"
       }
-      
-      $.ajax({url: federationReportsSubscribersEndpoint, 
+
+      $.ajax({url: federationReportsSubscribersEndpoint,
         data: data,
         dataType: 'json',
-        async:true, 
+        async:true,
         success: function(data){
           fr.renderFederationSubscribers(data, true);
         },
@@ -1682,12 +1683,12 @@ fr.renderFederationReport = function(type) {
         }
       });
     }
-    
+
     if( type == 'connectivity') {
-      $.ajax({url: federationConnectivtyEndpoint, 
+      $.ajax({url: federationConnectivtyEndpoint,
         data: data,
         dataType: 'json',
-        async:true, 
+        async:true,
         success: function(data){
           fr.renderFederationConnectivity(data);
         },
@@ -1696,7 +1697,7 @@ fr.renderFederationReport = function(type) {
         }
       });
     }
-    
+
   } else {
     fr.toggleReportingContent(false);
   }
@@ -1704,16 +1705,16 @@ fr.renderFederationReport = function(type) {
 
 fr.refineFederationReport = function(type, refinement) {
   if (Modernizr.svg) {
-    
+
     fr.closeRefinement();
-  
+
     var data = $("#reportrequirements").serialize() + "&" + refinement.serialize() + fr.includeRobotsInReporting(true);
-  
+
     if( type == 'sessiontotals') {
-      $.ajax({url: federationReportsSessionTotalsEndpoint, 
+      $.ajax({url: federationReportsSessionTotalsEndpoint,
         data: data,
         dataType: 'json',
-        async:true, 
+        async:true,
         success: function(data){
           fr.renderFederationServices(data);
         },
@@ -1730,14 +1731,14 @@ fr.refineFederationReport = function(type, refinement) {
 fr.renderFederationSummaryReport = function(type) {
   if (Modernizr.svg) {
     fr.toggleReportingContent(true);
-    
-  
+
+
     var data = fr.includeRobotsInReporting(false);
-  
-    $.ajax({url: federationReportsSummaryEndpoint, 
+
+    $.ajax({url: federationReportsSummaryEndpoint,
       data: data,
       dataType: 'json',
-      async:true, 
+      async:true,
       success: function(data){
         fr.renderCreationSummary(data);
       },

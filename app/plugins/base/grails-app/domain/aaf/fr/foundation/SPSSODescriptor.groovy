@@ -37,6 +37,11 @@ class SPSSODescriptor extends SSODescriptor {
 		( !archived && active && approved && entityDescriptor.functioning() )
 	}
 
+	public boolean samlSchemaValid() {
+		// Missing mandatory endpoints indicates an incomplete SPSSODescriptor not valid according to the SAML schema
+		assertionConsumerServices.any { it.functioning() }
+	}
+
 	public boolean equals(Object obj) {
 		if( this.is(obj) ) return true
 		if ( obj == null ) return false
