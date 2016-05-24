@@ -122,34 +122,30 @@ aaf {
     certificates {
       // shib default of 20 years for assertion certs so this must be large
       maxlifeindays = 7800
-
-      // Optionally turn off certificate chain validation
-      // When true, skips searching for issuer CA certicate in validateCertificate.
-      // ... but the search is still on when invoked as 
-      //    validateCertificate(cert, requireChain = true)
-      ignoreIssuerCA = false
     }
 
     knownimplementations {
       identityproviders {
-        shib22 {
-          displayName = 'Shibboleth Identity Provider (2.2.x)'
-          selected = false
+        shib3 {
+          displayName = 'Shibboleth 3'
+          selected = true
           entitydescriptor = '$host/idp/shibboleth'
           post.uri = '$host/idp/profile/SAML2/POST/SSO'
           redirect.uri = '$host/idp/profile/SAML2/Redirect/SSO'
+          ecp.uri = '$host/idp/profile/SAML2/SOAP/ECP'
           artifact {
             uri = '$host:8443/idp/profile/SAML2/SOAP/ArtifactResolution'
             index = 2
           }
           attributeservice.uri = '$host:8443/idp/profile/SAML2/SOAP/AttributeQuery'
         }
-        shib23 {
-          displayName = 'Shibboleth Identity Provider (2.3.x, 2.4.x, 3.0.x, 3.1.x)'
-          selected = true
+        shib24 {
+          displayName = 'Shibboleth 2.4'
+          selected = false
           entitydescriptor = '$host/idp/shibboleth'
           post.uri = '$host/idp/profile/SAML2/POST/SSO'
           redirect.uri = '$host/idp/profile/SAML2/Redirect/SSO'
+          ecp.uri = '$host/idp/profile/SAML2/SOAP/ECP'
           artifact {
             uri = '$host:8443/idp/profile/SAML2/SOAP/ArtifactResolution'
             index = 2
@@ -158,39 +154,8 @@ aaf {
         }
       }
       serviceproviders {
-        shib23 {
-          displayName = "Shibboleth Service Provider (2.3.x - legacy)"
-          selected = false
-          entitydescriptor = '$host/shibboleth'
-          acs {
-            post {
-              uri = '$host/Shibboleth.sso/SAML2/POST'
-              index = 1
-            }
-            artifact {
-              uri = '$host/Shibboleth.sso/SAML2/Artifact'
-              index = 3
-            }
-          }
-          drs {
-            uri = '$host/Shibboleth.sso/DS'
-            index = 1
-          }
-          slo {
-            artifact.uri = '$host/Shibboleth.sso/SLO/Artifact'
-            redirect.uri = '$host/Shibboleth.sso/SLO/Redirect'
-            soap.uri = '$host/Shibboleth.sso/SLO/SOAP'
-            post.uri = '$host/Shibboleth.sso/SLO/POST'
-          }
-          mnid {
-            artifact.uri = '$host/Shibboleth.sso/NIM/Artifact'
-            redirect.uri = '$host/Shibboleth.sso/NIM/Redirect'
-            soap.uri = '$host/Shibboleth.sso/NIM/SOAP'
-            post.uri = '$host/Shibboleth.sso/NIM/POST'
-          }
-        }
-        shib24 {
-          displayName = "Shibboleth Service Provider (2.4.x, 2.5.x)"
+        shib25 {
+          displayName = "Shibboleth 2.5"
           selected = true
           entitydescriptor = '$host/shibboleth'
           acs {

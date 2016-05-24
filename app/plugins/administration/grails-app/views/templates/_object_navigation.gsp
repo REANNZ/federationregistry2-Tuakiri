@@ -23,7 +23,7 @@
     <g:link controller="organizationType" action="list">List</g:link></li>
   <li class="${controllerName == 'organizationType' && actionName == 'create' ? 'active' : ''}">
     <g:link controller="organizationType" action="create">Create</g:link></li>
-  
+
   <li class="nav-header">
     Contact Type
   </li>
@@ -31,6 +31,14 @@
     <g:link controller="contactType" action="list">List</g:link></li>
   <li class="${controllerName == 'contactType' && actionName == 'create' ? 'active' : ''}">
     <g:link controller="contactType" action="create">Create</g:link></li>
+
+  <li class="nav-header">
+    Service Category
+  </li>
+  <li class="${controllerName == 'adminServiceCategory' && actionName == 'list' ? 'active' : ''}">
+    <g:link controller="adminServiceCategory" action="list">List</g:link></li>
+  <li class="${controllerName == 'adminServiceCategory' && actionName == 'create' ? 'active' : ''}">
+    <g:link controller="adminServiceCategory" action="create">Create</g:link></li>
 
   <li class="nav-header">
     Monitor Types

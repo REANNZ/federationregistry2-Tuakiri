@@ -64,25 +64,25 @@ class EntityDescriptor extends Descriptor  {
 		// No children or no children functioning indicates an empty ED
 		if(empty && idpDescriptors) {
 		 	idpDescriptors.each {
-				if(it.functioning())
+				if(it.functioning() && it.samlSchemaValid())
 					empty = false
 			}
 		}
 		if(empty && attributeAuthorityDescriptors) {
 		 	attributeAuthorityDescriptors.each {
-				if(it.functioning())
+				if(it.functioning() && it.samlSchemaValid())
 					empty = false
 			}
 		}
 		if(empty && spDescriptors) {
 		 	spDescriptors.each {
-				if(it.functioning())
+				if(it.functioning() && it.samlSchemaValid())
 					empty = false
 			}
 		}
 		if(empty && pdpDescriptors) {
 		 	pdpDescriptors.each {
-				if(it.functioning())
+				if(it.functioning() && it.samlSchemaValid())
 					empty = false
 			}
 		}

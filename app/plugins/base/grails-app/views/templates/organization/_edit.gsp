@@ -42,7 +42,7 @@
       <div class="control-group">
         <label class="control-label" for="organization.primary"><g:message encodeAs="HTML" code="label.organizationtype" /></label>
         <div class="controls">
-          <g:select name="organization.primary" from="${organizationTypes.findAll{it.discoveryServiceCategory == true}.sort{it.displayName}}" optionKey="id" optionValue="displayName" value="${organization.primary.id}"/>
+          <g:select name="organization.primary" from="${organizationTypes.findAll{it.discoveryServiceCategory == true}.sort{it.displayName}}" optionKey="id" optionValue="${{ it.displayName?.encodeAsHTML() }}" value="${organization.primary.id}"/>
           <fr:tooltip code='help.fr.organization.edit.type' />
         </div>
       </div>

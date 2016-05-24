@@ -36,7 +36,7 @@
           <div class="control-group">
             <label for="idpcount"><g:message encodeAs="HTML" code="label.excludespfromorg"/> </label>
             <div class="controls">
-              <g:select name="excludeorg" from="${organizations.sort{it.displayName}}" optionKey="id" optionValue="displayName"/>
+              <g:select name="excludeorg" from="${organizations.sort{it.displayName}}" optionKey="id" optionValue="${{ it.displayName?.encodeAsHTML() }}"/>
             </div>
           </div>
 

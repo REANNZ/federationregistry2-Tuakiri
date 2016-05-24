@@ -3,6 +3,7 @@
 plugin.xml
 .DS_Store
 
+installer/federationregistry
 
 **/**/web-app/css/errors.css
 **/**/web-app/css/mobile.css

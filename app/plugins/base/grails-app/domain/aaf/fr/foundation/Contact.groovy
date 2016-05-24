@@ -52,8 +52,10 @@ class Contact {
 	    surname surname
 	    description description ?: ''
 
-	    organization { id this.organization.id
-	    							 name this.organization.displayName }
+	    organization {
+	    	id organization?.id ?: ''
+  			name organization?.displayName ?: ''
+  		}
 
 	    email email
 	    secondary_email secondaryEmail ?: ''
