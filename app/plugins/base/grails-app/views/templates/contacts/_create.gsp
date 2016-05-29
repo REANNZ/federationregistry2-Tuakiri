@@ -1,7 +1,7 @@
 
 <fr:hasAnyPermission in='["federation:management:${hostType}:${host.id}:contact:add", "federation:management:contacts"]'>
   <hr>
-  
+
   <div class="search-contacts">
     <div class="add-contact">
       <a class="btn search-for-contact"><g:message encodeAs="HTML" code="label.addcontact" /></a>
@@ -44,7 +44,7 @@
       <p><g:message encodeAs="HTML" code="templates.fr.contacts.confirmaddition"/></p>
       <strong><g:message encodeAs="HTML" code="templates.fr.contacts.selecttype"/></strong>
       <div class="controls">
-        <g:select id="contactselectedtype" name="contactType" from="${contactTypes.sort{it.displayName}}" optionKey="name" optionValue="displayName"/>
+        <g:select id="contactselectedtype" name="contactType" from="${contactTypes.sort{it.displayName}}" optionKey="${{it.name?.encodeAsHTML()}}" optionValue="${{it.displayName?.encodeAsHTML()}}"/>
       </div>
     </div>
     <div class="modal-footer">

@@ -4,8 +4,8 @@
 <fr:hasPermission target="federation:management:descriptor:${descriptor.id}:endpoint:create">
   <hr>
 
-  <div id="add-${endpointType}">
-    <a class="show-create-endpoint btn" data-type="${endpointType}"><g:message encodeAs="HTML" code="label.addendpoint"/></a>
+  <div id="add-${endpointType.encodeAsHTML()}">
+    <a class="show-create-endpoint btn" data-type="${endpointType.encodeAsHTML()}"><g:message encodeAs="HTML" code="label.addendpoint"/></a>
   </div>
 
   <div id="new-${endpointType}" class="revealable">
@@ -18,7 +18,7 @@
         <div class="control-group">
           <label class="control-label" for="binding"><g:message encodeAs="HTML" code="label.binding"/></label>
           <div class="controls">
-            <g:select name="binding" from="${SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding)}" optionKey="id" optionValue="uri" class="span4"/>
+            <g:select name="binding" from="${SamlURI.findAllWhere(type:SamlURIType.ProtocolBinding)}" optionKey="id" optionValue="${{ it.uri?.encodeAsHTML() }}" class="span4"/>
             <fr:tooltip code='help.fr.endpoint.binding' />
           </div>
         </div>
@@ -59,8 +59,8 @@
         </div>
 
         <div class="form-actions">
-          <a class="create-endpoint btn btn-success" data-type="${endpointType}"><g:message encodeAs="HTML" code="label.add"/></a>
-          <a class="cancel-create-endpoint btn" data-type="${endpointType}"><g:message encodeAs="HTML" code="label.cancel"/></a>
+          <a class="create-endpoint btn btn-success" data-type="${endpointType.encodeAsHTML()}"><g:message encodeAs="HTML" code="label.add"/></a>
+          <a class="cancel-create-endpoint btn" data-type="${endpointType.encodeAsHTML()}"><g:message encodeAs="HTML" code="label.cancel"/></a>
         </div>
 
       </fieldset>

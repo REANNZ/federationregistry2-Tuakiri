@@ -15,7 +15,7 @@
         <div class="control-group">
           <label class="control-label" for="categoryID"><g:message encodeAs="HTML" code="label.category"/></label>
           <div class="controls">
-                <g:select name="categoryID" from="${ServiceCategory.list()}" optionKey="id" optionValue="name"/>
+                <g:select name="categoryID" from="${ServiceCategory.list()}" optionKey="id" optionValue="${{ it.name?.encodeAsHTML() }}"/>
           </div>
         </div>
 

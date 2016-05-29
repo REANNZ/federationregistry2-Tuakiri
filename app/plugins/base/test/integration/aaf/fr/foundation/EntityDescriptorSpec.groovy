@@ -49,58 +49,104 @@ class EntityDescriptorSpec extends IntegrationSpec {
 		!ed.functioning()
 	}
 	
-	def "Ensure EntityDescriptor not empty with IDP child"() {
+	def "Ensure EntityDescriptor not empty with a samlValid IDP child"() {
 		when:
-        def o = Organization.build(active:true, approved:true)
+		def o = Organization.build(active:true, approved:true)
+		def ed = EntityDescriptor.build(active:true, approved:true, organization:o)
+		def idp = new IDPSSODescriptor(active:true, approved:true, entityDescriptor:ed)
+		def httpPost = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST', description:'')
+		def sso = new SingleSignOnService(descriptor:idp,active:true, approved:true, binding:httpPost, location:"https://test.example.com/sso/POST")
+		idp.addToSingleSignOnServices(sso)
+		ed.addToIdpDescriptors(idp)
+
+		then:
+		!ed.empty()
+	}
+
+	def "Ensure EntityDescriptor empty with an IDP child not samlValid"() {
+		when:
+		def o = Organization.build(active:true, approved:true)
 		def ed = EntityDescriptor.build(active:true, approved:true, organization:o)
 		def idp = new IDPSSODescriptor(active:true, approved:true, entityDescriptor:ed)
 		ed.addToIdpDescriptors(idp)
-		
+
+		then:
+		ed.empty()
+	}
+
+	def "Ensure EntityDescriptor not empty with a samlValid SP child"() {
+		when:
+		def o = Organization.build(active:true, approved:true)
+		def ed = EntityDescriptor.build(active:true, approved:true, organization:o)
+		def sp = new SPSSODescriptor(active:true, approved:true, entityDescriptor:ed)
+		def httpArtifact = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact', description:'')
+		def acs = new AssertionConsumerService(index:300, active:true, approved:true, binding:httpArtifact, location:"https://test.example.com/acs/ART")
+		sp.addToAssertionConsumerServices(acs)
+		ed.addToSpDescriptors(sp)
+
 		then:
 		!ed.empty()
 	}
-	
-	def "Ensure EntityDescriptor not empty with SP child"() {
-		when:	
-        def o = Organization.build(active:true, approved:true)
-        def ed = EntityDescriptor.build(active:true, approved:true, organization:o)
+
+	def "Ensure EntityDescriptor empty with an SP child not samlValid"() {
+		when:
+		def o = Organization.build(active:true, approved:true)
+		def ed = EntityDescriptor.build(active:true, approved:true, organization:o)
 		def sp = new SPSSODescriptor(active:true, approved:true, entityDescriptor:ed)
 		ed.addToSpDescriptors(sp)
-		
-		then:
-		!ed.empty()
-	}
-	
-	def "Ensure EntityDescriptor not empty with AA child"() {
-		when:
-    def o = Organization.build(active:true, approved:true)
-    def ed = EntityDescriptor.build(active:true, approved:true, organization:o)
-		def aa = new AttributeAuthorityDescriptor(active:true, approved:true, entityDescriptor:ed)
-
-    def soap = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:SOAP', description:'')
-    def attrService = new AttributeService(active:true, approved:true, location:'https://idp.example.org:8443/idp/profile/SAML2/SOAP/AttributeQuery', binding:soap)
-    aa.addToAttributeServices(attrService)
-
-    ed.addToAttributeAuthorityDescriptors(aa)
 
 		then:
-		!ed.empty()
+		ed.empty()
 	}
-	
-	def "Ensure EntityDescriptor not empty with IDP and AA child"() {
+
+	def "Ensure EntityDescriptor not empty with a samlValid AA child"() {
 		when:
-        def o = Organization.build(active:true, approved:true)
-        def ed = EntityDescriptor.build(active:true, approved:true, organization:o)
-		def idp = new IDPSSODescriptor(active:true, approved:true, entityDescriptor:ed)
-		ed.addToIdpDescriptors(idp)
-		
+		def o = Organization.build(active:true, approved:true)
+		def ed = EntityDescriptor.build(active:true, approved:true, organization:o)
 		def aa = new AttributeAuthorityDescriptor(active:true, approved:true, entityDescriptor:ed)
+
+		def soap = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:SOAP', description:'')
+		def attrService = new AttributeService(active:true, approved:true, location:'https://idp.example.org:8443/idp/profile/SAML2/SOAP/AttributeQuery', binding:soap)
+		aa.addToAttributeServices(attrService)
+
 		ed.addToAttributeAuthorityDescriptors(aa)
-		
+
 		then:
 		!ed.empty()
 	}
-	
+
+	def "Ensure EntityDescriptor empty with an AA child not samlValid"() {
+		when:
+		def o = Organization.build(active:true, approved:true)
+		def ed = EntityDescriptor.build(active:true, approved:true, organization:o)
+		def aa = new AttributeAuthorityDescriptor(active:true, approved:true, entityDescriptor:ed)
+
+		ed.addToAttributeAuthorityDescriptors(aa)
+
+		then:
+		ed.empty()
+	}
+
+	def "Ensure EntityDescriptor not empty with samlValid IDP and AA child"() {
+		when:
+		def o = Organization.build(active:true, approved:true)
+		def ed = EntityDescriptor.build(active:true, approved:true, organization:o)
+		def idp = new IDPSSODescriptor(active:true, approved:true, entityDescriptor:ed)
+		def httpPost = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST', description:'')
+		def sso = new SingleSignOnService(descriptor:idp,active:true, approved:true, binding:httpPost, location:"https://test.example.com/sso/POST")
+		idp.addToSingleSignOnServices(sso)
+		ed.addToIdpDescriptors(idp)
+
+		def aa = new AttributeAuthorityDescriptor(active:true, approved:true, entityDescriptor:ed)
+		def soap = new SamlURI(type:SamlURIType.ProtocolBinding, uri:'urn:oasis:names:tc:SAML:2.0:bindings:SOAP', description:'')
+		def attrService = new AttributeService(active:true, approved:true, location:'https://idp.example.org:8443/idp/profile/SAML2/SOAP/AttributeQuery', binding:soap)
+		aa.addToAttributeServices(attrService)
+		ed.addToAttributeAuthorityDescriptors(aa)
+
+		then:
+		!ed.empty()
+	}
+
 	def "Ensure EntityDescriptor empty when no child nodes"() {
 		when:
 		def ed = new EntityDescriptor()

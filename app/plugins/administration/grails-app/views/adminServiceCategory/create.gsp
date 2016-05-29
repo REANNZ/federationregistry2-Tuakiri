@@ -1,19 +1,20 @@
-<%@ page import="aaf.fr.foundation.AttributeBase" %>
+<%@ page import="aaf.fr.foundation.ServiceCategory" %>
 <!doctype html>
 <html>
   <head>
     <meta name="layout" content="admin">
-    <g:set var="entityName" value="${message(code: 'attributeBase.label', default: 'AttributeBase')}" />
+    <g:set var="entityName" value="${message(code: 'serviceCategory.label', default: 'ServiceCategory')}" />
   </head>
   <body>
-    <div id="create-attributeBase" class="content scaffold-create" role="main">
+    <div id="create-serviceCategory" class="content scaffold-create" role="main">
       <h3><g:message encodeAs="HTML" code="label.createspecific" args="[entityName]" /></h3>
       <g:if test="${flash.message}">
       <div class="message" role="status">${flash.message.encodeAsHTML()}</div>
       </g:if>
-      <g:hasErrors bean="${attributeBaseInstance}">
+
+      <g:hasErrors bean="${serviceCategoryInstance}">
         <ul class="clean alert alert-error">
-          <g:eachError bean="${attributeBaseInstance}" var="error">
+          <g:eachError bean="${serviceCategoryInstance}" var="error">
           <li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>><g:message encodeAs="HTML" error="${error}"/></li>
           </g:eachError>
         </ul>

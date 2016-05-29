@@ -35,7 +35,7 @@
           <div class="control-group">
             <label class="control-label" for="organization.id"><g:message encodeAs="HTML" code="label.organization" /></label>
             <div class="controls">
-              <g:select name="organization.id" from="${organizationList.sort{it.displayName}}" optionKey="id" optionValue="displayName" value="${organization?.id}"/>
+              <g:select name="organization.id" from="${organizationList.sort{it.displayName}}" optionKey="id" optionValue="${{ it.displayName?.encodeAsHTML() }}" value="${organization?.id}"/>
             </div>
           </div>
 
@@ -43,7 +43,7 @@
             <label class="control-label" for="entity.identifier"><g:message encodeAs="HTML" code="label.entityid" /></label>
             <div class="controls">
               <g:textField name="entity.identifier" value="${entity.entityID}" class="required span4"/>
-            </div>    
+            </div>
           </div>
         </fieldset>
       </div>
