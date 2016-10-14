@@ -42,7 +42,7 @@
       </li>
     </fr:isAdministrator>
   </fr:isLoggedIn>
-  <li><a style="color: #fff;" href="#" onClick="script: Zenbox.show(); return false;"><g:message encodeAs="HTML"  code="fr.branding.nav.support" default="Support" /></a></li>
+  <li><a style="color: #fff;" href="https://aaf.edu.au/support/"><g:message encodeAs="HTML"  code="fr.branding.nav.support" default="Support" /></a></li>
   <fr:isLoggedIn>
     <li>
       <g:link controller="auth" action="logout"><g:message encodeAs="HTML"  code="fr.branding.nav.logout" default="Logout" /></g:link>
