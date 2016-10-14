@@ -39,12 +39,6 @@ modules = {
     dependsOn 'jquery'
     resource url:[dir:'js/jquery', file:'jquery.alphanumeric.min.js']
   }
-  'zenbox' {
-    defaultBundle 'app'
-
-    resource url:'js/zenbox.js', disposition: 'head'
-    resource url:'css/zenbox.css'
-  }
   'codemirror' {
     resource url: [dir:'/js/codemirror/js', file:'codemirror.min.js'], disposition:'head', nominify: true
   }
