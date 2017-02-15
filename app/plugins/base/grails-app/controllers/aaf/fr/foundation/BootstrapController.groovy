@@ -17,6 +17,7 @@ class BootstrapController {
 		def identityProvider = new IDPSSODescriptor()
 		def c = AttributeBase.createCriteria()
 		def attributeList = c.list {
+			eq("adminRestricted", false)
 			order("category", "asc")
 			order("name", "asc")
 		}
@@ -36,6 +37,7 @@ class BootstrapController {
   			flash.message = message(code: 'aaf.fr.foundation.idpssoroledescriptor.register.validation.error')
   			def c = AttributeBase.createCriteria()
   			def attributeList = c.list {
+  				eq("adminRestricted", false)
   				order("category", "asc")
   				order("name", "asc")
   			}
@@ -71,6 +73,7 @@ class BootstrapController {
 		def serviceProvider = new SPSSODescriptor()
 		def c = AttributeBase.createCriteria()
 		def attributeList = c.list {
+			eq("adminRestricted", false)
 			order("category", "asc")
 			order("name", "asc")
 		}
@@ -90,6 +93,7 @@ class BootstrapController {
   			flash.message = message(code: 'aaf.fr.foundation.spssoroledescriptor.register.validation.error')
   			def c = AttributeBase.createCriteria()
   			def attributeList = c.list {
+  				eq("adminRestricted", false)
   				order("category", "asc")
   				order("name", "asc")
   			}
