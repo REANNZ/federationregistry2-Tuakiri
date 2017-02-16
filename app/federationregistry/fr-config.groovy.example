@@ -154,8 +154,8 @@ aaf {
         }
       }
       serviceproviders {
-        shib25 {
-          displayName = "Shibboleth 2.5"
+        shib26 {
+          displayName = "Shibboleth 2.6"
           selected = true
           entitydescriptor = '$host/shibboleth'
           acs {
