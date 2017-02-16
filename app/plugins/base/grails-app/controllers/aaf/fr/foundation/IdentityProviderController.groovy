@@ -69,6 +69,7 @@ class IdentityProviderController {
         flash.message = message(code: 'aaf.fr.foundation.idpssoroledescriptor.save.validation.error')
         def c = AttributeBase.createCriteria()
         def attributeList = c.list {
+          eq("adminRestricted", false)
           order("category", "asc")
           order("name", "asc")
         }
