@@ -1,0 +1,5 @@
+[submodule "aaf-patched-groovy"]
+	path = aaf-patched-groovy
+	url = https://github.com/ausaccessfed/groovy.git
+	branch = 2.0.8-aaf-patched
+  ignore = dirty
