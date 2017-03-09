@@ -21,6 +21,27 @@ The Federation Registry project provides an extensible, open web application tha
 - In-depth reporting to gain insight to the workings of the entire federation
 - Federation integrated, automatically provisioned user accounts with fine grained access control
 
+## Local Dependencies
+As of FR 2.7.0 (March 2017) there is an extra step required to build the AAF
+patched version of Groovy for dependency resolution purposes.
+
+To build AAF Groovy:
+
+1. Be on Java 7
+1. Be in the root directory of the federationregistry project checked out from
+Github
+1. `git submodule init`
+1. cd aaf-patched-groovy
+1. ./gradlew clean dist
+
+To build FR WAR file:
+
+1. Return to ../app/federationregisty and use `grails war` as normal.
+
+To develop FR code:
+
+1. Return to ../app/plugin/X and use `grails Y` as normal.
+
 ## License Notice
 This product includes software developed at Highcharts - http://www.highcharts.com 
 
