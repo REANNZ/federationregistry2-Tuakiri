@@ -31,6 +31,7 @@ To build AAF Groovy:
 1. Be in the root directory of the federationregistry project checked out from
 Github
 1. `git submodule init`
+1. `git submodule update`
 1. cd aaf-patched-groovy
 1. ./gradlew clean dist
 
