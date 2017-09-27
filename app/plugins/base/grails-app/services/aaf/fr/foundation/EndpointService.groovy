@@ -130,6 +130,9 @@ class EndpointService {
     sp.singleLogoutServices?.findAll{ it.functioning() }.each {
       determineProtocolSupport(it.binding, sp)
     }
+    sp.artifactResolutionServices?.findAll{ it.functioning() }.each {
+      determineProtocolSupport(it.binding, sp)
+    }
     
     log.debug "Determined current SP protocol support of ${sp.protocolSupportEnumerations}"
   }
@@ -144,6 +147,15 @@ class EndpointService {
     idp.singleLogoutServices?.findAll{ it.functioning() }.each {
       determineProtocolSupport(it.binding, idp)
     }
+    idp.assertionIDRequestServices?.findAll{ it.functioning() }.each {
+      determineProtocolSupport(it.binding, idp)
+    }
+    idp.nameIDMappingServices?.findAll{ it.functioning() }.each {
+      determineProtocolSupport(it.binding, idp)
+    }
+    idp.manageNameIDServices?.findAll{ it.functioning() }.each {
+      determineProtocolSupport(it.binding, idp)
+    }
 
     if(idp.collaborator) {
       determineAttributeAuthorityProtocolSupport(idp.collaborator)
@@ -154,6 +166,9 @@ class EndpointService {
   
   def determineAttributeAuthorityProtocolSupport(def aa) {
     aa.attributeServices.findAll{ it.functioning() }?.each {
+      determineProtocolSupport(it.binding, aa)
+    }
+    aa.assertionIDRequestServices.findAll{ it.functioning() }?.each {
       determineProtocolSupport(it.binding, aa)
     }
     
