@@ -121,9 +121,6 @@ class EndpointService {
   }
   
   def determineSPSSODescriptorProtocolSupport(sp) {
-    sp.singleLogoutServices?.findAll{ it.functioning() }.each {
-      determineProtocolSupport(it.binding, sp)
-    }
     sp.assertionConsumerServices?.findAll{ it.functioning() }.each {
       determineProtocolSupport(it.binding, sp)
     }
@@ -142,6 +139,9 @@ class EndpointService {
       determineProtocolSupport(it.binding, idp)
     }
     idp.artifactResolutionServices?.findAll{ it.functioning() }.each {
+      determineProtocolSupport(it.binding, idp)
+    }
+    idp.singleLogoutServices?.findAll{ it.functioning() }.each {
       determineProtocolSupport(it.binding, idp)
     }
 
