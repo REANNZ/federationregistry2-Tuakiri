@@ -76,6 +76,9 @@ class EndpointService {
     log.info "Toggling state of ${endpoint}"
     
     endpoint.active = !endpoint.active
+
+    determineDescriptorProtocolSupport(endpoint.descriptor)
+
     endpoint.save()
     if(endpoint.hasErrors()) {
       endpoint.errors.each {
@@ -118,16 +121,16 @@ class EndpointService {
   }
   
   def determineSPSSODescriptorProtocolSupport(sp) {
-    sp.singleLogoutServices?.each {
+    sp.assertionConsumerServices?.findAll{ it.functioning() }.each {
       determineProtocolSupport(it.binding, sp)
     }
-    sp.assertionConsumerServices?.each {
+    sp.manageNameIDServices?.findAll{ it.functioning() }.each {
       determineProtocolSupport(it.binding, sp)
     }
-    sp.manageNameIDServices?.each {
+    sp.singleLogoutServices?.findAll{ it.functioning() }.each {
       determineProtocolSupport(it.binding, sp)
     }
-    sp.singleLogoutServices?.each {
+    sp.artifactResolutionServices?.findAll{ it.functioning() }.each {
       determineProtocolSupport(it.binding, sp)
     }
     
@@ -135,10 +138,22 @@ class EndpointService {
   }
   
   def determineIDPSSODescriptorProtocolSupport(idp) {
-    idp.singleSignOnServices?.each {
+    idp.singleSignOnServices?.findAll{ it.functioning() }.each {
       determineProtocolSupport(it.binding, idp)
     }
-    idp.artifactResolutionServices?.each {
+    idp.artifactResolutionServices?.findAll{ it.functioning() }.each {
+      determineProtocolSupport(it.binding, idp)
+    }
+    idp.singleLogoutServices?.findAll{ it.functioning() }.each {
+      determineProtocolSupport(it.binding, idp)
+    }
+    idp.assertionIDRequestServices?.findAll{ it.functioning() }.each {
+      determineProtocolSupport(it.binding, idp)
+    }
+    idp.nameIDMappingServices?.findAll{ it.functioning() }.each {
+      determineProtocolSupport(it.binding, idp)
+    }
+    idp.manageNameIDServices?.findAll{ it.functioning() }.each {
       determineProtocolSupport(it.binding, idp)
     }
 
@@ -150,7 +165,10 @@ class EndpointService {
   }
   
   def determineAttributeAuthorityProtocolSupport(def aa) {
-    aa.attributeServices?.each {
+    aa.attributeServices.findAll{ it.functioning() }?.each {
+      determineProtocolSupport(it.binding, aa)
+    }
+    aa.assertionIDRequestServices.findAll{ it.functioning() }?.each {
       determineProtocolSupport(it.binding, aa)
     }
     
