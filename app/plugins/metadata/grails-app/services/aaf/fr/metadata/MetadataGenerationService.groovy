@@ -435,16 +435,6 @@ class MetadataGenerationService implements InitializingBean {
     boolean isRegex = roleDescriptor.scope.startsWith('^') && roleDescriptor.scope.endsWith('$')
     builder.Extensions() {
       builder."shibmd:Scope" (regexp:isRegex, roleDescriptor.scope)
-      if ( (renderMDUIDisplayName && roleDescriptor.displayName) || (renderMDUIDescription && roleDescriptor.description) ) {
-        builder."mdui:UIInfo" {
-          if (renderMDUIDisplayName && roleDescriptor.displayName) {
-            localizedName(builder, "mdui:DisplayName", mduiLang, roleDescriptor.displayName)
-          }
-          if (renderMDUIDescription && roleDescriptor.description) {
-            localizedName(builder, "mdui:Description", mduiLang, roleDescriptor.description)
-          }
-        }
-      }
     } 
   }
   
