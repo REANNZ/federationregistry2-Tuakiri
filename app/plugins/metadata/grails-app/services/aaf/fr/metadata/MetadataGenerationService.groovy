@@ -105,8 +105,6 @@ class MetadataGenerationService implements InitializingBean {
   
   def caKeyInfo(builder, keyInfo) {
     builder.'ds:KeyInfo'('xmlns:ds':'http://www.w3.org/2000/09/xmldsig#') {
-      if(keyInfo.keyName)
-        'ds:KeyName'(keyInfo.keyName)
       'ds:X509Data'() {
         def data = processCertificateData(keyInfo.certificate.data)
         'ds:X509Certificate'(data)
@@ -116,8 +114,6 @@ class MetadataGenerationService implements InitializingBean {
   
   def keyInfo(builder, keyInfo) {
     builder.'ds:KeyInfo'('xmlns:ds':'http://www.w3.org/2000/09/xmldsig#') {
-      if(keyInfo.keyName)
-        'ds:KeyName'(keyInfo.keyName)
       'ds:X509Data'() {
         def data = processCertificateData(keyInfo.certificate.data)
         'ds:X509Certificate'(data)
