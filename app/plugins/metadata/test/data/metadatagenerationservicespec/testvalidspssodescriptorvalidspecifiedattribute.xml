@@ -4,7 +4,6 @@
     </Extensions>
   <KeyDescriptor use='encryption'>
     <ds:KeyInfo xmlns:ds='http://www.w3.org/2000/09/xmldsig#'>
-      <ds:KeyName>key1</ds:KeyName>
       <ds:X509Data>
         <ds:X509Certificate>
 MIIDJDCCAgygAwIBAgIVAO0iiNByCKsIji9RIiEglo5mhsc9MA0GCSqGSIb3DQEB
@@ -31,7 +30,6 @@ wU7I1/N110XAqdxIAZo7giAij4IKE122u7bPYs8YlQ8JoMb4hPJY5g==
   </KeyDescriptor>
   <KeyDescriptor use='signing'>
     <ds:KeyInfo xmlns:ds='http://www.w3.org/2000/09/xmldsig#'>
-      <ds:KeyName>key2</ds:KeyName>
       <ds:X509Data>
         <ds:X509Certificate>
 MIIDJDCCAgygAwIBAgIVAO0iiNByCKsIji9RIiEglo5mhsc9MA0GCSqGSIb3DQEB
