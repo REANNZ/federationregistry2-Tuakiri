@@ -1673,7 +1673,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
     xml == ""
   }
 
-  def "Test valid AttributeAuthorityDescriptor creation with on AttributeService not functioning"() {
+  def "Test valid AttributeAuthorityDescriptor creation with an AttributeService not functioning"() {
     setup:
     setupBindings()
     def saml2Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:2.0:protocol')

@@ -123,7 +123,9 @@ class AttributeFilterGenerationService {
 	}
 	
 	def comment(builder, comment) {
-		builder.mkp.yieldUnescaped "\n<!-- $comment -->"
+		builder.mkp.yieldUnescaped "\n<!-- "
+		builder.mkp.yield comment.replaceAll("--", "&#x002D;&#x002D;")
+		builder.mkp.yieldUnescaped " -->"
 	}
 
 }
