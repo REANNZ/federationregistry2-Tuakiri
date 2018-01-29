@@ -1527,6 +1527,78 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		diff.similar()
 	}
 	
+	def "Ensure AttributeAuthorityDescriptor not created when collaborating with IdP but without any AttributeService endpoints"() {
+		setup:
+		setupBindings()
+		def saml2Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:2.0:protocol')
+		def saml1Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:1.1:protocol urn:mace:shibboleth:1.0')
+		def protocolSupportEnumerations = [saml1Prot, saml2Prot]
+
+		def organization = new Organization(active:true, approved:true, name:"Test Organization", displayName:"Test Organization Display", lang:"en", url: "http://example.com")
+		def entityDescriptor = new EntityDescriptor(organization:organization, entityID:"https://test.com", active:true, approved:true)
+		
+		def email = "test@example.com"
+		def home = "(07) 1111 1111"
+		def work = "(567) 222 22222"
+		def mobile = "0413 867 208"
+		def contact = Contact.build(givenName:"Test", surname:"User", email:email, homePhone:home, workPhone:work, mobilePhone:mobile)
+		def admin = ContactType.build(name:"administrative")
+		def contactPerson = ContactPerson.build(contact:contact, type:admin)
+
+    def idp = new IDPSSODescriptor(protocolSupportEnumerations:protocolSupportEnumerations, entityDescriptor:entityDescriptor, organization:organization, approved:true, active:true, scope:"test.com")
+
+    def certificate = new Certificate(data:loadPK())
+    def keyInfo = new KeyInfo(keyName:"key1", certificate:certificate)
+    def encryptionMethod = new EncryptionMethod(algorithm:"http://www.w3.org/2001/04/xmlenc#tripledes-cbc")
+    def keyDescriptor = new KeyDescriptor(roleDescriptor:idp, keyType:KeyTypes.encryption, keyInfo:keyInfo, encryptionMethod:encryptionMethod)
+
+    def certificate2 = new Certificate(data:loadPK())
+    def keyInfo2 = new KeyInfo(keyName:"key2", certificate:certificate2)
+    def keyDescriptor2 = new KeyDescriptor(roleDescriptor:idp, keyType:KeyTypes.signing, keyInfo:keyInfo2)
+
+    keyDescriptor.id = 1
+    keyDescriptor2.id = 2
+		
+		def nidf = new SamlURI(uri:"supported:nameid:format:urn")
+		def aidrs = new AssertionIDRequestService(active:true, approved:true, binding:httpRedirect, location:"https://test.example.com/assertionidrequestservice/REDIRECT")
+		
+		def ba1 =  new AttributeBase(oid:'2.5.4.3', nameFormat: attrUri, legacyName:'urn:mace:dir:attribute-def:cn', name:'commonName', description:'An individuals common name, typically their full name. This attribute should not be used in transactions where it is desirable to maintain user anonymity.', category:coreCategory, specificationRequired:false).save()
+		def ba2 =  new AttributeBase(oid:'2.5.4.4', nameFormat: attrUri, legacyName:'urn:mace:dir:attribute-def:sn', name:'surname', description:'Surname or family name', category:optionalCategory, specificationRequired:false).save()
+		def ba3 =  new AttributeBase(oid:'2.5.4.42', nameFormat: attrUri, legacyName:'urn:mace:dir:attribute-def:givenName', name:'givenName', description:'Given name of a person', category:optionalCategory, specificationRequired:false).save()
+		def ba4 =  new AttributeBase(oid:'1.3.6.1.4.1.5923.1.1.1.7', nameFormat: attrUri, legacyName:'urn:mace:dir:attribute-def:eduPersonEntitlement', name:'eduPersonEntitlement', description:'Member of: URI (either URL or URN) that indicates a set of rights to specific resources based on an agreement across the releavant community', category:coreCategory, specificationRequired:true).save()
+		
+		def attr1 = new Attribute(base:ba1)
+		def attr2 = new Attribute(base:ba2)
+		def attr3 = new Attribute(base:ba3)
+		def attr4 = new Attribute(base:ba4)
+		attr4.addToValues(new AttributeValue(value:'urn:mace:test:attr:value:1'))
+		attr4.addToValues(new AttributeValue(value:'urn:mace:test:attr:value:2'))
+		attr4.addToValues(new AttributeValue(value:'urn:mace:test:attr:value:3'))
+		
+		idp.addToKeyDescriptors(keyDescriptor)
+		idp.addToKeyDescriptors(keyDescriptor2)
+		idp.addToContacts(contactPerson)
+		
+		idp.addToNameIDFormats(nidf)
+		idp.addToAssertionIDRequestServices(aidrs)
+		
+		idp.addToAttributes(attr1)
+		idp.addToAttributes(attr2)
+		idp.addToAttributes(attr3)
+		idp.addToAttributes(attr4)
+
+		def aa = new AttributeAuthorityDescriptor(protocolSupportEnumerations:protocolSupportEnumerations, entityDescriptor:entityDescriptor, organization:organization, approved:true, active:true)
+		aa.collaborator = idp
+		idp.collaborator = aa
+
+		when:
+		metadataGenerationService.attributeAuthorityDescriptor(builder, false, false, true, aa)
+		def xml = writer.toString()
+
+		then:
+		xml == ""
+	}
+	
 	def "Test valid AttributeAuthorityDescriptor creation when not collaborating with IDP"() {
 		setup:
 		setupBindings()
