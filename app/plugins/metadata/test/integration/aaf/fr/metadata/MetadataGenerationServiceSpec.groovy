@@ -26,6 +26,7 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 	def saml2Prot
 	def saml1Prot
 	def protocolSupportEnumerations
+	def protocolSupportEnumerationsSimple
 	
 	def cleanup() {
 	}
@@ -63,6 +64,9 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		saml2Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:2.0:protocol')
 		saml1Prot = SamlURI.build(uri:'urn:oasis:names:tc:SAML:1.1:protocol urn:mace:shibboleth:1.0')
 		protocolSupportEnumerations = [saml1Prot, saml2Prot]
+
+                // sample protocolSupportEnumeration  value 'uri' used in some tests
+		protocolSupportEnumerationsSimple = [SamlURI.build(uri:'uri')]
 	}
 	
 	def loadExpected(file) {
@@ -319,11 +323,11 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 			def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.example.com/myuniqueID$i", active:true, approved:true)
 			entityDescriptor.addToContacts(contactPerson)
 
-			def idp = IDPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true)
+			def idp = IDPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerationsSimple, entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true)
 			def sso = new SingleSignOnService(descriptor:idp,active:true, approved:true, binding:httpPost, location:"https://test.example.com/sso/POST")
 			idp.addToSingleSignOnServices(sso)
 			entityDescriptor.addToIdpDescriptors(idp)
-			def sp = SPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true)
+			def sp = SPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerationsSimple, entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true)
 			def acs = new AssertionConsumerService(index:300, active:true, approved:true, binding:httpArtifact, location:"https://test.example.com/acs/ART")
 			sp.addToAssertionConsumerServices(acs)
 			entityDescriptor.addToSpDescriptors(sp)
@@ -386,11 +390,11 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 
 			entityDescriptor.addToContacts(contactPerson)
 
-			def idp = IDPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true)
+			def idp = IDPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerationsSimple, entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true)
 			def sso = new SingleSignOnService(descriptor:idp,active:true, approved:true, binding:httpPost, location:"https://test.example.com/sso/POST")
 			idp.addToSingleSignOnServices(sso)
 			entityDescriptor.addToIdpDescriptors(idp)
-			def sp = SPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true)
+			def sp = SPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerationsSimple, entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true)
 			def acs = new AssertionConsumerService(index:300, active:true, approved:true, binding:httpArtifact, location:"https://test.example.com/acs/ART")
 			sp.addToAssertionConsumerServices(acs)
 			entityDescriptor.addToSpDescriptors(sp)
@@ -460,11 +464,11 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 
 			entityDescriptor.addToContacts(contactPerson)
 
-			def idp = IDPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, displayName: 'Test IdP Name', description: 'Test IdP Description', active:true, approved:true)
+			def idp = IDPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerationsSimple, entityDescriptor:entityDescriptor, organization:organization, displayName: 'Test IdP Name', description: 'Test IdP Description', active:true, approved:true)
 			def sso = new SingleSignOnService(descriptor:idp,active:true, approved:true, binding:httpPost, location:"https://test.example.com/sso/POST")
 			idp.addToSingleSignOnServices(sso)
 			entityDescriptor.addToIdpDescriptors(idp)
-			def sp = SPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, displayName: 'Test SP Name', description: 'Test SP Description', active:true, approved:true)
+			def sp = SPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerationsSimple, entityDescriptor:entityDescriptor, organization:organization, displayName: 'Test SP Name', description: 'Test SP Description', active:true, approved:true)
 			def acs = new AssertionConsumerService(index:300, active:true, approved:true, binding:httpArtifact, location:"https://test.example.com/acs/ART")
 			sp.addToAssertionConsumerServices(acs)
 			entityDescriptor.addToSpDescriptors(sp)
@@ -520,11 +524,11 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 			def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.example.com/myuniqueID$i", active:true, approved:true)
 			entityDescriptor.addToContacts(contactPerson)
 
-			def idp = IDPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true)
+			def idp = IDPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerationsSimple, entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true)
 			def sso = new SingleSignOnService(descriptor:idp,active:true, approved:true, binding:httpPost, location:"https://test.example.com/sso/POST")
 			idp.addToSingleSignOnServices(sso)
 			entityDescriptor.addToIdpDescriptors(idp)
-			def sp = SPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true)
+			def sp = SPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerationsSimple, entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true)
 			def acs = new AssertionConsumerService(index:300, active:true, approved:true, binding:httpArtifact, location:"https://test.example.com/acs/ART")
 			sp.addToAssertionConsumerServices(acs)
 			entityDescriptor.addToSpDescriptors(sp)
@@ -604,27 +608,27 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def entityDescriptor = EntityDescriptor.build(organization:organization, entityID:"https://test.example.com/myuniqueID", active:true, approved:true)
 		entityDescriptor.addToContacts(contactPerson)
 
-		def idp1 = IDPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true)
+		def idp1 = IDPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerationsSimple, entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true)
 		def sso1 = new SingleSignOnService(descriptor:idp1,active:true, approved:true, binding:httpPost, location:"https://test.example.com/sso/POST")
 		idp1.addToSingleSignOnServices(sso1)
 		entityDescriptor.addToIdpDescriptors(idp1)
 
-		def idp2 = IDPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true)
+		def idp2 = IDPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerationsSimple, entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true)
 		def sso2 = new SingleSignOnService(descriptor:idp2,active:true, approved:true, binding:httpPost, location:"https://test.example.com/sso/POST")
 		idp2.addToSingleSignOnServices(sso2)
 		entityDescriptor.addToIdpDescriptors(idp2)
 
-		def sp1 = SPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true)
+		def sp1 = SPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerationsSimple, entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true)
 		def acs1 = new AssertionConsumerService(index:300, active:true, approved:true, binding:httpArtifact, location:"https://test.example.com/acs/ART")
 		sp1.addToAssertionConsumerServices(acs1)
 		entityDescriptor.addToSpDescriptors(sp1)
 
-		def sp2 = SPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true)
+		def sp2 = SPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerationsSimple, entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true)
 		def acs2 = new AssertionConsumerService(index:300, active:true, approved:true, binding:httpArtifact, location:"https://test.example.com/acs/ART")
 		sp2.addToAssertionConsumerServices(acs2)
 		entityDescriptor.addToSpDescriptors(sp2)
 
-		def sp3 = SPSSODescriptor.build(entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true)
+		def sp3 = SPSSODescriptor.build(protocolSupportEnumerations:protocolSupportEnumerationsSimple, entityDescriptor:entityDescriptor, organization:organization, active:true, approved:true)
 		def acs3 = new AssertionConsumerService(index:300, active:true, approved:true, binding:httpArtifact, location:"https://test.example.com/acs/ART")
 		sp3.addToAssertionConsumerServices(acs3)
 		entityDescriptor.addToSpDescriptors(sp3)
