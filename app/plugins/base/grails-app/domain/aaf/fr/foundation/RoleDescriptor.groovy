@@ -44,7 +44,7 @@ abstract class RoleDescriptor extends Descriptor {
 		organization(nullable: false)
 		extensions(nullable: true, maxSize:2000)
 		errorURL(nullable:true)
-		protocolSupportEnumerations(nullable: false, minSize:1)
+		protocolSupportEnumerations(nullable: true)
 		contacts(nullable: true)
 		keyDescriptors(nullable: true)
 		dateCreated(nullable:true)
