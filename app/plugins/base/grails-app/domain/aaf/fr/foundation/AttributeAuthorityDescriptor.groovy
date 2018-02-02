@@ -24,6 +24,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor {
 	static constraints = {
 		scope(nullable:false)
 		collaborator(nullable:true)
+    attributeServices(nullable: true)
 		assertionIDRequestServices(nullable: true)
 		nameIDFormats(nullable: true)
 		attributeProfiles(nullable: true)
