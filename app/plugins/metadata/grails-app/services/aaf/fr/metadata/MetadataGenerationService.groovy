@@ -105,8 +105,6 @@ class MetadataGenerationService implements InitializingBean {
   
   def caKeyInfo(builder, keyInfo) {
     builder.'ds:KeyInfo'('xmlns:ds':'http://www.w3.org/2000/09/xmldsig#') {
-      if(keyInfo.keyName)
-        'ds:KeyName'(keyInfo.keyName)
       'ds:X509Data'() {
         def data = processCertificateData(keyInfo.certificate.data)
         'ds:X509Certificate'(data)
@@ -116,8 +114,6 @@ class MetadataGenerationService implements InitializingBean {
   
   def keyInfo(builder, keyInfo) {
     builder.'ds:KeyInfo'('xmlns:ds':'http://www.w3.org/2000/09/xmldsig#') {
-      if(keyInfo.keyName)
-        'ds:KeyName'(keyInfo.keyName)
       'ds:X509Data'() {
         def data = processCertificateData(keyInfo.certificate.data)
         'ds:X509Certificate'(data)
@@ -308,9 +304,9 @@ class MetadataGenerationService implements InitializingBean {
     }
   }
   
-  def roleDescriptor(builder, all, minimal, roleExtensions, roleDescriptor) {
+  def roleDescriptor(builder, all, minimal, roleExtensions, roleDescriptor, roleExtClassName) {
     if(roleExtensions)
-      "${roleDescriptor.class.name.split('\\.').last()}Extensions"(builder, all, roleDescriptor)
+      "${roleExtClassName}Extensions"(builder, all, roleDescriptor)
     roleDescriptor.keyDescriptors?.sort{it.id}.each{keyDescriptor(builder, it)}   
     if(!minimal) {
       roleDescriptor.contacts?.sort{it.id}.each{cp -> contactPerson(builder, cp)}
@@ -328,7 +324,7 @@ class MetadataGenerationService implements InitializingBean {
     if(!idpSSODescriptor.attributeAuthorityOnly) {
       if(all || idpSSODescriptor.functioning() ) {
         builder.IDPSSODescriptor(protocolSupportEnumeration: idpSSODescriptor.protocolSupportEnumerations.sort{it.uri}.collect({it.uri}).join(' ')) {
-        roleDescriptor(builder, all, minimal, roleExtensions, idpSSODescriptor)
+        roleDescriptor(builder, all, minimal, roleExtensions, idpSSODescriptor, "IDPSSODescriptor")
         ssoDescriptor(builder, all, minimal, idpSSODescriptor)
 
         idpSSODescriptor.singleSignOnServices?.sort{it.id}.each{ sso -> endpoint(builder, all, minimal, "SingleSignOnService", sso) }
@@ -345,7 +341,7 @@ class MetadataGenerationService implements InitializingBean {
   def spSSODescriptor(builder, all, minimal, roleExtensions, spSSODescriptor) {
     if(all || spSSODescriptor.functioning() ) {
       builder.SPSSODescriptor(protocolSupportEnumeration: spSSODescriptor.protocolSupportEnumerations.sort{it.uri}.collect({it.uri}).join(' ')) {
-        roleDescriptor(builder, all, minimal, roleExtensions, spSSODescriptor)
+        roleDescriptor(builder, all, minimal, roleExtensions, spSSODescriptor, "SPSSODescriptor")
         ssoDescriptor(builder, all, minimal, spSSODescriptor)
       
         spSSODescriptor.assertionConsumerServices?.sort{it.id}.each{ ars -> indexedEndpoint(builder, all, minimal, "AssertionConsumerService", ars) }
@@ -366,7 +362,9 @@ class MetadataGenerationService implements InitializingBean {
           builder.AttributeAuthorityDescriptor(protocolSupportEnumeration: aaDescriptor.protocolSupportEnumerations.sort{it.uri}.collect({it.uri}).join(' ')) {
             // We don't currently provide direct AA manipulation to reduce general end user complexity.
             // So where a collaborative relationship exists we use all common data from the IDP to render the AA
-            roleDescriptor(builder, all, minimal, roleExtensions, aaDescriptor.collaborator)  
+            // But we pass the base class name AttributeAuthorityDescriptor, to let roleDescriptor use
+            // AttributeAuthorityDescriptorExtensions for generating the RoleDescriptor Extensions
+            roleDescriptor(builder, all, minimal, roleExtensions, aaDescriptor.collaborator, "AttributeAuthorityDescriptor")
             aaDescriptor.attributeServices?.sort{it.id}.each{ attrserv -> endpoint(builder, all, minimal, "AttributeService", attrserv) }
             aaDescriptor.collaborator.assertionIDRequestServices?.sort{it.id}.each{ aidrs -> endpoint(builder, all, minimal, "AssertionIDRequestService", aidrs) }
             aaDescriptor.collaborator.nameIDFormats?.sort{it.id}.each{ nidf -> samlURI(builder, "NameIDFormat", nidf) }
@@ -378,7 +376,7 @@ class MetadataGenerationService implements InitializingBean {
       }
       else {
         builder.AttributeAuthorityDescriptor(protocolSupportEnumeration: aaDescriptor.protocolSupportEnumerations.sort{it.uri}.collect({it.uri}).join(' ')) {
-          roleDescriptor(builder, all, minimal, roleExtensions, aaDescriptor) 
+          roleDescriptor(builder, all, minimal, roleExtensions, aaDescriptor, "AttributeAuthorityDescriptor")
           aaDescriptor.attributeServices?.sort{it.id}.each{ attrserv -> endpoint(builder, all, minimal, "AttributeService", attrserv) }
           aaDescriptor.assertionIDRequestServices?.sort{it.id}.each{ aidrs -> endpoint(builder, all, minimal, "AssertionIDRequestService", aidrs) }
           aaDescriptor.nameIDFormats?.sort{it.id}.each{ nidf -> samlURI(builder, "NameIDFormat", nidf) }
@@ -435,16 +433,6 @@ class MetadataGenerationService implements InitializingBean {
     boolean isRegex = roleDescriptor.scope.startsWith('^') && roleDescriptor.scope.endsWith('$')
     builder.Extensions() {
       builder."shibmd:Scope" (regexp:isRegex, roleDescriptor.scope)
-      if ( (renderMDUIDisplayName && roleDescriptor.displayName) || (renderMDUIDescription && roleDescriptor.description) ) {
-        builder."mdui:UIInfo" {
-          if (renderMDUIDisplayName && roleDescriptor.displayName) {
-            localizedName(builder, "mdui:DisplayName", mduiLang, roleDescriptor.displayName)
-          }
-          if (renderMDUIDescription && roleDescriptor.description) {
-            localizedName(builder, "mdui:Description", mduiLang, roleDescriptor.description)
-          }
-        }
-      }
     } 
   }
   
