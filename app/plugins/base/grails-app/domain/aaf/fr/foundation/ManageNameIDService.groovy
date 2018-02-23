@@ -14,4 +14,8 @@ class ManageNameIDService extends Endpoint  {
 		( active && approved && descriptor.functioning() )
 	}
 
+	public boolean selfFunctioning() {
+		( active && approved )
+	}
+
 }

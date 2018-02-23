@@ -14,4 +14,8 @@ class ArtifactResolutionService extends IndexedEndpoint  {
 		( active && approved && descriptor.functioning() )
 	}
 
+	public boolean selfFunctioning() {
+		( active && approved )
+	}
+
 }

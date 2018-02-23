@@ -121,16 +121,16 @@ class EndpointService {
   }
   
   def determineSPSSODescriptorProtocolSupport(sp) {
-    sp.assertionConsumerServices?.findAll{ it.functioning() }.each {
+    sp.assertionConsumerServices?.findAll{ it.selfFunctioning() }.each {
       determineProtocolSupport(it.binding, sp)
     }
-    sp.manageNameIDServices?.findAll{ it.functioning() }.each {
+    sp.manageNameIDServices?.findAll{ it.selfFunctioning() }.each {
       determineProtocolSupport(it.binding, sp)
     }
-    sp.singleLogoutServices?.findAll{ it.functioning() }.each {
+    sp.singleLogoutServices?.findAll{ it.selfFunctioning() }.each {
       determineProtocolSupport(it.binding, sp)
     }
-    sp.artifactResolutionServices?.findAll{ it.functioning() }.each {
+    sp.artifactResolutionServices?.findAll{ it.selfFunctioning() }.each {
       determineProtocolSupport(it.binding, sp)
     }
     
@@ -138,22 +138,22 @@ class EndpointService {
   }
   
   def determineIDPSSODescriptorProtocolSupport(idp) {
-    idp.singleSignOnServices?.findAll{ it.functioning() }.each {
+    idp.singleSignOnServices?.findAll{ it.selfFunctioning() }.each {
       determineProtocolSupport(it.binding, idp)
     }
-    idp.artifactResolutionServices?.findAll{ it.functioning() }.each {
+    idp.artifactResolutionServices?.findAll{ it.selfFunctioning() }.each {
       determineProtocolSupport(it.binding, idp)
     }
-    idp.singleLogoutServices?.findAll{ it.functioning() }.each {
+    idp.singleLogoutServices?.findAll{ it.selfFunctioning() }.each {
       determineProtocolSupport(it.binding, idp)
     }
-    idp.assertionIDRequestServices?.findAll{ it.functioning() }.each {
+    idp.assertionIDRequestServices?.findAll{ it.selfFunctioning() }.each {
       determineProtocolSupport(it.binding, idp)
     }
-    idp.nameIDMappingServices?.findAll{ it.functioning() }.each {
+    idp.nameIDMappingServices?.findAll{ it.selfFunctioning() }.each {
       determineProtocolSupport(it.binding, idp)
     }
-    idp.manageNameIDServices?.findAll{ it.functioning() }.each {
+    idp.manageNameIDServices?.findAll{ it.selfFunctioning() }.each {
       determineProtocolSupport(it.binding, idp)
     }
 
@@ -165,10 +165,10 @@ class EndpointService {
   }
   
   def determineAttributeAuthorityProtocolSupport(def aa) {
-    aa.attributeServices.findAll{ it.functioning() }?.each {
+    aa.attributeServices.findAll{ it.selfFunctioning() }?.each {
       determineProtocolSupport(it.binding, aa)
     }
-    aa.assertionIDRequestServices.findAll{ it.functioning() }?.each {
+    aa.assertionIDRequestServices.findAll{ it.selfFunctioning() }?.each {
       determineProtocolSupport(it.binding, aa)
     }
     

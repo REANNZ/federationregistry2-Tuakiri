@@ -14,4 +14,8 @@ class AssertionIDRequestService extends Endpoint  {
 		( active && approved && descriptor.functioning() )
 	}
 
+	public boolean selfFunctioning() {
+		( active && approved )
+	}
+
 }
