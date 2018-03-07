@@ -14,8 +14,4 @@ class SingleLogoutService extends Endpoint  {
 		( active && approved && descriptor.functioning() )
 	}
 
-	public boolean selfFunctioning() {
-		( active && approved )
-	}
-
 }
