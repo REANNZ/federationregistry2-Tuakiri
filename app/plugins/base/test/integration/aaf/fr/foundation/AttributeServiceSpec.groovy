@@ -65,7 +65,7 @@ class AttributeServiceSpec extends IntegrationSpec {
 		!ep.functioning()
 	}
 
-  def "Ensure selffunctioning operates"() {
+  def "Ensure exposed operates"() {
     when:
     def org = new Organization(active:true, approved:true)
     def ed = new EntityDescriptor(organization:org, active:true, approved:true)
@@ -73,10 +73,10 @@ class AttributeServiceSpec extends IntegrationSpec {
     def ep = new AttributeService(descriptor:aa, active:true, approved:true, location:'https://idp.example.org:8443/idp/profile/SAML2/SOAP/AttributeQuery', binding:soap)
 
     then:
-    ep.selfFunctioning()
+    ep.exposed()
   }
 
-  def "Ensure selffunctioning fails when unapproved"() {
+  def "Ensure exposed fails when unapproved"() {
     when:
     def org = new Organization(active:true, approved:true)
     def ed = new EntityDescriptor(organization:org, active:true, approved:true)
@@ -84,10 +84,10 @@ class AttributeServiceSpec extends IntegrationSpec {
     def ep = new AttributeService(descriptor:aa, active:true, approved:false, location:'https://idp.example.org:8443/idp/profile/SAML2/SOAP/AttributeQuery', binding:soap)
 
     then:
-    !ep.selfFunctioning()
+    !ep.exposed()
   }
 
-  def "Ensure selffunctioning fails when not active and unapproved"() {
+  def "Ensure exposed fails when not active and unapproved"() {
     when:
     def org = new Organization(active:true, approved:true)
     def ed = new EntityDescriptor(organization:org, active:true, approved:true)
@@ -95,7 +95,7 @@ class AttributeServiceSpec extends IntegrationSpec {
     def ep = new AttributeService(descriptor:aa, active:false, approved:false, location:'https://idp.example.org:8443/idp/profile/SAML2/SOAP/AttributeQuery', binding:soap)
 
     then:
-    !ep.selfFunctioning()
+    !ep.exposed()
   }
 
 }
