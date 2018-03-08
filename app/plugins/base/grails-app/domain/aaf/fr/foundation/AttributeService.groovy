@@ -10,8 +10,4 @@ class AttributeService extends Endpoint  {
   public boolean functioning() {
     ( active && approved && descriptor.functioning() )
   }
-
-  public boolean selfFunctioning() {
-    ( active && approved )
-  }
 }
