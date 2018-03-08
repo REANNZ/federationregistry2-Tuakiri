@@ -36,4 +36,9 @@ abstract class Endpoint	{
 	public boolean functioning() {
 		false
 	}
+
+	public boolean exposed() {
+		( active && approved )
+	}
+
 }
