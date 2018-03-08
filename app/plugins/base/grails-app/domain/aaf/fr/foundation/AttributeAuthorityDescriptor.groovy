@@ -24,6 +24,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor {
 	static constraints = {
 		scope(nullable:false)
 		collaborator(nullable:true)
+    attributeServices(nullable: true)
 		assertionIDRequestServices(nullable: true)
 		nameIDFormats(nullable: true)
 		attributeProfiles(nullable: true)
@@ -34,9 +35,9 @@ class AttributeAuthorityDescriptor extends RoleDescriptor {
 
 	public boolean functioning() {
 		if(collaborator)
-			( attributeServices?.findAll{it.selfFunctioning()}?.size() > 0 && !archived && active && approved && collaborator.functioning() && entityDescriptor.functioning() )
+			( attributeServices?.findAll{it.exposed()}?.size() > 0 && !archived && active && approved && collaborator.functioning() && entityDescriptor.functioning() )
 		else
-			( attributeServices?.findAll{it.selfFunctioning()}?.size() > 0 && !archived && active && approved && entityDescriptor.functioning() )
+			( attributeServices?.findAll{it.exposed()}?.size() > 0 && !archived && active && approved && entityDescriptor.functioning() )
 	}
 
 	public boolean samlSchemaValid() {
