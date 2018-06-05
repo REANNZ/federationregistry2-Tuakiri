@@ -16,6 +16,8 @@ class Contact {
 	String homePhone
 	String mobilePhone
 
+  Boolean active = true
+
 	Date dateCreated
 	Date lastUpdated
 
@@ -35,6 +37,7 @@ class Contact {
 		mobilePhone(nullable:true)
 		dateCreated(nullable:true)
 		lastUpdated(nullable:true)
+    active(nullable: false)
 	}
 
 	static mapping = {
