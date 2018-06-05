@@ -10,7 +10,7 @@
         </tr>
       </thead>
       <tbody>
-        <g:each in="${host.contacts?.sort{it.contact.surname}}" var="contactPerson" status="i">
+        <g:each in="${host.contacts?.findAll{it.functioning()}.sort{it.contact.surname}}" var="contactPerson" status="i">
           <tr>
             <td>${fieldValue(bean: contactPerson, field: "contact.givenName")} ${fieldValue(bean: contactPerson, field: "contact.surname")}</td>
             <td><a href="mailto:${contactPerson.contact.email.encodeAsHTML()}">${fieldValue(bean: contactPerson, field: "contact.email")} </a></td>
