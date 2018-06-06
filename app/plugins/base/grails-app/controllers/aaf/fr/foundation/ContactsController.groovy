@@ -136,7 +136,7 @@ class ContactsController {
 			contact.surname = params.surname
 			contact.email = params.email
 			contact.description = params.description
-      contact.active = params.active
+      contact.active = params.active == 'true'
 			
 			if(params.organization) {
 				if(params.organization == "null") {

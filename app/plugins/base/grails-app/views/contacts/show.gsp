@@ -39,6 +39,10 @@
           <th><g:message encodeAs="HTML" code="label.mobilephone" /></th>
           <td>${fieldValue(bean: contact, field: "mobilePhone")}</td>
         </tr>
+        <tr>
+          <th><g:message encodeAs="HTML" code="label.active" /></th>
+          <td>${fieldValue(bean: contact, field: "active")}</td>
+        </tr>
       </tbody>
     </table>
 

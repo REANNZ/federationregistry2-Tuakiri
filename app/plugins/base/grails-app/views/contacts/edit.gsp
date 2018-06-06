@@ -61,7 +61,7 @@
               <input type="radio" name="active" value="true"  ${contact.active ? 'checked' : ''}/>
               <g:message encodeAs="HTML" code="label.active"/>
             
-              <input type="radio" name="active" alue="false" ${contact.active ? '' : 'checked'}/>
+              <input type="radio" name="active" value="false" ${contact.active ? '' : 'checked'}/>
               <g:message encodeAs="HTML" code="label.inactive"/>
             </div>
           </div>

@@ -12,7 +12,7 @@
         </tr>
       </thead>
       <tbody>
-      <g:each in="${contacts}" var="contact" status="i">
+      <g:each in="${contacts.findAll{it.active}.sort{it.surname}}" var="contact" status="i">
         <tr>
           <td>${contact.givenName?.encodeAsHTML()}</td>
           <td>${contact.surname?.encodeAsHTML()}</td>
