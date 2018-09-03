@@ -202,7 +202,7 @@ class ServiceProviderService {
     }
 
     // Service Description
-    def serviceDescription = new ServiceDescription(connectURL: params.sp?.servicedescription?.connecturl, logo: params.sp?.servicedescription?.logourl, descriptor: serviceProvider)
+    def serviceDescription = new ServiceDescription(connectURL: params.sp?.servicedescription?.connecturl, logoURL: params.sp?.servicedescription?.logourl, descriptor: serviceProvider)
     serviceProvider.serviceDescription = serviceDescription
 
     // Generate return map

@@ -103,7 +103,7 @@
       <div class="control-group">
         <label class="control-label" for="sp.servicedescription.connecturl"><g:message encodeAs="HTML" code="label.serviceurl" /></label>
         <div class="controls">
-          <g:textField name="sp.servicedescription.connecturl" class="required url span4" value="${servicedescription?.connecturl}"/>
+          <g:textField name="sp.servicedescription.connecturl" class="required url span4" value="${serviceProvider?.serviceDescription?.connectURL}"/>
           <fr:tooltip code='help.fr.serviceprovider.connecturl' />
         </div>
       </div>
@@ -111,7 +111,7 @@
       <div class="control-group">
         <label class="control-label" for="sp.servicedescription.logourl"><g:message encodeAs="HTML" code="label.servicelogourl" /></label>
         <div class="controls">
-          <g:textField name="sp.servicedescription.logourl" class="url span4" value="${servicedescription?.logourl}"/>
+          <g:textField name="sp.servicedescription.logourl" class="url span4" value="${serviceProvider?.serviceDescription?.logoURL}"/>
           <fr:tooltip code='help.fr.serviceprovider.logourl' />
         </div>
       </div>
