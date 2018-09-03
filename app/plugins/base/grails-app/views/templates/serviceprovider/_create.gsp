@@ -292,7 +292,7 @@
 
     <fieldset>
       <div class="control-group">
-          <label class="control-label" for="newcertificatedata"><g:message encodeAs="HTML" code="label.certificate" /></label>
+        <label class="control-label" for="newcertificatedata"><g:message encodeAs="HTML" code="label.certificate" /></label>
         <div class="controls">
           <div id="newcertificatedetails">
           </div>
@@ -302,6 +302,7 @@
           <fr:tooltip code='help.fr.serviceprovider.certificate' />
         </div>
       </div>
+    </fieldset>
   </div>
 
   <hr>
