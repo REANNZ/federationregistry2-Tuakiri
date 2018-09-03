@@ -177,21 +177,19 @@ class ServiceProviderService {
 
     // Cryptography
     // Signing
-    if(params.sp?.crypto?.sig) {
-      def cert = cryptoService.createCertificate(params.cert)
-      if(cert) {
-        def keyInfo = new KeyInfo(certificate: cert)
-        def keyDescriptor = new KeyDescriptor(keyInfo:keyInfo, keyType:KeyTypes.signing, encryptionMethod:null)
-        keyDescriptor.roleDescriptor = serviceProvider
-        serviceProvider.addToKeyDescriptors(keyDescriptor)
-      } else {
-        serviceProvider.errors.rejectValue('keyDescriptors', 'aaf.fr.foundation.SPSSODescriptor.crypto.signing.invalid')
-      }
+    def certSIG = cryptoService.createCertificate(params.sigcert)
+    if(certSIG) {
+      def keyInfo = new KeyInfo(certificate: certSIG)
+      def keyDescriptor = new KeyDescriptor(keyInfo:keyInfo, keyType:KeyTypes.signing, encryptionMethod:null)
+      keyDescriptor.roleDescriptor = serviceProvider
+      serviceProvider.addToKeyDescriptors(keyDescriptor)
+    } else {
+      serviceProvider.errors.rejectValue('keyDescriptors', 'aaf.fr.foundation.SPSSODescriptor.crypto.signing.invalid')
     }
 
     // Encryption
-    if(params.sp?.crypto?.enc) {
-      def certEnc = cryptoService.createCertificate(params.cert)
+    if(params.enccert) {
+      def certEnc = cryptoService.createCertificate(params.enccert)
       if(certEnc) {
         def keyInfoEnc = new KeyInfo(certificate:certEnc)
         def keyDescriptorEnc = new KeyDescriptor(keyInfo:keyInfoEnc, keyType:KeyTypes.encryption, encryptionMethod:null)
@@ -199,7 +197,7 @@ class ServiceProviderService {
         serviceProvider.addToKeyDescriptors(keyDescriptorEnc)
       }
       else {
-        identityProvider.errors.rejectValue('keyDescriptors', 'aaf.fr.foundation.IDPSSODescriptor.crypto.encryption.invalid')
+        serviceProvider.errors.rejectValue('keyDescriptors', 'aaf.fr.foundation.SPSSODescriptor.crypto.encryption.invalid')
       }
     }
 
@@ -225,7 +223,8 @@ class ServiceProviderService {
     ret.mnidPost = mnidPost
     ret.discoveryResponseService = discoveryResponseService
     ret.contact = contact
-    ret.certificate = params.cert
+    ret.sigcert = params.sigcert
+    ret.enccert = params.enccert
     ret.supportedAttributes = supportedAttributes
 
     entityDescriptor.addToSpDescriptors(serviceProvider)

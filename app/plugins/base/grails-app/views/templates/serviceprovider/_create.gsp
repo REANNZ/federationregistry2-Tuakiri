@@ -291,15 +291,22 @@
     <p><g:message encodeAs="HTML" code="templates.fr.serviceprovider.create.crypto.details" /></p>
 
     <fieldset>
+      <div id="newcertificatedetails"></div>
+
       <div class="control-group">
-        <label class="control-label" for="newcertificatedata"><g:message encodeAs="HTML" code="label.certificate" /></label>
+        <label class="control-label"><g:message encodeAs="HTML" code="label.certificatesigning" /></label>
         <div class="controls">
-          <div id="newcertificatedetails">
-          </div>
           <g:hiddenField name="sp.crypto.sig" value="${true}" />
+          <g:textArea name="sigcert" id="sigcert" class="cert required" rows="25" cols="60" value="${sigcert}"/>
+          <fr:tooltip code='help.fr.serviceprovider.certificatesigning' />
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label"><g:message encodeAs="HTML" code="label.certificateencryption" /></label>
+        <div class="controls">
           <g:hiddenField name="sp.crypto.enc" value="${true}" />
-          <g:textArea name="cert" id="cert" class="cert required" rows="25" cols="60" value="${certificate}"/>
-          <fr:tooltip code='help.fr.serviceprovider.certificate' />
+          <g:textArea name="enccert" id="enccert" class="cert required" rows="25" cols="60" value="${enccert}"/>
+          <fr:tooltip code='help.fr.serviceprovider.certificateencryption' />
         </div>
       </div>
     </fieldset>
@@ -405,16 +412,15 @@
       ignore: ":disabled",
       keyup: false
     });
-    jQuery.validator.addMethod("validcert", function(value, element, params) { 
-      fr.validateCertificate();
-      return valid_certificate; 
-    }, jQuery.format("PEM data invalid"));
-    
-    $('#cert').rules("add", {
+
+    $('#sigcert').rules("add", {
          required: true,
-         validcert: true
     });
-    
+
+    $('#enccert').rules("add", {
+         required: false,
+    });
+
     $('#hostname').bind('change',  function() {
       var val = $.trim($(this).val());
       if( val.indexOf('/', val.length - 1) !== -1 && val.length > 9)
