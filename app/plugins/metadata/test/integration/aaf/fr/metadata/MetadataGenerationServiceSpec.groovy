@@ -271,6 +271,24 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		xml == expected
 	}
 
+	def "Test valid contact person generation with non functioning contact"() {
+		setup:
+		def email = "test@example.com"
+		def home = "(07) 1111 1111"
+		def work = "(567) 222 22222"
+		def mobile = "0413 867 208"
+		def contact = Contact.build(givenName:"Test", surname:"User", email:email, homePhone:home, workPhone:work, mobilePhone:mobile, active: false)
+		def ct = ContactType.build(name:"administrative")
+		def contactPerson = ContactPerson.build(contact:contact, type:ct)
+
+		when:
+		metadataGenerationService.contactPerson(builder, contactPerson)
+		
+		then:
+		def xml = writer.toString()
+		xml == ""
+	}
+
   def "Test valid contact person generation with non SAML type"() {
       setup:
       def email = "test@example.com"

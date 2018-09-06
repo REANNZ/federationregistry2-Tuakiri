@@ -23,6 +23,8 @@ class ContactPerson  {
 		dateCreated(nullable:true)
 		lastUpdated(nullable:true)
 	}
-	
+
+  public Boolean functioning() { this.contact.active }
+
 	public String toString() {	"contactperson:[id:$id, contact: $contact, descriptor:$descriptor, entity:$entity]" }
 }
