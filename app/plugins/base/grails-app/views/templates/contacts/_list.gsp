@@ -6,6 +6,7 @@
           <th><g:message encodeAs="HTML" code="label.name" /></th>
           <th><g:message encodeAs="HTML" code="label.email" /></th>
           <th><g:message encodeAs="HTML" code="label.type" /></th>
+          <th><g:message encodeAs="HTML" code="label.active" /></th>
           <th/>
         </tr>
       </thead>
@@ -15,6 +16,7 @@
             <td>${fieldValue(bean: contactPerson, field: "contact.givenName")} ${fieldValue(bean: contactPerson, field: "contact.surname")}</td>
             <td><a href="mailto:${contactPerson.contact.email.encodeAsHTML()}">${fieldValue(bean: contactPerson, field: "contact.email")} </a></td>
             <td>${fieldValue(bean: contactPerson, field: "type.displayName")}</td>
+            <td>${fieldValue(bean: contactPerson, field: "contact.active")}</td>
             <td>
               <a href="${createLink(controller:'contacts', action:'show', id: contactPerson.contact.id)}" class="btn btn-small"><g:message encodeAs="HTML" code='label.view'/></a>
               <fr:hasAnyPermission in='["federation:management:${hostType}:${host.id}:contact:remove", "federation:management:contacts"]'>
