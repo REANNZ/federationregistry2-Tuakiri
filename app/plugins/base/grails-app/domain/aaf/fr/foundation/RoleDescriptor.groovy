@@ -78,7 +78,7 @@ abstract class RoleDescriptor extends Descriptor {
 													 ],
     									  ]
     									}
-      contact_people this.contacts.collect { [id: it.id, type: [id: it.type.id, name: it.type.name], contact: [id: it.contact.id]] }
+      contact_people this.contacts.findAll{it.functioning()}.collect { [id: it.id, type: [id: it.type.id, name: it.type.name], contact: [id: it.contact.id]] }
       error_url errorURL ?:''
       extensions extensions ?:''
     }

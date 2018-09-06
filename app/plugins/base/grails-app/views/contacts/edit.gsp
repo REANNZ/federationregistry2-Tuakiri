@@ -53,6 +53,18 @@
               <input type="text" name="mobilePhone" value="${fieldValue(bean: contact, field: 'mobilePhone')}" />
             </div>
           </div>
+
+
+          <div class="control-group">
+            <label class="control-label" for="status"><g:message encodeAs="HTML" code="label.status" /></label>
+            <div class="controls">
+              <input type="radio" name="active" value="true"  ${contact.active ? 'checked' : ''}/>
+              <g:message encodeAs="HTML" code="label.active"/>
+            
+              <input type="radio" name="active" value="false" ${contact.active ? '' : 'checked'}/>
+              <g:message encodeAs="HTML" code="label.inactive"/>
+            </div>
+          </div>
         </fieldset>
 
         <div class="form-actions">
