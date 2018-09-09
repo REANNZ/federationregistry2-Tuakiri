@@ -71,22 +71,24 @@ class MetadataGenerationService implements InitializingBean {
   }
   
   def contactPerson(builder, contactPerson) {
-    // Ignores non SAML standard contact types and contacts marked as 'other'
-    def contactType
-    if(["technical", "support", "administrative", "billing"].contains(contactPerson.type.name)) {
-      
-      builder.ContactPerson(contactType:contactPerson.type.name) {
-        if(contactPerson.contact.organization)
-          Company(contactPerson.contact.organization.displayName)
-        GivenName(contactPerson.contact.givenName)
-        SurName(contactPerson.contact.surname)
-        EmailAddress("mailto:${contactPerson.contact.email}")
-        if(contactPerson.contact.workPhone)
-          TelephoneNumber(contactPerson.contact.workPhone)
-        if(contactPerson.contact.homePhone)
-          TelephoneNumber(contactPerson.contact.homePhone)
-        if(contactPerson.contact.mobilePhone)
-          TelephoneNumber(contactPerson.contact.mobilePhone)
+    if(contactPerson.functioning()) {
+      // Ignores non SAML standard contact types and contacts marked as 'other'
+      def contactType
+      if(["technical", "support", "administrative", "billing"].contains(contactPerson.type.name)) {
+        
+        builder.ContactPerson(contactType:contactPerson.type.name) {
+          if(contactPerson.contact.organization)
+            Company(contactPerson.contact.organization.displayName)
+          GivenName(contactPerson.contact.givenName)
+          SurName(contactPerson.contact.surname)
+          EmailAddress("mailto:${contactPerson.contact.email}")
+          if(contactPerson.contact.workPhone)
+            TelephoneNumber(contactPerson.contact.workPhone)
+          if(contactPerson.contact.homePhone)
+            TelephoneNumber(contactPerson.contact.homePhone)
+          if(contactPerson.contact.mobilePhone)
+            TelephoneNumber(contactPerson.contact.mobilePhone)
+        }
       }
     }
   }
@@ -309,7 +311,7 @@ class MetadataGenerationService implements InitializingBean {
       "${roleExtClassName}Extensions"(builder, all, roleDescriptor)
     roleDescriptor.keyDescriptors?.sort{it.id}.each{keyDescriptor(builder, it)}   
     if(!minimal) {
-      roleDescriptor.contacts?.sort{it.id}.each{cp -> contactPerson(builder, cp)}
+      roleDescriptor.contacts?.findAll{ it.functioning() }?.sort{it.id}.each{cp -> contactPerson(builder, cp)}
     }
   }
   

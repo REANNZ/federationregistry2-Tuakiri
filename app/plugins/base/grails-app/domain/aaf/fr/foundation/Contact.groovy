@@ -16,6 +16,8 @@ class Contact {
 	String homePhone
 	String mobilePhone
 
+	boolean active = true
+
 	Date dateCreated
 	Date lastUpdated
 
@@ -35,11 +37,13 @@ class Contact {
 		mobilePhone(nullable:true)
 		dateCreated(nullable:true)
 		lastUpdated(nullable:true)
+    active(nullable: false)
 	}
 
 	static mapping = {
 		autoImport false
 		sort "surname"
+		active defaultValue: true
 	}
 
 	public String toString() { "contact:[id:$id, givenName: $givenName, surname: $surname, email: $email]" }
