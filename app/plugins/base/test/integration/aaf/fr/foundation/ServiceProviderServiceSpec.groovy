@@ -67,7 +67,7 @@ class ServiceProviderServiceSpec extends IntegrationSpec {
     params.organization = [id: organization.id]
     params.active = true
     params.entity = [identifier:"https://service.test.com"]
-        params.cert = pk
+    params.sigcert = pk
     params.sp = [displayName:"test service name", description:"test desc", attributes:[(attr1.id):[requested: 'on', reasoning:'reason for request', required:'on'], (attr2.id):[requested: 'on', reasoning:'reason for request2', required:'off']], crypto:[sig: true, enc:true],
             acs:[ post:'https://service.test.com/Shibboleth.sso/SAML2/POST', 'post-index':1, artifact:'https://service.test.com/Shibboleth.sso/SAML2/Artifact', 'artifact-index':2 ], 
             slo:[post:'https://service.test.com/Shibboleth.sso/SLO/Post', soap:'https://service.test.com/Shibboleth.sso/SLO/SOAP', redirect:'https://service.test.com/Shibboleth.sso/SLO/Redirect', artifact:'https://service.test.com/Shibboleth.sso/SLO/Artifact'] ] 
@@ -144,7 +144,7 @@ class ServiceProviderServiceSpec extends IntegrationSpec {
     params.organization = [id: organization.id]
     params.active = true
     params.entity = [id: ed.id]
-    params.cert = pk
+    params.sigcert = pk
     params.sp = [displayName:"test service name", description:"test desc", attributes:[(attr1.id):[requested: 'on', reasoning:'reason for request', required:'on'], (attr2.id):[requested: 'on', reasoning:'reason for request2', required:'off']], crypto:[sig: true, enc:true],
             acs:[ post:'https://service.test.com/Shibboleth.sso/SAML2/POST', artifact:'https://service.test.com/Shibboleth.sso/SAML2/Artifact'] , 
             slo:[post:'https://service.test.com/Shibboleth.sso/SLO/Post', soap:'https://service.test.com/Shibboleth.sso/SLO/SOAP', redirect:'https://service.test.com/Shibboleth.sso/SLO/Redirect', artifact:'https://service.test.com/Shibboleth.sso/SLO/Artifact'] ] 
@@ -219,7 +219,7 @@ class ServiceProviderServiceSpec extends IntegrationSpec {
     params.organization = [id: organization.id]
     params.active = true
     params.entity = [identifier:"https://service2.test.com"]
-        params.cert = pk
+    params.sigcert = pk
     params.sp = [displayName:"test service name", description:"test desc", attributes:[(attr1.id):[requested: 'on', reasoning:'reason for request', required:'on'], (attr2.id):[requested: 'on', reasoning:'reason for request2', required:'off']], crypto:[sig: true, enc:true],
             acs:[ post:'https://service.test.com/Shibboleth.sso/SAML2/POST', artifact:'https://service.test.com/Shibboleth.sso/SAML2/Artifact'] , 
             slo:[post:'https://service.test.com/Shibboleth.sso/SLO/Post', redirect:'https://service.test.com/Shibboleth.sso/SLO/Redirect' ] ]
@@ -294,7 +294,7 @@ class ServiceProviderServiceSpec extends IntegrationSpec {
     params.organization = [id: organization.id]
     params.active = true
     params.entity = [identifier:"https://service.test.com"]
-        params.cert = pk
+    params.sigcert = pk
     params.sp = [displayName:"test service name", description:"test desc", attributes:[(attr1.id):[requested: 'on', reasoning:'reason for request', required:'on'], (attr2.id):[requested: 'on', reasoning:'reason for request2', required:'off']], crypto:[sig: true, enc:true],
             acs:[ artifact:'https://service.test.com/Shibboleth.sso/SAML2/Artifact'] , 
             slo:[post:'https://service.test.com/Shibboleth.sso/SLO/Post', soap:'https://service.test.com/Shibboleth.sso/SLO/SOAP', redirect:'https://service.test.com/Shibboleth.sso/SLO/Redirect', artifact:'https://service.test.com/Shibboleth.sso/SLO/Artifact'] ] 
@@ -366,7 +366,7 @@ class ServiceProviderServiceSpec extends IntegrationSpec {
     params.organization = [id: organization.id]
     params.active = true
     params.entity = [identifier:"https://service.test.com"]
-        params.cert = pk
+    params.sigcert = pk
     params.sp = [displayName:"test service name", description:"test desc", attributes:[(attr1.id):[requested: 'on', required:'on'], (attr2.id):[requested: 'on', reasoning:'', required:'off']], crypto:[sig: true, enc:true],
             acs:[ post:'https://service.test.com/Shibboleth.sso/SAML2/POST', artifact:'https://service.test.com/Shibboleth.sso/SAML2/Artifact'] , 
             slo:[post:'https://service.test.com/Shibboleth.sso/SLO/Post', soap:'https://service.test.com/Shibboleth.sso/SLO/SOAP', redirect:'https://service.test.com/Shibboleth.sso/SLO/Redirect', artifact:'https://service.test.com/Shibboleth.sso/SLO/Artifact'] ] 
@@ -438,7 +438,7 @@ class ServiceProviderServiceSpec extends IntegrationSpec {
     params.organization = [id: organization.id]
     params.active = true
     params.entity = [identifier:"https://service.test.com"]
-        params.cert = pk
+    params.sigcert = pk
     params.sp = [displayName:"test service name", description:"test desc", attributes:[(attr1.id):[requested: 'on', reasoning:'reason for request', required:'on'], (attr2.id):[requested: 'on', reasoning:'reason for request2', required:'off']], crypto:[sig: true, enc:true],
             acs:[ post:'https://service.test.com/Shibboleth.sso/SAML2/POST', artifact:'https://service.test.com/Shibboleth.sso/SAML2/Artifact'] , 
             slo:[post:'https://service.test.com/Shibboleth.sso/SLO/Post', soap:'https://service.test.com/Shibboleth.sso/SLO/SOAP', redirect:'https://service.test.com/Shibboleth.sso/SLO/Redirect', artifact:'https://service.test.com/Shibboleth.sso/SLO/Artifact'] ] 
@@ -499,7 +499,7 @@ class ServiceProviderServiceSpec extends IntegrationSpec {
     params.organization = [id: organization.id]
     params.active = true
     params.entity = [identifier:"https://service.test.com"]
-        params.cert = pk
+    params.sigcert = pk
     params.sp = [displayName:"test service name", description: null, attributes:[(attr1.id):[requested: 'on', reasoning:'reason for request', required:'on'], (attr2.id):[requested: 'on', reasoning:'reason for request2', required:'off']], crypto:[sig: true, enc:true],
             acs:[ post:'https://service.test.com/Shibboleth.sso/SAML2/POST', artifact:'https://service.test.com/Shibboleth.sso/SAML2/Artifact'] , 
             slo:[post:'https://service.test.com/Shibboleth.sso/SLO/Post', soap:'https://service.test.com/Shibboleth.sso/SLO/SOAP', redirect:'https://service.test.com/Shibboleth.sso/SLO/Redirect', artifact:'https://service.test.com/Shibboleth.sso/SLO/Artifact'] ] 
@@ -562,7 +562,7 @@ class ServiceProviderServiceSpec extends IntegrationSpec {
     params.organization = [id: organization.id]
     params.active = true
     params.entity = [identifier:"https://service.test.com"]
-        params.cert = pk
+    params.sigcert = pk
     params.sp = [description:"test desc", attributes:[(attr1.id):[requested: 'on', reasoning:'reason for request', required:'on'], (attr2.id):[requested: 'on', reasoning:'reason for request2', required:'off']], crypto:[sig: true, enc:true],
             acs:[ post:'https://service.test.com/Shibboleth.sso/SAML2/POST', artifact:'https://service.test.com/Shibboleth.sso/SAML2/Artifact'] , 
             slo:[post:'https://service.test.com/Shibboleth.sso/SLO/Post', soap:'https://service.test.com/Shibboleth.sso/SLO/SOAP', redirect:'https://service.test.com/Shibboleth.sso/SLO/Redirect', artifact:'https://service.test.com/Shibboleth.sso/SLO/Artifact'] ] 
