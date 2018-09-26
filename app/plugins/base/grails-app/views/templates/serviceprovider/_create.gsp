@@ -296,7 +296,6 @@
       <div class="control-group">
         <label class="control-label"><g:message encodeAs="HTML" code="label.certificatesigning" /></label>
         <div class="controls">
-          <g:hiddenField name="sp.crypto.sig" value="${true}" />
           <g:textArea name="sigcert" id="sigcert" class="cert required" rows="25" cols="60" value="${sigcert}"/>
           <fr:tooltip code='help.fr.serviceprovider.certificatesigning' />
         </div>
@@ -304,7 +303,6 @@
       <div class="control-group">
         <label class="control-label"><g:message encodeAs="HTML" code="label.certificateencryption" /></label>
         <div class="controls">
-          <g:hiddenField name="sp.crypto.enc" value="${true}" />
           <g:textArea name="enccert" id="enccert" class="cert required" rows="25" cols="60" value="${enccert}"/>
           <fr:tooltip code='help.fr.serviceprovider.certificateencryption' />
         </div>
