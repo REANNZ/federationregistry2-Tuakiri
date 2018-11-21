@@ -41,7 +41,7 @@
       <g:form controller="organization" action="grantFullAdministrationToken" method="POST">
         <g:hiddenField name="id" value="${organization.id}" />
         <div class="input-prepend">
-          <span class="add-on"><strong>CODE</strong> </span><input class="span2" id="token" name="token" size="16" type="text">
+          <span class="add-on"><strong>CODE</strong> </span><input class="span2 required" id="token" name="token" size="16" type="text" autocomplete="off">
         </div>
         <g:submitButton name="submit" value="${message(code: 'label.submitcode', default: 'Submit Code')}" class="btn btn-success btn-large" />
       </g:form>
