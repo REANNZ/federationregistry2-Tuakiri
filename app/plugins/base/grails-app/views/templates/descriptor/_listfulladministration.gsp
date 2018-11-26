@@ -41,7 +41,7 @@
       <form id="addfulladministrator" method="POST" class="validating" action='${g.createLink(controller:"descriptorAdministration", action:"grantFullAdministrationToken")}'>
         <g:hiddenField name="id" value="${descriptor.id}" />
         <div class="input-prepend">
-          <span class="add-on"><strong>CODE</strong> </span><input class="span2 required" id="token" name="token" size="16" type="text">
+          <span class="add-on"><strong>CODE</strong> </span><input class="span2 required" id="token" name="token" size="16" type="text" autocomplete="off">
         </div>
         <input type="submit" name="submit" value="${message(code: 'label.submitcode', default: 'Submit Code')}" class="btn btn-success btn-large" />
       </form>
