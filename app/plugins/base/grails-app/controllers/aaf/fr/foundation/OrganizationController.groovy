@@ -310,7 +310,7 @@ class OrganizationController {
     if(SecurityUtils.subject.isPermitted("federation:management:organization:${organization.id}:administrators")) {
       if(subj == subject) {
         flash.type="error"
-        flash.message = message(code: 'controller.organizationadministration.selfedit', default:"Admins can't remove their own privileged access.")
+        flash.message = message(code: 'controller.organizationadministration.selfedit', default:"Administrators cannot remove their own privileged access.")
         redirect(action: "show", id:organization.id, fragment:"tab-admins")
         return
       }

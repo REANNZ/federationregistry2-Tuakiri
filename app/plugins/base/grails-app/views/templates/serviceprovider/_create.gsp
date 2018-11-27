@@ -303,7 +303,7 @@
       <div class="control-group">
         <label class="control-label"><g:message encodeAs="HTML" code="label.certificateencryption" /></label>
         <div class="controls">
-          <g:textArea name="enccert" id="enccert" class="cert required" rows="25" cols="60" value="${enccert}"/>
+          <g:textArea name="enccert" id="enccert" class="cert" rows="25" cols="60" value="${enccert}"/>
           <fr:tooltip code='help.fr.serviceprovider.certificateencryption' />
         </div>
       </div>
