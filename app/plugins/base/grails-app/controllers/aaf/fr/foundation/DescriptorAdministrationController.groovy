@@ -201,7 +201,7 @@ class DescriptorAdministrationController {
     if(SecurityUtils.subject.isPermitted("federation:management:descriptor:${descriptor.id}:manage:administrators")) {
       if(subj == subject) {
         flash.type="error"
-        flash.message = message(code: 'controller.descriptoradministration.selfedit', default:"Admins can't remove their own privileged access.")
+        flash.message = message(code: 'controller.descriptoradministration.selfedit', default:"Administrators cannot remove their own privileged access.")
         redirect(controller: controller, action: "show", id:descriptor.id, fragment:"tab-admins")
         return
       }

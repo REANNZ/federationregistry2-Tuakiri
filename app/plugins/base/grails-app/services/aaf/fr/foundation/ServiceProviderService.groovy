@@ -234,7 +234,7 @@ class ServiceProviderService {
     }
 
     // Check contact explicitly to avoid TransientObjectException
-    if(!entityDescriptor.validate() || contact.hasErrors()) {
+    if(!entityDescriptor.validate() || contact.hasErrors() || serviceProvider.hasErrors()) {
       log.info "$subject attempted to create $serviceProvider but failed input validation"
       entityDescriptor.errors.each {log.debug it}
       TransactionAspectSupport.currentTransactionStatus().setRollbackOnly()
