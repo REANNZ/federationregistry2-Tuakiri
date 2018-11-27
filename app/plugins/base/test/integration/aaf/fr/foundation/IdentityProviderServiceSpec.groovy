@@ -883,7 +883,7 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
     ret.ecp.location == "/idp/profile/SAML2/SOAP/ECP"
   }
 
-  def "Create succeeds when IDPSSODescriptor crypto not supplied"() {
+  def "Create fails when IDPSSODescriptor crypto not supplied"() {
     setup:
     setupBindings()
     setupCrypto()
@@ -908,18 +908,10 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
     def wfProcessName, wfDescription, wfPriority, wfParams
 
     when:
-    WorkflowProcessService.metaClass.initiate =  { String processName, String instanceDescription, ProcessPriority priority, Map params ->
-      wfProcessName = processName
-      wfDescription = instanceDescription
-      wfPriority = priority
-      wfParams = params
-      [true, [:]]
-    }
-    WorkflowProcessService.metaClass.run = { def processInstance -> }
     def (created, ret) = IdentityProviderService.create(params)
 
     then:
-    created
+    !created
 
     def identityProvider = ret.identityProvider
     def attributeAuthority = ret.attributeAuthority
@@ -927,7 +919,7 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
     identityProvider.organization == organization
     identityProvider.entityDescriptor == entityDescriptor
     identityProvider.entityDescriptor.organization == organization
-    identityProvider.collaborator == attributeAuthority
+    identityProvider.collaborator == null
 
     identityProvider.displayName == "test name"
     identityProvider.description == "test desc"
@@ -946,14 +938,6 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
 
     identityProvider.artifactResolutionServices.size() == 1
     identityProvider.artifactResolutionServices.toList().get(0).location == "http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution"
-
-    wfProcessName == "idpssodescriptor_create"
-
-    wfPriority == ProcessPriority.MEDIUM
-    wfParams.size() == 5
-    wfParams.creator == "${contact.id}"
-    wfParams.identityProvider == "${identityProvider.id}"
-    wfParams.organization == "${organization.id}"
   }
 
   def "Backchannel crypto is correctly registered"() {
