@@ -782,13 +782,6 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
     }
 
     identityProvider.artifactResolutionServices == null
-
-    wfProcessName == "idpssodescriptor_create"
-    wfPriority == ProcessPriority.MEDIUM
-    wfParams.size() == 5
-    wfParams.creator == "${contact.id}"
-    wfParams.identityProvider == "${identityProvider.id}"
-    wfParams.organization == "${organization.id}"
   }
 
   def "Encryption crypto is correctly registered"() {
