@@ -87,6 +87,7 @@
         <div class="control-group">
           <label class="control-label" for="idp.displayName"><g:message encodeAs="HTML" code="label.displayname" /></label>
           <div class="controls">
+            <g:hiddenField name="aa.displayName" value=""/>
             <g:textField name="idp.displayName" class="required span4" value="${identityProvider?.displayName}"/>
             <fr:tooltip code='help.fr.identityprovider.displayname' />
           </div>
@@ -95,6 +96,7 @@
         <div class="control-group">
           <label class="control-label" for="idp.description"><g:message encodeAs="HTML" code="label.description" /></label>
           <div class="controls">
+            <g:hiddenField name="aa.description" />
             <g:textArea name="idp.description"  class="required span4" rows="8" value="${identityProvider?.description}"/>
             <fr:tooltip code='help.fr.identityprovider.description' />
           </div>
@@ -179,6 +181,32 @@
             </div>
           </div>
         </fieldset>
+        <hr>
+        <fieldset>
+          <div class="control-group">
+            <label class="control-label" for="idp.artifact"><g:message encodeAs="HTML" code="label.soapartifactendpoint" /></label>
+            <div class="controls">
+              <g:textField name="idp.artifact" size="64" class="required url span4" value="${soapArtifact?.location}"/>
+
+              <span class="index">Index:</span>
+              <g:textField name="idp.artifact-index" size="2" class="required number index span1" value="${soapArtifact?.index}"/>
+              <fr:tooltip code='help.fr.identityprovider.authartifact' />
+              <br><span class="binding"><strong><g:message encodeAs="HTML" code="label.binding" /></strong>: SAML:2.0:bindings:HTTP-Artifact</span>
+            </div>
+          </div>
+        </fieldset>
+        <hr>
+        <fieldset>
+          <div class="control-group">
+            <label class="control-label" for="aa.attributeservice"><g:message encodeAs="HTML" code="label.soapatrributequeryendpoint" /></label>
+
+            <div class="controls">
+              <g:textField name="aa.attributeservice" size="64" class="required url span4" value="${soapAttributeService?.location}"/>
+              <fr:tooltip code='help.fr.identityprovider.aasoap' />
+              <br><span class="binding"><strong><g:message encodeAs="HTML" code="label.binding" /></strong>: SAML:2.0:bindings:SOAP</span>
+            </div>
+          </div>
+        </fieldset>
       </div>
     </div>
 
@@ -215,6 +243,15 @@
             <g:hiddenField name="idp.crypto.sig" value="${true}" />
             <g:textArea name="sigcert" id="sigcert" class="cert required" rows="25" cols="60" value="${sigcert}"/>
             <fr:tooltip code='help.fr.identityprovider.certificatesigning' />
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label"><g:message encodeAs="HTML" code="label.certificatebackchannel" /></label>
+          <div class="controls">
+            <g:hiddenField name="idp.crypto.bc" value="${true}" />
+            <g:textArea name="bccert" id="bccert" class="cert" rows="25" cols="60" value="${bccert}"/>
+            <fr:tooltip code='help.fr.identityprovider.certificatebackchannel' />
           </div>
         </div>
 
