@@ -62,7 +62,7 @@ abstract class RoleDescriptor extends Descriptor {
 	def structureAsJson() {
     def json = new groovy.json.JsonBuilder()
     json {
-    	protocol_support_enumerations protocolSupportEnumerations.collect{ [id: it.id, uri: it.uri]}
+    	protocol_support_enumerations protocolSupportEnumerations.collect{ [id: it.id, uri: it.uri]}?.sort{it.id}
     	key_descriptors keyDescriptors.collect {
     										[  id: it.id, type: it.keyType, disabled: it.disabled,
 	    										 encryption_method: [ algorithm: it.encryptionMethod?.algorithm ?: '',
@@ -77,8 +77,8 @@ abstract class RoleDescriptor extends Descriptor {
 																			  ]
 													 ],
     									  ]
-    									}
-      contact_people this.contacts.findAll{it.functioning()}.collect { [id: it.id, type: [id: it.type.id, name: it.type.name], contact: [id: it.contact.id]] }
+    									}?.sort{it.id}
+      contact_people this.contacts.findAll{it.functioning()}.collect { [id: it.id, type: [id: it.type.id, name: it.type.name], contact: [id: it.contact.id]] }?.sort{it.id}
       error_url errorURL ?:''
       extensions extensions ?:''
     }
