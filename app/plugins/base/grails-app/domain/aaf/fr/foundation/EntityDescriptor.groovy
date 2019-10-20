@@ -97,7 +97,7 @@ class EntityDescriptor extends Descriptor  {
 		  entity_id entityID
 		  organization { id this.organization.id
 		  							 name this.organization.displayName }
-		  contacts this.contacts.collect { [id: it.id, type: [id: it.type.id, name: it.type.name]] }
+		  contacts this.contacts.collect { [id: it.id, type: [id: it.type.id, name: it.type.name]] }?.sort{it.id}
 
 		  active active
 		  archived archived
@@ -110,10 +110,10 @@ class EntityDescriptor extends Descriptor  {
 		  	sp_sso_descriptor_only this.holdsSPOnly()
 			  empty this.empty()
 		  	extensions extensions ?: ''
-		  	identity_providers idpDescriptors.collect { [id: it.id, functioning: it.functioning()] }
-		  	service_providers spDescriptors.collect { [id: it.id, functioning: it.functioning()] }
-		  	attribute_authorities attributeAuthorityDescriptors.collect { [id: it.id, functioning: it.functioning()] }
-		  	additional_metadata_locations additionalMetadataLocations.collect{ [uri: it.uri, namespace: it.namespace]}
+		  	identity_providers idpDescriptors.collect { [id: it.id, functioning: it.functioning()] }?.sort{it.id}
+		  	service_providers spDescriptors.collect { [id: it.id, functioning: it.functioning()] }?.sort{it.id}
+		  	attribute_authorities attributeAuthorityDescriptors.collect { [id: it.id, functioning: it.functioning()] }?.sort{it.id}
+		  	additional_metadata_locations additionalMetadataLocations.collect{ [uri: it.uri, namespace: it.namespace]}?.sort{it.uri}
 		  }
 		}
 	}
