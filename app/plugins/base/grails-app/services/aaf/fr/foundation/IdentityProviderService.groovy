@@ -89,12 +89,6 @@ class IdentityProviderService {
     identityProvider.addToSingleSignOnServices(httpRedirect)
     httpRedirect.validate()
 
-    def artifactBinding = SamlURI.findByUri(SamlConstants.soap)
-    def artifactLocation = params.idp?.artifact
-    def soapArtifact = new ArtifactResolutionService(approved: true, binding: artifactBinding, location:artifactLocation, index:params.idp?.'artifact-index', active:params.active, isDefault:true)
-    identityProvider.addToArtifactResolutionServices(soapArtifact)
-    soapArtifact.validate()
-
     def ecp = null
     if(params.idp?.ecp) {
       def ecpBinding = SamlURI.findByUri(SamlConstants.soap)
@@ -117,19 +111,6 @@ class IdentityProviderService {
       identityProvider.errors.rejectValue('keyDescriptors', 'aaf.fr.foundation.IDPSSODescriptor.crypto.signing.invalid')
     }
 
-    // Backchannel
-    if(params.idp?.crypto?.bc && params.bccert) {
-      def certBC = cryptoService.createCertificate(params.bccert)
-      if(certBC) {
-        def keyInfoBC = new KeyInfo(certificate:certBC)
-        def keyDescriptorBC = new aaf.fr.foundation.KeyDescriptor(keyInfo:keyInfoBC, keyType:KeyTypes.signing, encryptionMethod:null)
-        keyDescriptorBC.roleDescriptor = identityProvider
-        identityProvider.addToKeyDescriptors(keyDescriptorBC)
-      } else {
-        identityProvider.errors.rejectValue('keyDescriptors', 'aaf.fr.foundation.IDPSSODescriptor.crypto.backchannel.invalid')
-      }
-    }
-
     // Encryption
     if(params.idp?.crypto?.enc && params.enccert) {
       def certEnc = cryptoService.createCertificate(params.enccert)
@@ -145,16 +126,10 @@ class IdentityProviderService {
     }
 
     // Attribute Authority - collaborates with created IDP
-    def attributeAuthority, soapAttributeService
+    def attributeAuthority
     if(params.aa?.create) {
       attributeAuthority = new AttributeAuthorityDescriptor(approved:false, active:params.active, displayName: params.idp?.displayName, description: params.idp?.description, scope: params.idp?.scope, organization:organization)
       attributeAuthority.addToProtocolSupportEnumerations(saml2Namespace)
-
-      def attributeServiceBinding = SamlURI.findByUri('urn:oasis:names:tc:SAML:2.0:bindings:SOAP')
-      def attributeServiceLocation = params.aa?.attributeservice
-      soapAttributeService = new AttributeService(approved: true, binding: attributeServiceBinding, location:attributeServiceLocation, active:params.active)
-      attributeAuthority.addToAttributeServices(soapAttributeService)
-            soapAttributeService.validate()
     }
 
     // Generate return map
@@ -168,8 +143,6 @@ class IdentityProviderService {
     ret.httpPost = httpPost
     ret.httpRedirect = httpRedirect
     ret.ecp = ecp
-    ret.soapArtifact = soapArtifact
-    ret.soapAttributeService = soapAttributeService
     ret.contact = contact
     ret.sigcert = params.sigcert
     ret.bccert = params.bccert
