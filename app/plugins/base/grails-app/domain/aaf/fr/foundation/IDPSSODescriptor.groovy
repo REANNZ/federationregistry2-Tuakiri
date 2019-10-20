@@ -95,8 +95,8 @@ class IDPSSODescriptor extends SSODescriptor  {
 		  organization { id this.organization.id
 		  							 name this.organization.displayName }
 
-			contacts this.contacts.collect { [id: it.id, type: [id: it.type.id, name: it.type.name]] }
-			monitors this.monitors.collect { [id: it.id, type: [id: it.type.id, name: it.type.name], url: it.url, node: it.node ?: '', enabled: it.enabled, check_period: it.checkPeriod] }
+			contacts this.contacts.collect { [id: it.id, type: [id: it.type.id, name: it.type.name]] }?.sort{it.id}
+			monitors this.monitors.collect { [id: it.id, type: [id: it.type.id, name: it.type.name], url: it.url, node: it.node ?: '', enabled: it.enabled, check_period: it.checkPeriod] }?.sort{it.id}
 
 		  active this.active
 		  archived this.archived
@@ -105,7 +105,7 @@ class IDPSSODescriptor extends SSODescriptor  {
 		  utilises_attribute_filters autoAcceptServices
 		  created_at dateCreated
 		  updated_at lastUpdated
-		  administrators adminRole?.subjects.collect { [id: it.id, principal: it.sharedToken] }
+		  administrators adminRole?.subjects.collect { [id: it.id, principal: it.sharedToken] }?.sort{it.id}
 			saml {
 				entity {
 					id entityDescriptor.id
@@ -114,13 +114,13 @@ class IDPSSODescriptor extends SSODescriptor  {
 				attribute_authority_descriptor collaborator?.id
 				scope scope
 				authnrequests_signed wantAuthnRequestsSigned
-				single_sign_on_services singleSignOnServices.collect { [id: it.id, location: it.location, binding: [id: it.binding.id, uri: it.binding.uri], functioning: it.functioning() ]}
-				name_id_mapping_services nameIDMappingServices.collect { [id: it.id, location: it.location, binding: [id: it.binding.id, uri: it.binding.uri], functioning: it.functioning() ]}
-				assertion_id_request_services assertionIDRequestServices.collect { [id: it.id, location: it.location, binding: [id: it.binding.id, uri: it.binding.uri], functioning: it.functioning() ]}
-				attribute_profiles attributeProfiles.collect { [id:it.id, uri: it.uri]}
+				single_sign_on_services singleSignOnServices.collect { [id: it.id, location: it.location, binding: [id: it.binding.id, uri: it.binding.uri], functioning: it.functioning() ]}?.sort{it.id}
+				name_id_mapping_services nameIDMappingServices.collect { [id: it.id, location: it.location, binding: [id: it.binding.id, uri: it.binding.uri], functioning: it.functioning() ]}?.sort{it.id}
+				assertion_id_request_services assertionIDRequestServices.collect { [id: it.id, location: it.location, binding: [id: it.binding.id, uri: it.binding.uri], functioning: it.functioning() ]}?.sort{it.id}
+				attribute_profiles attributeProfiles.collect { [id:it.id, uri: it.uri]}?.sort{it.id}
 				attributes attributes.collect { [id:it.base.id, name: it.base.name, specification: it.base.specificationRequired,
-																				 values: it.values.collect { [value: it.value, approved: it.approved] }
-																			] }
+																				 values: it.values.collect { [value: it.value, approved: it.approved] }?.sort{it.value}
+																			] }?.sort{it.id}
 				sso_descriptor super.structureAsJson()
 			}
 		}

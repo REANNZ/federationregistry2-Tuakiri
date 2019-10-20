@@ -86,10 +86,10 @@ class SPSSODescriptor extends SSODescriptor {
 		  	maintenance serviceDescription.maintenance ?: ''
 		  }
 
-		  categories serviceCategories.collect { [id: it.id, name: it.name] }
+		  categories serviceCategories.collect { [id: it.id, name: it.name] }?.sort{it.id}
 
-		  contacts this.contacts.collect { [id: it.id, type: [id: it.type.id, name: it.type.name]] }
-		  monitors this.monitors.collect { [id: it.id, type: [id: it.type.id, name: it.type.name], url: it.url, node: it.node ?: '', enabled: it.enabled, check_period: it.checkPeriod] }
+		  contacts this.contacts.collect { [id: it.id, type: [id: it.type.id, name: it.type.name]] }?.sort{it.id}
+		  monitors this.monitors.collect { [id: it.id, type: [id: it.type.id, name: it.type.name], url: it.url, node: it.node ?: '', enabled: it.enabled, check_period: it.checkPeriod] }?.sort{it.id}
 
 		  active this.active
 		  archived this.archived
@@ -98,7 +98,7 @@ class SPSSODescriptor extends SSODescriptor {
 		  reporting this.reporting
 		  created_at dateCreated
 		  updated_at lastUpdated
-		  administrators adminRole?.subjects.collect { [id: it.id, principal: it.sharedToken] }
+		  administrators adminRole?.subjects.collect { [id: it.id, principal: it.sharedToken] }?.sort{it.id}
 			saml {
 				entity {
 					id entityDescriptor.id
@@ -112,11 +112,11 @@ class SPSSODescriptor extends SSODescriptor {
 																			descriptions: it.serviceDescriptions,
 																			attributes: it.requestedAttributes.collect { [id:it.base.id, name: it.base.name, specification: it.base.specificationRequired,
 																									reason: it.reasoning, is_required: it.isRequired,  approved: it.approved,
-																									values: it.values.collect { [value: it.value, approved: it.approved] }
-																									] }
-																			] }
-				assertion_consumer_services assertionConsumerServices.collect { [id: it.id, location: it.location, binding: [id: it.binding.id, uri: it.binding.uri], functioning: it.functioning(), index: it.index, is_default: it.isDefault ]}
-      	discovery_response_services discoveryResponseServices.collect { [id: it.id, location: it.location, binding: [id: it.binding.id, uri: it.binding.uri], functioning: it.functioning(), index: it.index, is_default: it.isDefault ]}
+																									values: it.values.collect { [value: it.value, approved: it.approved] }?.sort{it.value}
+																									] }?.sort{it.id}
+																			] }?.sort{it.id}
+				assertion_consumer_services assertionConsumerServices.collect { [id: it.id, location: it.location, binding: [id: it.binding.id, uri: it.binding.uri], functioning: it.functioning(), index: it.index, is_default: it.isDefault ]}?.sort{it.id}
+      	discovery_response_services discoveryResponseServices.collect { [id: it.id, location: it.location, binding: [id: it.binding.id, uri: it.binding.uri], functioning: it.functioning(), index: it.index, is_default: it.isDefault ]}?.sort{it.id}
 				sso_descriptor super.structureAsJson()
 			}
 		}
