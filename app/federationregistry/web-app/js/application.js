@@ -1267,6 +1267,9 @@ fr.configureIdentityProviderSAML = function(host) {
     $('#idp\\.post').val( knownIDPImpl[currentImpl].post.uri.replace('$host', host) );
     $('#idp\\.redirect').val( knownIDPImpl[currentImpl].redirect.uri.replace('$host', host) );
     $('#idp\\.ecp').val( knownIDPImpl[currentImpl].ecp.uri.replace('$host', host) );
+    $('#idp\\.artifact').val( knownIDPImpl[currentImpl].artifact.uri.replace('$host', host) );
+    $('#idp\\.artifact-index').val( knownIDPImpl[currentImpl].artifact.index );
+    $('#aa\\.attributeservice').val( knownIDPImpl[currentImpl].attributeservice.uri.replace('$host', host) );
   }
 };
 

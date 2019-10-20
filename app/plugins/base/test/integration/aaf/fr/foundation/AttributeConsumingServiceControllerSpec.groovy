@@ -78,8 +78,6 @@ class AttributeConsumingServiceControllerSpec extends IntegrationSpec {
     acs.addToRequestedAttributes(ra1)
     acs.save()
     
-    def wfProcessName, wfDescription, wfPriority, wfParams
-
     controller.params.id = acs.id
     controller.params.attrid = ra1.base.id
     controller.params.reasoning = "I really need it!"
