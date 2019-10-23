@@ -57,8 +57,8 @@ class AttributeAuthorityDescriptor extends RoleDescriptor {
 		  							 name this.organization.displayName }
 
 		  if(!collaborator)	{
-				contacts this.contacts.collect { [id: it.id, type: [id: it.type.id, name: it.type.name]] }
-				monitors this.monitors.collect { [id: it.id, type: [id: it.type.id, name: it.type.name], url: it.url, node: it.node ?: '', enabled: it.enabled, check_period: it.checkPeriod] }
+				contacts this.contacts.collect { [id: it.id, type: [id: it.type.id, name: it.type.name]] }?.sort{it.id}
+				monitors this.monitors.collect { [id: it.id, type: [id: it.type.id, name: it.type.name], url: it.url, node: it.node ?: '', enabled: it.enabled, check_period: it.checkPeriod] }?.sort{it.id}
 		  }
 
 			active this.active
@@ -67,7 +67,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor {
 			functioning this.functioning()
 			created_at dateCreated
 			updated_at lastUpdated
-			administrators adminRole?.subjects.collect { [id: it.id, principal: it.sharedToken] }
+			administrators adminRole?.subjects.collect { [id: it.id, principal: it.sharedToken] }?.sort{it.id}
 
 			saml {
 				entity {
@@ -76,18 +76,18 @@ class AttributeAuthorityDescriptor extends RoleDescriptor {
 				}
 				if(collaborator) {
 					extract_metadata_from_idp_sso_descriptor true
-					attribute_services attributeServices.collect { [id: it.id, location: it.location, binding: [id: it.binding.id, uri: it.binding.uri], functioning: it.functioning() ]}
+					attribute_services attributeServices.collect { [id: it.id, location: it.location, binding: [id: it.binding.id, uri: it.binding.uri], functioning: it.functioning() ]}?.sort{it.id}
 					idp_sso_descriptor collaborator?.id
 				} else {
 					extract_metadata_from_idp_sso_descriptor false
 					scope scope
-					attribute_services attributeServices.collect { [id: it.id, location: it.location, binding: [id: it.binding.id, uri: it.binding.uri], functioning: it.functioning() ]}
-					assertion_id_request_services assertionIDRequestServices.collect { [id: it.id, location: it.location, binding: [id: it.binding.id, uri: it.binding.uri], functioning: it.functioning() ]}
-					name_id_formats nameIDFormats.collect{ [id: it.id, uri: it.uri]}
-					attribute_profiles attributeProfiles.collect { [id:it.id, uri: it.uri]}
+					attribute_services attributeServices.collect { [id: it.id, location: it.location, binding: [id: it.binding.id, uri: it.binding.uri], functioning: it.functioning() ]}?.sort{it.id}
+					assertion_id_request_services assertionIDRequestServices.collect { [id: it.id, location: it.location, binding: [id: it.binding.id, uri: it.binding.uri], functioning: it.functioning() ]}?.sort{it.id}
+					name_id_formats nameIDFormats.collect{ [id: it.id, uri: it.uri]}?.sort{it.id}
+					attribute_profiles attributeProfiles.collect { [id:it.id, uri: it.uri]}?.sort{it.id}
 					attributes attributes.collect { [id:it.base.id, name: it.base.name, specification: it.base.specificationRequired,
-																					 values: it.values.collect { [value: it.value, approved: it.approved] }
-																				] }
+																					 values: it.values.collect { [value: it.value, approved: it.approved] }?.sort{it.value}
+																				] }?.sort{it.id}
 					role_descriptor super.structureAsJson()
 				}
 			}

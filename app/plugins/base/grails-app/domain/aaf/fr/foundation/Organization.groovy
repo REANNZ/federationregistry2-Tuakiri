@@ -105,28 +105,28 @@ class Organization  {	// Also called a participant in AAF land
 		  url this.url
 		  logo_url this.logoURL ?: ''
 		  lang this.lang
-		  contacts this.contacts.collect { [id: it.id, type: [id: it.type.id, name: it.type.name]] }
+		  contacts this.contacts.collect { [id: it.id, type: [id: it.type.id, name: it.type.name]] }?.sort{it.id}
 		  active this.active
 		  archived this.archived
 		  approved this.approved
 		  functioning this.functioning()
 		  types {
 		    primary this.primary.id
-		    secondary this.types.collect { it.id }
-		    suspensions this.suspensions.collect { it.id }
+		    secondary this.types.collect { it.id }?.sort{it.id}
+		    suspensions this.suspensions.collect { it.id }?.sort{it.id}
 		  }
-		  sponsors this.sponsors.collect { it.id }
-		  affiliates this.affiliates.collect { it.id }
+		  sponsors this.sponsors.collect { it.id }?.sort{it.id}
+		  affiliates this.affiliates.collect { it.id }?.sort{it.id}
 		  saml {
-		  	entity_descriptors entityDescriptors.collect { [id: it.id, entity_id: it.entityID, functioning: it.functioning()]}
-		    identity_providers identityProviders.collect { [id: it.id, entity: [id: it.entityDescriptor.id, entity_id: it.entityDescriptor.entityID], functioning: it.functioning()] }
-		    service_providers serviceProviders.collect { [id: it.id, entity: [id: it.entityDescriptor.id, entity_id: it.entityDescriptor.entityID], functioning: it.functioning()] }
-		    attribute_authorities attributeAuthorities.collect { [id: it.id, entity: [id: it.entityDescriptor.id, entity_id: it.entityDescriptor.entityID], functioning: it.functioning()] }
+		  	entity_descriptors entityDescriptors.collect { [id: it.id, entity_id: it.entityID, functioning: it.functioning()]}?.sort{it.id}
+		    identity_providers identityProviders.collect { [id: it.id, entity: [id: it.entityDescriptor.id, entity_id: it.entityDescriptor.entityID], functioning: it.functioning()] }?.sort{it.id}
+		    service_providers serviceProviders.collect { [id: it.id, entity: [id: it.entityDescriptor.id, entity_id: it.entityDescriptor.entityID], functioning: it.functioning()] }?.sort{it.id}
+		    attribute_authorities attributeAuthorities.collect { [id: it.id, entity: [id: it.entityDescriptor.id, entity_id: it.entityDescriptor.entityID], functioning: it.functioning()] }?.sort{it.id}
 		    extensions this.extensions ?: ''
 		  }
 		  created_at dateCreated
 		  updated_at lastUpdated
-		  administrators adminRole?.subjects.collect { [id: it.id, principal: it.sharedToken] }
+		  administrators adminRole?.subjects.collect { [id: it.id, principal: it.sharedToken] }?.sort{it.id}
 		}
 		json.content
 	}
