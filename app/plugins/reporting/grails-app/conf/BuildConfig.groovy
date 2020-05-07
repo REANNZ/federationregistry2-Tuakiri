@@ -32,7 +32,7 @@ grails.project.dependency.resolution = {
     compile "org.codehaus:groovy-all:2.0.8+aaf.groovy7664"
     compile "commons-collections:commons-collections:3.2.2"
 
-    test 'mysql:mysql-connector-java:5.1.18'
+    test 'mysql:mysql-connector-java:5.1.49'
     test "org.spockframework:spock-grails-support:0.7-groovy-2.0"
   }
 
