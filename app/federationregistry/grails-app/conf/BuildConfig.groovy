@@ -57,7 +57,7 @@ grails.project.dependency.resolution = {
 
     compile ':cache:1.0.0'
     compile ":mail:1.0"
-    compile ":build-test-data:2.0.3"
+    compile ":build-test-data:2.2.3"
     compile ":hibernate:3.6.10.16"
 
     runtime ":resources:1.1.6"
