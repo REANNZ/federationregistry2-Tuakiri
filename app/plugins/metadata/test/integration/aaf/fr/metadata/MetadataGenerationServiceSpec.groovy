@@ -2,7 +2,7 @@ package aaf.fr.metadata
 
 import org.custommonkey.xmlunit.*;
 
-import grails.plugin.spock.*
+import grails.test.spock.*
 import groovy.xml.MarkupBuilder
 
 import aaf.fr.foundation.*
