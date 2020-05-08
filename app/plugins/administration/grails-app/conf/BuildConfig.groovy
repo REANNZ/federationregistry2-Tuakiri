@@ -36,11 +36,11 @@ grails.project.dependency.resolution = {
   }
 
   plugins {
-    build ":tomcat:$grailsVersion"
+    build ":tomcat:7.0.54"
     
     compile ":build-test-data:2.0.3"
 
-    runtime ":hibernate:$grailsVersion"
+    runtime ":hibernate:3.6.10.16"
 
     test(":spock:0.7") {
       exclude "spock-grails-support"

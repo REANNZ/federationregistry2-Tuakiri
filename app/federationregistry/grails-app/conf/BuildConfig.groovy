@@ -53,12 +53,12 @@ grails.project.dependency.resolution = {
     provided: Dependencies needed at development time, but not during WAR deployment
     */
 
-    build ":tomcat:$grailsVersion"
+    build ":tomcat:7.0.54"
 
     compile ':cache:1.0.0'
     compile ":mail:1.0"
     compile ":build-test-data:2.0.3"
-    compile ":hibernate:$grailsVersion"
+    compile ":hibernate:3.6.10.16"
 
     runtime ":resources:1.1.6"
     runtime ":zipped-resources:1.0"
