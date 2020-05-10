@@ -32,12 +32,12 @@ grails.project.dependency.resolution = {
   }
 
   plugins {
-    build ":tomcat:7.0.54"
+    build ":tomcat:7.0.55.2"
 
     compile ":federated-grails:0.6.0"
     compile ":build-test-data:2.2.3"
     compile ":mail:1.0"
-    compile ":hibernate:3.6.10.16"
+    compile ":hibernate4:4.3.8.1"
 
     test ":resources:1.1.6"
     provided ":greenmail:1.3.4"
