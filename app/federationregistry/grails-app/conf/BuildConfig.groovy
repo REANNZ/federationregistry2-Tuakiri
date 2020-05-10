@@ -55,22 +55,22 @@ grails.project.dependency.resolution = {
     build ":tomcat:7.0.55.2"
 
     compile ':cache:1.1.8'
-    compile ":mail:1.0"
-    compile ":build-test-data:2.2.3"
+    compile ":mail:1.0.7"
+    compile ":build-test-data:2.4.0"
     compile ":hibernate4:4.3.8.1"
 
-    runtime ":resources:1.1.6"
-    runtime ":zipped-resources:1.0"
-    runtime ":cached-resources:1.0"
+    runtime ":resources:1.2.14"
+    runtime ":zipped-resources:1.0.1"
+    runtime ":cached-resources:1.1"
     runtime ":yui-minify-resources:0.1.4"
     runtime ":database-migration:1.4.0"
     runtime ":jquery:1.11.1"
     runtime ":modernizr:2.5.3"
     runtime (":twitter-bootstrap:2.1.1") { excludes "svn" }
     runtime 'org.grails.plugins:constraintkeys:0.1'
-    runtime ":console:1.2"
-    runtime ":cache-headers:1.1.5"
-    runtime ":audit-logging:0.5.4"
+    runtime ":console:1.5.9"
+    runtime ":cache-headers:1.1.7"
+    runtime ":audit-logging:1.0.7"
 
     provided ":greenmail:1.3.4"
   }

@@ -38,11 +38,11 @@ grails.project.dependency.resolution = {
     build ":tomcat:7.0.55.2"
 
     compile ":federated-grails:0.6.0"
-    compile ":build-test-data:2.2.3"
-    compile ":mail:1.0"
+    compile ":build-test-data:2.4.0"
+    compile ":mail:1.0.7"
     compile ":hibernate4:4.3.8.1"
 
-    test ":resources:1.1.6"
+    test ":resources:1.2.14"
     provided ":greenmail:1.3.4"
   }
 }
