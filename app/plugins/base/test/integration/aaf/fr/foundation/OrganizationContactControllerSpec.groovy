@@ -54,6 +54,7 @@ class OrganizationContactControllerSpec extends IntegrationSpec {
     subject.permissions.add("federation:management:organization:${o.id}:contact:add")
     
     when:
+    controller.request.method = 'POST'
     controller.create()
     o.refresh()
 

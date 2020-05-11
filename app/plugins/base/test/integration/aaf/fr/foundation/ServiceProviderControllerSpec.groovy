@@ -108,6 +108,7 @@ def "Validate successful save"() {
   controller.params[SynchronizerTokensHolder.TOKEN_KEY] = token.generateToken(controller.params[SynchronizerTokensHolder.TOKEN_URI])
 
   when:
+  controller.request.method = 'POST'
   def model = controller.save()
 
   then:
@@ -130,6 +131,7 @@ def "Validate failed save"() {
   controller.params[SynchronizerTokensHolder.TOKEN_KEY] = token.generateToken(controller.params[SynchronizerTokensHolder.TOKEN_URI])
 
   when:
+  controller.request.method = 'POST'
   def model = controller.save()
 
   then:
@@ -154,6 +156,7 @@ def "Validate successful update"() {
   } 
 
   when:
+  controller.request.method = 'PUT'
   def model = controller.update()
 
   then:
@@ -171,6 +174,7 @@ def "Validate update with incorrect perms"() {
   user.permissions.add("federation:management:descriptor:-1:update")
 
   when:
+  controller.request.method = 'PUT'
   def model = controller.update()
 
   then:
@@ -182,6 +186,7 @@ def "Invalid or non existing SPSSODescriptor fails update"() {
   controller.params.id = 1
 
   when:
+  controller.request.method = 'PUT'
   def model = controller.update()
 
   then:
@@ -203,6 +208,7 @@ def "Invalid service response fails update"() {
   } 
 
   when:
+  controller.request.method = 'PUT'
   def model = controller.update()
 
   then:

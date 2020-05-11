@@ -85,6 +85,7 @@ def "Validate successful save"() {
   organizationService.metaClass.create = { def p -> 
    return [true, organization]
  } 
+ controller.request.method = 'POST'
  def model = controller.save()
 
  then:
@@ -104,6 +105,7 @@ def "Validate failed save"() {
   } 
 
   when:
+  controller.request.method = 'POST'
   def model = controller.save()
 
   then:
@@ -122,6 +124,7 @@ def "Validate successful update"() {
   } 
 
   when:
+  controller.request.method = 'PUT'
   controller.update()
 
   then:
@@ -136,6 +139,7 @@ def "Validate update with incorrect perms"() {
   user.permissions.add("organization:-1:update")
 
   when:
+  controller.request.method = 'PUT'
   controller.update()
 
   then:
@@ -147,6 +151,7 @@ def "Invalid or non existing Organization fails update"() {
   controller.params.id = 2000000
 
   when:
+  controller.request.method = 'PUT'
   def model = controller.update()
 
   then:
@@ -166,6 +171,7 @@ def "Invalid organization data fails update"() {
   organizationService.metaClass.update = { def p -> 
    return [false, organization]
  } 
+ controller.request.method = 'PUT'
  def model = controller.update()
 
  then:    
