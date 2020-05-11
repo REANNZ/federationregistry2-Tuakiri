@@ -66,7 +66,7 @@ grails.project.dependency.resolution = {
     runtime ":database-migration:1.4.0"
     runtime ":jquery:1.11.1"
     runtime ":modernizr:2.5.3"
-    runtime (":twitter-bootstrap:2.1.1") { excludes "svn" }
+    runtime (":twitter-bootstrap:2.3.2.3") { excludes "svn" }
     runtime 'org.grails.plugins:constraintkeys:0.1'
     runtime ":console:1.5.9"
     runtime ":cache-headers:1.1.7"
