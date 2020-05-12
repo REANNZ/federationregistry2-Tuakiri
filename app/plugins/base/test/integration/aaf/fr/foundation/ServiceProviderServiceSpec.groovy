@@ -146,7 +146,7 @@ class ServiceProviderServiceSpec extends IntegrationSpec {
     params.entity = [id: ed.id]
     params.sigcert = pk
     params.sp = [displayName:"test service name", description:"test desc", attributes:[(attr1.id):[requested: 'on', reasoning:'reason for request', required:'on'], (attr2.id):[requested: 'on', reasoning:'reason for request2', required:'off']], crypto:[sig: true, enc:true],
-            acs:[ post:'https://service.test.com/Shibboleth.sso/SAML2/POST', artifact:'https://service.test.com/Shibboleth.sso/SAML2/Artifact'] , 
+            acs:[post:'https://service.test.com/Shibboleth.sso/SAML2/POST', 'post-index':1, artifact:'https://service.test.com/Shibboleth.sso/SAML2/Artifact', 'artifact-index':2 ],
             slo:[post:'https://service.test.com/Shibboleth.sso/SLO/Post', soap:'https://service.test.com/Shibboleth.sso/SLO/SOAP', redirect:'https://service.test.com/Shibboleth.sso/SLO/Redirect', artifact:'https://service.test.com/Shibboleth.sso/SLO/Artifact'] ] 
                 
     params.contact = [email:contact.email, type:ct.name]
@@ -221,7 +221,7 @@ class ServiceProviderServiceSpec extends IntegrationSpec {
     params.entity = [identifier:"https://service2.test.com"]
     params.sigcert = pk
     params.sp = [displayName:"test service name", description:"test desc", attributes:[(attr1.id):[requested: 'on', reasoning:'reason for request', required:'on'], (attr2.id):[requested: 'on', reasoning:'reason for request2', required:'off']], crypto:[sig: true, enc:true],
-            acs:[ post:'https://service.test.com/Shibboleth.sso/SAML2/POST', artifact:'https://service.test.com/Shibboleth.sso/SAML2/Artifact'] , 
+            acs:[post:'https://service.test.com/Shibboleth.sso/SAML2/POST', 'post-index':1, artifact:'https://service.test.com/Shibboleth.sso/SAML2/Artifact', 'artifact-index':2 ],
             slo:[post:'https://service.test.com/Shibboleth.sso/SLO/Post', redirect:'https://service.test.com/Shibboleth.sso/SLO/Redirect' ] ]
                 
     params.contact = [givenName:"Bradley", surname:"Beddoes", email:"bradleybeddoes@intient.com", type:ct.name]
