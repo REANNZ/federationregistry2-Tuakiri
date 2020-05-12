@@ -47,3 +47,5 @@ grails.project.dependency.resolution = {
     provided ":greenmail:1.3.4"
   }
 }
+
+grails.project.dependency.resolver = "maven"

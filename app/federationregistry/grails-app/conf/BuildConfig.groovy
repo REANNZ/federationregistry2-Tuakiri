@@ -76,6 +76,8 @@ grails.project.dependency.resolution = {
   }
 }
 
+grails.project.dependency.resolver = "maven"
+
 codenarc.reports = {
     HTMLReport('html') {
         outputFile = 'target/test-reports/codenarc.html'

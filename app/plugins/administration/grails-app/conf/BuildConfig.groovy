@@ -42,3 +42,5 @@ grails.project.dependency.resolution = {
     runtime ":hibernate4:4.3.8.1"
   }
 }
+
+grails.project.dependency.resolver = "maven"

@@ -40,3 +40,5 @@ grails.project.dependency.resolution = {
     compile ":hibernate4:4.3.8.1"
   }
 }
+
+grails.project.dependency.resolver = "maven"
