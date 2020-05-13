@@ -18,6 +18,9 @@ auditLog {
   }
 }
 
+// Enable console plugin
+grails.plugin.console.enabled = true
+
 grails.converters.xml.pretty.print = true
 
 grails.mime.file.extensions = true
