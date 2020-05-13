@@ -39,7 +39,7 @@ grails.project.dependency.resolution = {
     
     compile ":build-test-data:2.4.0"
 
-    runtime ":hibernate4:4.3.8.1"
+    runtime ":hibernate4:4.3.10"
   }
 }
 

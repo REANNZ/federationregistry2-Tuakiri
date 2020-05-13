@@ -27,8 +27,8 @@ grails.project.dependency.resolution = {
 
   dependencies {
     compile "commons-collections:commons-collections:3.2.2"
-    compile "org.springframework:spring-aop:4.0.9.RELEASE" // needed for shiro
-    compile "org.springframework:spring-expression:4.0.9.RELEASE" // needed for tests
+    compile "org.springframework:spring-aop:4.1.9.RELEASE" // needed for shiro
+    compile "org.springframework:spring-expression:4.1.9.RELEASE" // needed for tests
 
     test 'mysql:mysql-connector-java:5.1.49'
   }
@@ -41,7 +41,7 @@ grails.project.dependency.resolution = {
     compile ":shiro:1.2.1"
     compile ":build-test-data:2.4.0"
     compile ":mail:1.0.7"
-    compile ":hibernate4:4.3.8.1"
+    compile ":hibernate4:4.3.10"
 
     test ":resources:1.2.14"
     provided ":greenmail:1.3.4"
