@@ -730,7 +730,9 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
 		def mnid = new ManageNameIDService(descriptor:idp, active:true, approved:true, binding:httpRedirect, location:"https://test.example.com/mnid/REDIRECT")
 		def nidf = new SamlURI(uri:"supported:nameid:format:urn")
 		
-		def sso = new SingleSignOnService(descriptor:idp,active:true, approved:true, binding:httpPost, location:"https://test.example.com/sso/POST")
+		// NOTE: do not pass descriptor:idp, as this would right away add the sso object to
+		// idp.singleSignOnServices and a later add would add it to the List second time
+		def sso = new SingleSignOnService(active:true, approved:true, binding:httpPost, location:"https://test.example.com/sso/POST")
 		def nidms = new NameIDMappingService(descriptor:idp,active:true, approved:true, binding:httpRedirect, location:"https://test.example.com/nameidmappingserivce/REDIRECT")
 		def aidrs = new AssertionIDRequestService(descriptor:idp,active:true, approved:true, binding:httpRedirect, location:"https://test.example.com/assertionidrequestservice/REDIRECT")
 		
@@ -823,8 +825,10 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
     def slo = new SingleLogoutService(descriptor:idp, active:true, approved:true, binding:httpPost, location:"https://test.example.com/slo/POST")
     def mnid = new ManageNameIDService(descriptor:idp, active:true, approved:true, binding:httpRedirect, location:"https://test.example.com/mnid/REDIRECT")
     def nidf = new SamlURI(uri:"supported:nameid:format:urn")
-    
-    def sso = new SingleSignOnService(descriptor:idp,active:true, approved:true, binding:httpPost, location:"https://test.example.com/sso/POST")
+
+    // NOTE: do not pass descriptor:idp, as this would right away add the sso object to
+    // idp.singleSignOnServices and a later add would add it to the List second time
+    def sso = new SingleSignOnService(active:true, approved:true, binding:httpPost, location:"https://test.example.com/sso/POST")
     def nidms = new NameIDMappingService(descriptor:idp,active:true, approved:true, binding:httpRedirect, location:"https://test.example.com/nameidmappingserivce/REDIRECT")
     def aidrs = new AssertionIDRequestService(descriptor:idp,active:true, approved:true, binding:httpRedirect, location:"https://test.example.com/assertionidrequestservice/REDIRECT")
     
@@ -1889,7 +1893,9 @@ class MetadataGenerationServiceSpec extends IntegrationSpec {
     def mnid = new ManageNameIDService(descriptor:idp, active:true, approved:true, binding:httpRedirect, location:"https://test.example.com/mnid/REDIRECT")
     def nidf = new SamlURI(uri:"supported:nameid:format:urn")
 
-    def sso = new SingleSignOnService(descriptor:idp,active:true, approved:true, binding:httpPost, location:"https://test.example.com/sso/POST")
+    // NOTE: do not pass descriptor:idp, as this would right away add the sso object to
+    // idp.singleSignOnServices and a later add would add it to the List second time
+    def sso = new SingleSignOnService(active:true, approved:true, binding:httpPost, location:"https://test.example.com/sso/POST")
     def nidms = new NameIDMappingService(descriptor:idp,active:true, approved:true, binding:httpRedirect, location:"https://test.example.com/nameidmappingserivce/REDIRECT")
     def aidrs = new AssertionIDRequestService(descriptor:idp,active:true, approved:true, binding:httpRedirect, location:"https://test.example.com/assertionidrequestservice/REDIRECT")
 
