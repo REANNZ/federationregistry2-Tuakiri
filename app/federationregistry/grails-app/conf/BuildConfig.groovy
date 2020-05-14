@@ -56,7 +56,6 @@ grails.project.dependency.resolution = {
 
     compile ':cache:1.1.8'
     compile ":mail:1.0.7"
-    compile ":build-test-data:2.4.0"
     compile ":hibernate4:4.3.10"
 
     runtime ":resources:1.2.14"
@@ -71,6 +70,8 @@ grails.project.dependency.resolution = {
     runtime ":console:1.5.9"
     runtime ":cache-headers:1.1.7"
     runtime ":audit-logging:1.0.7"
+
+    test ":build-test-data:2.4.0"
 
     provided ":greenmail:1.3.4"
   }

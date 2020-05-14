@@ -42,10 +42,10 @@ grails.project.dependency.resolution = {
     compile ":federated-grails:0.6.0"
     // explicitly require shiro to force upgrade from 1.1.3 pulled by fed-grails
     compile ":shiro:1.2.1"
-    compile ":build-test-data:2.4.0"
     compile ":mail:1.0.7"
     compile ":hibernate4:4.3.10"
 
+    test ":build-test-data:2.4.0"
     test ":resources:1.2.14"
     provided ":greenmail:1.3.4"
   }
