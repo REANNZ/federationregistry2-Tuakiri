@@ -1,3 +1,4 @@
+import org.apache.shiro.SecurityUtils
 
 public class AdminSecurityFilters {
 
@@ -11,9 +12,9 @@ public class AdminSecurityFilters {
       }
     }
 
-    administration(uri: "/administration/**") {
+    administration(controller: "adminDashboard|subject|role|attributeBase|attributeCategory|monitorType|organizationType|contactType|adminServiceCategory|CAKeyInfo|samlURI|adminConsole") {
       before = {
-        if(!accessControl { permission("federation:globaladministrator") }) {
+        if (!SecurityUtils.subject.isPermitted("federation:globaladministrator")) {
           log.info("secfilter: DENIED - [${subject.id}]${subject.principal}|${request.remoteAddr}|$params.controller/$params.action")
           response.sendError(403)
           return
@@ -28,7 +29,7 @@ public class AdminSecurityFilters {
           log.info("secfilter: ALERT - bootstrap|${request.remoteAddr}|$params.controller/$params.action")
           return  
         }
-        else if (!accessControl { permission("federation:globaladministrator") }) {
+        else if (!SecurityUtils.subject.isPermitted("federation:globaladministrator")) {
           log.info("secfilter: DENIED - [${subject?.id}]${subject?.principal}|${request.remoteAddr}|$params.controller/$params.action")
           response.sendError(404) // Deliberately not 403.
           return
