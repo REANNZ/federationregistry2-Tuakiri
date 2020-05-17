@@ -28,7 +28,7 @@
               <li class="${controllerName == 'dashboard' ? 'directactive':''}">
                 <g:link controller="dashboard"><g:message encodeAs="HTML"  code="fr.branding.nav.dashboard" default="Dashboard"/></g:link>
               </li>
-              <li><a style="color: #fff;" href="https://aaf.edu.au/support/"><g:message encodeAs="HTML"  code="fr.branding.nav.support" default="Support"/></a></li>
+              <li><a style="color: #fff;" href="mailto:tuakiri@reannz.co.nz"><g:message encodeAs="HTML"  code="fr.branding.nav.support" default="Support"/></a></li>
             </ul>
           </div>
         </div>
