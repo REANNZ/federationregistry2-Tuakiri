@@ -1,6 +1,6 @@
 package aaf.fr.identity
 
-import grails.plugin.spock.*
+import grails.test.spock.*
 
 class SubjectSpec extends IntegrationSpec {
 

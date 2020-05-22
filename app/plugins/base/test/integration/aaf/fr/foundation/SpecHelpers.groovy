@@ -2,7 +2,7 @@ package aaf.fr.foundation
 
 import org.codehaus.groovy.runtime.InvokerHelper
 
-import grails.plugin.spock.*
+import grails.test.spock.*
 import org.apache.shiro.subject.Subject
 import org.apache.shiro.util.ThreadContext
 import org.apache.shiro.SecurityUtils

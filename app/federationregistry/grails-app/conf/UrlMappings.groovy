@@ -13,8 +13,8 @@ class UrlMappings {
       controller = "initialBootstrap"
     }
 
-    "403"(view:'/403')
-    "404"(view:'/404')
+    "403"(controller:'error', action:'notPermitted')
+    "404"(controller:'error', action:'notFound')
     "500"(view:'/500')
 
     // Development only.

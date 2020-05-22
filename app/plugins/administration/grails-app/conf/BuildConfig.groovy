@@ -15,37 +15,32 @@ grails.project.dependency.resolution = {
   repositories {
     inherits true
 
-    flatDir name:"aaf-patched-groovy", dirs:"../../../aaf-patched-groovy/target/libs"
-
     grailsPlugins()
     grailsHome()
     grailsCentral()
 
     mavenLocal()
-    mavenCentral()
+    // mavenCentral()
+    mavenRepo "https://repo1.maven.org/maven2"
 
-    mavenRepo "http://repo.grails.org/grails/repo/"
-    mavenRepo "http://download.java.net/maven/2/"
-    mavenRepo "http://repository.jboss.com/maven2/"
+    mavenRepo "https://repo.grails.org/grails/plugins-releases/"
+    mavenRepo "https://download.java.net/maven/2/"
+    mavenRepo "https://repository.jboss.org/maven2/"
   }
   
   dependencies {
-    compile "org.codehaus:groovy-all:2.0.8+aaf.groovy7664"
     compile "commons-collections:commons-collections:3.2.2"
 
-    test 'mysql:mysql-connector-java:5.1.18'
-    test "org.spockframework:spock-grails-support:0.7-groovy-2.0"
+    test 'mysql:mysql-connector-java:5.1.49'
   }
 
   plugins {
-    build ":tomcat:$grailsVersion"
-    
-    compile ":build-test-data:2.0.3"
+    build ":tomcat:7.0.55.2"
 
-    runtime ":hibernate:$grailsVersion"
+    runtime ":hibernate4:4.3.10"
 
-    test(":spock:0.7") {
-      exclude "spock-grails-support"
-    }
+    test ":build-test-data:2.4.0"
   }
 }
+
+grails.project.dependency.resolver = "maven"

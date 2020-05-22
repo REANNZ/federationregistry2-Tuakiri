@@ -289,23 +289,20 @@ class IdentityProviderService {
     def entityDescriptor = identityProvider.entityDescriptor
     def aa = identityProvider.collaborator
 
-    if(aa) {  // Untangle this linkage - horrible but required evil as GORM delete sucks.
-      IDPSSODescriptor.withTransaction {
-        AttributeAuthorityDescriptor.executeUpdate('update AttributeAuthorityDescriptor aa set aa.collaborator = NULL where aa.collaborator = ?', [identityProvider])
-        IDPSSODescriptor.executeUpdate('update IDPSSODescriptor idp set idp.collaborator = NULL where idp.collaborator = ?', [identityProvider.collaborator])
-      }
+    if(aa) {
+      // Untangle the IDPSSODescriptor <==> AAD collaborator linkage.
+      // Otherwise, delete would break on failed foreign key constraints.
+      identityProvider.collaborator = null
+      aa.collaborator = null
 
-      aa.attributeServices?.each { it.delete() }
-      aa.assertionIDRequestServices?.each { it.delete() }
-      aa.attributes?.each { it.delete() }
-      aa.contacts?.each { it.delete() }
-      aa.keyDescriptors?.each { it.delete() }
-      aa.monitors?.each { it.delete() }
+      // Explicitly flush these changes - otherwise, Hibernate would skip the UPDATES
+      // if it sees a subsequent DELETE - and the FK constraints would break.
+      identityProvider.save(flush: true)
+      aa.save(flush: true)
 
-      entityDescriptor.attributeAuthorityDescriptors.remove(aa)
-
-      log.info "$subject deleted $aa"
-      aa.delete()
+      // WORKAROUND: for uknown reasons, only the AA change gets flushed, not the IdP change.
+      // So we can delete the IDP - and once it is deleted, we can delete the AA.
+      // Delay AA delete until after IDP is deleted.
     }
 
     identityProvider.attributeProfiles?.each { it.delete() }
@@ -318,6 +315,20 @@ class IdentityProviderService {
     identityProvider.delete()
 
     log.info "$subject deleted $identityProvider"
+
+    if(aa) {  // Delayed delete
+      aa.attributeServices?.each { it.delete() }
+      aa.assertionIDRequestServices?.each { it.delete() }
+      aa.attributes?.each { it.delete() }
+      aa.contacts?.each { it.delete() }
+      aa.keyDescriptors?.each { it.delete() }
+      aa.monitors?.each { it.delete() }
+
+      entityDescriptor.attributeAuthorityDescriptors.remove(aa)
+
+      log.info "$subject deleted $aa"
+      aa.delete()
+    }
   }
 
   def archive(long id) {

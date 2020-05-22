@@ -1,6 +1,6 @@
 package aaf.fr.foundation
 
-import grails.plugin.spock.*
+import grails.test.spock.*
 import aaf.fr.workflow.*
 import aaf.fr.identity.Subject
 
@@ -82,6 +82,7 @@ class EntityDescriptorControllerSpec extends IntegrationSpec {
 		entityDescriptorService.metaClass.create = { def p -> 
 			return [true, entityDescriptor]
 		} 
+		controller.request.method = 'POST'
 		def model = controller.save()
 		
 		then:
@@ -97,6 +98,7 @@ class EntityDescriptorControllerSpec extends IntegrationSpec {
 		entityDescriptorService.metaClass.create = { def p -> 
 			return [false, entityDescriptor]
 		} 
+		controller.request.method = 'POST'
 		def model = controller.save()
 		
 		then:		
@@ -116,6 +118,7 @@ class EntityDescriptorControllerSpec extends IntegrationSpec {
 		entityDescriptorService.metaClass.update = { def p -> 
 			return [true, entityDescriptor]
 		} 
+		controller.request.method = 'PUT'
 		def model = controller.update()
 		
 		then:
@@ -127,6 +130,7 @@ class EntityDescriptorControllerSpec extends IntegrationSpec {
 		controller.params.id = 2000000
 		
 		when:
+		controller.request.method = 'PUT'
 		def model = controller.update()
 		
 		then:
@@ -147,6 +151,7 @@ class EntityDescriptorControllerSpec extends IntegrationSpec {
 		entityDescriptorService.metaClass.update = { def p -> 
 			return [false, entityDescriptor]
 		} 
+		controller.request.method = 'PUT'
 		def model = controller.update()
 		
 		then:		
@@ -162,6 +167,7 @@ class EntityDescriptorControllerSpec extends IntegrationSpec {
 		controller.params.id = entityDescriptor.id
 		
 		when:
+		controller.request.method = 'PUT'
 		def model = controller.update()
 		
 		then:
