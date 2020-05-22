@@ -1,6 +1,6 @@
 package aaf.fr.foundation
 
-import grails.plugin.spock.*
+import grails.test.spock.*
 
 class AuthzServiceSpec extends IntegrationSpec {
 

@@ -24,26 +24,23 @@ grails.project.dependency.resolution = {
   repositories {
     inherits true
 
-    flatDir name:"aaf-patched-groovy", dirs:"../../aaf-patched-groovy/target/libs"
-
     grailsCentral()
     grailsPlugins()
     grailsHome()
 
     mavenLocal()
-    mavenCentral()
+    // mavenCentral()
+    mavenRepo "https://repo1.maven.org/maven2"
 
-    mavenRepo "http://repo.grails.org/grails/repo/"
-    mavenRepo "http://download.java.net/maven/2/"
-    mavenRepo "http://repository.jboss.com/maven2/"
+    mavenRepo "https://repo.grails.org/grails/plugins-releases/"
+    mavenRepo "https://download.java.net/maven/2/"
+    mavenRepo "https://repository.jboss.org/maven2/"
   }
 
   dependencies {
-    compile "org.codehaus:groovy-all:2.0.8+aaf.groovy7664"
     compile "commons-collections:commons-collections:3.2.2"
 
-    test 'mysql:mysql-connector-java:5.1.18'
-    test "org.spockframework:spock-grails-support:0.7-groovy-2.0"
+    test 'mysql:mysql-connector-java:5.1.49'
   }
 
   plugins {
@@ -55,33 +52,32 @@ grails.project.dependency.resolution = {
     provided: Dependencies needed at development time, but not during WAR deployment
     */
 
-    build ":tomcat:$grailsVersion"
+    build ":tomcat:7.0.55.2"
 
-    compile ':cache:1.0.0'
-    compile ":mail:1.0"
-    compile ":build-test-data:2.0.3"
-    compile ":hibernate:$grailsVersion"
+    compile ':cache:1.1.8'
+    compile ":mail:1.0.7"
+    compile ":hibernate4:4.3.10"
 
-    runtime ":resources:1.1.6"
-    runtime ":zipped-resources:1.0"
-    runtime ":cached-resources:1.0"
+    runtime ":resources:1.2.14"
+    runtime ":zipped-resources:1.0.1"
+    runtime ":cached-resources:1.1"
     runtime ":yui-minify-resources:0.1.4"
-    runtime ":database-migration:1.1"
-    runtime ":jquery:1.7.2"
+    runtime ":database-migration:1.4.0"
+    runtime ":jquery:1.11.1"
     runtime ":modernizr:2.5.3"
-    runtime (":twitter-bootstrap:2.1.1") { excludes "svn" }
+    runtime (":twitter-bootstrap:2.3.2.3") { excludes "svn" }
     runtime 'org.grails.plugins:constraintkeys:0.1'
-    runtime ":console:1.2"
-    runtime ":cache-headers:1.1.5"
-    runtime ":audit-logging:0.5.4"
+    runtime ":console:1.5.9"
+    runtime ":cache-headers:1.1.7"
+    runtime ":audit-logging:1.0.7"
 
-    test(":spock:0.7") {
-      exclude "spock-grails-support"
-    }
+    test ":build-test-data:2.4.0"
 
     provided ":greenmail:1.3.4"
   }
 }
+
+grails.project.dependency.resolver = "maven"
 
 codenarc.reports = {
     HTMLReport('html') {

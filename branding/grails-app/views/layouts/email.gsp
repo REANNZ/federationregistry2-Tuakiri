@@ -2,6 +2,7 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />        
+    <g:set var="grailsApplication" bean="grailsApplication"/>
     <title><g:message encodeAs="HTML"  code='fr.branding.title' default='Federation Registry'/></title>
 
     <style type="text/css">

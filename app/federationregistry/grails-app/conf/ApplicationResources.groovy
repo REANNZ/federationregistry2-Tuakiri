@@ -59,7 +59,7 @@ modules = {
   'highcharts' {
     defaultBundle 'app'
 
-    resource url:'js/highcharts-2.2.0.js'
+    resource url:'js/highcharts-2.2.5.js'
   }
   'bootstrap-datepicker' {
     // Source: http://www.eyecon.ro/bootstrap-datepicker/

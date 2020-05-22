@@ -2,7 +2,7 @@ package aaf.fr.foundation
 
 import org.codehaus.groovy.grails.web.servlet.mvc.SynchronizerTokensHolder
 
-import grails.plugin.spock.*
+import grails.test.spock.*
 import aaf.fr.workflow.*
 import aaf.fr.identity.Subject
 
@@ -131,6 +131,7 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
     idpssoDescriptorService.metaClass.create = { def p -> 
       return [true, [organization:organization, entityDescriptor:entityDescriptor, identityProvider:identityProvider, attributeAuthority:attributeAuthority, httpPost:httpPost, httpRedirect:httpRedirect, soapArtifact:soapArtifact, organizationList:organizationList, attributeList:attributeList, nameIDFormatList:nameIDFormatList, contact:contact]]
     } 
+    controller.request.method = 'POST'
     def model = controller.save()
     
     then:
@@ -160,6 +161,7 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
     idpssoDescriptorService.metaClass.create = { def p -> 
       return [false, [organization:organization, entityDescriptor:entityDescriptor, identityProvider:identityProvider, attributeAuthority:attributeAuthority, httpPost:httpPost, httpRedirect:httpRedirect, soapArtifact:soapArtifact, organizationList:organizationList, attributeList:attributeList, nameIDFormatList:nameIDFormatList, contact:contact]]
     } 
+    controller.request.method = 'POST'
     def model = controller.save()
     
     then:
@@ -185,6 +187,7 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
     } 
 
     when:
+    controller.request.method = 'PUT'
     controller.update()
     
     then:
@@ -201,6 +204,7 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
     user.permissions.add("federation:management:descriptor:-1:update")
 
     when:
+    controller.request.method = 'PUT'
     controller.update()
     
     then:
@@ -220,6 +224,7 @@ class IdentityProviderControllerSpec extends IntegrationSpec {
     } 
 
     when:
+    controller.request.method = 'PUT'
     def model = controller.update()
     
     then:
