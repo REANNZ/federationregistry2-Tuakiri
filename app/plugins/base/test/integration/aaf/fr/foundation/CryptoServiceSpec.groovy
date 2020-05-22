@@ -3,7 +3,7 @@ package aaf.fr.foundation
 import java.security.*
 import java.security.cert.*
 
-import grails.plugin.spock.*
+import grails.test.spock.*
 
 class CryptoServiceSpec extends IntegrationSpec {
 

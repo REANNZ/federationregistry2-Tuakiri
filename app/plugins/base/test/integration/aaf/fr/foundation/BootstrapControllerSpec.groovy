@@ -2,7 +2,7 @@ package aaf.fr.foundation
 
 import org.codehaus.groovy.grails.web.servlet.mvc.SynchronizerTokensHolder
 
-import grails.plugin.spock.*
+import grails.test.spock.*
 import aaf.fr.workflow.*
 import aaf.fr.identity.Subject
 import com.icegreen.greenmail.util.*
@@ -76,6 +76,7 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		idpService.metaClass.create = { def p -> 
 			return [true, ret]
 		} 
+		controller.request.method = 'POST'
 		def model = controller.saveidp()
 		
 		then:
@@ -113,6 +114,7 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		this.idpService.metaClass.create = { def p -> 
 			return [false, ret]
 		} 
+		controller.request.method = 'POST'
 		def model = controller.saveidp()
 		
 		then:
@@ -185,6 +187,7 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		spService.metaClass.create = { def p -> 
 			return [true, ret]
 		} 
+		controller.request.method = 'POST'
 		def model = controller.savesp()
 		
 		then:
@@ -210,6 +213,7 @@ class BootstrapControllerSpec extends IntegrationSpec {
     controller.params[SynchronizerTokensHolder.TOKEN_KEY] = token.generateToken(controller.params[SynchronizerTokensHolder.TOKEN_URI])
 		
 		when:
+		controller.request.method = 'POST'
 		def model = controller.savesp()
 		
 		then:
@@ -247,6 +251,7 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		}
 		
 		when:
+		controller.request.method = 'POST'
 		def model = controller.organization()
 		
 		then:
@@ -267,6 +272,7 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		organizationService.metaClass.create = { def p -> 
 			return [true, organization, contact]
 		} 
+		controller.request.method = 'POST'
 		def model = controller.saveorganization()
 		
 		then:
@@ -285,6 +291,7 @@ class BootstrapControllerSpec extends IntegrationSpec {
 		organizationService.metaClass.create = { def p -> 
 			return [false, organization]
 		} 
+		controller.request.method = 'POST'
 		def model = controller.saveorganization()
 		
 		then:

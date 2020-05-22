@@ -1,6 +1,6 @@
 package aaf.fr.metadata
 
-import grails.plugin.spock.*
+import grails.test.spock.*
 
 import aaf.fr.foundation.*
 

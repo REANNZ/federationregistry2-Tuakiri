@@ -37,7 +37,6 @@ class Contact {
 		mobilePhone(nullable:true)
 		dateCreated(nullable:true)
 		lastUpdated(nullable:true)
-    active(nullable: false)
 	}
 
 	static mapping = {

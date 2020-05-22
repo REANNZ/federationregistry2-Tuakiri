@@ -12,40 +12,40 @@ grails.project.dependency.resolution = {
   repositories {
     inherits true
 
-    flatDir name:"aaf-patched-groovy", dirs:"../../../aaf-patched-groovy/target/libs"
-
     grailsPlugins()
     grailsHome()
     grailsCentral()
 
     mavenLocal()
-    mavenCentral()
+    // mavenCentral()
+    mavenRepo "https://repo1.maven.org/maven2"
 
-    mavenRepo "http://repo.grails.org/grails/repo/"
-    mavenRepo "http://download.java.net/maven/2/"
-    mavenRepo "http://repository.jboss.com/maven2/"
+    mavenRepo "https://repo.grails.org/grails/plugins-releases/"
+    mavenRepo "https://download.java.net/maven/2/"
+    mavenRepo "https://repository.jboss.org/maven2/"
   }
 
   dependencies {
-    compile "org.codehaus:groovy-all:2.0.8+aaf.groovy7664"
     compile "commons-collections:commons-collections:3.2.2"
+    compile "org.springframework:spring-aop:4.1.9.RELEASE" // needed for shiro
+    compile "org.springframework:spring-expression:4.1.9.RELEASE" // needed for tests
 
-    test 'mysql:mysql-connector-java:5.1.18'
-    test "org.spockframework:spock-grails-support:0.7-groovy-2.0"
+    test 'mysql:mysql-connector-java:5.1.49'
   }
 
   plugins {
-    build ":tomcat:$grailsVersion"
+    build ":tomcat:7.0.55.2"
 
     compile ":federated-grails:0.6.0"
-    compile ":build-test-data:2.0.3"
-    compile ":mail:1.0"
-    compile ":hibernate:$grailsVersion"
+    // explicitly require shiro to force upgrade from 1.1.3 pulled by fed-grails
+    compile ":shiro:1.2.1"
+    compile ":mail:1.0.7"
+    compile ":hibernate4:4.3.10"
 
-    test(":spock:0.7") {
-      exclude "spock-grails-support"
-    }
-    test ":resources:1.1.6"
+    test ":build-test-data:2.4.0"
+    test ":resources:1.2.14"
     provided ":greenmail:1.3.4"
   }
 }
+
+grails.project.dependency.resolver = "maven"

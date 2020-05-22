@@ -1,6 +1,6 @@
 package aaf.fr.foundation
 
-import grails.plugin.spock.*
+import grails.test.spock.*
 import aaf.fr.workflow.*
 import aaf.fr.identity.*
 

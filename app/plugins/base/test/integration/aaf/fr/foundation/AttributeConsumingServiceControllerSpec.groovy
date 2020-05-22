@@ -1,6 +1,6 @@
 package aaf.fr.foundation
 
-import grails.plugin.spock.*
+import grails.test.spock.*
 import aaf.fr.workflow.*
 import aaf.fr.identity.Subject
 
@@ -46,6 +46,7 @@ class AttributeConsumingServiceControllerSpec extends IntegrationSpec {
     WorkflowProcessService.metaClass.run = { def processInstance -> }
     
     when:
+    controller.request.method = 'POST'
     def model = controller.addRequestedAttribute()
     
     then:
@@ -64,6 +65,7 @@ class AttributeConsumingServiceControllerSpec extends IntegrationSpec {
     controller.params.reasoning = "I really need it!"
     
     when:
+    controller.request.method = 'POST'
     def model = controller.addRequestedAttribute()
     
     then:
@@ -95,6 +97,7 @@ class AttributeConsumingServiceControllerSpec extends IntegrationSpec {
     WorkflowProcessService.metaClass.run = { def processInstance -> }
     
     when:
+    controller.request.method = 'POST'
     def model = controller.addRequestedAttribute()
     
     then:
@@ -111,6 +114,7 @@ class AttributeConsumingServiceControllerSpec extends IntegrationSpec {
     controller.params.attrid = attr.id
     
     when:
+    controller.request.method = 'POST'
     def model = controller.addRequestedAttribute()
     
     then:
@@ -129,6 +133,7 @@ class AttributeConsumingServiceControllerSpec extends IntegrationSpec {
     user.permissions.add("federation:management:descriptor:${acs.descriptor.id}:attribute:remove")
     
     when:
+    controller.request.method = 'DELETE'
     def model = controller.removeRequestedAttribute()
     
     then:
@@ -147,6 +152,7 @@ class AttributeConsumingServiceControllerSpec extends IntegrationSpec {
     controller.params.raid = ra1.id
     
     when:
+    controller.request.method = 'DELETE'
     def model = controller.removeRequestedAttribute()
     
     then:
