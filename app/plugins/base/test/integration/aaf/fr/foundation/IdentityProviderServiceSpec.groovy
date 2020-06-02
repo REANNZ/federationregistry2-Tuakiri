@@ -411,7 +411,7 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
     params.entity = [id: entityDescriptor.id]
     params.idp = [description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], post:'http://identityProvider.test.com/SAML2/POST/SSO',
                 redirect:'http://identityProvider.test.com/SAML2/Redirect/SSO', artifact:'http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution', 'artifact-index':1]
-    params.aa = [create: true, displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], attributeservice:[uri:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
+    params.aa = [create: true, displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], attributeservice:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery", attributes:[1, 2]]
     params.contact = [email: contact.email, type:'technical']
 
     when:
@@ -476,7 +476,7 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
     params.entity = [id: entityDescriptor.id]
     params.idp = [displayName: "test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], post:'/SAML2/POST/SSO',
                 redirect:'http://identityProvider.test.com/SAML2/Redirect/SSO', artifact:'http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution', 'artifact-index':1]
-    params.aa = [create: true, displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], attributeservice:[uri:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
+    params.aa = [create: true, displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], attributeservice:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery", attributes:[1, 2]]
     params.contact = [email: contact.email, type:'technical']
 
     when:
@@ -540,7 +540,7 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
     params.entity = [id: entityDescriptor.id]
     params.idp = [displayName: "test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true],
                 redirect:'http://identityProvider.test.com/SAML2/Redirect/SSO', artifact:'http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution', 'artifact-index':1]
-    params.aa = [create: true, displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], attributeservice:[uri:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
+    params.aa = [create: true, displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], attributeservice:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery", attributes:[1, 2]]
     params.contact = [email: contact.email, type:'technical']
 
     when:
@@ -606,7 +606,7 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
     params.entity = [id: entityDescriptor.id]
     params.idp = [displayName: "test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], post:'http://identityProvider.test.com/SAML2/POST/SSO',
                 redirect:'asdfasdasdf', artifact:'http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution', 'artifact-index':1]
-    params.aa = [create: true, displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], attributeservice:[uri:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
+    params.aa = [create: true, displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], attributeservice:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery", attributes:[1, 2]]
     params.contact = [email: contact.email, type:'technical']
 
     when:
@@ -669,7 +669,7 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
     params.entity = [id: entityDescriptor.id]
     params.idp = [displayName: "test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], post:'http://identityProvider.test.com/SAML2/POST/SSO',
                 artifact:'http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution', 'artifact-index':1]
-    params.aa = [create: true, displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], attributeservice:[uri:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
+    params.aa = [create: true, displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], attributeservice:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery", attributes:[1, 2]]
     params.contact = [email: contact.email, type:'technical']
 
     when:
@@ -733,7 +733,7 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
     params.entity = [id: entityDescriptor.id]
     params.idp = [displayName: "test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], post:'http://identityProvider.test.com/SAML2/POST/SSO',
                 redirect:'http://identityProvider.test.com/SAML2/Redirect/SSO', artifact:'/SAML2/SOAP/ArtifactResolution', 'artifact-index':1]
-    params.aa = [create: true, displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], attributeservice:[uri:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
+    params.aa = [create: true, displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], attributeservice:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery", attributes:[1, 2]]
     params.contact = [email: contact.email, type:'technical']
 
     when:
@@ -798,7 +798,7 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
     params.entity = [id: entityDescriptor.id]
     params.idp = [displayName: "test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], post:'http://identityProvider.test.com/SAML2/POST/SSO',
                 redirect:'http://identityProvider.test.com/SAML2/Redirect/SSO']
-    params.aa = [create: true, displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], attributeservice:[uri:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
+    params.aa = [create: true, displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], attributeservice:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery", attributes:[1, 2]]
     params.contact = [email: contact.email, type:'technical']
 
     when:
@@ -865,7 +865,7 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
     params.idp = [displayName: "test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], post:'http://identityProvider.test.com/SAML2/POST/SSO',
                 redirect:'http://identityProvider.test.com/SAML2/Redirect/SSO', artifact:'http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution', 'artifact-index':1,
                 ecp: '/idp/profile/SAML2/SOAP/ECP']
-    params.aa = [create: true, displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], attributeservice:[uri:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
+    params.aa = [create: true, displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], attributeservice:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery", attributes:[1, 2]]
     params.contact = [email: contact.email, type:'technical']
 
     when:
@@ -1202,7 +1202,7 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
     params.entity = [id: entityDescriptor.id]
     params.idp = [displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], post:'http://identityProvider.test.com/SAML2/POST/SSO',
                 redirect:'http://identityProvider.test.com/SAML2/Redirect/SSO', artifact:'http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution', 'artifact-index':1]
-    params.aa = [create: true, crypto:[sig: true, enc:true], attributeservice:[uri:"abcd"], attributes:[1, 2]]
+    params.aa = [create: true, crypto:[sig: true, enc:true], attributeservice:"abcd", attributes:[1, 2]]
     params.contact = [email: contact.email, type:'technical']
 
     when:
@@ -1260,7 +1260,7 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
     params.entity = [id: 20000]
     params.idp = [displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], post:'http://identityProvider.test.com/SAML2/POST/SSO',
                 redirect:'http://identityProvider.test.com/SAML2/Redirect/SSO', artifact:'http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution', 'artifact-index':1]
-    params.aa = [create: true, displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], attributeservice:[uri:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
+    params.aa = [create: true, displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], attributeservice:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery", attributes:[1, 2]]
     params.contact = [email: contact.email, type:'technical']
 
     when:
@@ -1319,7 +1319,7 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
     params.entity = [identifier:""]
     params.idp = [displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], post:'http://identityProvider.test.com/SAML2/POST/SSO',
                 redirect:'http://identityProvider.test.com/SAML2/Redirect/SSO', artifact:'http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution', 'artifact-index':1]
-    params.aa = [create: true, displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], attributeservice:[uri:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
+    params.aa = [create: true, displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], attributeservice:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery", attributes:[1, 2]]
     params.contact = [email: contact.email, type:'technical']
 
     when:
@@ -1378,7 +1378,7 @@ class IdentityProviderServiceSpec extends IntegrationSpec {
     params.entity = [identifier: "http://test.example.com"]
     params.idp = [displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], post:'http://identityProvider.test.com/SAML2/POST/SSO',
                 redirect:'http://identityProvider.test.com/SAML2/Redirect/SSO', artifact:'http://identityProvider.test.com/SAML2/SOAP/ArtifactResolution', 'artifact-index':1]
-    params.aa = [create: true, displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], attributeservice:[uri:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery"], attributes:[1, 2]]
+    params.aa = [create: true, displayName:"test name", description:"test desc", scope:"test.com", crypto:[sig: true, enc:true], attributeservice:"http://identityProvider.test.com/SAML2/SOAP/AttributeQuery", attributes:[1, 2]]
     params.contact = [email: contact.email, type:'technical']
 
     when:
