@@ -20,16 +20,12 @@
           <td>${fieldValue(bean: contact, field: "givenName")}</td>
         </tr>
         <tr>
-          <tr>
-            <th><g:message encodeAs="HTML" code="label.surname" /></th>
-            <td>${fieldValue(bean: contact, field: "surname")}</td>
-          </tr>
+          <th><g:message encodeAs="HTML" code="label.surname" /></th>
+          <td>${fieldValue(bean: contact, field: "surname")}</td>
         </tr>
         <tr>
-          <tr>
-            <th><g:message encodeAs="HTML" code="label.email" /></th>
-            <td><a href="mailto:${fieldValue(bean: contact, field: "email")}">${fieldValue(bean: contact, field: "email")}</a></td>
-          </tr>
+          <th><g:message encodeAs="HTML" code="label.email" /></th>
+          <td><a href="mailto:${fieldValue(bean: contact, field: "email")}">${fieldValue(bean: contact, field: "email")}</a></td>
         </tr>
         <tr>
           <th><g:message encodeAs="HTML" code="label.workphone" /></th>
