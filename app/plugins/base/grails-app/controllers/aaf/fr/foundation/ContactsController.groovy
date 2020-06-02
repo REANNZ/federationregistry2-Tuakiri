@@ -156,7 +156,7 @@ class ContactsController {
 					contact.secondaryEmail = params.secondaryEmail
 			else 
 				if(contact.secondaryEmail)
-					contact.secondaryEmail.delete()
+					contact.secondaryEmail = null
 	
 			if(params.workPhone)
 				if(!contact.workPhone)
@@ -165,7 +165,6 @@ class ContactsController {
 					contact.workPhone = params.workPhone
 			else 
 				if(contact.workPhone) {
-					contact.workPhone.delete()
 					contact.workPhone = null
 				}
 			
@@ -176,7 +175,6 @@ class ContactsController {
 					contact.mobilePhone = params.mobilePhone
 			else 
 				if(contact.mobilePhone) {
-					contact.mobilePhone.delete()
 					contact.mobilePhone = null
 				}
 			
@@ -187,7 +185,6 @@ class ContactsController {
 					contact.homePhone = params.homePhone
 			else 
 				if(contact.homePhone) {
-					contact.homePhone.delete()
 					contact.homePhone = null
 				}
 			
