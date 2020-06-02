@@ -918,7 +918,7 @@ fr.close_ra_editor = function() {
 };
 
 fr.acs_reqattribute_update = function(acsID, raID, reason, required) {
-  var data = "id=" + raID + "&reasoning=" + reason + "&required=" + required;
+  var data = "id=" + raID + "&reasoning=" + encodeURIComponent(reason) + "&required=" + required;
   $.ajax({
     type: "POST",
     url: acsUpdateAttr,
