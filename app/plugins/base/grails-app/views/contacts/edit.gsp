@@ -40,6 +40,22 @@
             </div>
           </div>
 
+<%-- secondaryEmail and homePhone are in the Contact domain model but better not be exposed in the UI
+          <div class="control-group">
+            <label class="control-label" for="secondaryEmail"><g:message encodeAs="HTML" code="label.secondaryemail" /></label>
+            <div class="controls">
+              <input type="text" name="secondaryEmail" value="${fieldValue(bean: contact, field: 'secondaryEmail')}" class="email"/>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label class="control-label" for="homePhone"><g:message encodeAs="HTML" code="label.homephone" /></label>
+            <div class="controls">
+              <input type="text" name="homePhone" value="${fieldValue(bean: contact, field: 'homePhone')}" />
+            </div>
+          </div>
+--%>
+
           <div class="control-group">
             <label class="control-label" for="workPhone"><g:message encodeAs="HTML" code="label.workphone" /></label>
             <div class="controls">

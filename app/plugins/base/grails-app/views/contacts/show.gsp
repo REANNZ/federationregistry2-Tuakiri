@@ -27,6 +27,16 @@
           <th><g:message encodeAs="HTML" code="label.email" /></th>
           <td><a href="mailto:${fieldValue(bean: contact, field: "email")}">${fieldValue(bean: contact, field: "email")}</a></td>
         </tr>
+<%-- secondaryEmail and homePhone are in the Contact domain model but better not be exposed in the UI
+        <tr>
+          <th><g:message encodeAs="HTML" code="label.secondaryemail" /></th>
+          <td><a href="mailto:${fieldValue(bean: contact, field: "secondaryEmail")}">${fieldValue(bean: contact, field: "secondaryEmail")}</a></td>
+        </tr>
+        <tr>
+          <th><g:message encodeAs="HTML" code="label.homephone" /></th>
+          <td>${fieldValue(bean: contact, field: "homePhone")}</td>
+        </tr>
+--%>
         <tr>
           <th><g:message encodeAs="HTML" code="label.workphone" /></th>
           <td>${fieldValue(bean: contact, field: "workPhone")}</td>
