@@ -27,7 +27,7 @@
         </div>
 
         <div class="control-group">
-          <label class="control-label"for="surname"><g:message encodeAs="HTML" code="label.surname" /></label>
+          <label class="control-label" for="surname"><g:message encodeAs="HTML" code="label.surname" /></label>
           <div class="controls">
             <input type="text" name="surname" value="${fieldValue(bean: contact, field: 'surname')}" class="required"/>
           </div>
