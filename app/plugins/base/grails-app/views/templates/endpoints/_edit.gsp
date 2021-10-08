@@ -3,7 +3,7 @@
 
 <div id="endpoint-${endpoint.id}-editor">
   <h5><g:message encodeAs="HTML" code="label.editingendpoint"/> ${endpoint.id}</h5>
-  <form id="endpoint-edit-${endpoint.id}">
+  <form id="endpoint-edit-${endpoint.id}" onsubmit="return false;">
     <fieldset>
       <g:hiddenField name="id" value="${endpoint.id}" />
 

@@ -9,7 +9,7 @@
   
   <div id="newmonitor" class="revealable">
     <h4><g:message encodeAs="HTML" code="templates.fr.monitor.add.heading"/></h4>
-    <form id="newmonitordata" class="form-horizontal">
+    <form id="newmonitordata" class="form-horizontal" onsubmit="return false;">
       <fieldset>
        <g:hiddenField name="interval" value="0" />
 
