@@ -20,7 +20,7 @@
         <p>
           <g:message encodeAs="HTML" code="templates.fr.acs.reqattributes.add.details"/>
         </p>
-        <form id="newattributedata${acs.id}" class="form-horizontal validating">
+        <form id="newattributedata${acs.id}" class="form-horizontal validating" onsubmit="return false;">
           <fieldset>
             <div class="control-group">
               <label class="control-label" for="attrid"><g:message encodeAs="HTML" code="label.attribute"/></label>

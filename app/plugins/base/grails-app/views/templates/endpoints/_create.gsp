@@ -10,7 +10,7 @@
 
   <div id="new-${endpointType}" class="revealable">
     <h4><g:message encodeAs="HTML" code="templates.fr.endpoints.add.heading"/></h4>
-    <form id="new${endpointType}data" class="form-horizontal validating">
+    <form id="new${endpointType}data" class="form-horizontal validating" onsubmit="return false;">
       <fieldset>
         <input type="hidden"
  name="endpointType" value="${endpointType}">
