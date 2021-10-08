@@ -14,7 +14,7 @@
 
     <div id="newcertificatedetails"></div>
 
-    <form id="newcryptoform" class="form-horizontal">
+    <form id="newcryptoform" class="form-horizontal" onsubmit="return false;">
       <fieldset>
         <div class="control-group">
           <label class="control-label" for="certname"><g:message encodeAs="HTML" code="label.name"/></label>

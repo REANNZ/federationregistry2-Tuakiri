@@ -9,7 +9,7 @@
   <div id="new-attribute" class="revealable">
     <h3><g:message encodeAs="HTML" code="templates.fr.attributes.add.heading"/></h3>
 
-    <form id="newattributedata" class="form-horizontal">
+    <form id="newattributedata" class="form-horizontal" onsubmit="return false;">
       <div class="control-group">
         <label class="control-label" for="attributeID"><g:message encodeAs="HTML" code="label.attribute"/></label>
         <div class="controls">
