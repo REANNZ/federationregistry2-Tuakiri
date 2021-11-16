@@ -39,6 +39,11 @@ grails.project.dependency.resolution = {
 
   dependencies {
     compile "commons-collections:commons-collections:3.2.2"
+    compile "org.apache.shiro:shiro-quartz:1.2.5"
+    compile "org.apache.shiro:shiro-web:1.2.5"
+    compile "org.apache.shiro:shiro-spring:1.2.5"
+    compile "org.apache.shiro:shiro-ehcache:1.2.5"
+    compile "org.apache.shiro:shiro-core:1.2.5"
 
     test 'mysql:mysql-connector-java:5.1.49'
   }
