@@ -48,7 +48,6 @@ grails-app/views/templates/layouts/*
 grails-app/views/templates/_frheader.gsp
 grails-app/views/templates/_frfooter.gsp
 grails-app/views/templates/_frtopnavigation.gsp
-grails-app/views/templates/_frbrowsercheck.gsp
 grails-app/views/templates/mail/workflows/*
 web-app/css/frtheme.less
 web-app/images/logo.jpg
