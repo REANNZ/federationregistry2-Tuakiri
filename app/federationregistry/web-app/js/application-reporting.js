@@ -1190,7 +1190,7 @@ fr.detailed_attributesupport_compliance_report = function(target) {
 
 $(".detailed-idpattributesupport-report").click(function() {
   $('.idp-indepth').addClass('hidden');
-  $('#'+$('#choose-indepth-idp').attr('value')).removeClass('hidden');
+  $('#'+$('#choose-indepth-idp').val()).removeClass('hidden');
 });
 
 $(".detailed-idpattributesupport-reports").click(function() {
