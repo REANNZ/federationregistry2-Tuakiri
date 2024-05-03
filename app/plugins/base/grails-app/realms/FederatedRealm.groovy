@@ -10,6 +10,7 @@ import grails.plugins.federatedgrails.SessionRecord
 
 import aaf.fr.foundation.Contact
 import aaf.fr.foundation.EntityDescriptor
+import aaf.fr.foundation.Organization
 
 import grails.plugins.federatedgrails.InstanceGenerator
 
@@ -36,9 +37,15 @@ class FederatedRealm {
     }
 
     def entityDescriptor = EntityDescriptor.findWhere(entityID:token.attributes.entityID)
-    if(!entityDescriptor) {
-      log.error("Authentication attempt for Shibboleth provider, denying attempt as no Entity matching ($token.attributes.entityID) is available.")
-      throw new UnknownAccountException("Authentication attempt for Shibboleth provider, denying attempt as no Entity matching ($token.attributes.entityID) is available.")
+    def organization
+    if (entityDescriptor) {
+      organization = entityDescriptor.organization
+    } else {
+      organization = Organization.findWhere(name: token.attributes.schacHomeOrganization)
+      if(!organization) {
+        log.error("Authentication attempt for Shibboleth provider, denying attempt as no Entity matching ($token.attributes.entityID) neither organization matching ($token.attributes.schacHomeOrganization) is available.")
+        throw new UnknownAccountException("Authentication attempt for Shibboleth provider, denying attempt as no Entity matching ($token.attributes.entityID) neither organization matching ($token.attributes.schacHomeOrganization) is available.")
+      }
     }
 
     SubjectBase.withTransaction {
@@ -69,7 +76,7 @@ class FederatedRealm {
         // Attempt to link to local contact instance
         def contact = Contact.findByEmail(subject.email)
         if(!contact) {
-          contact = new Contact(givenName:subject.givenName, surname:subject.surname, email:subject.email, organization: entityDescriptor.organization)
+          contact = new Contact(givenName:subject.givenName, surname:subject.surname, email:subject.email, organization: organization)
           if(!contact.save()) {
             log.error "Unable to create Contact to link with incoming user"
             contact.errors.each { log.error it }
@@ -86,7 +93,7 @@ class FederatedRealm {
           throw new RuntimeException("Account creation exception for new federated account for ${token.principal}")
         }  
         
-        log.info("Created ${subject} with associated ${contact} from ${entityDescriptor} from federated attribute statement")
+        log.info("Created ${subject} with associated ${contact} from ${token.attributes.entityID} from federated attribute statement")
 
       } else {
         subject.cn = token.attributes.cn
@@ -117,7 +124,7 @@ class FederatedRealm {
           }
           throw new RuntimeException("Account update exception for existing federated account ${token.principal}")
         }
-        log.info("Updated ${subject} with associated ${subject.contact} from ${entityDescriptor} from federated attribute statement")
+        log.info("Updated ${subject} with associated ${subject.contact} from ${token.attributes.entityID} from federated attribute statement")
       }
       
       if (!subject.enabled) {
