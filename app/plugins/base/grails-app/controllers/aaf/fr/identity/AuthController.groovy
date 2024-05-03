@@ -74,6 +74,7 @@ class AuthController {
     attributes.cn =  federatedAttributeValue(grailsApplication, grailsApplication.config.federation.mapping.cn)
     attributes.email = federatedAttributeValue(grailsApplication, grailsApplication.config.federation.mapping.email)
     attributes.sharedToken = federatedAttributeValue(grailsApplication, grailsApplication.config.federation.mapping.sharedToken)
+    attributes.schacHomeOrganization = federatedAttributeValue(grailsApplication, grailsApplication.config.federation.mapping.schacHomeOrganization)
     
     if (!principal) {
       incomplete = true

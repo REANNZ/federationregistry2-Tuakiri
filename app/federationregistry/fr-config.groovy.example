@@ -74,6 +74,7 @@ federation {
     cn = "cn"
     email= "mail"
     sharedToken = "auEduPersonSharedToken"
+    schacHomeOrganization = "schacHomeOrganization"
   }
 }
 
