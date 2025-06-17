@@ -201,7 +201,7 @@ aaf {
             }
           }
           drs {
-            uri = '$host/simplesaml/module.php/saml/sp/discoresp.php'
+            uri = '$host/simplesaml/module.php/saml/sp/discoResponse'
             index = 1
           }
           slo {

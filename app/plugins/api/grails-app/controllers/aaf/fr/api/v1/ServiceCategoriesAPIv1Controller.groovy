@@ -57,7 +57,7 @@ class ServiceCategoriesAPIv1Controller {
 				data.organizationURL=sp.organization.url
 				data.url = sp.serviceDescription?.connectURL
 				data.logoURL = sp.serviceDescription?.logoURL
-				data.frURL = createLink(controller:'SPSSODescriptor', action:'show', id:sp.id, absolute:true )
+				data.frURL = createLink(controller:'serviceProvider', action:'show', id:sp.id, absolute:true )
 			
 				result.add(data)
 			}
