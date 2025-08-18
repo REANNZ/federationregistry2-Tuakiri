@@ -35,7 +35,7 @@
   <g:else>
     <h2 class="alert alert-error">No current administrators</h2>
     <div class="span5">
-      <p><g:message encodeAs="HTML" code="templates.fr.organization.administrator.justregistered" default="Have you recently registered this organisation? If so you will have recieved an email from Federation Registry stating registration was completed. This email contains within a unique code (10 characters a mix of letters and numbers) that when entered will give you administrative rights. Please look for and enter this code now." /></p>
+      <p><g:message encodeAs="HTML" code="templates.fr.organization.administrator.justregistered" default="Have you recently registered this organisation? If so you will have received an email from Federation Registry stating registration was completed. This email contains within a unique code (10 characters a mix of letters and numbers) that when entered will give you administrative rights. Please look for and enter this code now." /></p>
     </div>
     <div class="offset1 span5">
       <g:form controller="organization" action="grantFullAdministrationToken" method="POST">
