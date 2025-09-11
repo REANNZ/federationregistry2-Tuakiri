@@ -22,6 +22,7 @@ class OrganizationAPIv1Controller {
       // compatibility with SWAMID Metadata Tool
       result.active = org.functioning() // intentinoal duplicate
       result.memberSince = org.dateCreated.format("yyyy-MM-dd")
+      result.notMemberAfter = org.functioning() ? null : org.lastUpdated.format("yyyy-MM-dd")
       result.organizationInfoData = [
           en: [
                   OrganizationName: org.name,
