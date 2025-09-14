@@ -20,7 +20,7 @@ class OrganizationAPIv1Controller {
       result.link = g.createLink(controller: 'organizationAPIv1', id: org.id, absolute: true)
 
       // compatibility with SWAMID Metadata Tool
-      result.active = org.functioning() // intentinoal duplicate
+      result.active = result.functioning // intentional duplicate
       result.memberSince = org.dateCreated.format("yyyy-MM-dd")
       result.notMemberAfter = result.active ? null : org.lastUpdated.format("yyyy-MM-dd")
       result.organizationInfoData = [
