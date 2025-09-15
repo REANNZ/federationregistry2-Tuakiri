@@ -18,6 +18,18 @@ class OrganizationAPIv1Controller {
       result.functioning = org.functioning()
       result.archived = org.archived
       result.link = g.createLink(controller: 'organizationAPIv1', id: org.id, absolute: true)
+
+      // compatibility with SWAMID Metadata Tool
+      result.active = result.functioning // intentional duplicate
+      result.memberSince = org.dateCreated.format("yyyy-MM-dd")
+      result.notMemberAfter = result.active ? null : org.lastUpdated.format("yyyy-MM-dd")
+      result.organizationInfoData = [
+          en: [
+                  OrganizationName: org.name,
+                  OrganizationDisplayName: org.displayName,
+                  OrganizationURL: org.url
+              ]
+          ]
       result.format = "json"
       results.add(result)
     }
