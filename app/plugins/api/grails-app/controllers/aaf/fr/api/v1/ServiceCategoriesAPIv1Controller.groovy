@@ -52,6 +52,7 @@ class ServiceCategoriesAPIv1Controller {
 				def data = [:]
 				data.id = sp.id
 				data.displayName = sp.displayName
+				data.entityID = sp.entityDescriptor.entityID
 				data.description=sp.description
 				data.organization=sp.organization.displayName
 				data.organizationURL=sp.organization.url
